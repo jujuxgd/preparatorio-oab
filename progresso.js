@@ -212,14 +212,14 @@ function getMateriaId(nome) {
 // Progresso de tópicos de uma matéria por ID
 function getProgressoMateria(materiaId) {
   const p = carregarProgresso();
-  if (!p.topicos || typeof PLANO_OAB === 'undefined') return { total: 0, feitos: 0, pct: 0, dias: [] };
+  if (typeof PLANO_OAB === 'undefined') return { total: 0, feitos: 0, pct: 0, dias: [] };
   let total = 0, feitos = 0;
   const dias = [];
   PLANO_OAB.forEach(diaData => {
     diaData.materias && diaData.materias.forEach((mat, mIdx) => {
       if (getMateriaId(mat.nome) !== materiaId) return;
       const dayTopicos = mat.topicos || [];
-      const dayFeitos  = dayTopicos.filter((_,tIdx) => p.topicos[`d${diaData.dia}_m${mIdx}_t${tIdx}`]).length;
+      const dayFeitos  = dayTopicos.filter((_,tIdx) => !!(p.topicos && p.topicos[`d${diaData.dia}_m${mIdx}_t${tIdx}`])).length;
       total  += dayTopicos.length;
       feitos += dayFeitos;
       if (dayTopicos.length > 0) {
