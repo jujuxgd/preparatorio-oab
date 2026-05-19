@@ -956,43 +956,7 @@ body.focus-mode .focus-exit { display: block; }
           </ul>
         </div>
 
-        <div class="side-block">
-          <h4>Questões hoje <span class="icon">◎</span></h4>
-          <div style="font-size:0.72rem;color:var(--ink-faded);margin-bottom:0.7rem">Registe as questões feitas no QConcursos</div>
-          <select id="q-materia" style="width:100%;background:var(--bg-soft);border:1px solid var(--line);padding:0.5rem 0.7rem;border-radius:var(--radius-sm);font-family:inherit;font-size:0.82rem;color:var(--ink);margin-bottom:0.5rem">
-            <option value="">Selecionar matéria...</option>
-            <option value="etica">Ética Profissional</option>
-            <option value="constitucional">Constitucional</option>
-            <option value="civil">Direito Civil</option>
-            <option value="proc_civil">Processo Civil</option>
-            <option value="penal">Direito Penal</option>
-            <option value="proc_penal">Processo Penal</option>
-            <option value="trabalho">Direito do Trabalho</option>
-            <option value="proc_trabalho">Processo do Trabalho</option>
-            <option value="tributario">Tributário</option>
-            <option value="administrativo">Administrativo</option>
-            <option value="empresarial">Empresarial</option>
-            <option value="dh">Direitos Humanos</option>
-            <option value="internacional">Internacional</option>
-            <option value="ambiental">Ambiental</option>
-            <option value="eca">ECA</option>
-            <option value="cdc">Consumidor</option>
-            <option value="filosofia">Filosofia</option>
-            <option value="financeiro">Financeiro</option>
-            <option value="eleitoral">Eleitoral</option>
-            <option value="previdenciario">Previdenciário</option>
-          </select>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.4rem;margin-bottom:0.5rem">
-            <input type="number" id="q-total" placeholder="Total" min="1" max="200"
-              style="background:var(--bg-soft);border:1px solid var(--line);padding:0.5rem 0.7rem;border-radius:var(--radius-sm);font-size:0.82rem;color:var(--ink);font-family:inherit">
-            <input type="number" id="q-acertos" placeholder="Acertos" min="0" max="200"
-              style="background:var(--bg-soft);border:1px solid var(--line);padding:0.5rem 0.7rem;border-radius:var(--radius-sm);font-size:0.82rem;color:var(--ink);font-family:inherit">
-          </div>
-          <button class="btn btn-primary" style="width:100%;font-size:0.75rem" onclick="submitQuestoes()">Registar</button>
-          <div id="questoes-hoje-lista" style="margin-top:0.7rem;font-size:0.78rem"></div>
-        </div>
-
-        <div class="side-block" style="background:var(--bg-soft)">
+<div class="side-block" style="background:var(--bg-soft)">
           <h4>Plano <span class="icon">◈</span></h4>
           <div id="progresso-pct" style="font-family:'Playfair Display',serif;font-size:2rem;color:var(--rose-deep);font-weight:500;line-height:1">0%</div>
           <div style="font-size:0.72rem;color:var(--ink-faded);margin-bottom:0.8rem">do plano concluído</div>
@@ -1189,9 +1153,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const pctEl = document.getElementById('progresso-pct');
   if (pctEl) pctEl.textContent = `${stats.pct}%`;
 
-  // Questões de hoje
-  renderQuestoesHoje();
-
   // Comentários do dia
   renderComments();
 });
@@ -1222,68 +1183,6 @@ function toggleDiaConcluido() {
     const pctEl = document.getElementById('progresso-pct');
     if (pctEl) { const s = calcularStats(); pctEl.textContent = `${s.pct}%`; }
   }
-}
-
-// ── Registar questões QConcursos ──────────────
-function submitQuestoes() {
-  const materia = document.getElementById('q-materia').value;
-  const total   = parseInt(document.getElementById('q-total').value) || 0;
-  const acertos = parseInt(document.getElementById('q-acertos').value) || 0;
-
-  if (!materia) { alert('Selecciona uma matéria.'); return; }
-  if (total <= 0) { alert('Indica o número de questões.'); return; }
-  if (acertos > total) { alert('Acertos não pode ser maior que total.'); return; }
-
-  registrarQuestoes(materia, total, acertos);
-
-  // Limpar
-  document.getElementById('q-total').value = '';
-  document.getElementById('q-acertos').value = '';
-  document.getElementById('q-materia').value = '';
-
-  renderQuestoesHoje();
-}
-
-function renderQuestoesHoje() {
-  const lista = document.getElementById('questoes-hoje-lista');
-  if (!lista) return;
-  const hoje = new Date().toISOString().split('T')[0];
-  const todas = getTodasQuestoes();
-  const nomeMap = {
-    etica:'⚖️ Ética', constitucional:'🏛️ Const.', civil:'📜 Civil',
-    proc_civil:'⚖️ Proc. Civil', penal:'⚔️ Penal', proc_penal:'📋 Proc. Penal',
-    trabalho:'⚙️ Trabalho', proc_trabalho:'⚙️ Proc. Trab.', tributario:'💰 Tributário',
-    administrativo:'🏛️ Adm.', empresarial:'🏢 Empresarial', dh:'🌍 DH',
-    internacional:'🌍 Intl.', ambiental:'🌿 Ambiental', eca:'👶 ECA',
-    cdc:'🛒 CDC', filosofia:'📖 Filosofia', financeiro:'💰 Financeiro',
-    eleitoral:'🗳️ Eleitoral', previdenciario:'🛡️ Prev.'
-  };
-
-  // Questões de hoje
-  const hojeItens = [];
-  Object.entries(todas).forEach(([mat, dados]) => {
-    const hojeRegs = (dados.registros||[]).filter(r => r.data === hoje);
-    if (hojeRegs.length > 0) {
-      const t = hojeRegs.reduce((s,r) => s + r.total, 0);
-      const a = hojeRegs.reduce((s,r) => s + r.acertos, 0);
-      hojeItens.push({ mat, t, a });
-    }
-  });
-
-  if (hojeItens.length === 0) {
-    lista.innerHTML = '<div style="color:var(--ink-faded);font-style:italic">Nenhuma questão registada hoje</div>';
-    return;
-  }
-
-  lista.innerHTML = hojeItens.map(({mat,t,a}) => {
-    const pct = Math.round((a/t)*100);
-    const cor = pct >= 70 ? '#5a9850' : pct >= 50 ? '#c9960a' : '#c05050';
-    return `<div style="display:flex;justify-content:space-between;padding:0.3rem 0;border-bottom:1px dotted var(--line)">
-      <span>${nomeMap[mat]||mat}</span>
-      <span style="font-weight:600;color:${cor}">${a}/${t} (${pct}%)</span>
-    </div>`;
-  }).join('') +
-  `<a href="questoes.html" style="display:block;text-align:center;color:var(--rose-deep);font-size:0.72rem;margin-top:0.5rem;text-decoration:none">Ver histórico completo →</a>`;
 }
 
 // ── Exportar como PDF ────────────────────────

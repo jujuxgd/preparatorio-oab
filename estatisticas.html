@@ -444,7 +444,7 @@
     <a href="index.html" class="nav-link"><span class="icon">✦</span><span>Início</span></a>
     <a href="hoje.html" class="nav-link"><span class="icon">◐</span><span>Hoje</span></a>
     <a href="calendario.html" class="nav-link"><span class="icon">☷</span><span>Calendário</span></a>
-    <a href="revisar.html" class="nav-link"><span class="icon">↻</span><span>Revisar</span><span class="badge">3</span></a>
+    <a href="revisar.html" class="nav-link"><span class="icon">↻</span><span>Revisar</span></a>
     <div class="nav-section-label">Estudo</div>
     <a href="materias.html" class="nav-link"><span class="icon">❖</span><span>Matérias</span></a>
     <a href="questoes.html" class="nav-link"><span class="icon">◎</span><span>Questões</span></a>
@@ -471,12 +471,14 @@
   <main>
     <div class="topbar">
       <div class="page-title">
-        <div class="breadcrumb">Dados · janeiro 2026</div>
+        <div class="breadcrumb">Dados · <span data-month-year>—</span></div>
         <h1>Seu <em>caminho</em> em números</h1>
       </div>
       <div class="topbar-actions">
         <div class="streak-pill">
-          <span class="flame">🌸</span><span class="count">12</span><span class="label">dias</span>
+          <span class="flame">🌸</span>
+          <span class="count" id="streak-count">0</span>
+          <span class="label">dias</span>
         </div>
       </div>
     </div>
@@ -484,82 +486,53 @@
     <!-- HERO -->
     <div class="stats-hero">
       <div class="stat-big">
-        <div class="label">Total estudado</div>
-        <div class="num">42<small>h</small></div>
-        <div class="sub">média 3h 30min/dia</div>
+        <div class="label">Horas de estudo</div>
+        <div class="num" id="hero-horas">0<small>h</small></div>
+        <div class="sub" id="hero-horas-sub">nenhum dia concluído</div>
       </div>
       <div class="stat-big">
         <div class="label">Questões resolvidas</div>
-        <div class="num">187</div>
-        <div class="sub">acerto <em>68%</em></div>
+        <div class="num" id="hero-questoes">0</div>
+        <div class="sub" id="hero-questoes-sub">sem registros</div>
       </div>
       <div class="stat-big">
         <div class="label">Streak atual</div>
-        <div class="num">12<small> dias</small></div>
-        <div class="sub">recorde · 12 dias 🌸</div>
+        <div class="num" id="hero-streak">0<small> dias</small></div>
+        <div class="sub" id="hero-streak-sub">comece a estudar!</div>
       </div>
       <div class="stat-big">
         <div class="label">Progresso geral</div>
-        <div class="num">20<small>%</small></div>
-        <div class="sub">12 de 60 dias do plano</div>
+        <div class="num" id="hero-progresso">0<small>%</small></div>
+        <div class="sub" id="hero-progresso-sub">0 de 60 dias do plano</div>
       </div>
     </div>
 
     <!-- FAVORITA -->
-    <div class="favorita-card">
-      <div class="favorita-icon">⚖</div>
-      <div>
-        <div class="eyebrow">Sua matéria favorita</div>
-        <h3>Ética <em>Profissional</em></h3>
-        <p>Calculada com base em tempo dedicado, taxa de acertos e regularidade. Você passou <strong>12h 40min</strong> estudando Ética e acerta <strong>72%</strong> das questões — sua melhor combinação.</p>
-      </div>
-      <div class="badge">
-        <div class="pct">72%</div>
-        <div class="lbl">acertos</div>
-      </div>
-    </div>
+    <div class="favorita-card" id="favorita-card"></div>
 
-    <!-- LINHA 1: EVOLUÇÃO + DISTRIBUIÇÃO -->
+    <!-- LINHA 1: EVOLUÇÃO + DONUT -->
     <div class="stats-grid">
-      <!-- LINE CHART -->
       <div class="chart-card">
         <div class="chart-head">
           <div>
-            <div class="chart-title">Horas de estudo · <em>últimos 14 dias</em></div>
-            <div class="chart-sub">Tendência crescente · pico em 12 jan (4h 45min)</div>
+            <div class="chart-title">Dias estudados · <em>últimos 14 dias</em></div>
+            <div class="chart-sub" id="chart-sub-evol">barras = horas previstas por dia concluído</div>
           </div>
-          <div class="chart-sub"><strong style="color:var(--rose-deep);font-family:'Playfair Display',serif">+15%</strong> vs. semana anterior</div>
         </div>
-        <div class="line-chart">
-          <div class="line-day"><div class="line-bar" style="height:55%"></div><div class="lbl">30</div></div>
-          <div class="line-day"><div class="line-bar" style="height:48%"></div><div class="lbl">31</div></div>
-          <div class="line-day"><div class="line-bar" style="height:62%"></div><div class="lbl">01</div></div>
-          <div class="line-day"><div class="line-bar" style="height:70%"></div><div class="lbl">02</div></div>
-          <div class="line-day"><div class="line-bar" style="height:75%"></div><div class="lbl">03</div></div>
-          <div class="line-day"><div class="line-bar" style="height:58%"></div><div class="lbl">04</div></div>
-          <div class="line-day"><div class="line-bar" style="height:65%"></div><div class="lbl">05</div></div>
-          <div class="line-day"><div class="line-bar" style="height:80%"></div><div class="lbl">06</div></div>
-          <div class="line-day"><div class="line-bar" style="height:72%"></div><div class="lbl">07</div></div>
-          <div class="line-day"><div class="line-bar" style="height:78%"></div><div class="lbl">08</div></div>
-          <div class="line-day"><div class="line-bar" style="height:85%"></div><div class="lbl">09</div></div>
-          <div class="line-day"><div class="line-bar" style="height:82%"></div><div class="lbl">10</div></div>
-          <div class="line-day"><div class="line-bar" style="height:88%"></div><div class="lbl">11</div></div>
-          <div class="line-day"><div class="line-bar" style="height:95%"></div><div class="lbl">12</div></div>
-        </div>
+        <div class="line-chart" id="line-chart"></div>
       </div>
 
-      <!-- DONUT -->
       <div class="chart-card">
         <div class="chart-head">
           <div>
             <div class="chart-title">Taxa de <em>acerto</em></div>
-            <div class="chart-sub">187 questões resolvidas</div>
+            <div class="chart-sub" id="donut-sub">questões no QConcursos</div>
           </div>
         </div>
         <div class="donut-wrap">
-          <div class="donut">
+          <div class="donut" id="donut-circle" style="background:conic-gradient(var(--rose-deep) 0% 0%, var(--bg-soft) 0% 100%)">
             <div class="donut-inner">
-              <div class="pct">72%</div>
+              <div class="pct" id="donut-pct">—</div>
               <div class="lbl">acertos</div>
             </div>
           </div>
@@ -567,11 +540,11 @@
         <div class="donut-legend" style="margin-top:1.5rem">
           <div class="item">
             <span class="dot" style="background:var(--rose-deep)"></span>
-            <span>Acertos: <strong>135</strong></span>
+            <span>Acertos: <strong id="donut-acertos">0</strong></span>
           </div>
           <div class="item">
             <span class="dot" style="background:var(--bg-soft);border:1px solid var(--line)"></span>
-            <span>Erros: <strong>52</strong></span>
+            <span>Erros: <strong id="donut-erros">0</strong></span>
           </div>
         </div>
       </div>
@@ -579,161 +552,261 @@
 
     <!-- LINHA 2: RANKINGS -->
     <div class="stats-grid-2">
-      <!-- TEMPO POR MATÉRIA -->
       <div class="chart-card">
         <div class="chart-head">
           <div>
             <div class="chart-title">Tempo por <em>matéria</em></div>
-            <div class="chart-sub">Distribuição em horas</div>
+            <div class="chart-sub">Dias concluídos × horas do plano</div>
           </div>
         </div>
-        <ul class="ranking-list">
-          <li class="rank-item">
-            <span class="rank-pos">I</span>
-            <span class="rank-name">Ética Profissional</span>
-            <div class="rank-bar"><div class="rank-fill" style="width:100%"></div></div>
-            <span class="rank-val">12h40</span>
-          </li>
-          <li class="rank-item">
-            <span class="rank-pos">II</span>
-            <span class="rank-name">Constitucional</span>
-            <div class="rank-bar"><div class="rank-fill" style="width:72%"></div></div>
-            <span class="rank-val">9h12</span>
-          </li>
-          <li class="rank-item">
-            <span class="rank-pos">III</span>
-            <span class="rank-name">Direito Civil</span>
-            <div class="rank-bar"><div class="rank-fill" style="width:62%"></div></div>
-            <span class="rank-val">7h48</span>
-          </li>
-          <li class="rank-item">
-            <span class="rank-pos">IV</span>
-            <span class="rank-name">Processo Civil</span>
-            <div class="rank-bar"><div class="rank-fill" style="width:38%"></div></div>
-            <span class="rank-val">4h50</span>
-          </li>
-          <li class="rank-item">
-            <span class="rank-pos">V</span>
-            <span class="rank-name">Direito Penal</span>
-            <div class="rank-bar"><div class="rank-fill" style="width:24%"></div></div>
-            <span class="rank-val">3h05</span>
-          </li>
-        </ul>
+        <ul class="ranking-list" id="ranking-tempo"></ul>
       </div>
 
-      <!-- ACERTOS POR MATÉRIA -->
       <div class="chart-card">
         <div class="chart-head">
           <div>
             <div class="chart-title">Acertos por <em>matéria</em></div>
-            <div class="chart-sub">% de acerto em questões</div>
+            <div class="chart-sub">% de acerto no QConcursos</div>
           </div>
         </div>
-        <ul class="ranking-list">
-          <li class="rank-item">
-            <span class="rank-pos">I</span>
-            <span class="rank-name">Ética Profissional</span>
-            <div class="rank-bar"><div class="rank-fill" style="width:72%"></div></div>
-            <span class="rank-val">72%</span>
-          </li>
-          <li class="rank-item">
-            <span class="rank-pos">II</span>
-            <span class="rank-name">Constitucional</span>
-            <div class="rank-bar"><div class="rank-fill" style="width:68%"></div></div>
-            <span class="rank-val">68%</span>
-          </li>
-          <li class="rank-item">
-            <span class="rank-pos">III</span>
-            <span class="rank-name">Direito Civil</span>
-            <div class="rank-bar"><div class="rank-fill" style="width:65%"></div></div>
-            <span class="rank-val">65%</span>
-          </li>
-          <li class="rank-item">
-            <span class="rank-pos">IV</span>
-            <span class="rank-name">Processo Civil</span>
-            <div class="rank-bar"><div class="rank-fill" style="width:55%;background:linear-gradient(90deg,var(--gold),var(--rose))"></div></div>
-            <span class="rank-val">55%</span>
-          </li>
-          <li class="rank-item">
-            <span class="rank-pos">V</span>
-            <span class="rank-name">Direito Penal</span>
-            <div class="rank-bar"><div class="rank-fill" style="width:42%;background:linear-gradient(90deg,var(--error),var(--gold))"></div></div>
-            <span class="rank-val">42%</span>
-          </li>
-        </ul>
-        <div style="margin-top:1rem;padding:0.8rem 1rem;background:var(--bg-soft);border-radius:var(--radius-sm);font-size:0.78rem;color:var(--ink-soft)">
-          <strong style="color:var(--rose-deep);font-family:'Playfair Display',serif">✦ Atenção:</strong> Direito Penal abaixo do corte. Considere aumentar 30 min/dia.
-        </div>
+        <ul class="ranking-list" id="ranking-acertos"></ul>
+        <div id="ranking-atencao" style="display:none;margin-top:1rem;padding:0.8rem 1rem;background:var(--bg-soft);border-radius:var(--radius-sm);font-size:0.78rem;color:var(--ink-soft)"></div>
       </div>
     </div>
 
-    <!-- LINHA 3: COMPARTILHAR + DETALHE EXTRA -->
+    <!-- LINHA 3: RESUMO + CONQUISTAS -->
     <div class="stats-grid-2">
-      <!-- WRAPPED -->
-      <div class="wrapped-card">
-        <div class="eyebrow">Seu janeiro · resumido</div>
-        <h3>"Determinação <em>em estado puro"</em></h3>
-        <div class="wrapped-stats">
-          <div class="wrapped-stat">
-            <div class="v">42h</div>
-            <div class="l">estudadas</div>
-          </div>
-          <div class="wrapped-stat">
-            <div class="v">187</div>
-            <div class="l">questões</div>
-          </div>
-          <div class="wrapped-stat">
-            <div class="v">12</div>
-            <div class="l">dias seguidos</div>
-          </div>
-        </div>
-        <button class="btn">↗ Compartilhar progresso</button>
-      </div>
+      <div class="wrapped-card" id="wrapped-card"></div>
 
-      <!-- DECISIVOS -->
       <div class="chart-card">
         <div class="chart-head">
           <div>
             <div class="chart-title">Top <em>conquistas</em></div>
-            <div class="chart-sub">Janeiro 2026</div>
+            <div class="chart-sub" id="conquistas-sub"></div>
           </div>
         </div>
-        <div style="display:flex;flex-direction:column;gap:0.8rem;margin-top:0.5rem">
-          <div style="display:flex;align-items:center;gap:1rem;padding:0.8rem 1rem;background:var(--bg-soft);border-radius:var(--radius-sm)">
-            <span style="font-size:1.5rem">🌸</span>
-            <div>
-              <div style="font-size:0.88rem;font-weight:500">Primeira semana completa</div>
-              <div style="font-size:0.72rem;color:var(--ink-faded)">7 dias consecutivos · 06 jan</div>
-            </div>
-          </div>
-          <div style="display:flex;align-items:center;gap:1rem;padding:0.8rem 1rem;background:var(--bg-soft);border-radius:var(--radius-sm)">
-            <span style="font-size:1.5rem">✦</span>
-            <div>
-              <div style="font-size:0.88rem;font-weight:500">Simulado &gt; 60%</div>
-              <div style="font-size:0.72rem;color:var(--ink-faded)">62% em 12 jan · acima do corte</div>
-            </div>
-          </div>
-          <div style="display:flex;align-items:center;gap:1rem;padding:0.8rem 1rem;background:var(--bg-soft);border-radius:var(--radius-sm)">
-            <span style="font-size:1.5rem">📚</span>
-            <div>
-              <div style="font-size:0.88rem;font-weight:500">100 questões resolvidas</div>
-              <div style="font-size:0.72rem;color:var(--ink-faded)">Marco em 09 jan</div>
-            </div>
-          </div>
-          <div style="display:flex;align-items:center;gap:1rem;padding:0.8rem 1rem;background:var(--bg-soft);border-radius:var(--radius-sm)">
-            <span style="font-size:1.5rem">⚖</span>
-            <div>
-              <div style="font-size:0.88rem;font-weight:500">Ética dominada</div>
-              <div style="font-size:0.72rem;color:var(--ink-faded)">72% acerto · matéria favorita</div>
-            </div>
-          </div>
-        </div>
+        <div style="display:flex;flex-direction:column;gap:0.8rem;margin-top:0.5rem" id="conquistas-list"></div>
       </div>
     </div>
-
   </main>
 </div>
 
 <script src="script.js"></script>
+<script src="progresso.js"></script>
+<script src="plano-oab.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const p      = carregarProgresso();
+  const stats  = calcularStats();
+  const q      = getTotaisQuestoes();
+  const hoje   = getCurrentDate();
+
+  // ── Streak
+  const streakEl = document.getElementById('streak-count');
+  if (streakEl) streakEl.textContent = p.streak || 0;
+
+  // ── Horas totais (soma das horas de dias concluídos)
+  let totalHoras = 0;
+  const horasPorMateria = {};
+  Object.keys(p.dias || {}).forEach(numDia => {
+    if (!p.dias[numDia].concluido) return;
+    const dados = getDadosDia(parseInt(numDia));
+    if (!dados) return;
+    dados.materias.forEach(m => {
+      const h = parseFloat(m.horas) || 0;
+      totalHoras += h;
+      if (!horasPorMateria[m.nome]) horasPorMateria[m.nome] = 0;
+      horasPorMateria[m.nome] += h;
+    });
+  });
+  const mediaH = stats.concluidos > 0 ? (totalHoras / stats.concluidos).toFixed(1) : 0;
+
+  // ── Hero
+  document.getElementById('hero-horas').innerHTML     = `${totalHoras}<small>h</small>`;
+  document.getElementById('hero-horas-sub').textContent = stats.concluidos > 0 ? `média ${mediaH}h/dia` : 'nenhum dia concluído';
+  document.getElementById('hero-questoes').textContent  = q.total;
+  document.getElementById('hero-questoes-sub').innerHTML = q.total > 0 ? `acerto <em>${q.pct}%</em>` : 'sem registros';
+  document.getElementById('hero-streak').innerHTML    = `${p.streak||0}<small> dias</small>`;
+  document.getElementById('hero-streak-sub').textContent = p.streak >= 7 ? `recorde 🌸 ${p.streak} dias` : p.streak > 0 ? 'continue assim!' : 'comece a estudar!';
+  document.getElementById('hero-progresso').innerHTML = `${stats.pct}<small>%</small>`;
+  document.getElementById('hero-progresso-sub').textContent = `${stats.concluidos} de 60 dias do plano`;
+
+  // ── Matéria favorita (maior score: acertos × log(total+1))
+  const qTodas = getTodasQuestoes();
+  const NOMES_MAT = { etica:'Ética Profissional',constitucional:'Constitucional',civil:'Direito Civil',
+    proc_civil:'Processo Civil',penal:'Direito Penal',proc_penal:'Processo Penal',trabalho:'Direito do Trabalho',
+    proc_trabalho:'Proc. Trabalho',tributario:'Tributário',administrativo:'Administrativo',empresarial:'Empresarial',
+    dh:'Direitos Humanos',internacional:'Internacional',ambiental:'Ambiental',eca:'ECA',cdc:'Consumidor',
+    filosofia:'Filosofia',financeiro:'Financeiro',eleitoral:'Eleitoral',previdenciario:'Previdenciário' };
+  const EMOJIS_MAT = { etica:'⚖️',constitucional:'🏛️',civil:'📜',proc_civil:'⚖️',penal:'⚔️',proc_penal:'📋',
+    trabalho:'⚙️',proc_trabalho:'⚙️',tributario:'💰',administrativo:'🏛️',empresarial:'🏢',dh:'🌍',
+    internacional:'🌐',ambiental:'🌿',eca:'👶',cdc:'🛒',filosofia:'📖',financeiro:'💹',eleitoral:'🗳️',previdenciario:'🛡️' };
+
+  let favId = null, favScore = -1;
+  Object.entries(qTodas).forEach(([id, dados]) => {
+    if (dados.total < 3) return;
+    const pct = (dados.acertos / dados.total) * 100;
+    const score = pct * Math.log(dados.total + 1);
+    if (score > favScore) { favScore = score; favId = id; }
+  });
+  const favCard = document.getElementById('favorita-card');
+  if (favId && favCard) {
+    const fd = qTodas[favId];
+    const pct = Math.round((fd.acertos/fd.total)*100);
+    const hFav = horasPorMateria[NOMES_MAT[favId]] || 0;
+    favCard.innerHTML = `
+      <div class="favorita-icon">${EMOJIS_MAT[favId]||'📖'}</div>
+      <div>
+        <div class="eyebrow">Sua matéria com melhor desempenho</div>
+        <h3>${(NOMES_MAT[favId]||favId).replace(/ /,' <em>') + '</em>'}</h3>
+        <p>${hFav>0?`Você dedicou <strong>${hFav}h</strong> e acerta`:'Acerta'} <strong>${pct}%</strong> das questões — sua melhor combinação.</p>
+      </div>
+      <div class="badge"><div class="pct">${pct}%</div><div class="lbl">acertos</div></div>`;
+  } else if (favCard) {
+    favCard.innerHTML = `
+      <div class="favorita-icon">🌸</div>
+      <div>
+        <div class="eyebrow">Melhor matéria</div>
+        <h3>Ainda <em>sem dados</em></h3>
+        <p>Registre questões no QConcursos para identificar sua matéria com melhor desempenho.</p>
+      </div>`;
+  }
+
+  // ── Gráfico de evolução (últimos 14 dias)
+  const lineChart = document.getElementById('line-chart');
+  if (lineChart) {
+    const maxH = 4; // max horas esperadas por dia para escalar o gráfico
+    let html = '';
+    for (let i = 13; i >= 0; i--) {
+      const d = new Date(hoje);
+      d.setDate(d.getDate() - i);
+      const ds = d.toISOString().split('T')[0];
+      const dayLabel = d.getDate();
+      const entry = Object.entries(p.dias || {}).find(([,dd]) => dd.data_conclusao === ds);
+      let horas = 0;
+      if (entry) {
+        const dados = getDadosDia(parseInt(entry[0]));
+        if (dados) horas = dados.materias.reduce((s,m) => s + (parseFloat(m.horas)||0), 0);
+      }
+      const pct = horas > 0 ? Math.min(100, Math.round((horas / maxH) * 100)) : 0;
+      html += `<div class="line-day" title="${ds}: ${horas>0?horas+'h':'não estudado'}">
+        ${horas > 0 ? `<div class="line-bar" style="height:${pct}%"></div>` : `<div style="width:60%;height:4px;background:var(--line-soft);border-radius:2px;margin-bottom:1px"></div>`}
+        <div class="lbl">${dayLabel}</div>
+      </div>`;
+    }
+    lineChart.innerHTML = html;
+  }
+
+  // ── Donut
+  const donutPct  = document.getElementById('donut-pct');
+  const donutCircle = document.getElementById('donut-circle');
+  const donutSub  = document.getElementById('donut-sub');
+  if (q.total > 0) {
+    if (donutPct) donutPct.textContent = q.pct + '%';
+    if (donutCircle) donutCircle.style.background = `conic-gradient(var(--rose-deep) 0% ${q.pct}%, var(--bg-soft) ${q.pct}% 100%)`;
+    if (donutSub) donutSub.textContent = `${q.total} questão${q.total!==1?'es':''} resolvida${q.total!==1?'s':''}`;
+  } else {
+    if (donutPct) donutPct.textContent = '—';
+    if (donutSub) donutSub.textContent = 'nenhuma questão registrada';
+  }
+  const donutAcertos = document.getElementById('donut-acertos');
+  const donutErros   = document.getElementById('donut-erros');
+  if (donutAcertos) donutAcertos.textContent = q.acertos;
+  if (donutErros)   donutErros.textContent   = q.total - q.acertos;
+
+  // ── Ranking tempo por matéria
+  const rankingTempo = document.getElementById('ranking-tempo');
+  if (rankingTempo) {
+    const sorted = Object.entries(horasPorMateria).sort((a,b)=>b[1]-a[1]).slice(0,5);
+    if (sorted.length === 0) {
+      rankingTempo.innerHTML = '<li style="padding:1rem 0;color:var(--ink-faded);font-size:0.85rem;font-style:italic">Nenhum dia concluído ainda.</li>';
+    } else {
+      const maxH2 = sorted[0][1];
+      const romanos = ['I','II','III','IV','V'];
+      rankingTempo.innerHTML = sorted.map(([nome,h],i) => `
+        <li class="rank-item">
+          <span class="rank-pos">${romanos[i]}</span>
+          <span class="rank-name">${nome}</span>
+          <div class="rank-bar"><div class="rank-fill" style="width:${Math.round((h/maxH2)*100)}%"></div></div>
+          <span class="rank-val">${h}h</span>
+        </li>`).join('');
+    }
+  }
+
+  // ── Ranking acertos por matéria
+  const rankingAcertos = document.getElementById('ranking-acertos');
+  const rankAtencao    = document.getElementById('ranking-atencao');
+  if (rankingAcertos) {
+    const sorted = Object.entries(qTodas)
+      .filter(([,d]) => d.total > 0)
+      .map(([id,d]) => ({ id, nome: NOMES_MAT[id]||id, pct: Math.round((d.acertos/d.total)*100), total: d.total }))
+      .sort((a,b) => b.pct - a.pct)
+      .slice(0, 5);
+    if (sorted.length === 0) {
+      rankingAcertos.innerHTML = '<li style="padding:1rem 0;color:var(--ink-faded);font-size:0.85rem;font-style:italic">Registre questões para ver o ranking.</li>';
+    } else {
+      const romanos = ['I','II','III','IV','V'];
+      rankingAcertos.innerHTML = sorted.map(({nome,pct},i) => {
+        const cor = pct >= 70 ? '' : pct >= 50 ? 'background:linear-gradient(90deg,var(--gold),var(--rose))' : 'background:linear-gradient(90deg,var(--error),var(--gold))';
+        return `<li class="rank-item">
+          <span class="rank-pos">${romanos[i]}</span>
+          <span class="rank-name">${nome}</span>
+          <div class="rank-bar"><div class="rank-fill" style="width:${pct}%;${cor}"></div></div>
+          <span class="rank-val">${pct}%</span>
+        </li>`;
+      }).join('');
+      const fracos = sorted.filter(s => s.pct < 50);
+      if (fracos.length > 0 && rankAtencao) {
+        rankAtencao.style.display = '';
+        rankAtencao.innerHTML = `<strong style="color:var(--rose-deep);font-family:'Playfair Display',serif">✦ Atenção:</strong> ${fracos.map(f=>f.nome).join(', ')} abaixo do corte. Considere aumentar o foco.`;
+      }
+    }
+  }
+
+  // ── Wrapped card
+  const wrappedCard = document.getElementById('wrapped-card');
+  if (wrappedCard) {
+    const mesAtual = hoje.toLocaleDateString('pt-BR', { month:'long', year:'numeric' });
+    wrappedCard.innerHTML = `
+      <div class="eyebrow">Seu ${mesAtual} · resumido</div>
+      <h3>"${totalHoras > 0 ? 'Determinação <em>em estado puro</em>' : 'Pronta para <em>começar</em>'}"</h3>
+      <div class="wrapped-stats">
+        <div class="wrapped-stat"><div class="v">${totalHoras}h</div><div class="l">estudadas</div></div>
+        <div class="wrapped-stat"><div class="v">${q.total}</div><div class="l">questões</div></div>
+        <div class="wrapped-stat"><div class="v">${p.streak||0}</div><div class="l">dias seguidos</div></div>
+      </div>
+      <button class="btn" onclick="exportarProgresso()">↓ Exportar dados</button>`;
+  }
+
+  // ── Conquistas dinâmicas
+  const conquistas = [];
+  if (stats.concluidos >= 1) conquistas.push({ icon:'🌸', title:'Primeiro dia concluído', sub:`Dia 1 do plano completado` });
+  if (stats.concluidos >= 7) conquistas.push({ icon:'✦', title:'Primeira semana completa', sub:`${stats.concluidos} dias concluídos` });
+  if (stats.concluidos >= 30) conquistas.push({ icon:'🏆', title:'Metade do plano!', sub:'30 dias — você está no caminho' });
+  if (q.total >= 50)  conquistas.push({ icon:'📚', title:'50 questões resolvidas', sub:`Taxa atual: ${q.pct}%` });
+  if (q.total >= 100) conquistas.push({ icon:'📖', title:'100 questões resolvidas', sub:`Média de acerto: ${q.pct}%` });
+  if (q.total >= 500) conquistas.push({ icon:'🎯', title:'500 questões!', sub:'Dedicação de verdade' });
+  if (q.pct >= 70 && q.total >= 10) conquistas.push({ icon:'⚖️', title:'Acima do corte', sub:`${q.pct}% de acerto geral` });
+  if ((p.streak||0) >= 7) conquistas.push({ icon:'🔥', title:'7 dias seguidos', sub:'Constância é tudo' });
+
+  const conquistasSub = document.getElementById('conquistas-sub');
+  const conquistasList = document.getElementById('conquistas-list');
+  if (conquistasSub) conquistasSub.textContent = conquistas.length > 0 ? `${conquistas.length} desbloqueada${conquistas.length!==1?'s':''}` : 'Ainda sem conquistas';
+  if (conquistasList) {
+    if (conquistas.length === 0) {
+      conquistasList.innerHTML = `<div style="color:var(--ink-faded);font-size:0.85rem;font-style:italic;padding:0.5rem 0">Complete dias e registre questões para desbloquear conquistas.</div>`;
+    } else {
+      conquistasList.innerHTML = conquistas.slice(0,4).map(c => `
+        <div style="display:flex;align-items:center;gap:1rem;padding:0.8rem 1rem;background:var(--bg-soft);border-radius:var(--radius-sm)">
+          <span style="font-size:1.5rem">${c.icon}</span>
+          <div>
+            <div style="font-size:0.88rem;font-weight:500">${c.title}</div>
+            <div style="font-size:0.72rem;color:var(--ink-faded)">${c.sub}</div>
+          </div>
+        </div>`).join('');
+    }
+  }
+});
+</script>
 </body>
 </html>

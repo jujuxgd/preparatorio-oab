@@ -143,6 +143,9 @@
   margin-left: 0.5rem;
 }
 
+.q-chip { padding:0.3rem 0.8rem; background:var(--bg-soft); border:1px solid transparent; border-radius:20px; font-size:0.74rem; color:var(--ink-soft); cursor:pointer; transition:all 0.2s; white-space:nowrap; }
+.q-chip:hover { background:var(--blush); }
+.q-chip.active { background:linear-gradient(135deg,var(--rose),var(--rose-deep)); color:var(--paper); }
 .hist-wrap { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-sm); overflow: hidden; }
 .hist-table { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
 .hist-table th { padding: 0.7rem 1rem; background: var(--bg-soft); text-align: left; font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faded); font-weight: 600; }
@@ -258,6 +261,7 @@
 
     <!-- Cards por matéria -->
     <div class="q-section-title">Por matéria</div>
+    <div id="q-filter-row" style="display:none;margin-bottom:1rem;display:flex;gap:0.5rem;flex-wrap:wrap"></div>
     <div class="q-grid" id="q-grid"></div>
 
     <!-- Histórico recente -->
@@ -288,6 +292,8 @@ const MATERIAS_INFO = {
   eleitoral:{nome:"Eleitoral",emoji:"🗳️"}, previdenciario:{nome:"Previdenciário",emoji:"🛡️"}
 };
 
+let _activeFilter = null; // null = todas
+
 function pctColor(p) { return p >= 70 ? '#4a9850' : p >= 50 ? '#c9960a' : '#c05050'; }
 
 function renderSummary() {
@@ -301,10 +307,32 @@ function renderSummary() {
     <div class="q-hero-stat"><div class="num">${diasStudy}</div><div class="lbl">Dias estudados</div></div>`;
 }
 
+function buildFilterChips() {
+  const todas = getTodasQuestoes();
+  const row = document.getElementById('q-filter-row');
+  if (!row || Object.keys(todas).length === 0) return;
+  row.style.display = 'flex';
+  const chips = [{ id: null, label: 'Todas' }].concat(
+    Object.keys(todas).map(id => ({ id, label: (MATERIAS_INFO[id]?.emoji||'') + ' ' + (MATERIAS_INFO[id]?.nome||id) }))
+  );
+  row.innerHTML = chips.map(c => `
+    <span class="q-chip ${_activeFilter===c.id?'active':''}" onclick="setFilter(${c.id===null?'null':`'${c.id}'`})">${c.label}</span>
+  `).join('');
+}
+
+function setFilter(id) {
+  _activeFilter = id;
+  buildFilterChips();
+  renderCards();
+  renderHistorico();
+}
+
 function renderCards() {
   const todas = getTodasQuestoes();
   let html = '';
-  Object.entries(todas).sort((a,b) => b[1].total - a[1].total).forEach(([id, dados]) => {
+  Object.entries(todas)
+    .filter(([id]) => _activeFilter === null || id === _activeFilter)
+    .sort((a,b) => b[1].total - a[1].total).forEach(([id, dados]) => {
     const info     = MATERIAS_INFO[id] || { nome: id, emoji: '📖' };
     const pct      = dados.total > 0 ? Math.round((dados.acertos/dados.total)*100) : 0;
     const cor      = pctColor(pct);
@@ -326,15 +354,17 @@ function renderCards() {
     </div>`;
   });
   document.getElementById('q-grid').innerHTML = html ||
-    '<div style="color:var(--ink-faded);font-size:0.88rem;grid-column:1/-1;padding:1rem;text-align:center">Nenhuma questão registada ainda. Faça questões no QConcursos e registe aqui!</div>';
+    `<div style="color:var(--ink-faded);font-size:0.88rem;grid-column:1/-1;padding:1rem;text-align:center">${_activeFilter ? 'Nenhuma questão registada para esta matéria.' : 'Nenhuma questão registada ainda. Faça questões no QConcursos e registe aqui!'}</div>`;
 }
 
 function renderHistorico() {
   const todas = getTodasQuestoes();
   const regs  = [];
-  Object.entries(todas).forEach(([id, dados]) => {
-    (dados.registros||[]).forEach(r => regs.push({ ...r, mat: id }));
-  });
+  Object.entries(todas)
+    .filter(([id]) => _activeFilter === null || id === _activeFilter)
+    .forEach(([id, dados]) => {
+      (dados.registros||[]).forEach(r => regs.push({ ...r, mat: id }));
+    });
   regs.sort((a,b) => b.data.localeCompare(a.data));
   const tbody = document.getElementById('hist-tbody');
   if (regs.length === 0) {
@@ -355,7 +385,7 @@ function renderHistorico() {
   }).join('');
 }
 
-function renderAll() { renderSummary(); renderCards(); renderHistorico(); }
+function renderAll() { renderSummary(); buildFilterChips(); renderCards(); renderHistorico(); }
 
 function submitForm() {
   const materia = document.getElementById('q-materia').value;

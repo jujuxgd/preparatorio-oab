@@ -398,17 +398,28 @@ function renderGrid() {
         <span class="mat-emoji">${mat.emoji}</span>
         <div class="mat-info">
           <div class="mat-nome">${mat.nome}</div>
-          <div class="mat-sub">${prog.feitos}/${prog.total} tópicos${qStats.total>0?' · '+qStats.total+' questões':''}</div>
+          <div class="mat-sub" id="matsub-${mat.id}">${prog.feitos}/${prog.total} tópicos${qStats.total>0?' · '+qStats.total+' questões':''}</div>
         </div>
         <div class="mat-stats">
-          <div class="mat-pct">${pct}%</div>
-          <div class="mat-pbar"><div class="mat-pbar-fill" style="width:${pct}%"></div></div>
+          <div class="mat-pct" id="matpct-${mat.id}">${pct}%</div>
+          <div class="mat-pbar"><div class="mat-pbar-fill" id="matbar-${mat.id}" style="width:${pct}%"></div></div>
         </div>
         <span class="mat-chevron">›</span>
       </div>
       <div class="mat-body">
         ${qBar}
         ${diasHtml}
+        <div style="margin-top:0.8rem;padding-top:0.8rem;border-top:1px dotted var(--line)">
+          <div style="font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-faded);margin-bottom:0.4rem">◎ Registrar questões desta matéria</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:0.4rem;align-items:center">
+            <input type="number" placeholder="Total" min="1" id="qinput-t-${mat.id}"
+              style="background:var(--bg-soft);border:1px solid var(--line);padding:0.4rem 0.6rem;border-radius:var(--radius-sm);font-size:0.8rem;color:var(--ink);font-family:inherit">
+            <input type="number" placeholder="Acertos" min="0" id="qinput-a-${mat.id}"
+              style="background:var(--bg-soft);border:1px solid var(--line);padding:0.4rem 0.6rem;border-radius:var(--radius-sm);font-size:0.8rem;color:var(--ink);font-family:inherit">
+            <button class="btn btn-primary" style="font-size:0.72rem;padding:0.4rem 0.8rem;white-space:nowrap" onclick="registrarQuestoesMat('${mat.id}')">Registrar</button>
+          </div>
+          <div id="qfb-${mat.id}" style="font-size:0.75rem;margin-top:0.3rem;min-height:1em;color:var(--ink-soft)"></div>
+        </div>
       </div>
     </div>`;
   });
@@ -439,6 +450,35 @@ function toggleTopico(dia, mIdx, tIdx, el) {
       if (subEl) subEl.textContent = `${prog.feitos}/${prog.total} tópicos`;
     }
   }
+  buildTotais();
+}
+
+function registrarQuestoesMat(matId) {
+  const total   = parseInt(document.getElementById(`qinput-t-${matId}`)?.value) || 0;
+  const acertos = parseInt(document.getElementById(`qinput-a-${matId}`)?.value);
+  const fb      = document.getElementById(`qfb-${matId}`);
+
+  if (total <= 0) { if (fb) { fb.textContent = '⚠ Informe o total'; fb.style.color='var(--rose-deep)'; } return; }
+  if (isNaN(acertos) || acertos < 0 || acertos > total) { if (fb) { fb.textContent = '⚠ Acertos inválido'; fb.style.color='var(--rose-deep)'; } return; }
+
+  registrarQuestoes(matId, total, acertos);
+
+  document.getElementById(`qinput-t-${matId}`).value = '';
+  document.getElementById(`qinput-a-${matId}`).value = '';
+
+  const pct = Math.round((acertos / total) * 100);
+  if (fb) {
+    fb.textContent = `✓ ${acertos}/${total} (${pct}%) — registrado`;
+    fb.style.color = pct >= 70 ? '#4a9850' : 'var(--ink-soft)';
+    setTimeout(() => { if (fb) fb.textContent = ''; }, 3000);
+  }
+
+  // Atualiza o sub-header do card sem re-renderizar tudo
+  const qStats = getQuestoesPorMateria(matId);
+  const prog   = getProgressoMateria(matId);
+  const subEl  = document.getElementById(`matsub-${matId}`);
+  if (subEl) subEl.textContent = `${prog.feitos}/${prog.total} tópicos · ${qStats.total} questões`;
+
   buildTotais();
 }
 
