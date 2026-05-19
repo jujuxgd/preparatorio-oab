@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OAB · Calendário</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&family=Caveat:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+.filter-bar {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+  padding: 1rem 1.2rem;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.filter-bar .label {
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-faded);
+  align-self: center;
+  margin-right: 0.5rem;
+}
+
+.chip {
+  padding: 0.4rem 0.9rem;
+  background: var(--bg-soft);
+  border: 1px solid transparent;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.chip:hover { background: var(--blush); color: var(--ink); }
+
+.chip.active {
+  background: linear-gradient(135deg, var(--rose) 0%, var(--rose-deep) 100%);
+  color: var(--paper);
+  border-color: transparent;
+}
+
+.month-section {
+  background: var(--paper);
+  border-radius: var(--radius);
+  padding: 2rem;
+  border: 1px solid var(--line);
+  margin-bottom: 1.5rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.month-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.month-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.month-name em { font-style: italic; color: var(--rose-deep); }
+
+.month-stats {
+  font-size: 0.8rem;
+  color: var(--ink-faded);
+  display: flex;
+  gap: 1.5rem;
+}
+
+.month-stats strong {
+  color: var(--rose-deep);
+  font-family: 'Playfair Display', serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+}
+
+.dow {
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-faded);
+  text-align: center;
+  padding: 0.5rem 0;
+}
+
+.day-cell {
+  aspect-ratio: 1;
+  background: var(--bg-soft);
+  border-radius: var(--radius-sm);
+  padding: 0.6rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  border: 1.5px solid transparent;
+  transition: all var(--transition);
+  position: relative;
+}
+
+.day-cell:hover {
+  background: var(--blush);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.day-cell.empty {
+  background: transparent;
+  cursor: default;
+}
+
+.day-cell.empty:hover {
+  transform: none;
+  background: transparent;
+  box-shadow: none;
+}
+
+.day-cell.done {
+  background: linear-gradient(135deg, var(--rose-soft) 0%, var(--blush) 100%);
+}
+
+.day-cell.done::after {
+  content: '✓';
+  position: absolute;
+  top: 0.4rem;
+  right: 0.5rem;
+  color: var(--rose-deep);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.day-cell.today {
+  background: linear-gradient(135deg, var(--rose) 0%, var(--rose-deep) 100%);
+  color: var(--paper);
+  border-color: var(--rose-deep);
+  box-shadow: var(--shadow);
+}
+
+.day-cell.today .num { color: var(--paper); }
+.day-cell.today .topic { color: rgba(255,255,255,0.9); }
+.day-cell.today .materia { color: rgba(255,255,255,0.75); }
+
+.day-cell.simulado {
+  background: linear-gradient(135deg, var(--lavender) 0%, var(--champagne) 100%);
+  border-color: var(--gold);
+}
+
+.day-cell .num {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--ink);
+}
+
+.day-cell .topic {
+  font-size: 0.7rem;
+  color: var(--ink);
+  font-weight: 500;
+  line-height: 1.2;
+  margin-top: auto;
+}
+
+.day-cell .materia {
+  font-size: 0.62rem;
+  color: var(--ink-faded);
+  letter-spacing: 0.05em;
+  margin-top: 0.2rem;
+}
+
+.legend {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.legend-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+}
+</style>
+</head>
+<body>
+
+<div class="aurora-bg" aria-hidden="true">
+  <div class="aurora-blob ab1"></div>
+  <div class="aurora-blob ab2"></div>
+  <div class="aurora-blob ab3"></div>
+  <div class="aurora-blob ab4"></div>
+</div>
+
+<button class="mobile-menu-btn" onclick="toggleSidebar()" title="Menu">☰</button>
+
+<div class="app">
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="mark"></div>
+      <h1>OAB <em style="font-style:italic;color:var(--rose-deep)">·</em> Ju</h1>
+      <div class="subtitle">Plano 1ª Fase</div>
+    </div>
+    <div class="nav-section-label">Principal</div>
+    <a href="index.html" class="nav-link"><span class="icon">✦</span><span>Início</span></a>
+    <a href="hoje.html" class="nav-link"><span class="icon">◐</span><span>Hoje</span></a>
+    <a href="calendario.html" class="nav-link active"><span class="icon">☷</span><span>Calendário</span></a>
+    <a href="revisar.html" class="nav-link"><span class="icon">↻</span><span>Revisar</span><span class="badge">3</span></a>
+    <div class="nav-section-label">Estudo</div>
+    <a href="materias.html" class="nav-link"><span class="icon">❖</span><span>Matérias</span></a>
+    <a href="questoes.html" class="nav-link"><span class="icon">◎</span><span>Questões</span></a>
+    
+    
+    
+    
+    <div class="nav-section-label">Análise</div>
+    <a href="estatisticas.html" class="nav-link"><span class="icon">◈</span><span>Estatísticas</span></a>
+    <div class="sidebar-footer">
+      <div class="profile-card">
+        <div class="profile-avatar">
+          <img src="foto-perfil.jpg" alt="Julia" onerror="this.style.display='none'; this.parentElement.innerHTML='J';">
+        </div>
+        <div class="profile-info"><div class="name">Julia</div><div class="meta">Estudante de Direito</div></div>
+      </div>
+      <button class="theme-toggle" onclick="toggleTheme()">
+        <span class="theme-label">Modo escuro</span>
+        <span class="toggle-track"><span class="toggle-thumb"></span></span>
+      </button>
+    </div>
+  </aside>
+
+  <main>
+    <div class="topbar">
+      <div class="page-title">
+        <div class="breadcrumb">Planejamento · <span data-month-year>—</span></div>
+        <h1>Seu <em>calendário</em></h1>
+      </div>
+      <div class="topbar-actions">
+        <div class="streak-pill">
+          <span class="flame">🌸</span>
+          <span class="count" id="streak-count">0</span>
+          <span class="label">dias</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTADOR REGRESSIVO (pré-início) -->
+    <div id="countdown-banner" style="display:none;background:linear-gradient(135deg,var(--blush),var(--lavender));border-radius:var(--radius);padding:1.2rem 1.5rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap">
+      <div style="font-family:'Playfair Display',serif;font-size:2.5rem;font-weight:500;color:var(--rose-deep)" id="days-to-start">—</div>
+      <div>
+        <div style="font-size:0.7rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-faded)">dias até o início</div>
+        <div style="font-size:0.9rem;color:var(--ink-soft)">O plano começa em <strong>1 de Junho de 2026</strong>. Já podes explorar o conteúdo!</div>
+      </div>
+    </div>
+
+    <!-- CALENDÁRIOS GERADOS DINAMICAMENTE -->
+    <div id="calendar-container"></div>
+
+  </main>
+</div>
+
+<script src="script.js"></script>
+<script src="progresso.js"></script>
+<script src="plano-oab.js"></script>
+<script>
+(function buildCalendar() {
+  const STUDY_START = new Date(2026, 5, 1);   // 1 Jun 2026
+  const EXAM_DATE   = new Date(2026, 11, 20); // 20 Dez 2026
+  const today       = getCurrentDate();
+  const MONTHS_PT   = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho',
+                       'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  const DOW_PT      = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+
+  // Banner de countdown (se antes de Junho)
+  const daysToStart = Math.ceil((STUDY_START - today) / 864e5);
+  const banner = document.getElementById('countdown-banner');
+  if (daysToStart > 0 && banner) {
+    banner.style.display = 'flex';
+    document.getElementById('days-to-start').textContent = daysToStart;
+  }
+
+  // Progresso
+  const prog = carregarProgresso();
+
+  // Estudar qual dia do plano cai numa determinada data
+  function studyDayForDate(d) {
+    if (d < STUDY_START) return null;
+    const diff = Math.floor((d - STUDY_START) / 864e5);
+    const planDay = diff + 1;
+    return planDay >= 1 && planDay <= 60 ? planDay : null;
+  }
+
+  function isDone(planDay) {
+    return planDay && prog.dias[String(planDay)] && prog.dias[String(planDay)].concluido;
+  }
+
+  function renderMonth(year, month) {
+    const firstDay  = new Date(year, month, 1).getDay(); // 0=Dom
+    const daysInM   = new Date(year, month + 1, 0).getDate();
+    const monthName = MONTHS_PT[month];
+
+    // Calcular stats do mês
+    let studyDaysInMonth = 0, doneDays = 0;
+    for (let d = 1; d <= daysInM; d++) {
+      const pd = studyDayForDate(new Date(year, month, d));
+      if (pd) { studyDaysInMonth++; if (isDone(pd)) doneDays++; }
+    }
+    const horasPrevistas = studyDaysInMonth * 4;
+    const isExamMonth    = year === 2026 && month === 11;
+
+    let statsHTML = '';
+    if (studyDaysInMonth > 0) {
+      statsHTML = `<span><strong>${doneDays}</strong> concluídos</span>
+                   <span><strong>${studyDaysInMonth - doneDays}</strong> restantes</span>
+                   <span><strong>${horasPrevistas}h</strong> previstas</span>`;
+    } else if (isExamMonth) {
+      statsHTML = `<span style="color:var(--rose-deep);font-weight:600">⚖️ Prova OAB · 20 de dezembro</span>`;
+    } else {
+      statsHTML = `<span>Pré-plano · ${MONTHS_PT[month]}</span>`;
+    }
+
+    let cells = '';
+    // Empty cells for days before first
+    for (let i = 0; i < firstDay; i++) cells += `<div class="day-cell empty"></div>`;
+
+    for (let d = 1; d <= daysInM; d++) {
+      const date    = new Date(year, month, d);
+      const planDay = studyDayForDate(date);
+      const isToday = date.toDateString() === today.toDateString();
+      const isExam  = isExamMonth && d === 20;
+      const done    = isDone(planDay);
+
+      let cls = 'day-cell';
+      if (isToday) cls += ' today';
+      else if (isExam) cls += ' simulado';
+      else if (done) cls += ' done';
+
+      let inner = `<div class="num">${d}</div><div>`;
+      if (isToday) {
+        inner += `<div class="topic">Hoje ✦</div><div class="materia">Dia ${planDay || '—'}</div>`;
+      } else if (isExam) {
+        inner += `<div class="topic">★ Prova OAB</div><div class="materia">1ª Fase</div>`;
+      } else if (planDay) {
+        const dados = getDadosDia(planDay);
+        const short = dados ? dados.titulo.split(' · ')[0].replace('Revisão','Rev.') : `Dia ${planDay}`;
+        const mat   = dados ? dados.materias[0].nome.replace('Direito ','').replace('Processual ','Proc. ') : '';
+        inner += `<div class="topic">${short.length > 22 ? short.substring(0,20)+'…' : short}</div><div class="materia">${mat}</div>`;
+      }
+      inner += '</div>';
+
+      cells += `<div class="${cls}" data-plan="${planDay||''}" onclick="cellClick(this)">${inner}</div>`;
+    }
+
+    const dowRow = DOW_PT.map(d => `<div class="dow">${d}</div>`).join('');
+
+    return `
+    <div class="month-section">
+      <div class="month-header">
+        <div class="month-name">${monthName} <em>·</em> ${year}</div>
+        <div class="month-stats">${statsHTML}</div>
+      </div>
+      <div class="calendar-grid">${dowRow}${cells}</div>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:linear-gradient(135deg,var(--rose-soft),var(--blush))"></div>Concluído</div>
+        <div class="legend-item"><div class="legend-dot" style="background:linear-gradient(135deg,var(--rose),var(--rose-deep))"></div>Hoje</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--bg-soft)"></div>A estudar</div>
+        <div class="legend-item"><div class="legend-dot" style="background:linear-gradient(135deg,var(--lavender),var(--champagne))"></div>Simulado / Prova</div>
+      </div>
+    </div>`;
+  }
+
+  // Meses a mostrar: atual + meses do plano + Dezembro (prova)
+  const monthsToRender = [];
+  const todayMonth = { y: today.getFullYear(), m: today.getMonth() };
+
+  // Sempre inclui mês atual
+  monthsToRender.push(todayMonth);
+
+  // Meses do plano (Jun + Jul 2026)
+  [{y:2026,m:5},{y:2026,m:6}].forEach(mo => {
+    if (!(mo.y === todayMonth.y && mo.m === todayMonth.m))
+      monthsToRender.push(mo);
+  });
+
+  // Dezembro (prova) se ainda não passou
+  if (today < EXAM_DATE && !(todayMonth.y === 2026 && todayMonth.m === 11))
+    monthsToRender.push({y:2026,m:11});
+
+  // Ordenar
+  monthsToRender.sort((a,b) => a.y !== b.y ? a.y-b.y : a.m-b.m);
+
+  const container = document.getElementById('calendar-container');
+  container.innerHTML = monthsToRender.map(mo => renderMonth(mo.y, mo.m)).join('');
+})();
+
+function cellClick(el) {
+  const plan = el.dataset.plan;
+  if (plan) window.location.href = 'hoje.html';
+}
+</script>
+</body>
+</html>

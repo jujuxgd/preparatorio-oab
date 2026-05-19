@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OAB · Questões</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+/* Hero de totais */
+.q-hero {
+  background: linear-gradient(135deg, var(--blush) 0%, var(--rose-soft) 40%, var(--lavender) 100%);
+  border-radius: var(--radius-lg);
+  padding: 2rem 2.5rem;
+  margin-bottom: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  box-shadow: var(--shadow);
+}
+@media(max-width:640px) { .q-hero { grid-template-columns: repeat(2,1fr); gap: 1rem; } }
+
+.q-hero-stat {
+  text-align: center;
+  padding: 0 1rem;
+  border-right: 1px solid rgba(255,255,255,0.4);
+}
+.q-hero-stat:last-child { border-right: none; }
+
+.q-hero-stat .num {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.8rem;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--rose-deep);
+  letter-spacing: -0.03em;
+}
+.q-hero-stat .lbl {
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-top: 0.4rem;
+}
+
+/* Form de registo */
+.q-form {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 1.8rem 2rem;
+  margin-bottom: 1.8rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.q-form-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.15rem;
+  font-weight: 500;
+  margin-bottom: 1.2rem;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.q-form-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+@media(max-width:600px) { .q-form-grid { grid-template-columns: 1fr; } }
+
+.q-field { display: flex; flex-direction: column; gap: 0.35rem; }
+.q-label { font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink-faded); font-weight: 600; }
+.q-input {
+  background: var(--bg-soft);
+  border: 1.5px solid var(--line);
+  padding: 0.65rem 0.9rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.88rem;
+  color: var(--ink);
+  font-family: inherit;
+  transition: border-color var(--transition), box-shadow var(--transition);
+  width: 100%;
+  box-sizing: border-box;
+}
+.q-input:focus { outline: none; border-color: var(--rose); box-shadow: 0 0 0 3px var(--rose-soft); }
+
+.q-form-actions { display: flex; align-items: center; gap: 1rem; }
+.q-feedback { font-size: 0.85rem; color: var(--ink-soft); }
+
+/* Grid de matérias */
+.q-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px,1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.q-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.3rem 1.4rem;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition), box-shadow var(--transition);
+  border-left: 4px solid var(--line);
+}
+.q-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+.q-card.good { border-left-color: #4a9850; }
+.q-card.ok   { border-left-color: #c9960a; }
+.q-card.bad  { border-left-color: #c05050; }
+
+.q-card-header { display: flex; align-items: flex-start; gap: 0.8rem; margin-bottom: 1rem; }
+.q-card-emoji { font-size: 1.5rem; line-height: 1; }
+.q-card-nome  { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 500; color: var(--ink); margin-bottom: 0.15rem; }
+.q-card-sub   { font-size: 0.67rem; color: var(--ink-faded); letter-spacing: 0.05em; }
+
+.q-nums { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border-top: 1px solid var(--line); padding-top: 0.8rem; }
+.q-num { text-align: center; padding: 0 0.3rem; }
+.q-num:not(:last-child) { border-right: 1px solid var(--line); }
+.q-num .n { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 500; line-height: 1.1; }
+.q-num .l { font-size: 0.58rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-faded); margin-top: 0.2rem; }
+
+/* Histórico */
+.q-section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: var(--ink);
+  margin: 1.5rem 0 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.q-section-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+  margin-left: 0.5rem;
+}
+
+.hist-wrap { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-sm); overflow: hidden; }
+.hist-table { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
+.hist-table th { padding: 0.7rem 1rem; background: var(--bg-soft); text-align: left; font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faded); font-weight: 600; }
+.hist-table td { padding: 0.65rem 1rem; border-bottom: 1px solid var(--line); color: var(--ink-soft); }
+.hist-table tr:last-child td { border-bottom: none; }
+.hist-table tr:hover td { background: var(--bg-soft); }
+</style>
+</head>
+<body>
+
+<div class="aurora-bg" aria-hidden="true">
+  <div class="aurora-blob ab1"></div><div class="aurora-blob ab2"></div>
+  <div class="aurora-blob ab3"></div><div class="aurora-blob ab4"></div>
+</div>
+<button class="mobile-menu-btn" onclick="toggleSidebar()" title="Menu">☰</button>
+
+<div class="app">
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="mark"></div>
+      <h1>OAB <em style="font-style:italic;color:var(--rose-deep)">·</em> Ju</h1>
+      <div class="subtitle">Plano 1ª Fase</div>
+    </div>
+    <div class="nav-section-label">Principal</div>
+    <a href="index.html" class="nav-link"><span class="icon">✦</span><span>Início</span></a>
+    <a href="hoje.html" class="nav-link"><span class="icon">◐</span><span>Hoje</span></a>
+    <a href="calendario.html" class="nav-link"><span class="icon">☷</span><span>Calendário</span></a>
+    <a href="revisar.html" class="nav-link"><span class="icon">↻</span><span>Revisar</span></a>
+    <div class="nav-section-label">Estudo</div>
+    <a href="materias.html" class="nav-link"><span class="icon">❖</span><span>Matérias</span></a>
+    <a href="questoes.html" class="nav-link active"><span class="icon">◎</span><span>Questões</span></a>
+    <div class="nav-section-label">Análise</div>
+    <a href="estatisticas.html" class="nav-link"><span class="icon">◈</span><span>Estatísticas</span></a>
+    <div class="sidebar-footer">
+      <div class="profile-card">
+        <div class="profile-avatar">
+          <img src="foto-perfil.jpg" alt="Julia" onerror="this.style.display='none'; this.parentElement.innerHTML='J';">
+        </div>
+        <div class="profile-info">
+          <div class="name">Julia</div>
+          <div class="meta">Estudante de Direito</div>
+        </div>
+      </div>
+      <button class="theme-toggle" onclick="toggleTheme()">
+        <span class="theme-label">Modo escuro</span>
+        <span class="toggle-track"><span class="toggle-thumb"></span></span>
+      </button>
+    </div>
+  </aside>
+
+  <main>
+    <div class="topbar">
+      <div class="page-title">
+        <div class="breadcrumb">Questões · QConcursos</div>
+        <h1>Tracker de <em>questões</em></h1>
+      </div>
+      <div class="topbar-actions">
+        <div class="streak-pill">
+          <span class="flame">🌸</span>
+          <span class="count" id="streak-count">0</span>
+          <span class="label">dias</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hero totais -->
+    <div class="q-hero" id="q-hero"></div>
+
+    <!-- Form de registo -->
+    <div class="q-form">
+      <div class="q-form-title">◎ Registar sessão do QConcursos</div>
+      <div class="q-form-grid">
+        <div class="q-field">
+          <label class="q-label">Matéria</label>
+          <select id="q-materia" class="q-input">
+            <option value="">Selecionar matéria...</option>
+            <option value="etica">⚖️ Ética Profissional</option>
+            <option value="constitucional">🏛️ Constitucional</option>
+            <option value="civil">📜 Direito Civil</option>
+            <option value="proc_civil">⚖️ Processo Civil</option>
+            <option value="penal">⚔️ Direito Penal</option>
+            <option value="proc_penal">📋 Processo Penal</option>
+            <option value="trabalho">⚙️ Direito do Trabalho</option>
+            <option value="proc_trabalho">⚙️ Processo do Trabalho</option>
+            <option value="tributario">💰 Tributário</option>
+            <option value="administrativo">🏛️ Administrativo</option>
+            <option value="empresarial">🏢 Empresarial</option>
+            <option value="dh">🌍 Direitos Humanos</option>
+            <option value="internacional">🌐 Internacional</option>
+            <option value="ambiental">🌿 Ambiental</option>
+            <option value="eca">👶 ECA</option>
+            <option value="cdc">🛒 Consumidor</option>
+            <option value="filosofia">📖 Filosofia</option>
+            <option value="financeiro">💹 Financeiro</option>
+            <option value="eleitoral">🗳️ Eleitoral</option>
+            <option value="previdenciario">🛡️ Previdenciário</option>
+          </select>
+        </div>
+        <div class="q-field">
+          <label class="q-label">Total de questões</label>
+          <input type="number" id="q-total" class="q-input" placeholder="Ex: 30" min="1">
+        </div>
+        <div class="q-field">
+          <label class="q-label">Acertos</label>
+          <input type="number" id="q-acertos" class="q-input" placeholder="Ex: 21" min="0">
+        </div>
+      </div>
+      <div class="q-form-actions">
+        <button class="btn btn-primary" onclick="submitForm()">Registar sessão</button>
+        <div id="form-feedback" class="q-feedback"></div>
+      </div>
+    </div>
+
+    <!-- Cards por matéria -->
+    <div class="q-section-title">Por matéria</div>
+    <div class="q-grid" id="q-grid"></div>
+
+    <!-- Histórico recente -->
+    <div class="q-section-title">Histórico recente</div>
+    <div class="hist-wrap">
+      <table class="hist-table" id="hist-table">
+        <thead><tr><th>Data</th><th>Matéria</th><th>Total</th><th>Acertos</th><th>Taxa</th></tr></thead>
+        <tbody id="hist-tbody"></tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<script src="script.js"></script>
+<script src="progresso.js"></script>
+<script src="plano-oab.js"></script>
+<script>
+const MATERIAS_INFO = {
+  etica:{nome:"Ética Profissional",emoji:"⚖️"}, constitucional:{nome:"Constitucional",emoji:"🏛️"},
+  civil:{nome:"Direito Civil",emoji:"📜"}, proc_civil:{nome:"Processo Civil",emoji:"⚖️"},
+  penal:{nome:"Direito Penal",emoji:"⚔️"}, proc_penal:{nome:"Processo Penal",emoji:"📋"},
+  trabalho:{nome:"Trabalho",emoji:"⚙️"}, proc_trabalho:{nome:"Proc. Trabalho",emoji:"⚙️"},
+  tributario:{nome:"Tributário",emoji:"💰"}, administrativo:{nome:"Administrativo",emoji:"🏛️"},
+  empresarial:{nome:"Empresarial",emoji:"🏢"}, dh:{nome:"Direitos Humanos",emoji:"🌍"},
+  internacional:{nome:"Internacional",emoji:"🌐"}, ambiental:{nome:"Ambiental",emoji:"🌿"},
+  eca:{nome:"ECA",emoji:"👶"}, cdc:{nome:"Consumidor",emoji:"🛒"},
+  filosofia:{nome:"Filosofia",emoji:"📖"}, financeiro:{nome:"Financeiro",emoji:"💹"},
+  eleitoral:{nome:"Eleitoral",emoji:"🗳️"}, previdenciario:{nome:"Previdenciário",emoji:"🛡️"}
+};
+
+function pctColor(p) { return p >= 70 ? '#4a9850' : p >= 50 ? '#c9960a' : '#c05050'; }
+
+function renderSummary() {
+  const t = getTotaisQuestoes();
+  const diasStudy = calcularStats().concluidos;
+  const erros = t.total - t.acertos;
+  document.getElementById('q-hero').innerHTML = `
+    <div class="q-hero-stat"><div class="num">${t.total}</div><div class="lbl">Questões feitas</div></div>
+    <div class="q-hero-stat"><div class="num">${t.acertos}</div><div class="lbl">Acertos</div></div>
+    <div class="q-hero-stat"><div class="num" style="color:${pctColor(t.pct)}">${t.total > 0 ? t.pct+'%' : '—'}</div><div class="lbl">Taxa de acerto</div></div>
+    <div class="q-hero-stat"><div class="num">${diasStudy}</div><div class="lbl">Dias estudados</div></div>`;
+}
+
+function renderCards() {
+  const todas = getTodasQuestoes();
+  let html = '';
+  Object.entries(todas).sort((a,b) => b[1].total - a[1].total).forEach(([id, dados]) => {
+    const info     = MATERIAS_INFO[id] || { nome: id, emoji: '📖' };
+    const pct      = dados.total > 0 ? Math.round((dados.acertos/dados.total)*100) : 0;
+    const cor      = pctColor(pct);
+    const cls      = pct >= 70 ? 'good' : pct >= 50 ? 'ok' : 'bad';
+    const ultima   = dados.registros.at(-1)?.data || '—';
+    html += `<div class="q-card ${dados.total > 0 ? cls : ''}">
+      <div class="q-card-header">
+        <span class="q-card-emoji">${info.emoji}</span>
+        <div>
+          <div class="q-card-nome">${info.nome}</div>
+          <div class="q-card-sub">Última sessão: ${ultima} · ${dados.registros.length} sessão${dados.registros.length!==1?'ões':''}</div>
+        </div>
+      </div>
+      <div class="q-nums">
+        <div class="q-num"><div class="n">${dados.total}</div><div class="l">Total</div></div>
+        <div class="q-num"><div class="n">${dados.acertos}</div><div class="l">Acertos</div></div>
+        <div class="q-num"><div class="n" style="color:${cor}">${dados.total>0?pct+'%':'—'}</div><div class="l">Taxa</div></div>
+      </div>
+    </div>`;
+  });
+  document.getElementById('q-grid').innerHTML = html ||
+    '<div style="color:var(--ink-faded);font-size:0.88rem;grid-column:1/-1;padding:1rem;text-align:center">Nenhuma questão registada ainda. Faça questões no QConcursos e registe aqui!</div>';
+}
+
+function renderHistorico() {
+  const todas = getTodasQuestoes();
+  const regs  = [];
+  Object.entries(todas).forEach(([id, dados]) => {
+    (dados.registros||[]).forEach(r => regs.push({ ...r, mat: id }));
+  });
+  regs.sort((a,b) => b.data.localeCompare(a.data));
+  const tbody = document.getElementById('hist-tbody');
+  if (regs.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--ink-faded);font-style:italic;padding:1rem">Nenhum registo ainda</td></tr>';
+    return;
+  }
+  tbody.innerHTML = regs.slice(0, 30).map(r => {
+    const info = MATERIAS_INFO[r.mat] || { nome: r.mat, emoji: '📖' };
+    const pct  = Math.round((r.acertos/r.total)*100);
+    const cor  = pctColor(pct);
+    return `<tr>
+      <td>${r.data}</td>
+      <td>${info.emoji} ${info.nome}</td>
+      <td>${r.total}</td>
+      <td>${r.acertos}</td>
+      <td style="font-weight:600;color:${cor}">${pct}%</td>
+    </tr>`;
+  }).join('');
+}
+
+function renderAll() { renderSummary(); renderCards(); renderHistorico(); }
+
+function submitForm() {
+  const materia = document.getElementById('q-materia').value;
+  const total   = parseInt(document.getElementById('q-total').value) || 0;
+  const acertos = parseInt(document.getElementById('q-acertos').value) ?? -1;
+  const fb      = document.getElementById('form-feedback');
+
+  if (!materia) { fb.textContent = '⚠ Selecciona uma matéria.'; fb.style.color='var(--rose-deep)'; return; }
+  if (total <= 0) { fb.textContent = '⚠ Indica o número total de questões.'; fb.style.color='var(--rose-deep)'; return; }
+  if (acertos < 0 || acertos > total) { fb.textContent = '⚠ Acertos deve ser entre 0 e ' + total + '.'; fb.style.color='var(--rose-deep)'; return; }
+
+  registrarQuestoes(materia, total, acertos);
+
+  const info = MATERIAS_INFO[materia] || { nome: materia };
+  const pct  = Math.round((acertos/total)*100);
+  fb.textContent = `✓ Registado: ${info.nome} — ${acertos}/${total} (${pct}%)`;
+  fb.style.color = pct >= 70 ? '#4a9850' : 'var(--ink-soft)';
+
+  document.getElementById('q-materia').value = '';
+  document.getElementById('q-total').value   = '';
+  document.getElementById('q-acertos').value = '';
+
+  renderAll();
+}
+
+// Enter submit
+['q-total','q-acertos'].forEach(id => {
+  document.getElementById(id)?.addEventListener('keydown', e => { if (e.key === 'Enter') submitForm(); });
+});
+
+document.addEventListener('DOMContentLoaded', renderAll);
+</script>
+</body>
+</html>

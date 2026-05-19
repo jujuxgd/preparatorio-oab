@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OAB · Simulados</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&family=Caveat:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+.simulado-hero {
+  background: linear-gradient(135deg, var(--lavender) 0%, var(--rose-soft) 50%, var(--champagne) 100%);
+  padding: 2.5rem;
+  border-radius: var(--radius-lg);
+  margin-bottom: 2rem;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2rem;
+  align-items: center;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+.simulado-hero::before {
+  content: '⌖';
+  position: absolute;
+  top: -40px;
+  right: -20px;
+  font-size: 14rem;
+  color: rgba(255,255,255,0.15);
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+}
+
+[data-theme="dark"] .simulado-hero::before { color: rgba(0,0,0,0.2); }
+
+.simulado-hero h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.2rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+  position: relative;
+}
+
+.simulado-hero h2 em { font-style: italic; color: var(--rose-deep); }
+
+.simulado-hero p {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.05rem;
+  color: var(--ink-soft);
+  font-style: italic;
+  margin-bottom: 1.5rem;
+  max-width: 480px;
+  position: relative;
+}
+
+.simulado-hero .meta-grid {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.meta-item {
+  text-align: center;
+}
+
+.meta-item .val {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  font-weight: 500;
+  color: var(--rose-deep);
+  line-height: 1;
+}
+
+.meta-item .lbl {
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-faded);
+  margin-top: 0.3rem;
+}
+
+.start-btn-big {
+  background: linear-gradient(135deg, var(--rose) 0%, var(--rose-deep) 100%);
+  color: var(--paper);
+  border: none;
+  padding: 1.5rem 2.5rem;
+  font-size: 0.9rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  font-family: inherit;
+  border-radius: var(--radius);
+  font-weight: 600;
+  box-shadow: var(--shadow);
+  transition: all var(--transition);
+  position: relative;
+  min-width: 200px;
+}
+
+.start-btn-big:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin: 2rem 0 1.2rem;
+  letter-spacing: -0.01em;
+}
+
+.section-title em { font-style: italic; color: var(--rose-deep); }
+
+.simulados-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 1.2rem;
+}
+
+.sim-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.6rem 1.8rem;
+  transition: all var(--transition);
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+}
+
+.sim-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow);
+}
+
+.sim-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.sim-tag {
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.7rem;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+.sim-tag.feito {
+  background: rgba(168, 184, 154, 0.2);
+  color: var(--success);
+}
+[data-theme="dark"] .sim-tag.feito { color: #b8c9a8; }
+
+.sim-tag.pendente {
+  background: var(--blush);
+  color: var(--rose-deep);
+}
+
+.sim-tag.agendado {
+  background: var(--bg-soft);
+  color: var(--ink-faded);
+}
+
+.sim-score {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  font-weight: 500;
+  color: var(--rose-deep);
+  line-height: 1;
+}
+
+.sim-score small {
+  font-size: 0.8rem;
+  color: var(--ink-faded);
+  font-weight: 400;
+}
+
+.sim-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin-bottom: 0.4rem;
+  letter-spacing: -0.01em;
+}
+
+.sim-name em { font-style: italic; color: var(--rose-deep); }
+
+.sim-meta {
+  font-size: 0.78rem;
+  color: var(--ink-faded);
+  margin-bottom: 1rem;
+  letter-spacing: 0.03em;
+}
+
+.sim-footer {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 1rem;
+  border-top: 1px dotted var(--line);
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+}
+
+.sim-footer strong {
+  color: var(--ink);
+  font-family: 'Playfair Display', serif;
+  font-weight: 600;
+}
+
+.history-graph {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.8rem;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.graph-bars {
+  display: flex;
+  gap: 1rem;
+  align-items: end;
+  height: 180px;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.graph-bar-wrap {
+  flex: 1;
+  text-align: center;
+}
+
+.graph-bar {
+  background: linear-gradient(180deg, var(--rose) 0%, var(--rose-deep) 100%);
+  border-radius: 6px 6px 0 0;
+  margin: 0 auto;
+  width: 60%;
+  position: relative;
+  transition: all var(--transition);
+}
+
+.graph-bar:hover { opacity: 0.85; }
+
+.graph-bar .val {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Playfair Display', serif;
+  font-size: 0.9rem;
+  color: var(--rose-deep);
+  font-weight: 600;
+}
+
+.graph-bar-wrap .lbl {
+  font-size: 0.72rem;
+  color: var(--ink-faded);
+  margin-top: 0.5rem;
+  letter-spacing: 0.05em;
+}
+</style>
+</head>
+<body>
+
+<div class="aurora-bg" aria-hidden="true">
+  <div class="aurora-blob ab1"></div>
+  <div class="aurora-blob ab2"></div>
+  <div class="aurora-blob ab3"></div>
+  <div class="aurora-blob ab4"></div>
+</div>
+
+<button class="mobile-menu-btn" onclick="toggleSidebar()" title="Menu">☰</button>
+
+<div class="app">
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="mark"></div>
+      <h1>OAB <em style="font-style:italic;color:var(--rose-deep)">·</em> Ju</h1>
+      <div class="subtitle">Plano 1ª Fase</div>
+    </div>
+    <div class="nav-section-label">Principal</div>
+    <a href="index.html" class="nav-link"><span class="icon">✦</span><span>Início</span></a>
+    <a href="hoje.html" class="nav-link"><span class="icon">◐</span><span>Hoje</span></a>
+    <a href="calendario.html" class="nav-link"><span class="icon">☷</span><span>Calendário</span></a>
+    <a href="revisar.html" class="nav-link"><span class="icon">↻</span><span>Revisar</span><span class="badge">3</span></a>
+    <div class="nav-section-label">Estudo</div>
+    <a href="materias.html" class="nav-link"><span class="icon">❖</span><span>Matérias</span></a>
+    <a href="questoes.html" class="nav-link"><span class="icon">◎</span><span>Questões</span></a>
+    
+    
+    <a href="simulados.html" class="nav-link active"><span class="icon">⌖</span><span>Simulados</span></a>
+    
+    <div class="nav-section-label">Análise</div>
+    <a href="estatisticas.html" class="nav-link"><span class="icon">◈</span><span>Estatísticas</span></a>
+    <div class="sidebar-footer">
+      <div class="profile-card">
+        <div class="profile-avatar">
+          <img src="foto-perfil.jpg" alt="Julia" onerror="this.style.display='none'; this.parentElement.innerHTML='J';">
+        </div>
+        <div class="profile-info"><div class="name">Julia</div><div class="meta">Estudante de Direito</div></div>
+      </div>
+      <button class="theme-toggle" onclick="toggleTheme()">
+        <span class="theme-label">Modo escuro</span>
+        <span class="toggle-track"><span class="toggle-thumb"></span></span>
+      </button>
+    </div>
+  </aside>
+
+  <main>
+    <div class="topbar">
+      <div class="page-title">
+        <div class="breadcrumb">Treino sob pressão</div>
+        <h1>Seus <em>simulados</em></h1>
+      </div>
+      <div class="topbar-actions">
+        <div class="streak-pill">
+          <span class="flame">🌸</span><span class="count">12</span><span class="label">dias</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- HERO -->
+    <div class="simulado-hero">
+      <div>
+        <h2>Próximo simulado <em>·</em> 17 de janeiro</h2>
+        <p>Simulado parcial · 2 horas · 40 questões selecionadas das matérias já estudadas. Como uma prova real, sem pausas longas.</p>
+        <div class="meta-grid">
+          <div class="meta-item">
+            <div class="val">40</div>
+            <div class="lbl">questões</div>
+          </div>
+          <div class="meta-item">
+            <div class="val">2h</div>
+            <div class="lbl">duração</div>
+          </div>
+          <div class="meta-item">
+            <div class="val">26<small style="font-size:0.7rem">/40</small></div>
+            <div class="lbl">corte 50%</div>
+          </div>
+        </div>
+      </div>
+      <button class="start-btn-big">Começar agora →</button>
+    </div>
+
+    <!-- HISTÓRICO GRÁFICO -->
+    <div class="history-graph">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.2rem">
+        <h3 class="section-title" style="margin:0">Evolução dos <em>simulados</em></h3>
+        <span style="font-size:0.78rem;color:var(--ink-faded)">% de acertos</span>
+      </div>
+      <div class="graph-bars">
+        <div class="graph-bar-wrap"><div class="graph-bar" style="height:45%"><span class="val">45%</span></div><div class="lbl">28 dez · diagn.</div></div>
+        <div class="graph-bar-wrap"><div class="graph-bar" style="height:52%"><span class="val">52%</span></div><div class="lbl">02 jan</div></div>
+        <div class="graph-bar-wrap"><div class="graph-bar" style="height:58%"><span class="val">58%</span></div><div class="lbl">08 jan</div></div>
+        <div class="graph-bar-wrap"><div class="graph-bar" style="height:62%"><span class="val">62%</span></div><div class="lbl">12 jan</div></div>
+        <div class="graph-bar-wrap"><div class="graph-bar" style="height:35%;background:var(--bg-soft);border:1.5px dashed var(--rose)"><span class="val" style="color:var(--ink-faded)">—</span></div><div class="lbl">17 jan</div></div>
+        <div class="graph-bar-wrap"><div class="graph-bar" style="height:30%;background:var(--bg-soft);border:1.5px dashed var(--rose)"><span class="val" style="color:var(--ink-faded)">—</span></div><div class="lbl">31 jan</div></div>
+      </div>
+      <div style="margin-top:1rem;font-size:0.85rem;color:var(--ink-soft);text-align:center">
+        Crescimento de <strong style="color:var(--rose-deep);font-family:'Playfair Display',serif">+17%</strong> em 16 dias 🌸
+      </div>
+    </div>
+
+    <h3 class="section-title">Histórico <em>completo</em></h3>
+
+    <div class="simulados-list">
+
+      <div class="sim-card">
+        <div class="sim-card-head">
+          <span class="sim-tag feito">✓ Concluído</span>
+          <div class="sim-score">62<small>%</small></div>
+        </div>
+        <div class="sim-name">Simulado <em>parcial</em> · semana 2</div>
+        <div class="sim-meta">12 jan · 40 questões · 1h 53min</div>
+        <div class="sim-footer">
+          <span>Acertos: <strong>25/40</strong></span>
+          <span>Tempo médio: <strong>2:50/q</strong></span>
+        </div>
+      </div>
+
+      <div class="sim-card">
+        <div class="sim-card-head">
+          <span class="sim-tag feito">✓ Concluído</span>
+          <div class="sim-score">58<small>%</small></div>
+        </div>
+        <div class="sim-name">Simulado <em>parcial</em> · semana 1</div>
+        <div class="sim-meta">08 jan · 30 questões · 1h 22min</div>
+        <div class="sim-footer">
+          <span>Acertos: <strong>17/30</strong></span>
+          <span>Tempo médio: <strong>2:44/q</strong></span>
+        </div>
+      </div>
+
+      <div class="sim-card">
+        <div class="sim-card-head">
+          <span class="sim-tag feito">✓ Concluído</span>
+          <div class="sim-score">52<small>%</small></div>
+        </div>
+        <div class="sim-name">Simulado <em>diagnóstico</em> · OAB XL</div>
+        <div class="sim-meta">02 jan · 80 questões · 4h 38min</div>
+        <div class="sim-footer">
+          <span>Acertos: <strong>42/80</strong></span>
+          <span>Tempo médio: <strong>3:28/q</strong></span>
+        </div>
+      </div>
+
+      <div class="sim-card">
+        <div class="sim-card-head">
+          <span class="sim-tag feito">✓ Concluído</span>
+          <div class="sim-score">45<small>%</small></div>
+        </div>
+        <div class="sim-name">Simulado <em>inicial</em> · prova OAB XXXIX</div>
+        <div class="sim-meta">28 dez · 80 questões · 4h 51min</div>
+        <div class="sim-footer">
+          <span>Acertos: <strong>36/80</strong></span>
+          <span>Tempo médio: <strong>3:38/q</strong></span>
+        </div>
+      </div>
+
+      <div class="sim-card">
+        <div class="sim-card-head">
+          <span class="sim-tag agendado">○ Agendado</span>
+          <div class="sim-score" style="color:var(--ink-faded)">—</div>
+        </div>
+        <div class="sim-name">Simulado <em>mensal</em> · janeiro</div>
+        <div class="sim-meta">31 jan · 80 questões · 5h · prova completa</div>
+        <div class="sim-footer">
+          <span style="color:var(--ink-faded)">Aguardando</span>
+          <span style="color:var(--rose-deep);font-weight:600">em 18 dias</span>
+        </div>
+      </div>
+
+      <div class="sim-card">
+        <div class="sim-card-head">
+          <span class="sim-tag agendado">○ Agendado</span>
+          <div class="sim-score" style="color:var(--ink-faded)">—</div>
+        </div>
+        <div class="sim-name">Simulado <em>final</em> · véspera</div>
+        <div class="sim-meta">27 fev · 80 questões · 5h · simulação real</div>
+        <div class="sim-footer">
+          <span style="color:var(--ink-faded)">Aguardando</span>
+          <span style="color:var(--rose-deep);font-weight:600">em 45 dias</span>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OAB · Estatísticas</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&family=Caveat:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+/* STATS HERO */
+.stats-hero {
+  background: linear-gradient(135deg, var(--blush) 0%, var(--rose-soft) 50%, var(--lavender) 100%);
+  padding: 2.5rem;
+  border-radius: var(--radius-lg);
+  margin-bottom: 2rem;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+.stats-hero::before {
+  content: '◈';
+  position: absolute;
+  top: -60px;
+  right: -10px;
+  font-size: 16rem;
+  color: rgba(255,255,255,0.18);
+  font-family: 'Playfair Display', serif;
+  line-height: 1;
+}
+
+[data-theme="dark"] .stats-hero::before { color: rgba(0,0,0,0.18); }
+
+.stat-big {
+  position: relative;
+  z-index: 1;
+}
+
+.stat-big .num {
+  font-family: 'Playfair Display', serif;
+  font-size: 3rem;
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  margin-bottom: 0.3rem;
+}
+
+.stat-big .num em { font-style: italic; color: var(--rose-deep); }
+.stat-big .num small {
+  font-size: 1.2rem;
+  color: var(--ink-faded);
+  font-weight: 400;
+}
+
+.stat-big .label {
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-bottom: 0.2rem;
+}
+
+.stat-big .sub {
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+  font-style: italic;
+  font-family: 'Cormorant Garamond', serif;
+}
+
+/* GRIDS */
+.stats-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.stats-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 900px) {
+  .stats-grid, .stats-grid-2 { grid-template-columns: 1fr; }
+  .stats-hero { grid-template-columns: 1fr 1fr; }
+}
+
+.chart-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.8rem 2rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.chart-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 1.5rem;
+}
+
+.chart-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.chart-title em { font-style: italic; color: var(--rose-deep); }
+
+.chart-sub {
+  font-size: 0.75rem;
+  color: var(--ink-faded);
+  letter-spacing: 0.05em;
+}
+
+/* LINE CHART (área SVG-style com divs) */
+.line-chart {
+  height: 200px;
+  position: relative;
+  padding: 1rem 0;
+  display: flex;
+  align-items: end;
+  gap: 0.5rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.line-day {
+  flex: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  justify-content: end;
+}
+
+.line-bar {
+  width: 60%;
+  background: linear-gradient(180deg, var(--rose) 0%, var(--rose-deep) 100%);
+  border-radius: 4px 4px 0 0;
+  position: relative;
+  transition: all var(--transition);
+}
+
+.line-bar:hover { opacity: 0.85; }
+
+.line-day .lbl {
+  font-size: 0.65rem;
+  color: var(--ink-faded);
+  margin-top: 0.4rem;
+  letter-spacing: 0.05em;
+}
+
+/* DONUT (CSS-only) */
+.donut-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.donut {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  background: conic-gradient(
+    var(--rose-deep) 0% 72%,
+    var(--bg-soft) 72% 100%
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.donut::before {
+  content: '';
+  position: absolute;
+  inset: 18px;
+  background: var(--paper);
+  border-radius: 50%;
+}
+
+.donut-inner {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+
+.donut-inner .pct {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  font-weight: 500;
+  color: var(--rose-deep);
+  line-height: 1;
+}
+
+.donut-inner .lbl {
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-faded);
+  margin-top: 0.3rem;
+}
+
+.donut-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  font-size: 0.85rem;
+}
+
+.donut-legend .item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--ink-soft);
+}
+
+.donut-legend .dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+}
+
+.donut-legend .item strong {
+  font-family: 'Playfair Display', serif;
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* MATÉRIAS RANKING */
+.ranking-list { list-style: none; }
+
+.rank-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.8rem 0;
+  border-bottom: 1px dotted var(--line);
+}
+
+.rank-item:last-child { border-bottom: none; }
+
+.rank-pos {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  font-style: italic;
+  color: var(--rose-deep);
+  font-weight: 500;
+  width: 30px;
+}
+
+.rank-name {
+  flex: 1;
+  font-size: 0.88rem;
+  color: var(--ink);
+}
+
+.rank-bar {
+  flex: 2;
+  height: 6px;
+  background: var(--bg-soft);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.rank-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--rose), var(--rose-deep));
+  border-radius: 3px;
+}
+
+.rank-val {
+  font-family: 'Playfair Display', serif;
+  font-weight: 600;
+  color: var(--rose-deep);
+  font-size: 0.95rem;
+  min-width: 45px;
+  text-align: right;
+}
+
+/* FAVORITA HIGHLIGHT */
+.favorita-card {
+  background: linear-gradient(135deg, var(--champagne) 0%, var(--blush) 100%);
+  padding: 1.8rem 2rem;
+  border-radius: var(--radius);
+  margin-bottom: 1.5rem;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 2rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.favorita-icon {
+  font-size: 3rem;
+}
+
+.favorita-card .eyebrow {
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-faded);
+  margin-bottom: 0.4rem;
+}
+
+.favorita-card h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  font-weight: 500;
+  margin-bottom: 0.3rem;
+  letter-spacing: -0.01em;
+}
+
+.favorita-card h3 em { font-style: italic; color: var(--rose-deep); }
+
+.favorita-card p {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  max-width: 480px;
+}
+
+.favorita-card .badge {
+  background: var(--paper);
+  padding: 1rem 1.5rem;
+  border-radius: var(--radius);
+  text-align: center;
+}
+
+.favorita-card .badge .pct {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  font-weight: 500;
+  color: var(--rose-deep);
+}
+
+.favorita-card .badge .lbl {
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-faded);
+  margin-top: 0.2rem;
+}
+
+/* WRAPPED-STYLE SHARE CARD */
+.wrapped-card {
+  background: linear-gradient(135deg, var(--rose-deep) 0%, var(--rose) 50%, var(--lavender) 100%);
+  padding: 2rem;
+  border-radius: var(--radius-lg);
+  color: var(--paper);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.wrapped-card::before, .wrapped-card::after {
+  content: '🌸';
+  position: absolute;
+  font-size: 4rem;
+  opacity: 0.15;
+}
+
+.wrapped-card::before { top: -20px; left: -20px; }
+.wrapped-card::after { bottom: -20px; right: -20px; }
+
+.wrapped-card .eyebrow {
+  font-size: 0.7rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  opacity: 0.8;
+  margin-bottom: 0.7rem;
+}
+
+.wrapped-card h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+  font-style: italic;
+}
+
+.wrapped-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.wrapped-stat .v {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  font-weight: 500;
+}
+
+.wrapped-stat .l {
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  opacity: 0.85;
+  margin-top: 0.3rem;
+}
+
+.wrapped-card .btn {
+  background: var(--paper);
+  color: var(--rose-deep);
+  border-color: var(--paper);
+}
+
+.wrapped-card .btn:hover {
+  background: transparent;
+  color: var(--paper);
+}
+</style>
+</head>
+<body>
+
+<div class="aurora-bg" aria-hidden="true">
+  <div class="aurora-blob ab1"></div>
+  <div class="aurora-blob ab2"></div>
+  <div class="aurora-blob ab3"></div>
+  <div class="aurora-blob ab4"></div>
+</div>
+
+<button class="mobile-menu-btn" onclick="toggleSidebar()" title="Menu">☰</button>
+
+<div class="app">
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="mark"></div>
+      <h1>OAB <em style="font-style:italic;color:var(--rose-deep)">·</em> Ju</h1>
+      <div class="subtitle">Plano 1ª Fase</div>
+    </div>
+    <div class="nav-section-label">Principal</div>
+    <a href="index.html" class="nav-link"><span class="icon">✦</span><span>Início</span></a>
+    <a href="hoje.html" class="nav-link"><span class="icon">◐</span><span>Hoje</span></a>
+    <a href="calendario.html" class="nav-link"><span class="icon">☷</span><span>Calendário</span></a>
+    <a href="revisar.html" class="nav-link"><span class="icon">↻</span><span>Revisar</span><span class="badge">3</span></a>
+    <div class="nav-section-label">Estudo</div>
+    <a href="materias.html" class="nav-link"><span class="icon">❖</span><span>Matérias</span></a>
+    <a href="questoes.html" class="nav-link"><span class="icon">◎</span><span>Questões</span></a>
+    
+    
+    
+    
+    <div class="nav-section-label">Análise</div>
+    <a href="estatisticas.html" class="nav-link active"><span class="icon">◈</span><span>Estatísticas</span></a>
+    <div class="sidebar-footer">
+      <div class="profile-card">
+        <div class="profile-avatar">
+          <img src="foto-perfil.jpg" alt="Julia" onerror="this.style.display='none'; this.parentElement.innerHTML='J';">
+        </div>
+        <div class="profile-info"><div class="name">Julia</div><div class="meta">Estudante de Direito</div></div>
+      </div>
+      <button class="theme-toggle" onclick="toggleTheme()">
+        <span class="theme-label">Modo escuro</span>
+        <span class="toggle-track"><span class="toggle-thumb"></span></span>
+      </button>
+    </div>
+  </aside>
+
+  <main>
+    <div class="topbar">
+      <div class="page-title">
+        <div class="breadcrumb">Dados · janeiro 2026</div>
+        <h1>Seu <em>caminho</em> em números</h1>
+      </div>
+      <div class="topbar-actions">
+        <div class="streak-pill">
+          <span class="flame">🌸</span><span class="count">12</span><span class="label">dias</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- HERO -->
+    <div class="stats-hero">
+      <div class="stat-big">
+        <div class="label">Total estudado</div>
+        <div class="num">42<small>h</small></div>
+        <div class="sub">média 3h 30min/dia</div>
+      </div>
+      <div class="stat-big">
+        <div class="label">Questões resolvidas</div>
+        <div class="num">187</div>
+        <div class="sub">acerto <em>68%</em></div>
+      </div>
+      <div class="stat-big">
+        <div class="label">Streak atual</div>
+        <div class="num">12<small> dias</small></div>
+        <div class="sub">recorde · 12 dias 🌸</div>
+      </div>
+      <div class="stat-big">
+        <div class="label">Progresso geral</div>
+        <div class="num">20<small>%</small></div>
+        <div class="sub">12 de 60 dias do plano</div>
+      </div>
+    </div>
+
+    <!-- FAVORITA -->
+    <div class="favorita-card">
+      <div class="favorita-icon">⚖</div>
+      <div>
+        <div class="eyebrow">Sua matéria favorita</div>
+        <h3>Ética <em>Profissional</em></h3>
+        <p>Calculada com base em tempo dedicado, taxa de acertos e regularidade. Você passou <strong>12h 40min</strong> estudando Ética e acerta <strong>72%</strong> das questões — sua melhor combinação.</p>
+      </div>
+      <div class="badge">
+        <div class="pct">72%</div>
+        <div class="lbl">acertos</div>
+      </div>
+    </div>
+
+    <!-- LINHA 1: EVOLUÇÃO + DISTRIBUIÇÃO -->
+    <div class="stats-grid">
+      <!-- LINE CHART -->
+      <div class="chart-card">
+        <div class="chart-head">
+          <div>
+            <div class="chart-title">Horas de estudo · <em>últimos 14 dias</em></div>
+            <div class="chart-sub">Tendência crescente · pico em 12 jan (4h 45min)</div>
+          </div>
+          <div class="chart-sub"><strong style="color:var(--rose-deep);font-family:'Playfair Display',serif">+15%</strong> vs. semana anterior</div>
+        </div>
+        <div class="line-chart">
+          <div class="line-day"><div class="line-bar" style="height:55%"></div><div class="lbl">30</div></div>
+          <div class="line-day"><div class="line-bar" style="height:48%"></div><div class="lbl">31</div></div>
+          <div class="line-day"><div class="line-bar" style="height:62%"></div><div class="lbl">01</div></div>
+          <div class="line-day"><div class="line-bar" style="height:70%"></div><div class="lbl">02</div></div>
+          <div class="line-day"><div class="line-bar" style="height:75%"></div><div class="lbl">03</div></div>
+          <div class="line-day"><div class="line-bar" style="height:58%"></div><div class="lbl">04</div></div>
+          <div class="line-day"><div class="line-bar" style="height:65%"></div><div class="lbl">05</div></div>
+          <div class="line-day"><div class="line-bar" style="height:80%"></div><div class="lbl">06</div></div>
+          <div class="line-day"><div class="line-bar" style="height:72%"></div><div class="lbl">07</div></div>
+          <div class="line-day"><div class="line-bar" style="height:78%"></div><div class="lbl">08</div></div>
+          <div class="line-day"><div class="line-bar" style="height:85%"></div><div class="lbl">09</div></div>
+          <div class="line-day"><div class="line-bar" style="height:82%"></div><div class="lbl">10</div></div>
+          <div class="line-day"><div class="line-bar" style="height:88%"></div><div class="lbl">11</div></div>
+          <div class="line-day"><div class="line-bar" style="height:95%"></div><div class="lbl">12</div></div>
+        </div>
+      </div>
+
+      <!-- DONUT -->
+      <div class="chart-card">
+        <div class="chart-head">
+          <div>
+            <div class="chart-title">Taxa de <em>acerto</em></div>
+            <div class="chart-sub">187 questões resolvidas</div>
+          </div>
+        </div>
+        <div class="donut-wrap">
+          <div class="donut">
+            <div class="donut-inner">
+              <div class="pct">72%</div>
+              <div class="lbl">acertos</div>
+            </div>
+          </div>
+        </div>
+        <div class="donut-legend" style="margin-top:1.5rem">
+          <div class="item">
+            <span class="dot" style="background:var(--rose-deep)"></span>
+            <span>Acertos: <strong>135</strong></span>
+          </div>
+          <div class="item">
+            <span class="dot" style="background:var(--bg-soft);border:1px solid var(--line)"></span>
+            <span>Erros: <strong>52</strong></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LINHA 2: RANKINGS -->
+    <div class="stats-grid-2">
+      <!-- TEMPO POR MATÉRIA -->
+      <div class="chart-card">
+        <div class="chart-head">
+          <div>
+            <div class="chart-title">Tempo por <em>matéria</em></div>
+            <div class="chart-sub">Distribuição em horas</div>
+          </div>
+        </div>
+        <ul class="ranking-list">
+          <li class="rank-item">
+            <span class="rank-pos">I</span>
+            <span class="rank-name">Ética Profissional</span>
+            <div class="rank-bar"><div class="rank-fill" style="width:100%"></div></div>
+            <span class="rank-val">12h40</span>
+          </li>
+          <li class="rank-item">
+            <span class="rank-pos">II</span>
+            <span class="rank-name">Constitucional</span>
+            <div class="rank-bar"><div class="rank-fill" style="width:72%"></div></div>
+            <span class="rank-val">9h12</span>
+          </li>
+          <li class="rank-item">
+            <span class="rank-pos">III</span>
+            <span class="rank-name">Direito Civil</span>
+            <div class="rank-bar"><div class="rank-fill" style="width:62%"></div></div>
+            <span class="rank-val">7h48</span>
+          </li>
+          <li class="rank-item">
+            <span class="rank-pos">IV</span>
+            <span class="rank-name">Processo Civil</span>
+            <div class="rank-bar"><div class="rank-fill" style="width:38%"></div></div>
+            <span class="rank-val">4h50</span>
+          </li>
+          <li class="rank-item">
+            <span class="rank-pos">V</span>
+            <span class="rank-name">Direito Penal</span>
+            <div class="rank-bar"><div class="rank-fill" style="width:24%"></div></div>
+            <span class="rank-val">3h05</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- ACERTOS POR MATÉRIA -->
+      <div class="chart-card">
+        <div class="chart-head">
+          <div>
+            <div class="chart-title">Acertos por <em>matéria</em></div>
+            <div class="chart-sub">% de acerto em questões</div>
+          </div>
+        </div>
+        <ul class="ranking-list">
+          <li class="rank-item">
+            <span class="rank-pos">I</span>
+            <span class="rank-name">Ética Profissional</span>
+            <div class="rank-bar"><div class="rank-fill" style="width:72%"></div></div>
+            <span class="rank-val">72%</span>
+          </li>
+          <li class="rank-item">
+            <span class="rank-pos">II</span>
+            <span class="rank-name">Constitucional</span>
+            <div class="rank-bar"><div class="rank-fill" style="width:68%"></div></div>
+            <span class="rank-val">68%</span>
+          </li>
+          <li class="rank-item">
+            <span class="rank-pos">III</span>
+            <span class="rank-name">Direito Civil</span>
+            <div class="rank-bar"><div class="rank-fill" style="width:65%"></div></div>
+            <span class="rank-val">65%</span>
+          </li>
+          <li class="rank-item">
+            <span class="rank-pos">IV</span>
+            <span class="rank-name">Processo Civil</span>
+            <div class="rank-bar"><div class="rank-fill" style="width:55%;background:linear-gradient(90deg,var(--gold),var(--rose))"></div></div>
+            <span class="rank-val">55%</span>
+          </li>
+          <li class="rank-item">
+            <span class="rank-pos">V</span>
+            <span class="rank-name">Direito Penal</span>
+            <div class="rank-bar"><div class="rank-fill" style="width:42%;background:linear-gradient(90deg,var(--error),var(--gold))"></div></div>
+            <span class="rank-val">42%</span>
+          </li>
+        </ul>
+        <div style="margin-top:1rem;padding:0.8rem 1rem;background:var(--bg-soft);border-radius:var(--radius-sm);font-size:0.78rem;color:var(--ink-soft)">
+          <strong style="color:var(--rose-deep);font-family:'Playfair Display',serif">✦ Atenção:</strong> Direito Penal abaixo do corte. Considere aumentar 30 min/dia.
+        </div>
+      </div>
+    </div>
+
+    <!-- LINHA 3: COMPARTILHAR + DETALHE EXTRA -->
+    <div class="stats-grid-2">
+      <!-- WRAPPED -->
+      <div class="wrapped-card">
+        <div class="eyebrow">Seu janeiro · resumido</div>
+        <h3>"Determinação <em>em estado puro"</em></h3>
+        <div class="wrapped-stats">
+          <div class="wrapped-stat">
+            <div class="v">42h</div>
+            <div class="l">estudadas</div>
+          </div>
+          <div class="wrapped-stat">
+            <div class="v">187</div>
+            <div class="l">questões</div>
+          </div>
+          <div class="wrapped-stat">
+            <div class="v">12</div>
+            <div class="l">dias seguidos</div>
+          </div>
+        </div>
+        <button class="btn">↗ Compartilhar progresso</button>
+      </div>
+
+      <!-- DECISIVOS -->
+      <div class="chart-card">
+        <div class="chart-head">
+          <div>
+            <div class="chart-title">Top <em>conquistas</em></div>
+            <div class="chart-sub">Janeiro 2026</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:0.8rem;margin-top:0.5rem">
+          <div style="display:flex;align-items:center;gap:1rem;padding:0.8rem 1rem;background:var(--bg-soft);border-radius:var(--radius-sm)">
+            <span style="font-size:1.5rem">🌸</span>
+            <div>
+              <div style="font-size:0.88rem;font-weight:500">Primeira semana completa</div>
+              <div style="font-size:0.72rem;color:var(--ink-faded)">7 dias consecutivos · 06 jan</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:1rem;padding:0.8rem 1rem;background:var(--bg-soft);border-radius:var(--radius-sm)">
+            <span style="font-size:1.5rem">✦</span>
+            <div>
+              <div style="font-size:0.88rem;font-weight:500">Simulado &gt; 60%</div>
+              <div style="font-size:0.72rem;color:var(--ink-faded)">62% em 12 jan · acima do corte</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:1rem;padding:0.8rem 1rem;background:var(--bg-soft);border-radius:var(--radius-sm)">
+            <span style="font-size:1.5rem">📚</span>
+            <div>
+              <div style="font-size:0.88rem;font-weight:500">100 questões resolvidas</div>
+              <div style="font-size:0.72rem;color:var(--ink-faded)">Marco em 09 jan</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:1rem;padding:0.8rem 1rem;background:var(--bg-soft);border-radius:var(--radius-sm)">
+            <span style="font-size:1.5rem">⚖</span>
+            <div>
+              <div style="font-size:0.88rem;font-weight:500">Ética dominada</div>
+              <div style="font-size:0.72rem;color:var(--ink-faded)">72% acerto · matéria favorita</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

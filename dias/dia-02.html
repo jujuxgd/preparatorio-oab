@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dia 2 · Constitucional + Penal</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#fdf4f7;--paper:#fff;--ink:#4a2e3a;--ink-soft:#7a5566;
+    --ink-faded:#b08799;--rose:#e8a5c0;--rose-deep:#c87aa0;
+    --rose-soft:#f5d4e2;--blush:#fce0eb;--champagne:#f8e1d8;
+    --lavender:#e0c8dc;--line:#f0d4e0;--gold:#d4a888;--radius:10px;
+  }
+  [data-theme="dark"]{
+    --bg:#1a1318;--paper:#211a20;--ink:#f5e4ec;--ink-soft:#d4b8c8;
+    --ink-faded:#9a7686;--rose:#e8a5c0;--rose-deep:#f0b8d0;
+    --rose-soft:#4a2e3a;--blush:#3d2632;--champagne:#5a4248;
+    --lavender:#5a4258;--line:#3a2832;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Inter',sans-serif;font-size:0.93rem;color:var(--ink);
+       background:var(--bg);line-height:1.7;padding:2rem 2.5rem 4rem}
+  h2{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:500;
+     margin:2rem 0 0.8rem;color:var(--ink);letter-spacing:-0.01em;line-height:1.25}
+  h2 em{font-style:italic;color:var(--rose-deep)}
+  h2:first-child{margin-top:0}
+  h3{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:500;
+     margin:1.5rem 0 0.6rem;color:var(--ink);border-left:3px solid var(--rose);padding-left:0.7rem}
+  p{margin-bottom:0.85rem;color:var(--ink-soft)}
+  strong{color:var(--ink);font-weight:600}
+  .callout{padding:1rem 1.2rem;border-radius:var(--radius);margin:1.2rem 0}
+  .callout.atencao{background:linear-gradient(135deg,var(--blush),var(--rose-soft));border-left:4px solid var(--rose-deep)}
+  .callout.dica{background:linear-gradient(135deg,var(--champagne),#fde8d8);border-left:4px solid var(--gold)}
+  .callout.lei{background:linear-gradient(135deg,var(--lavender),#ede0ec);border-left:4px solid #b090c0}
+  .callout.penal{background:linear-gradient(135deg,#f5e2db,#f2d8d0);border-left:4px solid #c06040}
+  .callout-label{font-size:0.65rem;letter-spacing:0.18em;text-transform:uppercase;
+                 font-weight:700;margin-bottom:0.4rem;display:block;color:var(--ink)}
+  .callout p{margin:0;color:var(--ink);font-size:0.88rem}
+  table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:0.85rem}
+  th{background:var(--rose-soft);color:var(--ink);font-weight:600;padding:0.6rem 0.8rem;text-align:left;border-bottom:2px solid var(--rose)}
+  td{padding:0.55rem 0.8rem;border-bottom:1px solid var(--line);color:var(--ink-soft)}
+  tr:hover td{background:var(--blush);color:var(--ink)}
+  ul,ol{padding-left:1.4rem;margin:0.6rem 0}
+  li{margin-bottom:0.35rem;color:var(--ink-soft)}
+  li strong{color:var(--ink)}
+  .badge{display:inline-block;background:var(--rose-soft);color:var(--rose-deep);
+         font-size:0.65rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;
+         padding:0.2rem 0.6rem;border-radius:20px;margin-right:0.4rem}
+  .badge.penal{background:#f5e2db;color:#a04020}
+  .materia-header{display:flex;align-items:center;gap:0.8rem;
+    padding:1rem 1.2rem;border-radius:var(--radius);margin:2rem 0 1.2rem;
+    font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:500}
+  .materia-header.const{background:linear-gradient(135deg,var(--lavender),#ede0ec)}
+  .materia-header.penal-h{background:linear-gradient(135deg,#f5e2db,#f2d0c8)}
+  .materia-header .emoji{font-size:1.4rem}
+  .materia-header .tempo{font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;
+                         color:var(--ink-faded);margin-left:auto;font-family:'Inter',sans-serif}
+  .incidencia{font-size:0.7rem;color:var(--rose-deep);font-weight:600;
+              background:var(--rose-soft);padding:0.2rem 0.5rem;border-radius:4px}
+  hr{border:none;border-top:1px solid var(--line);margin:2rem 0}
+  mark{background:var(--blush);color:var(--ink);border-radius:3px;padding:0 2px}
+  mark.aten{background:#ffe4c0}
+  mark.lei{background:var(--lavender)}
+  .dimensoes-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0.8rem;margin:1rem 0}
+  .dim{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);
+       padding:0.8rem;text-align:center}
+  .dim .num{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--rose-deep);font-weight:600}
+  .dim .nome{font-size:0.72rem;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;margin:0.2rem 0}
+  .dim .detalhe{font-size:0.75rem;color:var(--ink-faded)}
+  @media(max-width:640px){.dimensoes-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════
+     DIREITO CONSTITUCIONAL
+═══════════════════════════════════════ -->
+
+<div class="materia-header const">
+  <span class="emoji">🏛️</span>
+  <span>Direito Constitucional</span>
+  <span class="incidencia">72% provas</span>
+  <span class="tempo">⏱ 2h</span>
+</div>
+
+<h2>I. Princípios Fundamentais <em>(arts. 1-4 CF/88)</em></h2>
+
+<h3>Art. 1º — Fundamentos da República <span class="badge">SOCDVP</span></h3>
+<table>
+  <tr><th>#</th><th>Fundamento</th><th>Detalhes</th></tr>
+  <tr><td><strong>I</strong></td><td><strong>Soberania</strong></td><td>Poder supremo do Estado no plano interno e externo (art. 1º, I; art. 18; art. 170, I)</td></tr>
+  <tr><td><strong>II</strong></td><td><strong>Cidadania</strong></td><td>Participação popular · arts. 14, 61 §2º — Constituição Cidadã</td></tr>
+  <tr><td><strong>III</strong></td><td><strong>Dignidade da Pessoa Humana</strong></td><td>Mínimo existencial · Prevista no art. 34, VII "a" como fundamento da intervenção federal</td></tr>
+  <tr><td><strong>IV</strong></td><td><strong>Valores sociais do trabalho e da livre iniciativa</strong></td><td>Base para a ordem econômica (art. 170)</td></tr>
+  <tr><td><strong>V</strong></td><td><strong>Pluralismo político</strong></td><td>Diversidade de ideias, partidos · arts. 1º V, 17</td></tr>
+</table>
+
+<div class="callout dica">
+  <span class="callout-label">✦ Mnemônico para os Fundamentos</span>
+  <p><strong>SO</strong>berania — <strong>CI</strong>dadania — <strong>DI</strong>gnidade — <strong>VA</strong>lores sociais — <strong>PLU</strong>ralismo = <strong>SOCIDIVAPLU</strong> (ou lembre: "Sou Cida, Dig da Vida, Plural")</p>
+</div>
+
+<h3>Art. 2º — Separação dos Poderes (Cláusula Pétrea)</h3>
+<p>São Poderes da União, <strong>independentes e harmônicos entre si</strong>: Legislativo, Executivo e Judiciário. Sistema de <strong>freios e contrapesos</strong> (checks and balances). Cláusula pétrea — art. 60, §4º, III.</p>
+
+<h3>Art. 3º — Objetivos Fundamentais <span class="badge">Memorize</span></h3>
+<ul>
+  <li><strong>Construir</strong> uma sociedade livre, justa e solidária</li>
+  <li><strong>Garantir</strong> o desenvolvimento nacional</li>
+  <li><strong>Erradicar</strong> a pobreza, a marginalização e reduzir desigualdades</li>
+  <li><strong>Promover</strong> o bem de todos, sem discriminações</li>
+</ul>
+
+<div class="callout atencao">
+  <span class="callout-label">⚠ Distinção importante</span>
+  <p><strong>Fundamentos</strong> (art. 1º) = o que a República É | <strong>Objetivos</strong> (art. 3º) = o que a República QUER TORNAR-SE. Na prova, trocam os artigos nas alternativas. Lembre-se: fundamentos são substantivos, objetivos são verbos no infinitivo.</p>
+</div>
+
+<h3>Art. 4º — Princípios das Relações Internacionais</h3>
+<p>Independência nacional · Prevalência dos DH · Autodeterminação dos povos · Não-intervenção · Igualdade entre os Estados · Defesa da paz · Solução pacífica dos conflitos · Repúdio ao terrorismo e ao racismo · Cooperação entre povos · Concessão de asilo político.</p>
+<p>Parágrafo único: o Brasil buscará a <strong>integração econômica, política, social e cultural</strong> dos povos da América Latina.</p>
+
+<hr>
+
+<h2>II. Teoria dos Direitos Fundamentais</h2>
+
+<h3>Dimensões (Gerações) dos Direitos Fundamentais</h3>
+
+<div class="dimensoes-grid">
+  <div class="dim"><div class="num">1ª</div><div class="nome">Liberdade</div><div class="detalhe">Direitos negativos (Estado não intervenha). Vida, liberdade, propriedade. Séc. XVIII.</div></div>
+  <div class="dim"><div class="num">2ª</div><div class="nome">Igualdade</div><div class="detalhe">Direitos positivos (Estado deve agir). Sociais, econômicos, culturais. Séc. XIX-XX.</div></div>
+  <div class="dim"><div class="num">3ª</div><div class="nome">Fraternidade</div><div class="detalhe">Difusos e coletivos. Meio ambiente, consumidor, paz. Pós 2ª Guerra.</div></div>
+</div>
+
+<h3>Características dos Direitos Fundamentais</h3>
+<table>
+  <tr><th>Característica</th><th>Significado prático</th></tr>
+  <tr><td><strong>Universalidade</strong></td><td>Titulares: todos os seres humanos</td></tr>
+  <tr><td><strong>Inalienabilidade</strong></td><td>Não podem ser transferidos/vendidos</td></tr>
+  <tr><td><strong>Imprescritibilidade</strong></td><td>Nunca prescrevem pelo não-uso</td></tr>
+  <tr><td><strong>Irrenunciabilidade</strong></td><td>Não pode abrir mão permanentemente</td></tr>
+  <tr><td><strong>Historicidade</strong></td><td>Surgem e evoluem com o tempo</td></tr>
+  <tr><td><strong>Relatividade</strong></td><td><mark>Não são absolutos</mark> — podem ser ponderados entre si</td></tr>
+</table>
+
+<h3>Destinatários do Art. 5º</h3>
+<p>O art. 5º protege "brasileiros e estrangeiros residentes no País". Porém, o <strong>STF amplia</strong>: protege também estrangeiros não residentes e pessoas jurídicas (quando compatível com sua natureza).</p>
+
+<h3>Eficácia dos Direitos Fundamentais</h3>
+<ul>
+  <li><strong>Vertical:</strong> Estado ↔ cidadão (regra principal)</li>
+  <li><strong>Horizontal:</strong> Particulares ↔ particulares (também se aplica)</li>
+  <li><strong>Irradiante:</strong> Influenciam toda a ordem jurídica</li>
+  <li><mark>Art. 5º, §1º:</mark> As normas definidoras dos direitos e garantias fundamentais têm <strong>aplicação imediata</strong></li>
+</ul>
+
+<div class="callout lei">
+  <span class="callout-label">📜 Catálogo Aberto — art. 5º, §2º</span>
+  <p>O rol do art. 5º é <strong>meramente exemplificativo</strong>. Os direitos e garantias expressos na CF não excluem outros decorrentes do regime e dos princípios por ela adotados, ou dos tratados internacionais em que o Brasil seja parte.</p>
+</div>
+
+<hr>
+
+<h2>III. Principais Direitos Individuais (art. 5º)</h2>
+
+<h3>Direito à Vida (caput)</h3>
+<p>Direito <mark class="aten">relativo, não absoluto</mark>. Exceção: pena de morte em <strong>caso de guerra declarada</strong> (art. 5º, XLVII, "a"). O Brasil não adota pena de morte em tempo de paz.</p>
+
+<h3>Igualdade (caput + inciso I)</h3>
+<ul>
+  <li><strong>Formal:</strong> igualdade perante a lei ("todos são iguais...")</li>
+  <li><strong>Material:</strong> tratar igualmente os iguais e desigualmente os desiguais na medida de suas desigualdades (Aristóteles). Base das ações afirmativas.</li>
+  <li>Art. 5º, I: homens e mulheres são iguais em direitos e obrigações <strong>nos termos desta Constituição</strong> (não em tudo, pois há proteções especiais à mulher)</li>
+</ul>
+
+<h3>Liberdades Relevantes para a Prova</h3>
+<table>
+  <tr><th>Liberdade</th><th>Inciso</th><th>Regra principal</th></tr>
+  <tr><td>Expressão e Imprensa</td><td>IV e IX</td><td>Vedada a censura prévia. Responsabilização posterior é possível.</td></tr>
+  <tr><td>Consciência e crença</td><td>VI a VIII</td><td>Escusa de consciência — pode recusar obrigação, mas deve prestar alternativa</td></tr>
+  <tr><td>Reunião</td><td>XVI</td><td>Exige <mark>prévia notificação</mark> (não autorização!), pacífica, sem armas</td></tr>
+  <tr><td>Associação</td><td>XVII a XXI</td><td>Criação e dissolução livres. Dissolução compulsória: apenas por decisão judicial</td></tr>
+  <tr><td>Profissão</td><td>XIII</td><td>Eficácia contida: "atendidas as qualificações profissionais que a lei estabelecer"</td></tr>
+  <tr><td>Locomoção</td><td>XV</td><td>Livre ir e vir em tempo de paz. Pode ser restringida em estado de sítio.</td></tr>
+</table>
+
+<h3>Inviolabilidade do Domicílio (inciso XI)</h3>
+<p>A casa é asilo inviolável. <strong>Exceções</strong> (entrada sem consentimento do morador):</p>
+<ul>
+  <li>Durante o dia: <strong>com mandado judicial, em flagrante delito, desastre, prestação de socorro</strong></li>
+  <li>Durante a noite: <mark class="aten">APENAS em flagrante delito, desastre ou prestação de socorro</mark> — NÃO com mandado judicial!</li>
+</ul>
+
+<!-- ═══════════════════════════════════════
+     DIREITO PENAL
+═══════════════════════════════════════ -->
+
+<div class="materia-header penal-h" style="margin-top:3rem">
+  <span class="emoji">⚔️</span>
+  <span>Direito Penal</span>
+  <span class="incidencia">68% provas</span>
+  <span class="tempo">⏱ 2h</span>
+</div>
+
+<h2>I. Lei Penal no Tempo <span class="badge penal">Alta incidência</span></h2>
+
+<h3>Princípio da Irretroatividade e Exceções</h3>
+<table>
+  <tr><th>Situação</th><th>Regra</th><th>Nome técnico</th></tr>
+  <tr><td>Lei mais grave, fato anterior</td><td><mark>Não retroage</mark> — irretroatividade da lex gravior</td><td>Lex gravior in pejus</td></tr>
+  <tr><td>Lei mais benéfica, fato anterior</td><td><mark>Retroage sempre</mark> — favorece o réu, mesmo com sentença transitada</td><td>Lex mitior / retroatividade benéfica</td></tr>
+  <tr><td>Descriminalização</td><td>Retroage — extingue a punibilidade, cessa pena</td><td>Abolitio criminis</td></tr>
+  <tr><td>Lei mais grave, crime contínuo ou permanente</td><td>Aplica-se se entrou em vigor antes de cessar o crime</td><td><strong>Súmula 711 STF</strong></td></tr>
+</table>
+
+<div class="callout atencao">
+  <span class="callout-label">⚠ O que é "lei mais grave"?</span>
+  <p>Lei mais grave é qualquer lei que traga <strong>qualquer prejuízo ao réu</strong>, não apenas pena maior — incluindo regime de cumprimento mais severo, redução/eliminação de benefícios, novas formas de cumprimento, etc.</p>
+</div>
+
+<h3>Lei Excepcional e Temporária</h3>
+<ul>
+  <li><strong>Lei excepcional:</strong> vigora em situação de anormalidade (calamidade, guerra)</li>
+  <li><strong>Lei temporária:</strong> traz prazo determinado de vigência</li>
+  <li><mark>Ultratividade:</mark> aplica-se aos fatos ocorridos na sua vigência, <strong>mesmo após o término</strong> (art. 3º CP)</li>
+</ul>
+
+<div class="callout dica">
+  <span class="callout-label">✦ Teoria da Atividade (art. 4º CP)</span>
+  <p>O tempo do crime é o momento da <strong>ação ou omissão</strong>, independentemente de quando o resultado ocorre. Relevante para determinar qual lei se aplica (a vigente no momento da conduta).</p>
+</div>
+
+<hr>
+
+<h2>II. Lei Penal no Espaço</h2>
+
+<h3>Princípio da Territorialidade (art. 5º CP)</h3>
+<p>Aplica-se a lei penal brasileira a todos os crimes praticados no <strong>território nacional</strong> (princípio da territorialidade temperada/mitigada). Admite exceções por tratados e convenções internacionais.</p>
+
+<div class="callout lei">
+  <span class="callout-label">📜 Território Nacional</span>
+  <p>Compreende: solo, subsolo, águas interiores, mar territorial (12 milhas náuticas), espaço aéreo. <strong>Território por extensão (ficção jurídica):</strong> embarcações e aeronaves públicas brasileiras, onde quer que estejam; privadas, em alto-mar ou espaço aéreo internacional.</p>
+</div>
+
+<h3>Extraterritorialidade (art. 7º CP)</h3>
+
+<table>
+  <tr>
+    <th>Tipo</th><th>Crimes</th><th>Condições</th>
+  </tr>
+  <tr>
+    <td><strong>Incondicionada</strong></td>
+    <td>Crimes contra a vida do Presidente da República; crimes contra o patrimônio ou fé pública da União, Estados, DF, Municípios, autarquias; crimes praticados por agentes do serviço público</td>
+    <td><mark>Não exige nenhuma condição</mark> — lei brasileira aplica-se automaticamente</td>
+  </tr>
+  <tr>
+    <td><strong>Condicionada</strong></td>
+    <td>Crimes praticados por brasileiro no exterior; crimes em aeronaves/embarcações privadas no exterior; crimes previstos em tratados</td>
+    <td>Exige: entrar no Brasil + ser punível no país onde foi praticado + não ter sido absolvido/cumprido pena + não ter sido perdoado + não estar extinta a punibilidade</td>
+  </tr>
+</table>
+
+<h3>Lugar do Crime — Teoria da Ubiquidade (art. 6º CP)</h3>
+
+<div class="callout atencao">
+  <span class="callout-label">⚠ Ubiquidade vs. Atividade</span>
+  <p><strong>Tempo do crime:</strong> Teoria da Atividade (art. 4º) — momento da conduta.<br>
+  <strong>Lugar do crime:</strong> Teoria da Ubiquidade (art. 6º) — onde ocorreu a ação OU o resultado.</p>
+  <p>Não confundir! A banca adora trocar os artigos.</p>
+</div>
+
+<p>Considera-se praticado o crime no lugar em que ocorreu a ação ou omissão, no todo ou em parte, <strong>bem como onde se produziu ou deveria produzir-se o resultado</strong>.</p>
+
+<p><strong>Relevância:</strong> define a aplicação da lei penal brasileira em crimes internacionais (crimes à distância). Se qualquer parte do crime ocorre no Brasil — seja a conduta, seja o resultado — aplica-se a lei penal brasileira.</p>
+
+<div class="callout dica">
+  <span class="callout-label">✦ Resumo de Artigos Essenciais do CP</span>
+  <p>Art. 4º = Tempo do crime (atividade) | Art. 5º = Territorialidade | Art. 6º = Lugar do crime (ubiquidade) | Art. 7º = Extraterritorialidade | Art. 3º = Lei temporária/excepcional (ultratividade)</p>
+</div>
+
+<script src="../highlighter.js"></script>
+<script>
+  const parentTheme = window.parent && window.parent.document.documentElement.getAttribute('data-theme');
+  if (parentTheme) document.documentElement.setAttribute('data-theme', parentTheme);
+  window.addEventListener('message', e => {
+    if (e.data && e.data.type === 'set-theme') {
+      document.documentElement.setAttribute('data-theme', e.data.theme);
+    }
+  });
+</script>
+</body>
+</html>

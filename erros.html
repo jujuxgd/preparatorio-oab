@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OAB · Banco de Erros</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&family=Caveat:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+.error-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.error-stat-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  padding: 1.4rem 1.6rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+
+.error-stat-card .label {
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-faded);
+  margin-bottom: 0.5rem;
+}
+
+.error-stat-card .num {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.2rem;
+  font-weight: 500;
+  color: var(--rose-deep);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.error-stat-card .sub {
+  font-size: 0.75rem;
+  color: var(--ink-soft);
+  margin-top: 0.4rem;
+}
+
+.filter-bar {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+  padding: 1rem 1.2rem;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.filter-bar .label {
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-faded);
+  align-self: center;
+  margin-right: 0.5rem;
+}
+
+.chip {
+  padding: 0.4rem 0.9rem;
+  background: var(--bg-soft);
+  border: 1px solid transparent;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.chip:hover { background: var(--blush); color: var(--ink); }
+
+.chip.active {
+  background: linear-gradient(135deg, var(--rose) 0%, var(--rose-deep) 100%);
+  color: var(--paper);
+}
+
+.error-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--error);
+  border-radius: var(--radius);
+  padding: 1.8rem;
+  margin-bottom: 1.2rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.error-card.dominada {
+  border-left-color: var(--success);
+  opacity: 0.75;
+}
+
+.error-head {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-faded);
+  margin-bottom: 1rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px dotted var(--line);
+}
+
+.error-head .num {
+  background: var(--rose-soft);
+  color: var(--rose-deep);
+  padding: 0.2rem 0.7rem;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+.error-head .materia {
+  font-weight: 500;
+}
+
+.error-question {
+  font-size: 0.92rem;
+  color: var(--ink);
+  margin-bottom: 1.2rem;
+  line-height: 1.6;
+}
+
+.error-resp {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+}
+
+.error-resp-box {
+  padding: 0.8rem 1rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+}
+
+.error-resp-box.wrong {
+  background: rgba(201, 137, 126, 0.12);
+  border-left: 3px solid var(--error);
+}
+
+.error-resp-box.right {
+  background: rgba(168, 184, 154, 0.15);
+  border-left: 3px solid var(--success);
+}
+
+.error-resp-box .lbl {
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 0.3rem;
+  font-weight: 600;
+}
+
+.error-resp-box.wrong .lbl { color: var(--error); }
+.error-resp-box.right .lbl { color: var(--success); }
+[data-theme="dark"] .error-resp-box.right .lbl { color: #b8c9a8; }
+
+.error-tip {
+  background: var(--bg-soft);
+  padding: 1rem 1.2rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  color: var(--ink);
+  margin-bottom: 1rem;
+}
+
+.error-tip .lbl {
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--rose-deep);
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+}
+
+.error-actions {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.error-actions .tags {
+  display: flex;
+  gap: 0.3rem;
+  margin-left: auto;
+}
+
+.error-actions .tag {
+  background: var(--blush);
+  color: var(--rose-deep);
+  padding: 0.2rem 0.6rem;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+</style>
+</head>
+<body>
+
+<div class="aurora-bg" aria-hidden="true">
+  <div class="aurora-blob ab1"></div>
+  <div class="aurora-blob ab2"></div>
+  <div class="aurora-blob ab3"></div>
+  <div class="aurora-blob ab4"></div>
+</div>
+
+<button class="mobile-menu-btn" onclick="toggleSidebar()" title="Menu">☰</button>
+
+<div class="app">
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="mark"></div>
+      <h1>OAB <em style="font-style:italic;color:var(--rose-deep)">·</em> Ju</h1>
+      <div class="subtitle">Plano 1ª Fase</div>
+    </div>
+    <div class="nav-section-label">Principal</div>
+    <a href="index.html" class="nav-link"><span class="icon">✦</span><span>Início</span></a>
+    <a href="hoje.html" class="nav-link"><span class="icon">◐</span><span>Hoje</span></a>
+    <a href="calendario.html" class="nav-link"><span class="icon">☷</span><span>Calendário</span></a>
+    <a href="revisar.html" class="nav-link"><span class="icon">↻</span><span>Revisar</span><span class="badge">3</span></a>
+    <div class="nav-section-label">Estudo</div>
+    <a href="materias.html" class="nav-link"><span class="icon">❖</span><span>Matérias</span></a>
+    <a href="questoes.html" class="nav-link"><span class="icon">◎</span><span>Questões</span></a>
+    
+    
+    
+    
+    <div class="nav-section-label">Análise</div>
+    <a href="estatisticas.html" class="nav-link"><span class="icon">◈</span><span>Estatísticas</span></a>
+    <div class="sidebar-footer">
+      <div class="profile-card">
+        <div class="profile-avatar">
+          <img src="foto-perfil.jpg" alt="Julia" onerror="this.style.display='none'; this.parentElement.innerHTML='J';">
+        </div>
+        <div class="profile-info"><div class="name">Julia</div><div class="meta">Estudante de Direito</div></div>
+      </div>
+      <button class="theme-toggle" onclick="toggleTheme()">
+        <span class="theme-label">Modo escuro</span>
+        <span class="toggle-track"><span class="toggle-thumb"></span></span>
+      </button>
+    </div>
+  </aside>
+
+  <main>
+    <div class="topbar">
+      <div class="page-title">
+        <div class="breadcrumb">Onde você errou · onde vai dominar</div>
+        <h1>Banco de <em>erros</em></h1>
+      </div>
+      <div class="topbar-actions">
+        <button class="btn btn-primary">↻ Refazer todas</button>
+      </div>
+    </div>
+
+    <div class="error-stats">
+      <div class="error-stat-card">
+        <div class="label">Total de erros</div>
+        <div class="num">46</div>
+        <div class="sub">desde 02 jan</div>
+      </div>
+      <div class="error-stat-card">
+        <div class="label">Refeitas</div>
+        <div class="num">18</div>
+        <div class="sub">já dominadas</div>
+      </div>
+      <div class="error-stat-card">
+        <div class="label">Pendentes</div>
+        <div class="num">28</div>
+        <div class="sub">aguardando revisão</div>
+      </div>
+      <div class="error-stat-card">
+        <div class="label">Taxa de melhora</div>
+        <div class="num">+12<span style="font-size:1rem">%</span></div>
+        <div class="sub">vs. semana anterior</div>
+      </div>
+    </div>
+
+    <div class="filter-bar">
+      <span class="label">Filtrar</span>
+      <span class="chip active">Todas</span>
+      <span class="chip">Pendentes</span>
+      <span class="chip">Dominadas</span>
+      <span class="chip">Ética</span>
+      <span class="chip">Constitucional</span>
+      <span class="chip">Civil</span>
+      <span class="chip">Processo Civil</span>
+    </div>
+
+    <!-- ERRO 1 -->
+    <div class="error-card">
+      <div class="error-head">
+        <span class="num">Questão 05</span>
+        <span class="materia">Ética · Direitos do Advogado</span>
+        <span>FGV · errei em 13 jan</span>
+      </div>
+      <div class="error-question">
+        Sobre a comunicação do advogado com cliente preso considerado incomunicável pelo juízo, é correto afirmar:
+      </div>
+      <div class="error-resp">
+        <div class="error-resp-box wrong">
+          <div class="lbl">✕ Sua resposta · alt. C</div>
+          A comunicação só é permitida com autorização judicial expressa.
+        </div>
+        <div class="error-resp-box right">
+          <div class="lbl">✓ Resposta correta · alt. A</div>
+          A comunicação é direito do advogado mesmo com cliente considerado incomunicável.
+        </div>
+      </div>
+      <div class="error-tip">
+        <div class="lbl">✦ Por que você errou</div>
+        Confundiu a incomunicabilidade do cliente com restrição ao acesso do advogado. O art. 7º, III do EOAB garante o direito de comunicação reservada, INDEPENDENTE do status de incomunicabilidade.
+      </div>
+      <div class="error-actions">
+        <button class="btn btn-primary">↻ Refazer agora</button>
+        <button class="btn">✓ Marcar como dominada</button>
+        <div class="tags">
+          <span class="tag">decoreba</span>
+          <span class="tag">pegadinha</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ERRO 2 -->
+    <div class="error-card">
+      <div class="error-head">
+        <span class="num">Questão 12</span>
+        <span class="materia">Civil · Capacidade</span>
+        <span>FGV · errei em 11 jan</span>
+      </div>
+      <div class="error-question">
+        Sobre os relativamente incapazes no Código Civil de 2002, assinale a alternativa correta:
+      </div>
+      <div class="error-resp">
+        <div class="error-resp-box wrong">
+          <div class="lbl">✕ Sua resposta · alt. B</div>
+          Inclui menores de 16 anos e os pródigos.
+        </div>
+        <div class="error-resp-box right">
+          <div class="lbl">✓ Resposta correta · alt. D</div>
+          Inclui maiores de 16 e menores de 18, ébrios habituais, pródigos e os que não puderem exprimir vontade por causa transitória ou permanente.
+        </div>
+      </div>
+      <div class="error-tip">
+        <div class="lbl">✦ Por que você errou</div>
+        Menores de 16 são ABSOLUTAMENTE incapazes (art. 3º), não relativamente. Os relativamente incapazes estão no art. 4º — confunde fácil com o rol do art. 3º.
+      </div>
+      <div class="error-actions">
+        <button class="btn btn-primary">↻ Refazer agora</button>
+        <button class="btn">✓ Marcar como dominada</button>
+        <div class="tags">
+          <span class="tag">lei seca</span>
+          <span class="tag">cai muito</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ERRO DOMINADO -->
+    <div class="error-card dominada">
+      <div class="error-head">
+        <span class="num">Questão 03</span>
+        <span class="materia">Constitucional · Princípios</span>
+        <span>✓ dominada em 10 jan</span>
+      </div>
+      <div class="error-question">
+        Sobre os fundamentos da República Federativa do Brasil (art. 1º, CF/88)...
+      </div>
+      <div class="error-actions">
+        <button class="btn">↻ Refazer mesmo assim</button>
+        <div class="tags">
+          <span class="tag">dominada</span>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="script.js"></script>
+<script>
+document.querySelectorAll('.chip').forEach(c => {
+  c.addEventListener('click', () => {
+    document.querySelectorAll('.chip').forEach(x => x.classList.remove('active'));
+    c.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>

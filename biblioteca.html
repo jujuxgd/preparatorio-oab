@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OAB · Biblioteca</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&family=Caveat:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+.bib-search {
+  width: 100%;
+  margin-bottom: 1.5rem;
+  padding: 1rem 1.4rem;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  font-family: inherit;
+  font-size: 0.95rem;
+  color: var(--ink);
+}
+
+.bib-search:focus {
+  outline: none;
+  border-color: var(--rose);
+  box-shadow: 0 0 0 4px var(--rose-soft);
+}
+
+.bib-filters {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+  padding: 1rem 1.2rem;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.bib-filters .label {
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-faded);
+  align-self: center;
+  margin-right: 0.5rem;
+}
+
+.chip {
+  padding: 0.4rem 0.9rem;
+  background: var(--bg-soft);
+  border: 1px solid transparent;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.chip:hover { background: var(--blush); color: var(--ink); }
+.chip.active {
+  background: linear-gradient(135deg, var(--rose), var(--rose-deep));
+  color: var(--paper);
+}
+
+.bib-section {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.8rem 2rem;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.bib-section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.bib-section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.bib-section-title em { font-style: italic; color: var(--rose-deep); }
+
+.bib-section-title .icon {
+  font-size: 1.1rem;
+}
+
+.bib-count {
+  font-size: 0.75rem;
+  color: var(--ink-faded);
+  letter-spacing: 0.05em;
+}
+
+.bib-count strong {
+  font-family: 'Playfair Display', serif;
+  color: var(--rose-deep);
+  font-weight: 600;
+}
+
+.bib-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.pdf-card {
+  background: var(--bg-soft);
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  padding: 1.2rem;
+  cursor: pointer;
+  transition: all var(--transition);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.pdf-card:hover {
+  background: var(--paper);
+  border-color: var(--rose);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow);
+}
+
+.pdf-icon {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--rose-deep);
+  background: var(--paper);
+  width: 42px;
+  height: 50px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.4rem;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+}
+
+.pdf-icon::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 10px;
+  height: 10px;
+  background: var(--rose-soft);
+  clip-path: polygon(0 0, 100% 100%, 0 100%);
+}
+
+.pdf-title {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1.3;
+  min-height: 2.3em;
+}
+
+.pdf-source {
+  font-size: 0.7rem;
+  color: var(--ink-faded);
+  font-style: italic;
+  margin-top: auto;
+}
+
+.pdf-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  color: var(--ink-faded);
+  padding-top: 0.5rem;
+  border-top: 1px dotted var(--line);
+  margin-top: 0.5rem;
+}
+
+.pdf-meta .pages {
+  font-family: 'Playfair Display', serif;
+  font-weight: 600;
+  color: var(--rose-deep);
+}
+
+.pdf-card.favorito::before {
+  content: '★';
+  position: absolute;
+  top: 0.8rem;
+  right: 0.8rem;
+  color: var(--gold);
+  font-size: 0.9rem;
+}
+
+.upload-card {
+  background: var(--paper-tint);
+  border: 2px dashed var(--line);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  text-align: center;
+  min-height: 170px;
+  transition: all var(--transition);
+}
+
+.upload-card:hover {
+  background: var(--blush);
+  border-color: var(--rose);
+}
+
+.upload-card .plus {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem;
+  color: var(--rose-deep);
+  line-height: 1;
+  margin-bottom: 0.5rem;
+  font-weight: 300;
+}
+
+.upload-card .txt {
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+  line-height: 1.4;
+}
+
+.upload-card .txt em {
+  font-style: italic;
+  color: var(--rose-deep);
+}
+</style>
+</head>
+<body>
+
+<div class="aurora-bg" aria-hidden="true">
+  <div class="aurora-blob ab1"></div>
+  <div class="aurora-blob ab2"></div>
+  <div class="aurora-blob ab3"></div>
+  <div class="aurora-blob ab4"></div>
+</div>
+
+<button class="mobile-menu-btn" onclick="toggleSidebar()" title="Menu">☰</button>
+
+<div class="app">
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="mark"></div>
+      <h1>OAB <em style="font-style:italic;color:var(--rose-deep)">·</em> Ju</h1>
+      <div class="subtitle">Plano 1ª Fase</div>
+    </div>
+    <div class="nav-section-label">Principal</div>
+    <a href="index.html" class="nav-link"><span class="icon">✦</span><span>Início</span></a>
+    <a href="hoje.html" class="nav-link"><span class="icon">◐</span><span>Hoje</span></a>
+    <a href="calendario.html" class="nav-link"><span class="icon">☷</span><span>Calendário</span></a>
+    <a href="revisar.html" class="nav-link"><span class="icon">↻</span><span>Revisar</span><span class="badge">3</span></a>
+    <div class="nav-section-label">Estudo</div>
+    <a href="materias.html" class="nav-link"><span class="icon">❖</span><span>Matérias</span></a>
+    <a href="questoes.html" class="nav-link"><span class="icon">◎</span><span>Questões</span></a>
+    
+    
+    
+    <a href="biblioteca.html" class="nav-link active"><span class="icon">▤</span><span>Biblioteca</span></a>
+    <div class="nav-section-label">Análise</div>
+    <a href="estatisticas.html" class="nav-link"><span class="icon">◈</span><span>Estatísticas</span></a>
+    <div class="sidebar-footer">
+      <div class="profile-card">
+        <div class="profile-avatar">
+          <img src="foto-perfil.jpg" alt="Julia" onerror="this.style.display='none'; this.parentElement.innerHTML='J';">
+        </div>
+        <div class="profile-info"><div class="name">Julia</div><div class="meta">Estudante de Direito</div></div>
+      </div>
+      <button class="theme-toggle" onclick="toggleTheme()">
+        <span class="theme-label">Modo escuro</span>
+        <span class="toggle-track"><span class="toggle-thumb"></span></span>
+      </button>
+    </div>
+  </aside>
+
+  <main>
+    <div class="topbar">
+      <div class="page-title">
+        <div class="breadcrumb">Suas fontes originais · materiais de estudo</div>
+        <h1>Sua <em>biblioteca</em></h1>
+      </div>
+      <div class="topbar-actions">
+        <button class="btn btn-primary">↑ Subir PDF</button>
+      </div>
+    </div>
+
+    <input type="text" class="bib-search" placeholder="Buscar em todos os materiais — título, matéria, professor...">
+
+    <div class="bib-filters">
+      <span class="label">Tipo</span>
+      <span class="chip active">Todos</span>
+      <span class="chip">Apostilas</span>
+      <span class="chip">Slides</span>
+      <span class="chip">Resumos</span>
+      <span class="chip">Provas anteriores</span>
+      <span class="chip">Doutrina</span>
+      <span class="chip">★ Favoritos</span>
+    </div>
+
+    <!-- ÉTICA -->
+    <div class="bib-section">
+      <div class="bib-section-head">
+        <div class="bib-section-title">
+          <span class="icon">⚖</span>
+          <span>Ética <em>Profissional</em></span>
+        </div>
+        <div class="bib-count"><strong>8</strong> materiais · <strong>342</strong> páginas</div>
+      </div>
+
+      <div class="bib-grid">
+        <div class="pdf-card favorito">
+          <div class="pdf-icon">PDF</div>
+          <div class="pdf-title">EOAB Comentado · Lei 8.906/94</div>
+          <div class="pdf-source">Estratégia Concursos · 2025</div>
+          <div class="pdf-meta">
+            <span>Apostila</span>
+            <span class="pages">124p</span>
+          </div>
+        </div>
+
+        <div class="pdf-card">
+          <div class="pdf-icon">PDF</div>
+          <div class="pdf-title">Código de Ética e Disciplina da OAB</div>
+          <div class="pdf-source">CFOAB · texto oficial</div>
+          <div class="pdf-meta">
+            <span>Legislação</span>
+            <span class="pages">42p</span>
+          </div>
+        </div>
+
+        <div class="pdf-card favorito">
+          <div class="pdf-icon">PDF</div>
+          <div class="pdf-title">Resumo de Ética · revisão pré-prova</div>
+          <div class="pdf-source">CERS · Prof. Pedro Ivo</div>
+          <div class="pdf-meta">
+            <span>Resumo</span>
+            <span class="pages">38p</span>
+          </div>
+        </div>
+
+        <div class="pdf-card">
+          <div class="pdf-icon">PDF</div>
+          <div class="pdf-title">Slides de aula · Honorários e prerrogativas</div>
+          <div class="pdf-source">Gran · 2024</div>
+          <div class="pdf-meta">
+            <span>Slides</span>
+            <span class="pages">56p</span>
+          </div>
+        </div>
+
+        <div class="pdf-card">
+          <div class="pdf-icon">PDF</div>
+          <div class="pdf-title">Provimentos do CFOAB · compilação</div>
+          <div class="pdf-source">CFOAB · atualizado 2025</div>
+          <div class="pdf-meta">
+            <span>Legislação</span>
+            <span class="pages">82p</span>
+          </div>
+        </div>
+
+        <div class="upload-card">
+          <div class="plus">+</div>
+          <div class="txt">Adicionar <em>material</em><br>de Ética</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONSTITUCIONAL -->
+    <div class="bib-section">
+      <div class="bib-section-head">
+        <div class="bib-section-title">
+          <span class="icon">⚜</span>
+          <span>Direito <em>Constitucional</em></span>
+        </div>
+        <div class="bib-count"><strong>12</strong> materiais · <strong>567</strong> páginas</div>
+      </div>
+
+      <div class="bib-grid">
+        <div class="pdf-card favorito">
+          <div class="pdf-icon">PDF</div>
+          <div class="pdf-title">CF/88 anotada e esquematizada</div>
+          <div class="pdf-source">Pedro Lenza · 28ª ed.</div>
+          <div class="pdf-meta">
+            <span>Doutrina</span>
+            <span class="pages">156p</span>
+          </div>
+        </div>
+
+        <div class="pdf-card">
+          <div class="pdf-icon">PDF</div>
+          <div class="pdf-title">Controle de Constitucionalidade · esquemas</div>
+          <div class="pdf-source">Gran Cursos · 2024</div>
+          <div class="pdf-meta">
+            <span>Resumo</span>
+            <span class="pages">48p</span>
+          </div>
+        </div>
+
+        <div class="pdf-card">
+          <div class="pdf-icon">PDF</div>
+          <div class="pdf-title">Remédios Constitucionais · MS, HC, HD, MI</div>
+          <div class="pdf-source">Estratégia · 2025</div>
+          <div class="pdf-meta">
+            <span>Apostila</span>
+            <span class="pages">72p</span>
+          </div>
+        </div>
+
+        <div class="pdf-card">
+          <div class="pdf-icon">PDF</div>
+          <div class="pdf-title">Súmulas Vinculantes comentadas</div>
+          <div class="pdf-source">CERS · 2025</div>
+          <div class="pdf-meta">
+            <span>Jurisprudência</span>
+            <span class="pages">94p</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CIVIL -->
+    <div class="bib-section">
+      <div class="bib-section-head">
+        <div class="bib-section-title">
+          <span class="icon">❦</span>
+          <span>Direito <em>Civil</em></span>
+        </div>
+        <div class="bib-count"><strong>15</strong> materiais · <strong>892</strong> páginas</div>
+      </div>
+
+      <div class="bib-grid">
+        <div class="pdf-card favorito">
+          <div class="pdf-icon">PDF</div>
+          <div class="pdf-title">CC/2002 esquematizado · parte geral</div>
+          <div class="pdf-source">Tartuce · 19ª ed.</div>
+          <div class="pdf-meta">
+            <span>Doutrina</span>
+            <span class="pages">234p</span>
+          </div>
+        </div>
+
+        <div class="pdf-card">
+          <div class="pdf-icon">PDF</div>
+          <div class="pdf-title">Direito de Família para OAB</div>
+          <div class="pdf-source">Gran · 2024</div>
+          <div class="pdf-meta">
+            <span>Apostila</span>
+            <span class="pages">98p</span>
+          </div>
+        </div>
+
+        <div class="pdf-card">
+          <div class="pdf-icon">PDF</div>
+          <div class="pdf-title">Direito das Sucessões · esquemas</div>
+          <div class="pdf-source">Estratégia · 2025</div>
+          <div class="pdf-meta">
+            <span>Resumo</span>
+            <span class="pages">62p</span>
+          </div>
+        </div>
+
+        <div class="pdf-card">
+          <div class="pdf-icon">PDF</div>
+          <div class="pdf-title">Contratos em espécie · quadros sinóticos</div>
+          <div class="pdf-source">CERS · 2025</div>
+          <div class="pdf-meta">
+            <span>Resumo</span>
+            <span class="pages">84p</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROVAS ANTERIORES -->
+    <div class="bib-section">
+      <div class="bib-section-head">
+        <div class="bib-section-title">
+          <span class="icon">⌖</span>
+          <span>Provas <em>anteriores</em></span>
+        </div>
+        <div class="bib-count"><strong>10</strong> provas · <strong>800</strong> questões</div>
+      </div>
+
+      <div class="bib-grid">
+        <div class="pdf-card favorito">
+          <div class="pdf-icon">PDF</div>
+          <div class="pdf-title">OAB XL · 2024.3 · gabarito comentado</div>
+          <div class="pdf-source">FGV · 80 questões</div>
+          <div class="pdf-meta">
+            <span>Prova</span>
+            <span class="pages">68p</span>
+          </div>
+        </div>
+
+        <div class="pdf-card">
+          <div class="pdf-icon">PDF</div>
+          <div class="pdf-title">OAB XXXIX · 2024.2 · gabarito comentado</div>
+          <div class="pdf-source">FGV · 80 questões</div>
+          <div class="pdf-meta">
+            <span>Prova</span>
+            <span class="pages">64p</span>
+          </div>
+        </div>
+
+        <div class="pdf-card">
+          <div class="pdf-icon">PDF</div>
+          <div class="pdf-title">OAB XXXVIII · 2024.1</div>
+          <div class="pdf-source">FGV · 80 questões</div>
+          <div class="pdf-meta">
+            <span>Prova</span>
+            <span class="pages">62p</span>
+          </div>
+        </div>
+
+        <div class="pdf-card">
+          <div class="pdf-icon">PDF</div>
+          <div class="pdf-title">OAB XXXVII · 2023.3</div>
+          <div class="pdf-source">FGV · 80 questões</div>
+          <div class="pdf-meta">
+            <span>Prova</span>
+            <span class="pages">60p</span>
+          </div>
+        </div>
+
+        <div class="pdf-card">
+          <div class="pdf-icon">PDF</div>
+          <div class="pdf-title">Compilação 1.000 questões por matéria</div>
+          <div class="pdf-source">Banca FGV · 2018-2024</div>
+          <div class="pdf-meta">
+            <span>Banco</span>
+            <span class="pages">312p</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script src="script.js"></script>
+<script>
+document.querySelectorAll('.chip').forEach(c => {
+  c.addEventListener('click', () => {
+    document.querySelectorAll('.chip').forEach(x => x.classList.remove('active'));
+    c.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>

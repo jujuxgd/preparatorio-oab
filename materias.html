@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OAB · Matérias</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+.mat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1.2rem;
+}
+
+.mat-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--transition);
+}
+.mat-card:hover { box-shadow: var(--shadow); }
+
+.mat-header {
+  padding: 1rem 1.2rem 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.mat-emoji { font-size: 1.4rem; flex-shrink: 0; }
+
+.mat-info { flex: 1; min-width: 0; }
+
+.mat-nome {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1.2;
+}
+
+.mat-sub {
+  font-size: 0.7rem;
+  color: var(--ink-faded);
+  letter-spacing: 0.08em;
+  margin-top: 0.15rem;
+}
+
+.mat-stats {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.2rem;
+  flex-shrink: 0;
+}
+
+.mat-pct {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: var(--rose-deep);
+  line-height: 1;
+}
+
+.mat-pbar {
+  width: 60px;
+  height: 4px;
+  background: var(--line-soft);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.mat-pbar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--rose), var(--rose-deep));
+  border-radius: 2px;
+  transition: width 0.6s ease;
+}
+
+.mat-chevron {
+  font-size: 0.7rem;
+  color: var(--ink-faded);
+  margin-left: 0.2rem;
+  transition: transform 0.2s;
+}
+.mat-card.open .mat-chevron { transform: rotate(90deg); }
+
+.mat-body {
+  display: none;
+  padding: 0 1.2rem 1rem;
+  border-top: 1px solid var(--line);
+}
+.mat-card.open .mat-body { display: block; }
+
+/* Questões stats dentro da card */
+.mat-q-stats {
+  display: flex;
+  gap: 1rem;
+  padding: 0.6rem 0 0.8rem;
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+  border-bottom: 1px dotted var(--line);
+  margin-bottom: 0.6rem;
+}
+.mat-q-num { font-family:'Playfair Display',serif; font-size:1.1rem; color:var(--rose-deep); font-weight:500; }
+
+/* Dias/tópicos */
+.dia-bloco {
+  margin-bottom: 0.5rem;
+}
+
+.dia-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-faded);
+  margin-bottom: 0.3rem;
+}
+
+.dia-badge {
+  background: var(--rose-soft);
+  color: var(--rose-deep);
+  padding: 0.1rem 0.45rem;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.65rem;
+}
+
+.dia-badge.done {
+  background: rgba(90, 152, 80, 0.15);
+  color: #4a8840;
+}
+
+.topico-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.3rem 0;
+  cursor: pointer;
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+  border-radius: 4px;
+  transition: background 0.15s;
+}
+.topico-item:hover { background: var(--bg-soft); }
+
+.topico-check {
+  width: 16px; height: 16px;
+  border: 1.5px solid var(--ink-ghost);
+  border-radius: 3px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.6rem;
+  color: var(--paper);
+  flex-shrink: 0;
+  margin-top: 1px;
+  transition: all 0.15s;
+}
+.topico-item.checked .topico-check {
+  background: linear-gradient(135deg, #6ab870, #4a9850);
+  border-color: #4a9850;
+}
+.topico-item.checked .topico-check::after { content: '✓'; }
+.topico-item.checked { color: var(--ink-faded); text-decoration: line-through; text-decoration-color: rgba(80,160,80,0.4); }
+
+/* Filtros */
+.filter-row {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+.fchip {
+  padding: 0.35rem 0.85rem;
+  background: var(--bg-soft);
+  border: 1px solid transparent;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.fchip:hover { background: var(--blush); }
+.fchip.active {
+  background: linear-gradient(135deg, var(--rose), var(--rose-deep));
+  color: var(--paper);
+}
+
+/* Totais */
+.totais-bar {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.totais-item {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1rem 1.2rem;
+  text-align: center;
+}
+.totais-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  font-weight: 500;
+  color: var(--rose-deep);
+}
+.totais-label { font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-faded); margin-top: 0.2rem; }
+</style>
+</head>
+<body>
+
+<div class="aurora-bg" aria-hidden="true">
+  <div class="aurora-blob ab1"></div><div class="aurora-blob ab2"></div>
+  <div class="aurora-blob ab3"></div><div class="aurora-blob ab4"></div>
+</div>
+<button class="mobile-menu-btn" onclick="toggleSidebar()" title="Menu">☰</button>
+
+<div class="app">
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="mark"></div>
+      <h1>OAB <em style="font-style:italic;color:var(--rose-deep)">·</em> Ju</h1>
+      <div class="subtitle">Plano 1ª Fase</div>
+    </div>
+    <div class="nav-section-label">Principal</div>
+    <a href="index.html" class="nav-link"><span class="icon">✦</span><span>Início</span></a>
+    <a href="hoje.html" class="nav-link"><span class="icon">◐</span><span>Hoje</span></a>
+    <a href="calendario.html" class="nav-link"><span class="icon">☷</span><span>Calendário</span></a>
+    <a href="revisar.html" class="nav-link"><span class="icon">↻</span><span>Revisar</span></a>
+    <div class="nav-section-label">Estudo</div>
+    <a href="materias.html" class="nav-link active"><span class="icon">❖</span><span>Matérias</span></a>
+    <a href="questoes.html" class="nav-link"><span class="icon">◎</span><span>Questões</span></a>
+    <div class="nav-section-label">Análise</div>
+    <a href="estatisticas.html" class="nav-link"><span class="icon">◈</span><span>Estatísticas</span></a>
+    <div class="sidebar-footer">
+      <div class="profile-card">
+        <div class="profile-avatar">
+          <img src="foto-perfil.jpg" alt="Julia" onerror="this.style.display='none'; this.parentElement.innerHTML='J';">
+        </div>
+        <div class="profile-info">
+          <div class="name">Julia</div>
+          <div class="meta">Estudante de Direito</div>
+        </div>
+      </div>
+      <button class="theme-toggle" onclick="toggleTheme()">
+        <span class="theme-label">Modo escuro</span>
+        <span class="toggle-track"><span class="toggle-thumb"></span></span>
+      </button>
+    </div>
+  </aside>
+
+  <main>
+    <div class="topbar">
+      <div class="page-title">
+        <div class="breadcrumb">Estudo · <span data-month-year>—</span></div>
+        <h1>Suas <em>matérias</em></h1>
+      </div>
+      <div class="topbar-actions">
+        <div class="streak-pill">
+          <span class="flame">🌸</span>
+          <span class="count" id="streak-count">0</span>
+          <span class="label">dias</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Totais gerais -->
+    <div class="totais-bar" id="totais-bar"></div>
+
+    <!-- Filtros -->
+    <div class="filter-row">
+      <span class="fchip active" data-filter="todas" onclick="setFilter('todas',this)">Todas</span>
+      <span class="fchip" data-filter="em_andamento" onclick="setFilter('em_andamento',this)">Em andamento</span>
+      <span class="fchip" data-filter="concluida" onclick="setFilter('concluida',this)">Concluídas</span>
+      <span class="fchip" data-filter="pendente" onclick="setFilter('pendente',this)">Não iniciadas</span>
+    </div>
+
+    <!-- Grid de matérias -->
+    <div class="mat-grid" id="mat-grid"></div>
+  </main>
+</div>
+
+<script src="script.js"></script>
+<script src="progresso.js"></script>
+<script src="plano-oab.js"></script>
+<script>
+const MATERIAS_CATALOG = [
+  { id:"etica",          nome:"Ética Profissional",           emoji:"⚖️", questoes_prova:8,  pct_prova:10   },
+  { id:"constitucional", nome:"Direito Constitucional",       emoji:"🏛️", questoes_prova:6,  pct_prova:7.5  },
+  { id:"civil",          nome:"Direito Civil",                emoji:"📜", questoes_prova:6,  pct_prova:7.5  },
+  { id:"proc_civil",     nome:"Direito Processual Civil",     emoji:"⚖️", questoes_prova:6,  pct_prova:7.5  },
+  { id:"penal",          nome:"Direito Penal",                emoji:"⚔️", questoes_prova:6,  pct_prova:7.5  },
+  { id:"proc_penal",     nome:"Direito Processual Penal",     emoji:"📋", questoes_prova:6,  pct_prova:7.5  },
+  { id:"trabalho",       nome:"Direito do Trabalho",          emoji:"⚙️", questoes_prova:5,  pct_prova:6.25 },
+  { id:"proc_trabalho",  nome:"Processo do Trabalho",         emoji:"⚙️", questoes_prova:5,  pct_prova:6.25 },
+  { id:"tributario",     nome:"Direito Tributário",           emoji:"💰", questoes_prova:5,  pct_prova:6.25 },
+  { id:"administrativo", nome:"Direito Administrativo",       emoji:"🏛️", questoes_prova:5,  pct_prova:6.25 },
+  { id:"empresarial",    nome:"Direito Empresarial",          emoji:"🏢", questoes_prova:4,  pct_prova:5    },
+  { id:"dh",             nome:"Direitos Humanos",             emoji:"🌍", questoes_prova:2,  pct_prova:2.5  },
+  { id:"internacional",  nome:"Direito Internacional",        emoji:"🌐", questoes_prova:2,  pct_prova:2.5  },
+  { id:"ambiental",      nome:"Direito Ambiental",            emoji:"🌿", questoes_prova:2,  pct_prova:2.5  },
+  { id:"eca",            nome:"ECA",                          emoji:"👶", questoes_prova:2,  pct_prova:2.5  },
+  { id:"cdc",            nome:"Direito do Consumidor",        emoji:"🛒", questoes_prova:2,  pct_prova:2.5  },
+  { id:"filosofia",      nome:"Filosofia do Direito",         emoji:"📖", questoes_prova:2,  pct_prova:2.5  },
+  { id:"financeiro",     nome:"Direito Financeiro",           emoji:"💹", questoes_prova:2,  pct_prova:2.5  },
+  { id:"eleitoral",      nome:"Direito Eleitoral",            emoji:"🗳️", questoes_prova:2,  pct_prova:2.5  },
+  { id:"previdenciario", nome:"Direito Previdenciário",       emoji:"🛡️", questoes_prova:2,  pct_prova:2.5  },
+];
+
+let currentFilter = 'todas';
+
+function setFilter(filter, el) {
+  currentFilter = filter;
+  document.querySelectorAll('.fchip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  renderGrid();
+}
+
+function buildTotais() {
+  const totaisQ  = getTotaisQuestoes();
+  let topTotal = 0, topFeitos = 0;
+  MATERIAS_CATALOG.forEach(m => {
+    const p = getProgressoMateria(m.id);
+    topTotal  += p.total;
+    topFeitos += p.feitos;
+  });
+  const topPct = topTotal > 0 ? Math.round((topFeitos/topTotal)*100) : 0;
+
+  document.getElementById('totais-bar').innerHTML = `
+    <div class="totais-item">
+      <div class="totais-num">${topPct}%</div>
+      <div class="totais-label">Tópicos estudados</div>
+    </div>
+    <div class="totais-item">
+      <div class="totais-num">${totaisQ.total}</div>
+      <div class="totais-label">Questões feitas</div>
+    </div>
+    <div class="totais-item">
+      <div class="totais-num" style="color:${totaisQ.pct>=70?'#4a9850':totaisQ.pct>=50?'#c9960a':'#c05050'}">${totaisQ.pct}%</div>
+      <div class="totais-label">Acertos médios</div>
+    </div>`;
+}
+
+function renderGrid() {
+  const grid = document.getElementById('mat-grid');
+  let html = '';
+
+  MATERIAS_CATALOG.forEach(mat => {
+    const prog   = getProgressoMateria(mat.id);
+    const qStats = getQuestoesPorMateria(mat.id);
+    const qPct   = qStats.total > 0 ? Math.round((qStats.acertos/qStats.total)*100) : null;
+    const pct    = prog.pct;
+
+    const estado = pct === 0 ? 'pendente' : pct === 100 ? 'concluida' : 'em_andamento';
+    if (currentFilter !== 'todas' && currentFilter !== estado) return;
+
+    // Corpo dos dias/tópicos
+    let diasHtml = '';
+    prog.dias.forEach(({ dia, topicos, mIdx, feitos }) => {
+      const isDiaConcluido = obterDia(dia).concluido;
+      diasHtml += `<div class="dia-bloco">
+        <div class="dia-label">
+          <span class="dia-badge ${isDiaConcluido?'done':''}">Dia ${dia}</span>
+          <span>${feitos}/${topicos.length} tópico${topicos.length!==1?'s':''}</span>
+        </div>
+        ${topicos.map((top, tIdx) => {
+          const checked = isTopicoEstudado(dia, mIdx, tIdx);
+          return `<div class="topico-item ${checked?'checked':''}" onclick="toggleTopico(${dia},${mIdx},${tIdx},this)">
+            <span class="topico-check"></span>
+            <span>${top}</span>
+          </div>`;
+        }).join('')}
+      </div>`;
+    });
+
+    if (!diasHtml) {
+      diasHtml = `<div style="color:var(--ink-faded);font-size:0.8rem;padding:0.5rem 0;font-style:italic">Tópicos disponíveis a partir do Dia ${PLANO_OAB.find(d=>d.materias.some(m=>getMateriaId(m.nome)===mat.id))?.dia||'?'} do plano.</div>`;
+    }
+
+    const qBar = qStats.total > 0 ? `
+      <div class="mat-q-stats">
+        <div><div class="mat-q-num">${qStats.total}</div><div style="font-size:0.65rem;color:var(--ink-faded)">QUESTÕES</div></div>
+        <div><div class="mat-q-num">${qStats.acertos}</div><div style="font-size:0.65rem;color:var(--ink-faded)">ACERTOS</div></div>
+        <div><div class="mat-q-num" style="color:${qPct>=70?'#4a9850':qPct>=50?'#c9960a':'#c05050'}">${qPct}%</div><div style="font-size:0.65rem;color:var(--ink-faded)">TAXA</div></div>
+        <div style="margin-left:auto;font-size:0.7rem;color:var(--ink-faded)">${mat.questoes_prova}Q na prova<br>(${mat.pct_prova}%)</div>
+      </div>` : `<div style="font-size:0.72rem;color:var(--ink-faded);padding:0.5rem 0 0.3rem;border-bottom:1px dotted var(--line);margin-bottom:0.3rem">${mat.questoes_prova} questões na prova · ${mat.pct_prova}% da nota</div>`;
+
+    html += `<div class="mat-card" id="matcard-${mat.id}">
+      <div class="mat-header" onclick="toggleCard('${mat.id}')">
+        <span class="mat-emoji">${mat.emoji}</span>
+        <div class="mat-info">
+          <div class="mat-nome">${mat.nome}</div>
+          <div class="mat-sub">${prog.feitos}/${prog.total} tópicos${qStats.total>0?' · '+qStats.total+' questões':''}</div>
+        </div>
+        <div class="mat-stats">
+          <div class="mat-pct">${pct}%</div>
+          <div class="mat-pbar"><div class="mat-pbar-fill" style="width:${pct}%"></div></div>
+        </div>
+        <span class="mat-chevron">›</span>
+      </div>
+      <div class="mat-body">
+        ${qBar}
+        ${diasHtml}
+      </div>
+    </div>`;
+  });
+
+  grid.innerHTML = html || '<div style="color:var(--ink-faded);text-align:center;padding:2rem">Nenhuma matéria neste filtro.</div>';
+}
+
+function toggleCard(id) {
+  const card = document.getElementById('matcard-' + id);
+  if (card) card.classList.toggle('open');
+}
+
+function toggleTopico(dia, mIdx, tIdx, el) {
+  const novo = toggleTopicoManual(dia, mIdx, tIdx);
+  el.classList.toggle('checked', novo);
+  // Actualiza pct no header
+  const mat = PLANO_OAB[dia-1]?.materias[mIdx];
+  if (mat) {
+    const matId = getMateriaId(mat.nome);
+    const card  = document.getElementById('matcard-' + matId);
+    if (card) {
+      const prog = getProgressoMateria(matId);
+      const pctEl = card.querySelector('.mat-pct');
+      const barEl = card.querySelector('.mat-pbar-fill');
+      const subEl = card.querySelector('.mat-sub');
+      if (pctEl) pctEl.textContent = prog.pct + '%';
+      if (barEl) barEl.style.width = prog.pct + '%';
+      if (subEl) subEl.textContent = `${prog.feitos}/${prog.total} tópicos`;
+    }
+  }
+  buildTotais();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  buildTotais();
+  renderGrid();
+});
+</script>
+</body>
+</html>

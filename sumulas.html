@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OAB · Súmulas</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&family=Caveat:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+.sum-filters {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+  padding: 1rem 1.2rem;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.sum-filters .label {
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-faded);
+  align-self: center;
+  margin-right: 0.5rem;
+}
+
+.chip {
+  padding: 0.4rem 0.9rem;
+  background: var(--bg-soft);
+  border: 1px solid transparent;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.chip:hover { background: var(--blush); color: var(--ink); }
+.chip.active {
+  background: linear-gradient(135deg, var(--rose), var(--rose-deep));
+  color: var(--paper);
+}
+
+.search-box {
+  width: 100%;
+  margin-bottom: 1.5rem;
+  padding: 1rem 1.4rem;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  font-family: inherit;
+  font-size: 0.95rem;
+  color: var(--ink);
+}
+
+.search-box:focus {
+  outline: none;
+  border-color: var(--rose);
+  box-shadow: 0 0 0 4px var(--rose-soft);
+}
+
+.sumulas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 1.2rem;
+}
+
+.sum-card {
+  background: linear-gradient(135deg, var(--paper) 0%, var(--paper-tint) 100%);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.6rem 1.8rem;
+  position: relative;
+  transition: all var(--transition);
+  cursor: pointer;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.sum-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow);
+}
+
+.sum-card::before {
+  content: '§';
+  position: absolute;
+  top: 1rem;
+  right: 1.2rem;
+  font-family: 'Playfair Display', serif;
+  font-size: 3rem;
+  color: var(--rose-soft);
+  font-style: italic;
+  line-height: 1;
+}
+
+.sum-tag {
+  display: inline-block;
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--rose-deep);
+  background: var(--rose-soft);
+  padding: 0.25rem 0.7rem;
+  border-radius: 20px;
+  margin-bottom: 0.7rem;
+  font-weight: 600;
+}
+
+.sum-sigla {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin-bottom: 0.7rem;
+  letter-spacing: -0.01em;
+}
+
+.sum-sigla em { color: var(--rose-deep); font-style: italic; }
+
+.sum-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--ink);
+  margin-bottom: 1rem;
+}
+
+.sum-foot {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--ink-faded);
+  padding-top: 0.8rem;
+  border-top: 1px dotted var(--line);
+  align-items: center;
+}
+
+.sum-foot .cai {
+  color: var(--rose-deep);
+  font-weight: 600;
+}
+
+.sum-foot .star {
+  color: var(--gold);
+  cursor: pointer;
+}
+</style>
+</head>
+<body>
+
+<div class="aurora-bg" aria-hidden="true">
+  <div class="aurora-blob ab1"></div>
+  <div class="aurora-blob ab2"></div>
+  <div class="aurora-blob ab3"></div>
+  <div class="aurora-blob ab4"></div>
+</div>
+
+<button class="mobile-menu-btn" onclick="toggleSidebar()" title="Menu">☰</button>
+
+<div class="app">
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="mark"></div>
+      <h1>OAB <em style="font-style:italic;color:var(--rose-deep)">·</em> Ju</h1>
+      <div class="subtitle">Plano 1ª Fase</div>
+    </div>
+    <div class="nav-section-label">Principal</div>
+    <a href="index.html" class="nav-link"><span class="icon">✦</span><span>Início</span></a>
+    <a href="hoje.html" class="nav-link"><span class="icon">◐</span><span>Hoje</span></a>
+    <a href="calendario.html" class="nav-link"><span class="icon">☷</span><span>Calendário</span></a>
+    <a href="revisar.html" class="nav-link"><span class="icon">↻</span><span>Revisar</span><span class="badge">3</span></a>
+    <div class="nav-section-label">Estudo</div>
+    <a href="materias.html" class="nav-link"><span class="icon">❖</span><span>Matérias</span></a>
+    <a href="questoes.html" class="nav-link"><span class="icon">◎</span><span>Questões</span></a>
+    
+    
+    
+    
+    <div class="nav-section-label">Análise</div>
+    <a href="estatisticas.html" class="nav-link"><span class="icon">◈</span><span>Estatísticas</span></a>
+    <div class="sidebar-footer">
+      <div class="profile-card">
+        <div class="profile-avatar">
+          <img src="foto-perfil.jpg" alt="Julia" onerror="this.style.display='none'; this.parentElement.innerHTML='J';">
+        </div>
+        <div class="profile-info"><div class="name">Julia</div><div class="meta">Estudante de Direito</div></div>
+      </div>
+      <button class="theme-toggle" onclick="toggleTheme()">
+        <span class="theme-label">Modo escuro</span>
+        <span class="toggle-track"><span class="toggle-thumb"></span></span>
+      </button>
+    </div>
+  </aside>
+
+  <main>
+    <div class="topbar">
+      <div class="page-title">
+        <div class="breadcrumb">Jurisprudência consolidada</div>
+        <h1>Súmulas <em>essenciais</em></h1>
+      </div>
+      <div class="topbar-actions">
+        <div class="streak-pill">
+          <span class="flame">🌸</span><span class="count">12</span><span class="label">dias</span>
+        </div>
+      </div>
+    </div>
+
+    <input type="text" class="search-box" placeholder="Buscar súmula por número, tema ou conteúdo...">
+
+    <div class="sum-filters">
+      <span class="label">Tribunal</span>
+      <span class="chip active">Todas</span>
+      <span class="chip">STF · SV</span>
+      <span class="chip">STF</span>
+      <span class="chip">STJ</span>
+      <span class="chip">TST</span>
+    </div>
+
+    <div class="sum-filters">
+      <span class="label">Matéria</span>
+      <span class="chip active">Todas</span>
+      <span class="chip">Constitucional</span>
+      <span class="chip">Civil</span>
+      <span class="chip">Penal</span>
+      <span class="chip">Processo Civil</span>
+      <span class="chip">Trabalho</span>
+      <span class="chip">Tributário</span>
+    </div>
+
+    <div class="sumulas-grid">
+
+      <div class="sum-card">
+        <span class="sum-tag">Vinculante</span>
+        <div class="sum-sigla">SV <em>14</em> · STF</div>
+        <div class="sum-text">É direito do defensor, no interesse do representado, ter acesso amplo aos elementos de prova que, já documentados em procedimento investigatório...</div>
+        <div class="sum-foot">
+          <span>Processo Penal · Defesa</span>
+          <span class="cai">Cai em 73%</span>
+          <span class="star">★</span>
+        </div>
+      </div>
+
+      <div class="sum-card">
+        <span class="sum-tag">Vinculante</span>
+        <div class="sum-sigla">SV <em>10</em> · STF</div>
+        <div class="sum-text">Viola a cláusula de reserva de plenário a decisão de órgão fracionário de tribunal que, embora não declare expressamente a inconstitucionalidade...</div>
+        <div class="sum-foot">
+          <span>Constitucional · Controle</span>
+          <span class="cai">Cai em 58%</span>
+          <span class="star">★</span>
+        </div>
+      </div>
+
+      <div class="sum-card">
+        <span class="sum-tag">STJ</span>
+        <div class="sum-sigla">Súmula <em>297</em></div>
+        <div class="sum-text">O Código de Defesa do Consumidor é aplicável às instituições financeiras.</div>
+        <div class="sum-foot">
+          <span>Consumidor</span>
+          <span class="cai">Cai em 64%</span>
+          <span class="star">★</span>
+        </div>
+      </div>
+
+      <div class="sum-card">
+        <span class="sum-tag">STF</span>
+        <div class="sum-sigla">Súmula <em>473</em></div>
+        <div class="sum-text">A Administração pode anular seus próprios atos quando eivados de vícios que os tornam ilegais, ou revogá-los, por motivo de conveniência ou oportunidade...</div>
+        <div class="sum-foot">
+          <span>Administrativo</span>
+          <span class="cai">Cai em 81%</span>
+          <span class="star">★</span>
+        </div>
+      </div>
+
+      <div class="sum-card">
+        <span class="sum-tag">TST</span>
+        <div class="sum-sigla">Súmula <em>331</em></div>
+        <div class="sum-text">A contratação de trabalhadores por empresa interposta é ilegal, formando-se o vínculo diretamente com o tomador dos serviços, salvo no caso de trabalho temporário...</div>
+        <div class="sum-foot">
+          <span>Trabalho · Terceirização</span>
+          <span class="cai">Cai em 52%</span>
+          <span class="star">★</span>
+        </div>
+      </div>
+
+      <div class="sum-card">
+        <span class="sum-tag">Vinculante</span>
+        <div class="sum-sigla">SV <em>11</em> · STF</div>
+        <div class="sum-text">Só é lícito o uso de algemas em casos de resistência e de fundado receio de fuga ou de perigo à integridade física própria ou alheia...</div>
+        <div class="sum-foot">
+          <span>Processo Penal · Direitos</span>
+          <span class="cai">Cai em 41%</span>
+          <span class="star">★</span>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<script src="script.js"></script>
+<script>
+document.querySelectorAll('.chip').forEach(c => {
+  c.addEventListener('click', (e) => {
+    const siblings = e.target.parentElement.querySelectorAll('.chip');
+    siblings.forEach(x => x.classList.remove('active'));
+    c.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OAB · Revisar</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&family=Caveat:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+.revisao-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.8rem 2rem;
+  margin-bottom: 1.2rem;
+  position: relative;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition);
+}
+
+.revisao-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.revisao-card.urgent {
+  border-left: 4px solid var(--rose-deep);
+}
+
+.rev-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.rev-tag {
+  display: inline-block;
+  background: var(--rose-soft);
+  color: var(--rose-deep);
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-weight: 600;
+  margin-bottom: 0.6rem;
+}
+
+.rev-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.3rem;
+}
+
+.rev-title em { font-style: italic; color: var(--rose-deep); }
+
+.rev-meta {
+  font-size: 0.75rem;
+  color: var(--ink-faded);
+  letter-spacing: 0.05em;
+}
+
+.rev-bullets {
+  list-style: none;
+  margin: 1rem 0 1.5rem;
+  padding: 1rem 1.5rem;
+  background: var(--bg-soft);
+  border-radius: var(--radius-sm);
+}
+
+.rev-bullets li {
+  padding: 0.5rem 0;
+  font-size: 0.9rem;
+  color: var(--ink);
+  border-bottom: 1px dotted var(--line);
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.rev-bullets li:last-child { border-bottom: none; }
+
+.rev-bullets li::before {
+  content: '✦';
+  position: absolute;
+  left: 0;
+  color: var(--rose-deep);
+}
+
+.rev-feedback {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+
+.feedback-btn {
+  flex: 1;
+  padding: 0.7rem;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  transition: all var(--transition);
+  font-weight: 500;
+}
+
+.feedback-btn.lembrei:hover { background: var(--success); color: var(--paper); border-color: var(--success); }
+.feedback-btn.mais-ou-menos:hover { background: var(--gold); color: var(--paper); border-color: var(--gold); }
+.feedback-btn.esqueci:hover { background: var(--error); color: var(--paper); border-color: var(--error); }
+
+.info-banner {
+  background: linear-gradient(135deg, var(--lavender) 0%, var(--rose-soft) 100%);
+  padding: 1.8rem 2rem;
+  border-radius: var(--radius);
+  margin-bottom: 2rem;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 2rem;
+}
+
+.info-banner h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  font-weight: 500;
+  margin-bottom: 0.4rem;
+}
+
+.info-banner h3 em { font-style: italic; }
+
+.info-banner p {
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+  max-width: 540px;
+}
+
+.curve-viz {
+  display: flex;
+  gap: 0.4rem;
+  align-items: end;
+}
+
+.curve-bar {
+  width: 20px;
+  background: var(--rose-deep);
+  border-radius: 4px 4px 0 0;
+  opacity: 0.8;
+}
+</style>
+</head>
+<body>
+
+<div class="aurora-bg" aria-hidden="true">
+  <div class="aurora-blob ab1"></div>
+  <div class="aurora-blob ab2"></div>
+  <div class="aurora-blob ab3"></div>
+  <div class="aurora-blob ab4"></div>
+</div>
+
+<button class="mobile-menu-btn" onclick="toggleSidebar()" title="Menu">☰</button>
+
+<div class="app">
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="mark"></div>
+      <h1>OAB <em style="font-style:italic;color:var(--rose-deep)">·</em> Ju</h1>
+      <div class="subtitle">Plano 1ª Fase</div>
+    </div>
+    <div class="nav-section-label">Principal</div>
+    <a href="index.html" class="nav-link"><span class="icon">✦</span><span>Início</span></a>
+    <a href="hoje.html" class="nav-link"><span class="icon">◐</span><span>Hoje</span></a>
+    <a href="calendario.html" class="nav-link"><span class="icon">☷</span><span>Calendário</span></a>
+    <a href="revisar.html" class="nav-link active"><span class="icon">↻</span><span>Revisar</span><span class="badge">3</span></a>
+    <div class="nav-section-label">Estudo</div>
+    <a href="materias.html" class="nav-link"><span class="icon">❖</span><span>Matérias</span></a>
+    <a href="questoes.html" class="nav-link"><span class="icon">◎</span><span>Questões</span></a>
+    
+    
+    
+    
+    <div class="nav-section-label">Análise</div>
+    <a href="estatisticas.html" class="nav-link"><span class="icon">◈</span><span>Estatísticas</span></a>
+    <div class="sidebar-footer">
+      <div class="profile-card">
+        <div class="profile-avatar">
+          <img src="foto-perfil.jpg" alt="Julia" onerror="this.style.display='none'; this.parentElement.innerHTML='J';">
+        </div>
+        <div class="profile-info"><div class="name">Julia</div><div class="meta">Estudante de Direito</div></div>
+      </div>
+      <button class="theme-toggle" onclick="toggleTheme()">
+        <span class="theme-label">Modo escuro</span>
+        <span class="toggle-track"><span class="toggle-thumb"></span></span>
+      </button>
+    </div>
+  </aside>
+
+  <main>
+    <div class="topbar">
+      <div class="page-title">
+        <div class="breadcrumb">Memória ativa · Curva de Ebbinghaus</div>
+        <h1>Revisar <em>hoje</em></h1>
+      </div>
+      <div class="topbar-actions">
+        <div class="streak-pill">
+          <span class="flame">🌸</span><span class="count">12</span><span class="label">dias</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-banner">
+      <div>
+        <h3 id="rev-banner-title"><em>Nenhuma revisão</em> pendente</h3>
+        <p>A curva do esquecimento de Ebbinghaus mostra que esquecemos 70% do conteúdo em 24h sem revisão. Revisar nos intervalos certos (1, 7, 15 e 30 dias) consolida o aprendizado a longo prazo.</p>
+      </div>
+      <div class="curve-viz">
+        <div class="curve-bar" style="height:80px;opacity:1"></div>
+        <div class="curve-bar" style="height:55px;opacity:0.85"></div>
+        <div class="curve-bar" style="height:40px;opacity:0.7"></div>
+        <div class="curve-bar" style="height:30px;opacity:0.55"></div>
+        <div class="curve-bar" style="height:25px;opacity:0.4"></div>
+      </div>
+    </div>
+
+    <!-- CARDS DINÂMICOS -->
+    <div id="revisao-cards"></div>
+  </main>
+</div>
+
+<script src="script.js"></script>
+<script src="progresso.js"></script>
+<script src="plano-oab.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const INTERVALS = [1, 7, 15, 30];
+  const p = carregarProgresso();
+  const hoje = new Date();
+  const hojeStr = hoje.toISOString().split('T')[0];
+  const cards = [];
+
+  Object.entries(p.dias || {}).forEach(([numDia, dData]) => {
+    if (!dData.concluido || !dData.data_conclusao) return;
+    const concl = new Date(dData.data_conclusao);
+    const diff = Math.round((hoje - concl) / 864e5);
+    const isDue = INTERVALS.some(iv => diff >= iv && diff < iv + 3);
+    if (!isDue) return;
+    const intervalo = INTERVALS.filter(iv => diff >= iv).pop();
+    const dado = typeof getDadosDia === 'function' ? getDadosDia(parseInt(numDia)) : null;
+    if (!dado) return;
+
+    const topicos = dado.materias.flatMap(m => m.topicos || []).slice(0, 4);
+    const materias = dado.materias.map(m => m.nome).join(' + ');
+    const isUrgent = diff <= 2;
+    const quando = diff === 1 ? 'há 1 dia' : `há ${diff} dias`;
+
+    const nota = dData.nota ? `<li style="font-style:italic;color:var(--ink-soft)">${dData.nota.slice(0,120)}${dData.nota.length>120?'…':''}</li>` : '';
+
+    cards.push({ diff, isUrgent, html: `
+      <div class="revisao-card${isUrgent?' urgent':''}">
+        <div class="rev-head">
+          <div>
+            <span class="rev-tag">${quando}</span>
+            <h3 class="rev-title">${dado.titulo.replace(' · ',' <em>·</em> ')}</h3>
+            <div class="rev-meta">${materias} · Dia ${numDia} · Estudado em ${dData.data_conclusao}</div>
+          </div>
+        </div>
+        <ul class="rev-bullets">
+          ${topicos.map(t => `<li>${t.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</li>`).join('')}
+          ${nota}
+        </ul>
+        <div class="rev-feedback">
+          <button class="feedback-btn lembrei" onclick="registrarFeedback(this,'lembrei',${numDia})">✓ Lembrei tudo</button>
+          <button class="feedback-btn mais-ou-menos" onclick="registrarFeedback(this,'mais-ou-menos',${numDia})">~ Mais ou menos</button>
+          <button class="feedback-btn esqueci" onclick="registrarFeedback(this,'esqueci',${numDia})">✕ Esqueci</button>
+        </div>
+      </div>`
+    });
+  });
+
+  cards.sort((a,b) => a.diff - b.diff);
+  const container = document.getElementById('revisao-cards');
+  const banner = document.getElementById('rev-banner-title');
+
+  if (cards.length === 0) {
+    container.innerHTML = `<div style="text-align:center;padding:2.5rem;background:var(--paper);border-radius:var(--radius);border:1px dashed var(--line)">
+      <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-style:italic;color:var(--rose-deep);margin-bottom:0.5rem">✦ Sem revisões pendentes</div>
+      <p style="font-size:0.9rem;color:var(--ink-soft)">Complete dias no plano de estudos para gerar cards de revisão automáticos nos intervalos de 1, 7, 15 e 30 dias.</p>
+    </div>`;
+    if (banner) banner.innerHTML = '<em>Nenhuma revisão</em> pendente';
+  } else {
+    container.innerHTML = cards.map(c => c.html).join('');
+    if (banner) banner.innerHTML = `${cards.length} conteúdo${cards.length>1?'s':''} <em>aguardando revisão</em>`;
+  }
+
+  // Streak
+  const streakEl = document.querySelector('.streak-pill .count');
+  if (streakEl) streakEl.textContent = (p.streak || 0);
+});
+
+function registrarFeedback(btn, tipo, numDia) {
+  const card = btn.closest('.revisao-card');
+  const feedback = { lembrei:'✓ Revisado', 'mais-ou-menos':'~ Revisado', esqueci:'✕ Revisado' };
+  if (card) {
+    card.style.opacity = '0.5';
+    card.style.transition = 'opacity 0.4s';
+    setTimeout(() => card.remove(), 400);
+  }
+  const p = carregarProgresso();
+  if (!p.revisoes) p.revisoes = {};
+  if (!p.revisoes[String(numDia)]) p.revisoes[String(numDia)] = [];
+  p.revisoes[String(numDia)].push({ data: new Date().toISOString().split('T')[0], resultado: tipo });
+  salvarProgresso(p);
+}
+</script>
+</body>
+</html>

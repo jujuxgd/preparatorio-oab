@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OAB · Início</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&family=Caveat:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+/* Estilos específicos do dashboard */
+.hero {
+  background: linear-gradient(135deg, var(--blush) 0%, var(--rose-soft) 50%, var(--lavender) 100%);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem;
+  margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+[data-theme="dark"] .hero {
+  background: linear-gradient(135deg, var(--blush) 0%, var(--rose-soft) 50%, var(--lavender) 100%);
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -10%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+[data-theme="dark"] .hero::before {
+  background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 60%);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2rem;
+  align-items: center;
+}
+
+.hero h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.2rem;
+  font-weight: 500;
+  line-height: 1.1;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.hero h2 em {
+  font-style: italic;
+  color: var(--rose-deep);
+}
+
+.hero .quote {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem;
+  font-style: italic;
+  color: var(--ink-soft);
+  margin-bottom: 1.5rem;
+  max-width: 480px;
+}
+
+.hero .quote-author {
+  display: block;
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-faded);
+  margin-top: 0.3rem;
+  font-style: normal;
+}
+
+.hero-cta {
+  display: flex;
+  gap: 0.8rem;
+}
+
+.countdown {
+  text-align: center;
+  background: var(--paper);
+  padding: 1.5rem 2rem;
+  border-radius: var(--radius);
+  min-width: 160px;
+  box-shadow: var(--shadow);
+}
+
+.countdown .number {
+  font-family: 'Playfair Display', serif;
+  font-size: 3.5rem;
+  font-weight: 500;
+  color: var(--rose-deep);
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.countdown .label {
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-faded);
+  margin-top: 0.4rem;
+}
+
+.countdown .date {
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+  margin-top: 0.3rem;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+}
+
+/* GRID DASHBOARD */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 900px) {
+  .dashboard-grid { grid-template-columns: 1fr; }
+}
+
+/* HOJE CARD */
+.today-card {
+  background: var(--paper);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-sm);
+}
+
+.today-tag {
+  display: inline-block;
+  background: var(--rose-soft);
+  color: var(--rose-deep);
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+[data-theme="dark"] .today-tag {
+  color: var(--rose-deep);
+}
+
+.today-card h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.4rem;
+  line-height: 1.2;
+}
+
+.today-card h3 em {
+  font-style: italic;
+  color: var(--rose-deep);
+}
+
+.today-card .subject {
+  font-size: 0.85rem;
+  color: var(--ink-faded);
+  letter-spacing: 0.05em;
+  margin-bottom: 1.5rem;
+}
+
+.today-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin: 1.5rem 0;
+  padding: 1.2rem;
+  background: var(--bg-soft);
+  border-radius: var(--radius);
+}
+
+.today-stat {
+  text-align: center;
+}
+
+.today-stat .num {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.today-stat .lbl {
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-faded);
+  margin-top: 0.2rem;
+}
+
+.progress-section {
+  margin-top: 1.5rem;
+}
+
+.progress-bar {
+  height: 8px;
+  background: var(--line-soft);
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 0.5rem 0;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--rose) 0%, var(--rose-deep) 100%);
+  border-radius: 4px;
+  transition: width 1s ease;
+}
+
+.progress-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+}
+
+/* SIDEBAR DASHBOARD */
+.side-card {
+  background: var(--paper);
+  border-radius: var(--radius);
+  padding: 1.3rem;
+  border: 1px solid var(--line);
+  margin-bottom: 1rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.side-card h4 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.side-card h4 .icon {
+  font-size: 0.9rem;
+  color: var(--rose-deep);
+}
+
+/* MOOD TRACKER */
+.mood-options {
+  display: flex;
+  gap: 0.4rem;
+  justify-content: space-between;
+}
+
+.mood-btn {
+  flex: 1;
+  aspect-ratio: 1;
+  background: var(--bg-soft);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 1.4rem;
+  transition: all var(--transition);
+}
+
+.mood-btn:hover {
+  background: var(--blush);
+  transform: translateY(-2px);
+}
+
+.mood-btn.selected {
+  background: var(--rose-soft);
+  border-color: var(--rose);
+}
+
+.mood-label {
+  font-size: 0.7rem;
+  color: var(--ink-faded);
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+/* HEATMAP */
+.heatmap {
+  display: grid;
+  grid-template-columns: repeat(14, 1fr);
+  gap: 3px;
+  margin-top: 0.5rem;
+}
+
+.heat-cell {
+  aspect-ratio: 1;
+  background: var(--line-soft);
+  border-radius: 2px;
+  transition: transform var(--transition);
+}
+
+.heat-cell:hover { transform: scale(1.3); }
+.heat-cell.l1 { background: var(--blush); }
+.heat-cell.l2 { background: var(--rose-soft); }
+.heat-cell.l3 { background: var(--rose); }
+.heat-cell.l4 { background: var(--rose-deep); }
+
+/* MATÉRIAS BAR CHART */
+.materia-bar {
+  margin-bottom: 0.7rem;
+}
+
+.materia-bar .top {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.78rem;
+  margin-bottom: 0.25rem;
+}
+
+.materia-bar .name { color: var(--ink); }
+.materia-bar .pct { color: var(--rose-deep); font-weight: 600; font-family: 'Playfair Display', serif; }
+
+.materia-bar .bar {
+  height: 5px;
+  background: var(--line-soft);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.materia-bar .fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--rose-soft), var(--rose));
+  border-radius: 3px;
+}
+
+/* REVISÃO PREVIEW */
+.revisao-preview-item {
+  padding: 0.7rem 0;
+  border-bottom: 1px dotted var(--line);
+  cursor: pointer;
+  transition: padding var(--transition);
+}
+
+.revisao-preview-item:hover { padding-left: 0.3rem; }
+.revisao-preview-item:last-child { border-bottom: none; }
+
+.revisao-preview-item .when {
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--rose-deep);
+  margin-bottom: 0.2rem;
+}
+
+.revisao-preview-item .topic {
+  font-size: 0.85rem;
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.revisao-preview-item .materia {
+  font-size: 0.72rem;
+  color: var(--ink-faded);
+  margin-top: 0.1rem;
+}
+
+/* FATO HISTÓRICO */
+.fact-card {
+  background: linear-gradient(135deg, var(--champagne) 0%, var(--blush) 100%);
+  padding: 1.3rem;
+  border-radius: var(--radius);
+  margin-bottom: 1rem;
+  position: relative;
+  overflow: hidden;
+}
+
+[data-theme="dark"] .fact-card {
+  background: linear-gradient(135deg, var(--champagne) 0%, var(--blush) 100%);
+}
+
+.fact-card .eyebrow {
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-faded);
+  margin-bottom: 0.5rem;
+}
+
+.fact-card .fact {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.05rem;
+  font-style: italic;
+  line-height: 1.4;
+  color: var(--ink);
+}
+
+.fact-card .year {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--rose-deep);
+  margin-bottom: 0.3rem;
+}
+
+/* PLAYLIST */
+.playlist-card {
+  background: linear-gradient(135deg, var(--lavender) 0%, var(--rose-soft) 100%);
+  padding: 1.3rem;
+  border-radius: var(--radius);
+}
+
+.playlist-card .icon-music {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.playlist-card .pl-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 0.2rem;
+}
+
+.playlist-card .pl-sub {
+  font-size: 0.75rem;
+  color: var(--ink-soft);
+  margin-bottom: 0.8rem;
+}
+</style>
+</head>
+<body>
+
+<div class="aurora-bg" aria-hidden="true">
+  <div class="aurora-blob ab1"></div>
+  <div class="aurora-blob ab2"></div>
+  <div class="aurora-blob ab3"></div>
+  <div class="aurora-blob ab4"></div>
+</div>
+
+<button class="mobile-menu-btn" onclick="toggleSidebar()" title="Menu">☰</button>
+
+<div class="app">
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="mark"></div>
+      <h1>OAB <em style="font-style:italic;color:var(--rose-deep)">·</em> Ju</h1>
+      <div class="subtitle">Plano 1ª Fase</div>
+    </div>
+
+    <div class="nav-section-label">Principal</div>
+    <a href="index.html" class="nav-link active">
+      <span class="icon">✦</span>
+      <span>Início</span>
+    </a>
+    <a href="hoje.html" class="nav-link">
+      <span class="icon">◐</span>
+      <span>Hoje</span>
+    </a>
+    <a href="calendario.html" class="nav-link">
+      <span class="icon">☷</span>
+      <span>Calendário</span>
+    </a>
+    <a href="revisar.html" class="nav-link">
+      <span class="icon">↻</span>
+      <span>Revisar</span>
+    </a>
+
+    <div class="nav-section-label">Estudo</div>
+    <a href="materias.html" class="nav-link">
+      <span class="icon">❖</span>
+      <span>Matérias</span>
+    </a>
+    <a href="questoes.html" class="nav-link">
+      <span class="icon">◎</span>
+      <span>Questões</span>
+    </a>
+
+    <div class="nav-section-label">Análise</div>
+    <a href="estatisticas.html" class="nav-link">
+      <span class="icon">◈</span>
+      <span>Estatísticas</span>
+    </a>
+
+    <div class="sidebar-footer">
+      <div class="profile-card">
+        <div class="profile-avatar">
+          <img src="foto-perfil.jpg" alt="Julia" onerror="this.style.display='none'; this.parentElement.innerHTML='J';">
+        </div>
+        <div class="profile-info">
+          <div class="name">Julia</div>
+          <div class="meta">Estudante de Direito</div>
+        </div>
+      </div>
+      <button class="theme-toggle" onclick="toggleTheme()">
+        <span class="theme-label">Modo escuro</span>
+        <span class="toggle-track"><span class="toggle-thumb"></span></span>
+      </button>
+    </div>
+  </aside>
+
+  <main>
+    <div class="topbar">
+      <div class="page-title">
+        <div class="breadcrumb">Painel · <span data-month-year>—</span></div>
+        <h1>Bom dia, <em>Julia</em></h1>
+      </div>
+      <div class="topbar-actions">
+        <div class="streak-pill">
+          <span class="flame">🌸</span>
+          <span class="count" id="streak-count">0</span>
+          <span class="label">dias</span>
+        </div>
+        <button class="icon-btn" title="Notificações">◌</button>
+        <button class="icon-btn" title="Modo foco">✦</button>
+      </div>
+    </div>
+
+    <div class="hero">
+      <div class="hero-content">
+        <div>
+          <h2 id="hero-title">Hoje: <em id="hero-materias">—</em></h2>
+          <p class="quote">
+            "A advocacia não é profissão de covardes. Quem tem medo de perder a banca, de cair do cartaz, de comprometer o sucesso, que se faça funcionário, guarda-livros, ou que vá vender picolés à porta das escolas."
+            <span class="quote-author">— Sobral Pinto</span>
+          </p>
+          <div class="hero-cta">
+            <a href="hoje.html" class="btn btn-primary">Começar o dia →</a>
+            <a href="revisar.html" class="btn">Revisar</a>
+          </div>
+        </div>
+        <div class="countdown">
+          <div class="number" data-countdown>—</div>
+          <div class="label">dias</div>
+          <div class="date">restantes · 20 dez</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dashboard-grid">
+
+      <div class="today-card">
+        <span class="today-tag" id="today-tag-dynamic">○ carregando…</span>
+        <h3 id="today-title">—</h3>
+        <div class="subject" id="today-subject">—</div>
+
+        <div class="today-stats">
+          <div class="today-stat">
+            <div class="num" id="stat-horas">—</div>
+            <div class="lbl">Horas previstas</div>
+          </div>
+          <div class="today-stat">
+            <div class="num" id="stat-materias">—</div>
+            <div class="lbl">Matérias</div>
+          </div>
+          <div class="today-stat">
+            <div class="num" id="stat-questoes">—</div>
+            <div class="lbl">Questões feitas</div>
+          </div>
+          <div class="today-stat">
+            <div class="num" id="stat-acertos">—</div>
+            <div class="lbl">Taxa de acerto</div>
+          </div>
+        </div>
+
+        <div class="progress-section">
+          <div class="progress-label">
+            <span id="progress-days-text">0 de 60 dias concluídos</span>
+            <span id="progress-pct-text">0%</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill" id="progress-fill-main" style="width:0%"></div></div>
+        </div>
+
+        <div style="margin-top:1.5rem;display:flex;gap:0.8rem;flex-wrap:wrap">
+          <a href="hoje.html" class="btn btn-primary">Abrir conteúdo do dia</a>
+          <button onclick="baterMetaDoDia()" class="btn" style="border-color: var(--rose-deep); color: var(--rose-deep); background: rgba(255,192,203,0.1);">Bater Meta do Dia ✨</button>
+        </div>
+      </div>
+
+      <div>
+
+        <div class="side-card">
+          <h4>Dias concluídos <span class="icon">↻</span></h4>
+          <div style="font-size:0.72rem;color:var(--ink-faded);margin-bottom:0.5rem;letter-spacing:0.05em">Últimos estudados</div>
+          <div id="revisao-preview-container">
+            <div style="font-size:0.82rem;color:var(--ink-faded);font-style:italic;padding:0.5rem 0">Nenhum dia concluído ainda.</div>
+          </div>
+        </div>
+
+        <div class="side-card">
+          <h4>Como você tá hoje? <span class="icon">♡</span></h4>
+          <div class="mood-options">
+            <button class="mood-btn" title="Cansada">😮‍💨</button>
+            <button class="mood-btn" title="Perdida">🌀</button>
+            <button class="mood-btn selected" title="Focada">✨</button>
+            <button class="mood-btn" title="Confiante">🌷</button>
+            <button class="mood-btn" title="Empolgada">🎀</button>
+          </div>
+          <div class="mood-label">Selecionado: <em id="mood-text">focada</em></div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="dashboard-grid" style="grid-template-columns:1fr 1fr 1fr;gap:1.5rem">
+
+      <div class="side-card">
+        <h4>Progresso por matéria <span class="icon">❖</span></h4>
+        <div id="materias-bars">
+          <div style="font-size:0.82rem;color:var(--ink-faded);font-style:italic">Carregando…</div>
+        </div>
+        <a href="materias.html" style="font-size:0.78rem;color:var(--rose-deep);text-decoration:none;margin-top:0.8rem;display:inline-block;letter-spacing:0.05em">Ver todas as matérias →</a>
+      </div>
+
+      <div class="side-card">
+        <h4>Mapa de estudos <span class="icon">⛛</span></h4>
+        <div style="font-size:0.72rem;color:var(--ink-faded);margin-bottom:0.5rem">Últimos 28 dias · dias concluídos</div>
+        <div class="heatmap" id="heatmap-container"></div>
+        <div style="display:flex;justify-content:space-between;font-size:0.7rem;color:var(--ink-faded);margin-top:0.8rem;align-items:center">
+          <span>sem estudo</span>
+          <div style="display:flex;gap:3px">
+            <div class="heat-cell" style="width:10px;height:10px"></div>
+            <div class="heat-cell l4" style="width:10px;height:10px"></div>
+          </div>
+          <span>concluído</span>
+        </div>
+        <div style="margin-top:1.2rem;padding-top:1rem;border-top:1px solid var(--line);font-size:0.82rem;color:var(--ink-soft)">
+          <div style="display:flex;justify-content:space-between;margin-bottom:0.3rem">
+            <span>Dias concluídos</span>
+            <span style="font-family:'Playfair Display',serif;color:var(--rose-deep);font-weight:600" id="heatmap-concluidos">0</span>
+          </div>
+          <div style="display:flex;justify-content:space-between">
+            <span>Streak atual</span>
+            <span style="font-family:'Playfair Display',serif;color:var(--rose-deep);font-weight:600" id="heatmap-streak">0 dias</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="side-card" id="questoes-summary">
+        <h4>Questões QConcursos <span class="icon">◎</span></h4>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;margin-bottom:1rem">
+          <div style="text-align:center;padding:0.8rem;background:var(--bg-soft);border-radius:var(--radius-sm)">
+            <div style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:500;color:var(--ink)" id="q-total">0</div>
+            <div style="font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-faded)">Total feitas</div>
+          </div>
+          <div style="text-align:center;padding:0.8rem;background:var(--bg-soft);border-radius:var(--radius-sm)">
+            <div style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:500;color:var(--rose-deep)" id="q-pct">—</div>
+            <div style="font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-faded)">Taxa de acerto</div>
+          </div>
+        </div>
+        <div style="font-size:0.82rem;color:var(--ink-soft);display:flex;justify-content:space-between;padding:0.5rem 0;border-top:1px solid var(--line)">
+          <span>Acertos</span>
+          <span style="font-weight:600;color:var(--ink)" id="q-acertos">0</span>
+        </div>
+        <a href="questoes.html" style="font-size:0.78rem;color:var(--rose-deep);text-decoration:none;margin-top:0.8rem;display:inline-block;letter-spacing:0.05em">Registrar sessão →</a>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<script src="plano-oab.js"></script>
+<script src="progresso.js"></script>
+<script src="script.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // Countdown para o exame
+  const countdownEl = document.querySelector('[data-countdown]');
+  if (countdownEl) countdownEl.textContent = getDaysUntilExam();
+
+  // Saudação dinâmica
+  const hour = new Date().getHours();
+  const greeting = hour < 12 ? 'Bom dia' : hour < 18 ? 'Boa tarde' : 'Boa noite';
+  const greetEl = document.querySelector('.topbar h1');
+  if (greetEl) greetEl.innerHTML = `${greeting}, <em>Julia</em>`;
+
+  // Streak
+  const p = carregarProgresso();
+  const streakCount = document.getElementById('streak-count');
+  if (streakCount) streakCount.textContent = p.streak || 0;
+
+  // Tag de dia
+  const tag = document.getElementById('today-tag-dynamic');
+  const rawDay = getStudyDay();
+  const dia = rawDay <= 0 ? 1 : Math.min(rawDay, 60);
+  const isPreview = rawDay <= 0;
+  if (tag) {
+    if (isPreview) {
+      const daysLeft = Math.ceil((new Date(2026,5,1) - getCurrentDate()) / 864e5);
+      tag.textContent = daysLeft > 0 ? `🌸 Começa em ${daysLeft} dias` : '○ Plano iniciado!';
+    } else {
+      tag.textContent = `○ Dia ${dia} de 60`;
+    }
+  }
+
+  // Hero e today-card dinâmicos a partir do plano
+  const dados = typeof getDadosDia === 'function' ? getDadosDia(dia) : null;
+  if (dados) {
+    const nomes = dados.materias.map(m => m.nome).join(' · ');
+    const heroMaterias = document.getElementById('hero-materias');
+    if (heroMaterias) heroMaterias.textContent = nomes;
+
+    const todayTitle = document.getElementById('today-title');
+    if (todayTitle) {
+      const allTopicos = dados.materias.flatMap(m => m.topicos || []);
+      if (allTopicos.length > 0) {
+        todayTitle.innerHTML = `${allTopicos[0]}`;
+        if (allTopicos[1]) todayTitle.innerHTML += ` <em>·</em> ${allTopicos[1]}`;
+      } else {
+        todayTitle.textContent = nomes;
+      }
+    }
+
+    const todaySubject = document.getElementById('today-subject');
+    if (todaySubject) {
+      todaySubject.textContent = dados.materias.map(m => `${m.emoji || ''} ${m.nome}`).join('  ·  ');
+    }
+
+    const totalHoras = dados.materias.reduce((s, m) => s + (parseFloat(m.horas) || 0), 0);
+    const statHoras = document.getElementById('stat-horas');
+    if (statHoras) statHoras.textContent = totalHoras > 0 ? `${totalHoras}h` : '—';
+
+    const statMaterias = document.getElementById('stat-materias');
+    if (statMaterias) statMaterias.textContent = dados.materias.length;
+  }
+
+  // Questões totais
+  const q = typeof getTotaisQuestoes === 'function' ? getTotaisQuestoes() : {total:0,acertos:0,pct:0};
+  const statQ = document.getElementById('stat-questoes');
+  const statA = document.getElementById('stat-acertos');
+  if (statQ) statQ.textContent = q.total > 0 ? q.total : '—';
+  if (statA) statA.textContent = q.total > 0 ? `${q.pct}%` : '—';
+
+  const qTotal = document.getElementById('q-total');
+  const qPct   = document.getElementById('q-pct');
+  const qAcertos = document.getElementById('q-acertos');
+  if (qTotal)   qTotal.textContent   = q.total;
+  if (qPct)     qPct.textContent     = q.total > 0 ? `${q.pct}%` : '—';
+  if (qAcertos) qAcertos.textContent = q.acertos;
+
+  // Barra de progresso geral
+  const stats = typeof calcularStats === 'function' ? calcularStats() : {concluidos:0,pct:0};
+  const fillEl = document.getElementById('progress-fill-main');
+  const pctText = document.getElementById('progress-pct-text');
+  const daysText = document.getElementById('progress-days-text');
+  if (fillEl)   fillEl.style.width   = `${stats.pct}%`;
+  if (pctText)  pctText.textContent  = `${stats.pct}%`;
+  if (daysText) daysText.textContent = `${stats.concluidos} de 60 dias concluídos`;
+
+  // Heatmap e streak card
+  const heatContainer = document.getElementById('heatmap-container');
+  const hConcluidos = document.getElementById('heatmap-concluidos');
+  const hStreak = document.getElementById('heatmap-streak');
+  if (heatContainer) {
+    const hoje = getCurrentDate();
+    const cells = [];
+    for (let i = 27; i >= 0; i--) {
+      const d = new Date(hoje);
+      d.setDate(d.getDate() - i);
+      const ds = d.toISOString().split('T')[0];
+      const concluido = Object.values(p.dias || {}).some(dd => dd.data_conclusao === ds);
+      cells.push(`<div class="heat-cell ${concluido ? 'l4' : ''}" title="${ds}"></div>`);
+    }
+    heatContainer.innerHTML = cells.join('');
+  }
+  if (hConcluidos) hConcluidos.textContent = stats.concluidos;
+  if (hStreak) hStreak.textContent = `${p.streak || 0} dia${(p.streak||0)!==1?'s':''}`;
+
+  // Progresso por matéria (top 6)
+  const MATERIAS_TOP = [
+    {id:'etica',          nome:'Ética Profissional'},
+    {id:'constitucional', nome:'Constitucional'},
+    {id:'civil',          nome:'Direito Civil'},
+    {id:'penal',          nome:'Direito Penal'},
+    {id:'proc_civil',     nome:'Processo Civil'},
+    {id:'proc_penal',     nome:'Processo Penal'},
+  ];
+  const materiasContainer = document.getElementById('materias-bars');
+  if (materiasContainer && typeof getProgressoMateria === 'function') {
+    materiasContainer.innerHTML = MATERIAS_TOP.map(m => {
+      const prog = getProgressoMateria(m.id);
+      return `<div class="materia-bar">
+        <div class="top"><span class="name">${m.nome}</span><span class="pct">${prog.pct}%</span></div>
+        <div class="bar"><div class="fill" style="width:${prog.pct}%"></div></div>
+      </div>`;
+    }).join('');
+  }
+
+  // Dias concluídos recentes (substituiu "Revisar hoje")
+  const revisaoContainer = document.getElementById('revisao-preview-container');
+  if (revisaoContainer) {
+    const diasConcluidos = Object.entries(p.dias || {})
+      .filter(([,d]) => d.concluido && d.data_conclusao)
+      .sort((a, b) => b[1].data_conclusao.localeCompare(a[1].data_conclusao))
+      .slice(0, 3);
+
+    if (diasConcluidos.length > 0) {
+      revisaoContainer.innerHTML = diasConcluidos.map(([numDia, dData]) => {
+        const dadosDia = typeof getDadosDia === 'function' ? getDadosDia(parseInt(numDia)) : null;
+        const nomesM = dadosDia ? dadosDia.materias.map(m => m.nome).join(', ') : `Dia ${numDia}`;
+        const dataConcl = dData.data_conclusao;
+        const diff = Math.round((getCurrentDate() - new Date(dataConcl)) / 864e5);
+        const quando = diff === 0 ? 'hoje' : diff === 1 ? 'ontem' : `há ${diff} dias`;
+        return `<div class="revisao-preview-item" onclick="location.href='revisar.html'">
+          <div class="when">${quando}</div>
+          <div class="topic">Dia ${numDia}</div>
+          <div class="materia">${nomesM}</div>
+        </div>`;
+      }).join('');
+    } else {
+      revisaoContainer.innerHTML = `<div style="font-size:0.82rem;color:var(--ink-faded);font-style:italic;padding:0.5rem 0">Nenhum dia concluído ainda.</div>`;
+    }
+  }
+
+  // Mood tracker
+  const moodBtns = document.querySelectorAll('.mood-btn');
+  const moodText = document.getElementById('mood-text');
+  const todayStr = getCurrentDate().toISOString().split('T')[0];
+  const savedMood = localStorage.getItem(`mood_${todayStr}`);
+  if (savedMood) {
+    moodBtns.forEach(btn => btn.classList.remove('selected'));
+    const activeBtn = Array.from(moodBtns).find(btn => btn.getAttribute('title') === savedMood);
+    if (activeBtn) {
+      activeBtn.classList.add('selected');
+      if (moodText) moodText.innerText = savedMood.toLowerCase();
+    }
+  }
+  moodBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      moodBtns.forEach(b => b.classList.remove('selected'));
+      e.currentTarget.classList.add('selected');
+      const moodName = e.currentTarget.getAttribute('title');
+      localStorage.setItem(`mood_${todayStr}`, moodName);
+      if (moodText) moodText.innerText = moodName.toLowerCase();
+    });
+  });
+});
+</script>
+</body>
+</html>
