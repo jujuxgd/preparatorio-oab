@@ -146,25 +146,27 @@ body {
 }
 
 .logo .mark {
-  display: inline-block;
-  width: 36px;
-  height: 36px;
-  background: linear-gradient(135deg, var(--rose) 0%, var(--rose-deep) 100%);
-  border-radius: 10px;
-  position: relative;
-  margin-bottom: 0.8rem;
-  box-shadow: var(--shadow-sm);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-bottom: 0.6rem;
+  font-size: 1.3rem;
+  letter-spacing: 0.04em;
 }
 
-.logo .mark::after {
-  content: '⚖';
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--paper);
-  font-size: 1.1rem;
+.logo .mark .star {
+  color: #e8b800;
+  text-shadow: 0 0 8px rgba(232, 184, 0, 0.5);
+  display: inline-block;
+  transition: transform 0.4s ease;
+}
+
+.logo .mark .star:hover { transform: scale(1.2) rotate(20deg); }
+
+.logo .mark .star.sm {
+  font-size: 0.85rem;
+  color: #d4a800;
+  opacity: 0.8;
 }
 
 .logo h1 {
@@ -673,32 +675,131 @@ textarea.handwritten {
   100% { transform: scale(1); }
 }
 
-/* ── Modo Foco melhorado ── */
+/* ── Modo Foco — dashboard width + fundo desfocado ── */
+body.focus-mode {
+  overflow: hidden;
+}
+
+/* Aurora fica visível mas desfocada ao fundo */
+body.focus-mode .aurora-bg {
+  filter: blur(40px) brightness(0.8);
+  transform: scale(1.12);
+  transition: filter 0.5s ease, transform 0.5s ease;
+}
+
+/* Elementos escondidos no foco */
 body.focus-mode .sidebar,
 body.focus-mode .day-footer,
 body.focus-mode .side,
 body.focus-mode .topbar,
 body.focus-mode .day-hero,
-body.focus-mode .aurora-bg,
 body.focus-mode .mobile-menu-btn {
   display: none !important;
 }
 
-body.focus-mode .app { grid-template-columns: 1fr; }
+/* App vira flex centralizado */
+body.focus-mode .app {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 2rem;
+  grid-template-columns: none;
+}
 
+/* Main como painel de dashboard centralizado */
 body.focus-mode main {
-  max-width: 100%;
+  width: 100%;
+  max-width: 1240px;
+  background: var(--paper);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--line);
+  box-shadow: 0 24px 64px rgba(74, 46, 58, 0.18), 0 4px 20px rgba(74, 46, 58, 0.1);
+  padding: 0;
   margin: 0;
-  padding: 1rem 2rem;
+  max-height: calc(100vh - 4rem);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  animation: focusIn 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Barra superior do painel foco */
+body.focus-mode .focus-topbar {
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.8rem 1.5rem;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper);
+  flex-shrink: 0;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+/* Área de conteúdo com scroll */
+body.focus-mode .focus-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem 2rem;
+}
+
+/* Barra inferior do painel foco */
+body.focus-mode .focus-bottombar {
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.8rem 1.5rem;
+  border-top: 1px solid var(--line);
+  background: var(--paper);
+  flex-shrink: 0;
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  gap: 1rem;
+}
+
+@keyframes focusIn {
+  from { opacity: 0; transform: scale(0.97) translateY(8px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
 }
 
 body.focus-mode .content-layout { grid-template-columns: 1fr; }
 
 body.focus-mode #teoria-frame {
-  height: calc(100vh - 120px) !important;
+  height: calc(100vh - 260px) !important;
 }
 
 body.focus-mode .tabs-bar { margin-bottom: 0.8rem; }
+
+/* Botão sair do foco — global para todas as páginas */
+.focus-exit {
+  display: none;
+  position: fixed;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 1000;
+  width: 44px;
+  height: 44px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1rem;
+  color: var(--ink-soft);
+  box-shadow: var(--shadow);
+  transition: all var(--transition);
+  font-family: inherit;
+}
+
+.focus-exit:hover {
+  background: var(--blush);
+  color: var(--rose-deep);
+  transform: scale(1.08);
+}
+
+body.focus-mode .focus-exit {
+  display: flex !important;
+}
 
 /* ── Print / PDF ── */
 @media print {

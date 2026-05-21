@@ -84,10 +84,48 @@ document.addEventListener('DOMContentLoaded', () => {
     const theme = document.documentElement.getAttribute('data-theme');
     label.textContent = theme === 'dark' ? 'Modo claro' : 'Modo escuro';
   }
-  
+
   // Atualizar contadores na página
   updateCountdowns();
+
+  // Badge de Revisar — calculado após todos os scripts carregarem
+  setTimeout(atualizarBadgeRevisar, 0);
 });
+
+function atualizarBadgeRevisar() {
+  const badges = document.querySelectorAll('a[href="revisar.html"] .badge');
+  if (!badges.length) return;
+  let count = 0;
+  try {
+    if (typeof carregarProgresso === 'function') {
+      const prog = carregarProgresso();
+      const today = getCurrentDate();
+      const INTERVALS = [1, 7, 15, 30];
+      Object.entries(prog.dias || {}).forEach(([dStr, d]) => {
+        if (!d.concluido) return;
+        if (d.nota && d.nota.trim()) {
+          // Tem resumo → conta como card de revisão
+          count++;
+        }
+        // Itens marcados para revisar individualmente
+        if (d.revisar && d.revisar.length) count += d.revisar.length;
+      });
+      // Questões marcadas para revisar via localStorage
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (k && k.startsWith('oab_revisar_q_')) count++;
+      }
+    }
+  } catch(e) {}
+  badges.forEach(b => {
+    if (count > 0) {
+      b.textContent = count;
+      b.style.display = '';
+    } else {
+      b.style.display = 'none';
+    }
+  });
+}
 
 // Atualizar todos os contadores de dias
 function updateCountdowns() {
@@ -147,6 +185,40 @@ function showPetals() {
 function toggleSidebar() {
   document.querySelector('.sidebar').classList.toggle('open');
 }
+
+// MODO FOCO — funciona em todas as páginas
+function toggleFocusMode() {
+  const active = document.body.classList.toggle('focus-mode');
+  if (active && document.documentElement.requestFullscreen) {
+    document.documentElement.requestFullscreen().catch(() => {});
+  } else if (!active && document.fullscreenElement) {
+    document.exitFullscreen().catch(() => {});
+  }
+}
+
+// Injeta botão "sair do foco" e botão "foco" na topbar em todas as páginas
+document.addEventListener('DOMContentLoaded', () => {
+  // Botão sair (canto fixo)
+  if (!document.querySelector('.focus-exit')) {
+    const exitBtn = document.createElement('button');
+    exitBtn.className = 'focus-exit';
+    exitBtn.title = 'Sair do modo foco';
+    exitBtn.textContent = '✕';
+    exitBtn.onclick = () => document.body.classList.remove('focus-mode');
+    document.body.appendChild(exitBtn);
+  }
+  // Botão foco na topbar-actions (se ainda não existe)
+  const topbarActions = document.querySelector('.topbar-actions');
+  if (topbarActions && !topbarActions.querySelector('[data-focus-btn]')) {
+    const focusBtn = document.createElement('button');
+    focusBtn.className = 'icon-btn';
+    focusBtn.setAttribute('data-focus-btn', '1');
+    focusBtn.title = 'Modo foco';
+    focusBtn.textContent = '✦';
+    focusBtn.onclick = toggleFocusMode;
+    topbarActions.prepend(focusBtn);
+  }
+});
 
 // ============================================
 // NOVAS FUNÇÕES (STREAK, CHECKLIST, MOOD, ERROS)

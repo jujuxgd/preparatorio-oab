@@ -1,0 +1,217 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Dia 2 · Direito Civil</title>
+<style>
+  :root {
+    --bg:#fdf4f7;--paper:#fff;--ink:#4a2e3a;--ink-soft:#7a5566;
+    --ink-faded:#b08799;--rose:#e8a5c0;--rose-deep:#c87aa0;
+    --rose-soft:#f5d4e2;--blush:#fce0eb;--champagne:#f8e1d8;
+    --lavender:#e0c8dc;--line:#f0d4e0;--gold:#d4a888;--radius:10px;
+  }
+  [data-theme="dark"]{
+    --bg:#1a1318;--paper:#211a20;--ink:#f5e4ec;--ink-soft:#d4b8c8;
+    --ink-faded:#9a7686;--rose:#e8a5c0;--rose-deep:#f0b8d0;
+    --rose-soft:#4a2e3a;--blush:#3d2632;--champagne:#5a4248;
+    --lavender:#5a4258;--line:#3a2832;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Inter',sans-serif;font-size:0.93rem;color:var(--ink);
+       background:var(--bg);line-height:1.7;padding:2rem 2.5rem 4rem}
+  h2{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:500;
+     margin:2rem 0 0.8rem;color:var(--ink);letter-spacing:-0.01em;line-height:1.25}
+  h2 em{font-style:italic;color:var(--rose-deep)}
+  h2:first-child{margin-top:0}
+  h3{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:500;
+     margin:1.5rem 0 0.6rem;color:var(--ink);border-left:3px solid var(--rose);padding-left:0.7rem}
+  p{margin-bottom:0.85rem;color:var(--ink-soft)}
+  strong{color:var(--ink);font-weight:600}
+  .callout{padding:1rem 1.2rem;border-radius:var(--radius);margin:1.2rem 0}
+  .callout.atencao{background:linear-gradient(135deg,var(--blush),var(--rose-soft));border-left:4px solid var(--rose-deep)}
+  .callout.dica{background:linear-gradient(135deg,var(--champagne),#fde8d8);border-left:4px solid var(--gold)}
+  .callout.lei{background:linear-gradient(135deg,var(--lavender),#ede0ec);border-left:4px solid #b090c0}
+  .callout.penal{background:linear-gradient(135deg,#f5e2db,#f2d8d0);border-left:4px solid #c06040}
+  .callout-label{font-size:0.65rem;letter-spacing:0.18em;text-transform:uppercase;
+                 font-weight:700;margin-bottom:0.4rem;display:block;color:var(--ink)}
+  .callout p{margin:0;color:var(--ink);font-size:0.88rem}
+  table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:0.85rem}
+  th{background:var(--rose-soft);color:var(--ink);font-weight:600;padding:0.6rem 0.8rem;text-align:left;border-bottom:2px solid var(--rose)}
+  td{padding:0.55rem 0.8rem;border-bottom:1px solid var(--line);color:var(--ink-soft)}
+  tr:hover td{background:var(--blush);color:var(--ink)}
+  ul,ol{padding-left:1.4rem;margin:0.6rem 0}
+  li{margin-bottom:0.35rem;color:var(--ink-soft)}
+  li strong{color:var(--ink)}
+  .badge{display:inline-block;background:var(--rose-soft);color:var(--rose-deep);
+         font-size:0.65rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;
+         padding:0.2rem 0.6rem;border-radius:20px;margin-right:0.4rem}
+  .badge.penal{background:#f5e2db;color:#a04020}
+  .badge.civil{background:var(--champagne);color:#8a5030}
+  .materia-header{display:flex;align-items:center;gap:0.8rem;
+    padding:1rem 1.2rem;border-radius:var(--radius);margin:2rem 0 1.2rem;
+    font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:500}
+  .materia-header.civil{background:linear-gradient(135deg,var(--champagne),#fde8d8)}
+  .materia-header.penal-h{background:linear-gradient(135deg,#f5e2db,#f2d0c8)}
+  .materia-header .emoji{font-size:1.4rem}
+  .materia-header .tempo{font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;
+                         color:var(--ink-faded);margin-left:auto;font-family:'Inter',sans-serif}
+  .incidencia{font-size:0.7rem;color:var(--rose-deep);font-weight:600;
+              background:var(--rose-soft);padding:0.2rem 0.5rem;border-radius:4px}
+  hr{border:none;border-top:1px solid var(--line);margin:2rem 0}
+  mark{background:var(--blush);color:var(--ink);border-radius:3px;padding:0 2px}
+  mark.aten{background:#ffe4c0}
+  mark.lei{background:var(--lavender)}
+  .iter-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0.8rem;margin:1rem 0}
+  .iter-card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);
+             padding:0.9rem;text-align:center}
+  .iter-card .fase{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--rose-deep);
+                   font-weight:600;margin-bottom:0.2rem}
+  .iter-card .desc{font-size:0.72rem;color:var(--ink-faded);line-height:1.4}
+  .iter-card.punivel{border-color:var(--rose);background:var(--rose-soft)}
+  @media(max-width:640px){.iter-grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════
+     DIREITO CIVIL — PARTE GERAL
+═══════════════════════════════════════ -->
+
+<div class="materia-header civil">
+  <span class="emoji">📜</span>
+  <span>Direito Civil</span>
+  <span class="incidencia">71% provas</span>
+  <span class="tempo">⏱ 2h</span>
+</div>
+
+<h2>I. Pessoa Natural <em>— Capacidade e Personalidade</em></h2>
+
+<p>A <strong>personalidade jurídica</strong> da pessoa natural começa com o <mark>nascimento com vida</mark> (art. 2º CC). O nascituro tem seus direitos resguardados desde a concepção — mas a personalidade em sentido técnico só se adquire com o nascimento.</p>
+
+<div class="callout atencao">
+  <span class="callout-label">⚠ Pegadinha clássica — Nascituro</span>
+  <p>O nascituro <strong>NÃO tem personalidade jurídica</strong> — mas tem <strong>expectativa de direito</strong> (herdará se nascer vivo, pode receber doação, seu curador pode ser nomeado). Corrente adotada no Brasil: <mark>natalista</mark> (com temperamento pela personalidade condicional).</p>
+</div>
+
+<h3>Capacidade de Direito vs. Capacidade de Fato</h3>
+<table>
+  <tr><th>Tipo</th><th>Conceito</th><th>Quem tem?</th></tr>
+  <tr><td><strong>Capacidade de direito</strong> (gozo)</td><td>Aptidão para ser titular de direitos e obrigações</td><td>Toda pessoa natural — desde o nascimento</td></tr>
+  <tr><td><strong>Capacidade de fato</strong> (exercício)</td><td>Aptidão para exercer pessoalmente os atos da vida civil</td><td>Maiores de 18 anos, sem incapacidade</td></tr>
+</table>
+
+<h3>Incapacidade Absoluta <span class="badge civil">Art. 3º CC</span></h3>
+<p>Desde o <strong>Estatuto da Pessoa com Deficiência (Lei 13.146/15)</strong>, são absolutamente incapazes <strong>apenas os menores de 16 anos</strong>. A deficiência mental/intelectual <mark>não gera mais incapacidade absoluta</mark>.</p>
+
+<h3>Incapacidade Relativa <span class="badge civil">Art. 4º CC</span></h3>
+<ul>
+  <li>Maiores de 16 e menores de 18 anos</li>
+  <li>Ébrios habituais e viciados em tóxicos</li>
+  <li>Aqueles que, por causa transitória ou permanente, não puderem exprimir vontade</li>
+  <li>Pródigos (apenas para atos que extravasem a mera administração)</li>
+</ul>
+
+<div class="callout dica">
+  <span class="callout-label">✦ Representação vs. Assistência</span>
+  <p><strong>Absolutamente incapaz</strong> → é <strong>representado</strong> (pai/mãe, tutor). Atua no lugar dele.<br>
+  <strong>Relativamente incapaz</strong> → é <strong>assistido</strong> (autoriza o ato junto). Atua ao lado dele.</p>
+</div>
+
+<h3>Emancipação <span class="badge civil">Art. 5º CC</span></h3>
+<table>
+  <tr><th>Espécie</th><th>Como ocorre</th><th>Requisito</th></tr>
+  <tr><td><strong>Voluntária</strong></td><td>Concessão dos pais em escritura pública</td><td>Menor com 16 anos</td></tr>
+  <tr><td><strong>Judicial</strong></td><td>Sentença do juiz a requerimento do tutor</td><td>Menor com 16 anos (sem pais)</td></tr>
+  <tr><td><strong>Legal</strong></td><td>Casamento; emprego público efetivo; colação de grau; estabelecimento civil/comercial com economia própria</td><td>Automática por lei</td></tr>
+</table>
+
+<div class="callout atencao">
+  <span class="callout-label">⚠ Emancipação não exclui responsabilidade civil</span>
+  <p>Os pais <strong>continuam responsáveis</strong> pelos atos do filho emancipado voluntariamente pelos próprios pais (Súmula 2 STJ/STF). A emancipação legal e judicial excluem a responsabilidade dos responsáveis.</p>
+</div>
+
+<hr>
+
+<h2>II. Bens Jurídicos</h2>
+
+<h3>Classificação dos Bens</h3>
+<table>
+  <tr><th>Critério</th><th>Espécies</th><th>Exemplos</th></tr>
+  <tr><td>Mobilidade</td><td><strong>Imóveis</strong> / <strong>Móveis</strong></td><td>Solo + acessões / veículos, títulos</td></tr>
+  <tr><td>Fungibilidade</td><td><strong>Fungíveis</strong> / <strong>Infungíveis</strong></td><td>Dinheiro / quadro de arte assinado</td></tr>
+  <tr><td>Consumo</td><td><strong>Consumíveis</strong> / <strong>Inconsumíveis</strong></td><td>Alimentos / carro</td></tr>
+  <tr><td>Divisão</td><td><strong>Divisíveis</strong> / <strong>Indivisíveis</strong></td><td>Terreno / cavalo</td></tr>
+  <tr><td>Titularidade</td><td><strong>Singulares</strong> / <strong>Coletivos</strong></td><td>Um livro / biblioteca</td></tr>
+</table>
+
+<h3>Bem de Família <span class="badge civil">Lei 8.009/90</span></h3>
+<p>O imóvel residencial próprio do casal ou da entidade familiar é impenhorável e não responde por dívidas civis, trabalhistas, fiscais etc. — com exceções importantes:</p>
+<ul>
+  <li>Crédito de trabalhadores da residência e das respectivas contribuições previdenciárias</li>
+  <li>Crédito real (hipoteca) sobre o próprio imóvel</li>
+  <li>Pensão alimentícia</li>
+  <li>Impostos, predial ou territorial, taxas e contribuições devidos em função do imóvel familiar</li>
+  <li>Execução de sentença penal condenatória (ressarcimento de dano ao fisco)</li>
+  <li>Obrigação decorrente de fiança concedida em contrato de locação <mark class="aten">(cai muito!)</mark></li>
+</ul>
+
+<hr>
+
+<h2>III. Negócio Jurídico — Planos e Defeitos</h2>
+
+<h3>Os Três Planos do Negócio Jurídico (Pontes de Miranda)</h3>
+<table>
+  <tr><th>Plano</th><th>Pergunta</th><th>Vícios</th><th>Sanção</th></tr>
+  <tr><td><strong>Existência</strong></td><td>O ato existe?</td><td>Ausência de agente, vontade, objeto</td><td>Inexistência (jurídica)</td></tr>
+  <tr><td><strong>Validade</strong></td><td>É válido?</td><td>Incapacidade, defeitos, ilicitude, forma</td><td>Nulidade / anulabilidade</td></tr>
+  <tr><td><strong>Eficácia</strong></td><td>Produz efeitos?</td><td>Condição suspensiva, prazo</td><td>Ineficácia</td></tr>
+</table>
+
+<h3>Defeitos do Negócio Jurídico <span class="badge civil">Arts. 138-165 CC</span></h3>
+<table>
+  <tr><th>Defeito</th><th>Conceito</th><th>Prazo anulação</th></tr>
+  <tr><td><strong>Erro / Ignorância</strong></td><td>Falsa representação da realidade. Deve ser essencial e escusável.</td><td>4 anos</td></tr>
+  <tr><td><strong>Dolo</strong></td><td>Induzimento malicioso ao erro. Pode ser principal (anula) ou acidental (perdas/danos).</td><td>4 anos</td></tr>
+  <tr><td><strong>Coação</strong></td><td>Ameaça grave, injusta, atual/iminente sobre bem jurídico.</td><td>4 anos</td></tr>
+  <tr><td><strong>Lesão</strong></td><td>Prestação desproporcional por estado de necessidade ou inexperiência.</td><td>4 anos</td></tr>
+  <tr><td><strong>Estado de Perigo</strong></td><td>Assunção de obrigação excessiva para salvar-se ou a terceiro de grave dano.</td><td>4 anos</td></tr>
+  <tr><td><strong>Fraude contra credores</strong></td><td>Ato que reduz patrimônio em prejuízo de credores. Ação pauliana.</td><td>4 anos</td></tr>
+  <tr><td><strong>Simulação</strong></td><td>Divergência intencional entre vontade real e declarada. Nulo (não anulável).</td><td>—</td></tr>
+</table>
+
+<div class="callout atencao">
+  <span class="callout-label">⚠ Nulo vs. Anulável</span>
+  <p><strong>Nulo:</strong> não produz efeito algum, pode ser declarado de ofício pelo juiz, não convalesce, não pode ser ratificado.<br>
+  <strong>Anulável:</strong> produz efeitos até a anulação; só pode ser arguido pelos interessados; pode ser ratificado; convalesce pelo prazo decadencial.</p>
+</div>
+
+<hr>
+
+<h2>IV. Prescrição e Decadência</h2>
+
+<table>
+  <tr><th></th><th>Prescrição</th><th>Decadência</th></tr>
+  <tr><td><strong>O que extingue</strong></td><td>Pretensão (direito de ação subjetiva)</td><td>Direito potestativo em si</td></tr>
+  <tr><td><strong>Início</strong></td><td>Violação do direito</td><td>Nascimento do direito</td></tr>
+  <tr><td><strong>Arguição</strong></td><td>Pode ser conhecida de ofício pelo juiz</td><td>Pode ser conhecida de ofício</td></tr>
+  <tr><td><strong>Renúncia</strong></td><td>Admite renúncia (após consumada)</td><td>Não admite renúncia (legal)</td></tr>
+  <tr><td><strong>Suspensão/Interrupção</strong></td><td><mark>Sim</mark> — vide arts. 197-204 CC</td><td>Só se a lei expressamente prever</td></tr>
+</table>
+
+<div class="callout dica">
+  <span class="callout-label">✦ Prazos prescricionais importantes (art. 206 CC)</span>
+  <p>1 ano: pretensão do hospedeiro, credores de alimentos | 3 anos: pretensão de reparação civil, enriquecimento ilícito, receber prestações periódicas | 4 anos: invalidade de negócio jurídico | <mark class="aten">5 anos: pretensão de cobrança de dívidas em geral por escrito</mark> | 10 anos: regra geral (art. 205)</p>
+</div>
+
+<script src="../highlighter.js"></script>
+<script>
+  const parentTheme = window.parent && window.parent.document.documentElement.getAttribute('data-theme');
+  if (parentTheme) document.documentElement.setAttribute('data-theme', parentTheme);
+  window.addEventListener('message', e => {
+    if (!e.data) return;
+    if (e.data.type === 'set-theme') document.documentElement.setAttribute('data-theme', e.data.theme);
+    if (e.data.type === 'hl-clear' && window.clearHighlights) window.clearHighlights();
+  });
+</script>
+</body>
+</html>

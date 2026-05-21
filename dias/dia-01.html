@@ -91,6 +91,7 @@
 </head>
 <body>
 
+<div class="secao" data-mat="etica">
 <!-- ═══════════════════════════════════════
      ÉTICA PROFISSIONAL
 ═══════════════════════════════════════ -->
@@ -220,6 +221,9 @@
   <p>Aplica-se a infrações puníveis com <strong>censura</strong> e a casos de <strong>publicidade irregular</strong>. Suspende o processo por <strong>3 anos</strong>, após os quais é arquivado sem anotação. Não pode ser celebrado se houver condenação por TAC nos 3 anos anteriores. Durante a suspensão, <strong>não fluem prazos prescricionais</strong>.</p>
 </div>
 
+</div><!-- /secao etica -->
+
+<div class="secao" data-mat="constitucional">
 <!-- ═══════════════════════════════════════
      DIREITO CONSTITUCIONAL
 ═══════════════════════════════════════ -->
@@ -309,15 +313,24 @@
   <p><strong>Plena</strong> = "funciona sozinha, ninguém mexe" | <strong>Contida</strong> = "funciona sozinha, mas pode ser contida por lei" | <strong>Limitada</strong> = "precisa de lei para funcionar"</p>
 </div>
 
+</div><!-- /secao constitucional -->
+
 <script src="../highlighter.js"></script>
 <script>
-  // Aplicar tema do site ao conteúdo do dia
   const parentTheme = window.parent && window.parent.document.documentElement.getAttribute('data-theme');
   if (parentTheme) document.documentElement.setAttribute('data-theme', parentTheme);
+
+  function filtrarSecao(mat) {
+    document.querySelectorAll('.secao').forEach(s => {
+      s.style.display = (!mat || s.dataset.mat === mat) ? '' : 'none';
+    });
+  }
+
   window.addEventListener('message', e => {
-    if (e.data && e.data.type === 'set-theme') {
-      document.documentElement.setAttribute('data-theme', e.data.theme);
-    }
+    if (!e.data) return;
+    if (e.data.type === 'set-theme') document.documentElement.setAttribute('data-theme', e.data.theme);
+    if (e.data.type === 'show-section') filtrarSecao(e.data.mat);
+    if (e.data.type === 'hl-clear' && window.clearHighlights) window.clearHighlights();
   });
 </script>
 </body>

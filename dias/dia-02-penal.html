@@ -1,0 +1,211 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Dia 2 · Direito Penal</title>
+<style>
+  :root {
+    --bg:#fdf4f7;--paper:#fff;--ink:#4a2e3a;--ink-soft:#7a5566;
+    --ink-faded:#b08799;--rose:#e8a5c0;--rose-deep:#c87aa0;
+    --rose-soft:#f5d4e2;--blush:#fce0eb;--champagne:#f8e1d8;
+    --lavender:#e0c8dc;--line:#f0d4e0;--gold:#d4a888;--radius:10px;
+  }
+  [data-theme="dark"]{
+    --bg:#1a1318;--paper:#211a20;--ink:#f5e4ec;--ink-soft:#d4b8c8;
+    --ink-faded:#9a7686;--rose:#e8a5c0;--rose-deep:#f0b8d0;
+    --rose-soft:#4a2e3a;--blush:#3d2632;--champagne:#5a4248;
+    --lavender:#5a4258;--line:#3a2832;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Inter',sans-serif;font-size:0.93rem;color:var(--ink);
+       background:var(--bg);line-height:1.7;padding:2rem 2.5rem 4rem}
+  h2{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:500;
+     margin:2rem 0 0.8rem;color:var(--ink);letter-spacing:-0.01em;line-height:1.25}
+  h2 em{font-style:italic;color:var(--rose-deep)}
+  h2:first-child{margin-top:0}
+  h3{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:500;
+     margin:1.5rem 0 0.6rem;color:var(--ink);border-left:3px solid var(--rose);padding-left:0.7rem}
+  p{margin-bottom:0.85rem;color:var(--ink-soft)}
+  strong{color:var(--ink);font-weight:600}
+  .callout{padding:1rem 1.2rem;border-radius:var(--radius);margin:1.2rem 0}
+  .callout.atencao{background:linear-gradient(135deg,var(--blush),var(--rose-soft));border-left:4px solid var(--rose-deep)}
+  .callout.dica{background:linear-gradient(135deg,var(--champagne),#fde8d8);border-left:4px solid var(--gold)}
+  .callout.lei{background:linear-gradient(135deg,var(--lavender),#ede0ec);border-left:4px solid #b090c0}
+  .callout.penal{background:linear-gradient(135deg,#f5e2db,#f2d8d0);border-left:4px solid #c06040}
+  .callout-label{font-size:0.65rem;letter-spacing:0.18em;text-transform:uppercase;
+                 font-weight:700;margin-bottom:0.4rem;display:block;color:var(--ink)}
+  .callout p{margin:0;color:var(--ink);font-size:0.88rem}
+  table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:0.85rem}
+  th{background:var(--rose-soft);color:var(--ink);font-weight:600;padding:0.6rem 0.8rem;text-align:left;border-bottom:2px solid var(--rose)}
+  td{padding:0.55rem 0.8rem;border-bottom:1px solid var(--line);color:var(--ink-soft)}
+  tr:hover td{background:var(--blush);color:var(--ink)}
+  ul,ol{padding-left:1.4rem;margin:0.6rem 0}
+  li{margin-bottom:0.35rem;color:var(--ink-soft)}
+  li strong{color:var(--ink)}
+  .badge{display:inline-block;background:var(--rose-soft);color:var(--rose-deep);
+         font-size:0.65rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;
+         padding:0.2rem 0.6rem;border-radius:20px;margin-right:0.4rem}
+  .badge.penal{background:#f5e2db;color:#a04020}
+  .badge.civil{background:var(--champagne);color:#8a5030}
+  .materia-header{display:flex;align-items:center;gap:0.8rem;
+    padding:1rem 1.2rem;border-radius:var(--radius);margin:2rem 0 1.2rem;
+    font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:500}
+  .materia-header.civil{background:linear-gradient(135deg,var(--champagne),#fde8d8)}
+  .materia-header.penal-h{background:linear-gradient(135deg,#f5e2db,#f2d0c8)}
+  .materia-header .emoji{font-size:1.4rem}
+  .materia-header .tempo{font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;
+                         color:var(--ink-faded);margin-left:auto;font-family:'Inter',sans-serif}
+  .incidencia{font-size:0.7rem;color:var(--rose-deep);font-weight:600;
+              background:var(--rose-soft);padding:0.2rem 0.5rem;border-radius:4px}
+  hr{border:none;border-top:1px solid var(--line);margin:2rem 0}
+  mark{background:var(--blush);color:var(--ink);border-radius:3px;padding:0 2px}
+  mark.aten{background:#ffe4c0}
+  mark.lei{background:var(--lavender)}
+  .iter-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0.8rem;margin:1rem 0}
+  .iter-card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);
+             padding:0.9rem;text-align:center}
+  .iter-card .fase{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--rose-deep);
+                   font-weight:600;margin-bottom:0.2rem}
+  .iter-card .desc{font-size:0.72rem;color:var(--ink-faded);line-height:1.4}
+  .iter-card.punivel{border-color:var(--rose);background:var(--rose-soft)}
+  @media(max-width:640px){.iter-grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════
+     DIREITO PENAL — ITER CRIMINIS
+═══════════════════════════════════════ -->
+
+<div class="materia-header penal-h" style="margin-top:3rem">
+  <span class="emoji">⚔️</span>
+  <span>Direito Penal</span>
+  <span class="incidencia">71% provas</span>
+  <span class="tempo">⏱ 2h</span>
+</div>
+
+<h2>I. Iter Criminis <em>— O Caminho do Crime</em></h2>
+
+<p>O <strong>iter criminis</strong> (latim: caminho do crime) é o conjunto de fases que o agente percorre desde a ideia criminosa até a consumação. Nem todas as fases são puníveis.</p>
+
+<div class="iter-grid">
+  <div class="iter-card">
+    <div class="fase">Cogitação</div>
+    <div class="desc">Ideia do crime surge na mente. <strong>Nunca punível</strong> — pensamento livre.</div>
+  </div>
+  <div class="iter-card">
+    <div class="fase">Preparação</div>
+    <div class="desc">Atos preparatórios para o crime. <strong>Regra: não punível.</strong> Exceção: quando constitui crime autônomo (ex: petrechos para falsificação).</div>
+  </div>
+  <div class="iter-card punivel">
+    <div class="fase">Execução</div>
+    <div class="desc">Início da conduta típica. <mark>Punível — tentativa</mark> a partir daqui.</div>
+  </div>
+  <div class="iter-card punivel">
+    <div class="fase">Consumação</div>
+    <div class="desc">Realização integral do tipo penal. <mark>Punível — crime consumado.</mark></div>
+  </div>
+</div>
+
+<h3>Tentativa <span class="badge penal">Art. 14, II CP</span></h3>
+
+<div class="callout lei">
+  <span class="callout-label">📜 Art. 14, II CP — Definição</span>
+  <p>"Diz-se o crime <strong>tentado</strong>, quando, iniciada a execução, não se consuma por circunstâncias alheias à vontade do agente."</p>
+</div>
+
+<table>
+  <tr><th>Espécie</th><th>Característica</th><th>Exemplo</th></tr>
+  <tr><td><strong>Tentativa perfeita</strong> (acabada / crime falho)</td><td>O agente esgota todos os atos que tinha disponíveis, mas o crime não se consuma.</td><td>Atira todas as balas, mas a vítima sobrevive</td></tr>
+  <tr><td><strong>Tentativa imperfeita</strong> (inacabada)</td><td>O agente não termina a execução por circunstâncias alheias à sua vontade.</td><td>É interrompido antes de terminar de atirar</td></tr>
+</table>
+
+<p><strong>Pena da tentativa:</strong> mesma do crime consumado, reduzida de <mark>1/3 a 2/3</mark> (art. 14, parágrafo único). Quanto mais próximo da consumação, menor a redução.</p>
+
+<div class="callout atencao">
+  <span class="callout-label">⚠ Crimes que não admitem tentativa</span>
+  <p>Crimes culposos | Crimes preterdolosos | Crimes omissivos próprios | Crimes habituais | Contravenções penais | Crimes de mera conduta que se consumam com um único ato (ex: injúria verbal)</p>
+</div>
+
+<hr>
+
+<h2>II. Desistência Voluntária e Arrependimento Eficaz</h2>
+
+<div class="callout lei">
+  <span class="callout-label">📜 Art. 15 CP — Ponte de Ouro</span>
+  <p>"O agente que, voluntariamente, desiste de prosseguir na execução ou <strong>impede que o resultado se produza</strong>, só responde pelos atos já praticados."</p>
+</div>
+
+<table>
+  <tr><th>Instituto</th><th>Momento</th><th>O que o agente faz</th><th>Resultado</th></tr>
+  <tr><td><strong>Desistência voluntária</strong></td><td>Durante a execução (tentativa imperfeita)</td><td>Para de praticar os atos executórios</td><td>Não responde por tentativa — só pelos atos já praticados</td></tr>
+  <tr><td><strong>Arrependimento eficaz</strong></td><td>Após os atos executórios (tentativa perfeita)</td><td>Age para impedir o resultado (ex: socorre a vítima)</td><td>Não responde por tentativa — só pelos atos já praticados</td></tr>
+</table>
+
+<div class="callout dica">
+  <span class="callout-label">✦ Diferença do arrependimento posterior (art. 16 CP)</span>
+  <p>No <strong>arrependimento posterior</strong>, o crime JÁ se consumou. O agente repara o dano ou restitui a coisa até o recebimento da denúncia, voluntariamente. Efeito: redução de pena de 1/3 a 2/3 — não exclui o crime. Cabe apenas em crimes sem violência ou grave ameaça.</p>
+</div>
+
+<hr>
+
+<h2>III. Crime Doloso e Culposo</h2>
+
+<h3>Dolo (art. 18, I CP)</h3>
+<table>
+  <tr><th>Tipo de Dolo</th><th>Conceito</th></tr>
+  <tr><td><strong>Dolo direto de 1º grau</strong></td><td>O agente quer o resultado como fim da conduta</td></tr>
+  <tr><td><strong>Dolo direto de 2º grau</strong> (de consequências necessárias)</td><td>O agente não quer o resultado, mas o aceita como consequência certa e necessária do meio escolhido</td></tr>
+  <tr><td><strong>Dolo eventual</strong></td><td>O agente não quer o resultado, mas assume o risco de produzi-lo — <mark>"dane-se"</mark></td></tr>
+</table>
+
+<h3>Culpa (art. 18, II CP)</h3>
+<p>O crime culposo exige: <strong>conduta voluntária + resultado involuntário + nexo causal + previsibilidade objetiva + tipicidade</strong>.</p>
+<table>
+  <tr><th>Modalidade</th><th>Conceito</th></tr>
+  <tr><td><strong>Imprudência</strong></td><td>Conduta ativa positiva — fazer o que não devia (ex: avançar o sinal)</td></tr>
+  <tr><td><strong>Negligência</strong></td><td>Conduta omissiva — deixar de fazer o que devia (ex: não verificar o freio)</td></tr>
+  <tr><td><strong>Imperícia</strong></td><td>Falta de aptidão técnica para exercício da arte, ofício ou profissão</td></tr>
+</table>
+
+<div class="callout atencao">
+  <span class="callout-label">⚠ Culpa inconsciente vs. Dolo eventual</span>
+  <p><strong>Culpa inconsciente:</strong> agente não prevê o resultado (embora previsível). | <strong>Dolo eventual:</strong> agente prevê o resultado e assume o risco. A distinção é relevante em acidentes de trânsito — banca cobra muito!</p>
+</div>
+
+<hr>
+
+<h2>IV. Crimes Omissivos</h2>
+
+<table>
+  <tr><th>Tipo</th><th>Conceito</th><th>Exemplos</th></tr>
+  <tr><td><strong>Omissivo próprio</strong> (puro)</td><td>O tipo descreve uma conduta omissiva. O agente não precisa ter obrigação especial de agir — qualquer um pode ser sujeito ativo.</td><td>Omissão de socorro (art. 135 CP)</td></tr>
+  <tr><td><strong>Omissivo impróprio</strong> (comissivo por omissão)</td><td>O tipo descreve conduta comissiva, mas praticada por omissão. <strong>Garante (art. 13, §2º CP)</strong> — dever jurídico de agir.</td><td>Mãe que deixa filho morrer de fome (homicídio)</td></tr>
+</table>
+
+<h3>Posições de Garantia (art. 13, §2º CP)</h3>
+<p>O <strong>garantidor</strong> é quem tem dever jurídico de agir para evitar o resultado. São garantidores:</p>
+<ul>
+  <li>Quem assumiu por lei a obrigação de cuidado (pais, tutores, curadores)</li>
+  <li>Quem assumiu contratualmente a custódia (médicos, babás, salva-vidas)</li>
+  <li>Quem criou o risco do dano com comportamento anterior (<mark>ingerência</mark>)</li>
+</ul>
+
+<div class="callout dica">
+  <span class="callout-label">✦ Causalidade — Art. 13 CP (Condição Equivalente / Sine Qua Non)</span>
+  <p>Considera-se <strong>causa</strong> toda condição sem a qual o resultado não teria ocorrido. Para eliminar mentalmente: se retirar a conduta e o resultado também desaparecer, há nexo causal. <br>
+  <strong>Limitação:</strong> teoria da imputação objetiva (Roxin) — usado pelo STJ para afastar tipicidade em condutas que não criam risco proibido ou que não são a realização do risco.</p>
+</div>
+
+<script src="../highlighter.js"></script>
+<script>
+  const parentTheme = window.parent && window.parent.document.documentElement.getAttribute('data-theme');
+  if (parentTheme) document.documentElement.setAttribute('data-theme', parentTheme);
+  window.addEventListener('message', e => {
+    if (!e.data) return;
+    if (e.data.type === 'set-theme') document.documentElement.setAttribute('data-theme', e.data.theme);
+    if (e.data.type === 'hl-clear' && window.clearHighlights) window.clearHighlights();
+  });
+</script>
+</body>
+</html>

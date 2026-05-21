@@ -1,12 +1,14 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
+<title>Preparatório - OAB</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OAB · Hoje</title>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&family=Caveat:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" href="favicon.png" type="image/png">
 <link rel="stylesheet" href="style.css">
 <style>
 /* PÁGINA HOJE */
@@ -81,59 +83,112 @@
 /* POMODORO */
 .pomodoro {
   background: linear-gradient(135deg, var(--blush) 0%, var(--rose-soft) 100%);
-  padding: 1.2rem 1.5rem;
+  padding: 1.1rem 1.3rem;
   border-radius: var(--radius);
-  min-width: 220px;
+  min-width: 210px;
   text-align: center;
+  transition: background 0.6s ease;
+}
+
+.pomodoro.break-mode {
+  background: linear-gradient(135deg, #e0f0d8 0%, #d0e8c8 100%);
+}
+
+.pomodoro.long-break-mode {
+  background: linear-gradient(135deg, var(--lavender) 0%, #d8cce8 100%);
+}
+
+[data-theme="dark"] .pomodoro.break-mode {
+  background: linear-gradient(135deg, #2a3a28 0%, #223020 100%);
+}
+
+[data-theme="dark"] .pomodoro.long-break-mode {
+  background: linear-gradient(135deg, #2a2438 0%, #201a30 100%);
+}
+
+.pomodoro-mode {
+  font-size: 0.68rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-bottom: 0.25rem;
+  font-weight: 600;
 }
 
 .pomodoro-time {
   font-family: 'Playfair Display', serif;
-  font-size: 2.5rem;
+  font-size: 2.4rem;
   font-weight: 500;
   letter-spacing: 0.02em;
   color: var(--rose-deep);
   line-height: 1;
 }
 
+.pomodoro.break-mode .pomodoro-time  { color: #4a8040; }
+.pomodoro.long-break-mode .pomodoro-time { color: #6040a0; }
+
 .pomodoro-status {
-  font-size: 0.65rem;
-  letter-spacing: 0.2em;
+  font-size: 0.62rem;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: var(--ink-soft);
-  margin: 0.4rem 0;
+  color: var(--ink-faded);
+  margin: 0.3rem 0;
 }
 
 .pomodoro-cycles {
   display: flex;
   gap: 0.3rem;
   justify-content: center;
-  margin-bottom: 0.7rem;
+  margin-bottom: 0.6rem;
 }
 
 .cycle-dot {
-  width: 8px;
-  height: 8px;
+  width: 8px; height: 8px;
   border-radius: 50%;
   background: var(--paper);
-  opacity: 0.5;
+  opacity: 0.35;
+  transition: all 0.3s;
 }
 
-.cycle-dot.filled {
-  background: var(--rose-deep);
-  opacity: 1;
-}
+.cycle-dot.filled { background: var(--rose-deep); opacity: 1; }
+.cycle-dot.active { background: var(--rose); opacity: 1; transform: scale(1.25); }
 
 .pomodoro-controls {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.4rem;
   justify-content: center;
+  align-items: center;
 }
 
-.pomodoro-controls .btn {
-  padding: 0.4rem 0.8rem;
-  font-size: 0.7rem;
+.pomo-btn-main {
+  background: var(--paper);
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 0.4rem 0.9rem;
+  font-size: 0.72rem;
+  font-family: inherit;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+  transition: all var(--transition);
+  letter-spacing: 0.05em;
 }
+
+.pomo-btn-main:hover { background: var(--rose-soft); color: var(--rose-deep); }
+
+.pomo-btn-sm {
+  background: transparent;
+  border: none;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: all var(--transition);
+  display: flex; align-items: center; justify-content: center;
+}
+
+.pomo-btn-sm:hover { background: var(--paper); color: var(--ink); }
 
 /* TABS */
 .content-layout {
@@ -672,43 +727,102 @@
   box-shadow: var(--shadow-lg);
 }
 
-/* MODO FOCO */
-body.focus-mode .sidebar,
-body.focus-mode .day-footer,
-body.focus-mode .side,
-body.focus-mode .topbar,
-body.focus-mode .day-hero {
-  display: none;
+/* Modo foco em style.css (global) */
+
+/* Registo de questões por matéria */
+.questao-reg {
+  display: grid;
+  grid-template-columns: 1fr auto auto auto;
+  gap: 0.6rem;
+  align-items: center;
+  padding: 0.7rem 0;
+  border-bottom: 1px dotted var(--line);
 }
 
-body.focus-mode .app {
-  grid-template-columns: 1fr;
+.questao-reg:last-child { border-bottom: none; }
+
+.questao-reg .mat-label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
 }
 
-body.focus-mode main {
-  padding: 2rem 3rem;
-  max-width: none;
+.questao-reg input[type="number"] {
+  width: 64px;
+  text-align: center;
+  padding: 0.4rem 0.5rem;
+  font-size: 0.85rem;
+  resize: none;
+}
+
+.questao-reg .acc-pill {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.2rem 0.6rem;
+  border-radius: 20px;
+  min-width: 48px;
+  text-align: center;
+}
+
+.q-resumo-card {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  padding: 0.8rem 1rem;
+  background: var(--bg-soft);
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+}
+
+.q-resumo-card strong { color: var(--rose-deep); font-family:'Playfair Display',serif; font-size:1rem; }
+
+/* Painéis de matéria no hoje */
+.subject-panel {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: 1rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.subject-panel-header {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.9rem 1.2rem;
+  cursor: pointer;
+  user-select: none;
+  transition: background var(--transition);
+}
+
+.subject-panel-header:hover { filter: brightness(0.97); }
+
+.subject-panel-header .sp-emoji { font-size: 1.2rem; }
+.subject-panel-header .sp-nome  { font-family:'Playfair Display',serif; font-size:1rem; font-weight:500; flex:1; }
+.subject-panel-header .sp-horas { font-size:0.7rem; color:var(--ink-faded); letter-spacing:0.1em; }
+.subject-panel-header .sp-toggle { font-size:0.9rem; color:var(--ink-faded); transition:transform 0.3s; }
+.subject-panel.collapsed .sp-toggle { transform: rotate(-90deg); }
+
+.subject-panel iframe {
+  display: block;
   width: 100%;
-  box-sizing: border-box;
+  height: calc(100vh - 280px);
+  min-height: 480px;
+  border: none;
+  border-top: 1px solid var(--line);
 }
 
-body.focus-mode .content-layout {
-  grid-template-columns: 1fr;
-}
+.subject-panel.collapsed iframe { display: none; }
 
-body.focus-mode #teoria-frame {
-  height: calc(100vh - 120px);
-}
-
-.focus-exit {
-  display: none;
-  position: fixed;
-  top: 1.5rem;
-  right: 1.5rem;
-  z-index: 100;
-}
-
-body.focus-mode .focus-exit { display: block; }
+/* Cores dos headers por matéria */
+.sp-rose     { background: linear-gradient(135deg, var(--blush), var(--rose-soft)); }
+.sp-lavender { background: linear-gradient(135deg, var(--lavender), #ede0ec); }
+.sp-champagne{ background: linear-gradient(135deg, var(--champagne), #fde8d8); }
+.sp-sage     { background: linear-gradient(135deg, var(--sage), #dde8d8); }
 </style>
 </head>
 <body>
@@ -727,9 +841,9 @@ body.focus-mode .focus-exit { display: block; }
   <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="logo">
-      <div class="mark"></div>
-      <h1>OAB <em style="font-style:italic;color:var(--rose-deep)">·</em> Ju</h1>
-      <div class="subtitle">Plano 1ª Fase</div>
+      <div class="mark"><span class="star">&#10022;</span><span class="star sm">&#10022;</span></div>
+      <h1>Exame da Ordem</h1>
+      <div class="subtitle">Preparatório OAB · Ju</div>
     </div>
 
     <div class="nav-section-label">Principal</div>
@@ -790,26 +904,38 @@ body.focus-mode .focus-exit { display: block; }
         <h2 id="day-titulo-h2">Carregando...</h2>
         <div class="meta" id="day-meta">—</div>
       </div>
-      <div class="pomodoro">
-        <div class="pomodoro-time" id="pomo-time">24:53</div>
-        <div class="pomodoro-status">Foco · ciclo 2/4</div>
-        <div class="pomodoro-cycles">
-          <span class="cycle-dot filled"></span>
-          <span class="cycle-dot filled"></span>
+      <div class="pomodoro" id="pomodoro-widget">
+        <div class="pomodoro-mode" id="pomo-mode">🎯 Foco</div>
+        <div class="pomodoro-time" id="pomo-time">25:00</div>
+        <div class="pomodoro-status" id="pomo-status">ciclo 1 de 4</div>
+        <div class="pomodoro-cycles" id="pomo-cycles">
+          <span class="cycle-dot"></span>
+          <span class="cycle-dot"></span>
           <span class="cycle-dot"></span>
           <span class="cycle-dot"></span>
         </div>
         <div class="pomodoro-controls">
-          <button class="btn">Pausar</button>
-          <button class="btn btn-ghost">↺</button>
+          <button class="pomo-btn-sm" onclick="pomoReset()" title="Reiniciar fase">↺</button>
+          <button class="pomo-btn-main" id="pomo-toggle" onclick="pomoToggle()">▶ Iniciar</button>
+          <button class="pomo-btn-sm" onclick="pomoSkip()" title="Pular fase">⏭</button>
         </div>
       </div>
+    </div>
+
+    <!-- BARRA SUPERIOR DO MODO FOCO (oculta por padrão) -->
+    <div class="focus-topbar" style="display:none">
+      <div style="font-family:'Playfair Display',serif;font-size:1rem;font-weight:500;color:var(--ink)">
+        <span id="focus-day-label" style="color:var(--rose-deep)">Dia —</span>
+        <span style="color:var(--ink-faded);margin:0 0.4rem">·</span>
+        <span id="focus-titulo-label">—</span>
+      </div>
+      <button class="icon-btn" onclick="document.body.classList.remove('focus-mode')" title="Sair do modo foco" style="width:32px;height:32px;font-size:0.85rem">✕</button>
     </div>
 
     <!-- TABS -->
     <div class="tabs-bar">
       <div class="tab active" data-tab="teoria">📖 Teoria</div>
-      <div class="tab" data-tab="questoes">📝 Questões</div>
+      <div class="tab" data-tab="questoes">📊 Questões</div>
       <div class="tab" data-tab="resumo">✦ Meu Resumo</div>
       <div class="tab" data-tab="comentarios">💭 Comentários <span class="badge" id="comments-badge" style="display:none"></span></div>
     </div>
@@ -817,103 +943,31 @@ body.focus-mode .focus-exit { display: block; }
     <div class="content-layout">
       <div>
 
-        <!-- TEORIA -->
+        <!-- TEORIA — painéis por matéria (gerados dinamicamente) -->
         <div class="tab-content active" data-tab="teoria">
-          <div class="content-card" style="padding:0;overflow:hidden;display:flex;flex-direction:column;border-radius:var(--radius)">
-            <div class="highlight-bar" style="border-radius:var(--radius) var(--radius) 0 0;flex-shrink:0;display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap">
-              <span class="label">✏️ Grifar</span>
-              <span style="font-size:0.72rem;color:var(--ink-faded)">Selecione o texto para activar</span>
-              <span style="border-left:1px solid var(--line);height:18px;margin:0 0.3rem"></span>
-              <button class="btn btn-ghost" style="padding:0.25rem 0.6rem;font-size:0.7rem" onclick="clearFrameHighlights()">🗑 Limpar grifos</button>
-            </div>
-            <iframe id="teoria-frame"
-              src="dias/dia-01.html"
-              style="border:none;width:100%;height:calc(100vh - 230px);min-height:520px;display:block"
-              title="Conteúdo do dia"
-              onload="syncThemeToFrame()">
-            </iframe>
+          <div class="highlight-bar" style="border-radius:var(--radius);margin-bottom:0.8rem;display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap">
+            <span class="label">✏️ Grifar</span>
+            <span style="font-size:0.72rem;color:var(--ink-faded)">Selecione o texto para activar</span>
+            <span style="border-left:1px solid var(--line);height:18px;margin:0 0.3rem"></span>
+            <button class="btn btn-ghost" style="padding:0.25rem 0.6rem;font-size:0.7rem" onclick="clearAllFrames()">🗑 Limpar grifos</button>
           </div>
+          <!-- Painéis injectados pelo JS -->
+          <div id="subject-panels"></div>
         </div>
 
-        <!-- QUESTÕES -->
+        <!-- QUESTÕES — REGISTO DIÁRIO -->
         <div class="tab-content" data-tab="questoes">
           <div class="content-card">
-
-            <div class="questao" data-gabarito="B">
-              <div class="questao-head">
-                <span class="num">Questão 01</span>
-                <span>FGV · XXXVIII Exame · Médio</span>
-              </div>
-              <div class="questao-text">
-                João, advogado regularmente inscrito na OAB, é procurado pela autoridade policial que pretende realizar busca e apreensão em seu escritório, sob a alegação de que documentos relacionados a um inquérito estariam ali guardados. Sobre a situação, é correto afirmar:
-              </div>
-              <ul class="alternativas">
-                <li class="alternativa" data-letra="A"><span class="letra">A</span><span>A inviolabilidade do escritório é absoluta, sendo vedada qualquer espécie de busca e apreensão no local.</span></li>
-                <li class="alternativa" data-letra="B"><span class="letra">B</span><span>A busca pode ser realizada mediante mandado judicial específico, fundamentado e na presença de representante da OAB.</span></li>
-                <li class="alternativa" data-letra="C"><span class="letra">C</span><span>Basta a autorização da autoridade policial e a presença de duas testemunhas.</span></li>
-                <li class="alternativa" data-letra="D"><span class="letra">D</span><span>A busca depende apenas de autorização do delegado de polícia e do Ministério Público.</span></li>
-              </ul>
-              <div class="questao-actions">
-                <button class="btn btn-primary" onclick="confirmarResposta(this)">Confirmar resposta</button>
-                <button class="btn" onclick="pularQuestao(this)">Pular</button>
-                <button class="btn btn-ghost" onclick="marcarRevisar(this)">⚑ Revisar depois</button>
-              </div>
-              <div class="gabarito">
-                <span class="label">✓ Gabarito · alternativa B</span>
-                A inviolabilidade do escritório do advogado não é absoluta. Admite-se busca e apreensão mediante mandado judicial específico e fundamentado, com a presença obrigatória de representante da OAB (art. 7º, II, e §6º, do EOAB).
-              </div>
+            <p style="font-size:0.82rem;color:var(--ink-faded);margin-bottom:1.2rem">Regista aqui as questões que fizeste hoje no QConcursos. Os dados ficam guardados por dia.</p>
+            <div id="questoes-form-container"></div>
+            <div style="margin-top:1.2rem;padding-top:1rem;border-top:1px solid var(--line);display:flex;gap:0.8rem;align-items:center;flex-wrap:wrap">
+              <button class="btn btn-primary" onclick="salvarQuestoesDia()">Guardar registo</button>
+              <a href="https://www.qconcursos.com" target="_blank" rel="noopener"
+                 style="font-size:0.78rem;color:var(--ink-faded);text-decoration:none;display:flex;align-items:center;gap:0.3rem">
+                ↗ Abrir QConcursos
+              </a>
             </div>
-
-            <div class="questao" data-gabarito="C">
-              <div class="questao-head">
-                <span class="num">Questão 02</span>
-                <span>FGV · XXXVII Exame · Fácil</span>
-              </div>
-              <div class="questao-text">
-                Sobre a imunidade material do advogado prevista no Estatuto da OAB, assinale a alternativa correta:
-              </div>
-              <ul class="alternativas">
-                <li class="alternativa" data-letra="A"><span class="letra">A</span><span>Alcança injúria, difamação e calúnia praticadas no exercício profissional.</span></li>
-                <li class="alternativa" data-letra="B"><span class="letra">B</span><span>É absoluta e independe dos limites da lei.</span></li>
-                <li class="alternativa" data-letra="C"><span class="letra">C</span><span>Não alcança a calúnia, ainda quando praticada no exercício profissional.</span></li>
-                <li class="alternativa" data-letra="D"><span class="letra">D</span><span>Aplica-se apenas em manifestações orais perante o Poder Judiciário.</span></li>
-              </ul>
-              <div class="questao-actions">
-                <button class="btn btn-primary" onclick="confirmarResposta(this)">Confirmar resposta</button>
-                <button class="btn" onclick="pularQuestao(this)">Pular</button>
-                <button class="btn btn-ghost" onclick="marcarRevisar(this)">⚑ Revisar depois</button>
-              </div>
-              <div class="gabarito">
-                <span class="label">✓ Gabarito · alternativa C</span>
-                Segundo decisão do STF na ADI 1.127, a imunidade material do advogado não alcança o crime de calúnia, ainda que praticado no exercício da profissão.
-              </div>
-            </div>
-
-            <div class="questao" data-gabarito="D">
-              <div class="questao-head">
-                <span class="num">Questão 03</span>
-                <span>FGV · XL Exame · Médio</span>
-              </div>
-              <div class="questao-text">
-                A OAB é entidade dotada de personalidade jurídica e forma organizativa especial. Em relação à sua natureza jurídica, assinale a afirmativa correta:
-              </div>
-              <ul class="alternativas">
-                <li class="alternativa" data-letra="A"><span class="letra">A</span><span>Trata-se de autarquia federal, sujeitando-se ao controle do Tribunal de Contas da União.</span></li>
-                <li class="alternativa" data-letra="B"><span class="letra">B</span><span>É uma entidade paraestatal, integrante da Administração Pública Indireta.</span></li>
-                <li class="alternativa" data-letra="C"><span class="letra">C</span><span>É uma fundação pública de direito privado, sujeita ao controle do Poder Executivo.</span></li>
-                <li class="alternativa" data-letra="D"><span class="letra">D</span><span>É um serviço público independente, categoria ímpar no direito brasileiro, não integrante da Administração Pública.</span></li>
-              </ul>
-              <div class="questao-actions">
-                <button class="btn btn-primary" onclick="confirmarResposta(this)">Confirmar resposta</button>
-                <button class="btn" onclick="pularQuestao(this)">Pular</button>
-                <button class="btn btn-ghost" onclick="marcarRevisar(this)">⚑ Revisar depois</button>
-              </div>
-              <div class="gabarito">
-                <span class="label">✓ Gabarito · alternativa D</span>
-                Conforme decisão do STF na ADI 3.026/DF, a OAB é um serviço público independente, categoria ímpar no elenco das personalidades jurídicas. Não se equipara a autarquia e não integra a Administração Pública Indireta.
-              </div>
-            </div>
-
+            <div id="questoes-resumo-dia" style="margin-top:1rem"></div>
           </div>
         </div>
 
@@ -971,7 +1025,7 @@ body.focus-mode .focus-exit { display: block; }
       </div>
     </div>
 
-    <!-- DAY FOOTER -->
+    <!-- DAY FOOTER (modo normal) -->
     <div class="day-footer">
       <div class="day-nav">
         <a href="hoje.html" id="nav-prev">← Dia anterior</a>
@@ -980,6 +1034,18 @@ body.focus-mode .focus-exit { display: block; }
       <div style="display:flex;gap:0.7rem;align-items:center">
         <button class="btn btn-ghost" onclick="exportarPDF()" title="Exportar PDF" style="font-size:0.75rem">↓ PDF</button>
         <button class="btn-estudei" id="btn-estudei" onclick="toggleDiaConcluido()">Estudei Hoje ✦</button>
+      </div>
+    </div>
+
+    <!-- BARRA INFERIOR DO MODO FOCO (oculta por padrão) -->
+    <div class="focus-bottombar" style="display:none">
+      <div class="day-nav" style="display:flex;gap:1rem">
+        <a href="#" id="focus-nav-prev" style="font-size:0.82rem;color:var(--ink-soft);text-decoration:none;transition:color var(--transition)">← Dia anterior</a>
+        <a href="#" id="focus-nav-next" style="font-size:0.82rem;color:var(--ink-soft);text-decoration:none;transition:color var(--transition)">Próximo dia →</a>
+      </div>
+      <div style="display:flex;gap:0.5rem;align-items:center">
+        <div id="focus-progresso" style="font-size:0.72rem;color:var(--ink-faded)">0% concluído</div>
+        <button class="btn-estudei" id="btn-estudei-foco" onclick="toggleDiaConcluido()" style="padding:0.7rem 1.5rem;font-size:0.75rem">Estudei Hoje ✦</button>
       </div>
     </div>
   </main>
@@ -1058,25 +1124,41 @@ function marcarRevisar(btn) {
   btn.style.color = 'var(--rose-deep)';
 }
 
-// ── Limpar grifos do iframe ──────────────────
-function clearFrameHighlights() {
-  const frame = document.getElementById('teoria-frame');
-  if (frame && frame.contentWindow) frame.contentWindow.postMessage({ type: 'hl-clear' }, '*');
+// ── Painéis de matéria: toggle colapso ───────
+function togglePanel(idx) {
+  const panel = document.getElementById(`sp-${idx}`);
+  if (panel) panel.classList.toggle('collapsed');
 }
 
-// ── Sincronizar tema com iframe ──────────────
-function syncThemeToFrame() {
-  const frame = document.getElementById('teoria-frame');
+// ── Sincronizar tema com qualquer iframe ─────
+function syncThemeToIframe(frame) {
   const theme = document.documentElement.getAttribute('data-theme') || 'light';
-  if (frame && frame.contentWindow) frame.contentWindow.postMessage({ type: 'set-theme', theme }, '*');
+  try { frame.contentWindow.postMessage({ type: 'set-theme', theme }, '*'); } catch(e) {}
 }
-document.getElementById('teoria-frame')?.addEventListener('load', syncThemeToFrame);
+
+// ── Limpar grifos de todos os iframes ────────
+function clearAllFrames() {
+  document.querySelectorAll('iframe').forEach(f => {
+    try { f.contentWindow.postMessage({ type: 'hl-clear' }, '*'); } catch(e) {}
+  });
+}
+
+// Legacy (mantido por compatibilidade)
+function clearFrameHighlights() { clearAllFrames(); }
+function syncThemeToFrame() {
+  document.querySelectorAll('iframe').forEach(f => syncThemeToIframe(f));
+}
 
 // ── Carregar dia dinâmico ────────────────────
 document.addEventListener('DOMContentLoaded', () => {
-  const rawDay  = getStudyDay();
-  const isPreview = rawDay <= 0;
-  const dia     = isPreview ? 1 : Math.min(rawDay, 60);
+  // Suporta ?dia=X na URL; fallback para oab_current_day ou getStudyDay()
+  const params   = new URLSearchParams(window.location.search);
+  const diaParam = params.get('dia');
+  const savedDay = localStorage.getItem('oab_current_day');
+  const rawDay   = diaParam ? parseInt(diaParam) :
+                   (savedDay ? parseInt(savedDay) : getStudyDay());
+  const isPreview = !diaParam && !savedDay && rawDay <= 0;
+  const dia      = (rawDay <= 0) ? 1 : Math.min(rawDay, 60);
   const dados   = getDadosDia(dia);
   const progDia = obterDia(dia);
 
@@ -1100,9 +1182,17 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.textContent = '✓ Dia Concluído';
   }
 
+  // Actualiza o "Dia X de 60" no topbar com o dia carregado
+  document.querySelectorAll('[data-study-day]').forEach(el => { el.textContent = dia; });
+
+  // Popula os labels das barras de modo foco
+  const focusDayLabel = document.getElementById('focus-day-label');
+  const focusTituloLabel = document.getElementById('focus-titulo-label');
+  if (focusDayLabel) focusDayLabel.textContent = `Dia ${dia}`;
+  if (focusTituloLabel && dados) focusTituloLabel.textContent = dados.titulo;
+
   if (dados) {
     // Topbar
-    const mat1 = dados.materias[0];
     document.getElementById('day-materia-tag').textContent =
       dados.materias.map(m => m.nome).join(' · ');
     document.getElementById('day-titulo-h2').innerHTML =
@@ -1110,10 +1200,61 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('day-meta').textContent =
       dados.materias.map(m => `${m.nome} (${m.horas}h)`).join(' + ');
 
-    // Iframe de teoria
-    const frame = document.getElementById('teoria-frame');
-    if (frame) {
-      frame.src = `dias/${dados.arquivo}.html`;
+    // Painéis de matéria — um iframe por matéria, filtrado via postMessage
+    const corSpCls = { rose:'sp-rose', lavender:'sp-lavender', champagne:'sp-champagne', sage:'sp-sage' };
+    const toMK = n => {
+      if (n.includes('Ética'))              return 'etica';
+      if (n.includes('Processual Penal'))   return 'proc-penal';
+      if (n.includes('Processual do Trab')) return 'proc-trabalho';
+      if (n.includes('Processual Civil'))   return 'proc-civil';
+      if (n.includes('Penal'))              return 'penal';
+      if (n.includes('Constitucional'))     return 'constitucional';
+      if (n.includes('Civil'))              return 'civil';
+      if (n.includes('Trabalho'))           return 'trabalho';
+      if (n.includes('Tributário'))         return 'tributario';
+      if (n.includes('Administrativo'))     return 'administrativo';
+      if (n.includes('Empresarial'))        return 'empresarial';
+      return n.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/\s+/g,'-');
+    };
+
+    const panels = document.getElementById('subject-panels');
+    if (panels) {
+      panels.innerHTML = '';
+      dados.materias.forEach((mat, idx) => {
+        const mk    = toMK(mat.nome);          // capturado na closure
+        const spCls = corSpCls[mat.cor] || 'sp-champagne';
+
+        // Painel container
+        const div = document.createElement('div');
+        div.className = 'subject-panel';
+        div.id = `sp-${idx}`;
+
+        // Header clicável
+        const header = document.createElement('div');
+        header.className = `subject-panel-header ${spCls}`;
+        header.innerHTML = `<span class="sp-emoji">${mat.emoji || '📖'}</span>
+          <span class="sp-nome">${mat.nome}</span>
+          <span class="sp-horas">⏱ ${mat.horas}h</span>
+          <span class="sp-toggle">▾</span>`;
+        header.onclick = () => togglePanel(idx);
+
+        // Iframe criado via JS para capturar mk na closure do onload
+        const iframe = document.createElement('iframe');
+        // Usa ficheiro dedicado da matéria se existir, senão o ficheiro do dia
+        const matArquivo = mat.arquivo_mat || dados.arquivo;
+        iframe.src   = `dias/${matArquivo}.html`;
+        iframe.title = mat.nome;
+        iframe.style.cssText = 'display:block;width:100%;height:calc(100vh - 280px);min-height:480px;border:none;border-top:1px solid var(--line)';
+
+        iframe.addEventListener('load', function () {
+          const theme = document.documentElement.getAttribute('data-theme') || 'light';
+          try { iframe.contentWindow.postMessage({ type: 'set-theme', theme }, '*'); } catch(e) {}
+        });
+
+        div.appendChild(header);
+        div.appendChild(iframe);
+        panels.appendChild(div);
+      });
     }
 
     // Checklist dinâmico
@@ -1134,13 +1275,22 @@ document.addEventListener('DOMContentLoaded', () => {
       ul.appendChild(li);
     });
 
-    // Navegação
+    // Navegação entre dias — mostra todas as matérias do dia
+    const matLabel = d => d.materias.map(m => m.nome.replace('Direito ','').replace('Processual ','Proc. ')).join(' + ');
     const prev = getDadosDia(dia - 1);
     const next = getDadosDia(dia + 1);
     const navPrev = document.getElementById('nav-prev');
     const navNext = document.getElementById('nav-next');
-    if (navPrev) navPrev.textContent = prev ? `← Dia ${dia-1} · ${prev.titulo.split(' · ')[0]}` : '← Início';
-    if (navNext) navNext.textContent = next ? `Dia ${dia+1} · ${next.titulo.split(' · ')[0]} →` : 'Plano concluído ✦';
+    const focNavPrev = document.getElementById('focus-nav-prev');
+    const focNavNext = document.getElementById('focus-nav-next');
+    const prevText = prev ? `← Dia ${dia-1} · ${matLabel(prev)}` : '← Início';
+    const nextText = next ? `Dia ${dia+1} · ${matLabel(next)} →` : 'Plano concluído ✦';
+    const prevHref = prev ? `hoje.html?dia=${dia-1}` : 'index.html';
+    const nextHref = next ? `hoje.html?dia=${dia+1}` : '#';
+    if (navPrev) { navPrev.textContent = prevText; navPrev.href = prevHref; }
+    if (navNext) { navNext.textContent = nextText; navNext.href = nextHref; }
+    if (focNavPrev) { focNavPrev.textContent = prevText; focNavPrev.href = prevHref; }
+    if (focNavNext) { focNavNext.textContent = nextText; focNavNext.href = nextHref; }
   }
 
   // Resumo persistido
@@ -1159,8 +1309,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // ── Toggle dia concluído/não concluído ───────
 function toggleDiaConcluido() {
-  const rawDay = getStudyDay();
-  const dia    = rawDay <= 0 ? 1 : Math.min(rawDay, 60);
+  const params   = new URLSearchParams(window.location.search);
+  const diaParam = params.get('dia');
+  const rawDay   = diaParam ? parseInt(diaParam) : getStudyDay();
+  const dia      = rawDay <= 0 ? 1 : Math.min(rawDay, 60);
   const progDia = obterDia(dia);
   const btn    = document.getElementById('btn-estudei');
 
@@ -1172,16 +1324,27 @@ function toggleDiaConcluido() {
     btn.classList.remove('concluido');
     btn.textContent = 'Estudei Hoje ✦';
   } else {
-    // Concluir + marcar tópicos automaticamente em Matérias
+    // Concluir + marcar tópicos + gravar próximo dia
     const resumoEl = document.querySelector('.tab-content[data-tab="resumo"] textarea');
     const nota = resumoEl ? resumoEl.value : '';
     concluirDia(dia, nota);
-    marcarTopicosEstudados(dia);   // ← auto-check nos tópicos
+    marcarTopicosEstudados(dia);
     baterMetaDoDia();
+    // Gravar próximo dia para auto-avançar
+    if (getDadosDia(dia + 1)) localStorage.setItem('oab_current_day', String(dia + 1));
     btn.classList.add('concluido');
     btn.textContent = '✓ Dia Concluído';
     const pctEl = document.getElementById('progresso-pct');
     if (pctEl) { const s = calcularStats(); pctEl.textContent = `${s.pct}%`; }
+    // Mostra mensagem e oferece navegar para o próximo dia
+    const nextD = getDadosDia(dia + 1);
+    if (nextD) {
+      setTimeout(() => {
+        if (confirm(`✦ Dia ${dia} concluído!\n\nIr para o Dia ${dia+1}?`)) {
+          window.location.href = `hoje.html?dia=${dia+1}`;
+        }
+      }, 400);
+    }
   }
 }
 
@@ -1196,15 +1359,7 @@ function exportarPDF() {
   setTimeout(() => window.print(), 200);
 }
 
-// ── Modo foco toggle ─────────────────────────
-function toggleFocusMode() {
-  const active = document.body.classList.toggle('focus-mode');
-  if (active && document.documentElement.requestFullscreen) {
-    document.documentElement.requestFullscreen().catch(() => {});
-  } else if (!active && document.fullscreenElement) {
-    document.exitFullscreen().catch(() => {});
-  }
-}
+// toggleFocusMode está em script.js (global)
 
 // ── Import de progresso ──────────────────────
 function handleImport(event) {
@@ -1304,3 +1459,10 @@ document.querySelector('.pomodoro-controls .btn-ghost')?.addEventListener('click
 </script>
 </body>
 </html>
+
+
+
+
+
+
+

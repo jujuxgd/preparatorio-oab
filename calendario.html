@@ -1,14 +1,121 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
+<title>Preparatório - OAB</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OAB · Calendário</title>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&family=Caveat:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" href="favicon.png" type="image/png">
 <link rel="stylesheet" href="style.css">
 <style>
+/* ── Overlay de conteúdo do dia ── */
+.day-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+body.overlay-open .aurora-bg {
+  filter: blur(30px) brightness(0.82);
+  transform: scale(1.1);
+  transition: filter 0.4s ease, transform 0.4s ease;
+}
+
+.overlay-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(74, 46, 58, 0.35);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  cursor: pointer;
+}
+
+.overlay-panel {
+  position: relative;
+  z-index: 1;
+  background: var(--paper);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--line);
+  width: calc(100% - 3rem);
+  max-width: 1400px;
+  height: calc(100vh - 3rem);
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 28px 70px rgba(74, 46, 58, 0.22), 0 4px 20px rgba(74, 46, 58, 0.1);
+  animation: overlayIn 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes overlayIn {
+  from { opacity: 0; transform: scale(0.96) translateY(10px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.overlay-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--line);
+  flex-shrink: 0;
+  gap: 1rem;
+}
+
+.overlay-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: var(--ink);
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.overlay-title em { font-style: italic; color: var(--rose-deep); }
+
+.overlay-actions { display: flex; gap: 0.5rem; align-items: center; }
+
+.overlay-goto {
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  padding: 0.4rem 0.9rem;
+  background: linear-gradient(135deg, var(--rose) 0%, var(--rose-deep) 100%);
+  color: var(--paper);
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-block;
+  transition: all var(--transition);
+}
+
+.overlay-goto:hover { opacity: 0.88; transform: translateY(-1px); }
+
+.overlay-close {
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 1px solid var(--line); background: var(--bg-soft);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  color: var(--ink-soft); font-size: 0.9rem; font-family: inherit;
+  transition: all var(--transition);
+}
+
+.overlay-close:hover { background: var(--blush); color: var(--rose-deep); }
+
+#overlay-frame {
+  flex: 1; border: none;
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  width: 100%;
+}
+
 .filter-bar {
   display: flex;
   gap: 0.6rem;
@@ -105,13 +212,13 @@
 }
 
 .day-cell {
-  aspect-ratio: 1;
+  min-height: 100px;
   background: var(--bg-soft);
   border-radius: var(--radius-sm);
-  padding: 0.6rem;
+  padding: 0.55rem 0.6rem;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  gap: 0.3rem;
   cursor: pointer;
   border: 1.5px solid transparent;
   transition: all var(--transition);
@@ -127,6 +234,7 @@
 .day-cell.empty {
   background: transparent;
   cursor: default;
+  min-height: 100px;
 }
 
 .day-cell.empty:hover {
@@ -145,8 +253,8 @@
   top: 0.4rem;
   right: 0.5rem;
   color: var(--rose-deep);
-  font-size: 0.8rem;
-  font-weight: 600;
+  font-size: 0.75rem;
+  font-weight: 700;
 }
 
 .day-cell.today {
@@ -157,8 +265,6 @@
 }
 
 .day-cell.today .num { color: var(--paper); }
-.day-cell.today .topic { color: rgba(255,255,255,0.9); }
-.day-cell.today .materia { color: rgba(255,255,255,0.75); }
 
 .day-cell.simulado {
   background: linear-gradient(135deg, var(--lavender) 0%, var(--champagne) 100%);
@@ -167,26 +273,43 @@
 
 .day-cell .num {
   font-family: 'Playfair Display', serif;
-  font-size: 1.3rem;
+  font-size: 1.15rem;
   font-weight: 500;
   line-height: 1;
   color: var(--ink);
 }
 
-.day-cell .topic {
-  font-size: 0.7rem;
-  color: var(--ink);
-  font-weight: 500;
-  line-height: 1.2;
+/* Chips de matéria por dia */
+.day-chips {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
   margin-top: auto;
 }
 
-.day-cell .materia {
-  font-size: 0.62rem;
-  color: var(--ink-faded);
-  letter-spacing: 0.05em;
-  margin-top: 0.2rem;
+.mat-chip {
+  font-size: 0.6rem;
+  font-weight: 600;
+  padding: 0.18rem 0.4rem;
+  border-radius: 4px;
+  line-height: 1.3;
+  color: var(--ink);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  transition: opacity var(--transition);
 }
+
+.mat-chip:hover { opacity: 0.8; }
+
+.mat-chip.c-rose       { background: var(--rose-soft); color: var(--rose-deep); }
+.mat-chip.c-lavender   { background: var(--lavender); color: #6040a0; }
+.mat-chip.c-champagne  { background: var(--champagne); color: #8a5030; }
+.mat-chip.c-sage       { background: var(--sage); color: #506050; }
+.mat-chip.c-white      { background: rgba(255,255,255,0.25); color: rgba(255,255,255,0.95); }
+
+.day-cell.today .mat-chip { background: rgba(255,255,255,0.22); color: rgba(255,255,255,0.95); }
 
 .legend {
   display: flex;
@@ -226,9 +349,9 @@
 <div class="app">
   <aside class="sidebar">
     <div class="logo">
-      <div class="mark"></div>
-      <h1>OAB <em style="font-style:italic;color:var(--rose-deep)">·</em> Ju</h1>
-      <div class="subtitle">Plano 1ª Fase</div>
+      <div class="mark"><span class="star">&#10022;</span><span class="star sm">&#10022;</span></div>
+      <h1>Exame da Ordem</h1>
+      <div class="subtitle">Preparatório OAB · Ju</div>
     </div>
     <div class="nav-section-label">Principal</div>
     <a href="index.html" class="nav-link"><span class="icon">✦</span><span>Início</span></a>
@@ -348,6 +471,9 @@
       statsHTML = `<span>Pré-plano · ${MONTHS_PT[month]}</span>`;
     }
 
+    const corClass  = { rose:'c-rose', lavender:'c-lavender', champagne:'c-champagne', sage:'c-sage' };
+    const chipNome  = n => n.replace('Direito ','').replace('Processual ','Proc. ').replace('Processo ','Proc. ');
+
     let cells = '';
     // Empty cells for days before first
     for (let i = 0; i < firstDay; i++) cells += `<div class="day-cell empty"></div>`;
@@ -364,20 +490,38 @@
       else if (isExam) cls += ' simulado';
       else if (done) cls += ' done';
 
-      let inner = `<div class="num">${d}</div><div>`;
+      let inner = `<div class="num">${d}</div>`;
+
       if (isToday) {
-        inner += `<div class="topic">Hoje ✦</div><div class="materia">Dia ${planDay || '—'}</div>`;
+        const dadosHoje = planDay ? getDadosDia(planDay) : null;
+        inner += `<div class="day-chips">`;
+        if (dadosHoje) {
+          dadosHoje.materias.forEach(m => {
+            const mk = toMatKey(m.nome);
+            inner += `<div class="mat-chip" title="${m.nome}" onclick="chipClick(${planDay},'${mk}','${m.nome.replace(/'/g,"\\'")}')">${m.emoji || ''} ${chipNome(m.nome)}</div>`;
+          });
+        } else {
+          inner += `<div class="mat-chip">✦ Hoje · Pré-início</div>`;
+        }
+        inner += `</div>`;
       } else if (isExam) {
-        inner += `<div class="topic">★ Prova OAB</div><div class="materia">1ª Fase</div>`;
+        inner += `<div class="day-chips"><div class="mat-chip c-lavender">★ Prova OAB 1ª Fase</div></div>`;
       } else if (planDay) {
         const dados = getDadosDia(planDay);
-        const short = dados ? dados.titulo.split(' · ')[0].replace('Revisão','Rev.') : `Dia ${planDay}`;
-        const mat   = dados ? dados.materias[0].nome.replace('Direito ','').replace('Processual ','Proc. ') : '';
-        inner += `<div class="topic">${short.length > 22 ? short.substring(0,20)+'…' : short}</div><div class="materia">${mat}</div>`;
+        inner += `<div class="day-chips">`;
+        if (dados) {
+          dados.materias.forEach(m => {
+            const cc = corClass[m.cor] || 'c-champagne';
+            const mk = toMatKey(m.nome);
+            inner += `<div class="mat-chip ${cc}" title="${m.nome}" onclick="chipClick(${planDay},'${mk}','${m.nome.replace(/'/g,"\\'")}')">${m.emoji || ''} ${chipNome(m.nome)}</div>`;
+          });
+        } else {
+          inner += `<div class="mat-chip c-champagne">Dia ${planDay}</div>`;
+        }
+        inner += `</div>`;
       }
-      inner += '</div>';
 
-      cells += `<div class="${cls}" data-plan="${planDay||''}" onclick="cellClick(this)">${inner}</div>`;
+      cells += `<div class="${cls}" data-plan="${planDay||''}" onclick="cellClick(this,event)">${inner}</div>`;
     }
 
     const dowRow = DOW_PT.map(d => `<div class="dow">${d}</div>`).join('');
@@ -422,10 +566,106 @@
   container.innerHTML = monthsToRender.map(mo => renderMonth(mo.y, mo.m)).join('');
 })();
 
+// Clique na célula do dia → abre overlay com conteúdo
 function cellClick(el) {
   const plan = el.dataset.plan;
-  if (plan) window.location.href = 'hoje.html';
+  if (!plan) return;
+  openDayOverlay(parseInt(plan));
 }
+
+// Converte nome da matéria em matKey para filtrar conteúdo
+function toMatKey(nome) {
+  if (nome.includes('Ética'))              return 'etica';
+  if (nome.includes('Processual Penal'))   return 'proc-penal';
+  if (nome.includes('Processual do Trab')) return 'proc-trabalho';
+  if (nome.includes('Processual Civil'))   return 'proc-civil';
+  if (nome.includes('Penal'))             return 'penal';
+  if (nome.includes('Constitucional'))    return 'constitucional';
+  if (nome.includes('Civil'))             return 'civil';
+  if (nome.includes('Trabalho'))          return 'trabalho';
+  if (nome.includes('Tributário'))        return 'tributario';
+  if (nome.includes('Administrativo'))    return 'administrativo';
+  if (nome.includes('Empresarial'))       return 'empresarial';
+  if (nome.includes('Previdenciário'))    return 'previdenciario';
+  if (nome.includes('Eleitoral'))         return 'eleitoral';
+  if (nome.includes('Financeiro'))        return 'financeiro';
+  if (nome.includes('Humanos'))           return 'dh';
+  if (nome.includes('Internacional'))     return 'dip';
+  if (nome.includes('Consumidor'))        return 'cdc';
+  if (nome.includes('Criança'))           return 'eca';
+  return nome.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/\s+/g,'-');
+}
+
+// Clique num chip — matKey e matNome passados directamente como strings
+function chipClick(planDay, matKey, matNome) {
+  openDayOverlay(planDay, matKey, matNome);
+}
+
+// Clique na célula do dia — ignora se o clique veio de um chip
+function cellClick(el, event) {
+  if (event && event.target.closest('.mat-chip')) return;
+  const plan = el.dataset.plan;
+  if (!plan) return;
+  openDayOverlay(parseInt(plan), null, null);
+}
+
+function openDayOverlay(planDay, matKey, matNome) {
+  const dados = getDadosDia(planDay);
+  if (!dados) return;
+  const overlay = document.getElementById('day-overlay');
+  const tituloDisplay = matNome
+    ? `Dia ${planDay} <em>·</em> ${matNome}`
+    : `Dia ${planDay} <em>·</em> ${dados.titulo}`;
+  document.getElementById('overlay-title').innerHTML = tituloDisplay;
+  document.getElementById('overlay-goto').href = `hoje.html?dia=${planDay}`;
+  const frame = document.getElementById('overlay-frame');
+
+  // Se a matéria tem ficheiro próprio, usa-o directamente (sem filtragem)
+  let src = `dias/${dados.arquivo}.html`;
+  if (matKey && dados.materias) {
+    const mat = dados.materias.find(m => toMatKey(m.nome) === matKey);
+    if (mat && mat.arquivo_mat) src = `dias/${mat.arquivo_mat}.html`;
+  }
+  frame.src = src;
+  frame.onload = () => {
+    const theme = document.documentElement.getAttribute('data-theme') || 'light';
+    try { frame.contentWindow.postMessage({ type: 'set-theme', theme }, '*'); } catch(e) {}
+  };
+  overlay.style.display = 'flex';
+  document.body.classList.add('overlay-open');
+}
+
+function closeOverlay() {
+  document.getElementById('day-overlay').style.display = 'none';
+  document.getElementById('overlay-frame').src = '';
+  document.body.classList.remove('overlay-open');
+}
+
+// Fechar com Escape
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeOverlay(); });
 </script>
+
+<!-- OVERLAY DE CONTEÚDO DO DIA -->
+<div class="day-overlay" id="day-overlay">
+  <div class="overlay-backdrop" onclick="closeOverlay()"></div>
+  <div class="overlay-panel">
+    <div class="overlay-header">
+      <div class="overlay-title" id="overlay-title">—</div>
+      <div class="overlay-actions">
+        <a id="overlay-goto" href="#" class="overlay-goto">Estudar hoje →</a>
+        <button class="overlay-close" onclick="closeOverlay()">✕</button>
+      </div>
+    </div>
+    <iframe id="overlay-frame" src="" title="Conteúdo do dia"></iframe>
+  </div>
+</div>
+
 </body>
 </html>
+
+
+
+
+
+
+

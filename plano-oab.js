@@ -11,9 +11,9 @@ const PLANO_OAB = [
 
 { dia:1, titulo:"Ética · Órgãos e Legislação", descricao:"Estrutura orgânica da OAB, natureza jurídica e sistema eleitoral", emoji_principal:"⚖️",
   materias:[
-    { nome:"Ética Profissional", emoji:"⚖️", horas:2.5, cor:"rose",
+    { nome:"Ética Profissional", emoji:"⚖️", horas:2.5, cor:"rose", arquivo_mat:"dia-01-etica",
       topicos:["Legislação e natureza jurídica da OAB (sui generis, ADI 3.026)","Conselho Federal, Seccionais, Subseções — composição e tipo de voto","Eleições e Mandatos: requisitos, duração, reeleição"] },
-    { nome:"Direito Constitucional", emoji:"🏛️", horas:1.5, cor:"lavender",
+    { nome:"Direito Constitucional", emoji:"🏛️", horas:1.5, cor:"lavender", arquivo_mat:"dia-01-const",
       topicos:["Poder Constituinte Originário e Derivado","Eficácia das normas: plena, contida, limitada"] }
   ],
   checklist:[
@@ -26,39 +26,39 @@ const PLANO_OAB = [
   sumula:{ sigla:"ADI 3.026/DF · STF", texto:"A OAB é um serviço público independente, categoria ímpar no direito brasileiro. Não se sujeita ao TCU." },
   incidencia:87, arquivo:"dia-01", lei_seca:["Lei 8.906/94 arts. 1-15"] },
 
-{ dia:2, titulo:"Constitucional · Direitos Fundamentais + Penal · Lei Penal", descricao:"Princípios fundamentais, direitos individuais e aplicação da lei penal no tempo e espaço", emoji_principal:"🏛️",
+{ dia:2, titulo:"Civil · Parte Geral + Penal · Iter Criminis", descricao:"Pessoa natural, bens, negócio jurídico e teoria do iter criminis", emoji_principal:"📜",
   materias:[
-    { nome:"Direito Constitucional", emoji:"🏛️", horas:2, cor:"lavender",
-      topicos:["Princípios fundamentais arts. 1-4 CF","Teoria geral dos Direitos Fundamentais: dimensões, características, destinatários","Vida, igualdade, liberdades e inviolabilidade do domicílio"] },
-    { nome:"Direito Penal", emoji:"⚔️", horas:2, cor:"rose",
-      topicos:["Lei Penal no Tempo: lex gravior, lex mitior, abolitio criminis","Territorialidade e extraterritorialidade (condicionada/incondicionada)","Lugar do crime (ubiquidade) vs. tempo do crime (atividade)"] }
-  ],
-  checklist:[
-    {id:"c2-1",texto:"Ler teoria: Constitucional — Princípios e DFs (2h)"},
-    {id:"c2-2",texto:"Ler teoria: Penal — Lei Penal no Tempo/Espaço (2h)"},
-    {id:"c2-3",texto:"Resolver 6 questões de Constitucional"},
-    {id:"c2-4",texto:"Resolver 6 questões de Penal"},
-    {id:"c2-5",texto:"Revisar resumo do Dia 1"}
-  ],
-  sumula:{ sigla:"Súmula 711 · STF", texto:"A lei penal mais grave aplica-se ao crime continuado ou permanente, se vigente antes da cessação da continuidade ou da permanência." },
-  incidencia:74, arquivo:"dia-02", lei_seca:["CP arts. 1-12","CF/88 arts. 1-5"] },
-
-{ dia:3, titulo:"Civil · Parte Geral + Penal · Iter Criminis", descricao:"Pessoa natural, bens, negócio jurídico e teoria do iter criminis", emoji_principal:"📜",
-  materias:[
-    { nome:"Direito Civil", emoji:"📜", horas:2, cor:"champagne",
+    { nome:"Direito Civil", emoji:"📜", horas:2, cor:"champagne", arquivo_mat:"dia-02-civil",
       topicos:["Pessoa natural: capacidade, incapacidade absoluta/relativa, emancipação","Bens jurídicos: imóveis, móveis, fungíveis, consumíveis, bem de família","Negócio jurídico: planos, defeitos (erro, dolo, coação, lesão, estado perigo), invalidade","Prescrição e decadência: conceito, prazo, suspensão, interrupção"] },
-    { nome:"Direito Penal", emoji:"⚔️", horas:2, cor:"rose",
+    { nome:"Direito Penal", emoji:"⚔️", horas:2, cor:"rose", arquivo_mat:"dia-02-penal",
       topicos:["Iter criminis: cogitação, preparação, execução, consumação","Tentativa: perfeita/imperfeita, pena","Desistência voluntária, arrependimento eficaz, arrependimento posterior","Crime doloso e culposo; crimes omissivos próprios e impróprios"] }
   ],
   checklist:[
-    {id:"c3-1",texto:"Ler teoria: Civil — Parte Geral (2h)"},
-    {id:"c3-2",texto:"Ler teoria: Penal — Iter Criminis (2h)"},
-    {id:"c3-3",texto:"Resolver 6 questões de Civil"},
-    {id:"c3-4",texto:"Resolver 6 questões de Penal"},
-    {id:"c3-5",texto:"Revisar Ética do Dia 1 (15min)"}
+    {id:"c2-1",texto:"Ler teoria: Civil — Parte Geral (2h)"},
+    {id:"c2-2",texto:"Ler teoria: Penal — Iter Criminis (2h)"},
+    {id:"c2-3",texto:"Resolver 6 questões de Civil"},
+    {id:"c2-4",texto:"Resolver 6 questões de Penal"},
+    {id:"c2-5",texto:"Revisar Ética do Dia 1 (15min)"}
   ],
   sumula:{ sigla:"Art. 14 CP", texto:"Diz-se o crime tentado, quando, iniciada a execução, não se consuma por circunstâncias alheias à vontade do agente." },
   incidencia:71, arquivo:"dia-03", lei_seca:["CC arts. 1-78","CP arts. 13-25"] },
+
+{ dia:3, titulo:"Constitucional · Direitos Fundamentais + Penal · Lei Penal", descricao:"Princípios fundamentais, direitos individuais e aplicação da lei penal no tempo e espaço", emoji_principal:"🏛️",
+  materias:[
+    { nome:"Direito Constitucional", emoji:"🏛️", horas:2, cor:"lavender", arquivo_mat:"dia-03-const",
+      topicos:["Princípios fundamentais arts. 1-4 CF","Teoria geral dos Direitos Fundamentais: dimensões, características, destinatários","Vida, igualdade, liberdades e inviolabilidade do domicílio"] },
+    { nome:"Direito Penal", emoji:"⚔️", horas:2, cor:"rose", arquivo_mat:"dia-03-penal",
+      topicos:["Lei Penal no Tempo: lex gravior, lex mitior, abolitio criminis","Territorialidade e extraterritorialidade (condicionada/incondicionada)","Lugar do crime (ubiquidade) vs. tempo do crime (atividade)"] }
+  ],
+  checklist:[
+    {id:"c3-1",texto:"Ler teoria: Constitucional — Princípios e DFs (2h)"},
+    {id:"c3-2",texto:"Ler teoria: Penal — Lei Penal no Tempo/Espaço (2h)"},
+    {id:"c3-3",texto:"Resolver 6 questões de Constitucional"},
+    {id:"c3-4",texto:"Resolver 6 questões de Penal"},
+    {id:"c3-5",texto:"Revisar Civil do Dia 2 (15min)"}
+  ],
+  sumula:{ sigla:"Súmula 711 · STF", texto:"A lei penal mais grave aplica-se ao crime continuado ou permanente, se vigente antes da cessação da continuidade ou da permanência." },
+  incidencia:74, arquivo:"dia-02", lei_seca:["CP arts. 1-12","CF/88 arts. 1-5"] },
 
 { dia:4, titulo:"Processo Penal · IP e Ação Penal + Trabalho · Relação de Emprego", descricao:"Inquérito policial, ação penal e fundamentos da relação de emprego", emoji_principal:"📋",
   materias:[
