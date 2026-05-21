@@ -109,14 +109,18 @@ function atualizarBadgeRevisar() {
   let count = 0;
   try {
     if (typeof carregarProgresso === 'function') {
-      const prog  = carregarProgresso();
-      const hoje  = new Date();
-      const IVLS  = [1, 7, 15, 30];
-      Object.entries(prog.dias || {}).forEach(([, d]) => {
+      const prog    = carregarProgresso();
+      const hoje    = new Date();
+      const hojeStr = hoje.toISOString().split('T')[0];
+      Object.entries(prog.dias || {}).forEach(([numDia, d]) => {
         if (!d.concluido || !d.data_conclusao) return;
         const diff = Math.round((hoje - new Date(d.data_conclusao)) / 864e5);
-        // Conta como card de revisão se está dentro de uma janela de intervalo
-        if (IVLS.some(iv => diff >= iv && diff < iv + 3)) count++;
+        if (diff < 1) return;                          // concluído hoje — ainda não é revisão
+        if (d.ultima_revisao === hojeStr) return;      // já foi revisado hoje
+        if (typeof getDadosDia === 'function') {       // dia precisa existir no plano
+          if (!getDadosDia(parseInt(numDia))) return;
+        }
+        count++;
       });
     }
   } catch(e) {}
