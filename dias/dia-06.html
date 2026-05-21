@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dia 6 · Civil Obrigações + Penal Excludentes</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#fdf4f7;--paper:#fff;--ink:#4a2e3a;--ink-soft:#7a5566;--ink-faded:#b08799;--rose:#e8a5c0;--rose-deep:#c87aa0;--rose-soft:#f5d4e2;--blush:#fce0eb;--champagne:#f8e1d8;--lavender:#e0c8dc;--line:#f0d4e0;--gold:#d4a888;--radius:10px;}
+  [data-theme="dark"]{--bg:#1a1318;--paper:#211a20;--ink:#f5e4ec;--ink-soft:#d4b8c8;--ink-faded:#9a7686;--rose:#e8a5c0;--rose-deep:#f0b8d0;--rose-soft:#4a2e3a;--blush:#3d2632;--champagne:#5a4248;--lavender:#5a4258;--line:#3a2832;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Inter',sans-serif;font-size:.93rem;color:var(--ink);background:var(--bg);line-height:1.7;padding:2rem 2.5rem 4rem;}
+  h2{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:500;margin:2rem 0 .8rem;color:var(--ink);letter-spacing:-.01em;line-height:1.25;}h2 em{font-style:italic;color:var(--rose-deep);}h2:first-child{margin-top:0;}
+  h3{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:500;margin:1.5rem 0 .6rem;color:var(--ink);border-left:3px solid var(--rose);padding-left:.7rem;}
+  p{margin-bottom:.85rem;color:var(--ink-soft);}strong{color:var(--ink);font-weight:600;}
+  .callout{padding:1rem 1.2rem;border-radius:var(--radius);margin:1.2rem 0;}
+  .callout.atencao{background:linear-gradient(135deg,var(--blush),var(--rose-soft));border-left:4px solid var(--rose-deep);}
+  .callout.dica{background:linear-gradient(135deg,var(--champagne),#fde8d8);border-left:4px solid var(--gold);}
+  .callout.lei{background:linear-gradient(135deg,var(--lavender),#ede0ec);border-left:4px solid #b090c0;}
+  .callout-label{font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;font-weight:700;margin-bottom:.4rem;display:block;color:var(--ink);}
+  .callout p{margin:0;color:var(--ink);font-size:.88rem;}
+  table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:.85rem;}
+  th{background:var(--rose-soft);color:var(--ink);font-weight:600;padding:.6rem .8rem;text-align:left;border-bottom:2px solid var(--rose);}
+  td{padding:.55rem .8rem;border-bottom:1px solid var(--line);color:var(--ink-soft);}tr:hover td{background:var(--blush);color:var(--ink);}
+  ul,ol{padding-left:1.4rem;margin:.6rem 0;}li{margin-bottom:.35rem;color:var(--ink-soft);}li strong{color:var(--ink);}
+  .badge{display:inline-block;background:var(--rose-soft);color:var(--rose-deep);font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:.2rem .6rem;border-radius:20px;margin-right:.4rem;}
+  .badge.lei{background:var(--lavender);color:#7040a0;}.badge.cai{background:var(--champagne);color:#8a5030;}
+  .materia-header{display:flex;align-items:center;gap:.8rem;padding:1rem 1.2rem;border-radius:var(--radius);margin:2rem 0 1.2rem;font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:500;}
+  .materia-header.civil{background:linear-gradient(135deg,var(--champagne),#fde8d8);}
+  .materia-header.penal{background:linear-gradient(135deg,var(--blush),var(--rose-soft));}
+  .materia-header .emoji{font-size:1.4rem;}.materia-header .tempo{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faded);margin-left:auto;font-family:'Inter',sans-serif;}
+  hr{border:none;border-top:1px solid var(--line);margin:2rem 0;}
+  .incidencia{font-size:.7rem;color:var(--rose-deep);font-weight:600;background:var(--rose-soft);padding:.2rem .5rem;border-radius:4px;}
+  mark{background:var(--blush);color:var(--ink);border-radius:3px;padding:0 2px;}mark.lei{background:var(--lavender);}mark.aten{background:#ffe4c0;}
+</style>
+</head>
+<body>
+
+<div class="secao" data-mat="civil">
+<div class="materia-header civil">
+  <span class="emoji">📜</span>
+  <span>Direito Civil — Teoria Geral das Obrigações</span>
+  <span class="incidencia">70% provas</span>
+  <span class="tempo">⏱ 2h</span>
+</div>
+
+<h2>I. Obrigações <em>quanto ao objeto</em></h2>
+
+<h3>Obrigação de Dar Coisa Certa (arts. 233-242 CC)</h3>
+<p>O devedor obriga-se a entregar bem <strong>determinado e individualizado</strong>. O credor não pode ser obrigado a receber coisa diversa (princípio da identidade da prestação).</p>
+<ul>
+  <li>Se a coisa se perder <strong>sem culpa</strong> do devedor: resolve-se a obrigação, devolvendo o preço + correção (res perit domino)</li>
+  <li>Se a coisa se perder <strong>com culpa</strong>: equivalente + perdas e danos</li>
+  <li>Se houver <strong>deterioração</strong>: credor pode exigir abatimento no preço ou resolução com perdas e danos</li>
+</ul>
+
+<h3>Obrigação de Dar Coisa Incerta (arts. 243-246 CC)</h3>
+<p>O objeto é determinado pelo gênero e quantidade (<em>genus non perit</em> — o gênero nunca perece). A <strong>concentração/escolha</strong> cabe ao devedor (salvo cláusula em contrário). Após a concentração, passa a ser coisa certa.</p>
+
+<h3>Obrigação de Fazer e Não Fazer</h3>
+<table>
+  <tr><th>Tipo</th><th>Fungível/Infungível</th><th>Inadimplemento</th></tr>
+  <tr><td><strong>Fazer fungível</strong></td><td>Pode ser realizado por terceiro</td><td>Credor pode mandar executar às custas do devedor</td></tr>
+  <tr><td><strong>Fazer infungível</strong></td><td>Personalíssimo (intuitu personae)</td><td>Só perdas e danos — não pode ser compelido</td></tr>
+  <tr><td><strong>Não fazer</strong></td><td>Abstenção</td><td>Se pratica o ato proibido: resolve-se + perdas e danos</td></tr>
+</table>
+
+<h2>II. Obrigações <em>quanto ao sujeito</em></h2>
+
+<h3>Obrigações Solidárias</h3>
+<p>A solidariedade <strong>não se presume</strong> — resulta da lei ou do contrato (art. 265 CC).</p>
+<table>
+  <tr><th>Solidariedade</th><th>Como funciona</th><th>Efeito do pagamento</th></tr>
+  <tr><td><strong>Ativa</strong> (credores)</td><td>Qualquer credor pode exigir a dívida toda</td><td>O credor que recebeu deve ratear com os outros</td></tr>
+  <tr><td><strong>Passiva</strong> (devedores)</td><td>O credor pode cobrar a dívida toda de qualquer devedor</td><td>Devedor que pagou tem ação regressiva contra os demais</td></tr>
+</table>
+
+<div class="callout atencao">
+  <span class="callout-label">⚠ Solidariedade ≠ Indivisibilidade</span>
+  <p>A <strong>solidariedade</strong> é qualidade dos sujeitos. A <strong>indivisibilidade</strong> é qualidade do objeto. Nas obrigações indivisíveis, a solidariedade não se comunica na dívida — cada coobrigado responde pela sua cota-parte (exceto se houver solidariedade expressamente).</p>
+</div>
+
+<h2>III. Transmissão das Obrigações</h2>
+
+<h3>Cessão de Crédito (arts. 286-298 CC)</h3>
+<ul>
+  <li>O credor (cedente) transfere o crédito a terceiro (cessionário)</li>
+  <li><strong>Não precisa de anuência do devedor</strong> — mas deve ser <strong>notificado</strong></li>
+  <li>Antes da notificação: o devedor pode pagar validamente ao cedente</li>
+  <li>Cessão <em>pro soluto</em>: cedente não garante solvência do devedor | <em>pro solvendo</em>: cedente garante</li>
+</ul>
+
+<h3>Assunção de Dívida / Cessão de Débito (arts. 299-303 CC)</h3>
+<ul>
+  <li>O devedor (cedente) transfere a dívida a um terceiro (cessionário)</li>
+  <li><strong>Precisa de consentimento expresso do credor</strong> (diferença crucial em relação à cessão de crédito)</li>
+  <li>Se o credor concordar sem ressalva, o devedor originário fica exonerado</li>
+</ul>
+</div>
+
+<hr>
+
+<div class="secao" data-mat="penal">
+<div class="materia-header penal" style="margin-top:3rem">
+  <span class="emoji">⚔️</span>
+  <span>Direito Penal — Excludentes</span>
+  <span class="incidencia">70% provas</span>
+  <span class="tempo">⏱ 2h</span>
+</div>
+
+<h2>I. Erro de Tipo <em>e</em> Erro de Proibição</h2>
+
+<h3>Erro de Tipo (art. 20 CP)</h3>
+<p>O agente tem falsa percepção da realidade sobre os <strong>elementos constitutivos do tipo penal</strong>.</p>
+<table>
+  <tr><th>Espécie</th><th>Conceito</th><th>Efeito</th></tr>
+  <tr><td><strong>Essencial evitável</strong></td><td>Erra sobre elemento do tipo, mas poderia ter evitado</td><td>Exclui o dolo, mas pune por culpa (se houver tipo culposo)</td></tr>
+  <tr><td><strong>Essencial inevitável</strong></td><td>Qualquer pessoa na situação erraria</td><td>Exclui dolo E culpa → isenta de pena</td></tr>
+  <tr><td><strong>Acidental</strong></td><td>Erro sobre acidente do crime (não sobre elemento essencial)</td><td>Não exclui o crime — responde normalmente</td></tr>
+</table>
+
+<h3>Erro de Proibição (art. 21 CP)</h3>
+<p>O agente sabe o que faz, mas acredita erroneamente que <strong>não é proibido por lei</strong>. Incide sobre a consciência da ilicitude.</p>
+<ul>
+  <li><strong>Inevitável:</strong> isenta de pena</li>
+  <li><strong>Evitável:</strong> reduz a pena de 1/6 a 1/3</li>
+</ul>
+
+<div class="callout dica">
+  <span class="callout-label">✦ Erro de tipo vs erro de proibição</span>
+  <p><strong>Erro de tipo:</strong> agente não sabe o que está fazendo. <strong>Erro de proibição:</strong> agente sabe o que faz, mas pensa que é permitido. Exemplo clássico: quem pega guarda-chuva alheio achando que é o seu → erro de tipo. Quem pratica eutanásia acreditando ser legal no Brasil → erro de proibição.</p>
+</div>
+
+<h2>II. Excludentes de Ilicitude <em>(art. 23 CP)</em></h2>
+
+<div class="callout lei">
+  <span class="callout-label">📜 Art. 23 CP — Decorar as 4 hipóteses</span>
+  <p>Não há crime quando o agente pratica o fato em: <strong>(I)</strong> estado de necessidade; <strong>(II)</strong> legítima defesa; <strong>(III)</strong> estrito cumprimento do dever legal; <strong>(IV)</strong> exercício regular de direito.</p>
+</div>
+
+<h3>Estado de Necessidade (art. 24 CP)</h3>
+<ul>
+  <li>Perigo atual não causado voluntariamente pelo agente</li>
+  <li>Inevitabilidade do comportamento lesivo</li>
+  <li>Proporcionalidade (razoabilidade do sacrifício)</li>
+  <li>Não tinha o dever legal de enfrentar o perigo</li>
+</ul>
+
+<h3>Legítima Defesa (art. 25 CP) <span class="badge cai">Cai muito</span></h3>
+<ul>
+  <li>Agressão <strong>injusta, atual ou iminente</strong></li>
+  <li>Direito próprio ou alheio</li>
+  <li>Meios necessários usados com <strong>moderação</strong></li>
+</ul>
+
+<div class="callout atencao">
+  <span class="callout-label">⚠ Pegadinhas de Legítima Defesa</span>
+  <p><strong>Aberratio ictus</strong> (erro na execução): a LD vale mesmo que o agente atinja terceiro inocente. <strong>Legítima defesa putativa</strong>: o agente imagina erroneamente estar em situação de LG → exclui a culpabilidade (erro de proibição). <strong>Não cabe</strong> LG contra estado de necessidade, contra quem está em LG real, contra atos lícitos.</p>
+</div>
+
+<h3>Excesso na Excludente (art. 23, parágrafo único)</h3>
+<p>O excesso doloso ou culposo é punível. Ex.: quem se defende de um tapa e mata o agressor a tiros comete homicídio em excesso.</p>
+
+<h2>III. Imputabilidade <em>e</em> Causas de Exclusão</h2>
+
+<h3>Inimputáveis (art. 26 CP)</h3>
+<ul>
+  <li><strong>Doença mental ou desenvolvimento mental incompleto/retardado:</strong> inteiramente incapaz de entender a ilicitude → absolvição imprópria (medida de segurança)</li>
+  <li><strong>Semi-imputável (parágrafo único):</strong> capacidade reduzida → redução de pena de 1/3 a 2/3 OU medida de segurança</li>
+  <li><strong>Menores de 18 anos</strong> (art. 27 CP): inimputáveis, sujeitos ao ECA</li>
+</ul>
+
+<h3>Embriaguez (art. 28 CP)</h3>
+<table>
+  <tr><th>Tipo</th><th>Efeito penal</th></tr>
+  <tr><td>Voluntária ou culposa</td><td><mark class="aten">NÃO exclui</mark> a imputabilidade — actio libera in causa</td></tr>
+  <tr><td>Acidental (caso fortuito / força maior) <strong>completa</strong></td><td><mark>Isenta de pena</mark></td></tr>
+  <tr><td>Acidental <strong>incompleta</strong></td><td>Reduz a pena de 1/3 a 2/3</td></tr>
+  <tr><td>Patológica (doença)</td><td>Tratada como doença mental — pode isentar de pena</td></tr>
+</table>
+</div>
+
+<script>
+  const pt = window.parent && window.parent.document.documentElement.getAttribute('data-theme');
+  if (pt) document.documentElement.setAttribute('data-theme', pt);
+  window.addEventListener('message', e => {
+    if (!e.data) return;
+    if (e.data.type === 'set-theme') document.documentElement.setAttribute('data-theme', e.data.theme);
+    if (e.data.type === 'show-section') {
+      document.querySelectorAll('.secao').forEach(s => {
+        s.style.display = (!e.data.mat || s.dataset.mat === e.data.mat) ? '' : 'none';
+      });
+    }
+  });
+</script>
+</body>
+</html>

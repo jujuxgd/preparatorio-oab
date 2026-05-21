@@ -187,26 +187,29 @@ function toggleSidebar() {
 
 // MODO FOCO — funciona em todas as páginas
 function toggleFocusMode() {
-  const active = document.body.classList.toggle('focus-mode');
-  if (active && document.documentElement.requestFullscreen) {
-    document.documentElement.requestFullscreen().catch(() => {});
-  } else if (!active && document.fullscreenElement) {
-    document.exitFullscreen().catch(() => {});
-  }
+  document.body.classList.toggle('focus-mode');
 }
 
-// Injeta botão "sair do foco" e botão "foco" na topbar em todas as páginas
+// Injeta barra Mac e botão foco em todas as páginas
 document.addEventListener('DOMContentLoaded', () => {
-  // Botão sair (canto fixo)
-  if (!document.querySelector('.focus-exit')) {
-    const exitBtn = document.createElement('button');
-    exitBtn.className = 'focus-exit';
-    exitBtn.title = 'Sair do modo foco';
-    exitBtn.textContent = '✕';
-    exitBtn.onclick = () => document.body.classList.remove('focus-mode');
-    document.body.appendChild(exitBtn);
+  // Barra de janela estilo Mac (title bar com traffic lights)
+  const mainEl = document.querySelector('main');
+  if (mainEl && !mainEl.querySelector('.focus-mac-bar')) {
+    const pageTitle = document.title.replace('Preparatório - OAB', 'OAB Preparatório').replace(' | ', ' · ') || 'OAB Preparatório';
+    const bar = document.createElement('div');
+    bar.className = 'focus-mac-bar';
+    bar.innerHTML = `
+      <div class="focus-mac-lights">
+        <span class="fml fml-close" onclick="toggleFocusMode()" title="Sair do foco"></span>
+        <span class="fml fml-min"></span>
+        <span class="fml fml-max"></span>
+      </div>
+      <span class="focus-mac-title">${pageTitle}</span>
+      <div style="width:54px"></div>`;
+    mainEl.prepend(bar);
   }
-  // Botão foco na topbar-actions (se ainda não existe)
+
+  // Botão foco na topbar-actions — apenas se não houver um já
   const topbarActions = document.querySelector('.topbar-actions');
   if (topbarActions && !topbarActions.querySelector('[data-focus-btn]')) {
     const focusBtn = document.createElement('button');
