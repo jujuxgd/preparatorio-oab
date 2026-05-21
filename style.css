@@ -705,14 +705,14 @@ body.focus-mode .app {
   justify-content: center;
   align-items: flex-start;
   min-height: 100vh;
-  padding: 2.5vh 2vw;
+  padding: 1.5vh 1.5vw;
   grid-template-columns: none;
 }
 
 /* Janela mac-style */
 body.focus-mode main {
   width: 100%;
-  max-width: 1440px;
+  max-width: 1700px;
   background: var(--paper);
   border-radius: 14px;
   border: 1px solid rgba(0,0,0,0.12);
