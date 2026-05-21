@@ -620,16 +620,24 @@ function openDayOverlay(planDay, matKey, matNome) {
   document.getElementById('overlay-goto').href = `hoje.html?dia=${planDay}`;
   const frame = document.getElementById('overlay-frame');
 
-  // Se a matéria tem ficheiro próprio, usa-o directamente (sem filtragem)
+  // Decide o ficheiro a carregar e se é necessário filtrar por secção
   let src = `dias/${dados.arquivo}.html`;
+  let filterMat = null;
   if (matKey && dados.materias) {
     const mat = dados.materias.find(m => toMatKey(m.nome) === matKey);
-    if (mat && mat.arquivo_mat) src = `dias/${mat.arquivo_mat}.html`;
+    if (mat && mat.arquivo_mat) {
+      src = `dias/${mat.arquivo_mat}.html`; // ficheiro já exclusivo — sem filtro necessário
+    } else {
+      filterMat = matKey; // arquivo combinado — filtrar via postMessage após carregamento
+    }
   }
   frame.src = src;
   frame.onload = () => {
     const theme = document.documentElement.getAttribute('data-theme') || 'light';
     try { frame.contentWindow.postMessage({ type: 'set-theme', theme }, '*'); } catch(e) {}
+    if (filterMat) {
+      try { frame.contentWindow.postMessage({ type: 'show-section', mat: filterMat }, '*'); } catch(e) {}
+    }
   };
   overlay.style.display = 'flex';
   document.body.classList.add('overlay-open');
