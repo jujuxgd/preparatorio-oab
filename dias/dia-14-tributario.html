@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#fdf4f7;--paper:#fff;--ink:#4a2e3a;--ink-soft:#7a5566;--ink-faded:#b08799;--rose:#e8a5c0;--rose-deep:#c87aa0;--rose-soft:#f5d4e2;--blush:#fce0eb;--champagne:#f8e1d8;--lavender:#e0c8dc;--line:#f0d4e0;--gold:#d4a888;--sage:#c8d8c0;--radius:10px;}
+  [data-theme="dark"]{--bg:#1a1318;--paper:#211a20;--ink:#f5e4ec;--ink-soft:#d4b8c8;--ink-faded:#9a7686;--rose:#e8a5c0;--rose-deep:#f0b8d0;--rose-soft:#4a2e3a;--blush:#3d2632;--champagne:#5a4248;--lavender:#5a4258;--line:#3a2832;--sage:#3a4a38;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Inter',sans-serif;font-size:.93rem;color:var(--ink);background:var(--bg);line-height:1.7;padding:2rem 2.5rem 4rem;}
+  h2{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:500;margin:2rem 0 .8rem;color:var(--ink);letter-spacing:-.01em;line-height:1.25;}h2 em{font-style:italic;color:var(--rose-deep);}h2:first-child{margin-top:0;}
+  h3{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:500;margin:1.5rem 0 .6rem;color:var(--ink);border-left:3px solid var(--rose);padding-left:.7rem;}
+  p{margin-bottom:.85rem;color:var(--ink-soft);}strong{color:var(--ink);font-weight:600;}
+  .callout{padding:1rem 1.2rem;border-radius:var(--radius);margin:1.2rem 0;}
+  .callout.atencao{background:linear-gradient(135deg,var(--blush),var(--rose-soft));border-left:4px solid var(--rose-deep);}
+  .callout.dica{background:linear-gradient(135deg,var(--champagne),#fde8d8);border-left:4px solid var(--gold);}
+  .callout.lei{background:linear-gradient(135deg,var(--lavender),#ede0ec);border-left:4px solid #b090c0;}
+  .callout-label{font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;font-weight:700;margin-bottom:.4rem;display:block;color:var(--ink);}
+  .callout p{margin:0;color:var(--ink);font-size:.88rem;}
+  table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:.85rem;}
+  th{background:var(--rose-soft);color:var(--ink);font-weight:600;padding:.6rem .8rem;text-align:left;border-bottom:2px solid var(--rose);}
+  td{padding:.55rem .8rem;border-bottom:1px solid var(--line);color:var(--ink-soft);}tr:hover td{background:var(--blush);color:var(--ink);}
+  ul,ol{padding-left:1.4rem;margin:.6rem 0;}li{margin-bottom:.35rem;color:var(--ink-soft);}li strong{color:var(--ink);}
+  .badge{display:inline-block;background:var(--rose-soft);color:var(--rose-deep);font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:.2rem .6rem;border-radius:20px;margin-right:.4rem;}
+  .badge.lei{background:var(--lavender);color:#7040a0;}.badge.cai{background:var(--champagne);color:#8a5030;}
+  .materia-header{display:flex;align-items:center;gap:.8rem;padding:1rem 1.2rem;border-radius:var(--radius);margin:0 0 1.2rem;font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:500;}
+  .materia-header.proc-penal{background:linear-gradient(135deg,#e8f0e0,var(--sage));}
+  .materia-header.trabalho,.materia-header.proc-trabalho,.materia-header.civil,.materia-header.tributario{background:linear-gradient(135deg,var(--champagne),#fde8d8);}
+  .materia-header.etica,.materia-header.penal{background:linear-gradient(135deg,var(--blush),var(--rose-soft));}
+  .materia-header.const,.materia-header.constitucional,.materia-header.administrativo{background:linear-gradient(135deg,var(--lavender),#ede0ec);}
+  .materia-header .emoji{font-size:1.4rem;}.materia-header .tempo{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faded);margin-left:auto;font-family:'Inter',sans-serif;}
+  .incidencia{font-size:.7rem;color:var(--rose-deep);font-weight:600;background:var(--rose-soft);padding:.2rem .5rem;border-radius:4px;}
+  mark{background:var(--blush);color:var(--ink);border-radius:3px;padding:0 2px;}mark.lei{background:var(--lavender);}mark.aten{background:#ffe4c0;}
+</style>
+</head>
+<body>
+<div class="materia-header tributario">
+  <span class="emoji">💰</span>
+  <span>Direito Tributário — Fundamentos</span>
+  <span class="incidencia">68% provas</span>
+  <span class="tempo">⏱ 2h</span>
+</div>
+
+<h2>I. Conceito e Espécies de Tributos</h2>
+
+<div class="callout lei">
+  <span class="callout-label">📜 Art. 3º CTN — Conceito legal de tributo</span>
+  <p>Tributo é toda prestação pecuniária compulsória, em moeda ou cujo valor nela se possa exprimir, que não constitua sanção de ato ilícito, instituída em lei e cobrada mediante atividade administrativa plenamente vinculada.</p>
+</div>
+
+<h3>Espécies Tributárias (Teoria Pentapartite — adotada pelo STF)</h3>
+<table>
+  <tr><th>Espécie</th><th>Vinculado?</th><th>Base</th></tr>
+  <tr><td><strong>Impostos</strong></td><td>Não vinculado a atividade estatal específica</td><td>Art. 145, I CF; art. 16 CTN</td></tr>
+  <tr><td><strong>Taxas</strong></td><td>Vinculado a serviço público ou poder de polícia</td><td>Art. 145, II CF; art. 77 CTN</td></tr>
+  <tr><td><strong>Contribuições de Melhoria</strong></td><td>Vinculado a obra pública com valorização imobiliária</td><td>Art. 145, III CF; art. 81 CTN</td></tr>
+  <tr><td><strong>Empréstimos Compulsórios</strong></td><td>Restituível · calamidade, guerra externa, investimento urgente</td><td>Art. 148 CF · reserva de LC da União</td></tr>
+  <tr><td><strong>Contribuições Especiais</strong></td><td>Finalidade específica (social, econômica, profissional)</td><td>Art. 149 CF · reserva da União (exceto saúde e previdência estadual)</td></tr>
+</table>
+
+<h2>II. Princípios Tributários <span class="badge cai">Alta incidência</span></h2>
+
+<table>
+  <tr><th>Princípio</th><th>Conteúdo</th><th>Art. CF</th></tr>
+  <tr><td><strong>Legalidade</strong></td><td>Tributo só pode ser criado ou aumentado por lei</td><td>150, I</td></tr>
+  <tr><td><strong>Isonomia tributária</strong></td><td>Vedado tratamento desigual entre contribuintes em situação equivalente</td><td>150, II</td></tr>
+  <tr><td><strong>Irretroatividade</strong></td><td>Lei tributária não alcança fatos geradores ocorridos antes de sua vigência</td><td>150, III, a</td></tr>
+  <tr><td><strong>Anterioridade</strong></td><td>Tributo criado/majorado só pode ser cobrado no exercício seguinte</td><td>150, III, b</td></tr>
+  <tr><td><strong>Noventena / Anterioridade nonagesimal</strong></td><td>Mínimo de 90 dias entre a lei e a cobrança</td><td>150, III, c</td></tr>
+  <tr><td><strong>Não confisco</strong></td><td>Vedado tributo com efeito confiscatório</td><td>150, IV</td></tr>
+  <tr><td><strong>Liberdade de tráfego</strong></td><td>Vedado tributo que limite o tráfego interestadual ou intermunicipal</td><td>150, V</td></tr>
+  <tr><td><strong>Capacidade contributiva</strong></td><td>Impostos pessoais serão graduados segundo capacidade econômica</td><td>145, §1º</td></tr>
+</table>
+
+<div class="callout atencao">
+  <span class="callout-label">⚠ Exceções à Anterioridade e Noventena</span>
+  <p>Não se aplicam: <strong>II, IE, IPI, IOF, IEG, EC</strong> — dispensados da anterioridade do exercício. Dispensados apenas da noventena: <strong>IR, IPVA (base de cálculo), IPTU (base de cálculo)</strong>. Mnemônico: "II IE IPI IOF IGM" e "IR IPVA IPTU base de cálculo".</p>
+</div>
+
+<h2>III. Imunidades Tributárias (art. 150, VI CF)</h2>
+
+<p>Imunidades são limitações constitucionais ao poder de tributar — não confundir com isenção (lei infraconstitucional).</p>
+<ul>
+  <li><strong>Recíproca:</strong> vedado à U, E, DF e M instituir impostos sobre patrimônio, renda ou serviços uns dos outros</li>
+  <li><strong>Templos:</strong> qualquer culto (imunidade ampla, independente de religião)</li>
+  <li><strong>Partidos políticos, sindicatos de trabalhadores, entidades educacionais e assistenciais sem fins lucrativos:</strong> desde que sem fins lucrativos e com requisitos do art. 14 CTN</li>
+  <li><strong>Livros, jornais, periódicos e papel destinado à impressão:</strong> imunidade objetiva — alcança o produto e os insumos essenciais</li>
+  <li><strong>Fonogramas e videofonogramas produzidos no Brasil:</strong> imunidade de ICMS nas operações de saída</li>
+</ul>
+<script>
+  const pt = window.parent && window.parent.document.documentElement.getAttribute('data-theme');
+  if (pt) document.documentElement.setAttribute('data-theme', pt);
+  window.addEventListener('message', e => {
+    if (e.data && e.data.type === 'set-theme') document.documentElement.setAttribute('data-theme', e.data.theme);
+  });
+</script>
+</body>
+</html>

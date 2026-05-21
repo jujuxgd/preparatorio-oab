@@ -1,0 +1,101 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#fdf4f7;--paper:#fff;--ink:#4a2e3a;--ink-soft:#7a5566;--ink-faded:#b08799;--rose:#e8a5c0;--rose-deep:#c87aa0;--rose-soft:#f5d4e2;--blush:#fce0eb;--champagne:#f8e1d8;--lavender:#e0c8dc;--line:#f0d4e0;--gold:#d4a888;--sage:#c8d8c0;--radius:10px;}
+  [data-theme="dark"]{--bg:#1a1318;--paper:#211a20;--ink:#f5e4ec;--ink-soft:#d4b8c8;--ink-faded:#9a7686;--rose:#e8a5c0;--rose-deep:#f0b8d0;--rose-soft:#4a2e3a;--blush:#3d2632;--champagne:#5a4248;--lavender:#5a4258;--line:#3a2832;--sage:#3a4a38;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Inter',sans-serif;font-size:.93rem;color:var(--ink);background:var(--bg);line-height:1.7;padding:2rem 2.5rem 4rem;}
+  h2{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:500;margin:2rem 0 .8rem;color:var(--ink);letter-spacing:-.01em;line-height:1.25;}h2 em{font-style:italic;color:var(--rose-deep);}h2:first-child{margin-top:0;}
+  h3{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:500;margin:1.5rem 0 .6rem;color:var(--ink);border-left:3px solid var(--rose);padding-left:.7rem;}
+  p{margin-bottom:.85rem;color:var(--ink-soft);}strong{color:var(--ink);font-weight:600;}
+  .callout{padding:1rem 1.2rem;border-radius:var(--radius);margin:1.2rem 0;}
+  .callout.atencao{background:linear-gradient(135deg,var(--blush),var(--rose-soft));border-left:4px solid var(--rose-deep);}
+  .callout.dica{background:linear-gradient(135deg,var(--champagne),#fde8d8);border-left:4px solid var(--gold);}
+  .callout.lei{background:linear-gradient(135deg,var(--lavender),#ede0ec);border-left:4px solid #b090c0;}
+  .callout-label{font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;font-weight:700;margin-bottom:.4rem;display:block;color:var(--ink);}
+  .callout p{margin:0;color:var(--ink);font-size:.88rem;}
+  table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:.85rem;}
+  th{background:var(--rose-soft);color:var(--ink);font-weight:600;padding:.6rem .8rem;text-align:left;border-bottom:2px solid var(--rose);}
+  td{padding:.55rem .8rem;border-bottom:1px solid var(--line);color:var(--ink-soft);}tr:hover td{background:var(--blush);color:var(--ink);}
+  ul,ol{padding-left:1.4rem;margin:.6rem 0;}li{margin-bottom:.35rem;color:var(--ink-soft);}li strong{color:var(--ink);}
+  .badge{display:inline-block;background:var(--rose-soft);color:var(--rose-deep);font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:.2rem .6rem;border-radius:20px;margin-right:.4rem;}
+  .badge.lei{background:var(--lavender);color:#7040a0;}.badge.cai{background:var(--champagne);color:#8a5030;}
+  .materia-header{display:flex;align-items:center;gap:.8rem;padding:1rem 1.2rem;border-radius:var(--radius);margin:0 0 1.2rem;font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:500;}
+  .materia-header.proc-penal{background:linear-gradient(135deg,#e8f0e0,var(--sage));}
+  .materia-header.trabalho,.materia-header.proc-trabalho,.materia-header.civil,.materia-header.tributario{background:linear-gradient(135deg,var(--champagne),#fde8d8);}
+  .materia-header.etica,.materia-header.penal{background:linear-gradient(135deg,var(--blush),var(--rose-soft));}
+  .materia-header.const,.materia-header.constitucional,.materia-header.administrativo{background:linear-gradient(135deg,var(--lavender),#ede0ec);}
+  .materia-header .emoji{font-size:1.4rem;}.materia-header .tempo{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faded);margin-left:auto;font-family:'Inter',sans-serif;}
+  .incidencia{font-size:.7rem;color:var(--rose-deep);font-weight:600;background:var(--rose-soft);padding:.2rem .5rem;border-radius:4px;}
+  mark{background:var(--blush);color:var(--ink);border-radius:3px;padding:0 2px;}mark.lei{background:var(--lavender);}mark.aten{background:#ffe4c0;}
+</style>
+</head>
+<body>
+<div class="materia-header civil">
+  <span class="emoji">📜</span>
+  <span>Direito Civil — Contratos Teoria Geral</span>
+  <span class="incidencia">66% provas</span>
+  <span class="tempo">⏱ 2h</span>
+</div>
+
+<h2>I. Formação do Contrato</h2>
+
+<h3>Proposta (Oferta) e Aceitação</h3>
+<ul>
+  <li><strong>Proposta</strong> vincula o proponente (art. 427 CC) — salvo se ressalvar o direito de retratação, se as circunstâncias indicarem que não é vinculante, ou se não houver prazo e o oblato não responder de imediato</li>
+  <li><strong>Aceitação</strong> deve ser pura e simples — aceitação com modificações é contraproposta</li>
+  <li>Entre presentes: imediata. Entre ausentes: teoria da expedição (art. 434 CC) — contrato formado quando a aceitação é expedida</li>
+</ul>
+
+<h2>II. Princípios Contratuais</h2>
+<ul>
+  <li><strong>Autonomia privada / autonomia da vontade:</strong> liberdade de contratar e fixar o conteúdo</li>
+  <li><strong>Função social do contrato (art. 421 CC):</strong> os contratos devem observar a função social — não prejudicar terceiros nem a coletividade</li>
+  <li><strong>Boa-fé objetiva (art. 422 CC):</strong> deveres de lealdade, informação, cooperação e proteção (pré-contratual, contratual e pós-contratual)</li>
+  <li><strong>Relatividade:</strong> o contrato vincula apenas as partes (res inter alios acta) — exceto contratos coletivos e em favor de terceiros</li>
+  <li><strong>Obrigatoriedade (<em>pacta sunt servanda</em>):</strong> o contrato faz lei entre as partes</li>
+</ul>
+
+<h2>III. Contratos em Espécie — Principais</h2>
+
+<h3>Compra e Venda (arts. 481-532)</h3>
+<ul>
+  <li>Elementos essenciais: coisa (res), preço (pretium) e consentimento (consensus)</li>
+  <li>Sinal (arras): confirmatórias (reforçam o contrato) ou penitenciais (autorizam arrependimento)</li>
+  <li>Cláusula de retrovenda: vendedor pode recomprar dentro de 3 anos</li>
+  <li>Evicção: perda da coisa por decisão judicial anterior — vendedor responde (pode ser excluída por cláusula)</li>
+</ul>
+
+<h3>Doação (arts. 538-564)</h3>
+<ul>
+  <li>Contrato unilateral, gratuito, formal</li>
+  <li><strong>Revogação</strong> por: ingratidão do donatário (taxativo: atentado contra vida, ofensa física, injúria grave, recusa alimentos) ou descumprimento de encargo</li>
+  <li>Prazo para revogação por ingratidão: <mark>1 ano</mark> da ciência do fato</li>
+</ul>
+
+<h3>Locação (regida pela Lei 8.245/91 — imóvel urbano)</h3>
+<ul>
+  <li>Prazo máximo sem outorga uxória/marital: 10 anos</li>
+  <li>Denúncia vazia: prazo indeterminado, com aviso prévio de 30 dias</li>
+  <li>Denúncia cheia: por infração, falta de pagamento, retomada para uso próprio, etc.</li>
+</ul>
+
+<h3>Fiança (arts. 818-839)</h3>
+<ul>
+  <li>Contrato acessório (segue o principal), unilateral, gratuito (regra), formal (escrita)</li>
+  <li>O fiador goza do <strong>benefício de ordem</strong> — primeiro executar o devedor principal</li>
+  <li><strong>Não há benefício de ordem</strong> se: o fiador renunciou, devedor insolvente, ou o fiador se obrigou como devedor solidário</li>
+</ul>
+<script>
+  const pt = window.parent && window.parent.document.documentElement.getAttribute('data-theme');
+  if (pt) document.documentElement.setAttribute('data-theme', pt);
+  window.addEventListener('message', e => {
+    if (e.data && e.data.type === 'set-theme') document.documentElement.setAttribute('data-theme', e.data.theme);
+  });
+</script>
+</body>
+</html>

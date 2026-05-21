@@ -1,4 +1,4 @@
-// ============================================
+﻿// ============================================
 // OAB 1ª FASE · Plano de Estudos — 60 Dias
 // 1 Jun → 30 Jul 2026 · 4h/dia · 2-3 matérias
 // ============================================
@@ -62,9 +62,9 @@ const PLANO_OAB = [
 
 { dia:4, titulo:"Processo Penal · IP e Ação Penal + Trabalho · Relação de Emprego", descricao:"Inquérito policial, ação penal e fundamentos da relação de emprego", emoji_principal:"📋",
   materias:[
-    { nome:"Direito Processual Penal", emoji:"📋", horas:2, cor:"sage",
+    { nome:"Direito Processual Penal", emoji:"📋", horas:2, cor:"sage", arquivo_mat:"dia-04-proc-penal",
       topicos:["Inquérito Policial: natureza, características, peças, prazo, arquivamento","ANPP — Acordo de Não Persecução Penal: requisitos, não cabimento","Ação Penal: pública (condicionada/incondicionada) e privada; condições de procedibilidade","Competência e jurisdição: regras, critérios, conexão e continência"] },
-    { nome:"Direito do Trabalho", emoji:"⚙️", horas:2, cor:"champagne",
+    { nome:"Direito do Trabalho", emoji:"⚙️", horas:2, cor:"champagne", arquivo_mat:"dia-04-trabalho",
       topicos:["Relação de emprego vs. relação de trabalho: distinção","CTPS: obrigatoriedade, anotações, sanções","Empregado e empregador: conceitos, poderes do empregador","Terceirização e trabalho temporário; contrato de trabalho: tipos e alteração contratual"] }
   ],
   checklist:[
@@ -79,9 +79,9 @@ const PLANO_OAB = [
 
 { dia:5, titulo:"Ética · Inscrição e Atividades Privativas + Constitucional · Direitos Políticos", descricao:"Inscrição na OAB, atividades exclusivas do advogado e direitos políticos", emoji_principal:"⚖️",
   materias:[
-    { nome:"Ética Profissional", emoji:"⚖️", horas:2, cor:"rose",
+    { nome:"Ética Profissional", emoji:"⚖️", horas:2, cor:"rose", arquivo_mat:"dia-05-etica",
       topicos:["Inscrição: condição de advogado, exame OAB, inscrição suplementar","Cancelamento, licenciamento e suspensão da inscrição","Atividades privativas do advogado: postulação, consultoria","Advogado empregado: jornada, benefícios, sigilo"] },
-    { nome:"Direito Constitucional", emoji:"🏛️", horas:2, cor:"lavender",
+    { nome:"Direito Constitucional", emoji:"🏛️", horas:2, cor:"lavender", arquivo_mat:"dia-05-constitucional",
       topicos:["Direitos políticos: voto, elegibilidade, inelegibilidade (art. 14)","Partidos políticos: criação, fusão, dissolução, fidelidade","Federalismo: conceito, repartição de competências (arts. 21-30)","Noções de intervenção federal (art. 34)"] }
   ],
   checklist:[
@@ -96,9 +96,9 @@ const PLANO_OAB = [
 
 { dia:6, titulo:"Civil · Obrigações Teoria Geral + Penal · Excludentes", descricao:"Teoria das obrigações e causas excludentes de tipicidade, ilicitude e culpabilidade", emoji_principal:"📜",
   materias:[
-    { nome:"Direito Civil", emoji:"📜", horas:2, cor:"champagne",
+    { nome:"Direito Civil", emoji:"📜", horas:2, cor:"champagne", arquivo_mat:"dia-06-civil",
       topicos:["Obrigações de dar, fazer e não fazer: conceito e espécies","Obrigações alternativas, facultativas, divisíveis, indivisíveis","Obrigações solidárias ativas e passivas: características, efeitos","Transmissão das obrigações: cessão de crédito, cessão de débito"] },
-    { nome:"Direito Penal", emoji:"⚔️", horas:2, cor:"rose",
+    { nome:"Direito Penal", emoji:"⚔️", horas:2, cor:"rose", arquivo_mat:"dia-06-penal",
       topicos:["Erro de tipo essencial e acidental; erro de proibição","Coação moral irresistível e obediência hierárquica","Excludentes de ilicitude: estado de necessidade, legítima defesa, estrito cumprimento, exercício regular","Imputabilidade: enfermidade mental, embriaguez completa e acidental"] }
   ],
   checklist:[
@@ -113,9 +113,9 @@ const PLANO_OAB = [
 
 { dia:7, titulo:"Processo Trabalho · Teoria Geral + Constitucional · Competências e Intervenção", descricao:"Organização da JT, competência e repartição constitucional de competências", emoji_principal:"⚙️",
   materias:[
-    { nome:"Direito Processual do Trabalho", emoji:"⚙️", horas:2, cor:"champagne",
+    { nome:"Direito Processual do Trabalho", emoji:"⚙️", horas:2, cor:"champagne", arquivo_mat:"dia-07-proc-trabalho",
       topicos:["Teoria geral do Processo do Trabalho","Organização e competência da JT: TRT, TST","Partes e procuradores; custas e justiça gratuita","Petição inicial, contestação e audiência trabalhista; provas"] },
-    { nome:"Direito Constitucional", emoji:"🏛️", horas:2, cor:"lavender",
+    { nome:"Direito Constitucional", emoji:"🏛️", horas:2, cor:"lavender", arquivo_mat:"dia-07-constitucional",
       topicos:["Competências exclusivas, privativas, comuns e concorrentes (arts. 21-24)","Intervenção federal: hipóteses, procedimento (arts. 34-36)","Estado de defesa e estado de sítio: pressupostos, efeitos (arts. 136-141)"] }
   ],
   checklist:[
@@ -130,9 +130,9 @@ const PLANO_OAB = [
 
 { dia:8, titulo:"Processo Penal · Provas e Prisões + Trabalho · Jornada", descricao:"Sistema probatório, prisões cautelares e jornada de trabalho", emoji_principal:"📋",
   materias:[
-    { nome:"Direito Processual Penal", emoji:"📋", horas:2, cor:"sage",
+    { nome:"Direito Processual Penal", emoji:"📋", horas:2, cor:"sage", arquivo_mat:"dia-08-proc-penal",
       topicos:["Provas: sistema de valoração, princípio da ampla defesa, prova ilícita","Prisão em flagrante: conceito, espécies, relaxamento","Prisão preventiva: fundamentos, prazo, revogação","Medidas cautelares diversas; medidas assecuratórias patrimoniais"] },
-    { nome:"Direito do Trabalho", emoji:"⚙️", horas:2, cor:"champagne",
+    { nome:"Direito do Trabalho", emoji:"⚙️", horas:2, cor:"champagne", arquivo_mat:"dia-08-trabalho",
       topicos:["Jornada de trabalho: normal, extraordinária, banco de horas","Horas extras: requisitos, pagamento, limitação","Hora noturna reduzida e adicional noturno","Intervalos intrajornada e interjornada; sobreaviso e prontidão"] }
   ],
   checklist:[
@@ -147,9 +147,9 @@ const PLANO_OAB = [
 
 { dia:9, titulo:"Constitucional · Legislativo + Ética · Honorários e Sociedade", descricao:"Poder Legislativo, processo legislativo e honorários advocatícios", emoji_principal:"🏛️",
   materias:[
-    { nome:"Direito Constitucional", emoji:"🏛️", horas:2, cor:"lavender",
+    { nome:"Direito Constitucional", emoji:"🏛️", horas:2, cor:"lavender", arquivo_mat:"dia-09-constitucional",
       topicos:["Estrutura e composição do Legislativo (arts. 44-57)","Processo legislativo: espécies normativas, PL ordinário, emendas","Medidas provisórias: pressupostos, vedações, trancamento","Veto e sanção presidencial; decreto legislativo e resoluções"] },
-    { nome:"Ética Profissional", emoji:"⚖️", horas:2, cor:"rose",
+    { nome:"Ética Profissional", emoji:"⚖️", horas:2, cor:"rose", arquivo_mat:"dia-09-etica",
       topicos:["Honorários contratuais, arbitrados e de sucumbência","Honorários na execução; cobrança; tabela da OAB","Sociedade de advogados: registro, espécies, responsabilidade","Procuração e mandato: substabelecimento, revogação, renúncia; advocacia pro bono"] }
   ],
   checklist:[
@@ -164,9 +164,9 @@ const PLANO_OAB = [
 
 { dia:10, titulo:"Civil · Obrigações Adimplemento e Extinção + Penal · Imputabilidade e Concurso", descricao:"Extinção das obrigações e concurso de pessoas no direito penal", emoji_principal:"📜",
   materias:[
-    { nome:"Direito Civil", emoji:"📜", horas:2, cor:"champagne",
+    { nome:"Direito Civil", emoji:"📜", horas:2, cor:"champagne", arquivo_mat:"dia-10-civil",
       topicos:["Adimplemento: pagamento, lugar, tempo, imputação, quitação","Extinção: consignação, sub-rogação, dação em pagamento, novação, compensação, confusão, remissão","Inadimplemento: mora, perdas e danos, multa, correção, juros","Cláusula penal: função, espécies, limites"] },
-    { nome:"Direito Penal", emoji:"⚔️", horas:2, cor:"rose",
+    { nome:"Direito Penal", emoji:"⚔️", horas:2, cor:"rose", arquivo_mat:"dia-10-penal",
       topicos:["Imputabilidade: enfermidade mental (semi-imputabilidade), menoridade, embriaguez","Concurso de pessoas: autoria, coautoria, participação, comunicabilidade","Punibilidade e extinção: anistia, graça, indulto, prescrição (espécies)"] }
   ],
   checklist:[
@@ -185,9 +185,9 @@ const PLANO_OAB = [
 
 { dia:11, titulo:"Processo Penal · Procedimentos e Júri + Trabalho · Remuneração", descricao:"Procedimentos penais, Tribunal do Júri e sistema remuneratório trabalhista", emoji_principal:"📋",
   materias:[
-    { nome:"Direito Processual Penal", emoji:"📋", horas:2, cor:"sage",
+    { nome:"Direito Processual Penal", emoji:"📋", horas:2, cor:"sage", arquivo_mat:"dia-11-proc-penal",
       topicos:["Procedimento comum ordinário: fase instrutória, alegações, sentença","Procedimento sumário e sumaríssimo (JECrim)","Tribunal do Júri: 1ª fase (pronúncia/impronúncia/absolvição sumária) e 2ª fase","Procedimentos especiais: crimes funcionais, Lei de Drogas"] },
-    { nome:"Direito do Trabalho", emoji:"⚙️", horas:2, cor:"champagne",
+    { nome:"Direito do Trabalho", emoji:"⚙️", horas:2, cor:"champagne", arquivo_mat:"dia-11-trabalho",
       topicos:["Remuneração vs salário: distinção, parcelas salariais e não salariais","Salário mínimo, piso salarial, equiparação salarial","Adicionais: hora extra, noturno, insalubridade, periculosidade","Comissões, gorjetas, gratificações; desconto salarial; FGTS"] }
   ],
   checklist:[
@@ -202,9 +202,9 @@ const PLANO_OAB = [
 
 { dia:12, titulo:"Constitucional · Executivo e Funções Essenciais + Ética · Infrações Disciplinares", descricao:"Poder Executivo, funções essenciais à justiça e processo disciplinar da OAB", emoji_principal:"🏛️",
   materias:[
-    { nome:"Direito Constitucional", emoji:"🏛️", horas:2, cor:"lavender",
+    { nome:"Direito Constitucional", emoji:"🏛️", horas:2, cor:"lavender", arquivo_mat:"dia-12-constitucional",
       topicos:["Poder Executivo: composição, atribuições do Presidente (art. 84)","Responsabilidade presidencial: crime comum vs. crime de responsabilidade","Funções essenciais à justiça: MP, DPU, AGU, Advocacia (arts. 127-135)","Art. 133 CF: indispensabilidade e inviolabilidade do advogado"] },
-    { nome:"Ética Profissional", emoji:"⚖️", horas:2, cor:"rose",
+    { nome:"Ética Profissional", emoji:"⚖️", horas:2, cor:"rose", arquivo_mat:"dia-12-etica",
       topicos:["Responsabilidades do advogado: civil, criminal, disciplinar","Infrações disciplinares: rol do art. 34 EOAB","Sanções disciplinares: censura, suspensão, exclusão, multa","Processo disciplinar: instauração, instrução, julgamento; prescrição"] }
   ],
   checklist:[
@@ -219,9 +219,9 @@ const PLANO_OAB = [
 
 { dia:13, titulo:"Civil · Contratos Teoria Geral + Penal · Aplicação da Pena", descricao:"Teoria geral dos contratos civis e dosimetria da pena", emoji_principal:"📜",
   materias:[
-    { nome:"Direito Civil", emoji:"📜", horas:2, cor:"champagne",
+    { nome:"Direito Civil", emoji:"📜", horas:2, cor:"champagne", arquivo_mat:"dia-13-civil",
       topicos:["Contratos: formação (proposta, aceitação), lugar e tempo de celebração","Defeitos contratuais: lesão, estado de perigo, resolução, resilição","Contratos em espécie: compra e venda (preço, sinal), locação, comodato, mandato, fiança, empreitada","Extinção dos contratos: resolução por inadimplemento, cláusula resolutória"] },
-    { nome:"Direito Penal", emoji:"⚔️", horas:2, cor:"rose",
+    { nome:"Direito Penal", emoji:"⚔️", horas:2, cor:"rose", arquivo_mat:"dia-13-penal",
       topicos:["Dosimetria da pena: 3 fases (art. 68 CP)","1ª fase: circunstâncias judiciais art. 59; 2ª fase: agravantes/atenuantes; 3ª fase: causas de aumento/diminuição","Regime inicial de cumprimento: fechado, semiaberto, aberto","Penas restritivas de direitos: espécies, requisitos, conversão; Pena de multa"] }
   ],
   checklist:[
@@ -236,9 +236,9 @@ const PLANO_OAB = [
 
 { dia:14, titulo:"Tributário · Fundamentos + Processo Trabalho · Recursos", descricao:"Conceito de tributo, espécies, princípios, imunidades e recursos trabalhistas", emoji_principal:"💰",
   materias:[
-    { nome:"Direito Tributário", emoji:"💰", horas:2, cor:"champagne",
+    { nome:"Direito Tributário", emoji:"💰", horas:2, cor:"champagne", arquivo_mat:"dia-14-tributario",
       topicos:["Conceito e natureza do tributo (art. 3 CTN)","Espécies tributárias: impostos, taxas, contribuição melhoria, empréstimos compulsórios, contribuições especiais","Competência tributária: privativa, comum, residual, extraordinária","Princípios: legalidade, anterioridade, irretroatividade, isonomia, capacidade contributiva, não confisco","Imunidades tributárias: recíproca, templos, partidos, sindicatos, jornais"] },
-    { nome:"Direito Processual do Trabalho", emoji:"⚙️", horas:2, cor:"champagne",
+    { nome:"Direito Processual do Trabalho", emoji:"⚙️", horas:2, cor:"champagne", arquivo_mat:"dia-14-proc-trabalho",
       topicos:["Recurso Ordinário: cabimento, prazo, efeitos","Recurso de Revista: transcendência, conhecimento, julgamento","Agravo de Instrumento; Embargos de Declaração; Embargos ao TST","Agravo de Petição; Recurso Extraordinário trabalhista"] }
   ],
   checklist:[
@@ -253,9 +253,9 @@ const PLANO_OAB = [
 
 { dia:15, titulo:"Administrativo · Organização e Princípios + Civil · Responsabilidade Civil", descricao:"Organização administrativa, princípios da Administração e responsabilidade civil", emoji_principal:"🏛️",
   materias:[
-    { nome:"Direito Administrativo", emoji:"🏛️", horas:2, cor:"lavender",
+    { nome:"Direito Administrativo", emoji:"🏛️", horas:2, cor:"lavender", arquivo_mat:"dia-15-administrativo",
       topicos:["Organização: Adm. direta e indireta; autarquias, fundações, EP, SEM, paraestatais","OAB no contexto do Adm. (ADI 3.026: não é autarquia)","Princípios: LIMPE (legalidade, impessoalidade, moralidade, publicidade, eficiência)","Princípios implícitos: proporcionalidade, razoabilidade, segurança jurídica, autotutela","Poderes da Administração: vinculado, discricionário, regulamentar, hierárquico, polícia"] },
-    { nome:"Direito Civil", emoji:"📜", horas:2, cor:"champagne",
+    { nome:"Direito Civil", emoji:"📜", horas:2, cor:"champagne", arquivo_mat:"dia-15-civil",
       topicos:["Responsabilidade civil subjetiva: culpa, nexo causal, dano","Responsabilidade civil objetiva: teoria do risco; Código Civil e CC especiais","Responsabilidade por fato de terceiro; do incapaz; solidariedade","Indenização: extensão, dano moral, lucro cessante; excludentes"] }
   ],
   checklist:[

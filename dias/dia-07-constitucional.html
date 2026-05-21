@@ -1,0 +1,114 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#fdf4f7;--paper:#fff;--ink:#4a2e3a;--ink-soft:#7a5566;--ink-faded:#b08799;--rose:#e8a5c0;--rose-deep:#c87aa0;--rose-soft:#f5d4e2;--blush:#fce0eb;--champagne:#f8e1d8;--lavender:#e0c8dc;--line:#f0d4e0;--gold:#d4a888;--sage:#c8d8c0;--radius:10px;}
+  [data-theme="dark"]{--bg:#1a1318;--paper:#211a20;--ink:#f5e4ec;--ink-soft:#d4b8c8;--ink-faded:#9a7686;--rose:#e8a5c0;--rose-deep:#f0b8d0;--rose-soft:#4a2e3a;--blush:#3d2632;--champagne:#5a4248;--lavender:#5a4258;--line:#3a2832;--sage:#3a4a38;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Inter',sans-serif;font-size:.93rem;color:var(--ink);background:var(--bg);line-height:1.7;padding:2rem 2.5rem 4rem;}
+  h2{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:500;margin:2rem 0 .8rem;color:var(--ink);letter-spacing:-.01em;line-height:1.25;}h2 em{font-style:italic;color:var(--rose-deep);}h2:first-child{margin-top:0;}
+  h3{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:500;margin:1.5rem 0 .6rem;color:var(--ink);border-left:3px solid var(--rose);padding-left:.7rem;}
+  p{margin-bottom:.85rem;color:var(--ink-soft);}strong{color:var(--ink);font-weight:600;}
+  .callout{padding:1rem 1.2rem;border-radius:var(--radius);margin:1.2rem 0;}
+  .callout.atencao{background:linear-gradient(135deg,var(--blush),var(--rose-soft));border-left:4px solid var(--rose-deep);}
+  .callout.dica{background:linear-gradient(135deg,var(--champagne),#fde8d8);border-left:4px solid var(--gold);}
+  .callout.lei{background:linear-gradient(135deg,var(--lavender),#ede0ec);border-left:4px solid #b090c0;}
+  .callout-label{font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;font-weight:700;margin-bottom:.4rem;display:block;color:var(--ink);}
+  .callout p{margin:0;color:var(--ink);font-size:.88rem;}
+  table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:.85rem;}
+  th{background:var(--rose-soft);color:var(--ink);font-weight:600;padding:.6rem .8rem;text-align:left;border-bottom:2px solid var(--rose);}
+  td{padding:.55rem .8rem;border-bottom:1px solid var(--line);color:var(--ink-soft);}tr:hover td{background:var(--blush);color:var(--ink);}
+  ul,ol{padding-left:1.4rem;margin:.6rem 0;}li{margin-bottom:.35rem;color:var(--ink-soft);}li strong{color:var(--ink);}
+  .badge{display:inline-block;background:var(--rose-soft);color:var(--rose-deep);font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:.2rem .6rem;border-radius:20px;margin-right:.4rem;}
+  .badge.lei{background:var(--lavender);color:#7040a0;}.badge.cai{background:var(--champagne);color:#8a5030;}
+  .materia-header{display:flex;align-items:center;gap:.8rem;padding:1rem 1.2rem;border-radius:var(--radius);margin:0 0 1.2rem;font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:500;}
+  .materia-header.proc-penal{background:linear-gradient(135deg,#e8f0e0,var(--sage));}
+  .materia-header.trabalho,.materia-header.proc-trabalho,.materia-header.civil,.materia-header.tributario{background:linear-gradient(135deg,var(--champagne),#fde8d8);}
+  .materia-header.etica,.materia-header.penal{background:linear-gradient(135deg,var(--blush),var(--rose-soft));}
+  .materia-header.const,.materia-header.constitucional,.materia-header.administrativo{background:linear-gradient(135deg,var(--lavender),#ede0ec);}
+  .materia-header .emoji{font-size:1.4rem;}.materia-header .tempo{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faded);margin-left:auto;font-family:'Inter',sans-serif;}
+  .incidencia{font-size:.7rem;color:var(--rose-deep);font-weight:600;background:var(--rose-soft);padding:.2rem .5rem;border-radius:4px;}
+  mark{background:var(--blush);color:var(--ink);border-radius:3px;padding:0 2px;}mark.lei{background:var(--lavender);}mark.aten{background:#ffe4c0;}
+</style>
+</head>
+<body>
+<div class="materia-header const" style="margin-top:3rem">
+  <span class="emoji">🏛️</span>
+  <span>Direito Constitucional</span>
+  <span class="incidencia">65% provas</span>
+  <span class="tempo">⏱ 2h</span>
+</div>
+
+<h2>I. Repartição de Competências <em>(arts. 21-30 CF)</em></h2>
+
+<p>O <strong>federalismo</strong> brasileiro é centrífugo — a distribuição de poderes parte da União para os entes. A repartição de competências é o mecanismo para evitar conflitos.</p>
+
+<h3>Quadro-resumo das Competências</h3>
+<table>
+  <tr><th>Art.</th><th>Tipo</th><th>Titular</th><th>Delegável?</th></tr>
+  <tr><td>21</td><td>Administrativa exclusiva</td><td>União</td><td>Não</td></tr>
+  <tr><td>22</td><td>Legislativa privativa</td><td>União</td><td>Sim — por LC</td></tr>
+  <tr><td>23</td><td>Administrativa comum</td><td>U + E + DF + M</td><td>—</td></tr>
+  <tr><td>24</td><td>Legislativa concorrente</td><td>U (normas gerais) + E/DF</td><td>—</td></tr>
+  <tr><td>25, §1º</td><td>Residual/Remanescente</td><td>Estados</td><td>—</td></tr>
+  <tr><td>30</td><td>Peculiar local</td><td>Municípios</td><td>—</td></tr>
+</table>
+
+<div class="callout dica">
+  <span class="callout-label">✦ Competência concorrente — conflito de normas</span>
+  <p>Na competência <strong>concorrente</strong> (art. 24): a União legisla sobre normas gerais; Estados/DF, sobre normas específicas. Se a União NÃO legislar, o Estado tem <em>competência plena</em>. Se a União legislar depois, a lei estadual é suspensa naquilo que conflitar — mas <strong>não é revogada</strong> (pode ser reativada se a lei federal for revogada).</p>
+</div>
+
+<h2>II. Intervenção Federal <em>(arts. 34-36 CF)</em></h2>
+
+<h3>Hipóteses de Intervenção (art. 34)</h3>
+<ul>
+  <li>Manter a integridade nacional</li>
+  <li>Repelir invasão estrangeira ou de uma unidade da Federação em outra</li>
+  <li>Pôr termo a grave comprometimento da ordem pública</li>
+  <li>Garantir o livre exercício de qualquer dos Poderes nas unidades da Federação</li>
+  <li>Reorganizar as finanças da unidade que suspender o pagamento da dívida fundada por mais de 2 anos consecutivos</li>
+  <li>Prover a execução de lei federal, ordem ou decisão judicial</li>
+  <li>Assegurar a observância dos chamados <strong>princípios constitucionais sensíveis</strong> (art. 34, VII)</li>
+</ul>
+
+<div class="callout lei">
+  <span class="callout-label">📜 Princípios Constitucionais Sensíveis — art. 34, VII</span>
+  <p>Forma republicana; sistema representativo; regime democrático; direitos da pessoa humana; autonomia municipal; prestação de contas da Administração Pública direta e indireta; aplicação do mínimo exigido da receita resultante de impostos estaduais em educação e saúde. Violação → ADI Interventiva.</p>
+</div>
+
+<h3>Procedimento da Intervenção Federal</h3>
+<table>
+  <tr><th>Iniciativa</th><th>Quem decreta</th><th>Controle</th></tr>
+  <tr><td>De ofício</td><td>Presidente da República</td><td>Congresso Nacional (apreciação em 24h)</td></tr>
+  <tr><td>Solicitação do Poder Executivo ou Legislativo estadual coato</td><td>Presidente</td><td>Congresso</td></tr>
+  <tr><td>Requisição do STF, STJ ou TSE</td><td>Presidente</td><td>Controle judicial prévio — CN apenas toma conhecimento</td></tr>
+  <tr><td>ADI Interventiva (PGR) provida pelo STF</td><td>Presidente</td><td>Controle judicial prévio</td></tr>
+</table>
+
+<h2>III. Estado de Defesa e Estado de Sítio</h2>
+
+<table>
+  <tr><th>Aspecto</th><th>Estado de Defesa (art. 136)</th><th>Estado de Sítio (art. 137)</th></tr>
+  <tr><td>Área</td><td>Locais restritos e determinados</td><td>Todo o território nacional</td></tr>
+  <tr><td>Prazo</td><td>Máx. 30 dias · prorrogável 1x por mais 30</td><td>Máx. 30 dias por decreto; sem limite de prorrogações</td></tr>
+  <tr><td>Autorização</td><td>CN aprova após (a posteriori)</td><td>CN autoriza antes (a priori)</td></tr>
+  <tr><td>Vigência durante recesso</td><td>CN convoca-se extraordinariamente</td><td>CN reúne-se automaticamente</td></tr>
+</table>
+
+<div class="callout atencao">
+  <span class="callout-label">⚠ Não confunda: defesa vs. sítio</span>
+  <p><strong>Estado de defesa</strong> = o presidente <em>decreta</em> e depois pede aprovação. <strong>Estado de sítio</strong> = o presidente <em>solicita</em> autorização ao CN antes de decretar. Inversão é pegadinha recorrente no OAB.</p>
+</div>
+<script>
+  const pt = window.parent && window.parent.document.documentElement.getAttribute('data-theme');
+  if (pt) document.documentElement.setAttribute('data-theme', pt);
+  window.addEventListener('message', e => {
+    if (e.data && e.data.type === 'set-theme') document.documentElement.setAttribute('data-theme', e.data.theme);
+  });
+</script>
+</body>
+</html>

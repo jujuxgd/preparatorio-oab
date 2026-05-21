@@ -1,0 +1,100 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#fdf4f7;--paper:#fff;--ink:#4a2e3a;--ink-soft:#7a5566;--ink-faded:#b08799;--rose:#e8a5c0;--rose-deep:#c87aa0;--rose-soft:#f5d4e2;--blush:#fce0eb;--champagne:#f8e1d8;--lavender:#e0c8dc;--line:#f0d4e0;--gold:#d4a888;--sage:#c8d8c0;--radius:10px;}
+  [data-theme="dark"]{--bg:#1a1318;--paper:#211a20;--ink:#f5e4ec;--ink-soft:#d4b8c8;--ink-faded:#9a7686;--rose:#e8a5c0;--rose-deep:#f0b8d0;--rose-soft:#4a2e3a;--blush:#3d2632;--champagne:#5a4248;--lavender:#5a4258;--line:#3a2832;--sage:#3a4a38;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Inter',sans-serif;font-size:.93rem;color:var(--ink);background:var(--bg);line-height:1.7;padding:2rem 2.5rem 4rem;}
+  h2{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:500;margin:2rem 0 .8rem;color:var(--ink);letter-spacing:-.01em;line-height:1.25;}h2 em{font-style:italic;color:var(--rose-deep);}h2:first-child{margin-top:0;}
+  h3{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:500;margin:1.5rem 0 .6rem;color:var(--ink);border-left:3px solid var(--rose);padding-left:.7rem;}
+  p{margin-bottom:.85rem;color:var(--ink-soft);}strong{color:var(--ink);font-weight:600;}
+  .callout{padding:1rem 1.2rem;border-radius:var(--radius);margin:1.2rem 0;}
+  .callout.atencao{background:linear-gradient(135deg,var(--blush),var(--rose-soft));border-left:4px solid var(--rose-deep);}
+  .callout.dica{background:linear-gradient(135deg,var(--champagne),#fde8d8);border-left:4px solid var(--gold);}
+  .callout.lei{background:linear-gradient(135deg,var(--lavender),#ede0ec);border-left:4px solid #b090c0;}
+  .callout-label{font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;font-weight:700;margin-bottom:.4rem;display:block;color:var(--ink);}
+  .callout p{margin:0;color:var(--ink);font-size:.88rem;}
+  table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:.85rem;}
+  th{background:var(--rose-soft);color:var(--ink);font-weight:600;padding:.6rem .8rem;text-align:left;border-bottom:2px solid var(--rose);}
+  td{padding:.55rem .8rem;border-bottom:1px solid var(--line);color:var(--ink-soft);}tr:hover td{background:var(--blush);color:var(--ink);}
+  ul,ol{padding-left:1.4rem;margin:.6rem 0;}li{margin-bottom:.35rem;color:var(--ink-soft);}li strong{color:var(--ink);}
+  .badge{display:inline-block;background:var(--rose-soft);color:var(--rose-deep);font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:.2rem .6rem;border-radius:20px;margin-right:.4rem;}
+  .badge.lei{background:var(--lavender);color:#7040a0;}.badge.cai{background:var(--champagne);color:#8a5030;}
+  .materia-header{display:flex;align-items:center;gap:.8rem;padding:1rem 1.2rem;border-radius:var(--radius);margin:0 0 1.2rem;font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:500;}
+  .materia-header.proc-penal{background:linear-gradient(135deg,#e8f0e0,var(--sage));}
+  .materia-header.trabalho,.materia-header.proc-trabalho,.materia-header.civil,.materia-header.tributario{background:linear-gradient(135deg,var(--champagne),#fde8d8);}
+  .materia-header.etica,.materia-header.penal{background:linear-gradient(135deg,var(--blush),var(--rose-soft));}
+  .materia-header.const,.materia-header.constitucional,.materia-header.administrativo{background:linear-gradient(135deg,var(--lavender),#ede0ec);}
+  .materia-header .emoji{font-size:1.4rem;}.materia-header .tempo{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faded);margin-left:auto;font-family:'Inter',sans-serif;}
+  .incidencia{font-size:.7rem;color:var(--rose-deep);font-weight:600;background:var(--rose-soft);padding:.2rem .5rem;border-radius:4px;}
+  mark{background:var(--blush);color:var(--ink);border-radius:3px;padding:0 2px;}mark.lei{background:var(--lavender);}mark.aten{background:#ffe4c0;}
+</style>
+</head>
+<body>
+<div class="materia-header penal" style="margin-top:3rem">
+  <span class="emoji">⚔️</span>
+  <span>Direito Penal — Aplicação da Pena (Dosimetria)</span>
+  <span class="incidencia">66% provas</span>
+  <span class="tempo">⏱ 2h</span>
+</div>
+
+<h2>I. Dosimetria <em>— Sistema Trifásico (art. 68 CP)</em></h2>
+
+<div class="callout lei">
+  <span class="callout-label">📜 Art. 68 CP — 3 fases obrigatórias</span>
+  <p><strong>1ª fase:</strong> pena-base (circunstâncias judiciais — art. 59). <strong>2ª fase:</strong> agravantes e atenuantes. <strong>3ª fase:</strong> causas de aumento e diminuição. O juiz deve percorrer as 3 fases na ordem correta e fundamentar cada etapa.</p>
+</div>
+
+<h3>1ª Fase — Circunstâncias Judiciais (art. 59 CP)</h3>
+<p>O juiz fixa a pena-base considerando:</p>
+<ul>
+  <li><strong>C</strong>ulpabilidade · <strong>A</strong>ntecedentes · <strong>C</strong>onduta social · <strong>P</strong>ersonalidade do agente</li>
+  <li><strong>M</strong>otivos · <strong>C</strong>ircunstâncias · <strong>C</strong>onsequências · <strong>C</strong>omportamento da vítima</li>
+</ul>
+<p>Mnemônico: <mark>CACCM + CCC</mark> (ou "Culpa Ante, Conduta, Pessoa, Motivo, Circunstância, Consequência, Comportamento")</p>
+
+<h3>2ª Fase — Agravantes e Atenuantes</h3>
+<table>
+  <tr><th>Agravantes (art. 61)</th><th>Atenuantes (art. 65)</th></tr>
+  <tr><td>Reincidência · motivo fútil/torpe · uso de veneno/traição/emboscada · contra criança/idoso/deficiente</td><td>Menoridade (18-21) · senilidade (70+) · desconhecimento da lei · confissão espontânea · motivo relevante</td></tr>
+</table>
+
+<div class="callout dica">
+  <span class="callout-label">✦ Limite das agravantes e atenuantes</span>
+  <p>As agravantes e atenuantes <strong>não podem</strong> levar a pena além do máximo ou abaixo do mínimo cominado. Exceção: a <strong>menoridade</strong> e a <strong>confissão</strong> sempre reduzem, mesmo abaixo do mínimo (art. 65 CP, interpretação do STJ).</p>
+</div>
+
+<h3>3ª Fase — Causas de Aumento e Diminuição</h3>
+<ul>
+  <li>Podem ultrapassar os limites do tipo (acima do máximo ou abaixo do mínimo)</li>
+  <li>Previstas na Parte Geral ou Especial do CP</li>
+  <li>Exemplos: tentativa (1/3 a 2/3 de redução); crime continuado (1/6 a 2/3 de aumento)</li>
+</ul>
+
+<h2>II. Regime Inicial de Cumprimento da Pena</h2>
+
+<table>
+  <tr><th>Regime</th><th>Critério</th><th>Reincidente?</th></tr>
+  <tr><td><strong>Fechado</strong></td><td>Pena > 8 anos; pena > 4 anos se reincidente</td><td>Fechado obrigatório</td></tr>
+  <tr><td><strong>Semiaberto</strong></td><td>Pena > 4 anos e ≤ 8 anos; não reincidente</td><td>Reincidente: fechado</td></tr>
+  <tr><td><strong>Aberto</strong></td><td>Pena ≤ 4 anos; não reincidente</td><td>Reincidente: semiaberto ou fechado</td></tr>
+</table>
+
+<h2>III. Penas Restritivas de Direito</h2>
+<ul>
+  <li>Substituem a privativa de liberdade quando: crime doloso com pena até 4 anos ou crime culposo (qualquer pena); réu não reincidente em crime doloso; circunstâncias favoráveis</li>
+  <li>Espécies: prestação de serviços à comunidade · limitação de fim de semana · interdição temporária de direitos · prestação pecuniária · perda de bens e valores</li>
+</ul>
+<script>
+  const pt = window.parent && window.parent.document.documentElement.getAttribute('data-theme');
+  if (pt) document.documentElement.setAttribute('data-theme', pt);
+  window.addEventListener('message', e => {
+    if (e.data && e.data.type === 'set-theme') document.documentElement.setAttribute('data-theme', e.data.theme);
+  });
+</script>
+</body>
+</html>
