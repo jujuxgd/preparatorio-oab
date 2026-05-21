@@ -763,11 +763,24 @@ body.focus-mode .focus-bottombar {
 
 body.focus-mode .content-layout { grid-template-columns: 1fr; }
 
-body.focus-mode #teoria-frame {
-  height: calc(100vh - 260px) !important;
+/* Área scrollável entre barras do modo foco */
+body.focus-mode .tabs-bar,
+body.focus-mode .content-layout {
+  flex-shrink: 0;
 }
 
 body.focus-mode .tabs-bar { margin-bottom: 0.8rem; }
+
+body.focus-mode #subject-panels,
+body.focus-mode .content-layout {
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+}
+
+body.focus-mode #teoria-frame {
+  height: calc(100vh - 260px) !important;
+}
 
 /* Botão sair do foco — global para todas as páginas */
 .focus-exit {

@@ -1063,66 +1063,11 @@ document.querySelectorAll('.tab').forEach(tab => {
     document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
     tab.classList.add('active');
     document.querySelector(`.tab-content[data-tab="${target}"]`).classList.add('active');
+    if (target === 'questoes') _buildQForm();
   });
 });
 
-// ── Alternativas (selecção visual) ───────────
-document.querySelectorAll('.alternativa').forEach(alt => {
-  alt.addEventListener('click', () => {
-    const questao = alt.closest('.questao');
-    if (questao && questao.dataset.respondida) return;
-    questao.querySelectorAll('.alternativa').forEach(a => a.classList.remove('selected'));
-    alt.classList.add('selected');
-  });
-});
-
-// ── Confirmar resposta ── cores amarelo/verde ─
-function confirmarResposta(btn) {
-  const questao   = btn.closest('.questao');
-  if (questao.dataset.respondida) return;
-  const gabarito  = questao.dataset.gabarito;
-  const selected  = questao.querySelector('.alternativa.selected');
-  if (!selected) { selected?.classList.add('selected'); return; }
-
-  questao.dataset.respondida = '1';
-  const chose  = selected.dataset.letra;
-  const acertou = chose === gabarito;
-
-  // Marca a escolhida
-  selected.classList.remove('selected');
-  selected.classList.add(acertou ? 'correct-reveal' : 'selected-wrong');
-
-  // Se errou, mostra a certa em verde
-  if (!acertou) {
-    const certa = questao.querySelector(`.alternativa[data-letra="${gabarito}"]`);
-    if (certa) setTimeout(() => certa.classList.add('correct-reveal'), 300);
-  }
-
-  // Mostra gabarito
-  const gab = questao.querySelector('.gabarito');
-  if (gab) setTimeout(() => gab.classList.add('show'), acertou ? 200 : 600);
-
-  // Desabilita botão confirmar
-  btn.disabled = true;
-  btn.textContent = acertou ? '✓ Correcto!' : '✗ Errei';
-  btn.style.background = acertou ? '#5a9850' : '#c05050';
-  btn.style.borderColor = 'transparent';
-  btn.style.color = '#fff';
-}
-
-function pularQuestao(btn) {
-  const q = btn.closest('.questao');
-  const next = q.nextElementSibling;
-  if (next && next.classList.contains('questao')) next.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-function marcarRevisar(btn) {
-  const q = btn.closest('.questao');
-  const head = q.querySelector('.questao-head');
-  if (head) head.style.borderBottom = '2px solid var(--rose-deep)';
-  btn.textContent = '⚑ Marcado';
-  btn.style.color = 'var(--rose-deep)';
-}
+// Questões via QConcursos — registo na aba Questões
 
 // ── Painéis de matéria: toggle colapso ───────
 function togglePanel(idx) {
@@ -1370,6 +1315,108 @@ function handleImport(event) {
     .catch(() => alert('Erro ao importar. Verifique o arquivo.'));
 }
 
+// ── Questões diárias ─────────────────────────
+function _diaCorrente() {
+  const p = new URLSearchParams(window.location.search).get('dia');
+  const s = localStorage.getItem('oab_current_day');
+  const r = p ? parseInt(p) : (s ? parseInt(s) : getStudyDay());
+  return r <= 0 ? 1 : Math.min(r, 60);
+}
+
+function _buildQForm() {
+  const dia     = _diaCorrente();
+  const dados   = getDadosDia(dia);
+  const cont    = document.getElementById('questoes-form-container');
+  if (!cont || !dados) return;
+  const prog    = carregarProgresso();
+  const saved   = (prog.questoes_dia && prog.questoes_dia[String(dia)]) || {};
+  const header  = `<div style="display:grid;grid-template-columns:1fr 70px 70px 54px;gap:0.5rem;align-items:center;padding:0.4rem 0;border-bottom:1px solid var(--line);margin-bottom:0.4rem;font-size:0.7rem;font-weight:600;color:var(--ink-faded);letter-spacing:0.1em">
+    <span>MATÉRIA</span><span style="text-align:center">TOTAL</span><span style="text-align:center">ACERTOS</span><span style="text-align:center">%</span></div>`;
+  const rows = dados.materias.map(m => {
+    const mid  = typeof getMateriaId==='function' ? getMateriaId(m.nome) : m.nome;
+    const sv   = saved[mid] || {};
+    const acc  = sv.total > 0 ? Math.round((sv.acertos/sv.total)*100) : null;
+    const col  = acc===null ? 'var(--ink-faded)' : acc>=70 ? '#3a8030' : '#b04030';
+    const bg   = acc===null ? 'var(--bg-soft)' : acc>=70 ? 'rgba(100,180,80,.15)' : 'rgba(200,100,80,.12)';
+    return `<div class="questao-reg" data-mid="${mid}">
+      <div class="mat-label"><span>${m.emoji||'📖'}</span> ${m.nome.replace('Direito ','').replace('Processual ','Proc. ')}</div>
+      <input type="number" min="0" max="999" placeholder="0" value="${sv.total||''}" id="qt-${mid}" oninput="updateAcc('${mid}')" style="width:100%;text-align:center;padding:0.4rem;border-radius:6px;border:1px solid var(--line);font-size:0.9rem;background:var(--paper);color:var(--ink)">
+      <input type="number" min="0" max="999" placeholder="0" value="${sv.acertos||''}" id="qa-${mid}" oninput="updateAcc('${mid}')" style="width:100%;text-align:center;padding:0.4rem;border-radius:6px;border:1px solid var(--line);font-size:0.9rem;background:var(--paper);color:var(--ink)">
+      <div class="acc-pill" id="qp-${mid}" style="background:${bg};color:${col}">${acc!==null ? acc+'%' : '—'}</div>
+    </div>`;
+  }).join('');
+  cont.innerHTML = header + rows;
+  _buildQResumo(dia);
+}
+
+function updateAcc(mid) {
+  const t = parseInt(document.getElementById(`qt-${mid}`)?.value)||0;
+  const a = parseInt(document.getElementById(`qa-${mid}`)?.value)||0;
+  const p = document.getElementById(`qp-${mid}`); if(!p) return;
+  if (t > 0) {
+    const pct = Math.round(Math.min(a,t)/t*100);
+    p.textContent = pct+'%';
+    p.style.background = pct>=70?'rgba(100,180,80,.15)':'rgba(200,100,80,.12)';
+    p.style.color       = pct>=70?'#3a8030':'#b04030';
+  } else { p.textContent='—'; p.style.background='var(--bg-soft)'; p.style.color='var(--ink-faded)'; }
+}
+
+function salvarQuestoesDia() {
+  const dia   = _diaCorrente();
+  const dados = getDadosDia(dia); if (!dados) return;
+  const prog  = carregarProgresso();
+  if (!prog.questoes)     prog.questoes     = {};
+  if (!prog.questoes_dia) prog.questoes_dia = {};
+
+  // Subtrai contribuição anterior do dia (evita duplicação ao guardar várias vezes)
+  const old = prog.questoes_dia[String(dia)] || {};
+  Object.entries(old).forEach(([mid, v]) => {
+    if (prog.questoes[mid]) {
+      prog.questoes[mid].total   = Math.max(0, (prog.questoes[mid].total   || 0) - (v.total   || 0));
+      prog.questoes[mid].acertos = Math.max(0, (prog.questoes[mid].acertos || 0) - (v.acertos || 0));
+    }
+  });
+
+  const newDay = {};
+  dados.materias.forEach(m => {
+    const mid = typeof getMateriaId==='function' ? getMateriaId(m.nome) : m.nome;
+    const t = parseInt(document.getElementById(`qt-${mid}`)?.value) || 0;
+    const a = Math.min(parseInt(document.getElementById(`qa-${mid}`)?.value) || 0, t);
+    if (t > 0) {
+      newDay[mid] = { total: t, acertos: a };
+      if (!prog.questoes[mid]) prog.questoes[mid] = { total: 0, acertos: 0, registros: [] };
+      prog.questoes[mid].total   += t;
+      prog.questoes[mid].acertos += a;
+      if (!prog.questoes[mid].registros) prog.questoes[mid].registros = [];
+      prog.questoes[mid].registros.push({ data: new Date().toISOString().split('T')[0], total: t, acertos: a, dia });
+    }
+  });
+  prog.questoes_dia[String(dia)] = newDay;
+  salvarProgresso(prog);
+  _buildQResumo(dia);
+  const btn = document.querySelector('[onclick="salvarQuestoesDia()"]');
+  if (btn) { btn.textContent='✓ Guardado!'; setTimeout(()=>btn.textContent='Guardar registo',2000); }
+  atualizarBadgeRevisar();
+}
+
+function _buildQResumo(dia) {
+  const prog = carregarProgresso();
+  const q    = (prog.questoes_dia && prog.questoes_dia[String(dia)]) || {};
+  const tot  = Object.values(q).reduce((s,v)=>s+(v.total||0),0);
+  const ace  = Object.values(q).reduce((s,v)=>s+(v.acertos||0),0);
+  const res  = document.getElementById('questoes-resumo-dia'); if(!res) return;
+  if (tot > 0) {
+    const pct = Math.round((ace/tot)*100);
+    const cor = pct>=70?'#3a8030':pct>=50?'#8a6020':'#b04030';
+    res.innerHTML = `<div class="q-resumo-card" style="margin-top:0.8rem">
+      <div><strong style="color:var(--rose-deep)">${tot}</strong><br><span>questões hoje</span></div>
+      <div><strong style="color:#3a8030">${ace}</strong><br><span>acertos</span></div>
+      <div><strong style="color:${cor}">${pct}%</strong><br><span>aproveitamento</span></div>
+      ${pct>=70?'<div>✦ <span style="color:#3a8030">Bom resultado!</span></div>':pct>=50?'<div>📖 <span>Pode melhorar</span></div>':'<div>⚑ <span style="color:#b04030">Rever conteúdo</span></div>'}
+    </div>`;
+  } else { res.innerHTML=''; }
+}
+
 // ── Comentários do dia ───────────────────────
 function _diaAtual() {
   const r = getStudyDay(); return r <= 0 ? 1 : Math.min(r, 60);
@@ -1436,26 +1483,78 @@ document.getElementById('comment-input')?.addEventListener('keydown', e => {
   if (e.key === 'Enter' && e.ctrlKey) adicionarComentario();
 });
 
-// ── Pomodoro ──────────────────────────────────
-let pomoSeconds = 25 * 60;
-let pomoRunning = true;
-const pomoInterval = setInterval(() => {
-  if (!pomoRunning) return;
-  if (pomoSeconds > 0) pomoSeconds--;
-  const m = Math.floor(pomoSeconds / 60).toString().padStart(2, '0');
-  const s = (pomoSeconds % 60).toString().padStart(2, '0');
-  const el = document.getElementById('pomo-time');
-  if (el) el.textContent = `${m}:${s}`;
-  if (pomoSeconds === 0) { pomoRunning = false; }
-}, 1000);
+// ── Pomodoro — máquina de estados completa ────
+const POMO = {
+  WORK: 25*60, SHORT: 5*60, LONG: 15*60,
+  mode: 'work', secs: 25*60,
+  running: false, cycle: 1, done: 0, timer: null
+};
 
-document.querySelector('.pomodoro-controls .btn')?.addEventListener('click', function() {
-  pomoRunning = !pomoRunning;
-  this.textContent = pomoRunning ? 'Pausar' : 'Iniciar';
-});
-document.querySelector('.pomodoro-controls .btn-ghost')?.addEventListener('click', () => {
-  pomoSeconds = 25 * 60; pomoRunning = true;
-});
+function _pomoUI() {
+  const m = String(Math.floor(POMO.secs/60)).padStart(2,'0');
+  const s = String(POMO.secs%60).padStart(2,'0');
+  const timeEl    = document.getElementById('pomo-time');
+  const modeEl    = document.getElementById('pomo-mode');
+  const statusEl  = document.getElementById('pomo-status');
+  const toggleBtn = document.getElementById('pomo-toggle');
+  if (timeEl)   timeEl.textContent   = `${m}:${s}`;
+  if (modeEl)   modeEl.textContent   = POMO.mode==='work' ? '🎯 Foco' : POMO.mode==='short' ? '☕ Pausa 5min' : '🌸 Descanso 15min';
+  if (statusEl) statusEl.textContent = `ciclo ${POMO.cycle} de 4`;
+  if (toggleBtn) toggleBtn.textContent = POMO.running ? '⏸ Pausar'
+    : (POMO.secs < (POMO.mode==='work'?POMO.WORK:POMO.mode==='short'?POMO.SHORT:POMO.LONG) ? '▶ Continuar' : '▶ Iniciar');
+  const w = document.getElementById('pomodoro-widget');
+  if (w) w.className = 'pomodoro' + (POMO.mode==='short' ? ' break-mode' : POMO.mode==='long' ? ' long-break-mode' : '');
+  document.querySelectorAll('.cycle-dot').forEach((d,i) => {
+    d.classList.toggle('filled', i < POMO.done % 4);
+    d.classList.toggle('active', i === POMO.done % 4 && POMO.mode === 'work');
+  });
+}
+
+function _pomoNext() {
+  if (POMO.mode === 'work') {
+    POMO.done++;
+    POMO.cycle = (POMO.done % 4) + 1;
+    POMO.mode  = POMO.done % 4 === 0 ? 'long' : 'short';
+    POMO.secs  = POMO.mode === 'long' ? POMO.LONG : POMO.SHORT;
+  } else {
+    POMO.mode = 'work';
+    POMO.secs = POMO.WORK;
+  }
+  _pomoUI();
+}
+
+function pomoToggle() {
+  POMO.running = !POMO.running;
+  if (POMO.running) {
+    POMO.timer = setInterval(() => {
+      if (!POMO.running) return;
+      if (POMO.secs > 0) { POMO.secs--; _pomoUI(); }
+      else {
+        clearInterval(POMO.timer); POMO.running = false;
+        const isFoco = POMO.mode === 'work';
+        const msg = isFoco ? `✦ Foco concluído! Hora de pausar.` : `Pausa concluída! Vamos focar.`;
+        _pomoNext();
+        setTimeout(() => { if (confirm(msg + '\n\nIniciar próxima fase?')) pomoToggle(); }, 200);
+      }
+    }, 1000);
+  } else {
+    clearInterval(POMO.timer);
+  }
+  _pomoUI();
+}
+
+function pomoReset() {
+  clearInterval(POMO.timer); POMO.running = false;
+  POMO.secs = POMO.mode==='work' ? POMO.WORK : POMO.mode==='short' ? POMO.SHORT : POMO.LONG;
+  _pomoUI();
+}
+
+function pomoSkip() {
+  clearInterval(POMO.timer); POMO.running = false;
+  _pomoNext();
+}
+
+_pomoUI();
 </script>
 </body>
 </html>

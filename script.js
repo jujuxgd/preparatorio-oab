@@ -98,32 +98,20 @@ function atualizarBadgeRevisar() {
   let count = 0;
   try {
     if (typeof carregarProgresso === 'function') {
-      const prog = carregarProgresso();
-      const today = getCurrentDate();
-      const INTERVALS = [1, 7, 15, 30];
-      Object.entries(prog.dias || {}).forEach(([dStr, d]) => {
-        if (!d.concluido) return;
-        if (d.nota && d.nota.trim()) {
-          // Tem resumo → conta como card de revisão
-          count++;
-        }
-        // Itens marcados para revisar individualmente
-        if (d.revisar && d.revisar.length) count += d.revisar.length;
+      const prog  = carregarProgresso();
+      const hoje  = new Date();
+      const IVLS  = [1, 7, 15, 30];
+      Object.entries(prog.dias || {}).forEach(([, d]) => {
+        if (!d.concluido || !d.data_conclusao) return;
+        const diff = Math.round((hoje - new Date(d.data_conclusao)) / 864e5);
+        // Conta como card de revisão se está dentro de uma janela de intervalo
+        if (IVLS.some(iv => diff >= iv && diff < iv + 3)) count++;
       });
-      // Questões marcadas para revisar via localStorage
-      for (let i = 0; i < localStorage.length; i++) {
-        const k = localStorage.key(i);
-        if (k && k.startsWith('oab_revisar_q_')) count++;
-      }
     }
   } catch(e) {}
   badges.forEach(b => {
-    if (count > 0) {
-      b.textContent = count;
-      b.style.display = '';
-    } else {
-      b.style.display = 'none';
-    }
+    if (count > 0) { b.textContent = count; b.style.display = ''; }
+    else b.style.display = 'none';
   });
 }
 
