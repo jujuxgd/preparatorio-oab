@@ -174,7 +174,7 @@
     <a href="index.html" class="nav-link"><span class="icon">✦</span><span>Início</span></a>
     <a href="hoje.html" class="nav-link"><span class="icon">◐</span><span>Hoje</span></a>
     <a href="calendario.html" class="nav-link"><span class="icon">☷</span><span>Calendário</span></a>
-    <a href="revisar.html" class="nav-link"><span class="icon">↻</span><span>Revisar</span><span class="badge">3</span></a>
+    <a href="revisar.html" class="nav-link"><span class="icon">↻</span><span>Revisar</span><span class="badge" style="display:none">0</span></a>
     <div class="nav-section-label">Estudo</div>
     <a href="materias.html" class="nav-link"><span class="icon">❖</span><span>Matérias</span></a>
     <a href="questoes.html" class="nav-link"><span class="icon">◎</span><span>Questões</span></a>
@@ -206,9 +206,17 @@
       </div>
       <div class="topbar-actions">
         <div class="streak-pill">
-          <span class="flame">🌸</span><span class="count">12</span><span class="label">dias</span>
+          <span class="flame">🌸</span><span class="count">0</span><span class="label">dias</span>
         </div>
       </div>
+    </div>
+
+    <!-- Súmula do Dia -->
+    <div id="sumula-dia-banner" style="display:none;background:linear-gradient(135deg,var(--lavender) 0%,var(--rose-soft) 100%);border-radius:var(--radius);padding:1.6rem 2rem;margin-bottom:1.8rem;position:relative;overflow:hidden;box-shadow:var(--shadow-sm)">
+      <div style="position:absolute;top:1rem;right:1.5rem;font-family:'Playfair Display',serif;font-size:3rem;color:rgba(200,100,120,0.15);font-style:italic;line-height:1">§</div>
+      <div style="font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink-faded);margin-bottom:0.5rem">Súmula do Dia · <span id="sumdia-label">—</span></div>
+      <div style="font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:500;color:var(--rose-deep);margin-bottom:0.5rem" id="sumdia-sigla">—</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;line-height:1.5;color:var(--ink)" id="sumdia-texto">—</div>
     </div>
 
     <input type="text" class="search-box" placeholder="Buscar súmula por número, tema ou conteúdo...">
@@ -305,13 +313,42 @@
   </main>
 </div>
 
+<script src="plano-oab.js"></script>
+<script src="progresso.js"></script>
 <script src="script.js"></script>
 <script>
-document.querySelectorAll('.chip').forEach(c => {
-  c.addEventListener('click', (e) => {
-    const siblings = e.target.parentElement.querySelectorAll('.chip');
-    siblings.forEach(x => x.classList.remove('active'));
-    c.classList.add('active');
+document.addEventListener('DOMContentLoaded', () => {
+  // Súmula do Dia
+  if (typeof getDadosDia === 'function' && typeof getStudyDay === 'function') {
+    const rawDay = getStudyDay();
+    const dia = rawDay <= 0 ? 1 : Math.min(rawDay, 60);
+    const dados = getDadosDia(dia);
+    if (dados && dados.sumula) {
+      const banner  = document.getElementById('sumula-dia-banner');
+      const label   = document.getElementById('sumdia-label');
+      const siglaEl = document.getElementById('sumdia-sigla');
+      const textoEl = document.getElementById('sumdia-texto');
+      if (banner)  banner.style.display  = 'block';
+      if (label)   label.textContent     = `Dia ${dia} · ${dados.materias.map(m => m.nome.replace('Direito ','')).join(' + ')}`;
+      if (siglaEl) siglaEl.textContent   = dados.sumula.sigla;
+      if (textoEl) textoEl.textContent   = dados.sumula.texto;
+    }
+  }
+
+  // Streak
+  if (typeof carregarProgresso === 'function') {
+    const p = carregarProgresso();
+    const streakEl = document.querySelector('.streak-pill .count');
+    if (streakEl) streakEl.textContent = p.streak || 0;
+  }
+
+  // Filtros de chip
+  document.querySelectorAll('.chip').forEach(c => {
+    c.addEventListener('click', (e) => {
+      const siblings = e.target.parentElement.querySelectorAll('.chip');
+      siblings.forEach(x => x.classList.remove('active'));
+      c.classList.add('active');
+    });
   });
 });
 </script>

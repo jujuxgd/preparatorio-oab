@@ -531,9 +531,9 @@
       <div class="hero-content">
         <div>
           <h2 id="hero-title">Hoje: <em id="hero-materias">—</em></h2>
-          <p class="quote">
+          <p class="quote" id="hero-quote">
             "A advocacia não é profissão de covardes. Quem tem medo de perder a banca, de cair do cartaz, de comprometer o sucesso, que se faça funcionário, guarda-livros, ou que vá vender picolés à porta das escolas."
-            <span class="quote-author">— Sobral Pinto</span>
+            <span class="quote-author" id="hero-quote-author">— Sobral Pinto</span>
           </p>
           <div class="hero-cta">
             <a href="hoje.html" class="btn btn-primary">Começar o dia →</a>
@@ -674,7 +674,41 @@
 <script src="progresso.js"></script>
 <script src="script.js"></script>
 <script>
+const QUOTES_OAB = [
+  { text: "A advocacia não é profissão de covardes. Quem tem medo de perder a banca, de cair do cartaz, de comprometer o sucesso, que se faça funcionário, guarda-livros, ou que vá vender picolés à porta das escolas.", author: "Sobral Pinto" },
+  { text: "O advogado é indispensável à administração da Justiça.", author: "Constituição Federal, art. 133" },
+  { text: "Direito é a arte do bem e do justo.", author: "Celso · Digesto, D.1.1.1" },
+  { text: "A lei é o testemunho e o sinal externo da consciência interna e da moralidade.", author: "Immanuel Kant" },
+  { text: "Não há liberdade onde não há lei. Não há lei onde não há liberdade.", author: "Rui Barbosa" },
+  { text: "Ninguém ignora tudo, ninguém sabe tudo. Por isso aprendemos sempre.", author: "Paulo Freire" },
+  { text: "Onde há sociedade, há direito. Onde há direito, há sociedade.", author: "Ulpiano — Ubi societas, ibi ius" },
+  { text: "A essência do Direito é a justiça; onde não há justiça, não há Direito.", author: "Rudolf von Ihering" },
+  { text: "A justiça é a constante e perpétua vontade de dar a cada um o que é seu.", author: "Ulpiano" },
+  { text: "Advocacia é serviço público. O advogado é agente da justiça e da paz social.", author: "EOAB, art. 2º" },
+  { text: "O sucesso é a soma de pequenos esforços repetidos dia após dia.", author: "Robert Collier" },
+  { text: "Conheça todas as teorias, domine todas as técnicas, mas ao tocar uma alma humana, seja apenas outra alma humana.", author: "Carl Jung" },
+  { text: "Nenhuma grande obra foi alcançada sem entusiasmo.", author: "Ralph Waldo Emerson" },
+  { text: "Cada questão resolvida é um passo em direção à aprovação.", author: "Preparatório OAB · Ju" },
+  { text: "Onde não existe lei, não existe liberdade.", author: "John Locke" },
+  { text: "O Direito não é apenas o conjunto das normas, mas a aspiração permanente à justiça.", author: "Miguel Reale" },
+  { text: "O juiz que não sabe interpretar a lei não sabe direito.", author: "Adágio jurídico" },
+  { text: "A toga que você vai vestir representará décadas de luta. Vale cada revisão.", author: "Preparatório OAB · Ju" },
+  { text: "Dura lex, sed lex — a lei é dura, mas é a lei.", author: "Princípio do Direito Romano" },
+  { text: "A dignidade da pessoa humana é o fundamento de todo o ordenamento jurídico.", author: "CF/88, art. 1º, III" },
+];
+
 document.addEventListener('DOMContentLoaded', () => {
+  // Citação rotativa diária
+  const quoteEl  = document.getElementById('hero-quote');
+  const authorEl = document.getElementById('hero-quote-author');
+  if (quoteEl && authorEl) {
+    const today = getCurrentDate ? getCurrentDate() : new Date();
+    const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / 864e5);
+    const q = QUOTES_OAB[dayOfYear % QUOTES_OAB.length];
+    quoteEl.childNodes[0].textContent = `"${q.text}" `;
+    authorEl.textContent = `— ${q.author}`;
+  }
+
   // Countdown para o exame
   const countdownEl = document.querySelector('[data-countdown]');
   if (countdownEl) countdownEl.textContent = getDaysUntilExam();

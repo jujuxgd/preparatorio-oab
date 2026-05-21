@@ -727,6 +727,53 @@
   box-shadow: var(--shadow-lg);
 }
 
+/* Toast de avanço de dia */
+.day-toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(0);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: 1.2rem 1.8rem;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  z-index: 9000;
+  min-width: 320px;
+  max-width: 480px;
+  animation: toastIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(30px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+.day-toast.hiding {
+  animation: toastOut 0.3s ease forwards;
+}
+
+@keyframes toastOut {
+  to { opacity: 0; transform: translateX(-50%) translateY(20px); }
+}
+
+.toast-icon { font-size: 1.8rem; flex-shrink: 0; }
+.toast-text { flex: 1; }
+.toast-text strong { display: block; font-family:'Playfair Display',serif; font-size:0.95rem; color:var(--ink); }
+.toast-text span { font-size:0.78rem; color:var(--ink-faded); }
+.toast-progress {
+  position: absolute;
+  bottom: 0; left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--rose), var(--rose-deep));
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  animation: toastTimer 5s linear forwards;
+}
+@keyframes toastTimer { from { width: 100%; } to { width: 0%; } }
+
 /* Modo foco em style.css (global) */
 
 /* Registo de questões por matéria */
@@ -1005,12 +1052,20 @@
       <div class="side">
         <div class="side-block">
           <h4>Checklist do dia <span class="icon">✓</span></h4>
-          <ul class="checklist" id="daily-checklist">
-            <!-- Preenchido dinamicamente pelo plano-oab.js -->
-          </ul>
+          <ul class="checklist" id="daily-checklist"></ul>
         </div>
 
-<div class="side-block" style="background:var(--bg-soft)">
+        <!-- Súmula do Dia -->
+        <div class="side-block" id="sumula-block" style="display:none">
+          <h4>Súmula do Dia <span class="icon">⚖</span></h4>
+          <div class="sumula-card">
+            <div class="sigla" id="sumula-sigla" style="font-size:1rem;margin-bottom:0.5rem">—</div>
+            <div class="body" id="sumula-body" style="font-size:0.88rem">—</div>
+          </div>
+          <a href="sumulas.html" style="font-size:0.7rem;color:var(--ink-faded);text-decoration:none;margin-top:0.6rem;display:block;text-align:right;letter-spacing:0.05em">Ver todas →</a>
+        </div>
+
+        <div class="side-block" style="background:var(--bg-soft)">
           <h4>Plano <span class="icon">◈</span></h4>
           <div id="progresso-pct" style="font-family:'Playfair Display',serif;font-size:2rem;color:var(--rose-deep);font-weight:500;line-height:1">0%</div>
           <div style="font-size:0.72rem;color:var(--ink-faded);margin-bottom:0.8rem">do plano concluído</div>
@@ -1127,14 +1182,21 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.textContent = '✓ Dia Concluído';
   }
 
-  // Actualiza o "Dia X de 60" no topbar com o dia carregado
   document.querySelectorAll('[data-study-day]').forEach(el => { el.textContent = dia; });
-
-  // Popula os labels das barras de modo foco
   const focusDayLabel = document.getElementById('focus-day-label');
   const focusTituloLabel = document.getElementById('focus-titulo-label');
   if (focusDayLabel) focusDayLabel.textContent = `Dia ${dia}`;
   if (focusTituloLabel && dados) focusTituloLabel.textContent = dados.titulo;
+
+  // Súmula do Dia
+  if (dados && dados.sumula) {
+    const sBlock = document.getElementById('sumula-block');
+    const sSigla = document.getElementById('sumula-sigla');
+    const sBody  = document.getElementById('sumula-body');
+    if (sBlock) sBlock.style.display = '';
+    if (sSigla) sSigla.textContent = dados.sumula.sigla;
+    if (sBody)  sBody.textContent  = dados.sumula.texto;
+  }
 
   if (dados) {
     // Topbar
@@ -1281,14 +1343,11 @@ function toggleDiaConcluido() {
     btn.textContent = '✓ Dia Concluído';
     const pctEl = document.getElementById('progresso-pct');
     if (pctEl) { const s = calcularStats(); pctEl.textContent = `${s.pct}%`; }
-    // Mostra mensagem e oferece navegar para o próximo dia
+    // Toast elegante com auto-avanço
     const nextD = getDadosDia(dia + 1);
     if (nextD) {
-      setTimeout(() => {
-        if (confirm(`✦ Dia ${dia} concluído!\n\nIr para o Dia ${dia+1}?`)) {
-          window.location.href = `hoje.html?dia=${dia+1}`;
-        }
-      }, 400);
+      showPetals();
+      _mostrarToastAvanco(dia + 1, nextD);
     }
   }
 }
@@ -1305,6 +1364,38 @@ function exportarPDF() {
 }
 
 // toggleFocusMode está em script.js (global)
+
+// ── Toast de avanço elegante ──────────────────
+function _mostrarToastAvanco(proximoDia, dadosNext) {
+  const existing = document.querySelector('.day-toast');
+  if (existing) existing.remove();
+
+  const mats = dadosNext.materias.map(m => m.nome.replace('Direito ','')).join(' + ');
+  const toast = document.createElement('div');
+  toast.className = 'day-toast';
+  toast.innerHTML = `
+    <div class="toast-icon">🌸</div>
+    <div class="toast-text">
+      <strong>Dia ${proximoDia - 1} concluído! ✦</strong>
+      <span>A seguir: Dia ${proximoDia} · ${mats}</span>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:0.4rem;flex-shrink:0">
+      <button onclick="_irProximoDia(${proximoDia})" style="background:linear-gradient(135deg,var(--rose),var(--rose-deep));color:var(--paper);border:none;border-radius:var(--radius-sm);padding:0.4rem 0.9rem;font-size:0.74rem;font-family:inherit;font-weight:600;cursor:pointer;white-space:nowrap">Ir agora →</button>
+      <button onclick="this.closest('.day-toast').remove()" style="background:transparent;border:none;color:var(--ink-faded);font-size:0.72rem;cursor:pointer;font-family:inherit">Ficar aqui</button>
+    </div>
+    <div class="toast-progress"></div>`;
+  document.body.appendChild(toast);
+
+  // Auto-avança após 5s
+  const timer = setTimeout(() => _irProximoDia(proximoDia), 5000);
+  toast.querySelector('[onclick*="Ficar"]').addEventListener('click', () => clearTimeout(timer));
+}
+
+function _irProximoDia(dia) {
+  const t = document.querySelector('.day-toast');
+  if (t) { t.classList.add('hiding'); setTimeout(() => t.remove(), 300); }
+  setTimeout(() => window.location.href = `hoje.html?dia=${dia}`, 350);
+}
 
 // ── Import de progresso ──────────────────────
 function handleImport(event) {

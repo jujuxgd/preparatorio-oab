@@ -179,7 +179,7 @@
     <a href="index.html" class="nav-link"><span class="icon">✦</span><span>Início</span></a>
     <a href="hoje.html" class="nav-link"><span class="icon">◐</span><span>Hoje</span></a>
     <a href="calendario.html" class="nav-link"><span class="icon">☷</span><span>Calendário</span></a>
-    <a href="revisar.html" class="nav-link active"><span class="icon">↻</span><span>Revisar</span><span class="badge">3</span></a>
+    <a href="revisar.html" class="nav-link active"><span class="icon">↻</span><span>Revisar</span><span class="badge" style="display:none">0</span></a>
     <div class="nav-section-label">Estudo</div>
     <a href="materias.html" class="nav-link"><span class="icon">❖</span><span>Matérias</span></a>
     <a href="questoes.html" class="nav-link"><span class="icon">◎</span><span>Questões</span></a>
@@ -211,7 +211,7 @@
       </div>
       <div class="topbar-actions">
         <div class="streak-pill">
-          <span class="flame">🌸</span><span class="count">12</span><span class="label">dias</span>
+          <span class="flame">🌸</span><span class="count">0</span><span class="label">dias</span>
         </div>
       </div>
     </div>
@@ -249,43 +249,51 @@ document.addEventListener('DOMContentLoaded', () => {
   Object.entries(p.dias || {}).forEach(([numDia, dData]) => {
     if (!dData.concluido || !dData.data_conclusao) return;
     const concl = new Date(dData.data_conclusao);
-    const diff = Math.round((hoje - concl) / 864e5);
-    const isDue = INTERVALS.some(iv => diff >= iv && diff < iv + 3);
-    if (!isDue) return;
-    const intervalo = INTERVALS.filter(iv => diff >= iv).pop();
+    const diff  = Math.round((hoje - concl) / 864e5);
+    // Mostra se passou pelo menos 1 dia E ainda não revisou, OU se revisou mas voltou ao intervalo seguinte
+    const jaRevisouHoje = (dData.ultima_revisao === hojeStr);
+    if (jaRevisouHoje) return;
+    // Está em algum intervalo de revisão (1, 7, 15, 30 dias ou mais)
+    if (diff < 1) return;
     const dado = typeof getDadosDia === 'function' ? getDadosDia(parseInt(numDia)) : null;
     if (!dado) return;
 
-    const topicos = dado.materias.flatMap(m => m.topicos || []).slice(0, 4);
-    const materias = dado.materias.map(m => m.nome).join(' + ');
-    const isUrgent = diff <= 2;
-    const quando = diff === 1 ? 'há 1 dia' : `há ${diff} dias`;
-
-    const nota = dData.nota ? `<li style="font-style:italic;color:var(--ink-soft)">${dData.nota.slice(0,120)}${dData.nota.length>120?'…':''}</li>` : '';
+    const intervalo = INTERVALS.filter(iv => diff >= iv).pop() || 1;
+    const topicos   = dado.materias.flatMap(m => m.topicos || []).slice(0, 4);
+    const materias  = dado.materias.map(m => `${m.emoji||''} ${m.nome}`).join('  ·  ');
+    const isUrgent  = diff <= 3;
+    const quando    = diff === 1 ? 'há 1 dia' : `há ${diff} dias`;
+    const ivLabel   = `Intervalo ${intervalo}d`;
+    const nota      = dData.nota ? `<div style="margin-top:0.6rem;padding:0.7rem;background:var(--bg-soft);border-radius:var(--radius-sm);font-style:italic;font-size:0.85rem;color:var(--ink-soft)">"${dData.nota.slice(0,150)}${dData.nota.length>150?'…':''}"</div>` : '';
 
     cards.push({ diff, isUrgent, html: `
       <div class="revisao-card${isUrgent?' urgent':''}">
         <div class="rev-head">
-          <div>
-            <span class="rev-tag">${quando}</span>
+          <div style="flex:1">
+            <div style="display:flex;gap:0.5rem;margin-bottom:0.4rem;align-items:center;flex-wrap:wrap">
+              <span class="rev-tag">${quando}</span>
+              <span style="font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;background:var(--lavender);color:#6040a0;padding:0.2rem 0.6rem;border-radius:20px;font-weight:600">${ivLabel}</span>
+            </div>
             <h3 class="rev-title">${dado.titulo.replace(' · ',' <em>·</em> ')}</h3>
-            <div class="rev-meta">${materias} · Dia ${numDia} · Estudado em ${dData.data_conclusao}</div>
+            <div class="rev-meta">${materias}</div>
           </div>
+          <a href="hoje.html?dia=${numDia}" style="font-size:0.72rem;color:var(--rose-deep);text-decoration:none;white-space:nowrap;align-self:flex-start;margin-top:0.3rem">Ver conteúdo →</a>
         </div>
+        ${nota}
         <ul class="rev-bullets">
           ${topicos.map(t => `<li>${t.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</li>`).join('')}
-          ${nota}
         </ul>
         <div class="rev-feedback">
           <button class="feedback-btn lembrei" onclick="registrarFeedback(this,'lembrei',${numDia})">✓ Lembrei tudo</button>
           <button class="feedback-btn mais-ou-menos" onclick="registrarFeedback(this,'mais-ou-menos',${numDia})">~ Mais ou menos</button>
-          <button class="feedback-btn esqueci" onclick="registrarFeedback(this,'esqueci',${numDia})">✕ Esqueci</button>
+          <button class="feedback-btn esqueci" onclick="registrarFeedback(this,'esqueci',${numDia})">✕ Preciso rever</button>
         </div>
       </div>`
     });
   });
 
-  cards.sort((a,b) => a.diff - b.diff);
+  // Urgentes primeiro, depois por diff crescente
+  cards.sort((a,b) => (b.isUrgent - a.isUrgent) || (a.diff - b.diff));
   const container = document.getElementById('revisao-cards');
   const banner = document.getElementById('rev-banner-title');
 

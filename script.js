@@ -88,8 +88,19 @@ document.addEventListener('DOMContentLoaded', () => {
   // Atualizar contadores na página
   updateCountdowns();
 
-  // Badge de Revisar — calculado após todos os scripts carregarem
-  setTimeout(atualizarBadgeRevisar, 0);
+  // Badge de Revisar e streak — calculados após todos os scripts carregarem
+  setTimeout(() => {
+    atualizarBadgeRevisar();
+    // Streak global: atualiza qualquer .streak-pill .count na página
+    try {
+      if (typeof carregarProgresso === 'function') {
+        const _p = carregarProgresso();
+        document.querySelectorAll('.streak-pill .count').forEach(el => {
+          el.textContent = _p.streak || 0;
+        });
+      }
+    } catch(e) {}
+  }, 0);
 });
 
 function atualizarBadgeRevisar() {
