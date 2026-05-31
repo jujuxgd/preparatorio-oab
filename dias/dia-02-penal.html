@@ -1,200 +1,381 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Dia 2 · Direito Penal</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dia 2 · Direito Penal — Iter Criminis</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg:#fdf4f7;--paper:#fff;--ink:#4a2e3a;--ink-soft:#7a5566;
-    --ink-faded:#b08799;--rose:#e8a5c0;--rose-deep:#c87aa0;
-    --rose-soft:#f5d4e2;--blush:#fce0eb;--champagne:#f8e1d8;
-    --lavender:#e0c8dc;--line:#f0d4e0;--gold:#d4a888;--radius:10px;
-  }
-  [data-theme="dark"]{
-    --bg:#1a1318;--paper:#211a20;--ink:#f5e4ec;--ink-soft:#d4b8c8;
-    --ink-faded:#9a7686;--rose:#e8a5c0;--rose-deep:#f0b8d0;
-    --rose-soft:#4a2e3a;--blush:#3d2632;--champagne:#5a4248;
-    --lavender:#5a4258;--line:#3a2832;
-  }
+  :root{--bg:#fdf4f7;--paper:#fff;--ink:#4a2e3a;--ink-soft:#7a5566;--ink-faded:#b08799;--rose:#e8a5c0;--rose-deep:#c87aa0;--rose-soft:#f5d4e2;--blush:#fce0eb;--champagne:#f8e1d8;--lavender:#e0c8dc;--line:#f0d4e0;--gold:#d4a888;--radius:10px;--penal:#f5e2db;--penal-deep:#c06040}
+  [data-theme="dark"]{--bg:#1a1318;--paper:#211a20;--ink:#f5e4ec;--ink-soft:#d4b8c8;--ink-faded:#9a7686;--rose:#e8a5c0;--rose-deep:#f0b8d0;--rose-soft:#4a2e3a;--blush:#3d2632;--champagne:#5a4248;--lavender:#5a4258;--line:#3a2832}
   *{margin:0;padding:0;box-sizing:border-box}
-  body{font-family:'Inter',sans-serif;font-size:0.93rem;color:var(--ink);
-       background:var(--bg);line-height:1.7;padding:2rem 2.5rem 4rem}
-  h2{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:500;
-     margin:2rem 0 0.8rem;color:var(--ink);letter-spacing:-0.01em;line-height:1.25}
-  h2 em{font-style:italic;color:var(--rose-deep)}
-  h2:first-child{margin-top:0}
-  h3{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:500;
-     margin:1.5rem 0 0.6rem;color:var(--ink);border-left:3px solid var(--rose);padding-left:0.7rem}
-  p{margin-bottom:0.85rem;color:var(--ink-soft)}
-  strong{color:var(--ink);font-weight:600}
+  body{font-family:'Inter',sans-serif;font-size:0.93rem;color:var(--ink);background:var(--bg);line-height:1.7;padding:2rem 2.5rem 4rem}
+  h2{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:500;margin:2rem 0 0.8rem;color:var(--ink);letter-spacing:-0.01em;line-height:1.25}
+  h2 em{font-style:italic;color:var(--rose-deep)} h2:first-child{margin-top:0}
+  h3{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:500;margin:1.5rem 0 0.6rem;color:var(--ink);border-left:3px solid var(--penal-deep);padding-left:0.7rem}
+  h4{font-family:'Inter',sans-serif;font-size:0.88rem;font-weight:700;margin:1.2rem 0 0.4rem;color:var(--ink);text-transform:uppercase;letter-spacing:0.06em}
+  p{margin-bottom:0.85rem;color:var(--ink-soft)} strong{color:var(--ink);font-weight:600}
   .callout{padding:1rem 1.2rem;border-radius:var(--radius);margin:1.2rem 0}
   .callout.atencao{background:linear-gradient(135deg,var(--blush),var(--rose-soft));border-left:4px solid var(--rose-deep)}
   .callout.dica{background:linear-gradient(135deg,var(--champagne),#fde8d8);border-left:4px solid var(--gold)}
   .callout.lei{background:linear-gradient(135deg,var(--lavender),#ede0ec);border-left:4px solid #b090c0}
-  .callout.penal{background:linear-gradient(135deg,#f5e2db,#f2d8d0);border-left:4px solid #c06040}
-  .callout-label{font-size:0.65rem;letter-spacing:0.18em;text-transform:uppercase;
-                 font-weight:700;margin-bottom:0.4rem;display:block;color:var(--ink)}
-  .callout p{margin:0;color:var(--ink);font-size:0.88rem}
+  .callout.penal{background:linear-gradient(135deg,var(--penal),#f2d8d0);border-left:4px solid var(--penal-deep)}
+  .callout.jurisprudencia{background:linear-gradient(135deg,#e8f0e0,#d8e8d0);border-left:4px solid #80a870}
+  .callout.pegadinha{background:linear-gradient(135deg,#fff0d8,#ffe8c0);border-left:4px solid #d4903a}
+  .callout-label{font-size:0.65rem;letter-spacing:0.18em;text-transform:uppercase;font-weight:700;margin-bottom:0.4rem;display:block;color:var(--ink)}
+  .callout p{margin:0 0 0.5rem;color:var(--ink);font-size:0.88rem} .callout p:last-child{margin-bottom:0}
+  .callout ol,.callout ul{color:var(--ink);font-size:0.88rem;padding-left:1.2rem} .callout li{margin-bottom:0.3rem}
   table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:0.85rem}
-  th{background:var(--rose-soft);color:var(--ink);font-weight:600;padding:0.6rem 0.8rem;text-align:left;border-bottom:2px solid var(--rose)}
-  td{padding:0.55rem 0.8rem;border-bottom:1px solid var(--line);color:var(--ink-soft)}
+  th{background:var(--penal);color:var(--ink);font-weight:600;padding:0.6rem 0.8rem;text-align:left;border-bottom:2px solid var(--penal-deep)}
+  td{padding:0.55rem 0.8rem;border-bottom:1px solid var(--line);color:var(--ink-soft);vertical-align:top}
   tr:hover td{background:var(--blush);color:var(--ink)}
-  ul,ol{padding-left:1.4rem;margin:0.6rem 0}
-  li{margin-bottom:0.35rem;color:var(--ink-soft)}
-  li strong{color:var(--ink)}
-  .badge{display:inline-block;background:var(--rose-soft);color:var(--rose-deep);
-         font-size:0.65rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;
-         padding:0.2rem 0.6rem;border-radius:20px;margin-right:0.4rem}
-  .badge.penal{background:#f5e2db;color:#a04020}
-  .badge.civil{background:var(--champagne);color:#8a5030}
-  .materia-header{display:flex;align-items:center;gap:0.8rem;
-    padding:1rem 1.2rem;border-radius:var(--radius);margin:2rem 0 1.2rem;
-    font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:500}
-  .materia-header.civil{background:linear-gradient(135deg,var(--champagne),#fde8d8)}
-  .materia-header.penal-h{background:linear-gradient(135deg,#f5e2db,#f2d0c8)}
+  ul,ol{padding-left:1.4rem;margin:0.6rem 0} li{margin-bottom:0.35rem;color:var(--ink-soft)} li strong{color:var(--ink)}
+  .badge{display:inline-block;background:var(--penal);color:var(--penal-deep);font-size:0.65rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;padding:0.2rem 0.6rem;border-radius:20px;margin-right:0.4rem}
+  .badge.cai{background:var(--champagne);color:#8a5030}
+  .materia-header{display:flex;align-items:center;gap:0.8rem;padding:1rem 1.2rem;border-radius:var(--radius);margin:0 0 1.5rem;font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:500}
+  .materia-header.penal-h{background:linear-gradient(135deg,var(--penal),#f2d0c8)}
   .materia-header .emoji{font-size:1.4rem}
-  .materia-header .tempo{font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;
-                         color:var(--ink-faded);margin-left:auto;font-family:'Inter',sans-serif}
-  .incidencia{font-size:0.7rem;color:var(--rose-deep);font-weight:600;
-              background:var(--rose-soft);padding:0.2rem 0.5rem;border-radius:4px}
+  .materia-header .tempo{font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-faded);margin-left:auto;font-family:'Inter',sans-serif}
+  .incidencia{font-size:0.7rem;color:var(--penal-deep);font-weight:600;background:var(--penal);padding:0.2rem 0.5rem;border-radius:4px}
   hr{border:none;border-top:1px solid var(--line);margin:2rem 0}
-  mark{background:var(--blush);color:var(--ink);border-radius:3px;padding:0 2px}
-  mark.aten{background:#ffe4c0}
-  mark.lei{background:var(--lavender)}
+  mark{background:var(--blush);color:var(--ink);border-radius:3px;padding:0 2px} mark.aten{background:#ffe4c0} mark.ok{background:#d8f0d0}
+  .ascii-box{font-family:'Courier New',monospace;font-size:0.78rem;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:1rem;margin:1rem 0;overflow-x:auto;line-height:1.5;color:var(--ink-soft);white-space:pre}
+  .stat-row{display:flex;gap:1rem;margin:1rem 0;flex-wrap:wrap}
+  .stat-card{flex:1;min-width:120px;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:0.8rem;text-align:center}
+  .stat-card .num{font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--penal-deep);font-weight:600}
+  .stat-card .label{font-size:0.68rem;color:var(--ink-faded);text-transform:uppercase;letter-spacing:0.08em}
   .iter-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0.8rem;margin:1rem 0}
-  .iter-card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);
-             padding:0.9rem;text-align:center}
-  .iter-card .fase{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--rose-deep);
-                   font-weight:600;margin-bottom:0.2rem}
+  .iter-card{background:var(--paper);border:1.5px solid var(--line);border-radius:var(--radius);padding:0.9rem;text-align:center}
+  .iter-card .fase{font-family:'Playfair Display',serif;font-size:1rem;color:var(--ink-faded);font-weight:600;margin-bottom:0.2rem}
+  .iter-card .status{font-size:0.7rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:0.4rem}
   .iter-card .desc{font-size:0.72rem;color:var(--ink-faded);line-height:1.4}
-  .iter-card.punivel{border-color:var(--rose);background:var(--rose-soft)}
+  .iter-card.nao-punivel{border-color:var(--line);opacity:0.7}
+  .iter-card.punivel{border-color:var(--penal-deep);background:var(--penal)}
+  .iter-card.punivel .fase{color:var(--penal-deep)}
+  .caso{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:1rem 1.2rem;margin:1rem 0}
+  .caso-titulo{font-size:0.72rem;text-transform:uppercase;letter-spacing:0.12em;font-weight:700;color:var(--penal-deep);margin-bottom:0.5rem}
+  .caso-resp{margin-top:0.6rem;padding-top:0.6rem;border-top:1px solid var(--line);font-size:0.88rem}
+  .caso-resp strong{color:var(--penal-deep)}
   @media(max-width:640px){.iter-grid{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════
-     DIREITO PENAL — ITER CRIMINIS
-═══════════════════════════════════════ -->
-
-<div class="materia-header penal-h" style="margin-top:3rem">
+<div class="materia-header penal-h">
   <span class="emoji">⚔️</span>
-  <span>Direito Penal</span>
-  <span class="incidencia">71% provas</span>
+  <span>Direito Penal — Iter Criminis e Tentativa</span>
+  <span class="incidencia">71% provas · 8-9 questões</span>
   <span class="tempo">⏱ 2h</span>
 </div>
 
-<h2>I. Iter Criminis <em>— O Caminho do Crime</em></h2>
+<div class="stat-row">
+  <div class="stat-card"><div class="num">71%</div><div class="label">Incidência nas provas</div></div>
+  <div class="stat-card"><div class="num">9</div><div class="label">Questões médias/exame</div></div>
+  <div class="stat-card"><div class="num">52%</div><div class="label">Acerto médio candidatos</div></div>
+  <div class="stat-card"><div class="num">4</div><div class="label">Institutos do dia</div></div>
+</div>
 
-<p>O <strong>iter criminis</strong> (latim: caminho do crime) é o conjunto de fases que o agente percorre desde a ideia criminosa até a consumação. Nem todas as fases são puníveis.</p>
+<h2>I. Introdução <em>— Iter Criminis na OAB</em></h2>
+
+<p>O iter criminis e os institutos conexos (tentativa, desistência voluntária, arrependimento eficaz e posterior, dolo, culpa e omissão) são <strong>a espinha dorsal da teoria geral do crime</strong> — e correspondem a 30-40% das questões de Penal na OAB. A FGV frequentemente apresenta situações fáticas e exige a identificação precisa do instituto aplicável.</p>
+
+<p>Doutrinadores de referência: <strong>Cleber Masson</strong> (<em>Direito Penal — Parte Geral</em>, 2024 — mais cobrado), <strong>Rogério Greco</strong> (<em>Curso de Direito Penal</em>, 2023), <strong>Guilherme de Souza Nucci</strong> (<em>Manual de Direito Penal</em>, 2024). A lei de regência é o <strong>Código Penal (Decreto-Lei 2.848/1940)</strong>, com as profundas reformas da Lei 7.209/84 (Parte Geral) e alterações posteriores.</p>
+
+<p>Ponto crítico para a OAB: a <strong>distinção entre os institutos liberatórios</strong> — desistência voluntária, arrependimento eficaz e arrependimento posterior — gera as pegadinhas mais frequentes. Além disso, a distinção entre <strong>dolo eventual e culpa consciente</strong> é recorrente, especialmente em questões de acidentes de trânsito.</p>
+
+<hr>
+
+<h2>II. Iter Criminis <em>— O Caminho do Crime</em></h2>
+
+<p>Iter criminis (latim: caminho do crime) é a sequência de fases percorrida pelo agente desde a concepção da ideia criminosa até a consumação. Cleber Masson (2024) define como "o conjunto de etapas que se sucedem cronologicamente no desenvolvimento do delito doloso". Aplica-se apenas a <strong>crimes dolosos</strong> — crimes culposos não têm iter criminis.</p>
 
 <div class="iter-grid">
-  <div class="iter-card">
+  <div class="iter-card nao-punivel">
     <div class="fase">Cogitação</div>
-    <div class="desc">Ideia do crime surge na mente. <strong>Nunca punível</strong> — pensamento livre.</div>
+    <div class="status" style="color:var(--ink-faded)">Não punível</div>
+    <div class="desc">Ideia criminosa no plano mental. Pensamento livre — direito penal não pune intenções. Inviolável.</div>
   </div>
-  <div class="iter-card">
+  <div class="iter-card nao-punivel">
     <div class="fase">Preparação</div>
-    <div class="desc">Atos preparatórios para o crime. <strong>Regra: não punível.</strong> Exceção: quando constitui crime autônomo (ex: petrechos para falsificação).</div>
+    <div class="status" style="color:var(--ink-faded)">Regra: não punível</div>
+    <div class="desc">Atos preparatórios para o crime. Exceção: quando o próprio ato preparatório constitui crime autônomo (ex.: art. 291 CP — petrechos para falsificação).</div>
   </div>
   <div class="iter-card punivel">
     <div class="fase">Execução</div>
-    <div class="desc">Início da conduta típica. <mark>Punível — tentativa</mark> a partir daqui.</div>
+    <div class="status" style="color:var(--penal-deep)">PUNÍVEL — Tentativa</div>
+    <div class="desc">Início da conduta típica descrita no tipo penal. Crime de tentativa começa aqui. O critério é o início dos atos de execução (não de preparação).</div>
   </div>
   <div class="iter-card punivel">
     <div class="fase">Consumação</div>
-    <div class="desc">Realização integral do tipo penal. <mark>Punível — crime consumado.</mark></div>
+    <div class="status" style="color:var(--penal-deep)">PUNÍVEL — Crime consumado</div>
+    <div class="desc">Realização integral do tipo penal — presença de todos os elementos do tipo. Art. 14, I CP. Pena máxima.</div>
   </div>
 </div>
 
-<h3>Tentativa <span class="badge penal">Art. 14, II CP</span></h3>
+<div class="callout atencao">
+  <span class="callout-label">⚠ Critério para distinguir preparação de execução</span>
+  <p><strong>Teoria objetivo-formal (adotada no Brasil):</strong> a execução começa com a prática de atos descritos no próprio núcleo do tipo penal. Ex.: no furto, a execução começa com a subtração (pegar o objeto), não com a chegada ao local.<br>
+  <strong>Teoria objetivo-material (Roxin):</strong> considera atos que colocam imediatamente em perigo o bem jurídico. Usada pelo STJ em alguns julgados para antecipar o início da execução.</p>
+</div>
+
+<hr>
+
+<h2>III. Tentativa <em>— Art. 14, II CP</em></h2>
+
+<h3>3.1 Conceito e Requisitos</h3>
 
 <div class="callout lei">
-  <span class="callout-label">📜 Art. 14, II CP — Definição</span>
+  <span class="callout-label">📜 CP — Art. 14, II (textual)</span>
   <p>"Diz-se o crime <strong>tentado</strong>, quando, iniciada a execução, não se consuma por circunstâncias alheias à vontade do agente."</p>
 </div>
 
+<p>Requisitos cumulativos da tentativa: (1) início da execução; (2) não consumação; (3) <strong>motivo alheio à vontade do agente</strong> (se o próprio agente parou, não é tentativa, mas desistência voluntária ou arrependimento eficaz).</p>
+
+<h3>3.2 Espécies de Tentativa</h3>
+
 <table>
-  <tr><th>Espécie</th><th>Característica</th><th>Exemplo</th></tr>
-  <tr><td><strong>Tentativa perfeita</strong> (acabada / crime falho)</td><td>O agente esgota todos os atos que tinha disponíveis, mas o crime não se consuma.</td><td>Atira todas as balas, mas a vítima sobrevive</td></tr>
-  <tr><td><strong>Tentativa imperfeita</strong> (inacabada)</td><td>O agente não termina a execução por circunstâncias alheias à sua vontade.</td><td>É interrompido antes de terminar de atirar</td></tr>
+  <tr><th>Espécie</th><th>Conceito</th><th>Exemplo</th><th>Punição</th></tr>
+  <tr><td><strong>Imperfeita</strong> (inacabada)</td><td>O agente não termina os atos executórios por circunstância alheia à sua vontade (é interrompido no meio)</td><td>Atira 3 vezes, mas é imobilizado antes de disparar o 4º tiro</td><td>Pena do crime consumado reduzida de 1/3 a 2/3</td></tr>
+  <tr><td><strong>Perfeita</strong> (acabada / crime falho)</td><td>O agente esgota tudo que tinha disponível, mas o resultado não ocorre por circunstâncias alheias</td><td>Atira todos os cartuchos — a vítima sobrevive por atendimento médico rápido</td><td>Pena do crime consumado reduzida de 1/3 a 2/3</td></tr>
+  <tr><td><strong>Branca</strong> (incruenta)</td><td>A vítima não é atingida — o ataque não produz nem lesão física</td><td>Atirador erra todos os disparos</td><td>Maior redução (mais distante da consumação)</td></tr>
+  <tr><td><strong>Cruenta</strong></td><td>A vítima é atingida mas não morre (crime não se consuma)</td><td>Disparos atingem a vítima, mas ela sobrevive</td><td>Menor redução (mais próxima da consumação)</td></tr>
 </table>
-
-<p><strong>Pena da tentativa:</strong> mesma do crime consumado, reduzida de <mark>1/3 a 2/3</mark> (art. 14, parágrafo único). Quanto mais próximo da consumação, menor a redução.</p>
-
-<div class="callout atencao">
-  <span class="callout-label">⚠ Crimes que não admitem tentativa</span>
-  <p>Crimes culposos | Crimes preterdolosos | Crimes omissivos próprios | Crimes habituais | Contravenções penais | Crimes de mera conduta que se consumam com um único ato (ex: injúria verbal)</p>
-</div>
-
-<hr>
-
-<h2>II. Desistência Voluntária e Arrependimento Eficaz</h2>
 
 <div class="callout lei">
-  <span class="callout-label">📜 Art. 15 CP — Ponte de Ouro</span>
-  <p>"O agente que, voluntariamente, desiste de prosseguir na execução ou <strong>impede que o resultado se produza</strong>, só responde pelos atos já praticados."</p>
+  <span class="callout-label">📜 CP — Art. 14, parágrafo único — Pena da Tentativa</span>
+  <p>"Salvo disposição em contrário, pune-se a tentativa com a pena correspondente ao crime consumado, <strong>diminuída de um a dois terços</strong>."</p>
+  <p><strong>Critério de redução:</strong> quanto mais próximo da consumação, <strong>menor</strong> a redução. Quanto mais distante (menos atos executados), <strong>maior</strong> a redução.</p>
 </div>
+
+<h3>3.3 Crimes que NÃO Admitem Tentativa</h3>
 
 <table>
-  <tr><th>Instituto</th><th>Momento</th><th>O que o agente faz</th><th>Resultado</th></tr>
-  <tr><td><strong>Desistência voluntária</strong></td><td>Durante a execução (tentativa imperfeita)</td><td>Para de praticar os atos executórios</td><td>Não responde por tentativa — só pelos atos já praticados</td></tr>
-  <tr><td><strong>Arrependimento eficaz</strong></td><td>Após os atos executórios (tentativa perfeita)</td><td>Age para impedir o resultado (ex: socorre a vítima)</td><td>Não responde por tentativa — só pelos atos já praticados</td></tr>
+  <tr><th>Categoria</th><th>Motivo</th><th>Exemplos</th></tr>
+  <tr><td>Crimes <strong>culposos</strong></td><td>Resultado é involuntário — não há dolo de produzir resultado que possa ser "tentado"</td><td>Homicídio culposo, lesão culposa</td></tr>
+  <tr><td>Crimes <strong>preterdolosos</strong></td><td>Dolo no antecedente + culpa no consequente — resultado mais grave é culposo</td><td>Lesão corporal seguida de morte (art. 129, §3º)</td></tr>
+  <tr><td>Crimes <strong>omissivos próprios</strong></td><td>Consumação é instantânea — com a omissão, o crime está consumado</td><td>Omissão de socorro (art. 135)</td></tr>
+  <tr><td>Crimes <strong>habituais</strong></td><td>Exigem reiteração de atos — um único ato não perfaz o crime</td><td>Curandeirismo (art. 284)</td></tr>
+  <tr><td>Crimes <strong>de mera conduta</strong> (consumam-se em único ato)</td><td>Com a prática do ato, o crime está perfeito</td><td>Violação de domicílio (em regra)</td></tr>
+  <tr><td><strong>Contravenções penais</strong></td><td>Expressa vedação legal (art. 4º LCP)</td><td>Qualquer contravenção</td></tr>
 </table>
-
-<div class="callout dica">
-  <span class="callout-label">✦ Diferença do arrependimento posterior (art. 16 CP)</span>
-  <p>No <strong>arrependimento posterior</strong>, o crime JÁ se consumou. O agente repara o dano ou restitui a coisa até o recebimento da denúncia, voluntariamente. Efeito: redução de pena de 1/3 a 2/3 — não exclui o crime. Cabe apenas em crimes sem violência ou grave ameaça.</p>
-</div>
 
 <hr>
 
-<h2>III. Crime Doloso e Culposo</h2>
+<h2>IV. Desistência Voluntária e Arrependimento Eficaz <em>— A "Ponte de Ouro"</em></h2>
 
-<h3>Dolo (art. 18, I CP)</h3>
-<table>
-  <tr><th>Tipo de Dolo</th><th>Conceito</th></tr>
-  <tr><td><strong>Dolo direto de 1º grau</strong></td><td>O agente quer o resultado como fim da conduta</td></tr>
-  <tr><td><strong>Dolo direto de 2º grau</strong> (de consequências necessárias)</td><td>O agente não quer o resultado, mas o aceita como consequência certa e necessária do meio escolhido</td></tr>
-  <tr><td><strong>Dolo eventual</strong></td><td>O agente não quer o resultado, mas assume o risco de produzi-lo — <mark>"dane-se"</mark></td></tr>
-</table>
+<div class="callout lei">
+  <span class="callout-label">📜 CP — Art. 15 (textual) — Desistência e Arrependimento Eficaz</span>
+  <p>"O agente que, voluntariamente, <strong>desiste de prosseguir na execução</strong> ou <strong>impede que o resultado se produza</strong>, só responde pelos atos já praticados."</p>
+</div>
 
-<h3>Culpa (art. 18, II CP)</h3>
-<p>O crime culposo exige: <strong>conduta voluntária + resultado involuntário + nexo causal + previsibilidade objetiva + tipicidade</strong>.</p>
+<p>Franz von Liszt cunhou o termo <strong>"Ponte de Ouro"</strong>: o legislador abre uma saída para o agente que, mesmo no meio da execução, decide não prosseguir — e como prêmio, ele não responde pela tentativa. A doutrina usa "Caminho de Volta" como sinônimo.</p>
+
 <table>
-  <tr><th>Modalidade</th><th>Conceito</th></tr>
-  <tr><td><strong>Imprudência</strong></td><td>Conduta ativa positiva — fazer o que não devia (ex: avançar o sinal)</td></tr>
-  <tr><td><strong>Negligência</strong></td><td>Conduta omissiva — deixar de fazer o que devia (ex: não verificar o freio)</td></tr>
-  <tr><td><strong>Imperícia</strong></td><td>Falta de aptidão técnica para exercício da arte, ofício ou profissão</td></tr>
+  <tr><th>Instituto</th><th>Quando ocorre</th><th>O que o agente faz</th><th>Efeito</th></tr>
+  <tr><td><strong>Desistência voluntária</strong></td><td>Durante a execução ainda <em>inacabada</em> (tentativa imperfeita)</td><td>Para de praticar os atos executórios que ainda podia praticar</td><td>Não responde por tentativa — só pelos atos já praticados</td></tr>
+  <tr><td><strong>Arrependimento eficaz</strong></td><td>Após esgotar a execução (tentativa perfeita), mas antes do resultado</td><td>Age ativamente para impedir o resultado (ex.: leva vítima ao hospital, aplica antídoto)</td><td>Não responde por tentativa — só pelos atos já praticados. O resultado deve ser efetivamente impedido.</td></tr>
 </table>
 
 <div class="callout atencao">
-  <span class="callout-label">⚠ Culpa inconsciente vs. Dolo eventual</span>
-  <p><strong>Culpa inconsciente:</strong> agente não prevê o resultado (embora previsível). | <strong>Dolo eventual:</strong> agente prevê o resultado e assume o risco. A distinção é relevante em acidentes de trânsito — banca cobra muito!</p>
+  <span class="callout-label">⚠ "Voluntariamente" ≠ "Espontaneamente" — Diferença crucial!</span>
+  <p>O art. 15 exige que a desistência seja <strong>voluntária</strong> — não precisa ser espontânea. O agente pode desistir porque ficou com medo, porque foi convencido por terceiro, ou por qualquer razão — desde que a decisão de parar seja dele.</p>
+  <p><strong>Fórmula de Frank:</strong> "Posso continuar mas não quero" = <mark class="ok">desistência voluntária</mark> (art. 15). "Quero continuar mas não posso" = <mark class="aten">tentativa</mark> (art. 14, II).</p>
+</div>
+
+<h3>4.2 Arrependimento Posterior — Art. 16 CP</h3>
+
+<div class="callout lei">
+  <span class="callout-label">📜 CP — Art. 16 — Arrependimento Posterior (NÃO exclui o crime!)</span>
+  <p>"Nos crimes cometidos sem violência ou grave ameaça à pessoa, reparado o dano ou restituída a coisa, até o recebimento da denúncia ou da queixa, por ato voluntário do agente, a pena será <strong>reduzida de um a dois terços</strong>."</p>
+</div>
+
+<table>
+  <tr><th>Aspecto</th><th>Desistência Voluntária / Arrep. Eficaz</th><th>Arrependimento Posterior</th></tr>
+  <tr><td>Momento</td><td>Antes do resultado — crime não se consumou</td><td>Após o resultado — crime JÁ CONSUMADO</td></tr>
+  <tr><td>Efeito no crime</td><td><mark class="ok">Exclui a tentativa</mark> — só responde pelos atos já praticados</td><td><mark class="aten">NÃO exclui o crime</mark> — apenas reduz a pena</td></tr>
+  <tr><td>Redução</td><td>—</td><td>1/3 a 2/3</td></tr>
+  <tr><td>Requisitos</td><td>Voluntariedade</td><td>Sem violência ou grave ameaça + reparação voluntária + até recebimento da denúncia</td></tr>
+</table>
+
+<hr>
+
+<h2>V. Dolo e Culpa <em>— Art. 18 CP</em></h2>
+
+<h3>5.1 Crime Doloso — Art. 18, I CP</h3>
+
+<div class="callout lei">
+  <span class="callout-label">📜 CP — Art. 18, I — Crime Doloso</span>
+  <p>"Diz-se o crime: I — doloso, quando o agente <strong>quis o resultado</strong> ou <strong>assumiu o risco de produzi-lo</strong>."</p>
+</div>
+
+<table>
+  <tr><th>Espécie de Dolo</th><th>Conceito</th><th>Exemplo</th></tr>
+  <tr><td><strong>Direto de 1º grau</strong></td><td>Agente quer o resultado como FIM da conduta</td><td>Atirar para matar querendo a morte</td></tr>
+  <tr><td><strong>Direto de 2º grau</strong> (consequências necessárias)</td><td>Agente não quer o resultado, mas o aceita como CONSEQUÊNCIA CERTA e necessária do meio escolhido</td><td>Bomba no avião para matar um passageiro — mata todos os outros (dolo direto de 2º grau quanto aos demais)</td></tr>
+  <tr><td><strong>Eventual</strong></td><td>Agente prevê o resultado mas <mark class="aten">ASSUME O RISCO</mark> — "dane-se" se ocorrer. Não quer, mas aceita.</td><td>Racha automobilístico — colide e mata pedestre</td></tr>
+</table>
+
+<h3>5.2 Crime Culposo — Art. 18, II CP</h3>
+
+<div class="callout lei">
+  <span class="callout-label">📜 CP — Art. 18, II — Crime Culposo</span>
+  <p>"Diz-se o crime: II — culposo, quando o agente deu causa ao resultado por <strong>imprudência, negligência ou imperícia</strong>."</p>
+</div>
+
+<table>
+  <tr><th>Modalidade</th><th>Conduta</th><th>Exemplo</th></tr>
+  <tr><td><strong>Imprudência</strong></td><td>Ação positiva precipitada — fazer o que não deveria</td><td>Avançar sinal vermelho em excesso de velocidade</td></tr>
+  <tr><td><strong>Negligência</strong></td><td>Omissão — não fazer o que deveria</td><td>Não verificar os freios antes de viajar</td></tr>
+  <tr><td><strong>Imperícia</strong></td><td>Falta de aptidão técnica no exercício de arte, ofício ou profissão</td><td>Médico que aplica dose errada de anestesia sem conhecimento técnico</td></tr>
+</table>
+
+<h3>5.3 Culpa Consciente vs. Dolo Eventual — A Distinção Mais Cobrada</h3>
+
+<table>
+  <tr><th>Aspecto</th><th>Culpa Consciente</th><th>Dolo Eventual</th></tr>
+  <tr><td>O agente prevê o resultado?</td><td>SIM — prevê como possível</td><td>SIM — prevê como possível</td></tr>
+  <tr><td>O agente quer o resultado?</td><td>NÃO — acredita que não vai ocorrer</td><td>NÃO — mas assume o risco</td></tr>
+  <tr><td>Atitude interna</td><td>"Prevejo mas confio que não vai acontecer"</td><td>"Prevejo e, se acontecer, dane-se"</td></tr>
+  <tr><td>Punição</td><td>Crime culposo (pena menor)</td><td>Crime doloso (pena maior)</td></tr>
+  <tr><td>Exemplo emblemático</td><td>Motorista cansado que acredita estar bem — ocorre acidente</td><td>Motorista em racha que sabe do risco e continua</td></tr>
+</table>
+
+<div class="callout atencao">
+  <span class="callout-label">⚠ Rachas e Dolo Eventual — Súmula 610 STJ</span>
+  <p>O STJ firmou entendimento: em homicídio praticado na direção de veículo, a presença de dolo eventual (não culpa) deve ser analisada caso a caso. Não é automático que racha = dolo eventual. O Tribunal do Júri decide. Mas a tendência da FGV nas questões é que racha = dolo eventual (crime doloso) → Tribunal do Júri competente.</p>
 </div>
 
 <hr>
 
-<h2>IV. Crimes Omissivos</h2>
+<h2>VI. Crimes Omissivos</h2>
+
+<div class="callout lei">
+  <span class="callout-label">📜 CP — Art. 13, §2º — Posições de Garantia</span>
+  <p>"A omissão é penalmente relevante quando o omitente devia e podia agir para evitar o resultado. O dever de agir incumbe a quem:<br>
+  a) tenha por lei obrigação de cuidado, proteção ou vigilância;<br>
+  b) de outra forma, assumiu a responsabilidade de impedir o resultado;<br>
+  c) com seu comportamento anterior, criou o risco da ocorrência do resultado."</p>
+</div>
 
 <table>
-  <tr><th>Tipo</th><th>Conceito</th><th>Exemplos</th></tr>
-  <tr><td><strong>Omissivo próprio</strong> (puro)</td><td>O tipo descreve uma conduta omissiva. O agente não precisa ter obrigação especial de agir — qualquer um pode ser sujeito ativo.</td><td>Omissão de socorro (art. 135 CP)</td></tr>
-  <tr><td><strong>Omissivo impróprio</strong> (comissivo por omissão)</td><td>O tipo descreve conduta comissiva, mas praticada por omissão. <strong>Garante (art. 13, §2º CP)</strong> — dever jurídico de agir.</td><td>Mãe que deixa filho morrer de fome (homicídio)</td></tr>
+  <tr><th>Tipo</th><th>Conceito</th><th>Sujeito ativo</th><th>Exemplo</th></tr>
+  <tr><td><strong>Omissivo próprio</strong></td><td>O tipo descreve uma conduta omissiva. Qualquer pessoa pode ser sujeito ativo — não exige posição de garantia.</td><td>Qualquer pessoa</td><td>Omissão de socorro (art. 135) — qualquer um que veja a vítima</td></tr>
+  <tr><td><strong>Omissivo impróprio</strong> (comissivo por omissão)</td><td>O tipo descreve conduta comissiva, mas o garantidor a pratica por omissão. Exige posição de garantia (art. 13, §2º).</td><td>Apenas o garantidor (garante)</td><td>Mãe que deixa filho recém-nascido morrer de fome — responde por homicídio (não omissão de socorro)</td></tr>
 </table>
 
-<h3>Posições de Garantia (art. 13, §2º CP)</h3>
-<p>O <strong>garantidor</strong> é quem tem dever jurídico de agir para evitar o resultado. São garantidores:</p>
-<ul>
-  <li>Quem assumiu por lei a obrigação de cuidado (pais, tutores, curadores)</li>
-  <li>Quem assumiu contratualmente a custódia (médicos, babás, salva-vidas)</li>
-  <li>Quem criou o risco do dano com comportamento anterior (<mark>ingerência</mark>)</li>
-</ul>
+<hr>
+
+<h2>VII. Jurisprudência Consolidada</h2>
+
+<div class="callout jurisprudencia">
+  <span class="callout-label">⚖ HC 399.994 STJ — Desistência Voluntária e Critério</span>
+  <p>O STJ confirmou a aplicação da fórmula de Frank para distinguir tentativa de desistência voluntária: o critério não é a motivação interna do agente, mas a possibilidade objetiva de prosseguir. Se o agente podia continuar e escolheu não prosseguir, há desistência voluntária (art. 15 CP). Impacto: mesmo que o agente tenha parado por medo de ser preso, se ainda tinha meios para prosseguir, é desistência voluntária.</p>
+</div>
+
+<div class="callout jurisprudencia">
+  <span class="callout-label">⚖ STJ — Arrependimento Posterior e Co-autores</span>
+  <p>O arrependimento posterior de um dos co-autores (art. 16 CP) se comunica aos demais, independentemente de terem participado da reparação do dano (STJ, posição majoritária). A redução da pena de 1/3 a 2/3 aproveita a todos quando um repara o dano voluntariamente até o recebimento da denúncia. (Tema controverso — parte da doutrina discorda.)</p>
+</div>
+
+<div class="callout jurisprudencia">
+  <span class="callout-label">⚖ STJ — Consumação do Furto (Teoria da Amotio)</span>
+  <p>O furto se consuma quando o agente inverte a posse do bem, <strong>ainda que não saia do estabelecimento</strong>. A prisão em flagrante dentro da loja não impede a consumação — o STJ adota a <strong>teoria da amotio (inversão da posse)</strong>: consuma-se quando o agente assume o controle do bem, mesmo que vigilado. A tentativa ocorre quando há interrupção antes da inversão da posse. <mark class="aten">Atenção: a Súmula 318 STJ trata de outro tema (reformatio in pejus em recurso exclusivo do réu) — não confundir.</mark></p>
+</div>
+
+<hr>
+
+<h2>VIII. Pegadinhas Clássicas da Banca</h2>
+
+<div class="callout pegadinha">
+  <span class="callout-label">⚠ 7 Pegadinhas — Iter Criminis e Tentativa</span>
+  <ol>
+    <li><strong>Desistência voluntária ≠ tentativa.</strong> Se o agente parou porque quis (mesmo por medo), não é tentativa — é desistência voluntária. Só é tentativa se não consumou POR CIRCUNSTÂNCIAS ALHEIAS à sua vontade.</li>
+    <li><strong>Arrependimento posterior NÃO exclui o crime.</strong> O crime continua existindo — apenas a pena é reduzida. Questão que diz "arrependimento posterior exclui a tipicidade" está errada.</li>
+    <li><strong>Arrependimento eficaz: o resultado deve ser EFETIVAMENTE impedido.</strong> Se o agente tenta impedir mas não consegue (a vítima morre mesmo), não se aplica o art. 15 — responde pelo crime consumado. O "eficaz" é essencial.</li>
+    <li><strong>Crimes culposos NÃO admitem tentativa.</strong> Resultado culposo é involuntário — não há como "tentar" produzi-lo. Questão que fala em "tentativa de homicídio culposo" está errada.</li>
+    <li><strong>Dolo eventual = crime doloso (não culposo).</strong> A banca coloca situações de racha e pergunta se é culpa ou dolo. Racha = dolo eventual = crime doloso = competência do Tribunal do Júri (homicídio doloso).</li>
+    <li><strong>Arrependimento posterior exige: SEM violência ou grave ameaça.</strong> Não cabe em roubo, extorsão, estupro. Cabe em furto, estelionato, receptação etc.</li>
+    <li><strong>Tentativa tem pena reduzida de 1/3 a 2/3 — não pela metade.</strong> Questão que diz "redução de metade" está errada. O correto é de um a dois terços (art. 14, parágrafo único).</li>
+  </ol>
+</div>
+
+<hr>
+
+<h2>IX. Casos Práticos</h2>
+
+<div class="caso">
+  <div class="caso-titulo">Caso 1 — Desistência Voluntária ou Tentativa?</div>
+  <p>Rodrigo invade a casa de sua ex-namorada com faca para matá-la. Ao vê-la chorando e suplicando, sente remorso e vai embora sem efetuar nenhum ferimento. Ele responde por tentativa de homicídio?</p>
+  <div class="caso-resp"><strong>Resposta:</strong> NÃO. Aplica-se a <strong>desistência voluntária</strong> (art. 15 CP). Rodrigo podia continuar (tinha faca, tinha oportunidade) mas escolheu não prosseguir. Pela fórmula de Frank: "Posso continuar mas não quero." Rodrigo responde apenas pelos atos já praticados — violação de domicílio (art. 150) e ameaça (art. 147), se presentes. Não responde por tentativa de homicídio.</div>
+</div>
+
+<div class="caso">
+  <div class="caso-titulo">Caso 2 — Arrependimento Eficaz ou Tentativa Perfeita?</div>
+  <p>Carlos ministrou veneno no café da manhã de sua esposa. Após ela tomar e sentir-se mal, arrependeu-se e a levou imediatamente ao hospital, onde recebeu o antídoto e sobreviveu. Carlos responde por tentativa de homicídio?</p>
+  <div class="caso-resp"><strong>Resposta:</strong> NÃO responde por tentativa de homicídio. Aplica-se o <strong>arrependimento eficaz</strong> (art. 15 CP) — Carlos esgotou os atos executórios (envenenou), mas agiu para impedir o resultado, que foi efetivamente impedido. Ele responde pelos atos já praticados: lesão corporal (o veneno causou mal-estar) e possível ameaça. O resultado foi eficazmente impedido — condição essencial do art. 15.</div>
+</div>
+
+<div class="caso">
+  <div class="caso-titulo">Caso 3 — Dolo Eventual ou Culpa Consciente?</div>
+  <p>Pedro e Lucas disputam um racha na rodovia. Na curva, Pedro perde o controle e atropela um ciclista que morre no local. Pedro alega que nunca quis matar ninguém e que confiava em sua habilidade de pilotagem. Qual é a natureza do crime?</p>
+  <div class="caso-resp"><strong>Resposta:</strong> A tendência da jurisprudência dominante é reconhecer <strong>dolo eventual</strong>: Pedro previu o resultado como possível e assumiu o risco ao participar do racha. A confiança na própria habilidade pode ser argumento de defesa, mas o STJ e a doutrina majoritária entendem que racha implica assunção consciente do risco de morte. Crime doloso → competência do Tribunal do Júri. Se o júri entender que foi culpa consciente, a competência seria do juiz singular (homicídio culposo).</div>
+</div>
+
+<hr>
+
+<h2>X. Resumo Esquemático Final</h2>
+
+<div class="ascii-box">ITER CRIMINIS E TENTATIVA — DIA 2
+
+CAMINHO DO CRIME:
+Cogitação → Preparação → EXECUÇÃO → Consumação
+(não punível)  (não punível)  (punível)    (punível)
+
+TENTATIVA (art. 14, II):
+• Iniciada a execução
+• NÃO se consuma
+• POR CIRCUNSTÂNCIAS ALHEIAS à vontade do agente
+• Pena: crime consumado reduzida de 1/3 a 2/3
+
+PONTE DE OURO (art. 15):
+• Desistência Voluntária: ainda na execução, agent PARA voluntariamente
+  → Não responde por tentativa, só pelos atos já praticados
+• Arrependimento Eficaz: após esgotada a execução, age para IMPEDIR resultado
+  → Não responde por tentativa, só pelos atos já praticados
+  ⚠ O resultado DEVE ser efetivamente impedido!
+
+FÓRMULA DE FRANK:
+"Posso e quero" = tentativa (se não consegue = tentativa)
+"Posso mas não quero" = desistência voluntária (art. 15)
+"Quero mas não posso" = tentativa (art. 14)
+
+ARREPENDIMENTO POSTERIOR (art. 16):
+• Crime JÁ consumado
+• Sem violência ou grave ameaça
+• Reparação voluntária ATÉ recebimento da denúncia
+• Efeito: REDUZ pena 1/3 a 2/3 (NÃO exclui o crime)
+
+DOLO vs. CULPA:
+• Dolo direto 1º grau: QUER o resultado
+• Dolo direto 2º grau: aceita resultado CERTO e necessário
+• Dolo eventual: prevê + ASSUME O RISCO ("dane-se")
+• Culpa consciente: prevê + CONFIA que não vai ocorrer
+• Culpa inconsciente: NÃO prevê (mas era previsível)
+
+CRIMES SEM TENTATIVA: culposo | preterdoloso | omissivo próprio | habitual | contravenção</div>
 
 <div class="callout dica">
-  <span class="callout-label">✦ Causalidade — Art. 13 CP (Condição Equivalente / Sine Qua Non)</span>
-  <p>Considera-se <strong>causa</strong> toda condição sem a qual o resultado não teria ocorrido. Para eliminar mentalmente: se retirar a conduta e o resultado também desaparecer, há nexo causal. <br>
-  <strong>Limitação:</strong> teoria da imputação objetiva (Roxin) — usado pelo STJ para afastar tipicidade em condutas que não criam risco proibido ou que não são a realização do risco.</p>
+  <span class="callout-label">✦ Checklist de Revisão Rápida</span>
+  <ul>
+    <li>☐ Tentativa = execução iniciada + não consumação + motivo alheio</li>
+    <li>☐ Pena tentativa: reduzida 1/3 a 2/3 (não pela metade!)</li>
+    <li>☐ Desistência voluntária: pode continuar mas não quer → art. 15</li>
+    <li>☐ Arrependimento eficaz: após execução esgotada, impede resultado → art. 15</li>
+    <li>☐ Arrependimento posterior: crime consumado + sem violência + repara até denúncia → reduz pena, não exclui crime</li>
+    <li>☐ Dolo eventual: prevê + assume o risco ("dane-se") → crime DOLOSO</li>
+    <li>☐ Culpa consciente: prevê + confia que não vai ocorrer → crime CULPOSO</li>
+    <li>☐ Omissivo próprio: qualquer pessoa | omissivo impróprio: só o garantidor (art. 13, §2º)</li>
+  </ul>
 </div>
 
 <script src="../highlighter.js"></script>

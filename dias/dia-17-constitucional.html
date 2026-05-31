@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dia 17 · Constitucional — Judiciário e Controle Difuso</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#fdf4f7;--paper:#fff;--ink:#4a2e3a;--ink-soft:#7a5566;--ink-faded:#b08799;--rose:#e8a5c0;--rose-deep:#c87aa0;--rose-soft:#f5d4e2;--blush:#fce0eb;--champagne:#f8e1d8;--lavender:#e0c8dc;--sage:#d4c8dc;--line:#f0d4e0;--gold:#d4a888;--radius:10px}
+  [data-theme="dark"]{--bg:#1a1318;--paper:#211a20;--ink:#f5e4ec;--ink-soft:#d4b8c8;--ink-faded:#9a7686;--rose:#e8a5c0;--rose-deep:#f0b8d0;--rose-soft:#4a2e3a;--blush:#3d2632;--champagne:#5a4248;--lavender:#5a4258;--line:#3a2832}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Inter',sans-serif;font-size:.93rem;color:var(--ink);background:var(--bg);line-height:1.7;padding:2rem 2.5rem 4rem}
+  h2{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:500;margin:2rem 0 .8rem;color:var(--ink);letter-spacing:-.01em}
+  h2 em{font-style:italic;color:var(--rose-deep)} h2:first-child{margin-top:0}
+  h3{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:500;margin:1.5rem 0 .6rem;color:var(--ink);border-left:3px solid var(--rose);padding-left:.7rem}
+  h4{font-size:.88rem;font-weight:700;margin:1.2rem 0 .4rem;color:var(--ink);text-transform:uppercase;letter-spacing:.06em}
+  p{margin-bottom:.85rem;color:var(--ink-soft)} strong{color:var(--ink);font-weight:600}
+  .callout{padding:1rem 1.2rem;border-radius:var(--radius);margin:1.2rem 0}
+  .callout.atencao{background:linear-gradient(135deg,var(--blush),var(--rose-soft));border-left:4px solid var(--rose-deep)}
+  .callout.dica{background:linear-gradient(135deg,var(--champagne),#fde8d8);border-left:4px solid var(--gold)}
+  .callout.lei{background:linear-gradient(135deg,var(--lavender),#ede0ec);border-left:4px solid #b090c0}
+  .callout.jurisprudencia{background:linear-gradient(135deg,#e8f0e0,#d8e8d0);border-left:4px solid #80a870}
+  .callout.pegadinha{background:linear-gradient(135deg,#fff0d8,#ffe8c0);border-left:4px solid #d4903a}
+  .callout-label{font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;font-weight:700;margin-bottom:.4rem;display:block;color:var(--ink)}
+  .callout p,.callout li{margin:0 0 .4rem;color:var(--ink);font-size:.88rem}
+  .callout ol,.callout ul{color:var(--ink);font-size:.88rem;padding-left:1.2rem}
+  table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:.85rem}
+  th{background:var(--rose-soft);color:var(--ink);font-weight:600;padding:.6rem .8rem;text-align:left;border-bottom:2px solid var(--rose)}
+  td{padding:.55rem .8rem;border-bottom:1px solid var(--line);color:var(--ink-soft);vertical-align:top}
+  tr:hover td{background:var(--blush);color:var(--ink)}
+  ul,ol{padding-left:1.4rem;margin:.6rem 0} li{margin-bottom:.35rem;color:var(--ink-soft)} li strong{color:var(--ink)}
+  .badge{display:inline-block;background:var(--rose-soft);color:var(--rose-deep);font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:.2rem .6rem;border-radius:20px;margin-right:.4rem}
+  .badge.cai{background:var(--champagne);color:#8a5030}
+  .materia-header{display:flex;align-items:center;gap:.8rem;padding:1rem 1.2rem;border-radius:var(--radius);margin:0 0 1.5rem;font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:500}
+  .materia-header.const{background:linear-gradient(135deg,var(--lavender),#ede0ec)}
+  .materia-header .tempo{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faded);margin-left:auto;font-family:'Inter',sans-serif}
+  .incidencia{font-size:.7rem;color:var(--rose-deep);font-weight:600;background:var(--rose-soft);padding:.2rem .5rem;border-radius:4px}
+  hr{border:none;border-top:1px solid var(--line);margin:2rem 0}
+  mark{background:var(--blush);color:var(--ink);border-radius:3px;padding:0 2px} mark.aten{background:#ffe4c0} mark.ok{background:#d8f0d0}
+  .ascii-box{font-family:'Courier New',monospace;font-size:.78rem;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:1rem;margin:1rem 0;overflow-x:auto;line-height:1.5;color:var(--ink-soft);white-space:pre}
+  .stat-row{display:flex;gap:1rem;margin:1rem 0;flex-wrap:wrap}
+  .stat-card{flex:1;min-width:120px;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:.8rem;text-align:center}
+  .stat-card .num{font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--rose-deep);font-weight:600}
+  .stat-card .label{font-size:.68rem;color:var(--ink-faded);text-transform:uppercase;letter-spacing:.08em}
+  .caso{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:1rem 1.2rem;margin:1rem 0}
+  .caso-titulo{font-size:.72rem;text-transform:uppercase;letter-spacing:.12em;font-weight:700;color:var(--rose-deep);margin-bottom:.5rem}
+  .caso-resp{margin-top:.6rem;padding-top:.6rem;border-top:1px solid var(--line);font-size:.88rem}
+  .caso-resp strong{color:var(--rose-deep)}
+</style>
+</head>
+<body>
+
+<div class="materia-header const">
+  <span>🏛️</span>
+  <span>Constitucional — Poder Judiciário e Controle Difuso</span>
+  <span class="incidencia">69% provas</span>
+  <span class="tempo">⏱ 2h</span>
+</div>
+
+<div class="stat-row">
+  <div class="stat-card"><div class="num">11</div><div class="label">Ministros do STF</div></div>
+  <div class="stat-card"><div class="num">33</div><div class="label">Mínimo de ministros do STJ</div></div>
+  <div class="stat-card"><div class="num">SV 10</div><div class="label">Cláusula reserva de plenário</div></div>
+  <div class="stat-card"><div class="num">Art. 97</div><div class="label">Reserva de plenário — quórum</div></div>
+</div>
+
+<h2>I. Poder Judiciário — <em>Organização e Garantias</em></h2>
+
+<h3>1.1 Estrutura do Judiciário Brasileiro</h3>
+
+<div class="ascii-box">SUPREMO TRIBUNAL FEDERAL (STF)
+│ Guarda da Constituição · 11 Ministros · sede em Brasília
+│
+├── SUPERIOR TRIBUNAL DE JUSTIÇA (STJ)
+│   Uniformizar interpretação da lei federal infraconstitucional · mín. 33 Ministros
+│
+├── TRIBUNAL SUPERIOR DO TRABALHO (TST)
+│   27 Ministros
+│
+├── TRIBUNAL SUPERIOR ELEITORAL (TSE)
+│   Mín. 7 membros
+│
+└── SUPERIOR TRIBUNAL MILITAR (STM)
+    15 Ministros (10 militares + 5 civis)
+
+JUSTIÇAS ESPECIALIZADAS:          JUSTIÇA COMUM:
+JT: TST → TRTs → Varas do Trabalho  JF: STJ → TRFs → Varas Federais
+JE: TSE → TREs → Zonas Eleitorais   JE: STJ/STF → TJs → Juízes Estaduais
+JM: STM → Auditoria Militar</div>
+
+<h3>1.2 Garantias dos Magistrados (art. 95 CF)</h3>
+<table>
+  <tr><th>Garantia</th><th>Conteúdo</th><th>Observação OAB</th></tr>
+  <tr><td><strong>Vitaliciedade</strong></td><td>Após 2 anos de exercício — perda do cargo só por sentença judicial transitada em julgado</td><td>No 1º grau: 2 anos. Nos tribunais: desde a posse</td></tr>
+  <tr><td><strong>Inamovibilidade</strong></td><td>Não pode ser removido compulsoriamente — exceção: por interesse público (2/3 do tribunal)</td><td>Protege a independência — mas cede por interesse público</td></tr>
+  <tr><td><strong>Irredutibilidade de subsídio</strong></td><td>Subsídio não pode ser reduzido</td><td>Não protege contra IR e contribuições previdenciárias</td></tr>
+</table>
+
+<h3>1.3 Vedações aos Magistrados (art. 95, parágrafo único)</h3>
+<ul>
+  <li>Exercer, ainda que em disponibilidade, <strong>outro cargo ou função</strong> (exceto magistério)</li>
+  <li>Receber custas ou participação em processo</li>
+  <li>Dedicar-se à atividade <strong>político-partidária</strong></li>
+  <li>Receber auxílios de pessoas jurídicas de direito privado (exceto previstos em lei)</li>
+  <li><mark>Exercer a advocacia</mark> no juízo ou tribunal do qual se afastou — <strong>quarentena de 3 anos</strong> (art. 95, pú, V CF)</li>
+</ul>
+
+<hr>
+
+<h2>II. STF — Supremo Tribunal Federal</h2>
+
+<h3>2.1 Composição e Nomeação</h3>
+<ul>
+  <li><strong>11 Ministros</strong> nomeados pelo Presidente da República após aprovação do Senado (maioria absoluta)</li>
+  <li>Requisitos: cidadão brasileiro (nato ou naturalizado), reputação ilibada, notável saber jurídico, <strong>mais de 35 e menos de 65 anos</strong></li>
+  <li>Vitaliciedade desde a posse; aposentadoria compulsória aos <strong>75 anos</strong></li>
+  <li>Presidência: dentre os próprios Ministros, por eleição, mandato de 2 anos</li>
+</ul>
+
+<h3>2.2 Competências do STF</h3>
+<table>
+  <tr><th>Competência</th><th>Exemplos (art. 102 CF)</th></tr>
+  <tr><td><strong>Originária</strong></td><td>ADI, ADC, ADPF, ADO; crimes comuns do Presidente, Vice, parlamentares federais, Ministros de Estado; conflito entre Estados ou entre Estado e União; habeas corpus do Presidente e Ministros</td></tr>
+  <tr><td><strong>Recursal ordinária</strong></td><td>HC, MS, HD, MI decididos em única instância por TRF/TJ quando a decisão for denegatória; crime político</td></tr>
+  <tr><td><strong>Recursal extraordinária</strong></td><td>Contrariedade à CF, declaração de inconstitucionalidade de tratado ou lei federal, validade de lei ou ato local contestado em face da CF</td></tr>
+</table>
+
+<div class="callout dica">
+  <span class="callout-label">✦ Repercussão Geral — filtro do RExt</span>
+  <p>O RE só é admitido pelo STF se demonstrar <strong>repercussão geral</strong> — relevância jurídica, política, social ou econômica que ultrapasse o interesse das partes. Decisão sobre repercussão: por maioria de 2/3 (8 ministros).</p>
+</div>
+
+<hr>
+
+<h2>III. STJ — Superior Tribunal de Justiça</h2>
+
+<ul>
+  <li>Mínimo de <strong>33 Ministros</strong> (nomeados pelo Presidente da República após aprovação do Senado)</li>
+  <li>Requisitos iguais ao STF (exceto faixa etária — não há limite máximo na CF; aposentadoria compulsória aos 75 anos)</li>
+  <li>Composição: 1/3 de juízes federais (TRF), 1/3 de desembargadores (TJ), 1/3 de advogados e membros do MP</li>
+  <li>Uniformiza interpretação da <strong>lei federal infraconstitucional</strong></li>
+  <li>Recurso Especial (REsp): contrariedade ou negação de vigência de tratado ou lei federal; divergência entre tribunais na interpretação de lei federal</li>
+</ul>
+
+<hr>
+
+<h2>IV. Controle Difuso de Constitucionalidade <span class="badge cai">Alta incidência</span></h2>
+
+<h3>4.1 Características</h3>
+<table>
+  <tr><th>Aspecto</th><th>Controle Difuso</th><th>Controle Concentrado</th></tr>
+  <tr><td>Órgão</td><td><mark class="ok">Qualquer juiz ou tribunal</mark></td><td>STF (ou TJ para lei estadual)</td></tr>
+  <tr><td>Origem</td><td>Incidental (questão prejudicial em outro processo)</td><td>Principal (objeto único da ação)</td></tr>
+  <tr><td>Legitimidade</td><td>Qualquer parte do processo</td><td>Legitimados restritos (art. 103 CF)</td></tr>
+  <tr><td>Efeito</td><td><strong>Inter partes</strong> (regra)</td><td><strong>Erga omnes</strong></td></tr>
+  <tr><td>Efeito temporal</td><td>Ex tunc (regra)</td><td>Ex nunc (regra) com possibilidade de modulação</td></tr>
+</table>
+
+<h3>4.2 Cláusula de Reserva de Plenário — Art. 97 CF</h3>
+
+<div class="callout lei">
+  <span class="callout-label">📜 Art. 97 CF (textual)</span>
+  <p>"Somente pelo voto da maioria absoluta de seus membros ou dos membros do respectivo órgão especial poderão os tribunais declarar a inconstitucionalidade de lei ou ato normativo do Poder Público."</p>
+</div>
+
+<p>A reserva de plenário exige que a declaração de inconstitucionalidade por um tribunal seja feita pelo <strong>pleno ou órgão especial</strong> — nunca pela turma ou câmara fracionária isolada.</p>
+
+<div class="callout jurisprudencia">
+  <span class="callout-label">⚖ Súmula Vinculante 10 — STF</span>
+  <p>"Viola a cláusula de reserva de plenário (CF, artigo 97) a decisão de órgão fracionário de tribunal que, embora não declare expressamente a inconstitucionalidade de lei ou ato normativo do poder público, <strong>afasta sua incidência no todo ou em parte</strong>."</p>
+  <p><strong>Consequência prática:</strong> órgão fracionário não pode simplesmente "deixar de aplicar" a lei por entendê-la inconstitucional sem levar ao plenário. Isso viola o art. 97 CF e a SV 10.</p>
+</div>
+
+<h3>4.3 Exceções à Reserva de Plenário</h3>
+<ul>
+  <li>Quando o <strong>pleno do próprio tribunal</strong> ou o <strong>STF</strong> já se pronunciou pela inconstitucionalidade — dispensada nova remessa ao pleno (art. 949, parágrafo único CPC)</li>
+  <li>Juízes de 1º grau <strong>não precisam observar</strong> a reserva — aplicam-na individualmente (só tribunais)</li>
+  <li><strong>Turmas do STF</strong> não precisam: o quórum do art. 97 não se aplica internamente ao STF</li>
+</ul>
+
+<h3>4.4 Suspensão pelo Senado — Art. 52, X CF</h3>
+
+<p>Quando o STF declara lei inconstitucional no controle difuso, a decisão tem efeito <em>inter partes</em>. Para dar efeito <em>erga omnes</em>, o STF pode comunicar ao Senado, que mediante resolução <strong>suspende a execução da lei</strong> no todo ou em parte.</p>
+
+<div class="callout atencao">
+  <span class="callout-label">⚠ Teorias sobre o art. 52, X CF</span>
+  <p><strong>Teoria clássica:</strong> o Senado tem discricionariedade — pode ou não suspender. <strong>Teoria da abstrativização (STF — tendência majoritária):</strong> as decisões do STF em controle difuso têm, de fato, efeito erga omnes — o papel do Senado seria apenas de dar publicidade. Essa segunda teoria vem ganhando força na jurisprudência do STF. Para a OAB: mencionar as duas teorias, mas saber que a clássica ainda é a posição formal.</p>
+</div>
+
+<hr>
+
+<h2>V. Súmula Vinculante</h2>
+<ul>
+  <li>Prevista no art. 103-A CF (EC 45/2004)</li>
+  <li>Aprovada por <strong>2/3 dos Ministros do STF</strong> (8 de 11)</li>
+  <li>Reiteradas decisões sobre a mesma matéria constitucional</li>
+  <li>Vincula: todos os órgãos do <strong>Poder Judiciário</strong> e da <strong>Administração Pública direta e indireta</strong> (não vincula o Legislativo)</li>
+  <li>Reclamação ao STF para garantir observância da SV</li>
+</ul>
+
+<hr>
+
+<h2>VI. Pegadinhas da Banca</h2>
+<div class="callout pegadinha">
+  <span class="callout-label">⚠ 5 Pegadinhas — Judiciário e Controle Difuso</span>
+  <ol>
+    <li><strong>Vitaliciedade no 1º grau = após 2 anos.</strong> No tribunal = desde a posse. A banca inverte ou generaliza.</li>
+    <li><strong>Cláusula reserva de plenário = qualquer afastamento da lei.</strong> Não é só "declaração expressa" — se a turma afasta a incidência da lei por inconstitucionalidade implícita, também viola o art. 97 (SV 10).</li>
+    <li><strong>Juiz singular não precisa de reserva de plenário.</strong> A cláusula do art. 97 CF é só para tribunais. O juiz de 1º grau pode declarar inconstitucionalidade individualmente.</li>
+    <li><strong>Súmula vinculante NÃO vincula o Legislativo.</strong> Vincula Judiciário e Administração Pública. O Congresso pode editar lei contrária à SV (isso não viola a SV — pode iniciar processo de revisão).</li>
+    <li><strong>STF tem 11 ministros, STJ tem mínimo 33.</strong> A banca inverte ou confunde. Maioria absoluta do STF = 6 votos. Quórum para SV = 2/3 = 8 votos.</li>
+  </ol>
+</div>
+
+<hr>
+
+<h2>VII. Resumo Esquemático</h2>
+<div class="ascii-box">PODER JUDICIÁRIO — MAPA RÁPIDO
+
+STF: 11 Ministros · guarda da CF · competência originária (ADI, ADC, ADPF...)
+STJ: mín. 33 Ministros · lei federal infraconstitucional · REsp
+TST/TSE/STM: justiças especializadas
+
+GARANTIAS MAGISTRADOS: vitaliciedade (2 anos 1ºgrau · posse tribunal) +
+                        inamovibilidade + irredutibilidade de subsídio
+VEDAÇÕES: outra função (exceto magistério) · atividade político-partidária
+          advocacia no juízo de origem (quarentena 3 anos)
+
+CONTROLE DIFUSO
+├── Qualquer juiz ou tribunal (incidentalmente)
+├── Efeito inter partes
+├── CLÁUSULA RESERVA PLENÁRIO (art. 97 CF + SV 10):
+│   → Tribunal: pleno ou órgão especial · maioria absoluta
+│   → Câmara/Turma NÃO pode afastar a lei (nem implicitamente)
+│   → Exceção: STF já declarou inconstitucional → dispensa nova remessa
+└── SENADO (art. 52, X CF): pode suspender → efeito erga omnes
+
+SÚMULA VINCULANTE (art. 103-A CF)
+├── 2/3 do STF (8 min.) + reiteradas decisões
+└── Vincula: Judiciário + Adm. Pública (NÃO o Legislativo)</div>
+
+<div class="caso">
+  <div class="caso-titulo">Caso Prático — Reserva de Plenário</div>
+  <p>A 3ª Câmara Criminal do Tribunal de Justiça do Estado X, ao julgar apelação, entendeu que determinado artigo da lei estadual era inconstitucional e, sem remetê-lo ao Pleno, simplesmente deixou de aplicá-lo ao caso. Há vício processual?</p>
+  <div class="caso-resp"><strong>Resposta:</strong> SIM. A Câmara violou a <strong>cláusula de reserva de plenário</strong> (art. 97 CF) e a <strong>SV 10 do STF</strong>. A declaração de inconstitucionalidade (mesmo implícita, quando o órgão afasta a incidência da lei) por órgão fracionário de tribunal exige remessa ao Plenário ou Órgão Especial. O vício é de nulidade processual — cabe reclamação ao STF para garantir a observância da SV 10.</div>
+</div>
+
+<script src="../highlighter.js"></script>
+<script>
+  const pt = window.parent && window.parent.document.documentElement.getAttribute('data-theme');
+  if (pt) document.documentElement.setAttribute('data-theme', pt);
+  window.addEventListener('message', e => {
+    if (!e.data) return;
+    if (e.data.type === 'set-theme') document.documentElement.setAttribute('data-theme', e.data.theme);
+    if (e.data.type === 'set-accent' && e.data.vars) { const r = document.documentElement; Object.keys(e.data.vars).forEach(k => { if(e.data.vars[k]) r.style.setProperty(k, e.data.vars[k]); }); }
+    if (e.data.type === 'hl-clear' && window.clearHighlights) window.clearHighlights();
+  });
+</script>
+</body>
+</html>

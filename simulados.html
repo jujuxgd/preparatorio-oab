@@ -1,283 +1,311 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Preparatório - OAB</title>
+<title>Simulados - OAB</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&family=Caveat:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="icon" href="favicon.png" type="image/png">
 <link rel="stylesheet" href="style.css">
 <style>
-.simulado-hero {
-  background: linear-gradient(135deg, var(--lavender) 0%, var(--rose-soft) 50%, var(--champagne) 100%);
-  padding: 2.5rem;
-  border-radius: var(--radius-lg);
-  margin-bottom: 2rem;
+/* ── Hero de stats ─── */
+.sim-hero {
   display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 2rem;
-  align-items: center;
-  box-shadow: var(--shadow);
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.sim-stat {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.1rem 1.3rem;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
   position: relative;
   overflow: hidden;
 }
-
-.simulado-hero::before {
-  content: '⌖';
+.sim-stat::before {
+  content: '';
   position: absolute;
-  top: -40px;
-  right: -20px;
-  font-size: 14rem;
-  color: rgba(255,255,255,0.15);
-  font-family: 'Playfair Display', serif;
-  font-style: italic;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--rose), var(--rose-deep));
 }
-
-[data-theme="dark"] .simulado-hero::before { color: rgba(0,0,0,0.2); }
-
-.simulado-hero h2 {
+.sim-stat.pass::before { background: linear-gradient(90deg,#60b860,#3a9840); }
+.sim-stat.fail::before { background: linear-gradient(90deg,#e05070,#c03050); }
+.sim-num {
   font-family: 'Playfair Display', serif;
   font-size: 2.2rem;
   font-weight: 500;
-  margin-bottom: 0.5rem;
-  letter-spacing: -0.02em;
-  position: relative;
+  color: var(--rose-deep);
+  line-height: 1;
+  margin-bottom: 0.3rem;
 }
+.sim-stat.pass .sim-num { color: #3a9840; }
+.sim-stat.fail .sim-num { color: #c03050; }
+.sim-label { font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-faded); }
 
-.simulado-hero h2 em { font-style: italic; color: var(--rose-deep); }
-
-.simulado-hero p {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.05rem;
-  color: var(--ink-soft);
-  font-style: italic;
+/* ── Meta bar ─── */
+.meta-bar {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1rem 1.4rem;
   margin-bottom: 1.5rem;
-  max-width: 480px;
-  position: relative;
-}
-
-.simulado-hero .meta-grid {
   display: flex;
-  gap: 2rem;
+  align-items: center;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  box-shadow: var(--shadow-sm);
+}
+.meta-label { font-size: 0.78rem; color: var(--ink-faded); white-space: nowrap; }
+.meta-track {
+  flex: 1;
+  min-width: 120px;
+  height: 10px;
+  background: var(--bg-soft);
+  border-radius: 5px;
+  overflow: hidden;
+}
+.meta-fill {
+  height: 100%;
+  border-radius: 5px;
+  transition: width 0.6s ease;
+  background: linear-gradient(90deg, #e05070, #e05070);
+}
+.meta-fill.ok { background: linear-gradient(90deg, #60b860, #3a9840); }
+.meta-pct {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.meta-nota {
+  font-size: 0.75rem;
+  color: var(--ink-faded);
+  white-space: nowrap;
+}
+
+/* ── Formulário ─── */
+.sim-form {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.5rem;
   margin-bottom: 1.5rem;
-  position: relative;
+  box-shadow: var(--shadow-sm);
+  display: none;
+}
+.sim-form.open { display: block; animation: fadeInUp 0.3s ease; }
+
+.tipo-toggle {
+  display: flex;
+  gap: 0;
+  background: var(--bg-soft);
+  border-radius: var(--radius-sm);
+  padding: 3px;
+  margin-bottom: 1.2rem;
+  width: fit-content;
+}
+.tipo-btn {
+  padding: 0.55rem 1.4rem;
+  border: none;
+  border-radius: calc(var(--radius-sm) - 2px);
+  font-size: 0.82rem;
+  font-family: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition);
+  color: var(--ink-faded);
+  background: transparent;
+}
+.tipo-btn.active {
+  background: var(--paper);
+  color: var(--rose-deep);
+  box-shadow: var(--shadow-sm);
+  font-weight: 600;
 }
 
-.meta-item {
-  text-align: center;
+.sim-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem;
+  margin-bottom: 1rem;
 }
+@media (max-width: 600px) { .sim-form-grid { grid-template-columns: 1fr; } }
 
-.meta-item .val {
+.sim-field label {
+  display: block;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-faded);
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+}
+.sim-input, .sim-select {
+  width: 100%;
+  padding: 0.6rem 0.85rem;
+  font-size: 0.88rem;
+  font-family: inherit;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--bg-soft);
+  color: var(--ink);
+  transition: border-color var(--transition), box-shadow var(--transition);
+  appearance: none;
+}
+.sim-input:focus, .sim-select:focus {
+  outline: none;
+  border-color: var(--rose);
+  box-shadow: 0 0 0 3px rgba(255, 77, 166, 0.12);
+}
+.sim-input[type="number"] { text-align: center; }
+
+.resultado-preview {
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 0.8rem 1rem;
+  margin: 0.8rem 0;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+}
+.resultado-pct {
   font-family: 'Playfair Display', serif;
   font-size: 1.8rem;
   font-weight: 500;
-  color: var(--rose-deep);
   line-height: 1;
 }
-
-.meta-item .lbl {
-  font-size: 0.65rem;
-  letter-spacing: 0.18em;
+.resultado-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--ink-faded);
-  margin-top: 0.3rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 20px;
+}
+.resultado-badge.pass { background: rgba(90, 180, 90, 0.15); color: #3a9840; }
+.resultado-badge.fail { background: rgba(200, 60, 80, 0.12); color: #c03050; }
+
+.sim-form-actions {
+  display: flex;
+  gap: 0.6rem;
+  justify-content: flex-end;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+  margin-top: 0.8rem;
 }
 
-.start-btn-big {
-  background: linear-gradient(135deg, var(--rose) 0%, var(--rose-deep) 100%);
-  color: var(--paper);
-  border: none;
-  padding: 1.5rem 2.5rem;
-  font-size: 0.9rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
+/* ── Lista de simulados ─── */
+.sim-filters {
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 1.2rem;
+  flex-wrap: wrap;
+}
+.sim-chip {
+  padding: 0.35rem 0.85rem;
+  background: var(--bg-soft);
+  border: 1px solid transparent;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  color: var(--ink-soft);
   cursor: pointer;
-  font-family: inherit;
-  border-radius: var(--radius);
-  font-weight: 600;
-  box-shadow: var(--shadow);
-  transition: all var(--transition);
-  position: relative;
-  min-width: 200px;
+  transition: all 0.2s;
+  user-select: none;
+}
+.sim-chip:hover { background: var(--blush); }
+.sim-chip.active {
+  background: linear-gradient(135deg, var(--rose), var(--rose-deep));
+  color: white;
 }
 
-.start-btn-big:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-lg);
-}
-
-.section-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.5rem;
-  font-weight: 500;
-  margin: 2rem 0 1.2rem;
-  letter-spacing: -0.01em;
-}
-
-.section-title em { font-style: italic; color: var(--rose-deep); }
-
-.simulados-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-  gap: 1.2rem;
-}
+.sim-list { display: flex; flex-direction: column; gap: 0.8rem; }
 
 .sim-card {
   background: var(--paper);
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  padding: 1.6rem 1.8rem;
-  transition: all var(--transition);
-  cursor: pointer;
+  padding: 1.1rem 1.4rem;
   box-shadow: var(--shadow-sm);
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  gap: 1rem;
+  align-items: center;
+  transition: box-shadow var(--transition);
 }
+.sim-card:hover { box-shadow: var(--shadow); }
 
-.sim-card:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow);
-}
-
-.sim-card-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 1rem;
-}
-
-.sim-tag {
-  font-size: 0.65rem;
-  letter-spacing: 0.18em;
+.sim-card-type {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  padding: 0.3rem 0.7rem;
+  padding: 0.3rem 0.65rem;
   border-radius: 20px;
-  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
+.sim-card-type.simulado { background: var(--rose-soft); color: var(--rose-deep); }
+.sim-card-type.prova { background: rgba(80, 80, 200, 0.1); color: #4040c0; }
+[data-theme="dark"] .sim-card-type.prova { color: #9090ff; background: rgba(100,100,255,0.15); }
 
-.sim-tag.feito {
-  background: rgba(168, 184, 154, 0.2);
-  color: var(--success);
-}
-[data-theme="dark"] .sim-tag.feito { color: #b8c9a8; }
-
-.sim-tag.pendente {
-  background: var(--blush);
-  color: var(--rose-deep);
-}
-
-.sim-tag.agendado {
-  background: var(--bg-soft);
-  color: var(--ink-faded);
-}
-
-.sim-score {
+.sim-card-info { min-width: 0; }
+.sim-card-nome {
   font-family: 'Playfair Display', serif;
-  font-size: 2rem;
+  font-size: 0.95rem;
   font-weight: 500;
-  color: var(--rose-deep);
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sim-card-data { font-size: 0.72rem; color: var(--ink-faded); margin-top: 0.1rem; }
+
+.sim-card-result { text-align: right; flex-shrink: 0; }
+.sim-card-pct {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  font-weight: 500;
   line-height: 1;
 }
+.sim-card-pct.pass { color: #3a9840; }
+.sim-card-pct.fail { color: #c03050; }
+.sim-card-detail { font-size: 0.7rem; color: var(--ink-faded); margin-top: 0.1rem; }
 
-.sim-score small {
-  font-size: 0.8rem;
-  color: var(--ink-faded);
-  font-weight: 400;
+.sim-card-actions { flex-shrink: 0; }
+
+/* Mobile */
+@media (max-width: 640px) {
+  .sim-card { grid-template-columns: 1fr auto; grid-template-rows: auto auto; gap: 0.5rem; }
+  .sim-card-type { grid-column: 1; }
+  .sim-card-result { grid-column: 2; grid-row: 1 / 3; }
+  .sim-card-info { grid-column: 1; grid-row: 2; }
+  .sim-card-actions { display: none; }
 }
 
-.sim-name {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.25rem;
-  font-weight: 500;
-  margin-bottom: 0.4rem;
-  letter-spacing: -0.01em;
-}
-
-.sim-name em { font-style: italic; color: var(--rose-deep); }
-
-.sim-meta {
-  font-size: 0.78rem;
-  color: var(--ink-faded);
-  margin-bottom: 1rem;
-  letter-spacing: 0.03em;
-}
-
-.sim-footer {
-  display: flex;
-  justify-content: space-between;
-  padding-top: 1rem;
-  border-top: 1px dotted var(--line);
-  font-size: 0.78rem;
-  color: var(--ink-soft);
-}
-
-.sim-footer strong {
-  color: var(--ink);
-  font-family: 'Playfair Display', serif;
-  font-weight: 600;
-}
-
-.history-graph {
-  background: var(--paper);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 1.8rem;
-  margin-bottom: 1.5rem;
-  box-shadow: var(--shadow-sm);
-}
-
-.graph-bars {
-  display: flex;
-  gap: 1rem;
-  align-items: end;
-  height: 180px;
-  padding: 1rem 0;
-  border-bottom: 1px solid var(--line);
-}
-
-.graph-bar-wrap {
-  flex: 1;
+.empty-state {
   text-align: center;
-}
-
-.graph-bar {
-  background: linear-gradient(180deg, var(--rose) 0%, var(--rose-deep) 100%);
-  border-radius: 6px 6px 0 0;
-  margin: 0 auto;
-  width: 60%;
-  position: relative;
-  transition: all var(--transition);
-}
-
-.graph-bar:hover { opacity: 0.85; }
-
-.graph-bar .val {
-  position: absolute;
-  top: -20px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-family: 'Playfair Display', serif;
-  font-size: 0.9rem;
-  color: var(--rose-deep);
-  font-weight: 600;
-}
-
-.graph-bar-wrap .lbl {
-  font-size: 0.72rem;
+  padding: 4rem 2rem;
   color: var(--ink-faded);
-  margin-top: 0.5rem;
-  letter-spacing: 0.05em;
 }
+.empty-state .eicon { font-size: 3rem; margin-bottom: 1rem; display: block; }
+.empty-state h3 { font-family:'Playfair Display',serif; font-size:1.2rem; color:var(--ink-soft); margin-bottom:0.5rem; }
 </style>
 </head>
 <body>
 
 <div class="aurora-bg" aria-hidden="true">
-  <div class="aurora-blob ab1"></div>
-  <div class="aurora-blob ab2"></div>
-  <div class="aurora-blob ab3"></div>
-  <div class="aurora-blob ab4"></div>
+  <div class="aurora-blob ab1"></div><div class="aurora-blob ab2"></div>
+  <div class="aurora-blob ab3"></div><div class="aurora-blob ab4"></div>
 </div>
-
 <button class="mobile-menu-btn" onclick="toggleSidebar()" title="Menu">☰</button>
 
 <div class="app">
@@ -291,22 +319,23 @@
     <a href="index.html" class="nav-link"><span class="icon">✦</span><span>Início</span></a>
     <a href="hoje.html" class="nav-link"><span class="icon">◐</span><span>Hoje</span></a>
     <a href="calendario.html" class="nav-link"><span class="icon">☷</span><span>Calendário</span></a>
-    <a href="revisar.html" class="nav-link"><span class="icon">↻</span><span>Revisar</span><span class="badge" style="display:none">0</span></a>
+    <a href="revisar.html" class="nav-link"><span class="icon">↻</span><span>Revisar</span></a>
     <div class="nav-section-label">Estudo</div>
     <a href="materias.html" class="nav-link"><span class="icon">❖</span><span>Matérias</span></a>
     <a href="questoes.html" class="nav-link"><span class="icon">◎</span><span>Questões</span></a>
-    
-    
-    <a href="simulados.html" class="nav-link active"><span class="icon">⌖</span><span>Simulados</span></a>
-    
+    <a href="fichamentos.html" class="nav-link"><span class="icon">✎</span><span>Fichamentos</span></a>
     <div class="nav-section-label">Análise</div>
     <a href="estatisticas.html" class="nav-link"><span class="icon">◈</span><span>Estatísticas</span></a>
+    <a href="simulados.html" class="nav-link active"><span class="icon">◉</span><span>Simulados</span></a>
     <div class="sidebar-footer">
       <div class="profile-card">
         <div class="profile-avatar">
           <img src="foto-perfil.jpg" alt="Julia" onerror="this.style.display='none'; this.parentElement.innerHTML='J';">
         </div>
-        <div class="profile-info"><div class="name">Julia</div><div class="meta">Estudante de Direito</div></div>
+        <div class="profile-info">
+          <div class="name">Julia</div>
+          <div class="meta">Estudante de Direito</div>
+        </div>
       </div>
       <button class="theme-toggle" onclick="toggleTheme()">
         <span class="theme-label">Modo escuro</span>
@@ -318,153 +347,411 @@
   <main>
     <div class="topbar">
       <div class="page-title">
-        <div class="breadcrumb">Treino sob pressão</div>
-        <h1>Seus <em>simulados</em></h1>
+        <div class="breadcrumb">Análise · <span data-month-year>—</span></div>
+        <h1>Meus <em>simulados</em></h1>
       </div>
       <div class="topbar-actions">
-        <div class="streak-pill">
-          <span class="flame">🌸</span><span class="count">0</span><span class="label">dias</span>
-        </div>
+        <button class="btn btn-primary" id="btn-novo-sim" onclick="toggleForm()">+ Registrar simulado</button>
       </div>
     </div>
 
-    <!-- HERO -->
-    <div class="simulado-hero">
-      <div>
-        <h2>Próximo simulado <em>·</em> 17 de janeiro</h2>
-        <p>Simulado parcial · 2 horas · 40 questões selecionadas das matérias já estudadas. Como uma prova real, sem pausas longas.</p>
-        <div class="meta-grid">
-          <div class="meta-item">
-            <div class="val">40</div>
-            <div class="lbl">questões</div>
+    <!-- STATS -->
+    <div class="sim-hero" id="sim-hero"></div>
+
+    <!-- META OAB -->
+    <div class="meta-bar" id="meta-bar">
+      <span class="meta-label">Meta OAB (≥ 50%)</span>
+      <div class="meta-track"><div class="meta-fill" id="meta-fill" style="width:0%"></div></div>
+      <span class="meta-pct" id="meta-pct">—</span>
+      <span class="meta-nota" id="meta-nota">Nenhum simulado registrado</span>
+    </div>
+
+    <!-- FORMULÁRIO -->
+    <div class="sim-form" id="sim-form">
+      <div style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:500;margin-bottom:1.2rem;color:var(--ink)">
+        Registrar simulado
+      </div>
+
+      <!-- Tipo -->
+      <div class="tipo-toggle">
+        <button class="tipo-btn active" id="btn-tipo-sim" onclick="setTipo('simulado')">📝 Simulado</button>
+        <button class="tipo-btn" id="btn-tipo-prova" onclick="setTipo('prova_oab')">⚖️ Prova OAB</button>
+      </div>
+
+      <!-- Origem -->
+      <div id="campo-simulado" class="sim-field" style="margin-bottom:0.8rem">
+        <label>Fonte / Origem do simulado</label>
+        <input type="text" class="sim-input" id="sim-fonte" placeholder="Ex: CERS, Estratégia, Gran Cursos, IA, próprio...">
+      </div>
+      <div id="campo-prova" style="display:none;margin-bottom:0.8rem">
+        <div class="sim-form-grid">
+          <div class="sim-field">
+            <label>Ano da prova</label>
+            <select class="sim-select" id="sim-ano">
+              <option value="">Selecione...</option>
+              <option>2025</option><option>2024</option><option>2023</option>
+              <option>2022</option><option>2021</option><option>2020</option>
+              <option>2019</option><option>2018</option><option>2017</option>
+              <option>2016</option><option>2015</option><option>2014</option>
+              <option>2013</option><option>2012</option><option>2011</option><option>2010</option>
+            </select>
           </div>
-          <div class="meta-item">
-            <div class="val">2h</div>
-            <div class="lbl">duração</div>
+          <div class="sim-field">
+            <label>Nº do exame (romano)</label>
+            <select class="sim-select" id="sim-exame">
+              <option value="">Selecione...</option>
+              <option>I</option><option>II</option><option>III</option><option>IV</option>
+              <option>V</option><option>VI</option><option>VII</option><option>VIII</option>
+              <option>IX</option><option>X</option><option>XI</option><option>XII</option>
+              <option>XIII</option><option>XIV</option><option>XV</option><option>XVI</option>
+              <option>XVII</option><option>XVIII</option><option>XIX</option><option>XX</option>
+              <option>XXI</option><option>XXII</option><option>XXIII</option><option>XXIV</option>
+              <option>XXV</option><option>XXVI</option><option>XXVII</option><option>XXVIII</option>
+              <option>XXIX</option><option>XXX</option><option>XXXI</option><option>XXXII</option>
+              <option>XXXIII</option><option>XXXIV</option><option>XXXV</option><option>XXXVI</option>
+              <option>XXXVII</option><option>XXXVIII</option><option>XXXIX</option><option>XL</option>
+              <option>XLI</option><option>XLII</option><option>XLIII</option><option>XLIV</option>
+              <option>XLV</option><option>XLVI</option><option>XLVII</option><option>XLVIII</option>
+            </select>
           </div>
-          <div class="meta-item">
-            <div class="val">26<small style="font-size:0.7rem">/40</small></div>
-            <div class="lbl">corte 50%</div>
-          </div>
         </div>
       </div>
-      <button class="start-btn-big">Começar agora →</button>
+
+      <!-- Data + Questões -->
+      <div class="sim-form-grid">
+        <div class="sim-field">
+          <label>Data de realização</label>
+          <input type="date" class="sim-input" id="sim-data">
+        </div>
+        <div class="sim-field">
+          <label>Total de questões</label>
+          <input type="number" class="sim-input" id="sim-total" value="80" min="1" max="200" oninput="atualizarPreview()">
+        </div>
+      </div>
+
+      <!-- Acertos + Erros -->
+      <div class="sim-form-grid">
+        <div class="sim-field">
+          <label>✅ Acertos</label>
+          <input type="number" class="sim-input" id="sim-acertos" min="0" max="200" placeholder="0" oninput="atualizarPreview()">
+        </div>
+        <div class="sim-field">
+          <label>❌ Erros / Em branco</label>
+          <input type="number" class="sim-input" id="sim-erros" min="0" max="200" placeholder="auto" oninput="sincronizarErros()">
+        </div>
+      </div>
+
+      <!-- Preview resultado -->
+      <div class="resultado-preview" id="resultado-preview" style="display:none">
+        <div>
+          <div class="resultado-pct" id="preview-pct">—</div>
+          <div style="font-size:0.72rem;color:var(--ink-faded);margin-top:0.15rem" id="preview-frac">0/80</div>
+        </div>
+        <div style="flex:1">
+          <span class="resultado-badge" id="preview-badge">—</span>
+          <div style="font-size:0.75rem;color:var(--ink-soft);margin-top:0.3rem" id="preview-msg">—</div>
+        </div>
+      </div>
+
+      <!-- Observações -->
+      <div class="sim-field" style="margin-bottom:0.8rem">
+        <label>Observações (opcional)</label>
+        <textarea class="sim-input" id="sim-obs" rows="2" placeholder="Ex: Materias com mais erros, condições do dia, pontos a revisar..."></textarea>
+      </div>
+
+      <div class="sim-form-actions">
+        <button class="btn btn-ghost" onclick="cancelarForm()">Cancelar</button>
+        <button class="btn btn-primary" style="padding:0.6rem 1.8rem" onclick="registrarSimulado()">Registrar</button>
+      </div>
     </div>
 
-    <!-- HISTÓRICO GRÁFICO -->
-    <div class="history-graph">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.2rem">
-        <h3 class="section-title" style="margin:0">Evolução dos <em>simulados</em></h3>
-        <span style="font-size:0.78rem;color:var(--ink-faded)">% de acertos</span>
-      </div>
-      <div class="graph-bars">
-        <div class="graph-bar-wrap"><div class="graph-bar" style="height:45%"><span class="val">45%</span></div><div class="lbl">28 dez · diagn.</div></div>
-        <div class="graph-bar-wrap"><div class="graph-bar" style="height:52%"><span class="val">52%</span></div><div class="lbl">02 jan</div></div>
-        <div class="graph-bar-wrap"><div class="graph-bar" style="height:58%"><span class="val">58%</span></div><div class="lbl">08 jan</div></div>
-        <div class="graph-bar-wrap"><div class="graph-bar" style="height:62%"><span class="val">62%</span></div><div class="lbl">12 jan</div></div>
-        <div class="graph-bar-wrap"><div class="graph-bar" style="height:35%;background:var(--bg-soft);border:1.5px dashed var(--rose)"><span class="val" style="color:var(--ink-faded)">—</span></div><div class="lbl">17 jan</div></div>
-        <div class="graph-bar-wrap"><div class="graph-bar" style="height:30%;background:var(--bg-soft);border:1.5px dashed var(--rose)"><span class="val" style="color:var(--ink-faded)">—</span></div><div class="lbl">31 jan</div></div>
-      </div>
-      <div style="margin-top:1rem;font-size:0.85rem;color:var(--ink-soft);text-align:center">
-        Crescimento de <strong style="color:var(--rose-deep);font-family:'Playfair Display',serif">+17%</strong> em 16 dias 🌸
-      </div>
+    <!-- FILTROS -->
+    <div class="sim-filters">
+      <span class="sim-chip active" onclick="setFilter('todos', this)">Todos</span>
+      <span class="sim-chip" onclick="setFilter('aprovado', this)">✅ Aprovado (≥50%)</span>
+      <span class="sim-chip" onclick="setFilter('reprovado', this)">❌ Reprovado (&lt;50%)</span>
+      <span class="sim-chip" onclick="setFilter('simulado', this)">📝 Simulados</span>
+      <span class="sim-chip" onclick="setFilter('prova_oab', this)">⚖️ Provas OAB</span>
     </div>
 
-    <h3 class="section-title">Histórico <em>completo</em></h3>
-
-    <div class="simulados-list">
-
-      <div class="sim-card">
-        <div class="sim-card-head">
-          <span class="sim-tag feito">✓ Concluído</span>
-          <div class="sim-score">62<small>%</small></div>
-        </div>
-        <div class="sim-name">Simulado <em>parcial</em> · semana 2</div>
-        <div class="sim-meta">12 jan · 40 questões · 1h 53min</div>
-        <div class="sim-footer">
-          <span>Acertos: <strong>25/40</strong></span>
-          <span>Tempo médio: <strong>2:50/q</strong></span>
-        </div>
-      </div>
-
-      <div class="sim-card">
-        <div class="sim-card-head">
-          <span class="sim-tag feito">✓ Concluído</span>
-          <div class="sim-score">58<small>%</small></div>
-        </div>
-        <div class="sim-name">Simulado <em>parcial</em> · semana 1</div>
-        <div class="sim-meta">08 jan · 30 questões · 1h 22min</div>
-        <div class="sim-footer">
-          <span>Acertos: <strong>17/30</strong></span>
-          <span>Tempo médio: <strong>2:44/q</strong></span>
-        </div>
-      </div>
-
-      <div class="sim-card">
-        <div class="sim-card-head">
-          <span class="sim-tag feito">✓ Concluído</span>
-          <div class="sim-score">52<small>%</small></div>
-        </div>
-        <div class="sim-name">Simulado <em>diagnóstico</em> · OAB XL</div>
-        <div class="sim-meta">02 jan · 80 questões · 4h 38min</div>
-        <div class="sim-footer">
-          <span>Acertos: <strong>42/80</strong></span>
-          <span>Tempo médio: <strong>3:28/q</strong></span>
-        </div>
-      </div>
-
-      <div class="sim-card">
-        <div class="sim-card-head">
-          <span class="sim-tag feito">✓ Concluído</span>
-          <div class="sim-score">45<small>%</small></div>
-        </div>
-        <div class="sim-name">Simulado <em>inicial</em> · prova OAB XXXIX</div>
-        <div class="sim-meta">28 dez · 80 questões · 4h 51min</div>
-        <div class="sim-footer">
-          <span>Acertos: <strong>36/80</strong></span>
-          <span>Tempo médio: <strong>3:38/q</strong></span>
-        </div>
-      </div>
-
-      <div class="sim-card">
-        <div class="sim-card-head">
-          <span class="sim-tag agendado">○ Agendado</span>
-          <div class="sim-score" style="color:var(--ink-faded)">—</div>
-        </div>
-        <div class="sim-name">Simulado <em>mensal</em> · janeiro</div>
-        <div class="sim-meta">31 jan · 80 questões · 5h · prova completa</div>
-        <div class="sim-footer">
-          <span style="color:var(--ink-faded)">Aguardando</span>
-          <span style="color:var(--rose-deep);font-weight:600">em 18 dias</span>
-        </div>
-      </div>
-
-      <div class="sim-card">
-        <div class="sim-card-head">
-          <span class="sim-tag agendado">○ Agendado</span>
-          <div class="sim-score" style="color:var(--ink-faded)">—</div>
-        </div>
-        <div class="sim-name">Simulado <em>final</em> · véspera</div>
-        <div class="sim-meta">27 fev · 80 questões · 5h · simulação real</div>
-        <div class="sim-footer">
-          <span style="color:var(--ink-faded)">Aguardando</span>
-          <span style="color:var(--rose-deep);font-weight:600">em 45 dias</span>
-        </div>
-      </div>
-
-    </div>
+    <!-- LISTA -->
+    <div class="sim-list" id="sim-list"></div>
   </main>
 </div>
 
-<script src="plano-oab.js"></script>
-<script src="progresso.js"></script>
 <script src="script.js"></script>
+<script src="progresso.js"></script>
+<script src="plano-oab.js"></script>
+<script src="cores.js"></script>
+<script>
+const SIM_KEY = 'oab_simulados_v1';
+let _currentFilter = 'todos';
+let _currentTipo = 'simulado';
+
+// ── Storage ──────────────────────────────────
+function _loadSims() {
+  try { return JSON.parse(localStorage.getItem(SIM_KEY) || '[]'); } catch { return []; }
+}
+function _saveSims(arr) { localStorage.setItem(SIM_KEY, JSON.stringify(arr)); }
+
+// ── Tipo toggle ───────────────────────────────
+function setTipo(tipo) {
+  _currentTipo = tipo;
+  document.getElementById('btn-tipo-sim').classList.toggle('active', tipo === 'simulado');
+  document.getElementById('btn-tipo-prova').classList.toggle('active', tipo === 'prova_oab');
+  document.getElementById('campo-simulado').style.display = tipo === 'simulado' ? 'block' : 'none';
+  document.getElementById('campo-prova').style.display   = tipo === 'prova_oab'  ? 'block' : 'none';
+}
+
+// ── Form toggle ───────────────────────────────
+function toggleForm() {
+  const form = document.getElementById('sim-form');
+  const isOpen = form.classList.contains('open');
+  if (!isOpen) {
+    form.classList.add('open');
+    document.getElementById('btn-novo-sim').textContent = '✕ Cancelar';
+    // Default date = today
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('sim-data').value = today;
+    setTimeout(() => {
+      if (_currentTipo === 'simulado') document.getElementById('sim-fonte').focus();
+    }, 60);
+  } else {
+    cancelarForm();
+  }
+}
+
+function cancelarForm() {
+  document.getElementById('sim-form').classList.remove('open');
+  document.getElementById('btn-novo-sim').textContent = '+ Registrar simulado';
+  document.getElementById('sim-fonte').value = '';
+  document.getElementById('sim-ano').value = '';
+  document.getElementById('sim-exame').value = '';
+  document.getElementById('sim-total').value = '80';
+  document.getElementById('sim-acertos').value = '';
+  document.getElementById('sim-erros').value = '';
+  document.getElementById('sim-obs').value = '';
+  document.getElementById('resultado-preview').style.display = 'none';
+}
+
+// ── Preview em tempo real ─────────────────────
+function atualizarPreview() {
+  const total   = parseInt(document.getElementById('sim-total').value) || 80;
+  const acertos = parseInt(document.getElementById('sim-acertos').value);
+  const errEl   = document.getElementById('sim-erros');
+  if (!isNaN(acertos) && acertos >= 0) {
+    errEl.value = Math.max(0, total - acertos);
+    _showPreview(acertos, total);
+  } else {
+    document.getElementById('resultado-preview').style.display = 'none';
+  }
+}
+
+function sincronizarErros() {
+  const total  = parseInt(document.getElementById('sim-total').value) || 80;
+  const erros  = parseInt(document.getElementById('sim-erros').value);
+  const acEl   = document.getElementById('sim-acertos');
+  if (!isNaN(erros) && erros >= 0) {
+    const acertos = Math.max(0, total - erros);
+    acEl.value = acertos;
+    _showPreview(acertos, total);
+  }
+}
+
+function _showPreview(acertos, total) {
+  const pct     = total > 0 ? Math.round((acertos / total) * 100) : 0;
+  const aprovado = pct >= 50;
+  const pEl     = document.getElementById('resultado-preview');
+  pEl.style.display = 'flex';
+  document.getElementById('preview-pct').textContent  = pct + '%';
+  document.getElementById('preview-pct').style.color  = aprovado ? '#3a9840' : '#c03050';
+  document.getElementById('preview-frac').textContent = `${acertos}/${total} questões`;
+  const badge = document.getElementById('preview-badge');
+  badge.textContent  = aprovado ? '✅ Aprovado' : '❌ Reprovado';
+  badge.className    = 'resultado-badge ' + (aprovado ? 'pass' : 'fail');
+  const msg = document.getElementById('preview-msg');
+  if (aprovado) {
+    const sobre = acertos - Math.ceil(total * 0.5);
+    msg.textContent = `${sobre} ${sobre !== 1 ? 'questões' : 'questão'} acima da meta — parabéns!`;
+  } else {
+    const falta = Math.ceil(total * 0.5) - acertos;
+    msg.textContent = `Faltam ${falta} acerto${falta !== 1 ? 's' : ''} para atingir os 50%`;
+  }
+}
+
+// ── Registrar ─────────────────────────────────
+function registrarSimulado() {
+  const total   = parseInt(document.getElementById('sim-total').value) || 80;
+  const acertos = parseInt(document.getElementById('sim-acertos').value);
+  const data    = document.getElementById('sim-data').value;
+
+  if (isNaN(acertos) || acertos < 0 || acertos > total) {
+    document.getElementById('sim-acertos').focus();
+    document.getElementById('sim-acertos').style.borderColor = 'var(--rose-deep)';
+    setTimeout(() => document.getElementById('sim-acertos').style.borderColor = '', 2000);
+    return;
+  }
+
+  let nome;
+  if (_currentTipo === 'simulado') {
+    const fonte = document.getElementById('sim-fonte').value.trim();
+    nome = fonte || 'Simulado ' + new Date(data || Date.now()).toLocaleDateString('pt-BR');
+  } else {
+    const ano   = document.getElementById('sim-ano').value;
+    const exame = document.getElementById('sim-exame').value;
+    if (!exame) {
+      document.getElementById('sim-exame').focus();
+      return;
+    }
+    nome = `Exame ${exame}${ano ? ' (' + ano + ')' : ''}`;
+  }
+
+  const arr = _loadSims();
+  arr.unshift({
+    id:       Date.now(),
+    tipo:     _currentTipo,
+    nome,
+    data:     data || new Date().toISOString().split('T')[0],
+    total,
+    acertos,
+    erros:    total - acertos,
+    pct:      Math.round((acertos / total) * 100),
+    obs:      document.getElementById('sim-obs').value.trim(),
+    criado:   new Date().toISOString()
+  });
+  _saveSims(arr);
+  cancelarForm();
+  render();
+}
+
+// ── Deletar ───────────────────────────────────
+function deletarSim(id) {
+  if (!confirm('Excluir este registro?')) return;
+  _saveSims(_loadSims().filter(s => s.id !== id));
+  render();
+}
+
+// ── Filtro ────────────────────────────────────
+function setFilter(filter, el) {
+  _currentFilter = filter;
+  document.querySelectorAll('.sim-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  renderList();
+}
+
+// ── Format date ───────────────────────────────
+function _fmtDate(iso) {
+  try {
+    return new Date(iso + 'T12:00:00').toLocaleDateString('pt-BR', { day:'2-digit', month:'long', year:'numeric' });
+  } catch { return iso; }
+}
+
+// ── Renderizar stats ──────────────────────────
+function renderStats() {
+  const arr   = _loadSims();
+  const total = arr.length;
+  if (total === 0) {
+    document.getElementById('sim-hero').innerHTML = `
+      <div class="sim-stat"><div class="sim-num">0</div><div class="sim-label">Simulados realizados</div></div>
+      <div class="sim-stat"><div class="sim-num">—</div><div class="sim-label">Média geral</div></div>
+      <div class="sim-stat"><div class="sim-num">—</div><div class="sim-label">Aprovados (≥50%)</div></div>
+      <div class="sim-stat"><div class="sim-num">—</div><div class="sim-label">Melhor resultado</div></div>`;
+    document.getElementById('meta-fill').style.width = '0%';
+    document.getElementById('meta-pct').textContent = '—';
+    document.getElementById('meta-nota').textContent = 'Nenhum simulado registrado';
+    return;
+  }
+
+  const media     = Math.round(arr.reduce((s, x) => s + x.pct, 0) / total);
+  const aprovados = arr.filter(x => x.pct >= 50).length;
+  const melhor    = Math.max(...arr.map(x => x.pct));
+  const aprovPct  = Math.round((aprovados / total) * 100);
+
+  document.getElementById('sim-hero').innerHTML = `
+    <div class="sim-stat"><div class="sim-num">${total}</div><div class="sim-label">Simulados realizados</div></div>
+    <div class="sim-stat ${media >= 50 ? 'pass' : 'fail'}"><div class="sim-num">${media}%</div><div class="sim-label">Média geral</div></div>
+    <div class="sim-stat ${aprovPct >= 50 ? 'pass' : 'fail'}"><div class="sim-num">${aprovados}/${total}</div><div class="sim-label">Aprovados (≥50%)</div></div>
+    <div class="sim-stat ${melhor >= 50 ? 'pass' : 'fail'}"><div class="sim-num">${melhor}%</div><div class="sim-label">Melhor resultado</div></div>`;
+
+  const fillEl = document.getElementById('meta-fill');
+  const pctEl  = document.getElementById('meta-pct');
+  const notaEl = document.getElementById('meta-nota');
+  const clamp  = Math.min(media, 100);
+  fillEl.style.width = clamp + '%';
+  fillEl.className   = 'meta-fill' + (media >= 50 ? ' ok' : '');
+  pctEl.textContent  = media + '%';
+  pctEl.style.color  = media >= 50 ? '#3a9840' : '#c03050';
+
+  if (media >= 50) {
+    notaEl.textContent = `Média ${media >= 60 ? 'excelente' : 'suficiente'} — ${media >= 50 ? '✅ acima' : '❌ abaixo'} da meta de 50%`;
+    notaEl.style.color = '#3a9840';
+  } else {
+    const falta = 50 - media;
+    notaEl.textContent = `Precisa de +${falta}% na média para atingir a meta de 50%`;
+    notaEl.style.color = '#c03050';
+  }
+
+  // Tendência (últimos 3 vs primeiros 3)
+  if (arr.length >= 6) {
+    const ultimos = arr.slice(0, 3).map(x => x.pct);
+    const primeiros = arr.slice(-3).map(x => x.pct);
+    const mediaUlt = Math.round(ultimos.reduce((a,b) => a+b, 0) / 3);
+    const mediaPri = Math.round(primeiros.reduce((a,b) => a+b, 0) / 3);
+    if (mediaUlt > mediaPri) {
+      notaEl.textContent += ` · Tendência: ↑ melhorando`;
+    } else if (mediaUlt < mediaPri) {
+      notaEl.textContent += ` · Tendência: ↓ atenção`;
+    }
+  }
+}
+
+// ── Renderizar lista ──────────────────────────
+function renderList() {
+  let arr = _loadSims();
+  if (_currentFilter === 'aprovado')  arr = arr.filter(s => s.pct >= 50);
+  if (_currentFilter === 'reprovado') arr = arr.filter(s => s.pct < 50);
+  if (_currentFilter === 'simulado')  arr = arr.filter(s => s.tipo === 'simulado');
+  if (_currentFilter === 'prova_oab') arr = arr.filter(s => s.tipo === 'prova_oab');
+
+  const list = document.getElementById('sim-list');
+  if (!arr.length) {
+    list.innerHTML = `<div class="empty-state">
+      <span class="eicon">${_loadSims().length ? '🔍' : '📊'}</span>
+      <h3>${_loadSims().length ? 'Nenhum resultado neste filtro' : 'Nenhum simulado ainda'}</h3>
+      <p style="font-size:0.85rem">${_loadSims().length ? 'Tente outro filtro.' : 'Clique em "+ Registrar simulado" para começar.'}</p>
+    </div>`;
+    return;
+  }
+
+  list.innerHTML = arr.map(s => {
+    const aprovado = s.pct >= 50;
+    const typeCls  = s.tipo === 'prova_oab' ? 'prova' : 'simulado';
+    const typeLabel = s.tipo === 'prova_oab' ? '⚖️ Prova OAB' : '📝 Simulado';
+    return `<div class="sim-card">
+      <span class="sim-card-type ${typeCls}">${typeLabel}</span>
+      <div class="sim-card-info">
+        <div class="sim-card-nome">${s.nome.replace(/</g,'&lt;')}</div>
+        <div class="sim-card-data">${_fmtDate(s.data)}${s.obs ? ' · ' + s.obs.slice(0,50).replace(/</g,'&lt;') : ''}</div>
+      </div>
+      <div class="sim-card-result">
+        <div class="sim-card-pct ${aprovado ? 'pass' : 'fail'}">${s.pct}%</div>
+        <div class="sim-card-detail">${s.acertos}/${s.total} · ${aprovado ? '✅ Aprovado' : '❌ Reprovado'}</div>
+      </div>
+      <div class="sim-card-actions">
+        <button class="btn btn-ghost" style="font-size:0.7rem;padding:0.3rem 0.6rem;color:var(--error)" onclick="deletarSim(${s.id})" title="Excluir">✕</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function render() { renderStats(); renderList(); }
+
+// ── Init ──────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  const el = document.querySelector('[data-month-year]');
+  if (el) el.textContent = new Date().toLocaleDateString('pt-BR', { month:'long', year:'numeric' });
+  render();
+});
+</script>
 </body>
 </html>
-
-
-
-
-
-
-

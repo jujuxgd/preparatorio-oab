@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dia 18 · Tributário — Obrigação e Crédito Tributário</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#fdf4f7;--paper:#fff;--ink:#4a2e3a;--ink-soft:#7a5566;--ink-faded:#b08799;--rose:#e8a5c0;--rose-deep:#c87aa0;--rose-soft:#f5d4e2;--blush:#fce0eb;--champagne:#f8e1d8;--lavender:#e0c8dc;--sage:#d4c8dc;--line:#f0d4e0;--gold:#d4a888;--radius:10px}
+  [data-theme="dark"]{--bg:#1a1318;--paper:#211a20;--ink:#f5e4ec;--ink-soft:#d4b8c8;--ink-faded:#9a7686;--rose:#e8a5c0;--rose-deep:#f0b8d0;--rose-soft:#4a2e3a;--blush:#3d2632;--champagne:#5a4248;--lavender:#5a4258;--line:#3a2832}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Inter',sans-serif;font-size:.93rem;color:var(--ink);background:var(--bg);line-height:1.7;padding:2rem 2.5rem 4rem}
+  h2{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:500;margin:2rem 0 .8rem;color:var(--ink);letter-spacing:-.01em}
+  h2 em{font-style:italic;color:var(--rose-deep)} h2:first-child{margin-top:0}
+  h3{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:500;margin:1.5rem 0 .6rem;color:var(--ink);border-left:3px solid var(--rose);padding-left:.7rem}
+  h4{font-size:.88rem;font-weight:700;margin:1.2rem 0 .4rem;color:var(--ink);text-transform:uppercase;letter-spacing:.06em}
+  p{margin-bottom:.85rem;color:var(--ink-soft)} strong{color:var(--ink);font-weight:600}
+  .callout{padding:1rem 1.2rem;border-radius:var(--radius);margin:1.2rem 0}
+  .callout.atencao{background:linear-gradient(135deg,var(--blush),var(--rose-soft));border-left:4px solid var(--rose-deep)}
+  .callout.dica{background:linear-gradient(135deg,var(--champagne),#fde8d8);border-left:4px solid var(--gold)}
+  .callout.lei{background:linear-gradient(135deg,var(--lavender),#ede0ec);border-left:4px solid #b090c0}
+  .callout.jurisprudencia{background:linear-gradient(135deg,#e8f0e0,#d8e8d0);border-left:4px solid #80a870}
+  .callout.pegadinha{background:linear-gradient(135deg,#fff0d8,#ffe8c0);border-left:4px solid #d4903a}
+  .callout-label{font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;font-weight:700;margin-bottom:.4rem;display:block;color:var(--ink)}
+  .callout p,.callout li{margin:0 0 .4rem;color:var(--ink);font-size:.88rem}
+  .callout ol,.callout ul{color:var(--ink);font-size:.88rem;padding-left:1.2rem}
+  table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:.85rem}
+  th{background:var(--rose-soft);color:var(--ink);font-weight:600;padding:.6rem .8rem;text-align:left;border-bottom:2px solid var(--rose)}
+  td{padding:.55rem .8rem;border-bottom:1px solid var(--line);color:var(--ink-soft);vertical-align:top}
+  tr:hover td{background:var(--blush);color:var(--ink)}
+  ul,ol{padding-left:1.4rem;margin:.6rem 0} li{margin-bottom:.35rem;color:var(--ink-soft)} li strong{color:var(--ink)}
+  .badge{display:inline-block;background:var(--rose-soft);color:var(--rose-deep);font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:.2rem .6rem;border-radius:20px;margin-right:.4rem}
+  .badge.cai{background:var(--champagne);color:#8a5030}
+  .materia-header{display:flex;align-items:center;gap:.8rem;padding:1rem 1.2rem;border-radius:var(--radius);margin:0 0 1.5rem;font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:500}
+  .materia-header.trib{background:linear-gradient(135deg,var(--champagne),#fde8e0)}
+  .materia-header .tempo{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faded);margin-left:auto;font-family:'Inter',sans-serif}
+  .incidencia{font-size:.7rem;color:var(--rose-deep);font-weight:600;background:var(--rose-soft);padding:.2rem .5rem;border-radius:4px}
+  hr{border:none;border-top:1px solid var(--line);margin:2rem 0}
+  mark{background:var(--blush);color:var(--ink);border-radius:3px;padding:0 2px} mark.aten{background:#ffe4c0} mark.ok{background:#d8f0d0}
+  .ascii-box{font-family:'Courier New',monospace;font-size:.78rem;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:1rem;margin:1rem 0;overflow-x:auto;line-height:1.5;color:var(--ink-soft);white-space:pre}
+  .stat-row{display:flex;gap:1rem;margin:1rem 0;flex-wrap:wrap}
+  .stat-card{flex:1;min-width:120px;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:.8rem;text-align:center}
+  .stat-card .num{font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--rose-deep);font-weight:600}
+  .stat-card .label{font-size:.68rem;color:var(--ink-faded);text-transform:uppercase;letter-spacing:.08em}
+  .caso{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:1rem 1.2rem;margin:1rem 0}
+  .caso-titulo{font-size:.72rem;text-transform:uppercase;letter-spacing:.12em;font-weight:700;color:var(--rose-deep);margin-bottom:.5rem}
+  .caso-resp{margin-top:.6rem;padding-top:.6rem;border-top:1px solid var(--line);font-size:.88rem}
+  .caso-resp strong{color:var(--rose-deep)}
+</style>
+</head>
+<body>
+
+<div class="materia-header trib">
+  <span>💰</span>
+  <span>Direito Tributário — Obrigação e Crédito Tributário</span>
+  <span class="incidencia">64% provas</span>
+  <span class="tempo">⏱ 2h</span>
+</div>
+
+<div class="stat-row">
+  <div class="stat-card"><div class="num">Art. 113</div><div class="label">Obrigação tributária principal vs. acessória</div></div>
+  <div class="stat-card"><div class="num">3</div><div class="label">Modalidades de lançamento</div></div>
+  <div class="stat-card"><div class="num">Art. 135</div><div class="label">Responsabilidade pessoal dos sócios</div></div>
+  <div class="stat-card"><div class="num">5 anos</div><div class="label">Prazo de decadência e prescrição</div></div>
+</div>
+
+<h2>I. Obrigação Tributária <em>(arts. 113-138 CTN)</em></h2>
+
+<h3>1.1 Espécies</h3>
+<table>
+  <tr><th>Espécie</th><th>Objeto</th><th>Extinção</th><th>Exemplo</th></tr>
+  <tr><td><strong>Principal</strong> (art. 113, §1º)</td><td>Pagar tributo ou penalidade pecuniária</td><td>Pagamento</td><td>Pagar o IPTU; pagar a multa tributária</td></tr>
+  <tr><td><strong>Acessória</strong> (art. 113, §2º)</td><td>Fazer, não fazer ou tolerar (obrigação de conduta)</td><td>Cumprimento</td><td>Emitir nota fiscal, escriturar livros contábeis, tolerar fiscalização</td></tr>
+</table>
+
+<div class="callout atencao">
+  <span class="callout-label">⚠ Acessória independe da principal!</span>
+  <p>A obrigação acessória existe e deve ser cumprida mesmo quando há imunidade ou isenção do tributo. Ex.: entidade imune ao IR ainda deve entregar declaração de rendimentos. O descumprimento da obrigação acessória <strong>converte-se em obrigação principal</strong> (multa).</p>
+</div>
+
+<h3>1.2 Elementos da Obrigação Tributária</h3>
+<ul>
+  <li><strong>Fato gerador (FG):</strong> situação prevista em lei que, ao ocorrer, faz nascer a obrigação tributária (art. 114 CTN)</li>
+  <li><strong>Base de cálculo:</strong> grandeza sobre a qual se aplica a alíquota</li>
+  <li><strong>Alíquota:</strong> percentual ou valor fixo aplicado sobre a base</li>
+  <li><strong>Sujeito ativo:</strong> ente que tem o direito de exigir o tributo (Fisco) — pode ser delegado por lei</li>
+  <li><strong>Sujeito passivo:</strong> contribuinte (relação pessoal e direta com o FG — art. 121, I) ou responsável (terceiro por disposição expressa de lei — art. 121, II)</li>
+</ul>
+
+<hr>
+
+<h2>II. Crédito Tributário e Lançamento <span class="badge cai">Alta incidência</span></h2>
+
+<h3>2.1 Constituição do Crédito — Lançamento</h3>
+<p>O crédito tributário é constituído pelo <strong>lançamento</strong> — ato administrativo vinculado que verifica a ocorrência do FG, determina a matéria tributável, calcula o montante e identifica o sujeito passivo (art. 142 CTN).</p>
+
+<div class="callout lei">
+  <span class="callout-label">📜 Modalidades de Lançamento (CTN)</span>
+  <table>
+    <tr><th>Modalidade</th><th>Quem calcula e informa</th><th>Exemplos</th></tr>
+    <tr><td><strong>De ofício</strong> (art. 149)</td><td>Fisco apura e lança por iniciativa própria</td><td>IPTU, IPVA, taxas; lançamento de ofício substitutivo (quando contribuinte não cumpre)</td></tr>
+    <tr><td><strong>Por declaração</strong> (art. 147)</td><td>Contribuinte informa os fatos; Fisco calcula</td><td>ITBI, ITCMD (em alguns Estados)</td></tr>
+    <tr><td><strong>Por homologação</strong> (art. 150)</td><td>Contribuinte apura, calcula e paga antecipadamente; Fisco homologa</td><td>IR, IPI, ICMS, PIS, COFINS — <mark class="ok">maioria dos tributos!</mark></td></tr>
+  </table>
+</div>
+
+<div class="callout dica">
+  <span class="callout-label">✦ Lançamento por homologação — prazo de homologação</span>
+  <p>Após o pagamento antecipado, o Fisco tem <strong>5 anos para homologar</strong> (expressa ou tacitamente). Decorrido o prazo sem manifestação: <strong>homologação tácita</strong> (art. 150, §4º CTN) — o crédito é extinto. Se houve dolo/fraude/simulação: o prazo é de 5 anos contados do exercício seguinte ao que ocorreu o FG (art. 173, I CTN).</p>
+</div>
+
+<h3>2.2 Decadência × Prescrição no Crédito Tributário</h3>
+<table>
+  <tr><th>Instituto</th><th>O que extingue</th><th>Prazo</th><th>Termo inicial</th></tr>
+  <tr><td><strong>Decadência</strong> (art. 173 CTN)</td><td>Direito de fazer o lançamento (constituir o crédito)</td><td>5 anos</td><td>1º dia do exercício seguinte ao FG (regra) ou data em que se tornou definitiva decisão anulatória</td></tr>
+  <tr><td><strong>Prescrição</strong> (art. 174 CTN)</td><td>Direito de propor ação de execução fiscal (crédito já constituído)</td><td>5 anos</td><td>Data da constituição definitiva do crédito</td></tr>
+</table>
+
+<div class="callout atencao">
+  <span class="callout-label">⚠ Decadência vs. Prescrição — distinção crítica</span>
+  <p><strong>Antes do lançamento:</strong> decadência (extinção do direito de lançar). <strong>Após o lançamento:</strong> prescrição (extinção da ação executiva). Ambas extinguem o crédito (art. 156, V CTN). <mark class="aten">Ao contrário do direito civil, decadência e prescrição tributárias AMBAS extinguem o crédito</mark> — são causas de extinção, não apenas de exceção.</p>
+</div>
+
+<hr>
+
+<h2>III. Responsabilidade Tributária <em>(arts. 128-138 CTN)</em></h2>
+
+<h3>3.1 Responsabilidade por Transferência</h3>
+<table>
+  <tr><th>Tipo</th><th>Descrição</th><th>Artigo</th></tr>
+  <tr><td><strong>Por sucessão</strong></td><td>Adquirente de imóvel responde pelos tributos do imóvel; sucessor do empresário responde pelos débitos; herdeiro responde até o quinhão herdado</td><td>Arts. 129-133</td></tr>
+  <tr><td><strong>De terceiros</strong></td><td>Pais por filhos menores; tutores por pupilos; síndicos pela massa falida etc.</td><td>Art. 134</td></tr>
+  <tr><td><strong>Pessoal</strong> (art. 135)</td><td>Responsabilidade <em>pessoal</em> e exclusiva de diretores, gerentes e sócios que atuaram com <strong>excesso de poder ou infração de lei</strong></td><td>Art. 135, III</td></tr>
+</table>
+
+<div class="callout lei">
+  <span class="callout-label">📜 Art. 135, III CTN — Responsabilidade dos Sócios (O MAIS COBRADO!)</span>
+  <p>"São pessoalmente responsáveis pelos créditos correspondentes a obrigações tributárias resultantes de atos praticados com <strong>excesso de poderes</strong> ou <strong>infração de lei, contrato social ou estatutos</strong>: [...] III — os diretores, gerentes ou representantes de pessoas jurídicas de direito privado."</p>
+  <p><strong>Requisito:</strong> o sócio só responde pessoalmente se agiu com excesso de poder ou infração de lei. <mark class="aten">Mero inadimplemento NÃO é infração de lei para fins de responsabilidade pessoal</mark> — Súmula 430 STJ: "O inadimplemento da obrigação tributária pela sociedade não gera, por si só, a responsabilidade solidária do sócio-gerente."</p>
+</div>
+
+<h3>3.2 Substituição Tributária</h3>
+<table>
+  <tr><th>Modalidade</th><th>Direção</th><th>Mecanismo</th><th>Exemplo</th></tr>
+  <tr><td><strong>Para trás</strong> (regressiva/diferimento)</td><td>FG passado → responsável retém o tributo</td><td>Comprador recolhe pelo vendedor anterior</td><td>Leite cru: usina paga o imposto pelo produtor rural</td></tr>
+  <tr><td><strong>Para frente</strong> (progressiva)</td><td>FG futuro presumido → recolhimento antecipado</td><td>Fabricante recolhe antecipado pelo varejista</td><td>ICMS-ST: montadora paga ICMS presumindo o preço futuro de venda do revendedor</td></tr>
+</table>
+
+<div class="callout jurisprudencia">
+  <span class="callout-label">⚖ ADI 1.851/AL — STF — Substituição progressiva</span>
+  <p>Originalmente o STF entendia que o FG presumido era definitivo (não era possível pedir restituição se o preço real fosse menor). Após o RE 593.849/MG (2016): <mark>É devida a restituição da diferença do ICMS pago a mais no regime de substituição tributária para frente se a base de cálculo efetiva da operação for inferior à presumida.</mark></p>
+</div>
+
+<hr>
+
+<h2>IV. Pegadinhas da Banca</h2>
+<div class="callout pegadinha">
+  <span class="callout-label">⚠ 5 Pegadinhas — Obrigação e Crédito Tributário</span>
+  <ol>
+    <li><strong>Inadimplemento NÃO responsabiliza o sócio pessoalmente</strong> (Súmula 430 STJ). Precisa de excesso de poder ou infração de lei. A banca cria situações onde a empresa simplesmente não paga e imputa responsabilidade ao sócio — errado.</li>
+    <li><strong>Obrigação acessória persiste mesmo com imunidade/isenção.</strong> Entidade imune deve cumprir obrigações acessórias (declarações etc.). A banca diz que imunidade dispensa também as acessórias — errado.</li>
+    <li><strong>Lançamento por homologação = contribuinte calcula e paga.</strong> A banca chama de "autolançamento" — termo informal; o lançamento (ato administrativo) é do Fisco (homologação). Mas a iniciativa e o cálculo são do contribuinte.</li>
+    <li><strong>Decadência extingue direito de LANÇAR. Prescrição extingue direito de EXECUTAR.</strong> A banca inverte ou confunde os termos. Lembrar: decadência vem ANTES (sem lançamento), prescrição vem DEPOIS (lançamento feito mas não cobrado).</li>
+    <li><strong>Substituição para frente: FG presumido pode ser revisto.</strong> Após RE 593.849 (2016), se o preço real for menor que o presumido, cabe restituição. A banca usa o entendimento antigo (FG presumido é definitivo) — hoje está superado.</li>
+  </ol>
+</div>
+
+<hr>
+
+<h2>V. Resumo Esquemático</h2>
+<div class="ascii-box">OBRIGAÇÃO TRIBUTÁRIA
+├── Principal (art. 113, §1º): pagar tributo ou penalidade (em dinheiro)
+└── Acessória (art. 113, §2º): fazer/não fazer/tolerar — persiste com imunidade/isenção
+    └── Descumprimento → converte-se em obrigação principal (multa)
+
+SUJEITO PASSIVO:
+├── Contribuinte (art. 121, I): relação pessoal e direta com o FG
+└── Responsável (art. 121, II): terceiro por disposição expressa de lei
+
+CRÉDITO TRIBUTÁRIO — LANÇAMENTO (art. 142 CTN)
+├── De ofício (art. 149): Fisco apura e lança — IPTU, IPVA
+├── Por declaração (art. 147): contribuinte informa, Fisco calcula — ITBI
+└── Por homologação (art. 150): contribuinte calcula, paga e aguarda homologação — IR, ICMS
+    └── Homologação tácita após 5 anos se não houver dolo/fraude
+
+DECADÊNCIA × PRESCRIÇÃO (ambas = 5 anos)
+├── Decadência: extingue direito de LANÇAR (antes do lançamento)
+└── Prescrição: extingue ação de EXECUTAR (após lançamento definitivo)
+
+RESPONSABILIDADE SÓCIOS (art. 135 CTN)
+└── Pessoal e exclusiva apenas se: EXCESSO DE PODER ou INFRAÇÃO DE LEI
+    Súmula 430 STJ: mero inadimplemento NÃO responsabiliza pessoalmente o sócio
+
+SUBSTITUIÇÃO TRIBUTÁRIA
+├── Para trás: FG passado — comprador paga pelo vendedor anterior
+└── Para frente: FG futuro presumido — se preço real < presumido: restituição (RE 593.849)</div>
+
+<div class="caso">
+  <div class="caso-titulo">Caso Prático — Responsabilidade do Sócio</div>
+  <p>A sociedade empresária ABC Ltda. deixou de recolher o ICMS por 3 anos devido a dificuldades financeiras. O sócio-gerente João assinou todos os balanços que reconheciam as dívidas. O Fisco pretende incluir João pessoalmente na execução fiscal. É possível?</p>
+  <div class="caso-resp"><strong>Resposta:</strong> NÃO, em princípio. O mero inadimplemento da obrigação tributária — ainda que reconhecido em balanços assinados pelo sócio-gerente — <strong>não gera responsabilidade pessoal do sócio</strong>, conforme a Súmula 430 do STJ. Para responsabilizar João, o Fisco precisaria demonstrar que ele agiu com <strong>excesso de poder ou infração de lei</strong> (art. 135, III CTN), como dissolução irregular da sociedade, desvio de recursos para uso pessoal, fraude etc.</div>
+</div>
+
+<script src="../highlighter.js"></script>
+<script>
+  const pt = window.parent && window.parent.document.documentElement.getAttribute('data-theme');
+  if (pt) document.documentElement.setAttribute('data-theme', pt);
+  window.addEventListener('message', e => {
+    if (!e.data) return;
+    if (e.data.type === 'set-theme') document.documentElement.setAttribute('data-theme', e.data.theme);
+    if (e.data.type === 'set-accent' && e.data.vars) { const r = document.documentElement; Object.keys(e.data.vars).forEach(k => { if(e.data.vars[k]) r.style.setProperty(k, e.data.vars[k]); }); }
+    if (e.data.type === 'hl-clear' && window.clearHighlights) window.clearHighlights();
+  });
+</script>
+</body>
+</html>

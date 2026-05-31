@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dia 17 · Civil — Posse e Propriedade</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#fdf4f7;--paper:#fff;--ink:#4a2e3a;--ink-soft:#7a5566;--ink-faded:#b08799;--rose:#e8a5c0;--rose-deep:#c87aa0;--rose-soft:#f5d4e2;--blush:#fce0eb;--champagne:#f8e1d8;--lavender:#e0c8dc;--sage:#d4c8dc;--line:#f0d4e0;--gold:#d4a888;--radius:10px}
+  [data-theme="dark"]{--bg:#1a1318;--paper:#211a20;--ink:#f5e4ec;--ink-soft:#d4b8c8;--ink-faded:#9a7686;--rose:#e8a5c0;--rose-deep:#f0b8d0;--rose-soft:#4a2e3a;--blush:#3d2632;--champagne:#5a4248;--lavender:#5a4258;--line:#3a2832}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Inter',sans-serif;font-size:.93rem;color:var(--ink);background:var(--bg);line-height:1.7;padding:2rem 2.5rem 4rem}
+  h2{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:500;margin:2rem 0 .8rem;color:var(--ink);letter-spacing:-.01em}
+  h2 em{font-style:italic;color:var(--rose-deep)} h2:first-child{margin-top:0}
+  h3{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:500;margin:1.5rem 0 .6rem;color:var(--ink);border-left:3px solid var(--rose);padding-left:.7rem}
+  h4{font-size:.88rem;font-weight:700;margin:1.2rem 0 .4rem;color:var(--ink);text-transform:uppercase;letter-spacing:.06em}
+  p{margin-bottom:.85rem;color:var(--ink-soft)} strong{color:var(--ink);font-weight:600}
+  .callout{padding:1rem 1.2rem;border-radius:var(--radius);margin:1.2rem 0}
+  .callout.atencao{background:linear-gradient(135deg,var(--blush),var(--rose-soft));border-left:4px solid var(--rose-deep)}
+  .callout.dica{background:linear-gradient(135deg,var(--champagne),#fde8d8);border-left:4px solid var(--gold)}
+  .callout.lei{background:linear-gradient(135deg,var(--lavender),#ede0ec);border-left:4px solid #b090c0}
+  .callout.jurisprudencia{background:linear-gradient(135deg,#e8f0e0,#d8e8d0);border-left:4px solid #80a870}
+  .callout.pegadinha{background:linear-gradient(135deg,#fff0d8,#ffe8c0);border-left:4px solid #d4903a}
+  .callout-label{font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;font-weight:700;margin-bottom:.4rem;display:block;color:var(--ink)}
+  .callout p,.callout li{margin:0 0 .4rem;color:var(--ink);font-size:.88rem}
+  .callout ol,.callout ul{color:var(--ink);font-size:.88rem;padding-left:1.2rem}
+  table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:.85rem}
+  th{background:var(--rose-soft);color:var(--ink);font-weight:600;padding:.6rem .8rem;text-align:left;border-bottom:2px solid var(--rose)}
+  td{padding:.55rem .8rem;border-bottom:1px solid var(--line);color:var(--ink-soft);vertical-align:top}
+  tr:hover td{background:var(--blush);color:var(--ink)}
+  ul,ol{padding-left:1.4rem;margin:.6rem 0} li{margin-bottom:.35rem;color:var(--ink-soft)} li strong{color:var(--ink)}
+  .badge{display:inline-block;background:var(--rose-soft);color:var(--rose-deep);font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:.2rem .6rem;border-radius:20px;margin-right:.4rem}
+  .badge.cai{background:var(--champagne);color:#8a5030}
+  .materia-header{display:flex;align-items:center;gap:.8rem;padding:1rem 1.2rem;border-radius:var(--radius);margin:0 0 1.5rem;font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:500}
+  .materia-header.civil{background:linear-gradient(135deg,var(--champagne),#fde8e0)}
+  .materia-header .tempo{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faded);margin-left:auto;font-family:'Inter',sans-serif}
+  .incidencia{font-size:.7rem;color:var(--rose-deep);font-weight:600;background:var(--rose-soft);padding:.2rem .5rem;border-radius:4px}
+  hr{border:none;border-top:1px solid var(--line);margin:2rem 0}
+  mark{background:var(--blush);color:var(--ink);border-radius:3px;padding:0 2px} mark.aten{background:#ffe4c0} mark.ok{background:#d8f0d0}
+  .ascii-box{font-family:'Courier New',monospace;font-size:.78rem;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:1rem;margin:1rem 0;overflow-x:auto;line-height:1.5;color:var(--ink-soft);white-space:pre}
+  .stat-row{display:flex;gap:1rem;margin:1rem 0;flex-wrap:wrap}
+  .stat-card{flex:1;min-width:120px;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:.8rem;text-align:center}
+  .stat-card .num{font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--rose-deep);font-weight:600}
+  .stat-card .label{font-size:.68rem;color:var(--ink-faded);text-transform:uppercase;letter-spacing:.08em}
+  .caso{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:1rem 1.2rem;margin:1rem 0}
+  .caso-titulo{font-size:.72rem;text-transform:uppercase;letter-spacing:.12em;font-weight:700;color:var(--rose-deep);margin-bottom:.5rem}
+  .caso-resp{margin-top:.6rem;padding-top:.6rem;border-top:1px solid var(--line);font-size:.88rem}
+  .caso-resp strong{color:var(--rose-deep)}
+</style>
+</head>
+<body>
+
+<div class="materia-header civil">
+  <span>📜</span>
+  <span>Direito Civil — Posse e Propriedade</span>
+  <span class="incidencia">69% provas</span>
+  <span class="tempo">⏱ 2h</span>
+</div>
+
+<div class="stat-row">
+  <div class="stat-card"><div class="num">Ihering</div><div class="label">Teoria objetiva da posse (adotada CC/02)</div></div>
+  <div class="stat-card"><div class="num">1.228</div><div class="label">Artigo central da propriedade no CC</div></div>
+  <div class="stat-card"><div class="num">15 anos</div><div class="label">Usucapião extraordinária (regra)</div></div>
+  <div class="stat-card"><div class="num">5 anos</div><div class="label">Usucapião especial urbana e rural</div></div>
+</div>
+
+<h2>I. Posse — <em>Conceito e Teorias</em></h2>
+
+<h3>1.1 Teorias Clássicas</h3>
+<table>
+  <tr><th>Teoria</th><th>Autor</th><th>Elementos</th><th>Posição do CC/02</th></tr>
+  <tr><td><strong>Subjetiva</strong></td><td>Savigny</td><td><em>corpus</em> (contato físico) + <em>animus domini</em> (intenção de dono)</td><td>Não adotada como regra</td></tr>
+  <tr><td><strong>Objetiva</strong></td><td>Ihering</td><td>Apenas o <em>corpus</em> — exteriorização do domínio (conduta de quem age como dono)</td><td><mark class="ok">Adotada — art. 1.196 CC</mark></td></tr>
+</table>
+
+<div class="callout lei">
+  <span class="callout-label">📜 Art. 1.196 CC — Conceito de Possuidor</span>
+  <p>"Considera-se possuidor todo aquele que tem de fato o exercício, pleno ou não, de algum dos poderes inerentes à propriedade."</p>
+  <p><strong>Poderes inerentes à propriedade:</strong> usar, gozar, dispor e reivindicar (art. 1.228 CC)</p>
+</div>
+
+<h3>1.2 Classificação da Posse</h3>
+<table>
+  <tr><th>Critério</th><th>Espécies</th><th>Relevância prática</th></tr>
+  <tr><td>Extensão</td><td>Direta (quem tem contato físico) × Indireta (quem cedeu, mas mantém domínio jurídico)</td><td>Locatário = posse direta; proprietário-locador = posse indireta. Ambos têm ações possessórias.</td></tr>
+  <tr><td>Vício</td><td>Justa (adquirida sem vícios) × Injusta (violenta, clandestina ou precária)</td><td>Posse injusta gera vícios relativos — só arguíveis por quem sofreu a violência/clandestinidade</td></tr>
+  <tr><td>Boa-fé</td><td>Boa-fé (desconhece o vício) × Má-fé (conhece o vício)</td><td>Afeta usucapião, frutos, benfeitorias e indenização</td></tr>
+  <tr><td>Animus</td><td>Com animus domini (ad usucapionem) × Sem animus domini (detenção)</td><td>Só com animus domini pode usucapir</td></tr>
+</table>
+
+<div class="callout atencao">
+  <span class="callout-label">⚠ Detenção ≠ Posse</span>
+  <p>O detentor (fâmulo da posse, vigilante, caseiro) não tem posse — exerce em nome de outro (art. 1.198 CC). Consequência: não cabe ação possessória ao detentor; não pode usucapir. Ex.: caseiro que mora no imóvel a mando do dono = detentor.</p>
+</div>
+
+<hr>
+
+<h2>II. Efeitos da Posse</h2>
+
+<h3>2.1 Principais Efeitos</h3>
+<ul>
+  <li><strong>Percepção de frutos:</strong> possuidor de boa-fé tem direito aos frutos percebidos; de má-fé deve restituir todos os frutos, inclusive os percipiendos (que deixou de colher por negligência)</li>
+  <li><strong>Responsabilidade por deterioração:</strong> possuidor de boa-fé responde pela deterioração causada com dolo; de má-fé responde até pelos casos fortuitos</li>
+  <li><strong>Indenização por benfeitorias:</strong>
+    <ul>
+      <li>Boa-fé: indenização pelas úteis e necessárias; direito de <strong>retenção</strong></li>
+      <li>Má-fé: só pelas necessárias; sem direito de retenção</li>
+      <li>Voluptuárias: em nenhum caso há indenização — apenas levantamento se não causar dano</li>
+    </ul>
+  </li>
+  <li><strong>Usucapião:</strong> posse contínua, mansa, pacífica, com animus domini, pelo prazo legal</li>
+  <li><strong>Autodefesa (autotutela):</strong> desforço imediato e retomada pela própria força — só se imediato e moderado (art. 1.210, §1º CC)</li>
+</ul>
+
+<h3>2.2 Ações Possessórias</h3>
+<table>
+  <tr><th>Ação</th><th>Hipótese</th><th>Característica</th></tr>
+  <tr><td><strong>Reintegração de posse</strong></td><td>Esbulho — perda total da posse</td><td>Recupera a posse perdida</td></tr>
+  <tr><td><strong>Manutenção de posse</strong></td><td>Turbação — perturbação sem perda total</td><td>Mantém a posse existente</td></tr>
+  <tr><td><strong>Interdito proibitório</strong></td><td>Ameaça iminente (não consumada)</td><td>Preventiva — obtém mandado proibitório</td></tr>
+</table>
+
+<div class="callout dica">
+  <span class="callout-label">✦ Fungibilidade das ações possessórias</span>
+  <p>O juiz pode converter a ação de manutenção em reintegração (e vice-versa) se os fatos narrados mostram hipótese diversa da pedida (art. 554, §2º CPC). Exemplo: pediu manutenção, mas na instrução prova-se que perdeu totalmente a posse → o juiz converte para reintegração.</p>
+</div>
+
+<div class="callout atencao">
+  <span class="callout-label">⚠ Prazo para liminares nas possessórias</span>
+  <p>A liminar possessória sem audiência do réu (inaudita altera parte) só é possível quando a ação for de força <strong>nova</strong> — esbulho/turbação <strong>ocorrido há menos de 1 ano e 1 dia</strong>. Posse velha (+ de 1 ano e 1 dia): o rito é ordinário, sem liminar automática.</p>
+</div>
+
+<hr>
+
+<h2>III. Propriedade — <em>Art. 1.228 CC</em></h2>
+
+<h3>3.1 Faculdades e Função Social</h3>
+<div class="callout lei">
+  <span class="callout-label">📜 Art. 1.228, §1º CC — Função Social da Propriedade</span>
+  <p>"O direito de propriedade deve ser exercido em consonância com as suas finalidades econômicas e sociais e de modo que sejam preservados, de conformidade com o estabelecido em lei especial, a flora, a fauna, as belezas naturais, o equilíbrio ecológico e o patrimônio histórico e artístico, bem como evitada a poluição do ar e das águas."</p>
+</div>
+
+<p>As quatro faculdades da propriedade (GODR): <strong>usar</strong> (ius utendi), <strong>gozar</strong> (ius fruendi), <strong>dispor</strong> (ius abutendi) e <strong>reivindicar</strong> (ius reivindicandi — ação reivindicatória contra o possuidor sem título).</p>
+
+<hr>
+
+<h2>IV. Usucapião — Espécies <span class="badge cai">Alta incidência</span></h2>
+
+<table>
+  <tr><th>Espécie</th><th>Prazo</th><th>Requisitos específicos</th><th>Base legal</th></tr>
+  <tr>
+    <td><strong>Ordinária</strong></td>
+    <td>10 anos</td>
+    <td>Justo título + boa-fé. Reduz para 5 anos se: imóvel adquirido onerosamente com registro cancelado + morou/realizou obras</td>
+    <td>Art. 1.242 CC</td>
+  </tr>
+  <tr>
+    <td><strong>Extraordinária</strong></td>
+    <td>15 anos (regra)<br>10 anos (exceção)</td>
+    <td>Sem necessidade de justo título ou boa-fé. Reduz para 10 anos se: estabeleceu moradia habitual OU realizou obras/serviços produtivos</td>
+    <td>Art. 1.238 CC</td>
+  </tr>
+  <tr>
+    <td><strong>Especial urbana</strong></td>
+    <td>5 anos</td>
+    <td>Área urbana até <strong>250 m²</strong> + moradia + sem outro imóvel + não ter sido beneficiado anteriormente por usucapião</td>
+    <td>Art. 1.240 CC + art. 9º Estatuto da Cidade</td>
+  </tr>
+  <tr>
+    <td><strong>Especial rural</strong> (pro labore)</td>
+    <td>5 anos</td>
+    <td>Área rural até <strong>50 ha</strong> + morar + tornar produtivo com trabalho + não ter outro imóvel</td>
+    <td>Art. 1.239 CC + art. 191 CF</td>
+  </tr>
+  <tr>
+    <td><strong>Familiar</strong></td>
+    <td>2 anos</td>
+    <td>Imóvel urbano de até 250 m² + abandono do lar pelo ex-cônjuge/companheiro + sem outro imóvel</td>
+    <td>Art. 1.240-A CC</td>
+  </tr>
+  <tr>
+    <td><strong>Indígena</strong></td>
+    <td>10 anos</td>
+    <td>Posse de terras por silvícolas</td>
+    <td>Lei 6.001/73</td>
+  </tr>
+  <tr>
+    <td><strong>Coletiva</strong></td>
+    <td>5 anos</td>
+    <td>Área urbana + impossível identificar frações individuais + população de baixa renda</td>
+    <td>Art. 10 Estatuto da Cidade</td>
+  </tr>
+</table>
+
+<div class="callout atencao">
+  <span class="callout-label">⚠ O que NÃO pode ser usucapido</span>
+  <ul>
+    <li>Bens públicos — imprescritíveis (art. 183, §3º e 191, pú CF) — SV 23 STF</li>
+    <li>Coisas fora do comércio</li>
+    <li>Imóvel com menos de 100 m² (em algumas modalidades específicas)</li>
+    <li>Bem de família — é imprescritível para fins de usucapião? → NÃO: bem de família não impede usucapião (a impenhorabilidade é para execução, não para usucapião)</li>
+  </ul>
+</div>
+
+<div class="callout jurisprudencia">
+  <span class="callout-label">⚖ Súmula 237 STF — Usucapião e Petição Inicial</span>
+  <p>"O usucapião pode ser arguido em defesa." — O réu pode alegar usucapião como matéria de defesa (exceção) sem precisar ajuizar ação autônoma de usucapião.</p>
+</div>
+
+<hr>
+
+<h2>V. Pegadinhas da Banca</h2>
+<div class="callout pegadinha">
+  <span class="callout-label">⚠ 6 Pegadinhas — Posse e Propriedade</span>
+  <ol>
+    <li><strong>CC/02 adotou a teoria objetiva de Ihering.</strong> A banca coloca "subjetiva de Savigny" como a adotada — errado. O CC não exige animus domini para configurar a posse.</li>
+    <li><strong>Detentor não tem ação possessória.</strong> Fâmulo da posse, caseiro, vigilante = detenção (não posse). Não cabe ação possessória ao detentor em nome próprio.</li>
+    <li><strong>Possuidor de má-fé tem direito apenas a benfeitorias necessárias</strong> (não úteis). A banca coloca "necessárias e úteis" para quem está de má-fé — errado.</li>
+    <li><strong>Bens públicos NÃO podem ser usucapidos</strong> — qualquer que seja a espécie de usucapião (art. 183, §3º CF). A banca tenta criar uma "exceção" — não existe.</li>
+    <li><strong>Usucapião extraordinária = 15 anos</strong> (sem justo título). Reduz para 10 anos se estabeleceu moradia. A banca confunde com a ordinária (que é 10 anos com justo título).</li>
+    <li><strong>Usucapião especial urbana = 250 m².</strong> Rural = 50 ha. A banca inverte as áreas máximas.</li>
+  </ol>
+</div>
+
+<hr>
+
+<h2>VI. Resumo Esquemático</h2>
+<div class="ascii-box">POSSE (art. 1.196 CC — teoria objetiva de Ihering)
+├── Possuidor: quem exerce poder de fato sobre a coisa
+├── Detenção ≠ Posse: fâmulo da posse não tem ação possessória
+├── Classificação: direta/indireta · justa/injusta · boa-fé/má-fé · c/s animus
+├── Efeitos: frutos · benfeitorias · usucapião · autodefesa imediata
+└── AÇÕES POSSESSÓRIAS (fungíveis):
+    Esbulho (perda total)    → Reintegração
+    Turbação (perturbação)   → Manutenção
+    Ameaça                   → Interdito proibitório
+    [Força nova <1a1d: liminar automática | Força velha >1a1d: rito ordinário]
+
+PROPRIEDADE (art. 1.228 CC) — GODR: usar, gozar, dispor, reivindicar
+└── Função social (art. 1.228, §1º CC + art. 5º, XXIII CF)
+
+USUCAPIÃO — PRAZOS RÁPIDOS
+Extraordinária:   15 anos (sem JT/BF) → 10 anos com moradia/obra
+Ordinária:        10 anos (com JT+BF) → 5 anos com registro cancelado
+Especial urbana:  5 anos · ≤250m² · moradia · sem outro imóvel
+Especial rural:   5 anos · ≤50ha · moradia+trabalho · sem outro imóvel
+Familiar:         2 anos · abandono do lar · urbano ≤250m²
+Bens públicos:    NUNCA → imprescritíveis (SV 23 STF)</div>
+
+<div class="caso">
+  <div class="caso-titulo">Caso Prático — Usucapião Extraordinária</div>
+  <p>Maria ocupa há 12 anos um imóvel urbano abandonado pelo proprietário, sem nunca ter tido autorização. Não tem justo título nem boa-fé, e usa o imóvel como sua única residência, onde construiu reformas. Pode usucapir?</p>
+  <div class="caso-resp"><strong>Resposta:</strong> SIM. Aplica-se a <strong>usucapião extraordinária</strong> com prazo reduzido (art. 1.238, parágrafo único CC). O prazo cai de 15 para <strong>10 anos</strong> quando o possuidor estabeleceu moradia habitual ou realizou obras/serviços produtivos — independentemente de justo título ou boa-fé. Com 12 anos de posse e moradia habitual, os requisitos estão preenchidos.</div>
+</div>
+
+<script src="../highlighter.js"></script>
+<script>
+  const pt = window.parent && window.parent.document.documentElement.getAttribute('data-theme');
+  if (pt) document.documentElement.setAttribute('data-theme', pt);
+  window.addEventListener('message', e => {
+    if (!e.data) return;
+    if (e.data.type === 'set-theme') document.documentElement.setAttribute('data-theme', e.data.theme);
+    if (e.data.type === 'set-accent' && e.data.vars) { const r = document.documentElement; Object.keys(e.data.vars).forEach(k => { if(e.data.vars[k]) r.style.setProperty(k, e.data.vars[k]); }); }
+    if (e.data.type === 'hl-clear' && window.clearHighlights) window.clearHighlights();
+  });
+</script>
+</body>
+</html>

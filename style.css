@@ -4,42 +4,42 @@
 ============================================ */
 
 :root {
-  /* Light mode — pink coquette · romântico e doce */
-  --bg: #fdf4f7;
-  --bg-soft: #fae6ed;
-  --bg-deep: #f5d4e0;
+  /* Light mode — rosa choque · vibrante e bold */
+  --bg: #fff4f9;
+  --bg-soft: #ffe8f4;
+  --bg-deep: #ffd4ec;
   --paper: #ffffff;
-  --paper-tint: #fffafc;
+  --paper-tint: #fffafd;
 
-  --ink: #4a2e3a;
-  --ink-soft: #7a5566;
-  --ink-faded: #b08799;
-  --ink-ghost: #d4b3c2;
+  --ink: #25001a;
+  --ink-soft: #5c1a40;
+  --ink-faded: #a04070;
+  --ink-ghost: #d4a0c0;
 
-  --rose: #e8a5c0;
-  --rose-deep: #c87aa0;
-  --rose-soft: #f5d4e2;
-  --blush: #fce0eb;
-  --nude: #f4d8e0;
-  --champagne: #f8e1d8;
-  --sage: #d4c8dc;
-  --lavender: #e0c8dc;
+  --rose: #ff4da6;
+  --rose-deep: #e8006e;
+  --rose-soft: #ffd6ec;
+  --blush: #fff0f7;
+  --nude: #fce4ef;
+  --champagne: #fde8e0;
+  --sage: #e8d8f4;
+  --lavender: #f4d0f8;
 
-  --line: #f0d4e0;
-  --line-soft: #f8e3ec;
+  --line: #ffc8e4;
+  --line-soft: #ffe4f2;
 
-  --highlight-1: #fcd4e2;
-  --highlight-2: #f5d4e2;
-  --highlight-3: #f8e1d8;
-  --highlight-4: #e0c8dc;
+  --highlight-1: #ffb8dc;
+  --highlight-2: #ffd6ec;
+  --highlight-3: #fde8e0;
+  --highlight-4: #e8d4f4;
 
-  --success: #b8c4a8;
-  --error: #d4889c;
-  --gold: #d4a888;
+  --success: #a0c8a0;
+  --error: #e05070;
+  --gold: #d4a060;
 
-  --shadow-sm: 0 1px 2px rgba(200, 122, 160, 0.06), 0 2px 4px rgba(200, 122, 160, 0.04);
-  --shadow: 0 2px 4px rgba(200, 122, 160, 0.08), 0 8px 20px rgba(200, 122, 160, 0.07);
-  --shadow-lg: 0 8px 24px rgba(200, 122, 160, 0.14), 0 16px 40px rgba(200, 122, 160, 0.09);
+  --shadow-sm: 0 1px 2px rgba(232, 0, 110, 0.08), 0 2px 4px rgba(232, 0, 110, 0.05);
+  --shadow: 0 2px 4px rgba(232, 0, 110, 0.1), 0 8px 20px rgba(232, 0, 110, 0.08);
+  --shadow-lg: 0 8px 24px rgba(232, 0, 110, 0.18), 0 16px 40px rgba(232, 0, 110, 0.12);
 
   --radius-sm: 6px;
   --radius: 12px;
@@ -49,37 +49,37 @@
 }
 
 [data-theme="dark"] {
-  --bg: #1a1318;
-  --bg-soft: #251c22;
-  --bg-deep: #2f242a;
-  --paper: #211a20;
-  --paper-tint: #261d23;
+  --bg: #1a0010;
+  --bg-soft: #260018;
+  --bg-deep: #300020;
+  --paper: #200015;
+  --paper-tint: #26001c;
 
-  --ink: #f5e4ec;
-  --ink-soft: #d4b8c8;
-  --ink-faded: #9a7686;
-  --ink-ghost: #5c4250;
+  --ink: #ffe4f4;
+  --ink-soft: #f0a0d0;
+  --ink-faded: #c06090;
+  --ink-ghost: #6a2048;
 
-  --rose: #e8a5c0;
-  --rose-deep: #f0b8d0;
-  --rose-soft: #4a2e3a;
-  --blush: #3d2632;
-  --nude: #4a3540;
-  --champagne: #5a4248;
-  --sage: #5a4a64;
-  --lavender: #5a4258;
+  --rose: #ff4da6;
+  --rose-deep: #ff70bc;
+  --rose-soft: #4a0030;
+  --blush: #360020;
+  --nude: #4a1030;
+  --champagne: #4a2038;
+  --sage: #3a1860;
+  --lavender: #4a1060;
 
-  --line: #3a2832;
-  --line-soft: #2f1f28;
+  --line: #380018;
+  --line-soft: #280010;
 
-  --highlight-1: #5a2e44;
-  --highlight-2: #4a2e3a;
-  --highlight-3: #4a3540;
-  --highlight-4: #4a3a52;
+  --highlight-1: #5a0040;
+  --highlight-2: #4a0030;
+  --highlight-3: #4a1030;
+  --highlight-4: #3a1050;
 
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3), 0 2px 4px rgba(0, 0, 0, 0.2);
-  --shadow: 0 2px 4px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.2);
-  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.4), 0 16px 40px rgba(0, 0, 0, 0.3);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.3);
+  --shadow: 0 2px 4px rgba(0, 0, 0, 0.4), 0 8px 20px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5), 0 16px 40px rgba(0, 0, 0, 0.4);
 }
 
 * {
@@ -100,14 +100,14 @@ body {
   min-height: 100vh;
   transition: background var(--transition), color var(--transition);
   background-image:
-    radial-gradient(circle at 15% 20%, rgba(212, 165, 160, 0.08) 0%, transparent 50%),
-    radial-gradient(circle at 85% 80%, rgba(212, 200, 220, 0.06) 0%, transparent 50%);
+    radial-gradient(circle at 15% 20%, rgba(255, 77, 166, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 85% 80%, rgba(232, 0, 110, 0.05) 0%, transparent 50%);
 }
 
 [data-theme="dark"] body {
   background-image:
-    radial-gradient(circle at 15% 20%, rgba(212, 165, 160, 0.04) 0%, transparent 50%),
-    radial-gradient(circle at 85% 80%, rgba(212, 200, 220, 0.03) 0%, transparent 50%);
+    radial-gradient(circle at 15% 20%, rgba(255, 77, 166, 0.06) 0%, transparent 50%),
+    radial-gradient(circle at 85% 80%, rgba(232, 0, 110, 0.04) 0%, transparent 50%);
 }
 
 .serif { font-family: 'Cormorant Garamond', 'Playfair Display', Georgia, serif; }
@@ -155,18 +155,18 @@ body {
 }
 
 .logo .mark .star {
-  color: #e8b800;
-  text-shadow: 0 0 8px rgba(232, 184, 0, 0.5);
+  color: var(--rose);
+  text-shadow: 0 0 8px rgba(0,0,0,0.15);
   display: inline-block;
-  transition: transform 0.4s ease;
+  transition: transform 0.4s ease, color 0.3s ease;
 }
 
 .logo .mark .star:hover { transform: scale(1.2) rotate(20deg); }
 
 .logo .mark .star.sm {
   font-size: 0.85rem;
-  color: #d4a800;
-  opacity: 0.8;
+  color: var(--rose-deep);
+  opacity: 0.9;
 }
 
 .logo h1 {

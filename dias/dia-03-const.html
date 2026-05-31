@@ -1,195 +1,389 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dia 3 · Direito Constitucional</title>
+<title>Dia 3 · Constitucional — Princípios e DFs</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg:#fdf4f7;--paper:#fff;--ink:#4a2e3a;--ink-soft:#7a5566;
-    --ink-faded:#b08799;--rose:#e8a5c0;--rose-deep:#c87aa0;
-    --rose-soft:#f5d4e2;--blush:#fce0eb;--champagne:#f8e1d8;
-    --lavender:#e0c8dc;--line:#f0d4e0;--gold:#d4a888;--radius:10px;
-  }
-  [data-theme="dark"]{
-    --bg:#1a1318;--paper:#211a20;--ink:#f5e4ec;--ink-soft:#d4b8c8;
-    --ink-faded:#9a7686;--rose:#e8a5c0;--rose-deep:#f0b8d0;
-    --rose-soft:#4a2e3a;--blush:#3d2632;--champagne:#5a4248;
-    --lavender:#5a4258;--line:#3a2832;
-  }
+  :root{--bg:#fdf4f7;--paper:#fff;--ink:#4a2e3a;--ink-soft:#7a5566;--ink-faded:#b08799;--rose:#e8a5c0;--rose-deep:#c87aa0;--rose-soft:#f5d4e2;--blush:#fce0eb;--champagne:#f8e1d8;--lavender:#e0c8dc;--line:#f0d4e0;--gold:#d4a888;--radius:10px}
+  [data-theme="dark"]{--bg:#1a1318;--paper:#211a20;--ink:#f5e4ec;--ink-soft:#d4b8c8;--ink-faded:#9a7686;--rose:#e8a5c0;--rose-deep:#f0b8d0;--rose-soft:#4a2e3a;--blush:#3d2632;--champagne:#5a4248;--lavender:#5a4258;--line:#3a2832}
   *{margin:0;padding:0;box-sizing:border-box}
-  body{font-family:'Inter',sans-serif;font-size:0.93rem;color:var(--ink);
-       background:var(--bg);line-height:1.7;padding:2rem 2.5rem 4rem}
-  h2{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:500;
-     margin:2rem 0 0.8rem;color:var(--ink);letter-spacing:-0.01em;line-height:1.25}
-  h2 em{font-style:italic;color:var(--rose-deep)}
-  h2:first-child{margin-top:0}
-  h3{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:500;
-     margin:1.5rem 0 0.6rem;color:var(--ink);border-left:3px solid var(--rose);padding-left:0.7rem}
-  p{margin-bottom:0.85rem;color:var(--ink-soft)}
-  strong{color:var(--ink);font-weight:600}
+  body{font-family:'Inter',sans-serif;font-size:0.93rem;color:var(--ink);background:var(--bg);line-height:1.7;padding:2rem 2.5rem 4rem}
+  h2{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:500;margin:2rem 0 0.8rem;color:var(--ink);letter-spacing:-0.01em;line-height:1.25}
+  h2 em{font-style:italic;color:var(--rose-deep)} h2:first-child{margin-top:0}
+  h3{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:500;margin:1.5rem 0 0.6rem;color:var(--ink);border-left:3px solid var(--rose);padding-left:0.7rem}
+  h4{font-family:'Inter',sans-serif;font-size:0.88rem;font-weight:700;margin:1.2rem 0 0.4rem;color:var(--ink);text-transform:uppercase;letter-spacing:0.06em}
+  p{margin-bottom:0.85rem;color:var(--ink-soft)} strong{color:var(--ink);font-weight:600}
   .callout{padding:1rem 1.2rem;border-radius:var(--radius);margin:1.2rem 0}
   .callout.atencao{background:linear-gradient(135deg,var(--blush),var(--rose-soft));border-left:4px solid var(--rose-deep)}
   .callout.dica{background:linear-gradient(135deg,var(--champagne),#fde8d8);border-left:4px solid var(--gold)}
   .callout.lei{background:linear-gradient(135deg,var(--lavender),#ede0ec);border-left:4px solid #b090c0}
-  .callout.penal{background:linear-gradient(135deg,#f5e2db,#f2d8d0);border-left:4px solid #c06040}
-  .callout-label{font-size:0.65rem;letter-spacing:0.18em;text-transform:uppercase;
-                 font-weight:700;margin-bottom:0.4rem;display:block;color:var(--ink)}
-  .callout p{margin:0;color:var(--ink);font-size:0.88rem}
+  .callout.jurisprudencia{background:linear-gradient(135deg,#e8f0e0,#d8e8d0);border-left:4px solid #80a870}
+  .callout.pegadinha{background:linear-gradient(135deg,#fff0d8,#ffe8c0);border-left:4px solid #d4903a}
+  .callout-label{font-size:0.65rem;letter-spacing:0.18em;text-transform:uppercase;font-weight:700;margin-bottom:0.4rem;display:block;color:var(--ink)}
+  .callout p{margin:0 0 0.5rem;color:var(--ink);font-size:0.88rem} .callout p:last-child{margin-bottom:0}
+  .callout ol,.callout ul{color:var(--ink);font-size:0.88rem;padding-left:1.2rem} .callout li{margin-bottom:0.3rem}
   table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:0.85rem}
   th{background:var(--rose-soft);color:var(--ink);font-weight:600;padding:0.6rem 0.8rem;text-align:left;border-bottom:2px solid var(--rose)}
-  td{padding:0.55rem 0.8rem;border-bottom:1px solid var(--line);color:var(--ink-soft)}
+  td{padding:0.55rem 0.8rem;border-bottom:1px solid var(--line);color:var(--ink-soft);vertical-align:top}
   tr:hover td{background:var(--blush);color:var(--ink)}
-  ul,ol{padding-left:1.4rem;margin:0.6rem 0}
-  li{margin-bottom:0.35rem;color:var(--ink-soft)}
-  li strong{color:var(--ink)}
-  .badge{display:inline-block;background:var(--rose-soft);color:var(--rose-deep);
-         font-size:0.65rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;
-         padding:0.2rem 0.6rem;border-radius:20px;margin-right:0.4rem}
-  .badge.penal{background:#f5e2db;color:#a04020}
-  .materia-header{display:flex;align-items:center;gap:0.8rem;
-    padding:1rem 1.2rem;border-radius:var(--radius);margin:2rem 0 1.2rem;
-    font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:500}
+  ul,ol{padding-left:1.4rem;margin:0.6rem 0} li{margin-bottom:0.35rem;color:var(--ink-soft)} li strong{color:var(--ink)}
+  .badge{display:inline-block;background:var(--rose-soft);color:var(--rose-deep);font-size:0.65rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;padding:0.2rem 0.6rem;border-radius:20px;margin-right:0.4rem}
+  .badge.cai{background:var(--champagne);color:#8a5030}
+  .materia-header{display:flex;align-items:center;gap:0.8rem;padding:1rem 1.2rem;border-radius:var(--radius);margin:0 0 1.5rem;font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:500}
   .materia-header.const{background:linear-gradient(135deg,var(--lavender),#ede0ec)}
-  .materia-header.penal-h{background:linear-gradient(135deg,#f5e2db,#f2d0c8)}
   .materia-header .emoji{font-size:1.4rem}
-  .materia-header .tempo{font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;
-                         color:var(--ink-faded);margin-left:auto;font-family:'Inter',sans-serif}
-  .incidencia{font-size:0.7rem;color:var(--rose-deep);font-weight:600;
-              background:var(--rose-soft);padding:0.2rem 0.5rem;border-radius:4px}
+  .materia-header .tempo{font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-faded);margin-left:auto;font-family:'Inter',sans-serif}
+  .incidencia{font-size:0.7rem;color:var(--rose-deep);font-weight:600;background:var(--rose-soft);padding:0.2rem 0.5rem;border-radius:4px}
   hr{border:none;border-top:1px solid var(--line);margin:2rem 0}
-  mark{background:var(--blush);color:var(--ink);border-radius:3px;padding:0 2px}
-  mark.aten{background:#ffe4c0}
-  mark.lei{background:var(--lavender)}
-  .dimensoes-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0.8rem;margin:1rem 0}
-  .dim{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);
-       padding:0.8rem;text-align:center}
-  .dim .num{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--rose-deep);font-weight:600}
-  .dim .nome{font-size:0.72rem;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;margin:0.2rem 0}
-  .dim .detalhe{font-size:0.75rem;color:var(--ink-faded)}
-  @media(max-width:640px){.dimensoes-grid{grid-template-columns:1fr}}
+  mark{background:var(--blush);color:var(--ink);border-radius:3px;padding:0 2px} mark.aten{background:#ffe4c0} mark.ok{background:#d8f0d0}
+  .ascii-box{font-family:'Courier New',monospace;font-size:0.78rem;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:1rem;margin:1rem 0;overflow-x:auto;line-height:1.5;color:var(--ink-soft);white-space:pre}
+  .stat-row{display:flex;gap:1rem;margin:1rem 0;flex-wrap:wrap}
+  .stat-card{flex:1;min-width:120px;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:0.8rem;text-align:center}
+  .stat-card .num{font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--rose-deep);font-weight:600}
+  .stat-card .label{font-size:0.68rem;color:var(--ink-faded);text-transform:uppercase;letter-spacing:0.08em}
+  .caso{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:1rem 1.2rem;margin:1rem 0}
+  .caso-titulo{font-size:0.72rem;text-transform:uppercase;letter-spacing:0.12em;font-weight:700;color:var(--rose-deep);margin-bottom:0.5rem}
+  .caso-resp{margin-top:0.6rem;padding-top:0.6rem;border-top:1px solid var(--line);font-size:0.88rem}
+  .caso-resp strong{color:var(--rose-deep)}
+  .dim-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0.8rem;margin:1rem 0}
+  .dim{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:0.9rem;text-align:center}
+  .dim .num{font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--rose-deep);font-weight:600}
+  .dim .nome{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;margin:0.2rem 0}
+  .dim .detalhe{font-size:0.75rem;color:var(--ink-faded);line-height:1.4}
+  @media(max-width:640px){.dim-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════
-     DIREITO CONSTITUCIONAL
-═══════════════════════════════════════ -->
-
 <div class="materia-header const">
   <span class="emoji">🏛️</span>
-  <span>Direito Constitucional</span>
-  <span class="incidencia">72% provas</span>
+  <span>Direito Constitucional — Princípios e Direitos Fundamentais</span>
+  <span class="incidencia">72% provas · 8-10 questões</span>
   <span class="tempo">⏱ 2h</span>
 </div>
 
-<h2>I. Princípios Fundamentais <em>(arts. 1-4 CF/88)</em></h2>
+<div class="stat-row">
+  <div class="stat-card"><div class="num">72%</div><div class="label">Incidência OAB</div></div>
+  <div class="stat-card"><div class="num">9</div><div class="label">Questões médias/exame</div></div>
+  <div class="stat-card"><div class="num">54%</div><div class="label">Acerto médio candidatos</div></div>
+  <div class="stat-card"><div class="num">5</div><div class="label">Blocos temáticos do dia</div></div>
+</div>
 
-<h3>Art. 1º — Fundamentos da República <span class="badge">SOCDVP</span></h3>
+<h2>I. Introdução <em>— Princípios e DFs na OAB</em></h2>
+
+<p>Os <strong>princípios fundamentais (arts. 1-4)</strong> e os <strong>direitos fundamentais (arts. 5-17)</strong> respondem por <strong>40-50% das questões de Constitucional na OAB</strong>. A FGV os combina frequentemente com temas de Processo Penal (habeas corpus, mandado de segurança) e Ética. Dominar os incisos do art. 5º é condição para aprovação.</p>
+
+<p>Doutrinadores: <strong>Pedro Lenza</strong> (<em>Direito Constitucional Esquematizado</em>, 2024), <strong>Alexandre de Moraes</strong> (<em>Direito Constitucional</em>, 2023), <strong>Flávio Martins</strong> (<em>Curso de Direito Constitucional</em>, 2023). Jurisprudência essencial: STF — especialmente súmulas vinculantes e julgados sobre art. 5º.</p>
+
+<hr>
+
+<h2>II. Princípios Fundamentais <em>— Arts. 1-4 CF/88</em></h2>
+
+<h3>2.1 Art. 1º — Fundamentos da República Federativa do Brasil</h3>
+
+<div class="callout lei">
+  <span class="callout-label">📜 CF/88 — Art. 1º (textual)</span>
+  <p>"A República Federativa do Brasil, formada pela união indissolúvel dos Estados e Municípios e do Distrito Federal, constitui-se em Estado Democrático de Direito e tem como fundamentos:<br>
+  I — a soberania; II — a cidadania; III — a dignidade da pessoa humana; IV — os valores sociais do trabalho e da livre iniciativa; V — o pluralismo político.<br>
+  Parágrafo único. Todo o poder emana do povo, que o exerce por meio de representantes eleitos ou diretamente, nos termos desta Constituição."</p>
+</div>
+
 <table>
-  <tr><th>#</th><th>Fundamento</th><th>Detalhes</th></tr>
-  <tr><td><strong>I</strong></td><td><strong>Soberania</strong></td><td>Poder supremo do Estado no plano interno e externo (art. 1º, I; art. 18; art. 170, I)</td></tr>
-  <tr><td><strong>II</strong></td><td><strong>Cidadania</strong></td><td>Participação popular · arts. 14, 61 §2º — Constituição Cidadã</td></tr>
-  <tr><td><strong>III</strong></td><td><strong>Dignidade da Pessoa Humana</strong></td><td>Mínimo existencial · Prevista no art. 34, VII "a" como fundamento da intervenção federal</td></tr>
-  <tr><td><strong>IV</strong></td><td><strong>Valores sociais do trabalho e da livre iniciativa</strong></td><td>Base para a ordem econômica (art. 170)</td></tr>
-  <tr><td><strong>V</strong></td><td><strong>Pluralismo político</strong></td><td>Diversidade de ideias, partidos · arts. 1º V, 17</td></tr>
+  <tr><th>#</th><th>Fundamento</th><th>Conexões e Desdobramentos</th></tr>
+  <tr><td><strong>I</strong></td><td>Soberania</td><td>Art. 170, I (ordem econômica) · arts. 14-16 (soberania popular pelo voto) · independência nacional (art. 4º, I)</td></tr>
+  <tr><td><strong>II</strong></td><td>Cidadania</td><td>Arts. 14-16 (direitos políticos) · art. 5º, LXXIII (ação popular) · jus postulandi do cidadão</td></tr>
+  <tr><td><strong>III</strong></td><td>Dignidade da pessoa humana</td><td>Fundamento mais denso: mínimo existencial · direitos sociais · proibição de tortura · prisão em flagrante</td></tr>
+  <tr><td><strong>IV</strong></td><td>Valores sociais do trabalho e da livre iniciativa</td><td>Arts. 6-11 (direitos sociais) · arts. 170-192 (ordem econômica) · CLT</td></tr>
+  <tr><td><strong>V</strong></td><td>Pluralismo político</td><td>Art. 17 (partidos políticos) · liberdade de criação de partidos · vedação ao partido único</td></tr>
 </table>
 
 <div class="callout dica">
-  <span class="callout-label">✦ Mnemônico para os Fundamentos</span>
-  <p><strong>SO</strong>berania — <strong>CI</strong>dadania — <strong>DI</strong>gnidade — <strong>VA</strong>lores sociais — <strong>PLU</strong>ralismo = <strong>SOCIDIVAPLU</strong> (ou lembre: "Sou Cida, Dig da Vida, Plural")</p>
+  <span class="callout-label">✦ Mnemônico — Fundamentos do art. 1º</span>
+  <p><strong>SO</strong>berania · <strong>CI</strong>dadania · <strong>DI</strong>gnidade · <strong>VA</strong>lores sociais · <strong>PLU</strong>ralismo = <strong>SOCIDIVAPLU</strong><br>
+  Ou: <em>"Sou Cidadão, Tenho Dignidade, Valorizo o Trabalho e Sou Plural"</em></p>
 </div>
 
-<h3>Art. 2º — Separação dos Poderes (Cláusula Pétrea)</h3>
-<p>São Poderes da União, <strong>independentes e harmônicos entre si</strong>: Legislativo, Executivo e Judiciário. Sistema de <strong>freios e contrapesos</strong> (checks and balances). Cláusula pétrea — art. 60, §4º, III.</p>
-
-<h3>Art. 3º — Objetivos Fundamentais <span class="badge">Memorize</span></h3>
-<ul>
-  <li><strong>Construir</strong> uma sociedade livre, justa e solidária</li>
-  <li><strong>Garantir</strong> o desenvolvimento nacional</li>
-  <li><strong>Erradicar</strong> a pobreza, a marginalização e reduzir desigualdades</li>
-  <li><strong>Promover</strong> o bem de todos, sem discriminações</li>
-</ul>
-
-<div class="callout atencao">
-  <span class="callout-label">⚠ Distinção importante</span>
-  <p><strong>Fundamentos</strong> (art. 1º) = o que a República É | <strong>Objetivos</strong> (art. 3º) = o que a República QUER TORNAR-SE. Na prova, trocam os artigos nas alternativas. Lembre-se: fundamentos são substantivos, objetivos são verbos no infinitivo.</p>
-</div>
-
-<h3>Art. 4º — Princípios das Relações Internacionais</h3>
-<p>Independência nacional · Prevalência dos DH · Autodeterminação dos povos · Não-intervenção · Igualdade entre os Estados · Defesa da paz · Solução pacífica dos conflitos · Repúdio ao terrorismo e ao racismo · Cooperação entre povos · Concessão de asilo político.</p>
-<p>Parágrafo único: o Brasil buscará a <strong>integração econômica, política, social e cultural</strong> dos povos da América Latina.</p>
-
-<hr>
-
-<h2>II. Teoria dos Direitos Fundamentais</h2>
-
-<h3>Dimensões (Gerações) dos Direitos Fundamentais</h3>
-
-<div class="dimensoes-grid">
-  <div class="dim"><div class="num">1ª</div><div class="nome">Liberdade</div><div class="detalhe">Direitos negativos (Estado não intervenha). Vida, liberdade, propriedade. Séc. XVIII.</div></div>
-  <div class="dim"><div class="num">2ª</div><div class="nome">Igualdade</div><div class="detalhe">Direitos positivos (Estado deve agir). Sociais, econômicos, culturais. Séc. XIX-XX.</div></div>
-  <div class="dim"><div class="num">3ª</div><div class="nome">Fraternidade</div><div class="detalhe">Difusos e coletivos. Meio ambiente, consumidor, paz. Pós 2ª Guerra.</div></div>
-</div>
-
-<h3>Características dos Direitos Fundamentais</h3>
-<table>
-  <tr><th>Característica</th><th>Significado prático</th></tr>
-  <tr><td><strong>Universalidade</strong></td><td>Titulares: todos os seres humanos</td></tr>
-  <tr><td><strong>Inalienabilidade</strong></td><td>Não podem ser transferidos/vendidos</td></tr>
-  <tr><td><strong>Imprescritibilidade</strong></td><td>Nunca prescrevem pelo não-uso</td></tr>
-  <tr><td><strong>Irrenunciabilidade</strong></td><td>Não pode abrir mão permanentemente</td></tr>
-  <tr><td><strong>Historicidade</strong></td><td>Surgem e evoluem com o tempo</td></tr>
-  <tr><td><strong>Relatividade</strong></td><td><mark>Não são absolutos</mark> — podem ser ponderados entre si</td></tr>
-</table>
-
-<h3>Destinatários do Art. 5º</h3>
-<p>O art. 5º protege "brasileiros e estrangeiros residentes no País". Porém, o <strong>STF amplia</strong>: protege também estrangeiros não residentes e pessoas jurídicas (quando compatível com sua natureza).</p>
-
-<h3>Eficácia dos Direitos Fundamentais</h3>
-<ul>
-  <li><strong>Vertical:</strong> Estado ↔ cidadão (regra principal)</li>
-  <li><strong>Horizontal:</strong> Particulares ↔ particulares (também se aplica)</li>
-  <li><strong>Irradiante:</strong> Influenciam toda a ordem jurídica</li>
-  <li><mark>Art. 5º, §1º:</mark> As normas definidoras dos direitos e garantias fundamentais têm <strong>aplicação imediata</strong></li>
-</ul>
+<h3>2.2 Art. 2º — Separação dos Poderes</h3>
 
 <div class="callout lei">
-  <span class="callout-label">📜 Catálogo Aberto — art. 5º, §2º</span>
-  <p>O rol do art. 5º é <strong>meramente exemplificativo</strong>. Os direitos e garantias expressos na CF não excluem outros decorrentes do regime e dos princípios por ela adotados, ou dos tratados internacionais em que o Brasil seja parte.</p>
+  <span class="callout-label">📜 CF/88 — Art. 2º (textual)</span>
+  <p>"São Poderes da União, <strong>independentes e harmônicos entre si</strong>, o Legislativo, o Executivo e o Judiciário."</p>
+</div>
+
+<p>Montesquieu (<em>O Espírito das Leis</em>, 1748) é o pai clássico da tripartição. No Brasil, aplica-se o sistema de <strong>freios e contrapesos</strong> (checks and balances — modelo norte-americano): cada Poder controla os outros reciprocamente. A separação é <strong>cláusula pétrea</strong> (art. 60, §4º, III).</p>
+
+<p>Funções típicas e atípicas dos Poderes:</p>
+<table>
+  <tr><th>Poder</th><th>Função típica</th><th>Funções atípicas (exemplos)</th></tr>
+  <tr><td>Legislativo</td><td>Legislar + fiscalizar</td><td>Julga (Senado julga crime de responsabilidade do Presidente) · Administrar (regimentos internos)</td></tr>
+  <tr><td>Executivo</td><td>Administrar</td><td>Legislar (Medidas Provisórias, Decretos) · Julgar (processo administrativo)</td></tr>
+  <tr><td>Judiciário</td><td>Julgar</td><td>Legislar (regimentos internos) · Administrar (concursos, licitações internas)</td></tr>
+</table>
+
+<h3>2.3 Art. 3º — Objetivos Fundamentais</h3>
+
+<div class="callout lei">
+  <span class="callout-label">📜 CF/88 — Art. 3º (textual)</span>
+  <p>"Constituem objetivos fundamentais da República Federativa do Brasil:<br>
+  I — construir uma sociedade livre, justa e solidária;<br>
+  II — garantir o desenvolvimento nacional;<br>
+  III — erradicar a pobreza e a marginalização e reduzir as desigualdades sociais e regionais;<br>
+  IV — promover o bem de todos, sem preconceitos de origem, raça, sexo, cor, idade e quaisquer outras formas de discriminação."</p>
+</div>
+
+<div class="callout atencao">
+  <span class="callout-label">⚠ Fundamentos (art. 1º) vs. Objetivos (art. 3º) — Pegadinha clássica</span>
+  <p><strong>Fundamentos</strong> (art. 1º): o que a República <em>é</em> — substantivos (soberania, cidadania, dignidade...)<br>
+  <strong>Objetivos</strong> (art. 3º): o que a República <em>pretende realizar</em> — verbos no infinitivo (construir, garantir, erradicar, promover)<br>
+  A FGV frequentemente troca os artigos: coloca objetivo no art. 1º ou fundamento no art. 3º.</p>
+</div>
+
+<h3>2.4 Art. 4º — Princípios das Relações Internacionais</h3>
+
+<div class="callout lei">
+  <span class="callout-label">📜 CF/88 — Art. 4º (textual)</span>
+  <p>I — independência nacional; II — prevalência dos direitos humanos; III — autodeterminação dos povos; IV — não-intervenção; V — igualdade entre os Estados; VI — defesa da paz; VII — solução pacífica dos conflitos; VIII — repúdio ao terrorismo e ao racismo; IX — cooperação entre os povos para o progresso da humanidade; X — concessão de asilo político.<br>
+  <strong>Parágrafo único.</strong> A República Federativa do Brasil buscará a integração econômica, política, social e cultural dos povos da América Latina, visando à formação de uma comunidade latino-americana de nações.</p>
 </div>
 
 <hr>
 
-<h2>III. Principais Direitos Individuais (art. 5º)</h2>
+<h2>III. Teoria Geral dos Direitos Fundamentais</h2>
 
-<h3>Direito à Vida (caput)</h3>
-<p>Direito <mark class="aten">relativo, não absoluto</mark>. Exceção: pena de morte em <strong>caso de guerra declarada</strong> (art. 5º, XLVII, "a"). O Brasil não adota pena de morte em tempo de paz.</p>
+<h3>3.1 Dimensões (Gerações) dos Direitos Fundamentais</h3>
 
-<h3>Igualdade (caput + inciso I)</h3>
-<ul>
-  <li><strong>Formal:</strong> igualdade perante a lei ("todos são iguais...")</li>
-  <li><strong>Material:</strong> tratar igualmente os iguais e desigualmente os desiguais na medida de suas desigualdades (Aristóteles). Base das ações afirmativas.</li>
-  <li>Art. 5º, I: homens e mulheres são iguais em direitos e obrigações <strong>nos termos desta Constituição</strong> (não em tudo, pois há proteções especiais à mulher)</li>
-</ul>
+<p>Karel Vasak (1979) propôs a divisão em gerações. Paulo Bonavides a aprimorou no Brasil. A doutrina atual prefere o termo "<strong>dimensões</strong>" (não "gerações") para evitar a ideia de superação das anteriores — todas coexistem.</p>
 
-<h3>Liberdades Relevantes para a Prova</h3>
+<div class="dim-grid">
+  <div class="dim">
+    <div class="num">1ª</div>
+    <div class="nome">Liberdade</div>
+    <div class="detalhe">Direitos civis e políticos. Estado não deve intervir — direitos <em>negativos</em>. Séc. XVII-XVIII (Revoluções liberais). Ex.: vida, liberdade, propriedade, locomoção.</div>
+  </div>
+  <div class="dim">
+    <div class="num">2ª</div>
+    <div class="nome">Igualdade</div>
+    <div class="detalhe">Direitos sociais, econômicos e culturais. Estado deve agir — direitos <em>positivos</em>. Séc. XIX-XX (constitucionalismo social). Ex.: saúde, educação, trabalho, moradia.</div>
+  </div>
+  <div class="dim">
+    <div class="num">3ª</div>
+    <div class="nome">Fraternidade</div>
+    <div class="detalhe">Direitos difusos e coletivos. Titularidade difusa — toda a humanidade. Pós-guerra. Ex.: meio ambiente, paz, patrimônio histórico, consumidor.</div>
+  </div>
+</div>
+
+<div class="callout dica">
+  <span class="callout-label">✦ 4ª e 5ª Dimensões (doutrina — Paulo Bonavides)</span>
+  <p><strong>4ª dimensão:</strong> democracia direta, pluralismo, informação (globalização política). <strong>5ª dimensão:</strong> paz como direito autônomo. Raramente cobradas pela FGV — quando cobradas, identificar como posição doutrinária, não texto constitucional.</p>
+</div>
+
+<h3>3.2 Características dos Direitos Fundamentais</h3>
+
 <table>
-  <tr><th>Liberdade</th><th>Inciso</th><th>Regra principal</th></tr>
-  <tr><td>Expressão e Imprensa</td><td>IV e IX</td><td>Vedada a censura prévia. Responsabilização posterior é possível.</td></tr>
-  <tr><td>Consciência e crença</td><td>VI a VIII</td><td>Escusa de consciência — pode recusar obrigação, mas deve prestar alternativa</td></tr>
-  <tr><td>Reunião</td><td>XVI</td><td>Exige <mark>prévia notificação</mark> (não autorização!), pacífica, sem armas</td></tr>
-  <tr><td>Associação</td><td>XVII a XXI</td><td>Criação e dissolução livres. Dissolução compulsória: apenas por decisão judicial</td></tr>
-  <tr><td>Profissão</td><td>XIII</td><td>Eficácia contida: "atendidas as qualificações profissionais que a lei estabelecer"</td></tr>
-  <tr><td>Locomoção</td><td>XV</td><td>Livre ir e vir em tempo de paz. Pode ser restringida em estado de sítio.</td></tr>
+  <tr><th>Característica</th><th>Conceito</th><th>Observação OAB</th></tr>
+  <tr><td><strong>Universalidade</strong></td><td>Titulares são todos os seres humanos</td><td>O STF amplia o art. 5º para estrangeiros não residentes e pessoas jurídicas</td></tr>
+  <tr><td><strong>Inalienabilidade</strong></td><td>Não podem ser transferidos ou cedidos</td><td>Não se pode "vender" a própria liberdade permanentemente</td></tr>
+  <tr><td><strong>Imprescritibilidade</strong></td><td>Não se perdem pelo não-uso</td><td>Diferente dos direitos patrimoniais que prescrevem</td></tr>
+  <tr><td><strong>Irrenunciabilidade</strong></td><td>Não se pode abrir mão definitivamente</td><td>Renúncia temporária é admitida em alguns casos (ex.: BBB, contratos de trabalho)</td></tr>
+  <tr><td><strong>Historicidade</strong></td><td>Surgem e evoluem ao longo da história</td><td>Novas dimensões → novos direitos emergem</td></tr>
+  <tr><td><strong>Relatividade</strong></td><td><mark><strong>Não são absolutos</strong></mark> — podem colidir e ser ponderados</td><td>Pegadinha: "direito à vida é absoluto" — ERRADO. Pena de morte em guerra (art. 5º, XLVII)</td></tr>
+  <tr><td><strong>Eficácia horizontal</strong></td><td>Aplicam-se nas relações entre particulares</td><td>Teoria da aplicabilidade direta (STF: RE 201.819/RJ) — DFs vinculam também particulares</td></tr>
 </table>
 
-<h3>Inviolabilidade do Domicílio (inciso XI)</h3>
-<p>A casa é asilo inviolável. <strong>Exceções</strong> (entrada sem consentimento do morador):</p>
+<h3>3.3 Destinatários do Art. 5º CF</h3>
+
+<p>O caput do art. 5º fala em "brasileiros e estrangeiros residentes no País". Contudo, o <strong>STF adota interpretação extensiva</strong>: protege também estrangeiros não residentes (turistas, transeuntes) e pessoas jurídicas (quando a natureza do direito for compatível — ex.: pessoa jurídica pode sofrer dano moral, Súmula 227 STJ).</p>
+
+<hr>
+
+<h2>IV. Direitos Individuais — Art. 5º CF <span class="badge cai">55% das questões de Constitucional</span></h2>
+
+<h3>4.1 Direito à Vida — Caput</h3>
+
+<div class="callout lei">
+  <span class="callout-label">📜 CF/88 — Art. 5º, caput</span>
+  <p>"Todos são iguais perante a lei, sem distinção de qualquer natureza, garantindo-se aos brasileiros e aos estrangeiros residentes no País a inviolabilidade do direito à vida, à liberdade, à igualdade, à segurança e à propriedade..."</p>
+</div>
+
+<p>O direito à vida tem dupla acepção (Alexandre de Moraes, 2023): (1) direito de <em>permanecer vivo</em> (contra a morte provocada pelo Estado ou terceiros); (2) direito a uma <em>vida digna</em> (mínimo existencial). <strong>NÃO é absoluto</strong>:</p>
+
 <ul>
-  <li>Durante o dia: <strong>com mandado judicial, em flagrante delito, desastre, prestação de socorro</strong></li>
-  <li>Durante a noite: <mark class="aten">APENAS em flagrante delito, desastre ou prestação de socorro</mark> — NÃO com mandado judicial!</li>
+  <li>Pena de morte: vedada em tempo de paz, mas <mark class="aten">admitida em caso de guerra declarada</mark> (art. 5º, XLVII, 'a')</li>
+  <li>Aborto de feto anencéfalo: o STF (ADPF 54) decidiu que não configura homicídio</li>
+  <li>Pesquisa com células-tronco embrionárias: STF (ADI 3.510) declarou constitucional</li>
 </ul>
+
+<h3>4.2 Princípio da Igualdade — Art. 5º, I e caput</h3>
+
+<table>
+  <tr><th>Dimensão</th><th>Conceito</th><th>Destinatário</th></tr>
+  <tr><td><strong>Formal</strong> (igualdade perante a lei)</td><td>A lei deve ser aplicada igualmente a todos, sem distinções. Proíbe discriminação na aplicação.</td><td>Intérpretes e aplicadores do Direito</td></tr>
+  <tr><td><strong>Material</strong> (igualdade na lei)</td><td>A lei deve tratar os iguais de forma igual e os desiguais de forma desigual (Aristóteles). Base das ações afirmativas.</td><td>O legislador (ao criar a norma)</td></tr>
+</table>
+
+<div class="callout dica">
+  <span class="callout-label">✦ Ações Afirmativas — STF (ADPF 186 + RE 597.285)</span>
+  <p>O STF declarou constitucional o sistema de cotas raciais em universidades públicas. Fundamento: igualdade material (tratar desigualmente para reduzir desigualdade histórica). Não viola a igualdade formal — antes, realiza a igualdade material. Válido também para concursos públicos (Lei 12.990/14).</p>
+</div>
+
+<h3>4.3 Incisos do Art. 5º — Os Mais Cobrados pela FGV</h3>
+
+<table>
+  <tr><th>Inciso</th><th>Direito</th><th>Regra principal</th><th>Pegadinha associada</th></tr>
+  <tr><td>II</td><td>Legalidade</td><td>"Ninguém é obrigado a fazer ou deixar de fazer algo senão em virtude de lei"</td><td>Para o particular: tudo que não é proibido é permitido. Para o Estado (Adm. Pública): só pode fazer o que a lei permite.</td></tr>
+  <tr><td>IV</td><td>Livre manifestação de pensamento</td><td>Vedado o anonimato. Liberdade de expressão.</td><td>Liberdade de expressão não protege discurso de ódio ou racismo (HC 82.424 STF).</td></tr>
+  <tr><td>XI</td><td>Inviolabilidade do domicílio</td><td>Durante o DIA: mandado judicial, flagrante, desastre, socorro. À NOITE: APENAS flagrante, desastre, socorro.</td><td>À noite NÃO cabe mandado judicial! É a exceção mais cobrada.</td></tr>
+  <tr><td>XII</td><td>Sigilo de comunicações</td><td>Inviolável: carta, dado, telefone e telegráfico. Exceção: ordem judicial para investigação criminal ou instrução penal.</td><td>Sigilo bancário pode ser quebrado por CPI (MS 23.452/STF — CPI tem poderes investigatórios equivalentes aos judiciais) e por ordem judicial. <strong>Atenção:</strong> a SV 24 não trata de sigilo bancário — ela versa sobre crime tributário material (exige lançamento definitivo).</td></tr>
+  <tr><td>XIII</td><td>Livre exercício de profissão</td><td>Norma de eficácia contida: "atendidas as qualificações profissionais que a lei estabelecer"</td><td>A lei PODE criar requisitos (OAB, CRM, CREA) sem violar o inciso XIII.</td></tr>
+  <tr><td>XVI</td><td>Direito de reunião</td><td>Pacífica, sem armas, prévia NOTIFICAÇÃO (não autorização), sem frustrar outra reunião previamente convocada.</td><td>Exige NOTIFICAÇÃO, não AUTORIZAÇÃO prévia! Autorização seria censura prévia vedada.</td></tr>
+  <tr><td>XXXV</td><td>Inafastabilidade da jurisdição</td><td>"A lei não excluirá da apreciação do Poder Judiciário lesão ou ameaça a direito."</td><td>Válido mesmo antes do esgotamento da via administrativa (exceto Justiça Desportiva — art. 217, §1º).</td></tr>
+  <tr><td>XXXIX</td><td>Legalidade e anterioridade penal</td><td>"Não há crime sem lei anterior que o defina, nem pena sem prévia cominação legal."</td><td>Lei posterior não cria crime retroativamente (irretroatividade da lei penal mais grave).</td></tr>
+  <tr><td>LVII</td><td>Presunção de inocência</td><td>"Ninguém será considerado culpado até o trânsito em julgado de sentença penal condenatória."</td><td>STF (2019): execução após acórdão em 2º grau NÃO viola presunção de inocência (posição atual — ADCs 43, 44, 54).</td></tr>
+  <tr><td>LXVIII</td><td>Habeas corpus</td><td>Proteção à liberdade de locomoção ameaçada ou violada. Qualquer pessoa pode impetrar, sem advogado.</td><td>NÃO cabe HC para punições disciplinares militares (salvo ilegalidade manifesta — art. 142, §2º CF).</td></tr>
+</table>
+
+<h3>4.4 Inviolabilidade do Domicílio — Análise Detalhada (art. 5º, XI)</h3>
+
+<div class="callout lei">
+  <span class="callout-label">📜 CF/88 — Art. 5º, XI (textual)</span>
+  <p>"A casa é asilo inviolável do indivíduo, ninguém nela podendo penetrar sem consentimento do morador, salvo em caso de flagrante delito ou desastre, ou para prestar socorro, ou, durante o dia, por determinação judicial."</p>
+</div>
+
+<div class="ascii-box">INVIOLABILIDADE DO DOMICÍLIO — ART. 5º, XI
+
+                    CONSENTIMENTO DO MORADOR → Sempre permitido
+
+SEM consentimento:
+┌─────────────────────────────┬──────────────────────────────┐
+│ DURANTE O DIA               │ DURANTE A NOITE              │
+├─────────────────────────────┼──────────────────────────────┤
+│ • Flagrante delito          │ • Flagrante delito           │
+│ • Desastre                  │ • Desastre                   │
+│ • Prestação de socorro      │ • Prestação de socorro       │
+│ • MANDADO JUDICIAL ✓        │ ⚠ NÃO cabe mandado judicial  │
+└─────────────────────────────┴──────────────────────────────┘
+
+⚠ "DURANTE O DIA" = das 6h às 18h (STF — RE 603.616, Tema 280)</div>
+
+<hr>
+
+<h2>V. Jurisprudência Consolidada</h2>
+
+<div class="callout jurisprudencia">
+  <span class="callout-label">⚖ ADI 3.510/DF — STF (2008) — Células-tronco embrionárias</span>
+  <p>Declarou constitucional o art. 5º da Lei de Biossegurança, que autoriza pesquisa com células-tronco embrionárias. O direito à vida do embrião não é absoluto e deve ser ponderado com o direito à saúde de pessoas doentes. O embrião in vitro não tem os mesmos direitos do nascituro in utero.</p>
+</div>
+
+<div class="callout jurisprudencia">
+  <span class="callout-label">⚖ ADPF 54/DF — STF (2012) — Aborto de feto anencéfalo</span>
+  <p>Declarou que a interrupção da gestação de feto anencéfalo não é tipificada como aborto, pois não há vida extrauterina viável. Fundamentos: dignidade da pessoa humana + autonomia da mulher + laicidade do Estado. Não é aborto — é antecipação terapêutica do parto.</p>
+</div>
+
+<div class="callout jurisprudencia">
+  <span class="callout-label">⚖ RE 603.616/RO — STF (2010) — "Dia" para mandado de busca</span>
+  <p>O STF definiu que "dia" para cumprimento de mandado de busca e apreensão domiciliar é das <strong>6h às 18h</strong>. Fora desse horário, a polícia só pode entrar sem mandado nas hipóteses de flagrante delito, desastre ou prestação de socorro. Este foi o julgado que fixou a interpretação do art. 5º, XI para fins práticos.</p>
+</div>
+
+<div class="callout jurisprudencia">
+  <span class="callout-label">⚖ HC 82.424/RS — STF (2003) — Ellwanger — Liberdade de Expressão vs. Racismo</span>
+  <p>O STF condenou um editor que publicou livros com conteúdo antissemita, afirmando que a liberdade de expressão não protege o discurso de ódio e o racismo. O racismo é crime inafiançável e imprescritível (art. 5º, XLII CF). Ponderação: racismo sobrepõe-se à liberdade de expressão nesse caso.</p>
+</div>
+
+<hr>
+
+<h2>VI. Pegadinhas Clássicas da Banca</h2>
+
+<div class="callout pegadinha">
+  <span class="callout-label">⚠ 7 Pegadinhas — Princípios e DFs</span>
+  <ol>
+    <li><strong>Fundamentos (art. 1º) ≠ Objetivos (art. 3º).</strong> Fundamentos = substantivos (soberania, cidadania...). Objetivos = verbos infinitivo (construir, garantir, erradicar, promover). A banca troca os artigos.</li>
+    <li><strong>Direitos fundamentais NÃO são absolutos.</strong> Pena de morte existe em guerra declarada (art. 5º, XLVII). Questão que diz "direito à vida é absoluto" está errada.</li>
+    <li><strong>Reunião: NOTIFICAÇÃO, não autorização!</strong> O art. 5º, XVI exige aviso prévio à autoridade, não autorização. Exigir autorização seria censura prévia.</li>
+    <li><strong>À noite: NÃO cabe mandado judicial em domicílio.</strong> O art. 5º, XI só permite mandado "durante o dia". À noite, só flagrante, desastre ou socorro.</li>
+    <li><strong>Livre exercício de profissão é eficácia CONTIDA</strong> (não plena). A lei PODE estabelecer requisitos (ex.: aprovação no Exame de Ordem). Não é direito absoluto.</li>
+    <li><strong>Princípio da igualdade inclui ações afirmativas.</strong> Cotas raciais não violam igualdade — realizam igualdade material (ADPF 186). Questão que diz que cotas são inconstitucionais está errada.</li>
+    <li><strong>Liberdade de expressão não protege discurso de ódio e racismo</strong> (HC 82.424). A CF é mais ampla que apenas proteger opiniões — ela repudia expressamente o racismo (art. 4º, VIII + art. 5º, XLII).</li>
+  </ol>
+</div>
+
+<hr>
+
+<h2>VII. Casos Práticos</h2>
+
+<div class="caso">
+  <div class="caso-titulo">Caso 1 — Inviolabilidade do Domicílio</div>
+  <p>À 1h30 da madrugada, policiais obtêm ordem judicial de busca e apreensão para entrar na residência de Carlos, suspeito de tráfico de drogas. Ao chegarem, Carlos está em casa e não há flagrante em curso. Os policiais podem entrar?</p>
+  <div class="caso-resp"><strong>Resposta:</strong> NÃO. O art. 5º, XI só permite a entrada com mandado "durante o dia" (6h-18h, conforme RE 603.616/STF). À noite, sem flagrante delito em curso, desastre ou socorro a prestar, o mandado judicial não autoriza a entrada. A polícia deve aguardar o dia para cumprir o mandado. A entrada à noite com mandado (sem flagrante) configura violação de domicílio.</div>
+</div>
+
+<div class="caso">
+  <div class="caso-titulo">Caso 2 — Igualdade e Ações Afirmativas</div>
+  <p>Uma universidade federal implementou sistema de cotas destinando 20% das vagas a candidatos autodeclarados negros. Um candidato branco não aprovado pede a anulação do sistema, alegando violação ao princípio da igualdade (art. 5º, caput). Tem razão?</p>
+  <div class="caso-resp"><strong>Resposta:</strong> NÃO. O STF (ADPF 186/DF, rel. Min. Ricardo Lewandowski, 2012) declarou constitucional o sistema de cotas raciais. A igualdade não exige tratamento idêntico, mas proporcional. Cotas realizam a igualdade material: tratam desigualmente para compensar desigualdade histórica. O argumento do candidato confunde igualdade formal (perante a lei) com igualdade material (na lei) — a CF exige ambas.</div>
+</div>
+
+<div class="caso">
+  <div class="caso-titulo">Caso 3 — Fundamentos vs. Objetivos</div>
+  <p>Questão de prova afirma: "A dignidade da pessoa humana e a erradicação da pobreza são fundamentos da República Federativa do Brasil (art. 1º CF)." A afirmativa está correta?</p>
+  <div class="caso-resp"><strong>Resposta:</strong> INCORRETA. A dignidade da pessoa humana é fundamento (art. 1º, III ✓). A erradicação da pobreza é OBJETIVO (art. 3º, III ✗), não fundamento. A confusão entre arts. 1º e 3º é a pegadinha mais clássica de Constitucional na OAB.</div>
+</div>
+
+<hr>
+
+<h2>VIII. Resumo Esquemático Final</h2>
+
+<div class="ascii-box">PRINCÍPIOS FUNDAMENTAIS — CF/88
+
+ART. 1º — FUNDAMENTOS (o que a República É):
+SO-CI-DI-VA-PLU
+Soberania · Cidadania · Dignidade · Valores sociais · Pluralismo
+"Todo o poder emana do povo" (parágrafo único)
+
+ART. 2º — SEPARAÇÃO DOS PODERES (cláusula pétrea):
+Legislativo · Executivo · Judiciário — independentes e harmônicos
+Sistema de freios e contrapesos
+
+ART. 3º — OBJETIVOS (o que a República QUER CONSTRUIR — verbos):
+Construir · Garantir · Erradicar · Promover
+
+ART. 4º — RELAÇÕES INTERNACIONAIS (10 princípios):
+Independência · DH · Autodeterminação · Não-intervenção · Igualdade
+Paz · Solução pacífica · Repúdio terrorismo/racismo · Cooperação · Asilo
+Parágrafo único: integração América Latina
+
+──────────────────────────────────────────────────────────
+DIREITOS FUNDAMENTAIS
+
+DIMENSÕES: 1ª (liberdade) | 2ª (igualdade) | 3ª (fraternidade)
+CARACTERÍSTICAS: universais · inalienáveis · imprescritíveis · irrenunciáveis
+                 históricos · RELATIVOS (não absolutos!) · eficácia horizontal
+
+ART. 5º — INCISOS CRÍTICOS:
+• XI: domicílio — mandado só DURANTE O DIA (6h-18h)
+• XIII: profissão — eficácia CONTIDA (lei pode estabelecer requisitos)
+• XVI: reunião — NOTIFICAÇÃO (não autorização)
+• XLII: racismo — inafiançável + imprescritível
+• XLVII: pena de morte só em GUERRA DECLARADA
+• LVII: presunção de inocência até trânsito em julgado
+• LXVIII: HC — sem advogado, gratuito, protege locomoção</div>
+
+<div class="callout dica">
+  <span class="callout-label">✦ Checklist de Revisão Rápida</span>
+  <ul>
+    <li>☐ Fundamentos (art. 1º): substantivos | Objetivos (art. 3º): verbos no infinitivo</li>
+    <li>☐ Dignidade = fundamento (art. 1º) | Erradicar pobreza = objetivo (art. 3º)</li>
+    <li>☐ Separação de Poderes = cláusula pétrea (art. 60, §4º, III)</li>
+    <li>☐ Direitos fundamentais: RELATIVOS (não absolutos)</li>
+    <li>☐ Dimensões: 1ª liberdade · 2ª igualdade · 3ª fraternidade</li>
+    <li>☐ Domicílio à noite: APENAS flagrante, desastre, socorro (não mandado!)</li>
+    <li>☐ Reunião: NOTIFICAÇÃO (não autorização)</li>
+    <li>☐ Profissão livre: eficácia contida — lei pode criar requisitos</li>
+    <li>☐ Pena de morte: vedada em paz, admitida em guerra declarada</li>
+    <li>☐ Racismo: inafiançável + imprescritível (art. 5º, XLII)</li>
+  </ul>
+</div>
 
 <script src="../highlighter.js"></script>
 <script>

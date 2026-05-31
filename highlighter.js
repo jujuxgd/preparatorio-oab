@@ -382,10 +382,17 @@
 
   /* ── postMessage from parent dashboard ──────────────────────── */
   window.addEventListener('message', function (e) {
-    if (!e.data || e.data.type !== 'hl-clear') return;
-    document.querySelectorAll('.hl-mark').forEach(removeMark);
-    try { localStorage.removeItem(KEY); } catch (er) {}
-    hideToolbar(); hideMobileBar();
+    if (!e.data) return;
+    if (e.data.type === 'hl-clear') {
+      document.querySelectorAll('.hl-mark').forEach(removeMark);
+      try { localStorage.removeItem(KEY); } catch (er) {}
+      hideToolbar(); hideMobileBar();
+    }
+    if (e.data.type === 'set-accent' && e.data.vars) {
+      var r = document.documentElement;
+      var v = e.data.vars;
+      Object.keys(v).forEach(function(k) { if (v[k]) r.style.setProperty(k, v[k]); });
+    }
   });
 
 })();

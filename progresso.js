@@ -22,7 +22,18 @@ function _criarEstrutura() {
 function carregarProgresso() {
   try {
     const s = localStorage.getItem(PROGRESSO_KEY);
-    if (s) return JSON.parse(s);
+    if (s) {
+      const p = JSON.parse(s);
+      // Remove chaves de dias inválidas (dia 0, dias > 60 sem sentido)
+      // preserva apenas dias 1–60
+      if (p.dias) {
+        Object.keys(p.dias).forEach(k => {
+          const n = parseInt(k);
+          if (isNaN(n) || n < 1 || n > 60) delete p.dias[k];
+        });
+      }
+      return p;
+    }
   } catch(e) {}
   return _criarEstrutura();
 }
@@ -37,8 +48,10 @@ function obterDia(numDia) {
 }
 
 function concluirDia(numDia, nota) {
+  const n = parseInt(numDia);
+  if (isNaN(n) || n < 1 || n > 60) return; // ignora dias inválidos
   const p = carregarProgresso();
-  const key = String(numDia);
+  const key = String(n);
   if (!p.dias[key]) p.dias[key] = {};
   p.dias[key].concluido       = true;
   p.dias[key].data_conclusao  = new Date().toISOString().split('T')[0];
@@ -66,14 +79,17 @@ function salvarNota(numDia, texto) {
 }
 
 function calcularStats() {
-  const p               = carregarProgresso();
-  const total           = Object.keys(p.dias).length;
-  const concluidos      = Object.values(p.dias).filter(d => d.concluido).length;
-  const inicio          = new Date(p.inicio_estudos);
-  const hoje            = new Date();
-  const diasDecorridos  = Math.max(0, Math.floor((hoje - inicio) / 864e5));
-  const pct             = Math.round((concluidos / 60) * 100);
-  return { concluidos, diasDecorridos, pct, emDia: concluidos >= diasDecorridos, total };
+  const p = carregarProgresso();
+  // Conta apenas dias VÁLIDOS (1–60) que estão marcados como concluídos
+  const concluidos = Object.entries(p.dias).filter(([k, d]) => {
+    const n = parseInt(k);
+    return n >= 1 && n <= 60 && d.concluido === true;
+  }).length;
+  const inicio         = new Date(p.inicio_estudos);
+  const hoje           = new Date();
+  const diasDecorridos = Math.max(0, Math.floor((hoje - inicio) / 864e5));
+  const pct            = Math.round((concluidos / 60) * 100);
+  return { concluidos, diasDecorridos, pct, emDia: concluidos >= diasDecorridos };
 }
 
 function exportarProgresso() {

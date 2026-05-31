@@ -10,6 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&family=Caveat:wght@400;500&display=swap" rel="stylesheet">
 <link rel="icon" href="favicon.png" type="image/png">
 <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/quill/1.3.7/quill.snow.css">
 <style>
 /* PÁGINA HOJE */
 .day-hero {
@@ -867,9 +868,176 @@
 
 /* Cores dos headers por matéria */
 .sp-rose     { background: linear-gradient(135deg, var(--blush), var(--rose-soft)); }
-.sp-lavender { background: linear-gradient(135deg, var(--lavender), #ede0ec); }
-.sp-champagne{ background: linear-gradient(135deg, var(--champagne), #fde8d8); }
-.sp-sage     { background: linear-gradient(135deg, var(--sage), #dde8d8); }
+.sp-lavender { background: linear-gradient(135deg, var(--lavender), var(--blush)); }
+.sp-champagne{ background: linear-gradient(135deg, var(--champagne), var(--nude)); }
+.sp-sage     { background: linear-gradient(135deg, var(--sage), var(--bg-deep)); }
+
+/* Botão expandir painel */
+.sp-expand-btn {
+  background: rgba(255,255,255,0.55);
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 0.25rem 0.55rem;
+  font-size: 0.72rem;
+  cursor: pointer;
+  color: var(--ink-soft);
+  transition: all var(--transition);
+  margin-right: 0.4rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.sp-expand-btn:hover { background: white; color: var(--rose-deep); }
+
+/* Overlay fullscreen de painel */
+.panel-fullscreen-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  z-index: 9000;
+  display: none;
+  flex-direction: column;
+}
+.panel-fullscreen-overlay.open { display: flex; }
+.panel-fs-bar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.7rem 1.5rem;
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+  flex-shrink: 0;
+}
+.panel-fs-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  font-weight: 500;
+  flex: 1;
+  color: var(--ink);
+}
+.panel-fs-iframe {
+  flex: 1;
+  width: 100%;
+  border: none;
+}
+
+/* ── Anotações — sub-tabs por matéria ────────── */
+.anot-tabs-bar {
+  display: flex;
+  gap: 0.35rem;
+  margin-bottom: 1.2rem;
+  flex-wrap: wrap;
+}
+.anot-tab {
+  padding: 0.45rem 1rem;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1.5px solid var(--line);
+  color: var(--ink-faded);
+  background: var(--bg-soft);
+  transition: all var(--transition);
+  user-select: none;
+}
+.anot-tab:hover { color: var(--ink); background: var(--blush); border-color: var(--rose-soft); }
+.anot-tab.active {
+  background: linear-gradient(135deg, var(--rose) 0%, var(--rose-deep) 100%);
+  color: white;
+  border-color: transparent;
+  box-shadow: var(--shadow-sm);
+}
+.anot-panel { display: none; }
+.anot-panel.active { display: block; animation: fadeInUp 0.25s ease; }
+
+/* ── Quill overrides ───────────────────────── */
+.ql-toolbar.ql-snow {
+  border: 1px solid var(--line) !important;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0 !important;
+  background: var(--bg-soft) !important;
+  font-family: 'Inter', sans-serif !important;
+}
+.ql-container.ql-snow {
+  border: 1px solid var(--line) !important;
+  border-top: none !important;
+  border-radius: 0 0 var(--radius-sm) var(--radius-sm) !important;
+  background: var(--paper) !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 0.9rem !important;
+}
+.ql-editor { min-height: 380px; color: var(--ink) !important; line-height: 1.75 !important; }
+.ql-editor.ql-blank::before { color: var(--ink-faded) !important; font-style: italic !important; }
+.ql-toolbar button .ql-stroke { stroke: var(--ink-faded) !important; }
+.ql-toolbar button .ql-fill  { fill: var(--ink-faded) !important; }
+.ql-toolbar button:hover .ql-stroke,
+.ql-toolbar button.ql-active .ql-stroke { stroke: var(--rose-deep) !important; }
+.ql-toolbar button:hover .ql-fill,
+.ql-toolbar button.ql-active .ql-fill { fill: var(--rose-deep) !important; }
+.ql-toolbar .ql-picker-label { color: var(--ink-soft) !important; }
+.ql-toolbar .ql-picker-label:hover { color: var(--rose-deep) !important; }
+.ql-toolbar .ql-picker-options { background: var(--paper) !important; border-color: var(--line) !important; }
+[data-theme="dark"] .ql-editor { color: var(--ink) !important; }
+[data-theme="dark"] .ql-toolbar.ql-snow { background: var(--bg-soft) !important; }
+
+/* ── Checklist granular (tópicos por matéria) ─ */
+/* ── Preview cards de revisão (aba Resumo) ─── */
+.resumo-prev-card {
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1rem 1.2rem;
+  margin-bottom: 0.9rem;
+}
+.resumo-prev-head {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-bottom: 0.8rem;
+  flex-wrap: wrap;
+}
+.resumo-prev-nome {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--ink);
+}
+.resumo-prev-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.resumo-prev-list li {
+  padding: 0.35rem 0 0.35rem 1.3rem;
+  font-size: 0.83rem;
+  color: var(--ink-soft);
+  border-bottom: 1px dotted var(--line);
+  position: relative;
+  line-height: 1.4;
+}
+.resumo-prev-list li:last-child { border-bottom: none; }
+.resumo-prev-list li::before {
+  content: '✦';
+  position: absolute;
+  left: 0;
+  color: var(--rose-deep);
+  font-size: 0.6rem;
+  top: 0.45rem;
+}
+
+/* ── Checklist granular ─────────────────────── */
+.checklist-group-header {
+  font-size: 0.63rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--rose-deep);
+  font-weight: 700;
+  padding: 0.6rem 0 0.25rem;
+  border-top: 1px dotted var(--line);
+  margin-top: 0.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+.checklist-group-header:first-child { border-top: none; padding-top: 0; margin-top: 0; }
 </style>
 </head>
 <body>
@@ -902,13 +1070,13 @@
     <div class="nav-section-label">Estudo</div>
     <a href="materias.html" class="nav-link"><span class="icon">❖</span><span>Matérias</span></a>
     <a href="questoes.html" class="nav-link"><span class="icon">◎</span><span>Questões</span></a>
-    
-    
-    
-    
+    <a href="fichamentos.html" class="nav-link"><span class="icon">✎</span><span>Fichamentos</span></a>
+
+
 
     <div class="nav-section-label">Análise</div>
     <a href="estatisticas.html" class="nav-link"><span class="icon">◈</span><span>Estatísticas</span></a>
+    <a href="simulados.html" class="nav-link"><span class="icon">◉</span><span>Simulados</span></a>
 
     <div class="sidebar-footer">
       <div class="profile-card">
@@ -982,8 +1150,9 @@
     <!-- TABS -->
     <div class="tabs-bar">
       <div class="tab active" data-tab="teoria">📖 Teoria</div>
+      <div class="tab" data-tab="anotacoes">📝 Anotações</div>
       <div class="tab" data-tab="questoes">📊 Questões</div>
-      <div class="tab" data-tab="resumo">✦ Meu Resumo</div>
+      <div class="tab" data-tab="resumo">✦ Resumo</div>
       <div class="tab" data-tab="comentarios">💭 Comentários <span class="badge" id="comments-badge" style="display:none"></span></div>
     </div>
 
@@ -1002,6 +1171,22 @@
           <div id="subject-panels"></div>
         </div>
 
+        <!-- ANOTAÇÕES — editor rich text por matéria -->
+        <div class="tab-content" data-tab="anotacoes">
+          <div class="content-card" style="padding:1.5rem">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+              <div>
+                <div style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:500;color:var(--ink)">Anotações do dia</div>
+                <div style="font-size:0.75rem;color:var(--ink-faded);margin-top:0.2rem">Salvo automaticamente · cole texto formatado de qualquer fonte</div>
+              </div>
+              <a href="fichamentos.html" style="font-size:0.75rem;color:var(--rose-deep);text-decoration:none;display:flex;align-items:center;gap:0.3rem;font-weight:500">✍ Fichamentos globais →</a>
+            </div>
+            <div class="anot-tabs-bar" id="anot-tabs-bar"></div>
+            <div id="anot-panels"></div>
+            <div id="anot-loading" style="color:var(--ink-faded);font-size:0.85rem;font-style:italic;padding:1rem 0">Selecione a aba de Anotações para carregar o editor.</div>
+          </div>
+        </div>
+
         <!-- QUESTÕES — REGISTO DIÁRIO -->
         <div class="tab-content" data-tab="questoes">
           <div class="content-card">
@@ -1018,20 +1203,18 @@
           </div>
         </div>
 
-        <!-- RESUMO -->
+        <!-- RESUMO — preview automático dos cards de revisão -->
         <div class="tab-content" data-tab="resumo">
-          <div class="content-card">
-            <p style="color:var(--ink-soft);font-size:0.88rem;margin-bottom:1rem">Escreva aqui o seu resumo do dia. Vai virar card de revisão automática nos intervalos de 1, 7, 15 e 30 dias.</p>
-            <textarea class="handwritten" placeholder="O essencial deste estudo, com as suas palavras..."></textarea>
-            <div class="resumo-box">
-              <div class="resumo-text">
-                Direitos do advogado: art. 7º EOAB. Inviolabilidade <em>não é absoluta</em> — precisa mandado específico + presença da OAB. Imunidade material cobre injúria e difamação, mas <strong>NÃO calúnia</strong> (ADI 1.127).
+          <div class="content-card" style="padding:1.5rem">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem;flex-wrap:wrap;gap:0.5rem">
+              <div>
+                <div style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:500;color:var(--ink)">Cards de revisão automáticos</div>
+                <div style="font-size:0.75rem;color:var(--ink-faded);margin-top:0.2rem">Ao clicar "Estudei Hoje" esses cards aparecem em Revisar nos intervalos de 1, 7, 15 e 30 dias</div>
               </div>
+              <a href="revisar.html" style="font-size:0.75rem;color:var(--rose-deep);text-decoration:none;font-weight:500">↻ Ir para Revisar →</a>
             </div>
-            <div style="margin-top:1rem;display:flex;gap:0.6rem">
-              <button class="btn btn-primary">Salvar resumo</button>
-              <button class="btn">Exportar como card</button>
-            </div>
+            <div id="resumo-status" style="margin-bottom:1rem"></div>
+            <div id="resumo-preview-cards"></div>
           </div>
         </div>
 
@@ -1092,6 +1275,16 @@
       </div>
     </div>
 
+    <!-- OVERLAY FULLSCREEN PAINEL -->
+    <div class="panel-fullscreen-overlay" id="panel-fs-overlay">
+      <div class="panel-fs-bar">
+        <div style="width:28px;height:28px;background:linear-gradient(135deg,var(--rose),var(--rose-deep));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.7rem;color:white">⤢</div>
+        <div class="panel-fs-title" id="panel-fs-title">—</div>
+        <button class="btn btn-ghost" style="font-size:0.78rem;padding:0.4rem 0.9rem" onclick="closeFullscreen()">✕ Fechar</button>
+      </div>
+      <iframe class="panel-fs-iframe" id="panel-fs-iframe" src="" title="Conteúdo"></iframe>
+    </div>
+
     <!-- BARRA INFERIOR DO MODO FOCO (oculta por padrão) -->
     <div class="focus-bottombar" style="display:none">
       <div class="day-nav" style="display:flex;gap:1rem">
@@ -1109,6 +1302,9 @@
 <script src="script.js"></script>
 <script src="progresso.js"></script>
 <script src="plano-oab.js"></script>
+<script src="cards.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/quill/1.3.7/quill.min.js"></script>
+<script src="cores.js"></script>
 <script>
 // ── Tabs ─────────────────────────────────────
 document.querySelectorAll('.tab').forEach(tab => {
@@ -1119,8 +1315,240 @@ document.querySelectorAll('.tab').forEach(tab => {
     tab.classList.add('active');
     document.querySelector(`.tab-content[data-tab="${target}"]`).classList.add('active');
     if (target === 'questoes') _buildQForm();
+    if (target === 'anotacoes') _initAnotacoes();
   });
 });
+
+// ── Fullscreen para painéis de matéria ────────
+function expandPanel(idx, nome) {
+  const iframe = document.querySelector(`#sp-${idx} iframe`);
+  if (!iframe) return;
+  const overlay = document.getElementById('panel-fs-overlay');
+  const fsIframe = document.getElementById('panel-fs-iframe');
+  const fsTitle  = document.getElementById('panel-fs-title');
+  if (!overlay || !fsIframe) return;
+  fsTitle.textContent = nome;
+  fsIframe.src = iframe.src;
+  overlay.classList.add('open');
+  // Sincroniza tema para o iframe fullscreen
+  fsIframe.addEventListener('load', function once() {
+    const theme = document.documentElement.getAttribute('data-theme') || 'light';
+    try { fsIframe.contentWindow.postMessage({ type:'set-theme', theme }, '*'); } catch(e) {}
+    fsIframe.removeEventListener('load', once);
+  });
+  document.addEventListener('keydown', _fsEsc);
+}
+
+function closeFullscreen() {
+  const overlay = document.getElementById('panel-fs-overlay');
+  if (overlay) overlay.classList.remove('open');
+  const fsIframe = document.getElementById('panel-fs-iframe');
+  if (fsIframe) setTimeout(() => { fsIframe.src = ''; }, 200);
+  document.removeEventListener('keydown', _fsEsc);
+}
+
+function _fsEsc(e) { if (e.key === 'Escape') closeFullscreen(); }
+
+// ── Anotações — init Quill por matéria ────────
+let _anotInitialized = false;
+const _quillEditors = {};
+
+function _initAnotacoes() {
+  if (_anotInitialized) return;
+  if (typeof Quill === 'undefined') {
+    const s = document.createElement('script');
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/quill/1.3.7/quill.min.js';
+    s.onload = () => _buildAnotacoes();
+    document.head.appendChild(s);
+    return;
+  }
+  _buildAnotacoes();
+}
+
+function _buildAnotacoes() {
+  if (_anotInitialized) return;
+  _anotInitialized = true;
+
+  const dia = _diaCorrente();
+  const dados = getDadosDia(dia);
+  const loadingEl = document.getElementById('anot-loading');
+  if (loadingEl) loadingEl.style.display = 'none';
+  if (!dados) return;
+
+  const tabsBar = document.getElementById('anot-tabs-bar');
+  const panels  = document.getElementById('anot-panels');
+  if (!tabsBar || !panels) return;
+
+  dados.materias.forEach((mat, mIdx) => {
+    // Sub-tab
+    const btn = document.createElement('div');
+    btn.className = 'anot-tab' + (mIdx === 0 ? ' active' : '');
+    btn.innerHTML = `${mat.emoji || '📝'} ${mat.nome.replace('Direito ','').replace('Processual ','Proc. ')}`;
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.anot-tab').forEach((t,i) => t.classList.toggle('active', i === mIdx));
+      document.querySelectorAll('.anot-panel').forEach((p,i) => p.classList.toggle('active', i === mIdx));
+    });
+    tabsBar.appendChild(btn);
+
+    // Painel com editor
+    const panel = document.createElement('div');
+    panel.className = 'anot-panel' + (mIdx === 0 ? ' active' : '');
+    const editorId = `qe-d${dia}-m${mIdx}`;
+    const wrapper = document.createElement('div');
+    wrapper.id = editorId;
+    panel.appendChild(wrapper);
+    panels.appendChild(panel);
+
+    const quill = new Quill('#' + editorId, {
+      theme: 'snow',
+      placeholder: `Anote os pontos principais de ${mat.nome}... (cole texto formatado de qualquer fonte)`,
+      modules: {
+        toolbar: [
+          [{ header: [1, 2, 3, false] }],
+          ['bold', 'italic', 'underline', 'strike'],
+          [{ color: [] }, { background: [] }],
+          [{ list: 'ordered' }, { list: 'bullet' }],
+          ['blockquote', 'code-block'],
+          [{ align: [] }],
+          ['link'],
+          ['clean']
+        ],
+        clipboard: { matchVisual: false }
+      }
+    });
+
+    _quillEditors[`d${dia}_m${mIdx}`] = quill;
+
+    // ── Carrega conteúdo: prioriza fichamento vinculado (fonte única) ──
+    const annotKey  = `oab_anotacao_d${dia}_m${mIdx}`;
+
+    function _getFichLinked() {
+      try {
+        return (JSON.parse(localStorage.getItem('oab_fichamentos') || '[]'))
+          .find(f => f.source_key === sourceKey) || null;
+      } catch { return null; }
+    }
+
+    function _loadQuillContent() {
+      const linked = _getFichLinked();
+      if (linked) {
+        try { quill.setContents(JSON.parse(linked.delta), 'silent'); return; } catch {}
+        quill.root.innerHTML = linked.conteudo || '';
+        return;
+      }
+      const saved = localStorage.getItem(annotKey);
+      if (saved) {
+        try { quill.setContents(JSON.parse(saved), 'silent'); }
+        catch { try { quill.clipboard.dangerouslyPasteHTML(0, saved, 'silent'); } catch {} }
+      }
+    }
+    _loadQuillContent();
+
+    // ── Auto-save: anotação + fichamento vinculado (se existir) ──────
+    let saveTimer;
+    quill.on('text-change', () => {
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(() => {
+        const delta = JSON.stringify(quill.getContents());
+        localStorage.setItem(annotKey, delta);
+        // Propaga para o fichamento vinculado sem criar um novo
+        try {
+          const arr = JSON.parse(localStorage.getItem('oab_fichamentos') || '[]');
+          const idx = arr.findIndex(f => f.source_key === sourceKey);
+          if (idx >= 0) {
+            arr[idx] = { ...arr[idx], conteudo: quill.root.innerHTML, delta, atualizado: new Date().toISOString() };
+            localStorage.setItem('oab_fichamentos', JSON.stringify(arr));
+          }
+        } catch {}
+      }, 800);
+    });
+
+    // Botão Salvar / Atualizar nos Fichamentos
+    const sourceKey = `anotacao_d${dia}_m${mIdx}`;
+    const saveFichBar = document.createElement('div');
+    saveFichBar.style.cssText = 'display:flex;align-items:center;justify-content:space-between;gap:0.6rem;margin-top:0.9rem;padding-top:0.9rem;border-top:1px solid var(--line)';
+
+    const statusSpan = document.createElement('span');
+    statusSpan.style.cssText = 'font-size:0.72rem;color:var(--ink-faded);line-height:1.4';
+    saveFichBar.appendChild(statusSpan);
+
+    const btnWrap = document.createElement('div');
+    btnWrap.style.cssText = 'display:flex;gap:0.5rem;flex-shrink:0';
+
+    const saveFichBtn = document.createElement('button');
+    saveFichBtn.className = 'btn btn-primary';
+    saveFichBtn.style.cssText = 'font-size:0.75rem;padding:0.45rem 1.1rem';
+
+    const editFichBtn = document.createElement('a');
+    editFichBtn.href = 'fichamentos.html';
+    editFichBtn.className = 'btn btn-ghost';
+    editFichBtn.style.cssText = 'font-size:0.72rem;padding:0.45rem 0.8rem;text-decoration:none;display:none';
+    editFichBtn.textContent = '↗ Ver nos Fichamentos';
+
+    function _refreshFichBtnState() {
+      let arr; try { arr = JSON.parse(localStorage.getItem('oab_fichamentos') || '[]'); } catch { arr = []; }
+      const exists = arr.some(f => f.source_key === sourceKey);
+      saveFichBtn.innerHTML = exists ? '✎ Atualizar fichamento' : '✎ Salvar nos Fichamentos';
+      statusSpan.textContent = exists
+        ? 'Fichamento salvo · edite o texto acima e clique Atualizar'
+        : 'Anotação salva automaticamente · envie para Fichamentos quando terminar';
+      editFichBtn.style.display = exists ? 'inline-flex' : 'none';
+    }
+    _refreshFichBtnState();
+
+    saveFichBtn.addEventListener('click', () => {
+      const ok = _salvarAnotacaoComoFichamento(dia, mIdx, mat, quill);
+      if (ok) {
+        saveFichBtn.innerHTML = '✓ Fichamento atualizado!';
+        saveFichBtn.style.background = 'linear-gradient(135deg,#60b860,#3a9840)';
+        setTimeout(() => {
+          saveFichBtn.style.background = '';
+          _refreshFichBtnState();
+        }, 2500);
+      }
+    });
+
+    btnWrap.appendChild(editFichBtn);
+    btnWrap.appendChild(saveFichBtn);
+    saveFichBar.appendChild(btnWrap);
+    panel.appendChild(saveFichBar);
+  });
+}
+
+// Salva a anotação do Hoje direto no banco de Fichamentos
+function _salvarAnotacaoComoFichamento(dia, mIdx, mat, quill) {
+  if (!quill || !quill.getText().trim()) return false;
+  const FICH_KEY = 'oab_fichamentos';
+  let arr;
+  try { arr = JSON.parse(localStorage.getItem(FICH_KEY) || '[]'); } catch { arr = []; }
+
+  const materiaId = typeof getMateriaId === 'function' ? getMateriaId(mat.nome) : 'geral';
+  const sourceKey = `anotacao_d${dia}_m${mIdx}`;
+
+  // Título = primeiro tópico da matéria (ou nome da matéria + dia)
+  const titulo = (mat.topicos && mat.topicos.length)
+    ? mat.topicos[0]
+    : `${mat.nome} · Dia ${dia}`;
+
+  const existIdx = arr.findIndex(f => f.source_key === sourceKey);
+  const item = {
+    id:         existIdx >= 0 ? arr[existIdx].id : Date.now(),
+    titulo,
+    materia:    materiaId,
+    topico:     `Dia ${dia} — ${mat.nome}`,
+    source_key: sourceKey,
+    conteudo:   quill.root.innerHTML,
+    delta:      JSON.stringify(quill.getContents()),
+    criado:     existIdx >= 0 ? arr[existIdx].criado : new Date().toISOString(),
+    atualizado: new Date().toISOString()
+  };
+
+  if (existIdx >= 0) arr[existIdx] = item;
+  else arr.unshift(item);
+
+  localStorage.setItem(FICH_KEY, JSON.stringify(arr));
+  return true;
+}
 
 // Questões via QConcursos — registo na aba Questões
 
@@ -1242,6 +1670,7 @@ document.addEventListener('DOMContentLoaded', () => {
         header.innerHTML = `<span class="sp-emoji">${mat.emoji || '📖'}</span>
           <span class="sp-nome">${mat.nome}</span>
           <span class="sp-horas">⏱ ${mat.horas}h</span>
+          <button class="sp-expand-btn" title="Abrir em tela cheia" onclick="event.stopPropagation();expandPanel(${idx},'${mat.nome.replace(/'/g,'')}')">⤢ Expandir</button>
           <span class="sp-toggle">▾</span>`;
         header.onclick = () => togglePanel(idx);
 
@@ -1256,6 +1685,21 @@ document.addEventListener('DOMContentLoaded', () => {
         iframe.addEventListener('load', function () {
           const theme = document.documentElement.getAttribute('data-theme') || 'light';
           try { iframe.contentWindow.postMessage({ type: 'set-theme', theme }, '*'); } catch(e) {}
+          // Propaga cor do tema para o iframe
+          if (window._coresOAB) {
+            try {
+              const saved = JSON.parse(localStorage.getItem('oab_accent_color'));
+              if (saved && saved.base) {
+                const rv = document.documentElement;
+                const vars = {};
+                ['--rose','--rose-deep','--rose-soft','--blush','--nude','--champagne','--lavender','--sage',
+                 '--gold','--bg','--bg-soft','--bg-deep','--line','--line-soft','--ink','--ink-soft',
+                 '--ink-faded','--ink-ghost','--highlight-1','--highlight-2','--shadow-sm','--shadow','--shadow-lg'
+                ].forEach(v => { const val = rv.style.getPropertyValue(v); if (val) vars[v] = val; });
+                if (Object.keys(vars).length) iframe.contentWindow.postMessage({ type: 'set-accent', vars }, '*');
+              }
+            } catch(e) {}
+          }
         });
 
         div.appendChild(header);
@@ -1264,23 +1708,87 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    // Checklist dinâmico
+    // Checklist granular — tópicos + "Resolver questões" por matéria
     const ul = document.getElementById('daily-checklist');
     ul.innerHTML = '';
-    dados.checklist.forEach(item => {
-      const li = document.createElement('li');
-      li.id = item.id;
-      const isDone = progDia.checklist && progDia.checklist[item.id];
-      if (isDone) li.classList.add('done');
-      li.innerHTML = `<span class="check">${isDone ? '✓' : ''}</span>${item.texto}`;
-      li.addEventListener('click', () => {
-        li.classList.toggle('done');
-        const done2 = li.classList.contains('done');
-        li.querySelector('.check').textContent = done2 ? '✓' : '';
-        atualizarChecklist(dia, item.id, done2);
+
+    // Extrai nº de questões do checklist original para cada matéria
+    function _nQuestoes(checklist, matNome) {
+      const tokens = matNome.replace('Direito ','').replace('Processual ','').toLowerCase().split(' ');
+      const found = checklist.find(it =>
+        it.texto.startsWith('Resolver') &&
+        tokens.some(tk => tk.length > 3 && it.texto.toLowerCase().includes(tk))
+      );
+      if (found) { const m = found.texto.match(/\d+/); return m ? parseInt(m[0]) : 5; }
+      return 5;
+    }
+
+    dados.materias.forEach((mat, mIdx) => {
+      // Header da matéria
+      const groupHeader = document.createElement('div');
+      groupHeader.className = 'checklist-group-header';
+      groupHeader.innerHTML = `<span>${mat.emoji || '📖'}</span>${mat.nome.replace('Direito ','').replace('Processual ','Proc. ')}`;
+      ul.appendChild(groupHeader);
+
+      // Tópicos
+      (mat.topicos || []).forEach((topico, tIdx) => {
+        const li = document.createElement('li');
+        const isDone = isTopicoEstudado(dia, mIdx, tIdx);
+        if (isDone) li.classList.add('done');
+        li.innerHTML = `<span class="check">${isDone ? '✓' : ''}</span><span style="line-height:1.4">${topico}</span>`;
+        li.addEventListener('click', () => {
+          li.classList.toggle('done');
+          const done2 = li.classList.contains('done');
+          li.querySelector('.check').textContent = done2 ? '✓' : '';
+          toggleTopicoManual(dia, mIdx, tIdx, done2);
+        });
+        ul.appendChild(li);
       });
-      ul.appendChild(li);
+
+      // Item "Resolver questões" — sempre presente para cada matéria
+      const nQ    = _nQuestoes(dados.checklist, mat.nome);
+      const rKey  = `resolver_m${mIdx}_d${dia}`;
+      const rDone = progDia.checklist && progDia.checklist[rKey];
+      const rLi   = document.createElement('li');
+      rLi.id = rKey;
+      if (rDone) rLi.classList.add('done');
+      const matCurta = mat.nome.replace('Direito ','').replace('Processual ','Proc. ');
+      rLi.innerHTML = `<span class="check">${rDone ? '✓' : ''}</span><span style="line-height:1.4;font-weight:500">📝 Resolver ${nQ} questões de ${matCurta}</span>`;
+      rLi.addEventListener('click', () => {
+        rLi.classList.toggle('done');
+        const done2 = rLi.classList.contains('done');
+        rLi.querySelector('.check').textContent = done2 ? '✓' : '';
+        atualizarChecklist(dia, rKey, done2);
+      });
+      ul.appendChild(rLi);
     });
+
+    // Itens de revisão de dias anteriores (não "Ler teoria", não "Resolver", não "Escrever resumo")
+    const extras = dados.checklist.filter(it =>
+      !it.texto.startsWith('Ler teoria') &&
+      !it.texto.startsWith('Resolver') &&
+      !it.texto.startsWith('Escrever resumo')
+    );
+    if (extras.length) {
+      const eHeader = document.createElement('div');
+      eHeader.className = 'checklist-group-header';
+      eHeader.innerHTML = `<span>↻</span>Revisão`;
+      ul.appendChild(eHeader);
+      extras.forEach(item => {
+        const li = document.createElement('li');
+        li.id = item.id;
+        const isDone = progDia.checklist && progDia.checklist[item.id];
+        if (isDone) li.classList.add('done');
+        li.innerHTML = `<span class="check">${isDone ? '✓' : ''}</span><span style="line-height:1.4">${item.texto}</span>`;
+        li.addEventListener('click', () => {
+          li.classList.toggle('done');
+          const done2 = li.classList.contains('done');
+          li.querySelector('.check').textContent = done2 ? '✓' : '';
+          atualizarChecklist(dia, item.id, done2);
+        });
+        ul.appendChild(li);
+      });
+    }
 
     // Navegação entre dias — mostra todas as matérias do dia
     const matLabel = d => d.materias.map(m => m.nome.replace('Direito ','').replace('Processual ','Proc. ')).join(' + ');
@@ -1300,10 +1808,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (focNavNext) { focNavNext.textContent = nextText; focNavNext.href = nextHref; }
   }
 
-  // Resumo persistido
-  const resumoArea = document.querySelector('.tab-content[data-tab="resumo"] textarea');
-  if (resumoArea && progDia.nota) resumoArea.value = progDia.nota;
-  resumoArea?.addEventListener('input', () => salvarNota(dia, resumoArea.value));
+  // Preview dos cards de revisão na aba Resumo
+  _buildResumoPreview(dia, dados, progDia);
 
   // Progresso geral
   const stats = calcularStats();
@@ -1332,9 +1838,7 @@ function toggleDiaConcluido() {
     btn.textContent = 'Estudei Hoje ✦';
   } else {
     // Concluir + marcar tópicos + gravar próximo dia
-    const resumoEl = document.querySelector('.tab-content[data-tab="resumo"] textarea');
-    const nota = resumoEl ? resumoEl.value : '';
-    concluirDia(dia, nota);
+    concluirDia(dia, '');
     marcarTopicosEstudados(dia);
     baterMetaDoDia();
     // Gravar próximo dia para auto-avançar
@@ -1573,6 +2077,55 @@ function apagarComentario(id) {
 document.getElementById('comment-input')?.addEventListener('keydown', e => {
   if (e.key === 'Enter' && e.ctrlKey) adicionarComentario();
 });
+
+// ── Preview dos cards de revisão (aba Resumo) ──
+function _buildResumoPreview(dia, dados, progDia) {
+  const container = document.getElementById('resumo-preview-cards');
+  const statusEl  = document.getElementById('resumo-status');
+  if (!container || !dados) return;
+
+  const concluido = progDia && progDia.concluido;
+
+  if (statusEl) {
+    if (concluido) {
+      statusEl.innerHTML = `<div style="background:linear-gradient(135deg,#d8f0d0,#c0e8b8);border:1px solid #80c070;border-radius:var(--radius-sm);padding:0.7rem 1rem;font-size:0.82rem;color:#2a6020;display:flex;align-items:center;gap:0.5rem;margin-bottom:0.8rem">
+        <span style="font-size:1rem">✓</span>
+        <span><strong>Cards criados!</strong> Aparecem em <a href="revisar.html" style="color:#2a6020;font-weight:600">Revisar</a> nos intervalos de 1, 7, 15 e 30 dias.</span>
+      </div>`;
+    } else {
+      statusEl.innerHTML = `<div style="background:var(--bg-soft);border:1px dashed var(--line);border-radius:var(--radius-sm);padding:0.7rem 1rem;font-size:0.82rem;color:var(--ink-faded);display:flex;align-items:center;gap:0.5rem;margin-bottom:0.8rem">
+        <span>⏳</span>
+        <span>Clique em <strong style="color:var(--ink)">"Estudei Hoje ✦"</strong> para criar estes cards automaticamente em Revisar.</span>
+      </div>`;
+    }
+  }
+
+  container.innerHTML = '';
+  dados.materias.forEach((mat, mIdx) => {
+    const cardKey  = `${dia}_${mIdx}`;
+    const cardData = (typeof REVIEW_CARDS !== 'undefined') ? REVIEW_CARDS[cardKey] : null;
+    const titulo   = cardData ? cardData.titulo : mat.nome;
+    const pontos   = cardData ? cardData.pontos : (mat.topicos || []);
+    const pegadinha = cardData ? cardData.pegadinha : null;
+
+    const card = document.createElement('div');
+    card.className = 'resumo-prev-card';
+    card.innerHTML = `
+      <div class="resumo-prev-head">
+        <span style="font-size:1.3rem">${mat.emoji || '📖'}</span>
+        <div style="flex:1;min-width:0">
+          <div class="resumo-prev-nome">${titulo}</div>
+          <div style="font-size:0.68rem;color:var(--ink-faded)">Dia ${dia} · ${mat.nome} · aparece em Revisar nos intervalos 1, 7, 15, 30 dias</div>
+        </div>
+      </div>
+      <ul class="resumo-prev-list">
+        ${pontos.map(p => `<li>${p.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</li>`).join('')}
+      </ul>
+      ${pegadinha ? `<div style="margin-top:0.6rem;padding:0.6rem 0.8rem;background:linear-gradient(135deg,#fff0d8,#ffe8c0);border-left:3px solid #d4903a;border-radius:var(--radius-sm);font-size:0.78rem;color:#7a4010"><strong style="font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:#d4903a;display:block;margin-bottom:0.2rem">⚠ Pegadinha</strong>${pegadinha}</div>` : ''}
+    `;
+    container.appendChild(card);
+  });
+}
 
 // ── Pomodoro — máquina de estados completa ────
 const POMO = {

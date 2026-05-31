@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Fichamentos - OAB</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" href="favicon.png" type="image/png">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/quill/1.3.7/quill.snow.css">
+<style>
+/* ── Fichamentos ─────────────────────────────── */
+.fich-topbar-actions { display: flex; gap: 0.6rem; align-items: center; }
+
+.fich-chips {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+
+.fich-chip {
+  padding: 0.35rem 0.85rem;
+  background: var(--bg-soft);
+  border: 1px solid transparent;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: all 0.2s;
+  user-select: none;
+}
+.fich-chip:hover { background: var(--blush); color: var(--rose-deep); }
+.fich-chip.active {
+  background: linear-gradient(135deg, var(--rose), var(--rose-deep));
+  color: white;
+  border-color: transparent;
+}
+
+/* Create form */
+.fich-create-form {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  display: none;
+}
+.fich-create-form.open { display: block; animation: fadeInUp 0.3s ease; }
+
+.fich-form-row {
+  display: grid;
+  grid-template-columns: 1fr 220px;
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+}
+@media (max-width: 700px) { .fich-form-row { grid-template-columns: 1fr; } }
+
+.fich-form-label {
+  display: block;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faded);
+  margin-bottom: 0.3rem;
+  font-weight: 600;
+}
+
+.fich-form-input,
+.fich-form-select {
+  width: 100%;
+  padding: 0.65rem 0.9rem;
+  font-size: 0.9rem;
+  font-family: inherit;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--bg-soft);
+  color: var(--ink);
+  transition: border-color var(--transition), box-shadow var(--transition);
+  appearance: none;
+}
+.fich-form-input:focus,
+.fich-form-select:focus {
+  outline: none;
+  border-color: var(--rose);
+  box-shadow: 0 0 0 3px rgba(255, 77, 166, 0.15);
+}
+
+.fich-editor-label {
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faded);
+  margin-bottom: 0.4rem;
+  margin-top: 0.2rem;
+  font-weight: 600;
+}
+
+.fich-actions {
+  display: flex;
+  gap: 0.6rem;
+  justify-content: flex-end;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+}
+
+/* ── Cards grid ─────────────────────────────── */
+.fich-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1.2rem;
+}
+
+.fich-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--transition), transform var(--transition);
+  display: flex;
+  flex-direction: column;
+}
+.fich-card:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
+
+.fich-card-head {
+  padding: 0.9rem 1.2rem 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  border-bottom: 1px solid var(--line-soft);
+}
+.fich-mat-badge {
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: var(--rose-soft);
+  color: var(--rose-deep);
+  padding: 0.2rem 0.6rem;
+  border-radius: 10px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.fich-card-date {
+  font-size: 0.68rem;
+  color: var(--ink-faded);
+  letter-spacing: 0.04em;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.fich-card-titulo {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 0.7rem 1.2rem 0.4rem;
+  color: var(--ink);
+  line-height: 1.3;
+}
+
+.fich-card-preview {
+  padding: 0 1.2rem 0.8rem;
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+  line-height: 1.55;
+  flex: 1;
+  max-height: 90px;
+  overflow: hidden;
+  position: relative;
+}
+.fich-card-preview::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 32px;
+  background: linear-gradient(transparent, var(--paper));
+}
+
+.fich-card-footer {
+  padding: 0.6rem 1.2rem;
+  border-top: 1px solid var(--line-soft);
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  margin-top: auto;
+}
+
+/* ── Modal fullscreen ──────────────────────── */
+.fich-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(6px);
+  z-index: 8000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  animation: fadeIn 0.2s ease;
+}
+.fich-modal-overlay.open { display: flex; }
+
+.fich-modal {
+  background: var(--paper);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 820px;
+  max-height: 92vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+  animation: fadeInUp 0.3s ease;
+}
+
+.fich-modal-head {
+  position: sticky;
+  top: 0;
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  z-index: 1;
+}
+.fich-modal-titulo {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  font-weight: 500;
+  flex: 1;
+  color: var(--ink);
+}
+.fich-modal-body { padding: 1.5rem; }
+
+/* ── Quill overrides ─────────────────────── */
+.ql-toolbar.ql-snow {
+  border: 1px solid var(--line) !important;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0 !important;
+  background: var(--bg-soft) !important;
+  font-family: 'Inter', sans-serif !important;
+}
+.ql-container.ql-snow {
+  border: 1px solid var(--line) !important;
+  border-top: none !important;
+  border-radius: 0 0 var(--radius-sm) var(--radius-sm) !important;
+  background: var(--paper) !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 0.9rem !important;
+}
+.ql-editor { min-height: 300px; color: var(--ink) !important; line-height: 1.75 !important; }
+.ql-editor.ql-blank::before { color: var(--ink-faded) !important; font-style: italic !important; }
+.ql-toolbar button .ql-stroke { stroke: var(--ink-faded) !important; }
+.ql-toolbar button .ql-fill { fill: var(--ink-faded) !important; }
+.ql-toolbar button:hover .ql-stroke,
+.ql-toolbar button.ql-active .ql-stroke { stroke: var(--rose-deep) !important; }
+.ql-toolbar button:hover .ql-fill,
+.ql-toolbar button.ql-active .ql-fill { fill: var(--rose-deep) !important; }
+.ql-toolbar .ql-picker-label { color: var(--ink-soft) !important; }
+.ql-toolbar .ql-picker-label:hover { color: var(--rose-deep) !important; }
+.ql-toolbar .ql-picker-options { background: var(--paper) !important; border-color: var(--line) !important; }
+.ql-snow .ql-picker-options .ql-picker-item:hover { color: var(--rose-deep) !important; }
+
+/* Read-only viewer */
+.fich-readonly .ql-toolbar { display: none !important; }
+.fich-readonly .ql-container {
+  border-radius: var(--radius-sm) !important;
+  border: none !important;
+  background: transparent !important;
+}
+.fich-readonly .ql-editor { padding: 0; min-height: unset; }
+
+/* Tópico na card */
+.fich-card-topico {
+  font-size: 0.72rem;
+  color: var(--rose-deep);
+  padding: 0 1.2rem 0.5rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  line-height: 1.35;
+}
+
+/* Empty state */
+.fich-empty {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--ink-faded);
+  grid-column: 1 / -1;
+}
+.fich-empty .eicon { font-size: 3rem; margin-bottom: 1rem; display: block; }
+.fich-empty h3 { font-family: 'Playfair Display', serif; font-size: 1.2rem; margin-bottom: 0.5rem; color: var(--ink-soft); }
+.fich-empty p { font-size: 0.85rem; }
+</style>
+</head>
+<body>
+
+<div class="aurora-bg" aria-hidden="true">
+  <div class="aurora-blob ab1"></div>
+  <div class="aurora-blob ab2"></div>
+  <div class="aurora-blob ab3"></div>
+  <div class="aurora-blob ab4"></div>
+</div>
+
+<button class="mobile-menu-btn" onclick="toggleSidebar()" title="Menu">☰</button>
+
+<div class="app">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="mark"><span class="star">&#10022;</span><span class="star sm">&#10022;</span></div>
+      <h1>Exame da Ordem</h1>
+      <div class="subtitle">Preparatório OAB · Ju</div>
+    </div>
+
+    <div class="nav-section-label">Principal</div>
+    <a href="index.html" class="nav-link"><span class="icon">✦</span><span>Início</span></a>
+    <a href="hoje.html" class="nav-link"><span class="icon">◐</span><span>Hoje</span></a>
+    <a href="calendario.html" class="nav-link"><span class="icon">☷</span><span>Calendário</span></a>
+    <a href="revisar.html" class="nav-link"><span class="icon">↻</span><span>Revisar</span></a>
+
+    <div class="nav-section-label">Estudo</div>
+    <a href="materias.html" class="nav-link"><span class="icon">❖</span><span>Matérias</span></a>
+    <a href="questoes.html" class="nav-link"><span class="icon">◎</span><span>Questões</span></a>
+    <a href="fichamentos.html" class="nav-link active"><span class="icon">✎</span><span>Fichamentos</span></a>
+
+    <div class="nav-section-label">Análise</div>
+    <a href="estatisticas.html" class="nav-link"><span class="icon">◈</span><span>Estatísticas</span></a>
+    <a href="simulados.html" class="nav-link"><span class="icon">◉</span><span>Simulados</span></a>
+
+    <div class="sidebar-footer">
+      <div class="profile-card">
+        <div class="profile-avatar">
+          <img src="foto-perfil.jpg" alt="Julia" onerror="this.style.display='none'; this.parentElement.innerHTML='J';">
+        </div>
+        <div class="profile-info">
+          <div class="name">Julia</div>
+          <div class="meta">Estudante de Direito</div>
+        </div>
+      </div>
+      <button class="theme-toggle" onclick="toggleTheme()">
+        <span class="theme-label">Modo escuro</span>
+        <span class="toggle-track"><span class="toggle-thumb"></span></span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main>
+    <div class="topbar">
+      <div class="page-title">
+        <div class="breadcrumb">Estudo · <span data-month-year>—</span></div>
+        <h1>Meus <em>fichamentos</em></h1>
+      </div>
+      <div class="fich-topbar-actions">
+        <span id="fich-count-label" style="font-size:0.78rem;color:var(--ink-faded)"></span>
+        <button class="btn btn-primary" id="btn-novo-fich" onclick="toggleCreateForm()">✍ Novo fichamento</button>
+      </div>
+    </div>
+
+    <!-- FORM DE CRIAÇÃO -->
+    <div class="fich-create-form" id="create-form">
+      <div style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:500;margin-bottom:1.2rem;color:var(--ink);display:flex;align-items:baseline;gap:0.6rem">
+        ✎ Novo fichamento
+        <span style="font-size:0.72rem;font-family:'Inter',sans-serif;font-weight:400;color:var(--ink-faded)">— o tópico será o título do fichamento</span>
+      </div>
+
+      <!-- Matéria + Tópico (tópico = título) -->
+      <div style="display:grid;grid-template-columns:1fr 1.8fr;gap:0.8rem;margin-bottom:1rem">
+        <div>
+          <label class="fich-form-label">Matéria</label>
+          <select class="fich-form-select" id="fich-materia" onchange="updateTopicos()">
+            <option value="">Selecione...</option>
+            <option value="etica">⚖️ Ética Profissional</option>
+            <option value="constitucional">🏛️ Constitucional</option>
+            <option value="civil">📜 Direito Civil</option>
+            <option value="proc_civil">⚖️ Processo Civil</option>
+            <option value="penal">⚔️ Direito Penal</option>
+            <option value="proc_penal">📋 Processo Penal</option>
+            <option value="trabalho">⚙️ Direito do Trabalho</option>
+            <option value="proc_trabalho">⚙️ Processo do Trabalho</option>
+            <option value="tributario">💰 Tributário</option>
+            <option value="administrativo">🏛️ Administrativo</option>
+            <option value="empresarial">🏢 Empresarial</option>
+            <option value="dh">🌍 Direitos Humanos</option>
+            <option value="internacional">🌐 Internacional</option>
+            <option value="ambiental">🌿 Ambiental</option>
+            <option value="eca">👶 ECA</option>
+            <option value="cdc">🛒 Consumidor</option>
+            <option value="filosofia">📖 Filosofia</option>
+            <option value="financeiro">💹 Financeiro</option>
+            <option value="eleitoral">🗳️ Eleitoral</option>
+            <option value="previdenciario">🛡️ Previdenciário</option>
+          </select>
+        </div>
+        <div>
+          <label class="fich-form-label">Tópico específico <span style="font-weight:400;opacity:0.6">(opcional)</span></label>
+          <select class="fich-form-select" id="fich-topico">
+            <option value="">— selecione a matéria para ver os tópicos —</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Linha 3: Editor -->
+      <div class="fich-editor-label">Conteúdo — cole texto formatado de qualquer fonte</div>
+      <div id="fich-quill-create" style="margin-bottom:0.2rem"></div>
+
+      <!-- Linha 4: Ações (destaque maior) -->
+      <div class="fich-actions" style="padding-top:1.2rem;margin-top:1.2rem;border-top:1px solid var(--line);justify-content:space-between;align-items:center">
+        <span style="font-size:0.75rem;color:var(--ink-faded)" id="fich-save-hint">Selecione a matéria/tópico e escreva o conteúdo</span>
+        <div style="display:flex;gap:0.6rem">
+          <button class="btn btn-ghost" onclick="cancelCreate()">Cancelar</button>
+          <button class="btn btn-primary" style="padding:0.7rem 2rem;font-size:0.88rem;letter-spacing:0.05em" onclick="salvarFichamento()">💾 Salvar fichamento</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- FILTROS -->
+    <div class="fich-chips">
+      <span class="fich-chip active" onclick="setFichFilter('',this)">Todas</span>
+      <span class="fich-chip" onclick="setFichFilter('etica',this)">⚖️ Ética</span>
+      <span class="fich-chip" onclick="setFichFilter('constitucional',this)">🏛️ Const.</span>
+      <span class="fich-chip" onclick="setFichFilter('civil',this)">📜 Civil</span>
+      <span class="fich-chip" onclick="setFichFilter('proc_civil',this)">⚖️ Proc.Civil</span>
+      <span class="fich-chip" onclick="setFichFilter('penal',this)">⚔️ Penal</span>
+      <span class="fich-chip" onclick="setFichFilter('proc_penal',this)">📋 Proc.Penal</span>
+      <span class="fich-chip" onclick="setFichFilter('trabalho',this)">⚙️ Trabalho</span>
+      <span class="fich-chip" onclick="setFichFilter('tributario',this)">💰 Tributário</span>
+      <span class="fich-chip" onclick="setFichFilter('administrativo',this)">🏛️ Adm.</span>
+      <span class="fich-chip" onclick="setFichFilter('empresarial',this)">🏢 Empresarial</span>
+    </div>
+
+    <!-- GRID -->
+    <div class="fich-grid" id="fich-grid"></div>
+  </main>
+</div>
+
+<!-- MODAL LEITURA -->
+<div class="fich-modal-overlay" id="fich-modal" onclick="_closeModalOutside(event)">
+  <div class="fich-modal">
+    <div class="fich-modal-head">
+      <span id="modal-mat-badge" class="fich-mat-badge">—</span>
+      <span id="modal-titulo" class="fich-modal-titulo">—</span>
+      <span id="modal-date" style="font-size:0.7rem;color:var(--ink-faded);margin-right:0.3rem"></span>
+      <button class="btn btn-ghost" id="modal-edit-btn" onclick="editarFichamento(_viewingId); closeModal()" style="font-size:0.72rem;padding:0.3rem 0.7rem;color:var(--rose-deep);font-weight:600;margin-right:0.3rem">✎ Editar</button>
+      <button class="icon-btn" onclick="closeModal()" title="Fechar" style="width:28px;height:28px;font-size:0.8rem">✕</button>
+    </div>
+    <div class="fich-modal-body">
+      <div class="fich-readonly" id="modal-content-viewer">
+        <div id="modal-quill-viewer"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DE EDIÇÃO -->
+<div class="fich-modal-overlay" id="fich-edit-modal" onclick="_closeEditOutside(event)">
+  <div class="fich-modal" style="max-width:860px">
+    <div class="fich-modal-head">
+      <span style="font-size:0.75rem;color:var(--rose-deep);font-weight:700;letter-spacing:0.1em;text-transform:uppercase">✎ Editando fichamento</span>
+      <span style="flex:1"></span>
+      <button class="btn btn-ghost" onclick="closeEditModal()" style="font-size:0.72rem;padding:0.3rem 0.7rem;margin-right:0.3rem">Cancelar</button>
+      <button class="btn btn-primary" onclick="salvarEdicao()" style="font-size:0.78rem;padding:0.4rem 1.1rem">💾 Salvar alterações</button>
+    </div>
+    <!-- Matéria + Tópico -->
+    <div style="padding:1rem 1.5rem 0;display:grid;grid-template-columns:1fr 1.8fr;gap:0.8rem">
+      <div>
+        <label class="fich-form-label">Matéria</label>
+        <select class="fich-form-select" id="edit-materia" onchange="updateEditTopicos()">
+          <option value="">Selecione...</option>
+          <option value="etica">⚖️ Ética Profissional</option>
+          <option value="constitucional">🏛️ Constitucional</option>
+          <option value="civil">📜 Direito Civil</option>
+          <option value="proc_civil">⚖️ Processo Civil</option>
+          <option value="penal">⚔️ Direito Penal</option>
+          <option value="proc_penal">📋 Processo Penal</option>
+          <option value="trabalho">⚙️ Direito do Trabalho</option>
+          <option value="proc_trabalho">⚙️ Processo do Trabalho</option>
+          <option value="tributario">💰 Tributário</option>
+          <option value="administrativo">🏛️ Administrativo</option>
+          <option value="empresarial">🏢 Empresarial</option>
+          <option value="dh">🌍 Direitos Humanos</option>
+          <option value="internacional">🌐 Internacional</option>
+          <option value="ambiental">🌿 Ambiental</option>
+          <option value="eca">👶 ECA</option>
+          <option value="cdc">🛒 Consumidor</option>
+          <option value="filosofia">📖 Filosofia</option>
+          <option value="financeiro">💹 Financeiro</option>
+          <option value="eleitoral">🗳️ Eleitoral</option>
+          <option value="previdenciario">🛡️ Previdenciário</option>
+        </select>
+      </div>
+      <div>
+        <label class="fich-form-label">Tópico <span style="font-weight:400;opacity:0.6">(tópico = título)</span></label>
+        <select class="fich-form-select" id="edit-topico">
+          <option value="">— selecione a matéria para ver os tópicos —</option>
+        </select>
+      </div>
+    </div>
+    <div class="fich-modal-body" style="padding-top:1rem">
+      <div id="edit-quill-container"></div>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+<script src="progresso.js"></script>
+<script src="plano-oab.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/quill/1.3.7/quill.min.js"></script>
+<script src="cores.js"></script>
+<script>
+// ── Fichamentos ──────────────────────────────────────
+const FICH_KEY = 'oab_fichamentos';
+let _currentFilter = '';
+let _createQuill = null;
+let _viewerQuill = null;
+let _editQuill    = null;
+let _editingId    = null;
+let _viewingId    = null;
+
+const MAT_NOMES = {
+  etica:'Ética', constitucional:'Constitucional', civil:'Civil', proc_civil:'Proc. Civil',
+  penal:'Penal', proc_penal:'Proc. Penal', trabalho:'Trabalho', proc_trabalho:'Proc. Trabalho',
+  tributario:'Tributário', administrativo:'Administrativo', empresarial:'Empresarial',
+  dh:'Dir. Humanos', internacional:'Internacional', ambiental:'Ambiental',
+  eca:'ECA', cdc:'Consumidor', filosofia:'Filosofia',
+  financeiro:'Financeiro', eleitoral:'Eleitoral', previdenciario:'Previdenciário'
+};
+
+function _loadFich() {
+  try { return JSON.parse(localStorage.getItem(FICH_KEY) || '[]'); } catch { return []; }
+}
+function _saveFich(arr) { localStorage.setItem(FICH_KEY, JSON.stringify(arr)); }
+
+function toggleCreateForm() {
+  const form = document.getElementById('create-form');
+  const isOpen = form.classList.contains('open');
+  if (!isOpen) {
+    form.classList.add('open');
+    if (!_createQuill) {
+      _createQuill = new Quill('#fich-quill-create', {
+        theme: 'snow',
+        placeholder: 'Cole ou escreva o conteúdo — toda formatação HTML é preservada ao colar...',
+        modules: {
+          toolbar: [
+            [{ header: [1, 2, 3, false] }],
+            ['bold', 'italic', 'underline', 'strike'],
+            [{ color: [] }, { background: [] }],
+            [{ list: 'ordered' }, { list: 'bullet' }],
+            ['blockquote', 'code-block'],
+            [{ align: [] }],
+            ['link'],
+            ['clean']
+          ],
+          clipboard: { matchVisual: false }
+        }
+      });
+    }
+    setTimeout(() => document.getElementById('fich-titulo').focus(), 80);
+    document.getElementById('btn-novo-fich').textContent = '✕ Cancelar';
+  } else {
+    cancelCreate();
+  }
+}
+
+function updateTopicos() {
+  const materia = document.getElementById('fich-materia').value;
+  const sel = document.getElementById('fich-topico');
+  if (!materia || typeof PLANO_OAB === 'undefined') {
+    sel.innerHTML = '<option value="">— selecione a matéria para ver os tópicos —</option>';
+    return;
+  }
+  const grupos = [];
+  PLANO_OAB.forEach(diaData => {
+    if (!diaData.materias) return;
+    diaData.materias.forEach(mat => {
+      if (getMateriaId(mat.nome) === materia && mat.topicos && mat.topicos.length) {
+        grupos.push({ dia: diaData.dia, titulo: diaData.titulo, topicos: mat.topicos });
+      }
+    });
+  });
+  if (!grupos.length) {
+    sel.innerHTML = '<option value="">— nenhum tópico disponível —</option>';
+    return;
+  }
+  let html = '<option value="">Selecione um tópico (opcional)</option>';
+  grupos.forEach(({ dia, titulo, topicos }) => {
+    const label = `Dia ${dia} — ${titulo.split(' · ')[0].split(' + ')[0]}`;
+    html += `<optgroup label="${label}">`;
+    topicos.forEach(t => {
+      const safe = t.replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      html += `<option value="${safe}">${safe}</option>`;
+    });
+    html += '</optgroup>';
+  });
+  sel.innerHTML = html;
+}
+
+function cancelCreate() {
+  document.getElementById('create-form').classList.remove('open');
+  document.getElementById('fich-titulo').value = '';
+  document.getElementById('fich-materia').value = '';
+  document.getElementById('fich-topico').innerHTML = '<option value="">— selecione a matéria para ver os tópicos —</option>';
+  document.getElementById('btn-novo-fich').textContent = '✍ Novo fichamento';
+  if (_createQuill) _createQuill.setText('');
+}
+
+function salvarFichamento() {
+  const materia = document.getElementById('fich-materia').value;
+  const topico  = document.getElementById('fich-topico').value;
+  const hint    = document.getElementById('fich-save-hint');
+
+  if (!_createQuill || !_createQuill.getText().trim()) {
+    if (hint) { hint.textContent = '⚠ Adicione conteúdo ao fichamento'; hint.style.color = 'var(--rose-deep)'; setTimeout(() => { hint.textContent = 'Selecione a matéria/tópico e escreva o conteúdo'; hint.style.color = ''; }, 2500); }
+    return;
+  }
+
+  // Título = tópico, ou matéria, ou data
+  const titulo = topico || _matNome(materia) || new Date().toLocaleDateString('pt-BR');
+
+  const arr = _loadFich();
+  arr.unshift({
+    id: Date.now(),
+    titulo,
+    materia: materia || 'geral',
+    topico:  topico  || '',
+    conteudo: _createQuill.root.innerHTML,
+    delta:    JSON.stringify(_createQuill.getContents()),
+    criado:   new Date().toISOString(),
+    atualizado: new Date().toISOString()
+  });
+  _saveFich(arr);
+  cancelCreate();
+  renderGrid();
+}
+
+function deleteFichamento(id) {
+  if (!confirm('Excluir este fichamento? Esta ação não pode ser desfeita.')) return;
+  _saveFich(_loadFich().filter(f => f.id !== id));
+  renderGrid();
+}
+
+function setFichFilter(filter, el) {
+  _currentFilter = filter;
+  document.querySelectorAll('.fich-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  renderGrid();
+}
+
+function _matNome(id) { return MAT_NOMES[id] || id || 'Geral'; }
+
+function _formatDate(iso) {
+  try {
+    return new Date(iso).toLocaleDateString('pt-BR', { day:'2-digit', month:'short', year:'2-digit' });
+  } catch { return '—'; }
+}
+
+function _stripHtml(html) {
+  const tmp = document.createElement('div');
+  tmp.innerHTML = html;
+  return (tmp.textContent || tmp.innerText || '').trim();
+}
+
+function renderGrid() {
+  const grid = document.getElementById('fich-grid');
+  if (!grid) return;
+  let arr = _loadFich();
+  if (_currentFilter) arr = arr.filter(f => f.materia === _currentFilter);
+
+  const countLabel = document.getElementById('fich-count-label');
+  const total = _loadFich().length;
+  if (countLabel) countLabel.textContent = total > 0 ? `${total} fichamento${total !== 1 ? 's' : ''}` : '';
+
+  if (!arr.length) {
+    grid.innerHTML = `<div class="fich-empty">
+      <span class="eicon">✍</span>
+      <h3>${_currentFilter ? 'Nenhum fichamento nesta matéria' : 'Nenhum fichamento ainda'}</h3>
+      <p>${_currentFilter ? 'Tente outro filtro ou crie um novo.' : 'Clique em "✍ Novo fichamento" para começar.'}</p>
+    </div>`;
+    return;
+  }
+
+  grid.innerHTML = arr.map(f => {
+    const preview = _stripHtml(f.conteudo).slice(0, 160);
+    const titulo = f.titulo.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    const topicoHtml = f.topico
+      ? `<div class="fich-card-topico">📌 ${f.topico.replace(/</g,'&lt;')}</div>`
+      : '';
+    return `<div class="fich-card">
+      <div class="fich-card-head">
+        <span class="fich-mat-badge">${_matNome(f.materia)}</span>
+        <span class="fich-card-date">${_formatDate(f.criado)}</span>
+      </div>
+      <div class="fich-card-titulo">${titulo}</div>
+      ${topicoHtml}
+      <div class="fich-card-preview">${preview}${preview.length >= 160 ? '…' : ''}</div>
+      <div class="fich-card-footer">
+        <button class="btn btn-ghost" style="font-size:0.72rem;padding:0.3rem 0.7rem" onclick="openModal(${f.id})">↗ Ler</button>
+        <button class="btn btn-ghost" style="font-size:0.72rem;padding:0.3rem 0.7rem;color:var(--rose-deep);font-weight:600" onclick="editarFichamento(${f.id})">✎ Editar</button>
+        <button class="btn btn-ghost" style="font-size:0.72rem;padding:0.3rem 0.7rem;color:var(--error)" onclick="deleteFichamento(${f.id})">✕ Excluir</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function openModal(id) {
+  const item = _loadFich().find(f => f.id === id);
+  if (!item) return;
+  _viewingId = id;
+  document.getElementById('modal-titulo').textContent = item.titulo;
+  document.getElementById('modal-mat-badge').textContent = _matNome(item.materia);
+  document.getElementById('modal-date').textContent = _formatDate(item.criado);
+  // Mostra tópico no modal se existir
+  let topicoEl = document.getElementById('modal-topico');
+  if (!topicoEl) {
+    topicoEl = document.createElement('div');
+    topicoEl.id = 'modal-topico';
+    topicoEl.style.cssText = 'font-size:0.78rem;color:var(--rose-deep);font-weight:500;padding:0.5rem 1.5rem 0;display:flex;align-items:center;gap:0.4rem;border-bottom:1px solid var(--line);padding-bottom:0.5rem';
+    document.querySelector('.fich-modal-head').insertAdjacentElement('afterend', topicoEl);
+  }
+  if (item.topico) {
+    topicoEl.innerHTML = `<span>📌</span><span>${item.topico.replace(/</g,'&lt;')}</span>`;
+    topicoEl.style.display = 'flex';
+  } else {
+    topicoEl.style.display = 'none';
+  }
+  const overlay = document.getElementById('fich-modal');
+  overlay.classList.add('open');
+
+  if (!_viewerQuill) {
+    _viewerQuill = new Quill('#modal-quill-viewer', {
+      theme: 'snow',
+      readOnly: true,
+      modules: { toolbar: false }
+    });
+  }
+  try {
+    _viewerQuill.setContents(JSON.parse(item.delta), 'silent');
+  } catch {
+    _viewerQuill.root.innerHTML = item.conteudo;
+  }
+}
+
+function closeModal() {
+  document.getElementById('fich-modal').classList.remove('open');
+}
+
+// ── Edição de fichamento ──────────────────────
+function editarFichamento(id) {
+  const item = _loadFich().find(f => f.id === id);
+  if (!item) return;
+  _editingId = id;
+
+  // Preenche matéria
+  const matSel = document.getElementById('edit-materia');
+  if (matSel) { matSel.value = item.materia || ''; updateEditTopicos(); }
+
+  // Preenche tópico após popular o select
+  setTimeout(() => {
+    const topSel = document.getElementById('edit-topico');
+    if (topSel && item.topico) {
+      for (let opt of topSel.options) {
+        if (opt.value === item.topico) { topSel.value = item.topico; break; }
+      }
+    }
+  }, 50);
+
+  // Inicializa Quill de edição (uma vez)
+  if (!_editQuill) {
+    _editQuill = new Quill('#edit-quill-container', {
+      theme: 'snow',
+      placeholder: 'Edite o conteúdo do fichamento...',
+      modules: {
+        toolbar: [
+          [{ header: [1, 2, 3, false] }],
+          ['bold', 'italic', 'underline', 'strike'],
+          [{ color: [] }, { background: [] }],
+          [{ list: 'ordered' }, { list: 'bullet' }],
+          ['blockquote', 'code-block'],
+          [{ align: [] }],
+          ['link'],
+          ['clean']
+        ],
+        clipboard: { matchVisual: false }
+      }
+    });
+  }
+
+  // Carrega conteúdo
+  try {
+    _editQuill.setContents(JSON.parse(item.delta), 'silent');
+  } catch {
+    _editQuill.root.innerHTML = item.conteudo;
+  }
+
+  document.getElementById('fich-edit-modal').classList.add('open');
+}
+
+function updateEditTopicos() {
+  const materia = document.getElementById('edit-materia').value;
+  const sel = document.getElementById('edit-topico');
+  if (!materia || typeof PLANO_OAB === 'undefined') {
+    sel.innerHTML = '<option value="">— selecione a matéria para ver os tópicos —</option>';
+    return;
+  }
+  const grupos = [];
+  PLANO_OAB.forEach(diaData => {
+    if (!diaData.materias) return;
+    diaData.materias.forEach(mat => {
+      if (getMateriaId(mat.nome) === materia && mat.topicos && mat.topicos.length)
+        grupos.push({ dia: diaData.dia, titulo: diaData.titulo, topicos: mat.topicos });
+    });
+  });
+  if (!grupos.length) { sel.innerHTML = '<option value="">— nenhum tópico —</option>'; return; }
+  let html = '<option value="">Selecione um tópico (opcional)</option>';
+  grupos.forEach(({ dia, titulo, topicos }) => {
+    html += `<optgroup label="Dia ${dia} — ${titulo.split(' · ')[0].split(' + ')[0]}">`;
+    topicos.forEach(t => { const s = t.replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); html += `<option value="${s}">${s}</option>`; });
+    html += '</optgroup>';
+  });
+  sel.innerHTML = html;
+}
+
+function salvarEdicao() {
+  if (!_editingId || !_editQuill) return;
+  if (!_editQuill.getText().trim()) { alert('O conteúdo não pode estar vazio.'); return; }
+
+  const materia = document.getElementById('edit-materia').value;
+  const topico  = document.getElementById('edit-topico').value;
+  const titulo  = topico || _matNome(materia) || 'Fichamento';
+
+  const arr = _loadFich();
+  const idx = arr.findIndex(f => f.id === _editingId);
+  if (idx < 0) return;
+
+  const newDelta = JSON.stringify(_editQuill.getContents());
+  arr[idx] = {
+    ...arr[idx],
+    titulo,
+    materia:    materia || arr[idx].materia,
+    topico:     topico  || arr[idx].topico,
+    conteudo:   _editQuill.root.innerHTML,
+    delta:      newDelta,
+    atualizado: new Date().toISOString()
+  };
+  _saveFich(arr);
+
+  // Propaga de volta para a anotação do hoje.html (se tiver source_key)
+  const sk = arr[idx].source_key;
+  if (sk) {
+    const m = sk.match(/^anotacao_d(\d+)_m(\d+)$/);
+    if (m) localStorage.setItem(`oab_anotacao_d${m[1]}_m${m[2]}`, newDelta);
+  }
+
+  closeEditModal();
+  renderGrid();
+}
+
+function closeEditModal() {
+  document.getElementById('fich-edit-modal').classList.remove('open');
+  _editingId = null;
+}
+
+function _closeEditOutside(e) {
+  if (e.target.id === 'fich-edit-modal') closeEditModal();
+}
+
+function _closeModalOutside(e) {
+  if (e.target.id === 'fich-modal') closeModal();
+}
+
+// Esc fecha modais
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { closeModal(); closeEditModal(); }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  const el = document.querySelector('[data-month-year]');
+  if (el) el.textContent = new Date().toLocaleDateString('pt-BR', { month:'long', year:'numeric' });
+  renderGrid();
+});
+</script>
+</body>
+</html>

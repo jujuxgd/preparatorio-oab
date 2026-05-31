@@ -13,26 +13,44 @@
   h2{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:500;margin:2rem 0 0.8rem;color:var(--ink);letter-spacing:-0.01em;line-height:1.25}
   h2 em{font-style:italic;color:var(--rose-deep)} h2:first-child{margin-top:0}
   h3{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:500;margin:1.5rem 0 0.6rem;color:var(--ink);border-left:3px solid var(--rose);padding-left:0.7rem}
+  h4{font-family:'Inter',sans-serif;font-size:0.88rem;font-weight:700;margin:1.2rem 0 0.4rem;color:var(--ink);text-transform:uppercase;letter-spacing:0.06em}
   p{margin-bottom:0.85rem;color:var(--ink-soft)} strong{color:var(--ink);font-weight:600}
   .callout{padding:1rem 1.2rem;border-radius:var(--radius);margin:1.2rem 0}
   .callout.atencao{background:linear-gradient(135deg,var(--blush),var(--rose-soft));border-left:4px solid var(--rose-deep)}
   .callout.dica{background:linear-gradient(135deg,var(--champagne),#fde8d8);border-left:4px solid var(--gold)}
   .callout.lei{background:linear-gradient(135deg,var(--lavender),#ede0ec);border-left:4px solid #b090c0}
+  .callout.jurisprudencia{background:linear-gradient(135deg,#e8f0e0,#d8e8d0);border-left:4px solid #80a870}
+  .callout.pegadinha{background:linear-gradient(135deg,#fff0d8,#ffe8c0);border-left:4px solid #d4903a}
   .callout-label{font-size:0.65rem;letter-spacing:0.18em;text-transform:uppercase;font-weight:700;margin-bottom:0.4rem;display:block;color:var(--ink)}
-  .callout p{margin:0;color:var(--ink);font-size:0.88rem}
+  .callout p{margin:0 0 0.5rem;color:var(--ink);font-size:0.88rem}
+  .callout p:last-child{margin-bottom:0}
+  .callout ol,.callout ul{color:var(--ink);font-size:0.88rem;padding-left:1.2rem}
+  .callout li{margin-bottom:0.3rem}
   table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:0.85rem}
   th{background:var(--rose-soft);color:var(--ink);font-weight:600;padding:0.6rem 0.8rem;text-align:left;border-bottom:2px solid var(--rose)}
-  td{padding:0.55rem 0.8rem;border-bottom:1px solid var(--line);color:var(--ink-soft)}
+  td{padding:0.55rem 0.8rem;border-bottom:1px solid var(--line);color:var(--ink-soft);vertical-align:top}
   tr:hover td{background:var(--blush);color:var(--ink)}
   ul,ol{padding-left:1.4rem;margin:0.6rem 0} li{margin-bottom:0.35rem;color:var(--ink-soft)} li strong{color:var(--ink)}
   .badge{display:inline-block;background:var(--rose-soft);color:var(--rose-deep);font-size:0.65rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;padding:0.2rem 0.6rem;border-radius:20px;margin-right:0.4rem}
   .badge.cai{background:var(--champagne);color:#8a5030}
-  .materia-header{display:flex;align-items:center;gap:0.8rem;padding:1rem 1.2rem;border-radius:var(--radius);margin:0 0 1.2rem;font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:500}
+  .materia-header{display:flex;align-items:center;gap:0.8rem;padding:1rem 1.2rem;border-radius:var(--radius);margin:0 0 1.5rem;font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:500}
   .materia-header.const{background:linear-gradient(135deg,var(--lavender),#ede0ec)}
   .materia-header .emoji{font-size:1.4rem}
   .materia-header .tempo{font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-faded);margin-left:auto;font-family:'Inter',sans-serif}
   .incidencia{font-size:0.7rem;color:var(--rose-deep);font-weight:600;background:var(--rose-soft);padding:0.2rem 0.5rem;border-radius:4px}
+  hr{border:none;border-top:1px solid var(--line);margin:2rem 0}
   mark{background:var(--blush);color:var(--ink);border-radius:3px;padding:0 2px}
+  mark.aten{background:#ffe4c0}
+  mark.ok{background:#d8f0d0}
+  .ascii-box{font-family:'Courier New',monospace;font-size:0.78rem;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:1rem;margin:1rem 0;overflow-x:auto;line-height:1.5;color:var(--ink-soft);white-space:pre}
+  .stat-row{display:flex;gap:1rem;margin:1rem 0;flex-wrap:wrap}
+  .stat-card{flex:1;min-width:120px;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:0.8rem;text-align:center}
+  .stat-card .num{font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--rose-deep);font-weight:600}
+  .stat-card .label{font-size:0.68rem;color:var(--ink-faded);text-transform:uppercase;letter-spacing:0.08em}
+  .caso{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:1rem 1.2rem;margin:1rem 0}
+  .caso-titulo{font-size:0.72rem;text-transform:uppercase;letter-spacing:0.12em;font-weight:700;color:var(--rose-deep);margin-bottom:0.5rem}
+  .caso-resp{margin-top:0.6rem;padding-top:0.6rem;border-top:1px solid var(--line);font-size:0.88rem}
+  .caso-resp strong{color:var(--rose-deep)}
 </style>
 </head>
 <body>
@@ -40,66 +58,381 @@
 <div class="materia-header const">
   <span class="emoji">🏛️</span>
   <span>Direito Constitucional</span>
-  <span class="incidencia">72% provas</span>
+  <span class="incidencia">72% provas · 8-10 questões</span>
   <span class="tempo">⏱ 1h30</span>
 </div>
 
-<h2>I. Poder Constituinte</h2>
+<div class="stat-row">
+  <div class="stat-card"><div class="num">72%</div><div class="label">Incidência nas provas</div></div>
+  <div class="stat-card"><div class="num">9</div><div class="label">Questões médias por exame</div></div>
+  <div class="stat-card"><div class="num">55%</div><div class="label">Acerto médio dos candidatos</div></div>
+  <div class="stat-card"><div class="num">2</div><div class="label">Temas do dia (PC + Eficácia)</div></div>
+</div>
 
-<h3>Poder Constituinte Originário</h3>
+<!-- INTRODUÇÃO -->
+<h2>I. Introdução <em>— Poder Constituinte e Eficácia na OAB</em></h2>
+
+<p>Direito Constitucional é a segunda matéria em incidência na OAB, perdendo apenas para Ética. A FGV cobra entre 8 e 10 questões por exame, focando em <strong>direitos fundamentais, organização do Estado, processo legislativo e controle de constitucionalidade</strong>. Os dois temas do Dia 1 — Poder Constituinte e Eficácia das Normas — são <em>fundamentos estruturantes</em>: aparecem diretamente em 2-3 questões por exame e indiretamente em praticamente todas as demais questões de Constitucional.</p>
+
+<p>Doutrinadores de referência para este dia: <strong>Pedro Lenza</strong> (<em>Direito Constitucional Esquematizado</em>, 2024), <strong>José Afonso da Silva</strong> (<em>Aplicabilidade das Normas Constitucionais</em>, obra seminal sobre eficácia), <strong>Flávio Martins</strong> (<em>Curso de Direito Constitucional</em>, 2023) e <strong>Luís Roberto Barroso</strong> (<em>Curso de Direito Constitucional Contemporâneo</em>).</p>
+
+<p>Atenção especial para a <strong>recepção de normas</strong> e a questão da <strong>vedação do retrocesso</strong> como limite implícito ao Poder Constituinte — temas que a FGV combina com os temas principais para aumentar a dificuldade das questões.</p>
+
+<hr>
+
+<!-- PODER CONSTITUINTE -->
+<h2>II. Poder Constituinte <em>— Teoria e Classificação</em></h2>
+
+<h3>2.1 Conceito e Fundamento</h3>
+
+<p>Poder Constituinte é o poder de <strong>elaborar, modificar ou revogar a Constituição</strong>. É o poder político supremo, que fundamenta toda a ordem jurídica. Na teoria de <strong>Emmanuel Joseph Sieyès</strong> (<em>O que é o Terceiro Estado?</em>, 1789) — autor da teoria clássica do Poder Constituinte — esse poder emana da <em>nação</em> (no liberalismo clássico) ou do <em>povo</em> (na concepção democrática moderna). A CF/88 adotou o princípio democrático: <strong>todo poder emana do povo</strong> (art. 1º, parágrafo único).</p>
+
+<p>Pedro Lenza (2024) classifica o Poder Constituinte em: (1) <strong>Originário</strong> — cria uma nova Constituição; (2) <strong>Derivado</strong> — modifica a Constituição vigente, dentro dos limites que ela própria estabelece; e (3) <strong>Difuso</strong> — é exercido pela sociedade ao transformar informalmente o texto constitucional via mutação constitucional (interpretação evolutiva), sem alterar literalmente o texto.</p>
+
+<h3>2.2 Poder Constituinte Originário (PCO)</h3>
+
+<h4>Características Clássicas (Teoria de Sieyès)</h4>
+
 <table>
-  <tr><th>Característica</th><th>Significado</th></tr>
-  <tr><td><strong>Inicial</strong></td><td>Inaugura uma nova ordem jurídica</td></tr>
-  <tr><td><strong>Autônomo</strong></td><td>Define livremente o conteúdo da nova constituição</td></tr>
-  <tr><td><strong>Ilimitado juridicamente</strong></td><td>Não se preocupa com o direito anterior</td></tr>
-  <tr><td><strong>Incondicionado</strong></td><td>Não se sujeita a formas pré-fixadas</td></tr>
-  <tr><td><strong>Soberano</strong></td><td>Poder de fato — não tem previsão jurídica</td></tr>
+  <tr><th>Característica</th><th>Significado</th><th>Observação para OAB</th></tr>
+  <tr><td><strong>Inicial</strong></td><td>Inaugura uma nova ordem jurídica — cria a primeira Constituição ou substitui completamente a anterior</td><td>Revoga toda a ordem anterior (<em>ab-rogação</em>)</td></tr>
+  <tr><td><strong>Autônomo</strong></td><td>Decide livremente o conteúdo da Constituição, sem subordinação a normas jurídicas anteriores</td><td>Não se vincula a compromissos jurídicos anteriores</td></tr>
+  <tr><td><strong>Ilimitado juridicamente</strong></td><td>Não se sujeita a limites impostos pelo direito positivo anterior</td><td>Mas pode ter limites <em>suprapositivos</em></td></tr>
+  <tr><td><strong>Incondicionado</strong></td><td>Não precisa obedecer a forma ou procedimento pré-fixado</td><td>Pode usar qualquer meio para estabelecer a Constituição</td></tr>
+  <tr><td><strong>Soberano (poder de fato)</strong></td><td>Não tem previsão jurídica anterior que o autorize — é poder político puro</td><td>Justifica-se pela ruptura revolucionária ou pelo consenso social</td></tr>
+  <tr><td><strong>Permanente</strong></td><td>Não se esgota com a criação da Constituição — pode sempre ser convocado novamente</td><td>Latente na sociedade</td></tr>
+</table>
+
+<h4>Limite Implícito: Vedação do Retrocesso em Direitos Humanos</h4>
+
+<div class="callout atencao">
+  <span class="callout-label">⚠ Exceção Fundamental ao PCO — Limite Suprapositivo</span>
+  <p>A doutrina contemporânea (Barroso, 2023; Lenza, 2024) reconhece que o PCO, embora juridicamente ilimitado, <strong>não pode violar direitos previstos em Tratados Internacionais de Direitos Humanos</strong> dos quais o Brasil seja signatário — sob pena de sanções no plano internacional.</p>
+  <p><strong>Exemplos práticos:</strong></p>
+  <ul>
+    <li>A pena de morte (proibida no Brasil pelo art. 5º, XLVII, 'a') não poderia ser reintroduzida por nova Constituição sem violar o art. 4, §3º da Convenção Americana (Pacto de San José da Costa Rica)</li>
+    <li>A prisão civil do depositário infiel (Súmula Vinculante 25 + RE 466.343/SP) não pode ser restaurada, mesmo por novo PCO, sem romper o art. 7, §7º da CADH</li>
+  </ul>
+  <p>Este é um <strong>limite suprapositivo</strong> — não jurídico-positivo, mas de Direito Internacional e de princípios gerais. Cobrado na OAB especialmente combinado com DH e Controle de Constitucionalidade.</p>
+</div>
+
+<h4>Recepção e Desconstitucionalização</h4>
+
+<p>Quando surge uma nova Constituição, o que acontece com a legislação infraconstitucional anterior? Dois fenômenos importantes:</p>
+
+<table>
+  <tr><th>Fenômeno</th><th>Conceito</th><th>Exemplo</th></tr>
+  <tr><td><strong>Recepção</strong></td><td>A nova CF <em>recepciona</em> as normas infraconstitucionais anteriores que com ela sejam materialmente compatíveis, mesmo que formalmente diferentes (espécie normativa diferente)</td><td>Código Penal (Decreto-Lei 2.848/40) foi recepcionado pela CF/88 como lei ordinária, embora fosse Decreto-Lei</td></tr>
+  <tr><td><strong>Não recepção (revogação)</strong></td><td>Normas anteriores incompatíveis <em>materialmente</em> com a nova CF são revogadas (não declaradas inconstitucionais)</td><td>Dispositivos do CTN que contrariassem a CF/88 foram não recepcionados</td></tr>
+  <tr><td><strong>Desconstitucionalização</strong></td><td>Normas que eram constitucionais na Constituição anterior são rebaixadas para nível infraconstitucional pela nova Constituição (se esta assim determinar). No Brasil, a CF/88 NÃO adotou expressamente essa teoria</td><td>Não se aplica no Brasil como regra geral</td></tr>
+</table>
+
+<div class="callout lei">
+  <span class="callout-label">📜 Ponto crítico — Recepção e espécie normativa</span>
+  <p>Para a recepção, importa apenas a <strong>compatibilidade material</strong> (conteúdo). A <strong>incompatibilidade formal</strong> (espécie normativa diferente) NÃO impede a recepção. Assim:</p>
+  <ul>
+    <li>O CP (Decreto-Lei) → recepcionado como lei ordinária</li>
+    <li>O CPP (Decreto-Lei) → recepcionado como lei ordinária</li>
+    <li>O CTN (Lei 5.172/66, lei ordinária) → recepcionado como lei complementar (matéria exige LC na CF/88)</li>
+  </ul>
+  <p><strong>Ação cabível contra norma não recepcionada:</strong> ADPF (Arguição de Descumprimento de Preceito Fundamental) — não ADI, pois não há inconstitucionalidade superveniente no Brasil.</p>
+</div>
+
+<hr>
+
+<!-- PODER CONSTITUINTE DERIVADO -->
+<h2>III. Poder Constituinte Derivado <em>— Reformador e Decorrente</em></h2>
+
+<h3>3.1 Características Gerais</h3>
+
+<p>O Poder Constituinte Derivado (PCD) é criado <strong>dentro da própria Constituição</strong> — é juridicamente limitado, condicionado e subordinado ao que o PCO estabeleceu. Lenza (2024) o chama de "poder constituído" — porque foi constituído pelo Poder Constituinte Originário.</p>
+
+<table>
+  <tr><th>Espécie de PCD</th><th>Função</th><th>Base Legal</th></tr>
+  <tr><td><strong>Reformador</strong></td><td>Altera o texto constitucional via Emenda Constitucional (EC)</td><td>Art. 60 CF/88</td></tr>
+  <tr><td><strong>Decorrente</strong></td><td>Autoriza os Estados-membros a elaborarem suas próprias Constituições estaduais</td><td>Art. 25 CF/88</td></tr>
+  <tr><td><strong>Revisor</strong></td><td>Revisão geral da CF (procedimento facilitado) — já exaurido</td><td>Art. 3º ADCT — realizado em 1993/1994, gerou 6 Emendas de Revisão. NÃO pode ser utilizado novamente</td></tr>
+</table>
+
+<h3>3.2 Poder Constituinte Derivado Reformador — PEC (Art. 60 CF)</h3>
+
+<p>O mecanismo ordinário de mudança constitucional no Brasil é a <strong>Proposta de Emenda Constitucional (PEC)</strong>. A CF/88 é classificada como <strong>rígida</strong> (pela exigência de processo agravado) e alguns doutrinadores a chamam de <strong>super-rígida</strong> pela existência das cláusulas pétreas.</p>
+
+<h4>Procedimento da PEC — Passo a Passo (Art. 60)</h4>
+
+<div class="ascii-box">PASSO 1 — INICIATIVA (art. 60, incisos I, II, III)
+  ┌─────────────────────────────────────────────────────────────────┐
+  │ I — 1/3 dos Deputados Federais (= mín. 171 de 513)              │
+  │ I — 1/3 dos Senadores (= mín. 27 de 81)                         │
+  │ II — Presidente da República (basta a assinatura)                │
+  │ III — Mais da metade das Assembleias Legislativas das unidades    │
+  │        da Federação (26 estados + DF = 27 unidades → mín. 14)    │
+  │        cada uma aprovando por maioria relativa de seus membros    │
+  └─────────────────────────────────────────────────────────────────┘
+
+PASSO 2 — VOTAÇÃO (art. 60, §2º)
+  ┌─────────────────────────────────────────────────────────────────┐
+  │ • 3/5 dos membros de CADA CASA                                   │
+  │ • Em DOIS TURNOS em CADA CASA (= 4 votações no total)            │
+  │ • Câmara: 3/5 de 513 = mín. 308 votos                           │
+  │ • Senado: 3/5 de 81 = mín. 49 votos                             │
+  │ ⚠ Não há votação em sessão conjunta (Congresso Nacional)        │
+  └─────────────────────────────────────────────────────────────────┘
+
+PASSO 3 — PROMULGAÇÃO (art. 60, §3º)
+  ┌─────────────────────────────────────────────────────────────────┐
+  │ • Pelas MESAS DA CÂMARA + SENADO conjuntamente                   │
+  │ • NÃO há sanção nem veto presidencial                            │
+  │ • NÃO há participação do Presidente da República                 │
+  │ • Publicação: entra em vigor na data de publicação               │
+  └─────────────────────────────────────────────────────────────────┘</div>
+
+<h4>Limites ao Poder Derivado Reformador</h4>
+
+<table>
+  <tr><th>Tipo de Limite</th><th>Conteúdo</th><th>Base Legal</th></tr>
+  <tr><td><strong>Circunstanciais</strong></td><td>Vedada PEC durante: intervenção federal, estado de defesa e estado de sítio</td><td>Art. 60, §1º</td></tr>
+  <tr><td><strong>Temporais</strong></td><td>PEC rejeitada ou prejudicada só pode ser reapresentada na próxima sessão legislativa</td><td>Art. 60, §5º</td></tr>
+  <tr><td><strong>Formais/Procedimentais</strong></td><td>Exigência de 3/5, dois turnos, iniciativa qualificada</td><td>Art. 60, caput e §2º</td></tr>
+  <tr><td><strong>Materiais (Cláusulas Pétreas)</strong></td><td>Não podem ser abolidos por PEC: forma federativa, voto direto/secreto/universal/periódico, separação dos Poderes, direitos e garantias individuais</td><td>Art. 60, §4º</td></tr>
+</table>
+
+<div class="callout lei">
+  <span class="callout-label">📜 CF/88 — Art. 60, §4º — Cláusulas Pétreas (textual)</span>
+  <p>Não será objeto de deliberação a proposta de emenda tendente a abolir:</p>
+  <p>I — a forma federativa de Estado;<br>
+  II — o voto direto, secreto, universal e periódico;<br>
+  III — a separação dos Poderes;<br>
+  IV — os direitos e garantias individuais.</p>
+  <p><strong>Ponto crítico:</strong> A palavra é "ABOLIR" — não "modificar". A PEC pode <strong>ampliar</strong> cláusula pétrea (ex.: ampliar direitos individuais). O que não pode é <em>abolir</em> ou <em>reduzir substancialmente</em> a ponto de esvaziar o conteúdo essencial.</p>
+</div>
+
+<div class="callout atencao">
+  <span class="callout-label">⚠ Maioridade penal e Cláusula Pétrea — debate clássico OAB</span>
+  <p>O <strong>art. 228 CF</strong> (inimputabilidade penal do menor de 18 anos) é ou não cláusula pétrea? Posição dominante na doutrina e cobrada pela FGV: <strong>NÃO é expressamente cláusula pétrea</strong> — está no art. 228, fora do rol do art. 60, §4º. Contudo, parte da doutrina (Luís Roberto Barroso) entende que é direito e garantia individual implícita. A PEC 171/93 (que pretendia reduzir para 16 anos) tramita no Congresso. Na OAB, a resposta mais segura: o art. 228 não está expressamente no art. 60, §4º, logo formalmente não é cláusula pétrea expressa.</p>
+</div>
+
+<h3>3.3 Poder Constituinte Derivado Decorrente (Art. 25)</h3>
+
+<p>Autoriza os <strong>Estados-membros</strong> a organizarem-se mediante <strong>Constituição Estadual</strong>, obedecendo os princípios da CF. Características:</p>
+
+<ul>
+  <li>Exercido pelas <strong>Assembleias Legislativas</strong> estaduais</li>
+  <li>Limitado pelos <strong>princípios sensíveis, extensíveis e estabelecidos</strong> da CF</li>
+  <li>O Distrito Federal também possui poder constituinte decorrente (organiza-se pela Lei Orgânica — equivalente à Constituição Estadual)</li>
+  <li>Os Municípios <strong>NÃO exercem poder constituinte decorrente</strong> — organizam-se por Lei Orgânica Municipal, que é lei, não Constituição</li>
+</ul>
+
+<hr>
+
+<!-- EFICÁCIA DAS NORMAS -->
+<h2>IV. Eficácia das Normas Constitucionais <span class="badge cai">Alta incidência</span></h2>
+
+<h3>4.1 A Teoria de José Afonso da Silva</h3>
+
+<p>A classificação mais adotada na doutrina e nas provas de OAB é a de <strong>José Afonso da Silva</strong>, desenvolvida em sua obra <em>Aplicabilidade das Normas Constitucionais</em> (1ª ed., 1968 — clássico do Direito Constitucional brasileiro). Silva divide as normas constitucionais em três categorias segundo sua eficácia e aplicabilidade:</p>
+
+<table>
+  <tr><th>Tipo de Eficácia</th><th>Definição</th><th>Precisa de lei?</th><th>Pode ser restringida por lei?</th></tr>
+  <tr><td><strong>Plena</strong></td><td>Produz todos os seus efeitos imediatamente, desde a promulgação. Não pode ser restringida por lei ordinária.</td><td>Não</td><td><mark><strong>Não</strong></mark> — lei não pode restringir</td></tr>
+  <tr><td><strong>Contida</strong></td><td>Também de aplicação imediata, mas lei ordinária pode REDUZIR seu alcance. Enquanto não houver lei restritiva, tem eficácia plena.</td><td>Não (para produzir efeitos)</td><td><mark class="aten"><strong>Sim</strong></mark> — lei pode restringir até certo ponto</td></tr>
+  <tr><td><strong>Limitada</strong></td><td>Não produz todos os efeitos sem lei integrativa. Produz efeito mínimo (vincula o legislador), mas não é autoaplicável.</td><td><strong>Sim</strong> (para produzir efeitos plenos)</td><td>—</td></tr>
+</table>
+
+<h3>4.2 Normas de Eficácia Plena</h3>
+
+<p>São normas <strong>autoaplicáveis</strong> (self-executing), que não dependem de nenhuma lei integrativa para produzir todos os seus efeitos. O legislador não pode restringi-las — qualquer tentativa de restrição seria inconstitucional.</p>
+
+<div class="callout lei">
+  <span class="callout-label">📜 Exemplos de normas de eficácia plena</span>
+  <ul>
+    <li>Art. 2º — Separação dos Poderes ("São Poderes da União, independentes e harmônicos entre si...")</li>
+    <li>Art. 5º, <em>caput</em> — igualdade perante a lei, direito à vida, liberdade, segurança e propriedade</li>
+    <li>Art. 17, §4º — vedação ao financiamento empresarial de campanhas</li>
+    <li>Art. 60, §4º — cláusulas pétreas (imediatamente vinculam o poder de reforma)</li>
+    <li>Art. 1º — forma de Estado, sistema de governo, fundamentos da República</li>
+  </ul>
+</div>
+
+<h3>4.3 Normas de Eficácia Contida</h3>
+
+<p>Também chamadas de <strong>normas de eficácia redutível ou restringível</strong> (Flávio Martins, 2023). São imediatamente aplicáveis — produzem todos os efeitos desde a promulgação — mas uma lei ordinária pode <em>reduzir</em> seu âmbito de aplicação, mediante restrição expressamente autorizada pela própria Constituição.</p>
+
+<div class="callout dica">
+  <span class="callout-label">✦ A palavra-chave das normas contidas: "nos termos da lei" ou "na forma da lei"</span>
+  <p>A CF usa expressões que indicam que a lei pode restringir: "nos termos da lei", "nos limites definidos em lei", "salvo nas hipóteses previstas em lei", "na forma da lei". Essas expressões sinalizadoras identificam normas de eficácia contida.</p>
+</div>
+
+<div class="callout lei">
+  <span class="callout-label">📜 Exemplos de normas de eficácia contida</span>
+  <ul>
+    <li><strong>Art. 5º, XIII</strong> — "é livre o exercício de qualquer trabalho, ofício ou profissão, <em>atendidas as qualificações profissionais que a lei estabelecer</em>" → a lei pode criar requisitos para profissões (OAB, CRM, CREA etc.)</li>
+    <li><strong>Art. 5º, VIII</strong> — liberdade de crença, "salvo se as invocar para eximir-se de obrigação legal a todos imposta e recusar-se a cumprir prestação alternativa, fixada em lei"</li>
+    <li><strong>Art. 5º, XXIV</strong> — desapropriação "nos casos e na forma estabelecidos em lei"</li>
+    <li><strong>Art. 5º, XV</strong> — liberdade de locomoção "em tempo de paz, podendo qualquer pessoa, <em>nos termos da lei</em>, nela entrar, permanecer ou dela sair com seus bens"</li>
+  </ul>
+</div>
+
+<h3>4.4 Normas de Eficácia Limitada</h3>
+
+<p>São normas que, por si sós, <strong>não produzem todos os efeitos</strong> pretendidos pelo constituinte — dependem de lei integrativa para ter plena operatividade. Contudo, mesmo sem a lei, produzem um <em>efeito mínimo</em>: (1) vinculam o legislador (obrigam-no a legislar); (2) revogam normas anteriores contrárias; (3) servem de parâmetro para o controle de constitucionalidade.</p>
+
+<p>José Afonso da Silva subdivide em dois grupos:</p>
+
+<table>
+  <tr><th>Subgrupo</th><th>Característica</th><th>Exemplos</th></tr>
+  <tr><td><strong>Normas institutivas</strong> (ou organizativas)</td><td>Dependem de lei para criar ou estruturar um órgão ou instituição prevista na CF</td><td>Art. 33 CF — organização dos Territórios Federais (necessita de lei complementar)</td></tr>
+  <tr><td><strong>Normas programáticas</strong></td><td>Estabelecem programas, metas e diretrizes a serem alcançados progressivamente pelo Estado</td><td>Art. 7º, I — proteção contra despedida arbitrária "nos termos de lei complementar" (LC nunca foi editada). Art. 196 — saúde como direito de todos (exige políticas públicas)</td></tr>
 </table>
 
 <div class="callout atencao">
-  <span class="callout-label">⚠ Exceção — Vedação do Retrocesso</span>
-  <p>Limite ao poder originário: não podem ser violados direitos previstos em Tratados de DH dos quais o Brasil é parte (ex.: pena de morte, SV 25 — prisão do depositário infiel).</p>
+  <span class="callout-label">⚠ Pegadinha — Normas programáticas não são normas sem eficácia!</span>
+  <p>Normas de eficácia limitada <strong>produzem sim efeitos</strong>, mesmo sem lei integrativa. Elas: (a) revogam normas anteriores incompatíveis; (b) vinculam o legislador (inconstitucionalidade por omissão se não legislar); (c) servem de parâmetro de controle. O que falta é a plena operatividade. A questão que afirma que "normas programáticas não têm qualquer eficácia" está <mark><strong>ERRADA</strong></mark>.</p>
 </div>
 
-<h3>Poder Constituinte Derivado</h3>
-<table>
-  <tr><th>Espécie</th><th>Base</th><th>O que faz</th></tr>
-  <tr><td><strong>Reformador</strong></td><td>Art. 60 CF</td><td>Altera a CF via PEC.</td></tr>
-  <tr><td><strong>Decorrente</strong></td><td>Art. 25 CF</td><td>Autoriza estados a criarem suas constituições estaduais.</td></tr>
-  <tr><td><strong>Revisor</strong></td><td>Art. 3º ADCT</td><td>Já exaurido (apenas 6 emendas em 1993-1994).</td></tr>
-</table>
-
-<h3>Procedimento da PEC (art. 60)</h3>
-<ul>
-  <li><strong>Iniciativa:</strong> 1/3 dos Deputados (171) OU 1/3 dos Senadores (27) OU Presidente OU mais de metade das Assembleias Legislativas</li>
-  <li><strong>Votação:</strong> <mark>3/5</mark> em <mark>2 turnos em cada Casa</mark></li>
-  <li><strong>Promulgação:</strong> Mesas da Câmara + Senado (sem sanção/veto presidencial)</li>
-</ul>
-
-<div class="callout lei">
-  <span class="callout-label">📜 Cláusulas Pétreas — art. 60, §4º</span>
-  <p>Não podem ser abolidas por PEC: <strong>forma federativa de Estado · voto direto, secreto, universal e periódico · separação dos Poderes · direitos e garantias individuais</strong>. Pode-se ampliar, nunca reduzir.</p>
-</div>
-
-<h3>Limites ao Poder Derivado Reformador</h3>
-<ul>
-  <li><strong>Circunstanciais:</strong> Vedado PEC durante intervenção federal, estado de defesa ou sítio</li>
-  <li><strong>Temporais:</strong> PEC rejeitada só reapresentável na próxima sessão legislativa (art. 60, §5º)</li>
-  <li><strong>Materiais:</strong> Cláusulas pétreas (art. 60, §4º)</li>
-</ul>
-
-<h2>II. Eficácia das Normas Constitucionais <span class="badge cai">Alta incidência</span></h2>
+<h3>4.5 Outras Classificações Doutrinárias</h3>
 
 <table>
-  <tr><th>Tipo de Eficácia</th><th>Como funciona</th><th>Precisa de lei?</th><th>Exemplos</th></tr>
-  <tr><td><strong>Plena</strong></td><td>Produz todos os efeitos imediatamente. Não pode ser restringida.</td><td>Não</td><td>Art. 2º (separação de poderes), art. 5º caput</td></tr>
-  <tr><td><strong>Contida</strong></td><td>Imediata, mas lei pode REDUZIR sua abrangência.</td><td>Pode (para restringir)</td><td>Art. 5º, XIII (liberdade de profissão: "nos termos da lei")</td></tr>
-  <tr><td><strong>Limitada</strong></td><td>Não produz todos os efeitos sem lei integrativa.</td><td>Sim (para completar)</td><td>Normas programáticas (art. 7º, I)</td></tr>
+  <tr><th>Doutrinador</th><th>Classificação</th><th>Observação OAB</th></tr>
+  <tr><td><strong>Celso Ribeiro Bastos / Carlos Ayres Britto</strong></td><td>Normas de eficácia: (a) absoluta; (b) plena; (c) relativa restringível; (d) relativa complementável</td><td>Menos cobrado na OAB</td></tr>
+  <tr><td><strong>Maria Helena Diniz</strong></td><td>Eficácia: (a) absoluta (cláusulas pétreas); (b) plena; (c) relativa restringível (contida); (d) relativa complementável (limitada)</td><td>Às vezes cobrado — acrescenta as "absolutas" (cláusulas pétreas)</td></tr>
+  <tr><td><strong>Jorge Miranda</strong> (Portugal)</td><td>Preceitos exequíveis e não exequíveis por si mesmos</td><td>Referência teórica, raramente cobrada na OAB</td></tr>
 </table>
 
 <div class="callout dica">
-  <span class="callout-label">✦ Dica de memorização</span>
-  <p><strong>Plena</strong> = "funciona sozinha, ninguém mexe" | <strong>Contida</strong> = "funciona sozinha, mas lei pode restringir" | <strong>Limitada</strong> = "precisa de lei para funcionar"</p>
+  <span class="callout-label">✦ Para a OAB: use a classificação de José Afonso da Silva</span>
+  <p>A FGV adota majoritariamente a classificação de José Afonso da Silva (plena / contida / limitada). Quando a questão não especificar o doutrinador, use essa. Se mencionar Maria Helena Diniz, lembre que ela acrescenta as normas "absolutas" (cláusulas pétreas).</p>
+</div>
+
+<hr>
+
+<!-- JURISPRUDÊNCIA -->
+<h2>V. Jurisprudência Consolidada</h2>
+
+<div class="callout jurisprudencia">
+  <span class="callout-label">⚖ RE 466.343/SP — STF (2008) — Plenário — Depositário infiel</span>
+  <p><strong>Tese:</strong> É ilícita a prisão civil do depositário infiel, qualquer que seja a modalidade do depósito, pois o Pacto de San José da Costa Rica (Decreto 678/92) — status supralegal — proíbe a prisão por dívida. Confirmado pela <strong>Súmula Vinculante 25</strong>.</p>
+  <p><strong>SV 25:</strong> "É ilícita a prisão civil de depositário infiel, qualquer que seja a modalidade do depósito."</p>
+  <p><strong>Impacto para o PCO:</strong> Demonstra o limite suprapositivo — nem uma nova Constituição poderia restaurar essa prisão sem violar o DI.</p>
+</div>
+
+<div class="callout jurisprudencia">
+  <span class="callout-label">⚖ ADI 981/DF — STF — Poder Constituinte Derivado Revisor</span>
+  <p>O STF confirmou que o Poder Constituinte Revisor (art. 3º ADCT) está exaurido — só poderia ser exercido uma única vez (ocorreu em 1993-1994, resultando em 6 emendas de revisão). Não pode ser convocado novamente. Questão que afirma possibilidade de nova revisão está errada.</p>
+</div>
+
+<div class="callout jurisprudencia">
+  <span class="callout-label">⚖ ADI 939/DF — STF (1993) — Rel. Min. Sydney Sanches</span>
+  <p>Primeira vez que o STF declarou inconstitucional uma Emenda Constitucional por violar cláusula pétrea (EC 3/93 — IPMF). O STF entendeu que o princípio da anterioridade tributária é uma garantia do contribuinte — direito e garantia individual do art. 60, §4º, IV. Fundamento: cláusulas pétreas protegem não só as garantias do art. 5º, mas todos os direitos e garantias individuais espalhados pela CF.</p>
+</div>
+
+<div class="callout jurisprudencia">
+  <span class="callout-label">⚖ MI 107/DF — STF — Mandado de Injunção e normas de eficácia limitada</span>
+  <p>O STF criou o entendimento de que o mandado de injunção (art. 5º, LXXI CF) é o remédio constitucional para a inércia legislativa diante de norma constitucional de eficácia limitada. Hoje, o STF adota posição <em>concretista geral</em>: além de comunicar ao legislador, fixa a regra para o caso e para todos os casos análogos. Aplicação: art. 37, VII CF (greve do servidor público) — regulada pela Lei 7.783/89 enquanto não houver lei específica.</p>
+</div>
+
+<hr>
+
+<!-- PEGADINHAS -->
+<h2>VI. Pegadinhas da Banca <span class="badge cai">FGV — clássicas</span></h2>
+
+<div class="callout pegadinha">
+  <span class="callout-label">⚠ 7 Pegadinhas Clássicas — Poder Constituinte + Eficácia</span>
+  <ol>
+    <li><strong>Emenda Constitucional não tem sanção/veto presidencial.</strong> É promulgada pelas Mesas da Câmara e do Senado (art. 60, §3º). Questões que colocam o Presidente promulgando EC estão erradas.</li>
+    <li><strong>PCO não é "ilimitado absolutamente".</strong> Tem limite suprapositivo: tratados de DH. Questão que afirma que o PCO não tem NENHUM limite está incompleta/errada.</li>
+    <li><strong>PEC iniciada por Senadores começa no Senado.</strong> Regra: PEC começa sempre na Câmara — exceto quando apresentada por Senadores, que começa no Senado. Cobrado frequentemente.</li>
+    <li><strong>Revisão constitucional (art. 3º ADCT) está exaurida.</strong> Não pode ser convocada novamente (ADI 981). Questão que diz que é possível nova revisão está errada.</li>
+    <li><strong>Municípios NÃO exercem poder constituinte decorrente.</strong> Sua Lei Orgânica é lei, não Constituição. Só Estados-membros têm poder constituinte decorrente (art. 25 CF).</li>
+    <li><strong>Norma contida tem eficácia plena enquanto não houver lei restritiva.</strong> A lei não <em>cria</em> o direito — ela apenas <em>restringe</em>. Antes da lei, a norma contida tem eficácia plena. Cobrado como pegadinha: "a norma contida só tem eficácia depois da lei" — ERRADO.</li>
+    <li><strong>Cláusula pétrea proíbe abolir, não modificar.</strong> A PEC pode ampliar o conteúdo das cláusulas pétreas. O que não pode é abolir ou tender à abolição (STF: tendência à abolição = inconstitucionalidade). Ex.: EC que ampliasse direitos individuais é válida; EC que extinguisse o habeas corpus seria inconstitucional.</li>
+  </ol>
+</div>
+
+<hr>
+
+<!-- CASOS PRÁTICOS -->
+<h2>VII. Casos Práticos</h2>
+
+<div class="caso">
+  <div class="caso-titulo">Caso 1 — PEC e Cláusulas Pétreas</div>
+  <p>Uma PEC propõe extinguir o habeas corpus e o mandado de segurança do ordenamento brasileiro, sob o argumento de que esses remédios geram morosidade no Judiciário. A PEC é constitucional?</p>
+  <div class="caso-resp"><strong>Resposta:</strong> NÃO. O habeas corpus e o mandado de segurança são direitos e garantias individuais (art. 5º, LXVIII e LXIX CF), protegidos pela cláusula pétrea do art. 60, §4º, IV. A PEC "tendente a abolir" esses direitos não pode sequer ser deliberada — é inconstitucional do ponto de vista formal, antes mesmo de ser votada. O STF pode sustar sua tramitação por mandado de segurança impetrado por parlamentar.</div>
+</div>
+
+<div class="caso">
+  <div class="caso-titulo">Caso 2 — Eficácia das Normas</div>
+  <p>O art. 7º, IV CF estabelece que o salário mínimo deve ser fixado "capaz de atender a suas necessidades vitais básicas e às de sua família com moradia, alimentação, educação, saúde, lazer, vestuário, higiene, transporte e previdência social". Um trabalhador pretende mover ação contra a União alegando que o salário mínimo fixado é insuficiente para atender tais necessidades. Qual a natureza dessa norma e qual o resultado provável da ação?</p>
+  <div class="caso-resp"><strong>Resposta:</strong> O art. 7º, IV é norma de eficácia limitada do tipo programática — estabelece um programa (salário mínimo digno), mas depende de concretização legislativa. O salário mínimo está sendo fixado por lei, logo a norma está sendo cumprida formalmente. A ação individual provavelmente será julgada improcedente — o Judiciário não pode fixar salário mínimo diferente do previsto em lei (reserva de lei). O que pode ocorrer é a inconstitucionalidade por omissão (ADO) se o legislador fixar valor manifestamente insuficiente — mas o STF tem adotado postura de deferência ao legislador nessa matéria.</div>
+</div>
+
+<div class="caso">
+  <div class="caso-titulo">Caso 3 — Recepção de Normas</div>
+  <p>O Decreto-Lei 3.688/41 (Lei das Contravenções Penais), editado sob a Constituição de 1937, prevê a contravenção de "vadiagem" (art. 59). Com a CF/88, que garante liberdade de profissão (art. 5º, XIII) e dignidade da pessoa humana (art. 1º, III), esse dispositivo foi recepcionado?</p>
+  <div class="caso-resp"><strong>Resposta:</strong> Há forte discussão doutrinária. O STF não se pronunciou definitivamente sobre o art. 59 LCP como um todo. A maioria da doutrina e os tribunais inferiores têm considerado que o art. 59 LCP NÃO foi recepcionado pela CF/88, por ser incompatível materialmente com a dignidade da pessoa humana, a liberdade de locomoção (art. 5º, XV) e o princípio da lesividade (direito penal). Porém, para efeito de prova OAB, o que importa: (1) o critério de recepção é a compatibilidade MATERIAL; (2) a ação cabível é ADPF (não ADI); (3) o Decreto-Lei seria recepcionado como lei ordinária formalmente — a questão é o conteúdo.</div>
+</div>
+
+<hr>
+
+<!-- RESUMO -->
+<h2>VIII. Resumo Esquemático Final</h2>
+
+<div class="ascii-box">PODER CONSTITUINTE — MAPA MENTAL
+
+ORIGINÁRIO (PCO)
+├── Características: inicial, autônomo, ilimitado juridicamente, incondicionado, soberano
+├── Limite suprapositivo: tratados de DH (vedação do retrocesso)
+├── Efeito: revoga toda a ordem anterior (ab-rogação)
+└── Fenômenos com a legislação anterior:
+    ├── RECEPÇÃO: compatibilidade MATERIAL (não formal)
+    └── NÃO RECEPÇÃO: incompatibilidade material → ADPF (não ADI)
+
+DERIVADO (PCD)
+├── Reformador (art. 60) — PEC
+│   ├── Iniciativa: 1/3 Dep. | 1/3 Sen. | Presidente | +metade AL estaduais
+│   ├── Votação: 3/5 em 2 turnos em CADA Casa (= 4 votações)
+│   ├── Promulgação: Mesas Câmara + Senado (SEM sanção/veto presidencial)
+│   └── Limites: circunstanciais + temporais + formais + materiais (§4º)
+├── Decorrente (art. 25) — Constituições estaduais (ESTADOS, não municípios)
+└── Revisor (art. 3º ADCT) — EXAURIDO (ADI 981)
+
+CLÁUSULAS PÉTREAS (art. 60, §4º) — não pode ABOLIR:
+├── I — Forma federativa de Estado
+├── II — Voto direto, secreto, universal e periódico
+├── III — Separação dos Poderes
+└── IV — Direitos e garantias individuais
+
+──────────────────────────────────────────────────────
+
+EFICÁCIA DAS NORMAS (José Afonso da Silva)
+
+PLENA          → imediata + completa + NÃO restringível por lei
+               Exemplos: art. 2º, art. 5º caput, art. 60, §4º
+
+CONTIDA        → imediata + completa ENQUANTO não houver lei
+(restringível) → lei pode REDUZIR o alcance
+               Marcador: "nos termos da lei", "na forma da lei"
+               Exemplos: art. 5º, XIII (livre exercício de profissão)
+
+LIMITADA       → NÃO completa sem lei integrativa
+(programática  → Efeito mínimo: vincula legislador, revoga lei anterior contrária
+ou institutiva)→ Remédio se inércia legislativa: MANDADO DE INJUNÇÃO
+               Exemplos: art. 7º, I (proteção contra despedida arbitrária)</div>
+
+<div class="callout dica">
+  <span class="callout-label">✦ Checklist de Revisão Rápida</span>
+  <ul>
+    <li>☐ PCO: inicial, autônomo, ilimitado juridicamente — mas limite suprapositivo (DH)</li>
+    <li>☐ PEC começa na Câmara (exceto se iniciativa de Senadores → começa no Senado)</li>
+    <li>☐ PEC: 3/5 em 2 turnos em CADA Casa — sem sanção/veto do Presidente</li>
+    <li>☐ Cláusulas pétreas: 4 hipóteses do art. 60, §4º — vedação é ABOLIR (não modificar)</li>
+    <li>☐ Poder Constituinte Revisor (art. 3º ADCT): EXAURIDO — não pode ser usado novamente</li>
+    <li>☐ Municípios: NÃO têm poder constituinte decorrente (Lei Orgânica = lei, não Constituição)</li>
+    <li>☐ Recepção: critério MATERIAL (compatibilidade de conteúdo); contra norma não recepcionada: ADPF</li>
+    <li>☐ Eficácia contida: imediata, mas lei pode restringir; SEM lei → eficácia plena</li>
+    <li>☐ Eficácia limitada (programática): NÃO é "sem eficácia" — efeito mínimo existe</li>
+    <li>☐ SV 25: prisão civil do depositário infiel = ilícita (aplicação do PCO + limite DH)</li>
+  </ul>
 </div>
 
 <script src="../highlighter.js"></script>

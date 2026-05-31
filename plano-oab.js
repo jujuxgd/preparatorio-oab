@@ -270,9 +270,9 @@ const PLANO_OAB = [
 
 { dia:16, titulo:"Processo Penal · Recursos e HC + Trabalho · Aviso Prévio e Rescisão", descricao:"Sistema recursal penal, habeas corpus e rescisão do contrato de trabalho", emoji_principal:"📋",
   materias:[
-    { nome:"Direito Processual Penal", emoji:"📋", horas:2, cor:"sage",
+    { nome:"Direito Processual Penal", emoji:"📋", horas:2, cor:"sage", arquivo_mat:"dia-16-proc-penal",
       topicos:["RESE: hipóteses do art. 581 CPP","Apelação: cabimento, prazo, efeitos","Embargos infringentes e de nulidade; embargos de declaração","Habeas corpus: natureza, legitimidade, impetração, efeitos, cabimento; Mandado de segurança criminal"] },
-    { nome:"Direito do Trabalho", emoji:"⚙️", horas:2, cor:"champagne",
+    { nome:"Direito do Trabalho", emoji:"⚙️", horas:2, cor:"champagne", arquivo_mat:"dia-16-trabalho",
       topicos:["Aviso prévio: prazo, proporcionalidade, indenização","Verbas rescisórias: cálculo por tipo de dispensa","Rescisão sem justa causa vs. com justa causa; dispensa por pedido","PDV, força maior, rescisão indireta, distrato, morte do empregador"] }
   ],
   checklist:[
@@ -287,9 +287,9 @@ const PLANO_OAB = [
 
 { dia:17, titulo:"Constitucional · Judiciário e Controle Difuso + Civil · Posse e Propriedade", descricao:"Poder Judiciário, STF, controle difuso e direitos reais", emoji_principal:"🏛️",
   materias:[
-    { nome:"Direito Constitucional", emoji:"🏛️", horas:2, cor:"lavender",
+    { nome:"Direito Constitucional", emoji:"🏛️", horas:2, cor:"lavender", arquivo_mat:"dia-17-constitucional",
       topicos:["Poder Judiciário: organização, garantias e vedações","STF: composição, competências originárias e recursais","STJ, Justiça Federal, Estadual, do Trabalho, Eleitoral e Militar","Controle difuso de constitucionalidade: cláusula reserva plenário (SV 10)"] },
-    { nome:"Direito Civil", emoji:"📜", horas:2, cor:"champagne",
+    { nome:"Direito Civil", emoji:"📜", horas:2, cor:"champagne", arquivo_mat:"dia-17-civil",
       topicos:["Posse: conceito, teorias (subjetiva/objetiva), classificação, aquisição, efeitos","Ações possessórias: reintegração, manutenção, interdito proibitório","Propriedade: conceito, função social, restrições","Usucapião: espécies (ordinária, extraordinária, especial urbana/rural, indígena, coletiva)"] }
   ],
   checklist:[

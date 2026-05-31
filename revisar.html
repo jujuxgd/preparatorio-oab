@@ -117,6 +117,66 @@
 .feedback-btn.mais-ou-menos:hover { background: var(--gold); color: var(--paper); border-color: var(--gold); }
 .feedback-btn.esqueci:hover { background: var(--error); color: var(--paper); border-color: var(--error); }
 
+/* Agenda de revisões */
+.agenda-date-group {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  margin-bottom: 0.55rem;
+}
+.agenda-date-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.55rem 1rem;
+  border-bottom: 1px solid var(--line);
+}
+.agenda-date-header.past   { background: rgba(200,48,80,0.07); }
+.agenda-date-header.today  { background: var(--rose-soft); }
+.agenda-date-header.future { background: var(--bg-soft); }
+.agenda-date-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+.agenda-date-label.past   { color: #c03050; }
+.agenda-date-label.today  { color: var(--rose-deep); }
+.agenda-date-label.future { color: var(--ink); }
+.agenda-status-pill {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.15rem 0.5rem;
+  border-radius: 10px;
+}
+.agenda-status-pill.atrasada { background: #c03050; color: white; }
+.agenda-status-pill.hoje     { background: var(--rose-deep); color: white; }
+.agenda-mat-row {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.45rem 1rem;
+  border-bottom: 1px dotted var(--line);
+  font-size: 0.82rem;
+}
+.agenda-mat-row:last-child { border-bottom: none; }
+.agenda-iv-badge {
+  font-size: 0.62rem;
+  font-weight: 700;
+  padding: 0.15rem 0.45rem;
+  border-radius: 10px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.agenda-iv-badge.iv1 { background: rgba(232,0,110,0.12); color: var(--rose-deep); }
+.agenda-iv-badge.iv2 { background: rgba(100,60,200,0.1); color: #5030a0; }
+.agenda-iv-badge.iv3 { background: rgba(20,100,180,0.1); color: #104080; }
+.agenda-iv-badge.iv4 { background: rgba(20,140,80,0.1);  color: #0a5030; }
+[data-theme="dark"] .agenda-iv-badge.iv2 { color: #b090ff; }
+[data-theme="dark"] .agenda-iv-badge.iv3 { color: #70b0ff; }
+[data-theme="dark"] .agenda-iv-badge.iv4 { color: #70d090; }
+
 .info-banner {
   background: linear-gradient(135deg, var(--lavender) 0%, var(--rose-soft) 100%);
   padding: 1.8rem 2rem;
@@ -183,12 +243,14 @@
     <div class="nav-section-label">Estudo</div>
     <a href="materias.html" class="nav-link"><span class="icon">❖</span><span>Matérias</span></a>
     <a href="questoes.html" class="nav-link"><span class="icon">◎</span><span>Questões</span></a>
-    
+    <a href="fichamentos.html" class="nav-link"><span class="icon">✎</span><span>Fichamentos</span></a>
+
     
     
     
     <div class="nav-section-label">Análise</div>
     <a href="estatisticas.html" class="nav-link"><span class="icon">◈</span><span>Estatísticas</span></a>
+    <a href="simulados.html" class="nav-link"><span class="icon">◉</span><span>Simulados</span></a>
     <div class="sidebar-footer">
       <div class="profile-card">
         <div class="profile-avatar">
@@ -230,14 +292,27 @@
       </div>
     </div>
 
-    <!-- CARDS DINÂMICOS -->
+    <!-- SEÇÃO: revisões pendentes hoje/atrasadas -->
     <div id="revisao-cards"></div>
+
+    <!-- SEÇÃO: agenda completa de datas -->
+    <div id="agenda-wrap" style="margin-top:2rem;display:none">
+      <div style="display:flex;align-items:center;gap:0.8rem;margin-bottom:1rem">
+        <div style="flex:1;height:1px;background:var(--line)"></div>
+        <span style="font-family:'Playfair Display',serif;font-size:1rem;font-weight:500;color:var(--ink-faded);white-space:nowrap">Agenda de Revisões</span>
+        <div style="flex:1;height:1px;background:var(--line)"></div>
+      </div>
+      <p style="font-size:0.78rem;color:var(--ink-faded);margin-bottom:1.2rem">Todas as suas revisões programadas com base na curva do esquecimento — 1, 7, 15 e 30 dias após estudar cada matéria.</p>
+      <div id="agenda-revisoes"></div>
+    </div>
   </main>
 </div>
 
 <script src="script.js"></script>
 <script src="progresso.js"></script>
 <script src="plano-oab.js"></script>
+<script src="cards.js"></script>
+<script src="cores.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
   const INTERVALS = [1, 7, 15, 30];
@@ -250,45 +325,56 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!dData.concluido || !dData.data_conclusao) return;
     const concl = new Date(dData.data_conclusao);
     const diff  = Math.round((hoje - concl) / 864e5);
-    // Mostra se passou pelo menos 1 dia E ainda não revisou, OU se revisou mas voltou ao intervalo seguinte
-    const jaRevisouHoje = (dData.ultima_revisao === hojeStr);
-    if (jaRevisouHoje) return;
     // Está em algum intervalo de revisão (1, 7, 15, 30 dias ou mais)
     if (diff < 1) return;
     const dado = typeof getDadosDia === 'function' ? getDadosDia(parseInt(numDia)) : null;
     if (!dado) return;
 
     const intervalo = INTERVALS.filter(iv => diff >= iv).pop() || 1;
-    const topicos   = dado.materias.flatMap(m => m.topicos || []).slice(0, 4);
-    const materias  = dado.materias.map(m => `${m.emoji||''} ${m.nome}`).join('  ·  ');
     const isUrgent  = diff <= 3;
     const quando    = diff === 1 ? 'há 1 dia' : `há ${diff} dias`;
     const ivLabel   = `Intervalo ${intervalo}d`;
-    const nota      = dData.nota ? `<div style="margin-top:0.6rem;padding:0.7rem;background:var(--bg-soft);border-radius:var(--radius-sm);font-style:italic;font-size:0.85rem;color:var(--ink-soft)">"${dData.nota.slice(0,150)}${dData.nota.length>150?'…':''}"</div>` : '';
 
-    cards.push({ diff, isUrgent, html: `
-      <div class="revisao-card${isUrgent?' urgent':''}">
-        <div class="rev-head">
-          <div style="flex:1">
-            <div style="display:flex;gap:0.5rem;margin-bottom:0.4rem;align-items:center;flex-wrap:wrap">
-              <span class="rev-tag">${quando}</span>
-              <span style="font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;background:var(--lavender);color:#6040a0;padding:0.2rem 0.6rem;border-radius:20px;font-weight:600">${ivLabel}</span>
+    // Um card por matéria, com conteúdo do cards.js quando disponível
+    dado.materias.forEach((mat, mIdx) => {
+      const jaRevMatHoje = (dData[`revisao_mat_${mIdx}`] === hojeStr);
+      if (jaRevMatHoje) return;
+
+      // Tenta usar o card do cards.js (resumo real); fallback: tópicos do plano
+      const cardKey  = `${numDia}_${mIdx}`;
+      const cardData = (typeof REVIEW_CARDS !== 'undefined') ? REVIEW_CARDS[cardKey] : null;
+
+      const titulo   = cardData ? cardData.titulo : `${mat.emoji || '📖'} ${mat.nome}`;
+      const pontosHtml = cardData
+        ? cardData.pontos.map(p => `<li>${p}</li>`).join('')
+        : (mat.topicos || []).map(t => `<li>${t.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</li>`).join('');
+      const pegadinhaHtml = cardData && cardData.pegadinha
+        ? `<div style="margin-top:0.8rem;padding:0.8rem 1rem;background:linear-gradient(135deg,#fff0d8,#ffe8c0);border-left:3px solid #d4903a;border-radius:var(--radius-sm);font-size:0.82rem;color:#7a4010"><strong style="display:block;font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:#d4903a;margin-bottom:0.3rem">⚠ Pegadinha da Banca</strong>${cardData.pegadinha}</div>`
+        : '';
+
+      cards.push({ diff, isUrgent, html: `
+        <div class="revisao-card${isUrgent?' urgent':''}">
+          <div class="rev-head">
+            <div style="flex:1">
+              <div style="display:flex;gap:0.5rem;margin-bottom:0.4rem;align-items:center;flex-wrap:wrap">
+                <span class="rev-tag">${quando}</span>
+                <span style="font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;background:var(--lavender);color:var(--rose-deep);padding:0.2rem 0.6rem;border-radius:20px;font-weight:600">${ivLabel}</span>
+                <span style="font-size:0.65rem;background:var(--bg-soft);color:var(--ink-faded);padding:0.2rem 0.5rem;border-radius:20px">Dia ${numDia}</span>
+              </div>
+              <h3 class="rev-title">${titulo.replace(' · ',' <em>·</em> ')}</h3>
+              <div class="rev-meta">${mat.nome} · ${dado.titulo.split(' · ')[0]}</div>
             </div>
-            <h3 class="rev-title">${dado.titulo.replace(' · ',' <em>·</em> ')}</h3>
-            <div class="rev-meta">${materias}</div>
+            <a href="hoje.html?dia=${numDia}" style="font-size:0.72rem;color:var(--rose-deep);text-decoration:none;white-space:nowrap;align-self:flex-start;margin-top:0.3rem">Ver conteúdo →</a>
           </div>
-          <a href="hoje.html?dia=${numDia}" style="font-size:0.72rem;color:var(--rose-deep);text-decoration:none;white-space:nowrap;align-self:flex-start;margin-top:0.3rem">Ver conteúdo →</a>
-        </div>
-        ${nota}
-        <ul class="rev-bullets">
-          ${topicos.map(t => `<li>${t.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</li>`).join('')}
-        </ul>
-        <div class="rev-feedback">
-          <button class="feedback-btn lembrei" onclick="registrarFeedback(this,'lembrei',${numDia})">✓ Lembrei tudo</button>
-          <button class="feedback-btn mais-ou-menos" onclick="registrarFeedback(this,'mais-ou-menos',${numDia})">~ Mais ou menos</button>
-          <button class="feedback-btn esqueci" onclick="registrarFeedback(this,'esqueci',${numDia})">✕ Preciso rever</button>
-        </div>
-      </div>`
+          <ul class="rev-bullets">${pontosHtml}</ul>
+          ${pegadinhaHtml}
+          <div class="rev-feedback">
+            <button class="feedback-btn lembrei" onclick="registrarFeedbackMat(this,'lembrei',${numDia},${mIdx})">✓ Lembrei tudo</button>
+            <button class="feedback-btn mais-ou-menos" onclick="registrarFeedbackMat(this,'mais-ou-menos',${numDia},${mIdx})">~ Mais ou menos</button>
+            <button class="feedback-btn esqueci" onclick="registrarFeedbackMat(this,'esqueci',${numDia},${mIdx})">✕ Preciso rever</button>
+          </div>
+        </div>`
+      });
     });
   });
 
@@ -311,21 +397,153 @@ document.addEventListener('DOMContentLoaded', () => {
   // Streak
   const streakEl = document.querySelector('.streak-pill .count');
   if (streakEl) streakEl.textContent = (p.streak || 0);
+
+  // Agenda de revisões
+  buildAgenda();
 });
 
-function registrarFeedback(btn, tipo, numDia) {
+function buildAgenda() {
+  const p        = carregarProgresso();
+  const hoje     = new Date();
+  const hojeStr  = hoje.toISOString().split('T')[0];
+  const INTERVALS  = [1, 7, 15, 30];
+  const IV_LABELS  = ['1ª revisão', '2ª revisão', '3ª revisão', '4ª revisão'];
+  const IV_CLASSES = ['iv1', 'iv2', 'iv3', 'iv4'];
+
+  const items = []; // { dateStr, reviewDate, numDia, mIdx, mat, ivIdx, interval, status, done }
+
+  Object.entries(p.dias || {}).forEach(([numDia, dData]) => {
+    if (!dData.concluido || !dData.data_conclusao) return;
+    const dado = (typeof getDadosDia === 'function') ? getDadosDia(parseInt(numDia)) : null;
+    if (!dado) return;
+
+    const studyDate = new Date(dData.data_conclusao + 'T12:00:00');
+
+    dado.materias.forEach((mat, mIdx) => {
+      const reviews = (dData.revisoes_mat && dData.revisoes_mat[mIdx]) || [];
+
+      INTERVALS.forEach((interval, ivIdx) => {
+        const reviewDate = new Date(studyDate);
+        reviewDate.setDate(reviewDate.getDate() + interval);
+        const dateStr = reviewDate.toISOString().split('T')[0];
+
+        // Revisão deste intervalo concluída = há registro após study + interval dias
+        const done = reviews.some(r => {
+          if (r.resultado === 'esqueci') return false;
+          const rDate = new Date(r.data + 'T12:00:00');
+          return Math.round((rDate - studyDate) / 864e5) >= interval;
+        });
+
+        const isPast  = dateStr < hojeStr;
+        const isToday = dateStr === hojeStr;
+        const status  = done ? 'done' : isPast ? 'atrasada' : isToday ? 'hoje' : 'futura';
+
+        items.push({ dateStr, reviewDate, numDia, mIdx, mat, ivIdx, interval, status, done });
+      });
+    });
+  });
+
+  if (!items.length) return;
+
+  // Agrupa por data, ordena por data
+  const groups = {};
+  items.forEach(item => {
+    if (!groups[item.dateStr]) groups[item.dateStr] = [];
+    groups[item.dateStr].push(item);
+  });
+  const sortedDates = Object.keys(groups).sort();
+
+  // Conta pendentes (não done)
+  const totalPendentes = items.filter(i => !i.done).length;
+  if (totalPendentes === 0) return; // nada a mostrar
+
+  // Mostra a seção
+  const wrap = document.getElementById('agenda-wrap');
+  if (wrap) wrap.style.display = 'block';
+
+  let html = '';
+  sortedDates.forEach(dateStr => {
+    const groupItems = groups[dateStr];
+    const allDone    = groupItems.every(i => i.done);
+    if (allDone) return; // pula datas totalmente concluídas
+
+    const date    = new Date(dateStr + 'T12:00:00');
+    const isPast  = dateStr < hojeStr;
+    const isToday = dateStr === hojeStr;
+    const pending = groupItems.filter(i => !i.done);
+    if (!pending.length) return;
+
+    const dateFmt = isToday
+      ? 'Hoje · ' + date.toLocaleDateString('pt-BR', { day:'numeric', month:'long' })
+      : date.toLocaleDateString('pt-BR', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+    const dateClass  = isPast ? 'past' : isToday ? 'today' : 'future';
+    const labelClass = isPast ? 'past' : isToday ? 'today' : 'future';
+    const pillHtml   = isPast  ? '<span class="agenda-status-pill atrasada">atrasada</span>'
+                     : isToday ? '<span class="agenda-status-pill hoje">hoje</span>'
+                     : '';
+    const daysLabel  = isPast
+      ? `<span style="font-size:0.68rem;color:#c03050;margin-left:auto">${Math.round((hoje - date) / 864e5)} dias atrás</span>`
+      : isToday
+      ? `<span style="font-size:0.68rem;color:var(--rose-deep);margin-left:auto">hoje!</span>`
+      : (() => {
+          const diff = Math.round((date - hoje) / 864e5);
+          return `<span style="font-size:0.68rem;color:var(--ink-faded);margin-left:auto">em ${diff} dia${diff!==1?'s':''}</span>`;
+        })();
+
+    html += `<div class="agenda-date-group">
+      <div class="agenda-date-header ${dateClass}">
+        <span class="agenda-date-label ${labelClass}">${dateFmt}</span>
+        ${pillHtml}
+        ${daysLabel}
+        <span style="font-size:0.68rem;color:var(--ink-faded);margin-left:0.4rem">${pending.length} item${pending.length!==1?'s':''}</span>
+      </div>
+      <div>`;
+
+    pending.forEach(item => {
+      const matCurta = item.mat.nome.replace('Direito ','').replace('Processual ','Proc. ');
+      const ivClass  = IV_CLASSES[item.ivIdx];
+      const ivLabel  = IV_LABELS[item.ivIdx];
+      html += `<div class="agenda-mat-row">
+        <span style="font-size:1rem;flex-shrink:0">${item.mat.emoji || '📖'}</span>
+        <span style="flex:1;color:var(--ink)">${matCurta}</span>
+        <span style="font-size:0.68rem;color:var(--ink-faded)">Dia ${item.numDia}</span>
+        <span class="agenda-iv-badge ${ivClass}">${ivLabel} (+${item.interval}d)</span>
+      </div>`;
+    });
+
+    html += `</div></div>`;
+  });
+
+  const container = document.getElementById('agenda-revisoes');
+  if (container) container.innerHTML = html || '<div style="font-size:0.85rem;color:var(--ink-faded);text-align:center;padding:1rem">Todas as revisões concluídas ✦</div>';
+}
+
+// Feedback por matéria (novo sistema)
+function registrarFeedbackMat(btn, tipo, numDia, mIdx) {
   const card = btn.closest('.revisao-card');
-  const feedback = { lembrei:'✓ Revisado', 'mais-ou-menos':'~ Revisado', esqueci:'✕ Revisado' };
   if (card) {
     card.style.opacity = '0.5';
     card.style.transition = 'opacity 0.4s';
     setTimeout(() => card.remove(), 400);
   }
+  const today = new Date().toISOString().split('T')[0];
   const p = carregarProgresso();
-  if (!p.revisoes) p.revisoes = {};
-  if (!p.revisoes[String(numDia)]) p.revisoes[String(numDia)] = [];
-  p.revisoes[String(numDia)].push({ data: new Date().toISOString().split('T')[0], resultado: tipo });
+  const key = String(numDia);
+  if (!p.dias[key]) p.dias[key] = {};
+  // Marca revisão desta matéria hoje
+  p.dias[key][`revisao_mat_${mIdx}`] = today;
+  if (!p.dias[key].revisoes_mat) p.dias[key].revisoes_mat = {};
+  if (!p.dias[key].revisoes_mat[mIdx]) p.dias[key].revisoes_mat[mIdx] = [];
+  p.dias[key].revisoes_mat[mIdx].push({ data: today, resultado: tipo });
+  // Se esqueceu, limpa a marca de revisão para reaparecer no próximo carregamento
+  if (tipo === 'esqueci') delete p.dias[key][`revisao_mat_${mIdx}`];
   salvarProgresso(p);
+  atualizarBadgeRevisar();
+}
+
+// Compatibilidade com referências antigas
+function registrarFeedback(btn, tipo, numDia) {
+  registrarFeedbackMat(btn, tipo, numDia, 0);
 }
 </script>
 </body>
