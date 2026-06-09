@@ -10,9 +10,9 @@
 
   // Cada nível ajusta apenas os tokens fixos da escala rosa (ação primária).
   const LEVELS = {
-    sutil:    { '--rose-600': '#B83A6E', '--rose-500': '#CC4A7E' },
+    sutil:    { '--rose-600': '#B14A77', '--rose-500': '#C56F94' }, // mais empoeirado, suave
     couture:  { '--rose-600': '#C8336F', '--rose-500': '#D94B86' }, // padrão da marca
-    vibrante: { '--rose-600': '#D6266F', '--rose-500': '#E84C8A' },
+    vibrante: { '--rose-600': '#E01571', '--rose-500': '#F03E92' }, // mais saturado, punchy
   };
   const ORDER = [
     ['sutil',    'Sutil'],
