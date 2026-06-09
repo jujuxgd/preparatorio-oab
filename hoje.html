@@ -2041,6 +2041,19 @@ function _vaNorm(s) {
   return (s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
 }
 
+// Extrai tokens significativos (≥4 letras, sem conectivos/genéricos) para
+// casar tópico do dia × título da videoaula por sobreposição de palavras.
+const _VA_STOP = new Set(['de','da','do','das','dos','e','em','no','na','nos','nas','com','para','por',
+  'sem','sob','as','os','ao','aos','um','uma','uns','que','seu','sua','pre','pos','parte','geral',
+  'dia','dias','tipos','revisao','questoes','introducao','conceito','conceitos']);
+function _vaTokens(s) {
+  return _vaNorm(s)
+    .replace(/\([^)]*\)/g, ' ')
+    .replace(/[^a-z0-9\s]/g, ' ')
+    .split(/\s+/)
+    .filter(w => w.length >= 4 && !_VA_STOP.has(w));
+}
+
 let _vaCurrentUrl = '';
 
 function vaAbrirPlayer(url, titulo) {
@@ -2090,12 +2103,20 @@ function _buildVideoaulas() {
     const colonIdx = norm.indexOf(':');
     if (colonIdx > -1) topicosDia.push(norm.slice(colonIdx + 1).trim());
   }));
-  const tituloNorm = _vaNorm(dados.titulo || '');
+
+  // Conjunto de tokens significativos do conteúdo do dia (tópicos + título),
+  // usado para casar com o título de cada videoaula por sobreposição de palavras.
+  const dayTokenSet = new Set();
+  dados.materias.forEach(m => (m.topicos || []).forEach(t => _vaTokens(t).forEach(w => dayTokenSet.add(w))));
+  (dados.titulo || '').split('·').slice(1).forEach(part => _vaTokens(part).forEach(w => dayTokenSet.add(w)));
 
   // Constrói uma secção por matéria do dia
   dados.materias.forEach(mat => {
     const key = _vaKey(mat.nome);
     const dataMat = key ? VIDEOAULAS[key] : null;
+    // Tokens do nome da matéria — comuns a todas as aulas da secção, então
+    // não devem contar como "tópico do dia" (ex.: "civil", "processo").
+    const matStop = new Set(_vaTokens(mat.nome));
 
     // Cabeçalho da matéria
     const matHeader = document.createElement('div');
@@ -2121,14 +2142,17 @@ function _buildVideoaulas() {
       const aTitNorm = _vaNorm(aula.titulo);
       // Base do título da aula: sem "(parte N)" e sem " - subtítulo"
       const aTitBase = aTitNorm.replace(/\s*\([^)]*\)/g, '').replace(/\s*[-–].*$/, '').trim();
-      // Aula relevante ao tópico do dia?
-      const relevante = topicosDia.some(tp => tp && tp.length > 3 && (
-        aTitNorm.includes(tp) || tp.includes(aTitBase) ||
-        aTitBase.includes(tp) || tp.includes(aTitNorm.replace(/\s*\([^)]*\)/g, '').trim())
-      )) || (tituloNorm && tituloNorm.split('·').slice(1).some(part => {
-        const p = part.trim().split(':').pop().trim();
-        return p.length > 5 && (aTitNorm.includes(p) || p.includes(aTitBase));
-      }));
+      // Aula relevante ao tópico do dia? — sobreposição de tokens significativos.
+      // Ignora as palavras do nome da matéria (comuns a todas as aulas).
+      const aulaToks = _vaTokens(aula.titulo).filter(w => !matStop.has(w));
+      const hits     = aulaToks.filter(w => dayTokenSet.has(w)).length;
+      const need     = Math.max(1, Math.ceil(aulaToks.length * 0.6));
+      let relevante  = aulaToks.length > 0 && hits >= need;
+      // Fallback: frase-base da aula contida num tópico do dia (ou vice-versa).
+      if (!relevante && aTitBase.length > 4) {
+        relevante = topicosDia.some(tp => tp && tp.length > 4 &&
+          (tp.includes(aTitBase) || aTitBase.includes(tp)));
+      }
 
       const doneKey = `va_done_${key}_${aula.n}`;
       const done    = !!localStorage.getItem(doneKey);
