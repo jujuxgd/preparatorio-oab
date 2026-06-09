@@ -820,6 +820,12 @@
 .vde-table    { font-size: 0.83rem !important; }
 .vde-table td { line-height: 1.55 !important; }
 
+/* Conteúdo do dia — texto forte (quase preto) e quadrados bem mais claros */
+.vde-content, .vde-content p, .vde-content li,
+.vde-list li, .vde-table td, .vde-texto, .vde-label { color: var(--ink) !important; }
+.vde-block    { background: var(--paper) !important; border-left-color: var(--rose-soft) !important; }
+.vde-caiu     { color: var(--ink-faded) !important; }
+
 /* Aula concluída */
 .va-row-done { opacity: 0.6; }
 .va-row-done .va-check-btn { color: #4a9850 !important; }
@@ -1786,7 +1792,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ul.style.cssText = 'list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.4rem';
             mat.topicos.forEach(t => {
               const li = document.createElement('li');
-              li.style.cssText = 'font-size:.88rem;color:var(--ink-soft);padding:.4rem 0;border-bottom:1px dotted var(--line);display:flex;gap:.5rem;align-items:flex-start';
+              li.style.cssText = 'font-size:.88rem;color:var(--ink);padding:.4rem 0;border-bottom:1px dotted var(--line);display:flex;gap:.5rem;align-items:flex-start';
               li.innerHTML = '<span style="color:var(--rose);flex-shrink:0">›</span><span>' + t + '</span>';
               ul.appendChild(li);
             });
