@@ -573,6 +573,15 @@
 .checklist li:last-child { border-bottom: none; }
 .checklist li:hover { color: var(--ink); }
 
+/* Meta do dia — idêntica aos itens do checklist (sem herdar serifa/peso) */
+#meta-texto {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 0.83rem !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+  letter-spacing: 0 !important;
+}
+
 .checklist .check {
   width: 18px; height: 18px;
   flex-shrink: 0;
@@ -597,31 +606,6 @@
 .checklist li.done {
   text-decoration: line-through;
   color: var(--ink-ghost);
-}
-
-/* ── Súmula do dia ── */
-.sumula-card {
-  background: linear-gradient(135deg, var(--lavender) 0%, var(--rose-soft) 100%);
-  padding: 1.1rem 1.2rem;
-  border-radius: var(--radius);
-  position: relative;
-}
-
-.sumula-card .sigla {
-  font-family: 'Fraunces', serif;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--rose-deep);
-  margin-bottom: 0.4rem;
-  letter-spacing: 0.02em;
-}
-
-.sumula-card .body {
-  font-family: 'Fraunces', serif;
-  font-size: 0.92rem;
-  font-style: italic;
-  line-height: 1.5;
-  color: var(--ink);
 }
 
 /* CAI NA OAB */
@@ -1367,16 +1351,6 @@
           <ul class="checklist" id="daily-checklist"></ul>
         </div>
 
-        <!-- Súmula do Dia -->
-        <div class="side-block" id="sumula-block" style="display:none">
-          <h4>Súmula do Dia <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg></span></h4>
-          <div class="sumula-card">
-            <div class="sigla" id="sumula-sigla" style="font-size:1rem;margin-bottom:0.5rem">—</div>
-            <div class="body" id="sumula-body" style="font-size:0.88rem">—</div>
-          </div>
-          <a href="sumulas.html" style="font-size:0.7rem;color:var(--ink-faded);text-decoration:none;margin-top:0.6rem;display:block;text-align:right;letter-spacing:0.05em">Ver todas →</a>
-        </div>
-
         <div class="side-block" style="background:var(--bg-soft)">
           <h4>Plano <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M7 16v-3"/><path d="M12 16V8"/><path d="M17 16v-5"/></svg></span></h4>
           <div style="display:flex;align-items:baseline;gap:0.5rem;margin-bottom:0.15rem">
@@ -1702,16 +1676,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const focusTituloLabel = document.getElementById('focus-titulo-label');
   if (focusDayLabel) focusDayLabel.textContent = `Dia ${dia}`;
   if (focusTituloLabel && dados) focusTituloLabel.textContent = dados.titulo;
-
-  // Súmula do Dia
-  if (dados && dados.sumula) {
-    const sBlock = document.getElementById('sumula-block');
-    const sSigla = document.getElementById('sumula-sigla');
-    const sBody  = document.getElementById('sumula-body');
-    if (sBlock) sBlock.style.display = '';
-    if (sSigla) sSigla.textContent = dados.sumula.sigla;
-    if (sBody)  sBody.textContent  = dados.sumula.texto;
-  }
 
   if (dados) {
     // Topbar
