@@ -1148,6 +1148,63 @@ select:focus {
   main { padding-top: 4rem !important; }
 }
 
+/* Backdrop do menu lateral (mobile) */
+#sidebar-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+  background: rgba(33, 28, 25, 0.45);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+#sidebar-backdrop.show { opacity: 1; pointer-events: auto; }
+
+/* ============================================
+   RESPONSIVO — TELAS ESTREITAS (telemóvel)
+============================================ */
+@media (max-width: 640px) {
+  html, body { max-width: 100%; overflow-x: hidden; }
+
+  /* Grids de estatística / cartões colapsam */
+  .today-stats, .stats-hero, .q-hero, .wrapped-stats, .totais-bar {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 0.8rem !important;
+  }
+  .content-layout, .day-hero, .mat-grid { grid-template-columns: 1fr !important; }
+  .day-hero { text-align: left; gap: 1rem !important; }
+
+  /* Heros e banners — menos padding */
+  .hero, .stats-hero, .q-hero, .day-hero, .rf-hero, .info-banner {
+    padding: 1.4rem 1.2rem !important;
+  }
+
+  /* Barras de abas roláveis na horizontal (não quebram a tela) */
+  .tabs-bar, .dia-tabs, .cl-tabs-outer {
+    flex-wrap: nowrap !important;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .tabs-bar::-webkit-scrollbar,
+  .dia-tabs::-webkit-scrollbar,
+  .cl-tabs-outer::-webkit-scrollbar { height: 0; }
+  .tabs-bar .tab, .dia-tabs .dia-tab, .cl-tabs-outer .cl-tab {
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* Tabelas largas rolam em vez de estourar o layout */
+  .vde-content table, .vde-table, .cl-native-content table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Títulos display um pouco menores */
+  .page-title h1, .hero h2, .stats-hero h1 { font-size: 1.55rem !important; }
+}
+
 /* ============================================
    HIERARQUIA TIPOGRÁFICA GLOBAL
    Aplica refinamento a elementos sem classe específica
