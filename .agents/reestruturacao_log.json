@@ -1,0 +1,53 @@
+{
+  "sessao": "reestruturacao_7_etapas",
+  "atualizado_em": "2026-06-06",
+  "instrucao_retomada": "Ler este arquivo inteiro. Retomar pela primeira etapa nao 'concluido', no ponto 'parou_em'. Fonte canonica = plano-vde.js (PLANO_VDE: topicos, flashcards{frente,verso,pegadinha,caiu}, pdf_id por semana via _VDE_PDF_IDS, titulo, descricao, sumula). Site default font = Inter (style.css body). videoaulas.js (46KB) ja existe e funciona.",
+  "PDF_IDS_IMPORTANTES": {
+    "cronograma_120_dias": "15XIBOu2W9e66hhzOPSekcxDyCZ4Qlkyv",
+    "week1_resumo_teoria_dias_1a6": "1fubBaoKYuxSn7s9nNG5DNyDIbPHgM6mL",
+    "todos_pdf_semanais": "ver _VDE_PDF_IDS no topo de plano-vde.js (semanas 1-20)"
+  },
+  "etapas": {
+    "6_sidebar_zoom90": {
+      "status": "concluido",
+      "arquivo": "style.css",
+      "feito": "Compactei .sidebar(padding 1.3rem 1rem), .logo(mb 1.4rem,fonte 1.15rem), .nav-section-label(margin 0.85rem), .nav-link(padding 0.48rem,fonte 0.85rem), .sidebar-footer(pt 0.9rem), .profile-card(padding/mb menores). Adicionei bloco @media (max-height:880px) logo apos .profile-card que compacta ainda mais. Mantido overflow-y:auto como seguranca."
+    },
+    "2_caderno_highlighter": {
+      "status": "em_progresso",
+      "arquivo": "caderno-legislativo.html",
+      "feito": "Troquei .cl-native-content font-family de Cormorant serif para Inter (fonte padrao do site), font-size 0.95rem, line-height 1.75, max-width 820px, margin:0 auto. (linha ~98)",
+      "FALTA": "1) Verificar alinhamento dos blocos cl-artigo/cl-paragrafo/cl-inciso/cl-texto (normalizar font-size ~0.92rem). 2) IMPLEMENTAR GRIFADOR: adicionar CSS .cl-mark-{amarelo,rosa,verde,azul,lilas} em tons pastel; uma mini-toolbar flutuante que aparece ao selecionar texto dentro de #cl-body com swatches pastel + botao apagar grifo; JS que envolve a Range selecionada num <mark class='cl-mark-cor'> e PERSISTE em localStorage por materia (chave tipo cl_grifos_{id}) reaplicando no render. Reaplicar grifos dentro de renderContent()."
+    },
+    "1_materias_cronograma": {
+      "status": "pendente_extracao",
+      "arquivos": ["cronograma_120.js (CRIAR)", "plano-vde.js", "materias.html", "calendario.html"],
+      "DESCOBERTA": "materias.html (getProgressoMateria em progresso.js) e calendario.html JA leem PLANO_VDE -> ja batem 100% no nivel dia/materia. Gap real: dias 14-120 sao STUBS sem topicos (gerados pela IIFE _gerarStubs em plano-vde.js linha ~674).",
+      "PLANO": "1) Subagente extrair PDF 15XIBOu2W9e66hhzOPSekcxDyCZ4Qlkyv -> cronograma_120.js (const CRONOGRAMA_120={dia:{semana,materias:[{nome,emoji,topicos}]}} p/ 1..120; +window.CRONOGRAMA_120). 2) Editar IIFE _gerarStubs em plano-vde.js p/ usar CRONOGRAMA_120[i] quando existir (materias+topicos reais). 3) Incluir <script src=cronograma_120.js> ANTES de plano-vde.js em TODAS as paginas que carregam plano-vde.js (materias,calendario,hoje,index,dia,revisar,estatisticas,simulados,questoes). Isso propaga p/ Materias e Cronograma automaticamente.",
+      "OBS": "Extracao anterior falhou por limite de sessao. PDF do cronograma vem com texto EMBARALHADO (layout calendario)."
+    },
+    "3_teoria_pdf_nativo": {
+      "status": "pendente_extracao",
+      "arquivos": ["teoria_dia.js (atualmente stub 45 bytes, RECRIAR)", "hoje.html"],
+      "PLANO": "1) Subagente extrair PDF week1 1fubBaoKYuxSn7s9nNG5DNyDIbPHgM6mL (cobre dias 1-6: Const,Trab,Civil,Trib,ProcTrab,Penal) -> teoria_dia.js (const CONTEUDO_TEORIA={1..6: `<div class=vde-content>...`}; +window). Texto 100% FIEL, so formatacao visual (vde-h2/vde-h3/vde-label/vde-texto/vde-list/vde-atencao). Remover marcas d'agua. 2) Em hoje.html: <script src=teoria_dia.js>; na Teoria, trocar uso de CONTEUDO_VDE[dia] por CONTEUDO_TEORIA[dia] (rendiza texto nativo). PROIBIDO link do Drive na Teoria.",
+      "OBS": "hoje.html ja renderiza texto nativo via CONTEUDO_VDE[dia] (conteudo_vde.js, dias 1-13). User quer o texto REAL do PDF (nao o resumo curado). CONTEUDO_VDE_CSS (.vde-*) ja existe em conteudo_vde.js e e injetado pela Teoria."
+    },
+    "4_modo_foco": {
+      "status": "pendente",
+      "arquivo": "hoje.html",
+      "PLANO": "Adicionar botao 'Tela cheia' no painel Teoria (#subject-panels header). Criar overlay/modal in-site (NAO fullscreen nativo): div fixed inset:0, backdrop-filter:blur(10px) sobre fundo escurecido, card central branco com scroll que recebe clone do conteudo da Teoria. Barra de titulo estilo macOS: 3 bolinhas no canto (vermelho=fechar, amarelo=minimizar, verde) topo-esquerdo. Esc fecha. Sem iframe."
+    },
+    "5_flashcards_resumo_revisao": {
+      "status": "pendente",
+      "arquivos": ["hoje.html", "progresso.js", "revisar.html"],
+      "ESTADO_ATUAL": "hoje.html tem sub-aba 'Revisar' (tab data-tab=revisar, _buildRevisar/_revRender/_revFlip/_revPrev/_revNext) criada na sessao anterior usando REVIEW_CARDS. Tem tambem aba 'Resumo' (data-tab=resumo, _buildResumoHoje usa REVIEW_CARDS[dia+'_0']).",
+      "PLANO": "1) RENOMEAR sub-aba 'Revisar'->'Flashcards' (label e data-tab=flashcards; renomear handler p/ _buildFlashcards). Usar dados.flashcards de plano-vde ({frente,verso,pegadinha,caiu}) em vez de REVIEW_CARDS. Esses flashcards NAO entram em repeticao espacada (so treino do dia). 2) Manter/ajustar aba 'Resumo' = microresumo do dia. 3) toggleDiaConcluido(): ao 'Estudei Hoje', enviar SO o card do microresumo p/ revisar.html global (agendarRevisao em progresso.js com datas 1,7,15,30 a partir de agora). Verificar funcao de agendamento em progresso.js (procurar 'revisoes'/'agendar'). Remover qualquer agendamento dos flashcards."
+    },
+    "7_log_continuo": { "status": "concluido_continuo", "arquivo": ".agents/reestruturacao_log.json" }
+  },
+  "ordem_sugerida_retomada": ["2_caderno_highlighter (terminar grifador)", "5_flashcards_resumo_revisao", "4_modo_foco", "3_teoria_pdf_nativo (extrair via subagente)", "1_materias_cronograma (extrair via subagente)"],
+  "edits_aplicados_nesta_sessao": [
+    "style.css: sidebar compactada + @media max-height:880px (Etapa 6 OK)",
+    "caderno-legislativo.html: .cl-native-content fonte Inter (Etapa 2 parcial)"
+  ]
+}

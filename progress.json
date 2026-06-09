@@ -1,0 +1,44 @@
+{
+  "ultimo_dia_processado": 1,
+  "proxima_etapa": "dias_2_a_5",
+  "iniciado_em": "2026-05-22T00:00:00Z",
+  "lote_atual": 1,
+  "status": "em_progresso",
+  "dias": {
+    "dia_1": {
+      "materias": ["Ética (Órgãos OAB, Legislação, Eleições)", "Constitucional (Poder Constituinte, Eficácia normas)"],
+      "arquivos": ["dia-01-etica.html", "dia-01-const.html"],
+      "status": "concluido",
+      "palavras_estimadas": "~4500 palavras",
+      "fontes_usadas": ["Vade Mecum Doutrina OAB (Editora Foco 2023)", "Resumo Constitucional Fabiana Nascimento", "EOAB Lei 8.906/94", "CED Resolução 02/2015"]
+    },
+    "dia_2": {
+      "materias": ["Civil (Pessoa Natural, Bens, NJ, Prescrição)", "Penal (Iter criminis, Tentativa)"],
+      "arquivos": ["dia-02-civil.html", "dia-02-penal.html"],
+      "status": "pendente"
+    },
+    "dia_3": {
+      "materias": ["Constitucional (Princípios arts.1-4, DFs: Teoria, Vida, Igualdade)", "Penal (Lei Penal Tempo/Espaço)"],
+      "arquivos": ["dia-03-const.html", "dia-03-penal.html"],
+      "status": "pendente"
+    },
+    "dia_4": {
+      "materias": ["Processo Penal (IP, ANPP, Ação Penal, Competência)", "Trabalho (Relação emprego, CTPS, terceirização)"],
+      "arquivos": ["dia-04-proc-penal.html", "dia-04-trabalho.html"],
+      "status": "pendente"
+    },
+    "dia_5": {
+      "materias": ["Ética (Inscrição, atividades privativas, advogado empregado)", "Constitucional (Direitos Políticos, Federalismo)"],
+      "arquivos": ["dia-05-etica.html", "dia-05-constitucional.html"],
+      "status": "pendente"
+    }
+  },
+  "fontes_pdf": {
+    "vade_mecum": "1SZxbf_aHQi5z4wVopCNRTirEHKgrwq75",
+    "resumo_constitucional": "1oToi-3Q06ZkFWacDpHl3QPatwywYkzU2",
+    "resumao_estrategia": "1BbVL9HT9_tPDerFYUsWkbHutQ4Q-Qj6e",
+    "sintese_estrategica": "1iHFEV7apds2GU3H23kGz8rhXRaXvjb2Y",
+    "pedro_lenza": "1Be6j_WYjuxhKCoA-5Hpd7ccr8opLfJD-",
+    "penal_geral": "1pGzjc1JZzm_zblGPtgAso_JXZ2oQNoie"
+  }
+}

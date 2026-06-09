@@ -2,20 +2,22 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Preparatório - OAB</title>
+<title>Caderno de Erros · OAB</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&family=Caveat:wght@400;500&display=swap" rel="stylesheet">
-<link rel="icon" href="favicon.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Inter:opsz,wght@14..32,400..700&family=Caveat:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="style.css">
 <style>
+/* ── Stats ── */
 .error-stats {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1rem;
   margin-bottom: 2rem;
 }
-
 .error-stat-card {
   background: var(--paper);
   border: 1px solid var(--line);
@@ -23,30 +25,29 @@
   border-radius: var(--radius);
   box-shadow: var(--shadow-sm);
 }
-
 .error-stat-card .label {
-  font-size: 0.7rem;
+  font-size: 0.62rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--ink-faded);
   margin-bottom: 0.5rem;
+  font-weight: 600;
 }
-
 .error-stat-card .num {
-  font-family: 'Playfair Display', serif;
-  font-size: 2.2rem;
+  font-family: 'Fraunces', serif;
+  font-size: 2rem;
   font-weight: 500;
   color: var(--rose-deep);
   line-height: 1;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.04em;
 }
-
 .error-stat-card .sub {
   font-size: 0.75rem;
   color: var(--ink-soft);
   margin-top: 0.4rem;
 }
 
+/* ── Filter bar ── */
 .filter-bar {
   display: flex;
   gap: 0.6rem;
@@ -57,7 +58,6 @@
   border: 1px solid var(--line);
   border-radius: var(--radius);
 }
-
 .filter-bar .label {
   font-size: 0.72rem;
   letter-spacing: 0.15em;
@@ -66,43 +66,45 @@
   align-self: center;
   margin-right: 0.5rem;
 }
-
 .chip {
-  padding: 0.4rem 0.9rem;
+  padding: 0.35rem 0.85rem;
   background: var(--bg-soft);
   border: 1px solid transparent;
   border-radius: 20px;
-  font-size: 0.78rem;
+  font-size: 0.74rem;
   color: var(--ink-soft);
   cursor: pointer;
   transition: all var(--transition);
+  font-weight: 500;
+  letter-spacing: -0.005em;
 }
-
 .chip:hover { background: var(--blush); color: var(--ink); }
-
 .chip.active {
-  background: linear-gradient(135deg, var(--rose) 0%, var(--rose-deep) 100%);
-  color: var(--paper);
+  background: var(--rose-deep);
+  color: #fff;
 }
 
+/* ── Cards ── */
 .error-card {
   background: var(--paper);
   border: 1px solid var(--line);
-  border-left: 4px solid var(--error);
+  border-left: 4px solid var(--error, #c9897e);
   border-radius: var(--radius);
   padding: 1.8rem;
   margin-bottom: 1.2rem;
   box-shadow: var(--shadow-sm);
+  transition: opacity var(--transition);
 }
-
 .error-card.dominada {
-  border-left-color: var(--success);
-  opacity: 0.75;
+  border-left-color: var(--success, #8ab090);
+  opacity: 0.72;
 }
-
 .error-head {
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 0.4rem;
   font-size: 0.7rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -111,99 +113,174 @@
   padding-bottom: 0.8rem;
   border-bottom: 1px dotted var(--line);
 }
-
-.error-head .num {
+.error-head .materia-badge {
   background: var(--rose-soft);
   color: var(--rose-deep);
   padding: 0.2rem 0.7rem;
   border-radius: 20px;
   font-weight: 600;
 }
-
-.error-head .materia {
-  font-weight: 500;
-}
-
-.error-question {
-  font-size: 0.92rem;
-  color: var(--ink);
-  margin-bottom: 1.2rem;
-  line-height: 1.6;
-}
-
-.error-resp {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  margin-bottom: 1.2rem;
-}
-
-.error-resp-box {
-  padding: 0.8rem 1rem;
-  border-radius: var(--radius-sm);
-  font-size: 0.85rem;
-}
-
-.error-resp-box.wrong {
-  background: rgba(201, 137, 126, 0.12);
-  border-left: 3px solid var(--error);
-}
-
-.error-resp-box.right {
-  background: rgba(168, 184, 154, 0.15);
-  border-left: 3px solid var(--success);
-}
-
-.error-resp-box .lbl {
-  font-size: 0.65rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  margin-bottom: 0.3rem;
+.error-head .materia { font-weight: 500; }
+.error-topico {
+  font-size: 0.95rem;
   font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 0.25rem;
 }
-
-.error-resp-box.wrong .lbl { color: var(--error); }
-.error-resp-box.right .lbl { color: var(--success); }
-[data-theme="dark"] .error-resp-box.right .lbl { color: #b8c9a8; }
-
+.error-subtopico {
+  font-size: 0.8rem;
+  color: var(--ink-faded);
+  margin-bottom: 1rem;
+}
 .error-tip {
   background: var(--bg-soft);
   padding: 1rem 1.2rem;
   border-radius: var(--radius-sm);
   font-size: 0.85rem;
   color: var(--ink);
-  margin-bottom: 1rem;
+  margin-bottom: 0.8rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
 }
-
 .error-tip .lbl {
   font-size: 0.65rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--rose-deep);
   font-weight: 600;
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.4rem;
 }
-
 .error-actions {
   display: flex;
   gap: 0.6rem;
   align-items: center;
   flex-wrap: wrap;
+  margin-top: 1rem;
 }
-
 .error-actions .tags {
   display: flex;
   gap: 0.3rem;
   margin-left: auto;
 }
-
 .error-actions .tag {
-  background: var(--blush);
-  color: var(--rose-deep);
-  padding: 0.2rem 0.6rem;
+  padding: 0.2rem 0.7rem;
   border-radius: 20px;
   font-size: 0.7rem;
   font-weight: 500;
+}
+.tag-nao_sabia         { background: rgba(200,100,80,.14); color: #a0402e; }
+.tag-confusao_conceito { background: rgba(201,120,10,.12); color: #8a5500; }
+.tag-pegadinha         { background: rgba(142,92,86,.14);  color: var(--rose-deep); }
+.tag-desatencao        { background: rgba(120,120,160,.12);color: #4a4a7a; }
+.tag-memorizacao       { background: rgba(90,140,100,.13); color: #2e6040; }
+
+/* ── Novo Registro Form ── */
+.novo-form-wrap {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.8rem;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow-sm);
+  display: none;
+}
+.novo-form-wrap.open { display: block; }
+.novo-form-wrap h3 {
+  font-family: 'Fraunces', serif;
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-bottom: 1.4rem;
+  color: var(--ink);
+}
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0.8rem;
+  margin-bottom: 1.2rem;
+}
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.form-group label {
+  font-size: 0.68rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-faded);
+  font-weight: 500;
+}
+.form-group input,
+.form-group select,
+.form-group textarea {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 0.8rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  color: var(--ink);
+  transition: border-color var(--transition);
+  resize: vertical;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--rose);
+}
+.form-group textarea { min-height: 80px; }
+.form-group textarea.tall { min-height: 120px; }
+.motivo-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.4rem;
+}
+.motivo-group label {
+  font-size: 0.68rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-faded);
+  font-weight: 500;
+  width: 100%;
+  margin-bottom: 0.1rem;
+}
+.motivo-btn {
+  padding: 0.45rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: var(--bg-soft);
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.motivo-btn:hover { background: var(--blush); color: var(--ink); border-color: var(--rose); }
+.motivo-btn.sel {
+  background: var(--rose-deep);
+  color: var(--paper);
+  border-color: var(--rose-deep);
+}
+.form-full { grid-column: 1 / -1; }
+.form-actions {
+  display: flex;
+  gap: 0.8rem;
+  margin-top: 1.4rem;
+}
+
+/* ── Empty state ── */
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--ink-faded);
+}
+.empty-state .icon { font-size: 2.5rem; margin-bottom: 1rem; }
+.empty-state p { font-size: 0.9rem; margin-bottom: 1.5rem; }
+
+@media (max-width: 700px) {
+  .error-stats { grid-template-columns: repeat(2, 1fr); }
+  .form-row { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -221,26 +298,25 @@
 <div class="app">
   <aside class="sidebar">
     <div class="logo">
-      <div class="mark"><span class="star">&#10022;</span><span class="star sm">&#10022;</span></div>
+      <div class="mark"><svg class="seal" viewBox="0 0 64 64" width="26" height="26" aria-hidden="true"><circle cx="32" cy="32" r="23" fill="none" stroke="currentColor" stroke-width="1.6"/><text x="32" y="33" font-size="19" letter-spacing="1.2" text-anchor="middle" dominant-baseline="central" font-family="Georgia,serif" font-weight="700" fill="currentColor">OAB</text></svg></div>
       <h1>Exame da Ordem</h1>
-      <div class="subtitle">Preparatório OAB · Ju</div>
+      <div class="subtitle">Preparatório OAB · 1ª Fase</div>
     </div>
     <div class="nav-section-label">Principal</div>
-    <a href="index.html" class="nav-link"><span class="icon">✦</span><span>Início</span></a>
-    <a href="hoje.html" class="nav-link"><span class="icon">◐</span><span>Hoje</span></a>
-    <a href="calendario.html" class="nav-link"><span class="icon">☷</span><span>Calendário</span></a>
-    <a href="revisar.html" class="nav-link"><span class="icon">↻</span><span>Revisar</span><span class="badge" style="display:none">0</span></a>
+    <a href="index.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg></span><span>Início</span></a>
+    <a href="hoje.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"/></svg></span><span>Hoje</span></a>
+    <a href="calendario.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span><span>Calendário</span></a>
+    <a href="revisar.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg></span><span>Revisar</span></a>
     <div class="nav-section-label">Estudo</div>
-    <a href="materias.html" class="nav-link"><span class="icon">❖</span><span>Matérias</span></a>
-    <a href="questoes.html" class="nav-link"><span class="icon">◎</span><span>Questões</span></a>
-    <a href="fichamentos.html" class="nav-link"><span class="icon">✎</span><span>Caderno de Erros</span></a>
-
-    
-    
-    
+    <a href="materias.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg></span><span>Matérias</span></a>
+    <a href="questoes.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></span><span>Questões</span></a>
+    <a href="erros.html" class="nav-link active"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.4 2.6a1 1 0 0 1 3 3l-9 9a2 2 0 0 1-.85.5l-2.9.85a.5.5 0 0 1-.62-.62l.85-2.9a2 2 0 0 1 .5-.85z"/></svg></span><span>Caderno de Erros</span></a>
+    <a href="caderno-legislativo.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg></span><span>Caderno Legislativo</span></a>
     <div class="nav-section-label">Análise</div>
-    <a href="estatisticas.html" class="nav-link"><span class="icon">◈</span><span>Estatísticas</span></a>
-    <a href="simulados.html" class="nav-link"><span class="icon">◉</span><span>Simulados</span></a>
+    <a href="estatisticas.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M7 16v-3"/><path d="M12 16V8"/><path d="M17 16v-5"/></svg></span><span>Estatísticas</span></a>
+    <a href="simulados.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M9 12l2 2 4-4"/></svg></span><span>Simulados</span></a>
+    <div class="nav-section-label">Extra</div>
+    <a href="reta-final.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><path d="M4 22V4"/></svg></span><span>Reta Final</span></a>
     <div class="sidebar-footer">
       <div class="profile-card">
         <div class="profile-avatar">
@@ -259,153 +335,302 @@
     <div class="topbar">
       <div class="page-title">
         <div class="breadcrumb">Onde você errou · onde vai dominar</div>
-        <h1>Banco de <em>erros</em></h1>
+        <h1>Caderno de <em>erros</em></h1>
       </div>
       <div class="topbar-actions">
-        <button class="btn btn-primary">↻ Refazer todas</button>
+        <button class="btn btn-primary" onclick="toggleForm()">+ Novo registro</button>
       </div>
     </div>
 
-    <div class="error-stats">
-      <div class="error-stat-card">
-        <div class="label">Total de erros</div>
-        <div class="num">46</div>
-        <div class="sub">desde 02 jan</div>
+    <!-- FORM NOVO REGISTRO -->
+    <div class="novo-form-wrap" id="novo-form">
+      <h3>Registrar aprendizado</h3>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Matéria *</label>
+          <select id="f-materia">
+            <option value="">Selecione...</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Tópico</label>
+          <input type="text" id="f-topico" placeholder="ex: Capacidade Civil">
+        </div>
+        <div class="form-group">
+          <label>Subtópico</label>
+          <input type="text" id="f-subtopico" placeholder="ex: Emancipação">
+        </div>
       </div>
-      <div class="error-stat-card">
-        <div class="label">Refeitas</div>
-        <div class="num">18</div>
-        <div class="sub">já dominadas</div>
+
+      <div class="motivo-group">
+        <label>Motivo do erro *</label>
+        <button type="button" class="motivo-btn sel" data-motivo="nao_sabia">Não sabia o conteúdo</button>
+        <button type="button" class="motivo-btn" data-motivo="confusao_conceito">Confundi conceitos</button>
+        <button type="button" class="motivo-btn" data-motivo="pegadinha">Pegadinha da banca</button>
+        <button type="button" class="motivo-btn" data-motivo="desatencao">Desatenção</button>
+        <button type="button" class="motivo-btn" data-motivo="memorizacao">Falha de memorização</button>
       </div>
-      <div class="error-stat-card">
-        <div class="label">Pendentes</div>
-        <div class="num">28</div>
-        <div class="sub">aguardando revisão</div>
+
+      <div class="form-row">
+        <div class="form-group form-full">
+          <label>O que faltou para acertar *</label>
+          <textarea id="f-faltou" class="tall" placeholder="Escreva o ponto-chave que você não sabia ou confundiu..."></textarea>
+        </div>
       </div>
-      <div class="error-stat-card">
-        <div class="label">Taxa de melhora</div>
-        <div class="num">+12<span style="font-size:1rem">%</span></div>
-        <div class="sub">vs. semana anterior</div>
+      <div class="form-row">
+        <div class="form-group form-full">
+          <label>Explicação (cole do QConcursos)</label>
+          <textarea id="f-explicacao" class="tall" placeholder="Cole aqui o comentário do gabarito..."></textarea>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn btn-primary" onclick="salvarRegistro()">Salvar</button>
+        <button class="btn" onclick="toggleForm()">Cancelar</button>
+        <span id="form-msg" style="font-size:.78rem;color:var(--ink-faded);align-self:center"></span>
       </div>
     </div>
 
-    <div class="filter-bar">
+    <!-- STATS -->
+    <div class="error-stats" id="erros-stats"></div>
+
+    <!-- FILTROS -->
+    <div class="filter-bar" id="filter-bar">
       <span class="label">Filtrar</span>
-      <span class="chip active">Todas</span>
-      <span class="chip">Pendentes</span>
-      <span class="chip">Dominadas</span>
-      <span class="chip">Ética</span>
-      <span class="chip">Constitucional</span>
-      <span class="chip">Civil</span>
-      <span class="chip">Processo Civil</span>
+      <span class="chip active" data-filter="todas">Todas</span>
+      <span class="chip" data-filter="pendentes">Pendentes</span>
+      <span class="chip" data-filter="dominadas">Dominadas</span>
+      <span class="chip chip-sep" data-filter="nao_sabia">Não sabia</span>
+      <span class="chip" data-filter="confusao_conceito">Confundi conceitos</span>
+      <span class="chip" data-filter="pegadinha">Pegadinha</span>
+      <span class="chip" data-filter="desatencao">Desatenção</span>
+      <span class="chip" data-filter="memorizacao">Memorização</span>
     </div>
 
-    <!-- ERRO 1 -->
-    <div class="error-card">
-      <div class="error-head">
-        <span class="num">Questão 05</span>
-        <span class="materia">Ética · Direitos do Advogado</span>
-        <span>FGV · errei em 13 jan</span>
-      </div>
-      <div class="error-question">
-        Sobre a comunicação do advogado com cliente preso considerado incomunicável pelo juízo, é correto afirmar:
-      </div>
-      <div class="error-resp">
-        <div class="error-resp-box wrong">
-          <div class="lbl">✕ Sua resposta · alt. C</div>
-          A comunicação só é permitida com autorização judicial expressa.
-        </div>
-        <div class="error-resp-box right">
-          <div class="lbl">✓ Resposta correta · alt. A</div>
-          A comunicação é direito do advogado mesmo com cliente considerado incomunicável.
-        </div>
-      </div>
-      <div class="error-tip">
-        <div class="lbl">✦ Por que você errou</div>
-        Confundiu a incomunicabilidade do cliente com restrição ao acesso do advogado. O art. 7º, III do EOAB garante o direito de comunicação reservada, INDEPENDENTE do status de incomunicabilidade.
-      </div>
-      <div class="error-actions">
-        <button class="btn btn-primary">↻ Refazer agora</button>
-        <button class="btn">✓ Marcar como dominada</button>
-        <div class="tags">
-          <span class="tag">decoreba</span>
-          <span class="tag">pegadinha</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- ERRO 2 -->
-    <div class="error-card">
-      <div class="error-head">
-        <span class="num">Questão 12</span>
-        <span class="materia">Civil · Capacidade</span>
-        <span>FGV · errei em 11 jan</span>
-      </div>
-      <div class="error-question">
-        Sobre os relativamente incapazes no Código Civil de 2002, assinale a alternativa correta:
-      </div>
-      <div class="error-resp">
-        <div class="error-resp-box wrong">
-          <div class="lbl">✕ Sua resposta · alt. B</div>
-          Inclui menores de 16 anos e os pródigos.
-        </div>
-        <div class="error-resp-box right">
-          <div class="lbl">✓ Resposta correta · alt. D</div>
-          Inclui maiores de 16 e menores de 18, ébrios habituais, pródigos e os que não puderem exprimir vontade por causa transitória ou permanente.
-        </div>
-      </div>
-      <div class="error-tip">
-        <div class="lbl">✦ Por que você errou</div>
-        Menores de 16 são ABSOLUTAMENTE incapazes (art. 3º), não relativamente. Os relativamente incapazes estão no art. 4º — confunde fácil com o rol do art. 3º.
-      </div>
-      <div class="error-actions">
-        <button class="btn btn-primary">↻ Refazer agora</button>
-        <button class="btn">✓ Marcar como dominada</button>
-        <div class="tags">
-          <span class="tag">lei seca</span>
-          <span class="tag">cai muito</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- ERRO DOMINADO -->
-    <div class="error-card dominada">
-      <div class="error-head">
-        <span class="num">Questão 03</span>
-        <span class="materia">Constitucional · Princípios</span>
-        <span>✓ dominada em 10 jan</span>
-      </div>
-      <div class="error-question">
-        Sobre os fundamentos da República Federativa do Brasil (art. 1º, CF/88)...
-      </div>
-      <div class="error-actions">
-        <button class="btn">↻ Refazer mesmo assim</button>
-        <div class="tags">
-          <span class="tag">dominada</span>
-        </div>
-      </div>
-    </div>
+    <!-- LISTA -->
+    <div id="erros-lista"></div>
   </main>
 </div>
 
-<script src="plano-oab.js"></script>
+<script src="erros-core.js"></script>
+<script src="plano-vde.js"></script>
 <script src="progresso.js"></script>
 <script src="script.js"></script>
 <script src="cores.js"></script>
 <script>
-document.querySelectorAll('.chip').forEach(c => {
-  c.addEventListener('click', () => {
-    document.querySelectorAll('.chip').forEach(x => x.classList.remove('active'));
-    c.classList.add('active');
+// ── Filtro ativo
+let filtroAtivo = 'todas';
+
+// ── Preenche select de matérias
+function preencheSelectMaterias(selectEl) {
+  Object.entries(MATERIAS_ERROS).forEach(([k, v]) => {
+    const o = document.createElement('option');
+    o.value = k; o.textContent = v;
+    selectEl.appendChild(o);
+  });
+}
+preencheSelectMaterias(document.getElementById('f-materia'));
+
+// ── Motivo chips
+document.querySelectorAll('.motivo-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.motivo-btn').forEach(b => b.classList.remove('sel'));
+    btn.classList.add('sel');
   });
 });
+
+// ── Toggle form
+function toggleForm(prefill) {
+  const wrap = document.getElementById('novo-form');
+  const open = wrap.classList.toggle('open');
+  if (open) {
+    if (prefill) {
+      if (prefill.materia)   document.getElementById('f-materia').value  = prefill.materia;
+      if (prefill.topico)    document.getElementById('f-topico').value   = prefill.topico;
+      if (prefill.subtopico) document.getElementById('f-subtopico').value = prefill.subtopico;
+    }
+    document.getElementById('f-faltou').focus();
+  } else {
+    limparForm();
+  }
+}
+
+function limparForm() {
+  document.getElementById('f-materia').value    = '';
+  document.getElementById('f-topico').value     = '';
+  document.getElementById('f-subtopico').value  = '';
+  document.getElementById('f-faltou').value     = '';
+  document.getElementById('f-explicacao').value = '';
+  document.querySelectorAll('.motivo-btn').forEach((b, i) => {
+    b.classList.toggle('sel', i === 0);
+  });
+  document.getElementById('form-msg').textContent = '';
+}
+
+function salvarRegistro() {
+  const materia   = document.getElementById('f-materia').value;
+  const o_que_faltou = document.getElementById('f-faltou').value.trim();
+  if (!materia)   { document.getElementById('form-msg').textContent = 'Selecione a matéria.'; return; }
+  if (!o_que_faltou) { document.getElementById('form-msg').textContent = 'Preencha o campo obrigatório.'; return; }
+
+  const motivo = document.querySelector('.motivo-btn.sel')?.dataset.motivo || 'nao_sabia';
+
+  erros_add({
+    materia,
+    topico:      document.getElementById('f-topico').value.trim(),
+    subtopico:   document.getElementById('f-subtopico').value.trim(),
+    motivo,
+    o_que_faltou,
+    explicacao:  document.getElementById('f-explicacao').value.trim()
+  });
+
+  document.getElementById('novo-form').classList.remove('open');
+  limparForm();
+  renderAll();
+}
+
+// ── Render stats
+function renderStats() {
+  const s = erros_stats();
+  const motivoLabel = s.motivoMaisFreq ? MOTIVOS_ERROS[s.motivoMaisFreq[0]] : '—';
+  const materiaLabel = s.materiaMaisErra ? MATERIAS_ERROS[s.materiaMaisErra[0]] : '—';
+  document.getElementById('erros-stats').innerHTML = `
+    <div class="error-stat-card">
+      <div class="label">Total de registros</div>
+      <div class="num">${s.total}</div>
+      <div class="sub">aprendizados registrados</div>
+    </div>
+    <div class="error-stat-card">
+      <div class="label">Dominadas</div>
+      <div class="num">${s.dominadas}</div>
+      <div class="sub">${s.taxa}% do total</div>
+    </div>
+    <div class="error-stat-card">
+      <div class="label">Pendentes</div>
+      <div class="num">${s.pendentes}</div>
+      <div class="sub">aguardando revisão</div>
+    </div>
+    <div class="error-stat-card">
+      <div class="label">Padrão de erro</div>
+      <div class="num" style="font-size:1rem;padding-top:.4rem">${motivoLabel}</div>
+      <div class="sub">mais frequente · ${materiaLabel}</div>
+    </div>`;
+}
+
+// ── Render lista
+function renderLista() {
+  const todos = erros_get();
+  const filtrados = todos.filter(e => {
+    if (filtroAtivo === 'pendentes') return e.status !== 'dominada';
+    if (filtroAtivo === 'dominadas') return e.status === 'dominada';
+    if (Object.keys(MOTIVOS_ERROS).includes(filtroAtivo)) return e.motivo === filtroAtivo;
+    return true;
+  });
+
+  const lista = document.getElementById('erros-lista');
+  if (todos.length === 0) {
+    lista.innerHTML = `
+      <div class="empty-state">
+        <div class="icon">✗</div>
+        <p>Nenhum registro ainda.<br>Ao errar uma questão, clique em <strong>+ Novo registro</strong> para anotar o aprendizado.</p>
+        <button class="btn btn-primary" onclick="toggleForm()">+ Novo registro</button>
+      </div>`;
+    return;
+  }
+  if (filtrados.length === 0) {
+    lista.innerHTML = `<div class="empty-state"><p>Nenhum registro com este filtro.</p></div>`;
+    return;
+  }
+
+  lista.innerHTML = filtrados.map(e => renderCard(e)).join('');
+
+  lista.querySelectorAll('[data-dominar]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      erros_dominar(btn.dataset.dominar);
+      renderAll();
+    });
+  });
+  lista.querySelectorAll('[data-deletar]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (confirm('Excluir este registro?')) {
+        erros_deletar(btn.dataset.deletar);
+        renderAll();
+      }
+    });
+  });
+}
+
+function renderCard(e) {
+  const matNome   = MATERIAS_ERROS[e.materia] || e.materia;
+  const motivoLabel = MOTIVOS_ERROS[e.motivo] || e.motivo;
+  const isDominada = e.status === 'dominada';
+
+  const subtopico = e.subtopico
+    ? `<div class="error-subtopico">${e.subtopico}</div>`
+    : '';
+  const faltou = e.o_que_faltou
+    ? `<div class="error-tip"><div class="lbl">O que faltou para acertar</div>${escHtml(e.o_que_faltou)}</div>`
+    : '';
+  const explicacao = e.explicacao
+    ? `<div class="error-tip"><div class="lbl">Explicação (QConcursos)</div>${escHtml(e.explicacao)}</div>`
+    : '';
+  const acoes = isDominada
+    ? `<button class="btn" style="font-size:.76rem;padding:.35rem .8rem" data-deletar="${e.id}">✕ Excluir</button>
+       <div class="tags"><span class="tag tag-${e.motivo}">${motivoLabel}</span></div>`
+    : `<button class="btn btn-primary" style="font-size:.76rem;padding:.35rem .8rem" data-dominar="${e.id}">✓ Dominei</button>
+       <button class="btn" style="font-size:.76rem;padding:.35rem .8rem" data-deletar="${e.id}">✕ Excluir</button>
+       <div class="tags"><span class="tag tag-${e.motivo}">${motivoLabel}</span></div>`;
+
+  return `
+    <div class="error-card${isDominada ? ' dominada' : ''}">
+      <div class="error-head">
+        <span class="materia-badge">${matNome}</span>
+        <span class="materia">${e.topico || '—'}</span>
+        <span>${isDominada ? '✓ dominada ' + (e.dominada_em ? erros_fmt_data(e.dominada_em) : '') : erros_fmt_data(e.data)}</span>
+      </div>
+      ${subtopico}
+      ${faltou}
+      ${explicacao}
+      <div class="error-actions">${acoes}</div>
+    </div>`;
+}
+
+function escHtml(str) {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/\n/g, '<br>');
+}
+
+// ── Filtro chips
+document.querySelectorAll('#filter-bar .chip').forEach(c => {
+  c.addEventListener('click', () => {
+    document.querySelectorAll('#filter-bar .chip').forEach(x => x.classList.remove('active'));
+    c.classList.add('active');
+    filtroAtivo = c.dataset.filter;
+    renderLista();
+  });
+});
+
+function renderAll() {
+  renderStats();
+  renderLista();
+}
+
+renderAll();
+
+// expõe para hoje.html redirecionar com prefill via URL params
+(function() {
+  const p = new URLSearchParams(location.search);
+  if (p.get('novo') === '1') {
+    toggleForm({
+      materia:   p.get('materia')   || '',
+      topico:    p.get('topico')    || '',
+      subtopico: p.get('subtopico') || ''
+    });
+  }
+})();
 </script>
 </body>
 </html>
-
-
-
-
-
-
-

@@ -7,8 +7,8 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&family=Caveat:wght@400;500&display=swap" rel="stylesheet">
-<link rel="icon" href="favicon.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Inter:opsz,wght@14..32,400..700&family=Caveat:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="style.css">
 <style>
 /* ── Overlay de conteúdo do dia ── */
@@ -68,7 +68,7 @@ body.overlay-open .aurora-bg {
 }
 
 .overlay-title {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Fraunces', serif;
   font-size: 1.05rem;
   font-weight: 500;
   color: var(--ink);
@@ -86,7 +86,7 @@ body.overlay-open .aurora-bg {
   font-size: 0.72rem;
   letter-spacing: 0.08em;
   padding: 0.4rem 0.9rem;
-  background: linear-gradient(135deg, var(--rose) 0%, var(--rose-deep) 100%);
+  background: var(--rose-deep); color: #fff;
   color: var(--paper);
   border: none;
   border-radius: var(--radius-sm);
@@ -150,7 +150,7 @@ body.overlay-open .aurora-bg {
 .chip:hover { background: var(--blush); color: var(--ink); }
 
 .chip.active {
-  background: linear-gradient(135deg, var(--rose) 0%, var(--rose-deep) 100%);
+  background: var(--rose-deep); color: #fff;
   color: var(--paper);
   border-color: transparent;
 }
@@ -174,7 +174,7 @@ body.overlay-open .aurora-bg {
 }
 
 .month-name {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Fraunces', serif;
   font-size: 2rem;
   font-weight: 500;
   letter-spacing: -0.02em;
@@ -191,7 +191,7 @@ body.overlay-open .aurora-bg {
 
 .month-stats strong {
   color: var(--rose-deep);
-  font-family: 'Playfair Display', serif;
+  font-family: 'Fraunces', serif;
   font-weight: 600;
   font-size: 0.95rem;
 }
@@ -258,7 +258,7 @@ body.overlay-open .aurora-bg {
 }
 
 .day-cell.today {
-  background: linear-gradient(135deg, var(--rose) 0%, var(--rose-deep) 100%);
+  background: var(--rose-deep); color: #fff;
   color: var(--paper);
   border-color: var(--rose-deep);
   box-shadow: var(--shadow);
@@ -272,7 +272,7 @@ body.overlay-open .aurora-bg {
 }
 
 .day-cell .num {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Fraunces', serif;
   font-size: 1.15rem;
   font-weight: 500;
   line-height: 1;
@@ -349,26 +349,30 @@ body.overlay-open .aurora-bg {
 <div class="app">
   <aside class="sidebar">
     <div class="logo">
-      <div class="mark"><span class="star">&#10022;</span><span class="star sm">&#10022;</span></div>
+      <div class="mark"><svg class="seal" viewBox="0 0 64 64" width="26" height="26" aria-hidden="true"><circle cx="32" cy="32" r="23" fill="none" stroke="currentColor" stroke-width="1.6"/><text x="32" y="33" font-size="19" letter-spacing="1.2" text-anchor="middle" dominant-baseline="central" font-family="Georgia,serif" font-weight="700" fill="currentColor">OAB</text></svg></div>
       <h1>Exame da Ordem</h1>
-      <div class="subtitle">Preparatório OAB · Ju</div>
+      <div class="subtitle">Preparatório OAB · 1ª Fase</div>
     </div>
     <div class="nav-section-label">Principal</div>
-    <a href="index.html" class="nav-link"><span class="icon">✦</span><span>Início</span></a>
-    <a href="hoje.html" class="nav-link"><span class="icon">◐</span><span>Hoje</span></a>
-    <a href="calendario.html" class="nav-link active"><span class="icon">☷</span><span>Calendário</span></a>
-    <a href="revisar.html" class="nav-link"><span class="icon">↻</span><span>Revisar</span><span class="badge" style="display:none">0</span></a>
+    <a href="index.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg></span><span>Início</span></a>
+    <a href="hoje.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"/></svg></span><span>Hoje</span></a>
+    <a href="calendario.html" class="nav-link active"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span><span>Calendário</span></a>
+    <a href="revisar.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg></span><span>Revisar</span><span class="badge" style="display:none">0</span></a>
     <div class="nav-section-label">Estudo</div>
-    <a href="materias.html" class="nav-link"><span class="icon">❖</span><span>Matérias</span></a>
-    <a href="questoes.html" class="nav-link"><span class="icon">◎</span><span>Questões</span></a>
-    <a href="fichamentos.html" class="nav-link"><span class="icon">✎</span><span>Caderno de Erros</span></a>
+    <a href="materias.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg></span><span>Matérias</span></a>
+    <a href="questoes.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></span><span>Questões</span></a>
+    <a href="erros.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.4 2.6a1 1 0 0 1 3 3l-9 9a2 2 0 0 1-.85.5l-2.9.85a.5.5 0 0 1-.62-.62l.85-2.9a2 2 0 0 1 .5-.85z"/></svg></span><span>Caderno de Erros</span></a>
+    <a href="caderno-legislativo.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg></span><span>Caderno Legislativo</span></a>
 
     
     
     
     <div class="nav-section-label">Análise</div>
-    <a href="estatisticas.html" class="nav-link"><span class="icon">◈</span><span>Estatísticas</span></a>
-    <a href="simulados.html" class="nav-link"><span class="icon">◉</span><span>Simulados</span></a>
+    <a href="estatisticas.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M7 16v-3"/><path d="M12 16V8"/><path d="M17 16v-5"/></svg></span><span>Estatísticas</span></a>
+    <a href="simulados.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M9 12l2 2 4-4"/></svg></span><span>Simulados</span></a>
+
+    <div class="nav-section-label">Extra</div>
+    <a href="reta-final.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><path d="M4 22V4"/></svg></span><span>Reta Final</span></a>
     <div class="sidebar-footer">
       <div class="profile-card">
         <div class="profile-avatar">
@@ -386,8 +390,8 @@ body.overlay-open .aurora-bg {
   <main>
     <div class="topbar">
       <div class="page-title">
-        <div class="breadcrumb">Planejamento · <span data-month-year>—</span></div>
-        <h1>Seu <em>calendário</em></h1>
+        <div class="breadcrumb">Plano VDE · 120 Dias de Estudo</div>
+        <h1>Seu <em>cronograma</em></h1>
       </div>
       <div class="topbar-actions">
         <div class="streak-pill">
@@ -398,16 +402,17 @@ body.overlay-open .aurora-bg {
       </div>
     </div>
 
-    <!-- CONTADOR REGRESSIVO (pré-início) -->
-    <div id="countdown-banner" style="display:none;background:linear-gradient(135deg,var(--blush),var(--lavender));border-radius:var(--radius);padding:1.2rem 1.5rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap">
-      <div style="font-family:'Playfair Display',serif;font-size:2.5rem;font-weight:500;color:var(--rose-deep)" id="days-to-start">—</div>
-      <div>
-        <div style="font-size:0.7rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-faded)">dias até o início</div>
-        <div style="font-size:0.9rem;color:var(--ink-soft)">O plano começa em <strong>1 de Junho de 2026</strong>. Já podes explorar o conteúdo!</div>
+    <!-- Progresso geral -->
+    <div id="progress-banner" style="background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:1.2rem 1.5rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;box-shadow:var(--shadow-sm)">
+      <div style="font-family:'Fraunces',serif;font-size:2.5rem;font-weight:500;color:var(--rose-deep);line-height:1" id="banner-done">0</div>
+      <div style="flex:1">
+        <div style="font-size:0.68rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-faded);margin-bottom:0.3rem">dias estudados de 120</div>
+        <div style="height:6px;background:var(--bg-deep);border-radius:3px;overflow:hidden"><div id="banner-bar" style="height:100%;background:linear-gradient(90deg,var(--rose),var(--rose-deep));border-radius:3px;transition:width .4s ease;width:0%"></div></div>
       </div>
+      <div style="font-size:0.82rem;color:var(--ink-faded)">Próximo: <strong style="color:var(--rose-deep)" id="banner-prox">—</strong></div>
     </div>
 
-    <!-- CALENDÁRIOS GERADOS DINAMICAMENTE -->
+    <!-- GRID DE SEMANAS -->
     <div id="calendar-container"></div>
 
   </main>
@@ -415,261 +420,94 @@ body.overlay-open .aurora-bg {
 
 <script src="script.js"></script>
 <script src="progresso.js"></script>
-<script src="plano-oab.js"></script>
+<script src="plano-vde.js"></script>
 <script src="cores.js"></script>
 <script>
-(function buildCalendar() {
-  const STUDY_START = new Date(2026, 5, 1);   // 1 Jun 2026
-  const EXAM_DATE   = new Date(2026, 11, 20); // 20 Dez 2026
-  const today       = getCurrentDate();
-  const MONTHS_PT   = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho',
-                       'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
-  const DOW_PT      = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+(function buildStudyGrid() {
 
-  // Banner de countdown (se antes de Junho)
-  const daysToStart = Math.ceil((STUDY_START - today) / 864e5);
-  const banner = document.getElementById('countdown-banner');
-  if (daysToStart > 0 && banner) {
-    banner.style.display = 'flex';
-    document.getElementById('days-to-start').textContent = daysToStart;
-  }
-
-  // Progresso
+  // ── Progresso ──────────────────────────────
   const prog = carregarProgresso();
+  const proxDia = getStudyDay();
 
-  // Estudar qual dia do plano cai numa determinada data
-  function studyDayForDate(d) {
-    if (d < STUDY_START) return null;
-    const diff = Math.floor((d - STUDY_START) / 864e5);
-    const planDay = diff + 1;
-    return planDay >= 1 && planDay <= 60 ? planDay : null;
-  }
+  function isDone(n) { return prog.dias && prog.dias[String(n)] && prog.dias[String(n)].concluido; }
 
-  function isDone(planDay) {
-    return planDay && prog.dias[String(planDay)] && prog.dias[String(planDay)].concluido;
-  }
+  // Banner
+  const doneBanner = Object.keys(prog.dias || {}).filter(k => prog.dias[k].concluido).length;
+  document.getElementById('banner-done').textContent = doneBanner;
+  document.getElementById('banner-bar').style.width = Math.round((doneBanner / 120) * 100) + '%';
+  const proxDados = getDadosDia(proxDia);
+  document.getElementById('banner-prox').textContent = proxDados
+    ? 'Dia ' + proxDia + ' — ' + (proxDados.materia || proxDados.titulo)
+    : 'Dia ' + proxDia;
 
-  function renderMonth(year, month) {
-    const firstDay  = new Date(year, month, 1).getDay(); // 0=Dom
-    const daysInM   = new Date(year, month + 1, 0).getDate();
-    const monthName = MONTHS_PT[month];
+  // ── Streak ──────────────────────────────────
+  const streakEl = document.getElementById('streak-count');
+  if (streakEl) streakEl.textContent = prog.streak || 0;
 
-    // Calcular stats do mês
-    let studyDaysInMonth = 0, doneDays = 0;
-    for (let d = 1; d <= daysInM; d++) {
-      const pd = studyDayForDate(new Date(year, month, d));
-      if (pd) { studyDaysInMonth++; if (isDone(pd)) doneDays++; }
-    }
-    const horasPrevistas = studyDaysInMonth * 4;
-    const isExamMonth    = year === 2026 && month === 11;
+  // ── Build grid ──────────────────────────────
+  const corClass = { rose:'c-rose', lavender:'c-lavender', champagne:'c-champagne', sage:'c-sage' };
+  const chipNome = n => (n || '').replace('Direito ','').replace('Processual ','Proc. ').replace('Processo ','Proc. ');
 
-    let statsHTML = '';
-    if (studyDaysInMonth > 0) {
-      statsHTML = `<span><strong>${doneDays}</strong> concluídos</span>
-                   <span><strong>${studyDaysInMonth - doneDays}</strong> restantes</span>
-                   <span><strong>${horasPrevistas}h</strong> previstas</span>`;
-    } else if (isExamMonth) {
-      statsHTML = `<span style="color:var(--rose-deep);font-weight:600">⚖️ Prova OAB · 20 de dezembro</span>`;
-    } else {
-      statsHTML = `<span>Pré-plano · ${MONTHS_PT[month]}</span>`;
+  let html = '';
+  for (let semana = 1; semana <= 20; semana++) {
+    const diasDaSemana = [];
+    for (let d = (semana - 1) * 6 + 1; d <= semana * 6 && d <= 120; d++) {
+      diasDaSemana.push(d);
     }
 
-    const corClass  = { rose:'c-rose', lavender:'c-lavender', champagne:'c-champagne', sage:'c-sage' };
-    const chipNome  = n => n.replace('Direito ','').replace('Processual ','Proc. ').replace('Processo ','Proc. ');
+    const doneSemana = diasDaSemana.filter(d => isDone(d)).length;
+    const pctSemana  = Math.round((doneSemana / diasDaSemana.length) * 100);
 
     let cells = '';
-    // Empty cells for days before first
-    for (let i = 0; i < firstDay; i++) cells += `<div class="day-cell empty"></div>`;
-
-    for (let d = 1; d <= daysInM; d++) {
-      const date    = new Date(year, month, d);
-      const planDay = studyDayForDate(date);
-      const isToday = date.toDateString() === today.toDateString();
-      const isExam  = isExamMonth && d === 20;
-      const done    = isDone(planDay);
+    diasDaSemana.forEach(d => {
+      const dados  = getDadosDia(d);
+      const done   = isDone(d);
+      const isCurr = d === proxDia;
+      const isStub = !dados || dados.stub;
 
       let cls = 'day-cell';
-      if (isToday) cls += ' today';
-      else if (isExam) cls += ' simulado';
-      else if (done) cls += ' done';
+      if (done) cls += ' done';
+      else if (isCurr) cls += ' today';
 
-      let inner = `<div class="num">${d}</div>`;
+      const emoji = dados ? dados.emoji_principal : '📚';
+      const matLabel = dados && !isStub
+        ? chipNome(dados.materia || dados.titulo)
+        : (dados ? 'Sem conteúdo' : 'A definir');
+      const cor = (dados && dados.materias && dados.materias[0] && !isStub)
+        ? (corClass[dados.materias[0].cor] || 'c-champagne')
+        : 'c-champagne';
 
-      if (isToday) {
-        const dadosHoje = planDay ? getDadosDia(planDay) : null;
-        inner += `<div class="day-chips">`;
-        if (dadosHoje) {
-          dadosHoje.materias.forEach(m => {
-            const mk = toMatKey(m.nome);
-            inner += `<div class="mat-chip" title="${m.nome}" onclick="chipClick(${planDay},'${mk}','${m.nome.replace(/'/g,"\\'")}')">${m.emoji || ''} ${chipNome(m.nome)}</div>`;
-          });
-        } else {
-          inner += `<div class="mat-chip">✦ Hoje · Pré-início</div>`;
-        }
-        inner += `</div>`;
-      } else if (isExam) {
-        inner += `<div class="day-chips"><div class="mat-chip c-lavender">★ Prova OAB 1ª Fase</div></div>`;
-      } else if (planDay) {
-        const dados = getDadosDia(planDay);
-        inner += `<div class="day-chips">`;
-        if (dados) {
-          dados.materias.forEach(m => {
-            const cc = corClass[m.cor] || 'c-champagne';
-            const mk = toMatKey(m.nome);
-            inner += `<div class="mat-chip ${cc}" title="${m.nome}" onclick="chipClick(${planDay},'${mk}','${m.nome.replace(/'/g,"\\'")}')">${m.emoji || ''} ${chipNome(m.nome)}</div>`;
-          });
-        } else {
-          inner += `<div class="mat-chip c-champagne">Dia ${planDay}</div>`;
-        }
-        inner += `</div>`;
+      const progD   = prog.dias && prog.dias[String(d)];
+      const dateStr = done && progD && progD.data_conclusao ? progD.data_conclusao : null;
+      let dateChip  = '';
+      if (dateStr) {
+        const pp = dateStr.split('-');
+        dateChip = `<div class="mat-chip" style="background:transparent;color:var(--ink-faded);font-size:.62rem;padding:0 .3rem">✓ ${pp[2]}/${pp[1]}</div>`;
       }
+      cells += `<div class="${cls}" onclick="window.location='dia.html?dia=${d}'" title="Dia ${d}${dados ? ' - '+dados.titulo : ''}${dateStr ? ' (estudado '+dateStr+')' : ''}">
+        <div class="num">${d}</div>
+        <div class="day-chips">
+          <div class="mat-chip ${isCurr && !done ? '' : cor}">${emoji} ${matLabel}</div>
+          ${dateChip}
+        </div>
+      </div>`;
+    });
 
-      cells += `<div class="${cls}" data-plan="${planDay||''}" onclick="cellClick(this,event)">${inner}</div>`;
-    }
-
-    const dowRow = DOW_PT.map(d => `<div class="dow">${d}</div>`).join('');
-
-    return `
-    <div class="month-section">
+    html += `<div class="month-section">
       <div class="month-header">
-        <div class="month-name">${monthName} <em>·</em> ${year}</div>
-        <div class="month-stats">${statsHTML}</div>
+        <div class="month-name">Semana <em>${semana}</em></div>
+        <div class="month-stats">
+          <span><strong>${doneSemana}</strong> / ${diasDaSemana.length} concluídos</span>
+          <span>${pctSemana}%</span>
+        </div>
       </div>
-      <div class="calendar-grid">${dowRow}${cells}</div>
-      <div class="legend">
-        <div class="legend-item"><div class="legend-dot" style="background:linear-gradient(135deg,var(--rose-soft),var(--blush))"></div>Concluído</div>
-        <div class="legend-item"><div class="legend-dot" style="background:linear-gradient(135deg,var(--rose),var(--rose-deep))"></div>Hoje</div>
-        <div class="legend-item"><div class="legend-dot" style="background:var(--bg-soft)"></div>A estudar</div>
-        <div class="legend-item"><div class="legend-dot" style="background:linear-gradient(135deg,var(--lavender),var(--champagne))"></div>Simulado / Prova</div>
-      </div>
+      <div class="calendar-grid" style="grid-template-columns:repeat(6,1fr)">${cells}</div>
     </div>`;
   }
 
-  // Meses a mostrar: atual + meses do plano + Dezembro (prova)
-  const monthsToRender = [];
-  const todayMonth = { y: today.getFullYear(), m: today.getMonth() };
-
-  // Sempre inclui mês atual
-  monthsToRender.push(todayMonth);
-
-  // Meses do plano (Jun + Jul 2026)
-  [{y:2026,m:5},{y:2026,m:6}].forEach(mo => {
-    if (!(mo.y === todayMonth.y && mo.m === todayMonth.m))
-      monthsToRender.push(mo);
-  });
-
-  // Dezembro (prova) se ainda não passou
-  if (today < EXAM_DATE && !(todayMonth.y === 2026 && todayMonth.m === 11))
-    monthsToRender.push({y:2026,m:11});
-
-  // Ordenar
-  monthsToRender.sort((a,b) => a.y !== b.y ? a.y-b.y : a.m-b.m);
-
-  const container = document.getElementById('calendar-container');
-  container.innerHTML = monthsToRender.map(mo => renderMonth(mo.y, mo.m)).join('');
+  document.getElementById('calendar-container').innerHTML = html;
 })();
-
-// Clique na célula do dia → abre overlay com conteúdo
-function cellClick(el) {
-  const plan = el.dataset.plan;
-  if (!plan) return;
-  openDayOverlay(parseInt(plan));
-}
-
-// Converte nome da matéria em matKey para filtrar conteúdo
-function toMatKey(nome) {
-  if (nome.includes('Ética'))              return 'etica';
-  if (nome.includes('Processual Penal'))   return 'proc-penal';
-  if (nome.includes('Processual do Trab')) return 'proc-trabalho';
-  if (nome.includes('Processual Civil'))   return 'proc-civil';
-  if (nome.includes('Penal'))             return 'penal';
-  if (nome.includes('Constitucional'))    return 'constitucional';
-  if (nome.includes('Civil'))             return 'civil';
-  if (nome.includes('Trabalho'))          return 'trabalho';
-  if (nome.includes('Tributário'))        return 'tributario';
-  if (nome.includes('Administrativo'))    return 'administrativo';
-  if (nome.includes('Empresarial'))       return 'empresarial';
-  if (nome.includes('Previdenciário'))    return 'previdenciario';
-  if (nome.includes('Eleitoral'))         return 'eleitoral';
-  if (nome.includes('Financeiro'))        return 'financeiro';
-  if (nome.includes('Humanos'))           return 'dh';
-  if (nome.includes('Internacional'))     return 'dip';
-  if (nome.includes('Consumidor'))        return 'cdc';
-  if (nome.includes('Criança'))           return 'eca';
-  return nome.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/\s+/g,'-');
-}
-
-// Clique num chip — matKey e matNome passados directamente como strings
-function chipClick(planDay, matKey, matNome) {
-  openDayOverlay(planDay, matKey, matNome);
-}
-
-// Clique na célula do dia — ignora se o clique veio de um chip
-function cellClick(el, event) {
-  if (event && event.target.closest('.mat-chip')) return;
-  const plan = el.dataset.plan;
-  if (!plan) return;
-  openDayOverlay(parseInt(plan), null, null);
-}
-
-function openDayOverlay(planDay, matKey, matNome) {
-  const dados = getDadosDia(planDay);
-  if (!dados) return;
-  const overlay = document.getElementById('day-overlay');
-  const tituloDisplay = matNome
-    ? `Dia ${planDay} <em>·</em> ${matNome}`
-    : `Dia ${planDay} <em>·</em> ${dados.titulo}`;
-  document.getElementById('overlay-title').innerHTML = tituloDisplay;
-  document.getElementById('overlay-goto').href = `hoje.html?dia=${planDay}`;
-  const frame = document.getElementById('overlay-frame');
-
-  // Decide o ficheiro a carregar e se é necessário filtrar por secção
-  let src = `dias/${dados.arquivo}.html`;
-  let filterMat = null;
-  if (matKey && dados.materias) {
-    const mat = dados.materias.find(m => toMatKey(m.nome) === matKey);
-    if (mat && mat.arquivo_mat) {
-      src = `dias/${mat.arquivo_mat}.html`; // ficheiro já exclusivo — sem filtro necessário
-    } else {
-      filterMat = matKey; // arquivo combinado — filtrar via postMessage após carregamento
-    }
-  }
-  frame.src = src;
-  frame.onload = () => {
-    const theme = document.documentElement.getAttribute('data-theme') || 'light';
-    try { frame.contentWindow.postMessage({ type: 'set-theme', theme }, '*'); } catch(e) {}
-    if (filterMat) {
-      try { frame.contentWindow.postMessage({ type: 'show-section', mat: filterMat }, '*'); } catch(e) {}
-    }
-  };
-  overlay.style.display = 'flex';
-  document.body.classList.add('overlay-open');
-}
-
-function closeOverlay() {
-  document.getElementById('day-overlay').style.display = 'none';
-  document.getElementById('overlay-frame').src = '';
-  document.body.classList.remove('overlay-open');
-}
-
-// Fechar com Escape
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeOverlay(); });
 </script>
-
-<!-- OVERLAY DE CONTEÚDO DO DIA -->
-<div class="day-overlay" id="day-overlay">
-  <div class="overlay-backdrop" onclick="closeOverlay()"></div>
-  <div class="overlay-panel">
-    <div class="overlay-header">
-      <div class="overlay-title" id="overlay-title">—</div>
-      <div class="overlay-actions">
-        <a id="overlay-goto" href="#" class="overlay-goto">Estudar hoje →</a>
-        <button class="overlay-close" onclick="closeOverlay()">✕</button>
-      </div>
-    </div>
-    <iframe id="overlay-frame" src="" title="Conteúdo do dia"></iframe>
-  </div>
-</div>
 
 </body>
 </html>

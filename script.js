@@ -28,8 +28,7 @@ function clearSimulatedDate() {
 
 // DATAS IMPORTANTES
 const EXAM_DATE = new Date(2026, 11, 20); // 20 de dezembro de 2026
-const STUDY_START = new Date(2026, 5, 1); // 1º de junho de 2026
-const STUDY_END = new Date(2026, 6, 30);  // 30 de julho de 2026 (dia 60)
+const STUDY_START = new Date(2026, 5, 1); // referência — o plano é flexível (120 dias de estudo)
 
 // Nomes dos meses e dias em PT-BR
 const MONTHS_PT = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
@@ -52,14 +51,19 @@ function getDaysUntilExam() {
   return Math.ceil(diff / (1000 * 60 * 60 * 24));
 }
 
-// Calcular qual dia do plano você está (1-60)
+// Retorna o próximo dia de estudo não concluído (1-120)
+// Baseado em progresso real, não em data do calendário
 function getStudyDay() {
-  const today = getCurrentDate();
-  if (today < STUDY_START) return 0; // ainda não começou
-  if (today > STUDY_END) return 61; // já acabou
-  
-  const diff = today - STUDY_START;
-  return Math.floor(diff / (1000 * 60 * 60 * 24)) + 1;
+  try {
+    const s = localStorage.getItem('oab_progresso_v1');
+    if (!s) return 1;
+    const p = JSON.parse(s);
+    if (!p.dias) return 1;
+    for (let i = 1; i <= 120; i++) {
+      if (!p.dias[String(i)] || !p.dias[String(i)].concluido) return i;
+    }
+    return 120;
+  } catch(e) { return 1; }
 }
 
 // THEME TOGGLE
@@ -104,8 +108,21 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function atualizarBadgeRevisar() {
-  const badges = document.querySelectorAll('a[href="revisar.html"] .badge');
-  if (!badges.length) return;
+  const links = document.querySelectorAll('a.nav-link[href="revisar.html"]');
+  if (!links.length) return;
+  // Garante que cada link de Revisar tenha um badge — cria se não existir
+  const badges = [];
+  links.forEach(link => {
+    let b = link.querySelector('.badge');
+    if (!b) {
+      b = document.createElement('span');
+      b.className = 'badge';
+      b.style.display = 'none';
+      b.textContent = '0';
+      link.appendChild(b);
+    }
+    badges.push(b);
+  });
   let count = 0;
   try {
     if (typeof carregarProgresso === 'function') {
@@ -189,31 +206,50 @@ function toggleSidebar() {
   document.querySelector('.sidebar').classList.toggle('open');
 }
 
-// MODO FOCO — funciona em todas as páginas
+// MODO FOCO — overlay canônico (mesmo padrão visual de todas as páginas)
 function toggleFocusMode() {
-  document.body.classList.toggle('focus-mode');
+  let overlay = document.getElementById('site-focus-overlay');
+  if (overlay && overlay.classList.contains('active')) {
+    overlay.classList.remove('active');
+    document.body.style.overflow = '';
+    return;
+  }
+  if (!overlay) {
+    const rawTitle = (document.title || 'OAB').replace(/\s*[|·—–]\s*.*/,'').trim();
+    overlay = document.createElement('div');
+    overlay.id = 'site-focus-overlay';
+    overlay.className = 'focus-overlay';
+    overlay.innerHTML = `
+      <div class="focus-panel">
+        <div class="focus-panel-mac">
+          <div class="focus-mac-lights">
+            <span class="fml fml-close" onclick="toggleFocusMode()" title="Fechar"></span>
+            <span class="fml fml-min"></span>
+            <span class="fml fml-max"></span>
+          </div>
+          <span class="focus-mac-title">${rawTitle.toUpperCase()}</span>
+          <div style="width:54px"></div>
+        </div>
+        <div class="focus-panel-body" id="site-focus-body"></div>
+      </div>`;
+    overlay.addEventListener('click', e => { if (e.target === overlay) toggleFocusMode(); });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        const o = document.getElementById('site-focus-overlay');
+        if (o && o.classList.contains('active')) toggleFocusMode();
+      }
+    });
+    document.body.appendChild(overlay);
+  }
+  const focusBody = document.getElementById('site-focus-body');
+  const src = document.querySelector('.focus-dashboard-scroll') || document.querySelector('main');
+  if (src && focusBody) focusBody.innerHTML = src.innerHTML;
+  overlay.classList.add('active');
+  document.body.style.overflow = 'hidden';
 }
 
-// Injeta barra Mac e botão foco em todas as páginas
+// Injeta botão foco na topbar (apenas em páginas que não têm um hardcoded)
 document.addEventListener('DOMContentLoaded', () => {
-  // Barra de janela estilo Mac (title bar com traffic lights)
-  const mainEl = document.querySelector('main');
-  if (mainEl && !mainEl.querySelector('.focus-mac-bar')) {
-    const pageTitle = document.title.replace('Preparatório - OAB', 'OAB Preparatório').replace(' | ', ' · ') || 'OAB Preparatório';
-    const bar = document.createElement('div');
-    bar.className = 'focus-mac-bar';
-    bar.innerHTML = `
-      <div class="focus-mac-lights">
-        <span class="fml fml-close" onclick="toggleFocusMode()" title="Sair do foco"></span>
-        <span class="fml fml-min"></span>
-        <span class="fml fml-max"></span>
-      </div>
-      <span class="focus-mac-title">${pageTitle}</span>
-      <div style="width:54px"></div>`;
-    mainEl.prepend(bar);
-  }
-
-  // Botão foco na topbar-actions — apenas se não houver um já
   const topbarActions = document.querySelector('.topbar-actions');
   if (topbarActions && !topbarActions.querySelector('[data-focus-btn]')) {
     const focusBtn = document.createElement('button');

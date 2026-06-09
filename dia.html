@@ -1,0 +1,373 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Conteúdo do Dia · OAB</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Inter:opsz,wght@14..32,400..700&family=Caveat:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+<style>
+.dia-layout{display:grid;grid-template-columns:1fr 260px;gap:1.5rem;align-items:start}
+@media(max-width:820px){.dia-layout{grid-template-columns:1fr}.dia-side{display:none}}
+
+.dia-banner{
+  background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);
+  padding:1.1rem 1.4rem;display:flex;align-items:center;gap:1.4rem;
+  box-shadow:var(--shadow-sm);margin-bottom:1rem;
+}
+.dia-num{
+  font-family:'Fraunces',serif;font-size:2.8rem;font-weight:500;
+  color:var(--rose-deep);line-height:1;padding-right:1.3rem;
+  border-right:1px solid var(--line);min-width:68px;text-align:center;
+}
+.dia-info{flex:1}
+.dia-tag{
+  display:inline-block;background:var(--rose-soft);color:var(--rose-deep);
+  font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;
+  padding:.22rem .65rem;border-radius:20px;font-weight:600;margin-bottom:.35rem;
+}
+.dia-titulo{font-family:'Fraunces',serif;font-size:1.22rem;font-weight:500;line-height:1.2;margin-bottom:.15rem}
+.dia-titulo em{font-style:italic;color:var(--rose-deep)}
+.dia-desc{font-size:.78rem;color:var(--ink-faded)}
+.dia-done-wrap{display:flex;flex-direction:column;align-items:center;gap:.2rem}
+.dia-done-badge{
+  background:linear-gradient(135deg,var(--rose),var(--rose-deep));
+  color:white;border-radius:var(--radius-sm);padding:.35rem .8rem;
+  font-size:.68rem;letter-spacing:.1em;font-weight:600;
+}
+.dia-done-date{font-size:.62rem;color:var(--ink-faded)}
+
+/* Tabs */
+.dia-tabs{display:flex;gap:.35rem;margin-bottom:1rem;border-bottom:1px solid var(--line);padding-bottom:.4rem}
+.dia-tab{
+  padding:.4rem .9rem;border-radius:var(--radius-sm);font-size:.78rem;font-weight:500;
+  cursor:pointer;border:1px solid transparent;color:var(--ink-faded);background:transparent;
+  transition:all var(--transition);
+}
+.dia-tab:hover{background:var(--blush);color:var(--ink)}
+.dia-tab.active{background:linear-gradient(135deg,var(--rose),var(--rose-deep));color:white;box-shadow:var(--shadow-sm)}
+.dia-panel{display:none}.dia-panel.active{display:block}
+
+/* Content area */
+.dia-content-card{
+  background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-lg);
+  padding:1.8rem 2rem;box-shadow:var(--shadow);
+}
+
+/* Resumo */
+.resumo-label{
+  font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--ink-ghost);font-weight:600;margin-bottom:1rem;
+  display:flex;align-items:center;gap:.5rem;
+}
+.resumo-label span{width:24px;height:1px;background:var(--line);display:inline-block}
+.resumo-list{list-style:none;display:flex;flex-direction:column;gap:.45rem;margin-bottom:1rem}
+.resumo-list li{
+  font-size:.91rem;line-height:1.68;color:var(--ink);
+  padding:.5rem .8rem .5rem 1rem;
+  border-left:2.5px solid var(--line);
+  border-radius:0 var(--radius-sm) var(--radius-sm) 0;
+  background:var(--bg-soft);transition:border-color var(--transition);
+}
+.resumo-list li:hover{border-left-color:var(--rose)}
+.resumo-peg{
+  background:linear-gradient(135deg,var(--blush),var(--rose-soft));
+  border-radius:var(--radius-sm);padding:.9rem 1.1rem;font-size:.85rem;line-height:1.6;color:var(--ink);
+}
+.resumo-peg strong{color:var(--rose-deep);display:block;margin-bottom:.3rem;font-size:.65rem;letter-spacing:.12em;text-transform:uppercase}
+
+/* Stub */
+.dia-stub{
+  background:var(--paper);border:1px dashed var(--line);border-radius:var(--radius-lg);
+  padding:3rem 2rem;text-align:center;
+}
+.dia-stub .s-em{font-size:2rem;margin-bottom:.8rem}
+.dia-stub h3{font-family:'Fraunces',serif;font-size:1.1rem;margin-bottom:.4rem}
+.dia-stub p{font-size:.83rem;color:var(--ink-faded);max-width:400px;margin:0 auto 1.1rem}
+
+/* Actions */
+.dia-actions{
+  background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);
+  padding:.9rem 1.3rem;display:flex;gap:.7rem;flex-wrap:wrap;align-items:center;
+  box-shadow:var(--shadow-sm);margin-top:1rem;
+}
+
+/* Sidebar */
+.dia-side{display:flex;flex-direction:column;gap:1rem}
+.side-card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:1.1rem;box-shadow:var(--shadow-sm)}
+.side-card h4{font-family:'Fraunces',serif;font-size:.9rem;font-weight:500;margin-bottom:.7rem}
+.topic-list{list-style:none}
+.topic-list li{font-size:.79rem;color:var(--ink-soft);padding:.3rem 0;border-bottom:1px dotted var(--line);display:flex;gap:.4rem;align-items:flex-start}
+.topic-list li:last-child{border-bottom:none}
+.topic-list li::before{content:'›';color:var(--rose);flex-shrink:0;margin-top:1px}
+.sum-sigla{font-size:.7rem;font-weight:600;color:var(--rose-deep);margin-bottom:.3rem}
+.sum-body{font-family:'Fraunces',serif;font-size:.87rem;font-style:italic;line-height:1.5;color:var(--ink)}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="mark"><svg class="seal" viewBox="0 0 64 64" width="26" height="26" aria-hidden="true"><circle cx="32" cy="32" r="23" fill="none" stroke="currentColor" stroke-width="1.6"/><text x="32" y="33" font-size="19" letter-spacing="1.2" text-anchor="middle" dominant-baseline="central" font-family="Georgia,serif" font-weight="700" fill="currentColor">OAB</text></svg></div>
+      <h1>Exame da Ordem</h1>
+      <div class="subtitle">Preparatório OAB · 1ª Fase</div>
+    </div>
+    <div class="nav-section-label">Principal</div>
+    <a href="index.html"      class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg></span><span>Início</span></a>
+    <a href="hoje.html"       class="nav-link active"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"/></svg></span><span>Hoje</span></a>
+    <a href="calendario.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span><span>Calendário</span></a>
+    <a href="revisar.html"    class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg></span><span>Revisar</span></a>
+    <div class="nav-section-label">Estudo</div>
+    <a href="materias.html"   class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg></span><span>Matérias</span></a>
+    <a href="questoes.html"   class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></span><span>Questões</span></a>
+    <a href="erros.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.4 2.6a1 1 0 0 1 3 3l-9 9a2 2 0 0 1-.85.5l-2.9.85a.5.5 0 0 1-.62-.62l.85-2.9a2 2 0 0 1 .5-.85z"/></svg></span><span>Caderno de Erros</span></a>
+    <a href="caderno-legislativo.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg></span><span>Caderno Legislativo</span></a>
+    <div class="nav-section-label">Análise</div>
+    <a href="estatisticas.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M7 16v-3"/><path d="M12 16V8"/><path d="M17 16v-5"/></svg></span><span>Estatísticas</span></a>
+    <a href="simulados.html"    class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M9 12l2 2 4-4"/></svg></span><span>Simulados</span></a>
+    <div class="nav-section-label">Extra</div>
+    <a href="reta-final.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><path d="M4 22V4"/></svg></span><span>Reta Final</span></a>
+    <div class="sidebar-footer">
+      <div class="profile-card">
+        <div class="profile-avatar">
+          <img src="foto-perfil.jpg" alt="Julia" onerror="this.style.display='none';this.parentElement.innerHTML='J';">
+        </div>
+        <div class="profile-info"><div class="name">Julia</div><div class="meta">Estudante de Direito</div></div>
+      </div>
+      <button class="theme-toggle" onclick="toggleTheme()">
+        <span class="theme-label">Modo escuro</span>
+        <span class="toggle-track"><span class="toggle-thumb"></span></span>
+      </button>
+    </div>
+  </aside>
+
+  <main>
+    <div class="topbar">
+      <div class="page-title">
+        <div class="breadcrumb">Estudo · <span id="bc">Dia —</span></div>
+        <h1 id="pg-h1">Dia <em>—</em></h1>
+      </div>
+      <div class="topbar-actions">
+        <div class="streak-pill">
+          <span class="flame">🌸</span>
+          <span class="count" id="streak-count">0</span>
+          <span class="label">dias</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Banner -->
+    <div class="dia-banner">
+      <div class="dia-num" id="dia-num">—</div>
+      <div class="dia-info">
+        <span class="dia-tag" id="dia-tag">—</span>
+        <div class="dia-titulo" id="dia-titulo">Carregando...</div>
+        <div class="dia-desc" id="dia-desc"></div>
+      </div>
+      <div class="dia-done-wrap" id="done-wrap" style="display:none">
+        <div class="dia-done-badge">✓ Concluído</div>
+        <div class="dia-done-date" id="done-date"></div>
+      </div>
+    </div>
+
+    <div class="dia-layout">
+      <!-- MAIN -->
+      <div>
+        <!-- Tabs -->
+        <div class="dia-tabs">
+          <div class="dia-tab active" onclick="switchTab('conteudo',this)">📄 Conteúdo do PDF</div>
+          <div class="dia-tab" onclick="switchTab('resumo',this)">✦ Micro-Resumo</div>
+        </div>
+
+        <!-- Tab: Conteúdo extraído do PDF -->
+        <div class="dia-panel active" id="panel-conteudo">
+          <div class="dia-stub" id="conteudo-stub" style="display:none">
+            <div class="s-em">📄</div>
+            <h3>Conteúdo ainda não extraído</h3>
+            <p>O conteúdo deste dia ainda não foi adicionado. Peça a extração do PDF da Semana correspondente.</p>
+            <a id="stub-pdf-link" href="#" target="_blank" class="btn btn-primary" style="text-decoration:none">↗ Abrir PDF da Semana no Drive</a>
+          </div>
+          <div class="dia-content-card" id="conteudo-body"></div>
+        </div>
+
+        <!-- Tab: Micro-Resumo -->
+        <div class="dia-panel" id="panel-resumo">
+          <div class="dia-content-card">
+            <div class="resumo-label"><span></span><span id="res-titulo">—</span><span></span></div>
+            <div id="res-no-content" style="font-size:.85rem;color:var(--ink-faded);font-style:italic">Sem resumo para este dia ainda.</div>
+            <ul class="resumo-list" id="res-pontos" style="display:none"></ul>
+            <div class="resumo-peg" id="res-peg" style="display:none">
+              <strong>⚠️ ATENÇÃO — Pegadinha da Banca</strong>
+              <span id="res-peg-txt"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="dia-actions">
+          <button class="btn btn-primary" id="btn-estudei" onclick="marcarEstudado()" style="flex:1;min-width:160px">
+            ✦ Estudei Hoje — Salvar e Programar Revisão
+          </button>
+          <a href="hoje.html" class="btn btn-ghost" style="text-decoration:none">↩ Hoje</a>
+          <a href="revisar.html" class="btn btn-ghost" style="text-decoration:none">↻ Revisar</a>
+        </div>
+      </div>
+
+      <!-- SIDEBAR -->
+      <div class="dia-side">
+        <div class="side-card">
+          <h4>Tópicos do dia</h4>
+          <ul class="topic-list" id="topic-list"><li>Carregando...</li></ul>
+        </div>
+        <div class="side-card" id="lei-card" style="display:none">
+          <h4>Lei seca</h4>
+          <ul class="topic-list" id="lei-list"></ul>
+        </div>
+        <div class="side-card" id="sum-card" style="display:none">
+          <h4>Súmula do dia</h4>
+          <div class="sum-sigla" id="sum-sigla"></div>
+          <div class="sum-body" id="sum-body"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="script.js"></script>
+<script src="progresso.js"></script>
+<script src="plano-vde.js"></script>
+<script src="cards.js"></script>
+<script src="conteudo_vde.js"></script>
+<script src="cores.js"></script>
+<script>
+function switchTab(name, el) {
+  document.querySelectorAll('.dia-tab').forEach(function(t){ t.classList.remove('active'); });
+  document.querySelectorAll('.dia-panel').forEach(function(p){ p.classList.remove('active'); });
+  el.classList.add('active');
+  document.getElementById('panel-' + name).classList.add('active');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  var prog = carregarProgresso();
+  var sEl = document.getElementById('streak-count');
+  if (sEl) sEl.textContent = prog.streak || 0;
+
+  var params = new URLSearchParams(window.location.search);
+  var dia = parseInt(params.get('dia')) || getStudyDay();
+  var dados = getDadosDia(dia);
+
+  document.getElementById('bc').textContent = 'Dia ' + dia;
+  document.getElementById('pg-h1').innerHTML = 'Dia <em>' + dia + '</em>';
+
+  if (!dados) {
+    document.getElementById('dia-titulo').textContent = 'Dia ' + dia + ' não encontrado';
+    document.getElementById('conteudo-stub').style.display = 'block';
+    return;
+  }
+
+  // Banner
+  document.getElementById('dia-num').textContent = dia;
+  document.getElementById('dia-tag').textContent = 'Semana ' + dados.semana + ' · ' + (dados.materia || '');
+  document.getElementById('dia-titulo').innerHTML = (dados.titulo || '').replace(' · ', ' <em>·</em> ');
+  document.getElementById('dia-desc').textContent = dados.descricao || '';
+
+  // Done check
+  var progDia = obterDia(dia);
+  if (progDia && progDia.concluido) {
+    document.getElementById('done-wrap').style.display = 'flex';
+    if (progDia.data_conclusao) {
+      var pp = progDia.data_conclusao.split('-');
+      document.getElementById('done-date').textContent = 'em ' + pp[2] + '/' + pp[1] + '/' + pp[0].slice(2);
+    }
+    document.getElementById('btn-estudei').textContent = '↺ Estudei Novamente — Remarcar';
+    document.getElementById('btn-estudei').style.opacity = '.75';
+  }
+
+  // Topics sidebar
+  var topicos = (dados.materias && dados.materias[0] && dados.materias[0].topicos) || [];
+  var tList = document.getElementById('topic-list');
+  tList.innerHTML = topicos.length
+    ? topicos.map(function(t){ return '<li>' + t + '</li>'; }).join('')
+    : '<li>Ver PDF da Semana ' + dados.semana + '</li>';
+
+  if (dados.lei_seca && dados.lei_seca.length) {
+    document.getElementById('lei-card').style.display = 'block';
+    document.getElementById('lei-list').innerHTML = dados.lei_seca.map(function(l){ return '<li>' + l + '</li>'; }).join('');
+  }
+  if (dados.sumula) {
+    document.getElementById('sum-card').style.display = 'block';
+    document.getElementById('sum-sigla').textContent = dados.sumula.sigla;
+    document.getElementById('sum-body').textContent = dados.sumula.texto;
+  }
+
+  // PDF stub link
+  var pdfId = dados.pdf_id;
+  if (pdfId) {
+    document.getElementById('stub-pdf-link').href = 'https://drive.google.com/file/d/' + pdfId + '/view';
+  }
+
+  // ── Conteúdo extraído do PDF ──────────────────────────────
+  var conteudo = (typeof CONTEUDO_VDE !== 'undefined') ? CONTEUDO_VDE[dia] : null;
+  var conteudoBody = document.getElementById('conteudo-body');
+  if (conteudo) {
+    // Inject CSS once
+    if (typeof CONTEUDO_VDE_CSS !== 'undefined' && !document.getElementById('vde-css')) {
+      var tmp = document.createElement('div');
+      tmp.innerHTML = CONTEUDO_VDE_CSS;
+      tmp.firstElementChild.id = 'vde-css';
+      document.head.appendChild(tmp.firstElementChild);
+    }
+    conteudoBody.innerHTML = conteudo;
+  } else {
+    document.getElementById('conteudo-stub').style.display = 'block';
+    conteudoBody.style.display = 'none';
+  }
+
+  // ── Micro-Resumo ──────────────────────────────────────────
+  var cardKey = dia + '_0';
+  var card = (typeof REVIEW_CARDS !== 'undefined') ? REVIEW_CARDS[cardKey] : null;
+  if (card) {
+    document.getElementById('res-titulo').textContent = card.titulo;
+    var pontosList = document.getElementById('res-pontos');
+    pontosList.innerHTML = card.pontos.map(function(p){ return '<li>' + p + '</li>'; }).join('');
+    pontosList.style.display = 'flex';
+    document.getElementById('res-no-content').style.display = 'none';
+    if (card.pegadinha) {
+      document.getElementById('res-peg').style.display = 'block';
+      document.getElementById('res-peg-txt').textContent = card.pegadinha;
+    }
+  }
+});
+
+window.marcarEstudado = function() {
+  var params = new URLSearchParams(window.location.search);
+  var dia = parseInt(params.get('dia')) || getStudyDay();
+  concluirDia(dia);
+
+  var hoje = new Date().toISOString().split('T')[0];
+  var prog = carregarProgresso();
+  var ontem = new Date(Date.now() - 864e5).toISOString().split('T')[0];
+  if (prog.streak_data === ontem) prog.streak = (prog.streak || 0) + 1;
+  else if (prog.streak_data !== hoje) prog.streak = 1;
+  prog.streak_data = hoje;
+  salvarProgresso(prog);
+  localStorage.setItem('ju_oab_streak', String(prog.streak));
+  localStorage.setItem('ju_oab_streak_date', hoje);
+
+  var btn = document.getElementById('btn-estudei');
+  btn.textContent = '✓ Dia ' + dia + ' concluído · Revisão programada para 1, 7, 15 e 30 dias!';
+  btn.style.background = 'linear-gradient(135deg,#60b860,#3a9840)';
+  btn.disabled = true;
+
+  document.getElementById('done-wrap').style.display = 'flex';
+  var pp = hoje.split('-');
+  document.getElementById('done-date').textContent = 'em ' + pp[2] + '/' + pp[1] + '/' + pp[0].slice(2);
+
+  setTimeout(function(){ window.location.href = 'hoje.html'; }, 2200);
+};
+</script>
+</body>
+</html>

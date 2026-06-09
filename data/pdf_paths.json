@@ -1,0 +1,82 @@
+{
+  "_base": "C:\\Users\\julia\\Downloads\\Personalizado",
+  "_nota": "Caminhos locais dos PDFs VDE. Atualizado em 2026-06-06.",
+
+  "resumos": {
+    "_pasta": "Resumos",
+    "semana01": "Resumos\\Resumo - Semana 01 (120 dias).pdf",
+    "semana02": "Resumos\\Resumo - Semana 02 (120 dias).pdf",
+    "semana03": "Resumos\\Resumo - Semana 03 (120 dias).pdf",
+    "semana04": "Resumos\\Resumo - Semana 04 (120 dias)-Copiar.pdf",
+    "semana05": "Resumos\\Resumo - Semana 05 (120 dias)-Copiar.pdf",
+    "semana06": "Resumos\\Resumo - Semana 06 (120 dias)-Copiar.pdf",
+    "semana07": "Resumos\\Resumo - Semana 07 (120 dias).pdf",
+    "semana08": "Resumos\\Resumo - Semana 08 (120 dias).pdf",
+    "semana09": "Resumos\\Resumo - Semana 09 (120 dias).pdf",
+    "semana10": "Resumos\\Resumo - Semana 10 (120 dias).pdf",
+    "semana11": "Resumos\\Resumo - Semana 11 (120 dias)_watermark.pdf",
+    "semana12": "Resumos\\Resumo - Semana 12 (120 dias)_watermark.pdf",
+    "semana13": "Resumos\\Resumo - Semana 13 (120 dias)_watermark.pdf",
+    "semana14": null,
+    "semana15": "Resumos\\Resumo - Semana 15 (120 dias).pdf",
+    "semana16": "Resumos\\Resumo - Semana 16 (120 dias).pdf",
+    "semana17": "Resumos\\Resumo - Semana 17 (120 dias).pdf",
+    "semana18": "Resumos\\Resumo - Semana 18 (120 dias).pdf",
+    "semana19": "Resumos\\Resumo - Semana 19 (120 dias).pdf",
+    "semana20": "Resumos\\Resumo - Semana 20 (120 dias).pdf"
+  },
+
+  "aulas": {
+    "_pasta": "Aulas",
+    "constitucional":   "Aulas\\CONSTITUCIONAL VDE 1A FASE OAB.pdf",
+    "civil":            "Aulas\\CIVIL VDE 1A FASE OAB.pdf",
+    "trabalho":         "Aulas\\TRABALHO VDE 1A FASE OAB.pdf",
+    "penal":            "Aulas\\PENAL VDE 1A FASE OAB.pdf",
+    "tributario":       "Aulas\\TRIBUTÁRIO VDE 1A FASE OAB.pdf",
+    "administrativo":   "Aulas\\ADMINISTRATIVO VDE 1A FASE OAB.pdf",
+    "empresarial":      "Aulas\\EMPRESARIAL VDE 1A FASE OAB.pdf",
+    "processo_civil":   "Aulas\\PROCESSO CIVIL VDE 1A FASE OAB.pdf",
+    "processo_penal":   "Aulas\\PROCESSO PENAL VDE 1A FASE OAB.pdf",
+    "processo_trabalho":"Aulas\\PROCESSO DO TRABALHO VDE 1A FASE OAB.pdf",
+    "etica":            "Aulas\\ÉTICA VDE 1A FASE OAB.pdf",
+    "consumidor":       "Aulas\\CONSUMIDOR VDE 1A FASE OAB.pdf",
+    "previdenciario":   "Aulas\\PREVIDENCIÁRIO VDE 1A FASE OAB.pdf",
+    "eleitoral":        "Aulas\\ELEITORAL VDE 1A FASE OAB.pdf",
+    "eca":              "Aulas\\ESTATUTO DA CRIANÇA E DO ADOLESCENTE VDE 1A FASE OAB.pdf"
+  },
+
+  "caderno_legislativo": {
+    "_pasta": "Caderno Legislativo",
+    "administrativo":   "Caderno Legislativo\\Caderno Legislativo - Administrativo.pdf",
+    "civil":            "Caderno Legislativo\\Caderno Legislativo - Civil.pdf",
+    "consumidor":       "Caderno Legislativo\\Caderno Legislativo - Consumidor.pdf",
+    "etica":            "Caderno Legislativo\\Caderno Legislativo - Ética.pdf",
+    "processo_civil":   "Caderno Legislativo\\Caderno Legislativo - Processo Civil.pdf",
+    "processo_trabalho":"Caderno Legislativo\\Caderno Legislativo - Processo do Trabalho.pdf",
+    "processo_penal":   "Caderno Legislativo\\Caderno Legislativo - Processo Penal.pdf",
+    "trabalho":         "Caderno Legislativo\\Caderno Legislativo - Trabalho.pdf",
+    "tributario":       "Caderno Legislativo\\Caderno Legislativo - Tributário.pdf"
+  },
+
+  "cronograma": {
+    "vde_120d": "Cronograma\\VDE - Cronograma 120D - OAB 47.pdf"
+  },
+
+  "dicas_revisao": {
+    "_pasta": "Dicas Para Revisão de Última Hora",
+    "constitucional":  "Dicas Para Revisão de Última Hora\\Cópia de Super Dicas - Direito Constitucional.pdf",
+    "civil":           "Dicas Para Revisão de Última Hora\\Cópia de Super Dicas - Direito Civil.pdf",
+    "trabalho":        "Dicas Para Revisão de Última Hora\\Cópia de Super Dicas - Direito do Trabalho.pdf",
+    "penal":           "Dicas Para Revisão de Última Hora\\Cópia de Dicas - Direito Penal.pdf",
+    "tributario":      "Dicas Para Revisão de Última Hora\\Cópia de Dicas - Direito Tributário.pdf",
+    "proc_civil":      "Dicas Para Revisão de Última Hora\\Cópia de Super Dicas - Direito Processual Civil.pdf",
+    "proc_penal":      "Dicas Para Revisão de Última Hora\\Cópia de Super Dicas - Direito Processual Penal.pdf",
+    "proc_trabalho":   "Dicas Para Revisão de Última Hora\\Cópia de Super Dicas - Direito Processual do Trabalho.pdf",
+    "empresarial":     "Dicas Para Revisão de Última Hora\\Cópia de Super Dicas - Direito Empresarial.pdf",
+    "consumidor":      "Dicas Para Revisão de Última Hora\\Cópia de Super Dicas - Direito do Consumidor.pdf",
+    "eca":             "Dicas Para Revisão de Última Hora\\Cópia de Dicas - ECA.pdf",
+    "etica":           "Dicas Para Revisão de Última Hora\\Cópia de Super Dicas - Ética Profissional.pdf",
+    "direitos_humanos":"Dicas Para Revisão de Última Hora\\Cópia de Super Dicas - Direitos Humanos.pdf",
+    "60dq":            "Dicas Para Revisão de Última Hora\\60DQ+-+Nct44.pdf"
+  }
+}

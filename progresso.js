@@ -4,18 +4,17 @@
 // ============================================
 
 const PROGRESSO_KEY   = 'oab_progresso_v1';
-const PROGRESSO_VERSAO = '1.0';
+const PROGRESSO_VERSAO = '2.0';
 
 function _criarEstrutura() {
   return {
-    versao:          PROGRESSO_VERSAO,
-    criado:          new Date().toISOString(),
-    atualizado:      new Date().toISOString(),
-    inicio_estudos:  '2026-06-01',
-    meta_dias:       60,
-    streak:          parseInt(localStorage.getItem('ju_oab_streak') || '0'),
-    streak_data:     localStorage.getItem('ju_oab_streak_date') || null,
-    dias:            {}
+    versao:      PROGRESSO_VERSAO,
+    criado:      new Date().toISOString(),
+    atualizado:  new Date().toISOString(),
+    meta_dias:   120,
+    streak:      parseInt(localStorage.getItem('ju_oab_streak') || '0'),
+    streak_data: localStorage.getItem('ju_oab_streak_date') || null,
+    dias:        {}
   };
 }
 
@@ -29,7 +28,7 @@ function carregarProgresso() {
       if (p.dias) {
         Object.keys(p.dias).forEach(k => {
           const n = parseInt(k);
-          if (isNaN(n) || n < 1 || n > 60) delete p.dias[k];
+          if (isNaN(n) || n < 1 || n > 120) delete p.dias[k];
         });
       }
       return p;
@@ -49,7 +48,7 @@ function obterDia(numDia) {
 
 function concluirDia(numDia, nota) {
   const n = parseInt(numDia);
-  if (isNaN(n) || n < 1 || n > 60) return; // ignora dias inválidos
+  if (isNaN(n) || n < 1 || n > 120) return;
   const p = carregarProgresso();
   const key = String(n);
   if (!p.dias[key]) p.dias[key] = {};
@@ -80,16 +79,20 @@ function salvarNota(numDia, texto) {
 
 function calcularStats() {
   const p = carregarProgresso();
-  // Conta apenas dias VÁLIDOS (1–60) que estão marcados como concluídos
   const concluidos = Object.entries(p.dias).filter(([k, d]) => {
     const n = parseInt(k);
-    return n >= 1 && n <= 60 && d.concluido === true;
+    return n >= 1 && n <= 120 && d.concluido === true;
   }).length;
-  const inicio         = new Date(p.inicio_estudos);
-  const hoje           = new Date();
-  const diasDecorridos = Math.max(0, Math.floor((hoje - inicio) / 864e5));
-  const pct            = Math.round((concluidos / 60) * 100);
-  return { concluidos, diasDecorridos, pct, emDia: concluidos >= diasDecorridos };
+  const pct = Math.round((concluidos / 120) * 100);
+  return { concluidos, pct, total: 120 };
+}
+
+function proximoDia() {
+  const p = carregarProgresso();
+  for (let i = 1; i <= 120; i++) {
+    if (!p.dias[String(i)] || !p.dias[String(i)].concluido) return i;
+  }
+  return 120;
 }
 
 function exportarProgresso() {
@@ -228,10 +231,11 @@ function getMateriaId(nome) {
 // Progresso de tópicos de uma matéria por ID
 function getProgressoMateria(materiaId) {
   const p = carregarProgresso();
-  if (typeof PLANO_OAB === 'undefined') return { total: 0, feitos: 0, pct: 0, dias: [] };
+  const plano = (typeof PLANO_VDE !== 'undefined') ? PLANO_VDE : (typeof PLANO_OAB !== 'undefined' ? PLANO_OAB : []);
+  if (!plano.length) return { total: 0, feitos: 0, pct: 0, dias: [] };
   let total = 0, feitos = 0;
   const dias = [];
-  PLANO_OAB.forEach(diaData => {
+  plano.forEach(diaData => {
     diaData.materias && diaData.materias.forEach((mat, mIdx) => {
       if (getMateriaId(mat.nome) !== materiaId) return;
       const dayTopicos = mat.topicos || [];

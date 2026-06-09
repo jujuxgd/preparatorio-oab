@@ -1,4 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <rect width="100" height="100" rx="18" fill="#2a1a22"/>
-  <text x="50" y="62" text-anchor="middle" font-size="58" fill="#e8c040">⚖</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <style>
+    .bg { fill: #211C19; }
+    .ring { stroke: #C8336F; }
+    .mono { fill: #C8336F; font-family: Georgia, 'Times New Roman', serif; font-weight: 700; }
+    @media (prefers-color-scheme: dark) {
+      .bg { fill: #1A1714; }
+      .ring { stroke: #EC7FA9; }
+      .mono { fill: #EC7FA9; }
+    }
+  </style>
+  <rect class="bg" x="2" y="2" width="60" height="60" rx="16"/>
+  <circle class="ring" cx="32" cy="32" r="23" fill="none" stroke-width="1.6"/>
+  <text class="mono" x="32" y="33" font-size="19" letter-spacing="1.2"
+        text-anchor="middle" dominant-baseline="central">OAB</text>
 </svg>

@@ -2,3 +2,14 @@
 Thumbs.db
 *.log
 .claude/
+oab.db
+backend/uploads/
+__pycache__/
+*.pyc
+*.pyo
+.env
+
+# Artefatos temporários de extração de PDF
+*pdf_content*.txt
+*_pdf_extract.txt
+*AppDataLocalTemp*
