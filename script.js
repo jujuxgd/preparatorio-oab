@@ -201,10 +201,34 @@ function showPetals() {
   }
 }
 
-// MOBILE NAV TOGGLE
+// MOBILE NAV TOGGLE — com backdrop e fecho ao tocar fora / num link
 function toggleSidebar() {
-  document.querySelector('.sidebar').classList.toggle('open');
+  const sb = document.querySelector('.sidebar');
+  if (!sb) return;
+  const open = sb.classList.toggle('open');
+  let bd = document.getElementById('sidebar-backdrop');
+  if (open) {
+    if (!bd) {
+      bd = document.createElement('div');
+      bd.id = 'sidebar-backdrop';
+      bd.addEventListener('click', toggleSidebar);
+      document.body.appendChild(bd);
+    }
+    bd.classList.add('show');
+  } else if (bd) {
+    bd.classList.remove('show');
+  }
 }
+
+// Fecha o menu mobile ao clicar num link da nav
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('.sidebar .nav-link').forEach(function (a) {
+    a.addEventListener('click', function () {
+      const sb = document.querySelector('.sidebar');
+      if (sb && sb.classList.contains('open')) toggleSidebar();
+    });
+  });
+});
 
 // MODO FOCO — overlay canônico (mesmo padrão visual de todas as páginas)
 function toggleFocusMode() {

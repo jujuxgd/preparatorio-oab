@@ -1166,11 +1166,9 @@
     <!-- TABS -->
     <div class="tabs-bar">
       <div class="tab active" data-tab="teoria">📖 Teoria</div>
-      <div class="tab" data-tab="revisar">↻ Flashcards</div>
       <div class="tab" data-tab="questoes">📊 Questões</div>
       <div class="tab" data-tab="resumo">✦ Resumo</div>
       <div class="tab" data-tab="videoaulas">🎬 Videoaulas</div>
-      <div class="tab" data-tab="comentarios">💭 Comentários <span class="badge" id="comments-badge" style="display:none"></span></div>
     </div>
 
     <div class="content-layout">
@@ -1182,19 +1180,6 @@
         </div>
 
         <!-- REVISAR — flashcards de estudo com revisão espaçada -->
-        <div class="tab-content" data-tab="revisar">
-          <div class="content-card" style="padding:1.5rem">
-            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;margin-bottom:1.2rem">
-              <div>
-                <div style="font-family:'Fraunces',serif;font-size:1.05rem;font-weight:500">Flashcards do dia</div>
-                <div style="font-size:.73rem;color:var(--ink-faded);margin-top:.15rem">Clique no card para virar. Ao concluir o dia, entram na revisão espaçada (1, 7, 15, 30 dias).</div>
-              </div>
-              <a href="revisar.html" style="font-size:.73rem;color:var(--rose-deep);text-decoration:none;font-weight:500">↻ Ver revisões agendadas →</a>
-            </div>
-            <div id="revisar-deck"></div>
-          </div>
-        </div>
-
         <!-- QUESTÕES — REGISTO SIMPLIFICADO -->
         <div class="tab-content" data-tab="questoes">
           <div class="content-card" style="padding:1.5rem">
@@ -1308,17 +1293,6 @@
 
             <!-- Lista de aulas da matéria do dia -->
             <div id="va-lista" style="display:flex;flex-direction:column;gap:0.5rem"></div>
-          </div>
-        </div>
-
-        <!-- COMENTÁRIOS -->
-        <div class="tab-content" data-tab="comentarios">
-          <div class="content-card">
-            <div class="comment-area">
-              <div id="comments-list"></div>
-              <textarea id="comment-input" class="handwritten" placeholder="Anote um insight, dúvida ou observação… (Enter para enviar, Shift+Enter para nova linha)"></textarea>
-              <button class="btn btn-primary" style="margin-top:0.5rem" onclick="adicionarComentario()">Adicionar comentário</button>
-            </div>
           </div>
         </div>
 
