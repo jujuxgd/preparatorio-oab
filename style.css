@@ -219,8 +219,8 @@ body {
 
 .logo .mark .seal {
   display: block;
-  width: 30px;
-  height: 30px;
+  width: 44px;
+  height: 44px;
   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -229,7 +229,7 @@ body {
 .logo h1 {
   font-family: 'MagicalFeather', 'Fraunces', cursive;
   font-style: normal;
-  font-size: 2.4rem;
+  font-size: 2rem;
   font-weight: normal;
   letter-spacing: 0;
   line-height: 1.1;
