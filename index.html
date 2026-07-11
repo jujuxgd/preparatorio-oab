@@ -17,6 +17,12 @@ main { padding: 2rem 2.5rem 2.25rem; }
 .topbar .page-title h1 { font-size: 1.85rem; margin-bottom: 0.3rem; }
 .topbar .page-title .breadcrumb { margin-bottom: 0.3rem; }
 
+/* Em telas estreitas, o padding do <main> deste dashboard acompanha o
+   padrão responsivo do resto do site em vez de manter o respiro do desktop */
+@media (max-width: 1024px) { main { padding: 1.8rem 1.6rem 2rem; } }
+@media (max-width: 768px)  { main { padding: 1.5rem 1.1rem 1.8rem; } }
+@media (max-width: 640px)  { .topbar { margin-bottom: 1.1rem; flex-wrap: wrap; gap: 0.8rem; } }
+
 .hero {
   background: var(--blush);
   border-radius: var(--radius-lg);
@@ -51,11 +57,14 @@ main { padding: 2rem 2.5rem 2.25rem; }
   z-index: 1;
   display: grid;
   grid-template-columns: 1fr auto;
-  gap: 2rem;
+  gap: 1.8rem;
   align-items: center;
 }
 
-.hero-content { gap: 1.8rem; }
+@media (max-width: 640px) {
+  .hero-content { grid-template-columns: 1fr; }
+  .countdown { justify-self: start; }
+}
 
 .hero h2 {
   font-family: 'Fraunces', serif;

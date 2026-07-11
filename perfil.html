@@ -60,6 +60,13 @@
   display: flex;
   gap: 0.6rem;
   align-items: center;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 640px) {
+  .perfil-header { padding: 1.1rem 1.3rem; }
+  .perfil-header-backup { width: 100%; }
+  .perfil-header-backup .btn { flex: 1; justify-content: center; }
 }
 
 /* Resumo — grid de estatísticas compactas */
@@ -163,6 +170,8 @@
   flex-direction: column;
 }
 
+@media (max-width: 640px) { .chart-card { padding: 1.1rem 1.2rem; } }
+
 .chart-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1.2rem; }
 .chart-title { font-family: 'Fraunces', serif; font-size: 1.05rem; font-weight: 500; letter-spacing: -0.01em; }
 .chart-title em { font-style: italic; color: var(--rose-deep); }
@@ -173,6 +182,9 @@
   display: grid;
   grid-template-columns: repeat(14, 1fr);
   gap: 4px;
+}
+@media (max-width: 480px) {
+  .mood-calendar { grid-template-columns: repeat(7, 1fr); }
 }
 .mc-cell {
   aspect-ratio: 1;
@@ -236,6 +248,17 @@
 .line-bar { width: 62%; background: linear-gradient(180deg, var(--rose) 0%, var(--rose-deep) 100%); border-radius: 4px 4px 0 0; transition: opacity var(--transition); }
 .line-bar:hover { opacity: 0.8; }
 .line-day .lbl { font-size: 0.6rem; color: var(--ink-faded); margin-top: 0.35rem; letter-spacing: 0.02em; }
+
+/* Em telas estreitas, barras demais ficariam ilegíveis espremidas — rola
+   horizontalmente em vez de encolher cada barra abaixo do tocável/legível */
+@media (max-width: 640px) {
+  .line-chart {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    justify-content: flex-start;
+  }
+  .line-day { flex: 0 0 32px; }
+}
 
 /* Distribuição de emoções — lista de barras horizontais coloridas por categoria */
 .ranking-list { list-style: none; }
