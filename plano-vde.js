@@ -10,7 +10,29 @@
 // pela IIFE ao final. getDadosDia usa .find() — primeiro
 // match vence, portanto entradas reais DEVEM vir antes da IIFE.
 // ════════════════════════════════════════════════════════════
-const _VDE_PDF_IDS = {};
+// Resumos VDE por semana (Google Drive) — dia N usa _VDE_PDF_IDS[semana(N)].
+// Semana 14 não tem PDF mapeado; getDadosDia cai no link da pasta partilhada.
+const _VDE_PDF_IDS = {
+  1:  '1JU2DxXyW0uZ3mQ2BnVXsgg1VDHtuctRp',
+  2:  '1kWdKghftTNhbLD03x1ROF3gtTGd6KiSR',
+  3:  '1oiJ7e0ZCiAkmQbxqygNMZCGmTDUf2mtQ',
+  4:  '1I8xd9IJRZzTtHHRqWhPkUnwIHkjhub5E',
+  5:  '1smrTu6fkv5PgK2k-Sk81AMAEATjWX_aJ',
+  6:  '1-dO-Pg5ZGS-VoAhOZgZBxs_1TSNxwnVw',
+  7:  '1gn3JLmUH1sEujIDdTmNZLjMZEtejE_nL',
+  8:  '1zgj6y79VZkaaF1V91IP5XsDowys3OogC',
+  9:  '1AvBg3tRVFHYJJOV1ubayOSBD6v_Hjfvh',
+  10: '1jzt2EzvCq8S0mHc9UZoUU05yiz6cL7cz',
+  11: '1t3gMZCGy4e_pzQyAjrj73MAfv7cZW4Et',
+  12: '1xH4JUZcCv3C3_BIUJRzPHP7InvTKQyEN',
+  13: '1cflsheiFcZWx7R2XRwiYpNEiMSsQw6Q3',
+  15: '1_AE4xeoSKsa6SbcnVqQmrJZ3kCupjKVB',
+  16: '1vAt_1jny7Tbb7KJVaXCCBXGKh3mvYanG',
+  17: '1FtRRU7O25Gui8CHs5c41esrnQr96xPZs',
+  18: '1dUQgt_mZHvRNG9IJSn6pktUnxwaKwG_X',
+  19: '1NX0fEpfFZwYrI-eLGFaQdW75-avXolxs',
+  20: '1uH5T9KcXNuvo9Gl0azIHANODy358YRlm',
+};
 
 const PLANO_VDE = [
 

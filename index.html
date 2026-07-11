@@ -532,6 +532,7 @@
 </div>
 
 <button class="mobile-menu-btn" onclick="toggleSidebar()" title="Menu">☰</button>
+<button class="sidebar-toggle-btn" onclick="toggleSidebarCollapse()" title="Esconder menu">‹</button>
 
 <div class="app">
   <aside class="sidebar">
@@ -569,6 +570,7 @@
       <span>Questões</span>
     </a>
     <a href="erros.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.4 2.6a1 1 0 0 1 3 3l-9 9a2 2 0 0 1-.85.5l-2.9.85a.5.5 0 0 1-.62-.62l.85-2.9a2 2 0 0 1 .5-.85z"/></svg></span><span>Caderno de Erros</span></a>
+    <a href="caderno-legislativo.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg></span><span>Caderno Legislativo</span></a>
 
     <div class="nav-section-label">Análise</div>
     <a href="estatisticas.html" class="nav-link">
@@ -594,8 +596,6 @@
         <span class="theme-label">Modo escuro</span>
         <span class="toggle-track"><span class="toggle-thumb"></span></span>
       </button>
-    
-      <button onclick="resetarTudo()" style="margin-top:0.5rem;width:100%;padding:0.5rem;background:none;border:1px solid rgba(196,151,143,0.35);border-radius:var(--radius-sm);font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-faded);cursor:pointer;font-family:inherit;transition:all var(--transition)" onmouseover="this.style.borderColor='var(--rose)'" onmouseout="this.style.borderColor=rgba(0,0,0,0.15)">&#8635; Resetar Tudo</button>
     </div>
   </aside>
 
@@ -611,6 +611,7 @@
           <span class="count" id="streak-count">0</span>
           <span class="label">dias</span>
         </div>
+        <button onclick="resetarTudo()" class="btn btn-ghost" style="font-size:0.72rem;color:var(--ink-faded);padding:0.4rem 0.6rem" title="Resetar todo o progresso e preferências">↺</button>
       </div>
     </div>
 
@@ -673,7 +674,7 @@
         <div class="today-card-footer">
           <a href="hoje.html" class="btn btn-primary">Abrir conteúdo do dia</a>
           <a href="calendario.html" class="btn btn-ghost">☷ Calendário</a>
-          <button onclick="resetarProgresso()" class="btn btn-ghost" style="font-size:0.78rem;color:var(--ink-faded)" title="Apaga todo o progresso e reinicia do zero">🗑 Reiniciar progresso</button>
+          <button onclick="abrirApostilaModal()" class="btn btn-ghost" style="font-size:0.78rem" title="Abrir a apostila completa do preparatório">📖 Apostila completa</button>
         </div>
       </div>
 
@@ -755,10 +756,25 @@
   </main>
 </div>
 
+<!-- Modal: Apostila completa (PDF embutido do Drive) -->
+<div class="ju-modal-overlay" id="apostila-modal-overlay">
+  <div class="ju-modal-panel ju-modal-lg">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:0.9rem 1.3rem;border-bottom:1px solid var(--line);flex-shrink:0">
+      <div style="font-family:'Fraunces',serif;font-size:1rem;font-weight:500;color:var(--ink)">📖 Apostila completa</div>
+      <div style="display:flex;gap:0.5rem">
+        <a href="https://drive.google.com/file/d/1MlMhae3vIQ0wkrrPzk-Vk2FktiXKrMxf/view?usp=sharing" target="_blank" rel="noopener" class="btn btn-ghost" style="font-size:0.78rem">↗ Abrir no Drive</a>
+        <button onclick="fecharApostilaModal()" class="btn" style="font-size:0.78rem">Fechar</button>
+      </div>
+    </div>
+    <iframe id="apostila-modal-iframe" src="" title="Apostila completa" style="flex:1;width:100%;border:none" allow="autoplay"></iframe>
+  </div>
+</div>
+
 <script src="plano-vde.js"></script>
 <script src="progresso.js"></script>
 <script src="script.js"></script>
 <script src="cores.js"></script>
+<script src="perfil.js"></script>
 <script>
 const QUOTES_OAB = [
   { text: "A advocacia não é profissão de covardes. Quem tem medo de perder a banca, de cair do cartaz, de comprometer o sucesso, que se faça funcionário, guarda-livros, ou que vá vender picolés à porta das escolas.", author: "Sobral Pinto" },
@@ -802,8 +818,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // Saudação dinâmica
   const hour = new Date().getHours();
   const greeting = hour < 12 ? 'Bom dia' : hour < 18 ? 'Boa tarde' : 'Boa noite';
+  const nomeUsuario = (window._perfilOAB && window._perfilOAB.getNome()) || 'Estudante';
   const greetEl = document.querySelector('.topbar h1');
-  if (greetEl) greetEl.innerHTML = `${greeting}, <em>Julia</em>`;
+  if (greetEl) greetEl.innerHTML = `${greeting}, <em>${nomeUsuario}</em>`;
 
   // Streak
   const p = carregarProgresso();
@@ -968,17 +985,23 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-function resetarProgresso() {
-  if (!confirm('Apagar todo o progresso? Esta ação não pode ser desfeita.')) return;
-  localStorage.removeItem('oab_progresso_v1');
-  localStorage.removeItem('ju_oab_streak');
-  localStorage.removeItem('ju_oab_streak_date');
-  localStorage.removeItem('oab_current_day');
-  location.reload();
+function abrirApostilaModal() {
+  const overlay = document.getElementById('apostila-modal-overlay');
+  const iframe = document.getElementById('apostila-modal-iframe');
+  iframe.src = 'https://drive.google.com/file/d/1MlMhae3vIQ0wkrrPzk-Vk2FktiXKrMxf/preview';
+  overlay.classList.add('active');
 }
+
+function fecharApostilaModal() {
+  document.getElementById('apostila-modal-overlay').classList.remove('active');
+  document.getElementById('apostila-modal-iframe').src = '';
+}
+
+document.getElementById('apostila-modal-overlay').addEventListener('click', e => {
+  if (e.target.id === 'apostila-modal-overlay') fecharApostilaModal();
+});
 </script>
-<script>function resetarTudo(){if(!confirm("Apagar TODO o progresso?
-Esta acao nao pode ser desfeita."))return;var t=localStorage.getItem("theme");localStorage.clear();if(t)localStorage.setItem("theme",t);location.reload();}</script>
+<script>function resetarTudo(){if(!confirm("Apagar TODO o progresso?\nEsta acao nao pode ser desfeita."))return;var t=localStorage.getItem("theme");localStorage.clear();if(t)localStorage.setItem("theme",t);location.reload();}</script>
 </body>
 </html>
 

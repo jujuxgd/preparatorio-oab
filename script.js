@@ -261,61 +261,36 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 
-// MODO FOCO — overlay canônico (mesmo padrão visual de todas as páginas)
-function toggleFocusMode() {
-  let overlay = document.getElementById('site-focus-overlay');
-  if (overlay && overlay.classList.contains('active')) {
-    overlay.classList.remove('active');
-    document.body.style.overflow = '';
-    return;
+// ── Sidebar retrátil (desktop) — estado persiste entre páginas ──
+const SIDEBAR_COLLAPSE_KEY = 'oab_sidebar_collapsed';
+
+function toggleSidebarCollapse() {
+  const app = document.querySelector('.app');
+  const btn = document.querySelector('.sidebar-toggle-btn');
+  if (!app) return;
+  const collapsed = app.classList.toggle('sidebar-collapsed');
+  if (btn) {
+    btn.classList.toggle('collapsed', collapsed);
+    btn.textContent = collapsed ? '›' : '‹';
+    btn.title = collapsed ? 'Mostrar menu' : 'Esconder menu';
   }
-  if (!overlay) {
-    const rawTitle = (document.title || 'OAB').replace(/\s*[|·—–]\s*.*/,'').trim();
-    overlay = document.createElement('div');
-    overlay.id = 'site-focus-overlay';
-    overlay.className = 'focus-overlay';
-    overlay.innerHTML = `
-      <div class="focus-panel">
-        <div class="focus-panel-mac">
-          <div class="focus-mac-lights">
-            <span class="fml fml-close" onclick="toggleFocusMode()" title="Fechar"></span>
-            <span class="fml fml-min"></span>
-            <span class="fml fml-max"></span>
-          </div>
-          <span class="focus-mac-title">${rawTitle.toUpperCase()}</span>
-          <div style="width:54px"></div>
-        </div>
-        <div class="focus-panel-body" id="site-focus-body"></div>
-      </div>`;
-    overlay.addEventListener('click', e => { if (e.target === overlay) toggleFocusMode(); });
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') {
-        const o = document.getElementById('site-focus-overlay');
-        if (o && o.classList.contains('active')) toggleFocusMode();
-      }
-    });
-    document.body.appendChild(overlay);
-  }
-  const focusBody = document.getElementById('site-focus-body');
-  const src = document.querySelector('.focus-dashboard-scroll') || document.querySelector('main');
-  if (src && focusBody) focusBody.innerHTML = src.innerHTML;
-  overlay.classList.add('active');
-  document.body.style.overflow = 'hidden';
+  localStorage.setItem(SIDEBAR_COLLAPSE_KEY, collapsed ? '1' : '0');
 }
 
-// Injeta botão foco na topbar (apenas em páginas que não têm um hardcoded)
-document.addEventListener('DOMContentLoaded', () => {
-  const topbarActions = document.querySelector('.topbar-actions');
-  if (topbarActions && !topbarActions.querySelector('[data-focus-btn]')) {
-    const focusBtn = document.createElement('button');
-    focusBtn.className = 'icon-btn';
-    focusBtn.setAttribute('data-focus-btn', '1');
-    focusBtn.title = 'Modo foco';
-    focusBtn.textContent = '✦';
-    focusBtn.onclick = toggleFocusMode;
-    topbarActions.prepend(focusBtn);
+document.addEventListener('DOMContentLoaded', function () {
+  if (localStorage.getItem(SIDEBAR_COLLAPSE_KEY) !== '1') return;
+  const app = document.querySelector('.app');
+  const btn = document.querySelector('.sidebar-toggle-btn');
+  if (app) app.classList.add('sidebar-collapsed');
+  if (btn) {
+    btn.classList.add('collapsed');
+    btn.textContent = '›';
+    btn.title = 'Mostrar menu';
   }
 });
+
+// Modo Foco existe apenas no Caderno Legislativo (clToggleFocus, definido
+// inline em caderno-legislativo.html) — não é mais injetado globalmente.
 
 // ============================================
 // NOVAS FUNÇÕES (STREAK, CHECKLIST, MOOD, ERROS)
