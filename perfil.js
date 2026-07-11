@@ -134,6 +134,58 @@
     fecharModal();
   }
 
+  // ── Backup completo: exporta/importa TODO o localStorage do app ──
+  function exportarBackupCompleto() {
+    const dados = {};
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      dados[k] = localStorage.getItem(k);
+    }
+    const payload = { app: 'preparatorio-oab', exportado_em: new Date().toISOString(), dados };
+    const json = JSON.stringify(payload, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    const data = new Date().toISOString().split('T')[0];
+    a.href = url;
+    a.download = `oab_backup_${data}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  function importarBackupCompleto(file) {
+    return new Promise((resolve, reject) => {
+      const r = new FileReader();
+      r.onload = (e) => {
+        try {
+          const payload = JSON.parse(e.target.result);
+          const dados = (payload && typeof payload === 'object' && payload.dados) ? payload.dados : payload;
+          if (!dados || typeof dados !== 'object') throw new Error('Arquivo inválido');
+          Object.keys(dados).forEach(k => {
+            try { localStorage.setItem(k, dados[k]); } catch (e) {}
+          });
+          resolve();
+        } catch (err) { reject(err); }
+      };
+      r.onerror = reject;
+      r.readAsText(file);
+    });
+  }
+
+  // Clicar no card do perfil (avatar/nome na sidebar) abre a página completa
+  // /perfil.html — painel pessoal com humor, insights, histórico e gráficos.
+  function injetarClickCard() {
+    const jaNaPagina = /(^|\/)perfil\.html$/.test(location.pathname);
+    document.querySelectorAll('.profile-card').forEach(card => {
+      if (card.dataset.painelLigado) return;
+      card.dataset.painelLigado = '1';
+      if (jaNaPagina) return;
+      card.addEventListener('click', () => { location.href = 'perfil.html'; });
+    });
+  }
+
   // ── Botão de editar sobre o avatar da sidebar ──
   // (a .profile-avatar tem overflow:hidden para recortar a foto em círculo,
   // então o botão precisa ficar num wrapper irmão, não dentro dela.)
@@ -162,7 +214,8 @@
   document.addEventListener('DOMContentLoaded', () => {
     aplicarPerfil();
     injetarBotaoEditar();
+    injetarClickCard();
   });
 
-  window._perfilOAB = { getNome, getFoto, abrirModal };
+  window._perfilOAB = { getNome, getFoto, abrirModal, exportarBackupCompleto, importarBackupCompleto };
 })();

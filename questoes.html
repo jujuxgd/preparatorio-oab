@@ -212,7 +212,7 @@
   <main>
     <div class="topbar">
       <div class="page-title">
-        <div class="breadcrumb">Questões · QConcursos</div>
+        <div class="breadcrumb">Questões</div>
         <h1>Tracker de <em>questões</em></h1>
       </div>
       <div class="topbar-actions">
@@ -224,7 +224,7 @@
 
     <!-- Form de registo -->
     <div class="q-form">
-      <div class="q-form-title">◎ Registar sessão do QConcursos</div>
+      <div class="q-form-title">◎ Registar sessão de questões</div>
       <div class="q-form-grid">
         <div class="q-field">
           <label class="q-label">Matéria</label>
@@ -364,7 +364,7 @@ function renderCards() {
     </div>`;
   });
   document.getElementById('q-grid').innerHTML = html ||
-    `<div style="color:var(--ink-faded);font-size:0.88rem;grid-column:1/-1;padding:1rem;text-align:center">${_activeFilter ? 'Nenhuma questão registada para esta matéria.' : 'Nenhuma questão registada ainda. Faça questões no QConcursos e registe aqui!'}</div>`;
+    `<div style="color:var(--ink-faded);font-size:0.88rem;grid-column:1/-1;padding:1rem;text-align:center">${_activeFilter ? 'Nenhuma questão registada para esta matéria.' : 'Nenhuma questão registada ainda. Resolva questões e registe aqui!'}</div>`;
 }
 
 function renderHistorico() {

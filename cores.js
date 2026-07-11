@@ -67,6 +67,29 @@
     return /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(v);
   }
 
+  // ── Aliases (--rose, --rose-deep, --rose-soft, --blush) ──
+  // style.css redefine esses aliases com valores fixos dentro de
+  // [data-theme="dark"], o que travava a cor em rosa no modo escuro
+  // mesmo depois de trocar a intensidade/cor personalizada. Aqui eles
+  // são recalculados a partir da MESMA cor-base e aplicados via inline
+  // style, que tem prioridade sobre a regra fixa da folha de estilos.
+  function applyAliases(base) {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const root = document.documentElement;
+    const set = isDark ? {
+      '--rose':      lighten(base, 0.32),
+      '--rose-deep': lighten(base, 0.20),
+      '--rose-soft': darken(base, 0.75),
+      '--blush':     darken(base, 0.82),
+    } : {
+      '--rose':      lighten(base, 0.18),
+      '--rose-deep': base,
+      '--rose-soft': lighten(base, 0.88),
+      '--blush':     lighten(base, 0.95),
+    };
+    Object.entries(set).forEach(([k, v]) => root.style.setProperty(k, v));
+  }
+
   function applyCustom(rawHex) {
     const hex = normalizeHex(rawHex);
     if (!isValidHex(hex)) return false;
@@ -74,6 +97,7 @@
     const rose600 = hex;
     const ramp = buildRamp(hex);
     Object.entries(ramp).forEach(([k, v]) => root.style.setProperty(k, v));
+    applyAliases(hex);
     try {
       localStorage.setItem(KEY, 'custom');
       localStorage.setItem(CUSTOM_KEY, rose600);
@@ -99,6 +123,7 @@
     const set = LEVELS[level] ? level : 'couture';
     const root = document.documentElement;
     Object.entries(LEVELS[set]).forEach(([k, v]) => root.style.setProperty(k, v));
+    applyAliases(BASES[set]);
     try { localStorage.setItem(KEY, set); } catch (e) {}
     document.querySelectorAll('._ri-sw').forEach(b => {
       const active = b.dataset.level === set;
@@ -136,8 +161,8 @@
     const toggle = document.createElement('button');
     toggle.className = 'btn btn-ghost';
     toggle.style.cssText = 'display:flex;align-items:center;justify-content:center;padding:0;width:32px;height:32px;border-radius:50%';
-    toggle.title = 'Cor do tema';
-    toggle.setAttribute('aria-label', 'Cor do tema');
+    toggle.title = 'Cor personalizada';
+    toggle.setAttribute('aria-label', 'Cor personalizada');
     toggle.innerHTML = '<span style="width:18px;height:18px;border-radius:50%;background:var(--rose-600);display:inline-block;flex-shrink:0;border:1px solid rgba(0,0,0,.08)"></span>';
     toggle.addEventListener('click', e => { e.stopPropagation(); _toggle(); });
     wrap.appendChild(toggle);
@@ -149,25 +174,6 @@
       'background:var(--paper)', 'border:1px solid var(--line)', 'border-radius:var(--radius)',
       'box-shadow:var(--shadow-lg)', 'padding:1rem', 'min-width:200px', 'z-index:9999'
     ].join(';');
-    dd.innerHTML = '<div style="font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-faded);margin-bottom:.7rem;font-weight:600">Cor do tema</div>';
-
-    const col = document.createElement('div');
-    col.style.cssText = 'display:flex;align-items:center;gap:.6rem';
-    ORDER.forEach(([lvl, label]) => {
-      const b = document.createElement('button');
-      b.className = '_ri-sw';
-      b.dataset.level = lvl;
-      b.title = label;
-      b.setAttribute('aria-label', label);
-      b.style.cssText = 'width:28px;height:28px;border-radius:50%;border:none;cursor:pointer;transition:all .2s;background:' + LEVELS[lvl]['--rose-600'];
-      b.addEventListener('click', () => { apply(lvl); _toggle(false); });
-      col.appendChild(b);
-    });
-    dd.appendChild(col);
-
-    const divider = document.createElement('div');
-    divider.style.cssText = 'height:1px;background:var(--line);margin:.75rem 0';
-    dd.appendChild(divider);
 
     const customLabel = document.createElement('div');
     customLabel.style.cssText = 'font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-faded);margin-bottom:.5rem;font-weight:600';

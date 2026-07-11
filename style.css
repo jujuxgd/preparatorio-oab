@@ -407,6 +407,13 @@ body {
   gap: 0.7rem;
   padding: 0.45rem 0.5rem;
   margin-bottom: 0.5rem;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: background var(--transition);
+}
+
+.profile-card:hover {
+  background: var(--bg-soft);
 }
 
 /* Scrollbar fina na sidebar para indicar que é rolável */
