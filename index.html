@@ -558,8 +558,8 @@
       <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg></span>
       <span>Revisar</span>
     </a>
-
     <div class="nav-section-label">Estudo</div>
+    <a href="videoaulas.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg></span><span>Videoaulas</span></a>
     <a href="materias.html" class="nav-link">
       <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg></span>
       <span>Matérias</span>
@@ -569,7 +569,6 @@
       <span>Questões</span>
     </a>
     <a href="erros.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.4 2.6a1 1 0 0 1 3 3l-9 9a2 2 0 0 1-.85.5l-2.9.85a.5.5 0 0 1-.62-.62l.85-2.9a2 2 0 0 1 .5-.85z"/></svg></span><span>Caderno de Erros</span></a>
-    <a href="caderno-legislativo.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg></span><span>Caderno Legislativo</span></a>
 
     <div class="nav-section-label">Análise</div>
     <a href="estatisticas.html" class="nav-link">
@@ -595,6 +594,8 @@
         <span class="theme-label">Modo escuro</span>
         <span class="toggle-track"><span class="toggle-thumb"></span></span>
       </button>
+    
+      <button onclick="resetarTudo()" style="margin-top:0.5rem;width:100%;padding:0.5rem;background:none;border:1px solid rgba(196,151,143,0.35);border-radius:var(--radius-sm);font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-faded);cursor:pointer;font-family:inherit;transition:all var(--transition)" onmouseover="this.style.borderColor='var(--rose)'" onmouseout="this.style.borderColor=rgba(0,0,0,0.15)">&#8635; Resetar Tudo</button>
     </div>
   </aside>
 
@@ -610,8 +611,6 @@
           <span class="count" id="streak-count">0</span>
           <span class="label">dias</span>
         </div>
-        <button class="icon-btn" title="Notificações">◌</button>
-        <button class="icon-btn" data-focus-btn="1" title="Modo foco" onclick="toggleFocusMode()">✦</button>
       </div>
     </div>
 
@@ -632,7 +631,7 @@
         <div class="countdown">
           <div class="number" data-countdown>—</div>
           <div class="label">dias</div>
-          <div class="date">restantes · 20 dez</div>
+          <div class="date">restantes · OAB 48 · 10 jan</div>
         </div>
       </div>
     </div>
@@ -811,20 +810,18 @@ document.addEventListener('DOMContentLoaded', () => {
   const streakCount = document.getElementById('streak-count');
   if (streakCount) streakCount.textContent = p.streak || 0;
 
-  // Tag de dia — usa oab_current_day se disponível, senão getStudyDay()
+  // Tag de dia — baseada no calendário (seg-sex, 10/07/2026 – 01/01/2027)
   const tag = document.getElementById('today-tag-dynamic');
-  const _savedDay = localStorage.getItem('oab_current_day');
-  const _calcDay  = getStudyDay();
-  // oab_current_day tem prioridade (reflete o progresso real do usuário)
-  const rawDay    = _savedDay ? parseInt(_savedDay) : _calcDay;
-  const dia       = rawDay <= 0 ? 1 : Math.min(rawDay, 60);
-  const isPreview = !_savedDay && _calcDay <= 0;
+  const dia = getStudyDay();
   if (tag) {
-    if (isPreview) {
-      const daysLeft = Math.ceil((new Date(2026,5,1) - getCurrentDate()) / 864e5);
-      tag.textContent = daysLeft > 0 ? `🌸 Começa em ${daysLeft} dias` : '○ Plano iniciado!';
+    if (isDiaProva()) {
+      tag.textContent = '🏛️ Dia da Prova — OAB 48';
+    } else if (isRevisaoEstrategica()) {
+      tag.textContent = '↻ Revisão Estratégica (4–8 jan)';
+    } else if (!isWeekday(getCurrentDate())) {
+      tag.textContent = '🌿 Fim de semana livre';
     } else {
-      tag.textContent = `○ Dia ${dia} de 60`;
+      tag.textContent = `○ Dia ${dia} de 120`;
     }
   }
 
@@ -980,6 +977,8 @@ function resetarProgresso() {
   location.reload();
 }
 </script>
+<script>function resetarTudo(){if(!confirm("Apagar TODO o progresso?
+Esta acao nao pode ser desfeita."))return;var t=localStorage.getItem("theme");localStorage.clear();if(t)localStorage.setItem("theme",t);location.reload();}</script>
 </body>
 </html>
 

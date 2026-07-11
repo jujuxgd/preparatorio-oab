@@ -27,8 +27,41 @@ function clearSimulatedDate() {
 }
 
 // DATAS IMPORTANTES
-const EXAM_DATE = new Date(2026, 11, 20); // 20 de dezembro de 2026
-const STUDY_START = new Date(2026, 5, 1); // referência — o plano é flexível (120 dias de estudo)
+const EXAM_DATE   = new Date(2027, 0, 10);  // 10 de janeiro de 2027 — OAB 48
+const STUDY_START = new Date(2026, 6, 10);  // 10 de julho de 2026
+
+// ── Calendário de dias úteis ───────────────────
+function isWeekday(date) {
+  const dow = date.getDay();
+  return dow >= 1 && dow <= 5;
+}
+
+// Retorna o número do dia de estudo (1-N) para uma data calendar.
+// Conta apenas dias úteis a partir de 10/07/2026.
+function getStudyDayForDate(date) {
+  const d = new Date(date); d.setHours(0,0,0,0);
+  const start = new Date(2026, 6, 10); start.setHours(0,0,0,0);
+  if (d < start) return 0;
+  let count = 0;
+  const cur = new Date(start);
+  while (cur <= d) {
+    if (isWeekday(cur)) count++;
+    cur.setDate(cur.getDate() + 1);
+  }
+  return Math.min(count, 120);
+}
+
+// Retorna true se hoje está na semana de revisão estratégica (Jan 4-8, 2027)
+function isRevisaoEstrategica() {
+  const d = getCurrentDate();
+  return d.getFullYear() === 2027 && d.getMonth() === 0 && d.getDate() >= 4 && d.getDate() <= 8;
+}
+
+// Retorna true se hoje é o dia da prova (10 de janeiro de 2027)
+function isDiaProva() {
+  const d = getCurrentDate();
+  return d.getFullYear() === 2027 && d.getMonth() === 0 && d.getDate() === 10;
+}
 
 // Nomes dos meses e dias em PT-BR
 const MONTHS_PT = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
@@ -51,19 +84,17 @@ function getDaysUntilExam() {
   return Math.ceil(diff / (1000 * 60 * 60 * 24));
 }
 
-// Retorna o próximo dia de estudo não concluído (1-120)
-// Baseado em progresso real, não em data do calendário
+// Retorna o dia de estudo atual baseado no calendário.
+// Fins de semana retornam o número do último dia útil.
 function getStudyDay() {
-  try {
-    const s = localStorage.getItem('oab_progresso_v1');
-    if (!s) return 1;
-    const p = JSON.parse(s);
-    if (!p.dias) return 1;
-    for (let i = 1; i <= 120; i++) {
-      if (!p.dias[String(i)] || !p.dias[String(i)].concluido) return i;
-    }
-    return 120;
-  } catch(e) { return 1; }
+  let today = getCurrentDate();
+  today.setHours(0,0,0,0);
+  if (!isWeekday(today)) {
+    const prev = new Date(today);
+    while (!isWeekday(prev)) prev.setDate(prev.getDate() - 1);
+    return getStudyDayForDate(prev);
+  }
+  return getStudyDayForDate(today) || 1;
 }
 
 // THEME TOGGLE

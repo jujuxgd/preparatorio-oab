@@ -243,10 +243,10 @@
     <a href="calendario.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span><span>Calendário</span></a>
     <a href="revisar.html" class="nav-link active"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg></span><span>Revisar</span><span class="badge" style="display:none">0</span></a>
     <div class="nav-section-label">Estudo</div>
+    <a href="videoaulas.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg></span><span>Videoaulas</span></a>
     <a href="materias.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg></span><span>Matérias</span></a>
     <a href="questoes.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></span><span>Questões</span></a>
     <a href="erros.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.4 2.6a1 1 0 0 1 3 3l-9 9a2 2 0 0 1-.85.5l-2.9.85a.5.5 0 0 1-.62-.62l.85-2.9a2 2 0 0 1 .5-.85z"/></svg></span><span>Caderno de Erros</span></a>
-    <a href="caderno-legislativo.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg></span><span>Caderno Legislativo</span></a>
 
     
     
@@ -268,6 +268,8 @@
         <span class="theme-label">Modo escuro</span>
         <span class="toggle-track"><span class="toggle-thumb"></span></span>
       </button>
+    
+      <button onclick="resetarTudo()" style="margin-top:0.5rem;width:100%;padding:0.5rem;background:none;border:1px solid rgba(196,151,143,0.35);border-radius:var(--radius-sm);font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-faded);cursor:pointer;font-family:inherit;transition:all var(--transition)">&#8635; Resetar Tudo</button>
     </div>
   </aside>
 
@@ -277,11 +279,7 @@
         <div class="breadcrumb">Memória ativa · Curva de Ebbinghaus</div>
         <h1>Revisar <em>hoje</em></h1>
       </div>
-      <div class="topbar-actions">
-        <div class="streak-pill">
-          <span class="flame">🌸</span><span class="count">0</span><span class="label">dias</span>
-        </div>
-      </div>
+      <div class="topbar-actions"></div>
     </div>
 
     <div class="info-banner">
@@ -386,6 +384,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Urgentes primeiro, depois por diff crescente
   cards.sort((a,b) => (b.isUrgent - a.isUrgent) || (a.diff - b.diff));
+
+  // Adiciona microresumos do usuário para dias dentro do intervalo de revisão
+  Object.entries(p.dias || {}).forEach(([numDia, dData]) => {
+    if (!dData.concluido || !dData.data_conclusao) return;
+    const mrTexto = localStorage.getItem('microresumo_dia_' + numDia) || '';
+    if (!mrTexto.trim()) return;
+    const concl = new Date(dData.data_conclusao);
+    const diff  = Math.round((hoje - concl) / 864e5);
+    if (diff < 1) return;
+    const jaRevMrHoje = (dData['revisao_mr'] === hojeStr);
+    if (jaRevMrHoje) return;
+    const quando = diff === 1 ? 'há 1 dia' : `há ${diff} dias`;
+    const isUrgent = diff <= 3;
+    const dado = typeof getDadosDia === 'function' ? getDadosDia(parseInt(numDia)) : null;
+    const matNome = dado ? dado.materia : `Dia ${numDia}`;
+    const escapedTexto = mrTexto.replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    cards.push({ diff, isUrgent, html: `
+      <div class="revisao-card${isUrgent?' urgent':''}" style="border-left:4px solid var(--rose)">
+        <div class="rev-head">
+          <div style="flex:1">
+            <div style="display:flex;gap:0.5rem;margin-bottom:0.4rem;align-items:center;flex-wrap:wrap">
+              <span class="rev-tag">${quando}</span>
+              <span style="font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;background:var(--blush);color:var(--rose-deep);padding:0.2rem 0.6rem;border-radius:20px;font-weight:600">✦ Meu Resumo</span>
+              <span style="font-size:0.65rem;background:var(--bg-soft);color:var(--ink-faded);padding:0.2rem 0.5rem;border-radius:20px">Dia ${numDia}</span>
+            </div>
+            <h3 class="rev-title">${matNome.replace(' · ',' <em>·</em> ')}</h3>
+            <div class="rev-meta">Microresumo escrito por você</div>
+          </div>
+          <a href="hoje.html?dia=${numDia}" style="font-size:0.72rem;color:var(--rose-deep);text-decoration:none;white-space:nowrap;align-self:flex-start;margin-top:0.3rem">Ver conteúdo →</a>
+        </div>
+        <div style="white-space:pre-wrap;font-size:0.88rem;color:var(--ink);line-height:1.7;padding:1rem 1.2rem;background:var(--bg-soft);border-radius:var(--radius-sm);margin-bottom:1rem">${escapedTexto}</div>
+        <div class="rev-feedback">
+          <button class="feedback-btn lembrei" onclick="registrarFeedbackMr(this,'lembrei',${numDia})">✓ Revisado</button>
+          <button class="feedback-btn esqueci" onclick="registrarFeedbackMr(this,'esqueci',${numDia})">↻ Rever depois</button>
+        </div>
+      </div>` });
+  });
+
   const container = document.getElementById('revisao-cards');
   const banner = document.getElementById('rev-banner-title');
 
@@ -551,7 +587,20 @@ function registrarFeedbackMat(btn, tipo, numDia, mIdx) {
 function registrarFeedback(btn, tipo, numDia) {
   registrarFeedbackMat(btn, tipo, numDia, 0);
 }
+
+function registrarFeedbackMr(btn, tipo, numDia) {
+  const card = btn.closest('.revisao-card');
+  if (card) { card.style.opacity = '0.5'; card.style.transition = 'opacity 0.4s'; setTimeout(() => card.remove(), 400); }
+  const today = new Date().toISOString().split('T')[0];
+  const p = carregarProgresso();
+  const key = String(numDia);
+  if (!p.dias[key]) p.dias[key] = {};
+  if (tipo === 'lembrei') p.dias[key]['revisao_mr'] = today;
+  salvarProgresso(p);
+}
 </script>
+<script>function resetarTudo(){if(!confirm("Apagar TODO o progresso?
+Esta acao nao pode ser desfeita."))return;var t=localStorage.getItem("theme");localStorage.clear();if(t)localStorage.setItem("theme",t);location.reload();}</script>
 </body>
 </html>
 

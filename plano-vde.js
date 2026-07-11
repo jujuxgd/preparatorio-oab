@@ -1,26 +1,8 @@
 // ============================================================
-// VDE 120 Dias · OAB 1ª Fase
-// Baseado nos PDFs "Resumo - Semana XX (120 dias)"
-// Método Ana Clara Fernandes · @viciodeumaestudante
+// OAB 48 · Plano de Revisão Ativa
+// Método VDE 120 Dias — Ana Clara Fernandes
+// Foco: tópicos de direcionamento + flashcards por dia
 // ============================================================
-
-const _VDE_PDF_IDS = {
-  1:'1fubBaoKYuxSn7s9nNG5DNyDIbPHgM6mL', 2:'1kWdKghftTNhbLD03x1ROF3gtTGd6KiSR',
-  3:'1oiJ7e0ZCiAkmQbxqygNMZCGmTDUf2mtQ', 4:'1I8xd9IJRZzTtHHRqWhPkUnwIHkjhub5E',
-  5:'1smrTu6fkv5PgK2k-Sk81AMAEATjWX_aJ', 6:'1-dO-Pg5ZGS-VoAhOZgZBxs_1TSNxwnVw',
-  7:'1gn3JLmUH1sEujIDdTmNZLjMZEtejE_nL', 8:'1zgj6y79VZkaaF1V91IP5XsDowys3OogC',
-  9:'1AvBg3tRVFHYJJOV1ubayOSBD6v_Hjfvh', 10:'1jzt2EzvCq8S0mHc9UZoUU05yiz6cL7cz',
-  11:'1t3gMZCGy4e_pzQyAjrj73MAfv7cZW4Et',12:'1xH4JUZcCv3C3_BIUJRzPHP7InvTKQyEN',
-  13:'1cflsheiFcZWx7R2XRwiYpNEiMSsQw6Q3',14:null,
-  15:'1_AE4xeoSKsa6SbcnVqQmrJZ3kCupjKVB',16:'1vAt_1jny7Tbb7KJVaXCCBXGKh3mvYanG',
-  17:'1FtRRU7O25Gui8CHs5c41esrnQr96xPZs', 18:'1dUQgt_mZHvRNG9IJSn6pktUnxwaKwG_X',
-  19:'1NX0fEpfFZwYrI-eLGFaQdW75-avXolxs',20:'1uH5T9KcXNuvo9Gl0azIHANODy358YRlm'
-};
-
-function vdePdfUrl(semana) {
-  const id = _VDE_PDF_IDS[semana];
-  return id ? 'https://drive.google.com/file/d/' + id + '/view' : null;
-}
 
 // ════════════════════════════════════════════════════════════
 // PLANO_VDE — Array principal. Dias com conteúdo completo
@@ -28,6 +10,8 @@ function vdePdfUrl(semana) {
 // pela IIFE ao final. getDadosDia usa .find() — primeiro
 // match vence, portanto entradas reais DEVEM vir antes da IIFE.
 // ════════════════════════════════════════════════════════════
+const _VDE_PDF_IDS = {};
+
 const PLANO_VDE = [
 
 // ════════════════════════════════════════════════════
@@ -51,52 +35,16 @@ const PLANO_VDE = [
              'Dimensões dos Direitos Fundamentais (1ª, 2ª, 3ª)',
              'Tratados Internacionais de DH — status normativo (supralegal vs constitucional)',
              'Art. 5 CF — rol não exaustivo, aplicabilidade imediata'] }],
-  flashcards:[
-    { id:'d1_f1', frente:'Quais são as características do Poder Constituinte Originário (PCO)?',
-      verso:'É inicial (inaugura nova ordem jurídica), autônomo (não se subordina a nada anterior), ilimitado e incondicionado juridicamente. Pressupõe poder político (fático), não jurídico.',
-      pegadinha:'Normas do PCO têm presunção ABSOLUTA de constitucionalidade — não cabem em ADI perante o STF.', caiu:'OAB 35, 27' },
-    { id:'d1_f2', frente:'O Presidente da República pode vetar uma Emenda Constitucional?',
-      verso:'NÃO. A EC é promulgada pelas Mesas da Câmara e do Senado — sem participação do Presidente (sem sanção, sem veto). O Presidente apenas tem INICIATIVA de EC (art. 60, II CF).',
-      pegadinha:'A EC sequer passa pelo Presidente para ser promulgada!', caiu:'OAB 37, 25' },
-    { id:'d1_f3', frente:'O voto obrigatório é cláusula pétrea e não pode ser extinto por EC?',
-      verso:'FALSO. Art. 60, §4 CF protege o voto direto, secreto, universal e PERIÓDICO. Voto OBRIGATÓRIO não está listado — pode ser extinto por EC sem violar a CF.',
-      pegadinha:'Cláusulas pétreas admitem emendas apenas para AMPLIAR a proteção, nunca para diminuir ou abolir.', caiu:'OAB 25' },
-    { id:'d1_f4', frente:'Como impugnar PEC que viola cláusula pétrea — antes e depois de aprovada?',
-      verso:'ANTES da aprovação: Mandado de Segurança preventivo impetrado por parlamentar (controle preventivo pelo PJ). DEPOIS de aprovada: ADI no STF (controle repressivo concentrado).',
-      caiu:'OAB 40, 41' },
-    { id:'d1_f5', frente:'Tipos de eficácia das normas constitucionais (José Afonso da Silva):',
-      verso:'PLENA: direta, imediata e integral — independe de regulamentação. CONTIDA: direta e imediata, mas pode ser RESTRINGIDA por lei (ex: livre exercício profissional). LIMITADA: indireta e mediata — exige lei para se concretizar (institutivas e programáticas).',
-      caiu:'OAB 24' },
-    { id:'d1_f6', frente:'Brasil adota a teoria da inconstitucionalidade superveniente?',
-      verso:'NÃO. Se norma pré-constitucional é incompatível com a nova CF, ocorre NÃO RECEPÇÃO (revogação), não inconstitucionalidade superveniente. Consequência: não cabe ADI — cabe ADPF.',
-      caiu:'OAB 33' },
-    { id:'d1_f7', frente:'Status normativo dos Tratados Internacionais de Direitos Humanos:',
-      verso:'Aprovados pelo rito do art. 5, §3 CF (3/5 em dois turnos em cada Casa): status de EMENDA CONSTITUCIONAL. Aprovados pelo rito ordinário: status SUPRALEGAL (acima das leis ordinárias, abaixo da CF). STF adota o critério do rito.',
-      caiu:'OAB 32, 38' },
-    { id:'d1_f8', frente:'O rol do art. 5 CF é taxativo (fechado)?',
-      verso:'NÃO. É EXEMPLIFICATIVO (art. 5, §2 CF). Outros direitos fundamentais podem estar espalhados pela CF ou decorrer de Tratados Internacionais de DH ou dos princípios adotados pelo Brasil.',
-      caiu:'OAB 29' },
-    { id:'d1_f9', frente:'O que são as dimensões (gerações) dos Direitos Fundamentais?',
-      verso:'1ª: liberdades negativas (contra o Estado) — direitos civis e políticos. 2ª: prestações positivas do Estado — direitos sociais, econômicos, culturais. 3ª: direitos coletivos e difusos — paz, meio ambiente, autodeterminação dos povos.',
-      caiu:'OAB 36' },
-    { id:'d1_f10', frente:'O que é a Reserva do Possível e quais as suas 3 dimensões?',
-      verso:'Princípio segundo o qual os recursos públicos são limitados e as necessidades, ilimitadas — o Estado não pode atender a todas as demandas sociais. 3 dimensões: (1) Disponibilidade FÁTICA: insuficiência de recursos para concretizar direitos; (2) Disponibilidade JURÍDICA: relação com a distribuição de receitas e despesas, competências tributárias e orçamentárias; (3) LOGICAMENTE POSSÍVEL: impede que se peça objeto juridicamente impossível.',
-      pegadinha:'Reserva do Possível NÃO é sinônimo de ausência total de recursos — o Estado deve demonstrar que realmente não tem como atender.', caiu:'OAB 31' },
-    { id:'d1_f11', frente:'Inviolabilidade domiciliar — quando pode entrar SÓ DE DIA e quando PODE A QUALQUER HORA?',
-      verso:'SOMENTE DURANTE O DIA: por determinação judicial (busca e apreensão). *CAIU NA OAB 35 e 33* — EM QUALQUER HORÁRIO (dia, noite, madrugada): flagrante delito; desastre; para prestar socorro. São situações EMERGENCIAIS que justificam a entrada a qualquer momento. EXCEÇÃO ADICIONAL: durante o Estado de Sítio (art. 139, V CF), pode ser determinada busca e apreensão domiciliar independentemente de ordem judicial.',
-      pegadinha:'Busca e apreensão judicial = apenas durante o DIA. Flagrante, desastre e socorro = QUALQUER HORÁRIO!', caiu:'OAB 35, 33, 43' },
-    { id:'d1_f12', frente:'Quebra do sigilo de DADOS BANCÁRIOS, FISCAIS e TELEFÔNICOS — quem pode determinar?',
-      verso:'DADOS BANCÁRIOS: autoridade judicial OU CPIs. (TCU e MP NÃO podem). DADOS FISCAIS: autoridade judicial OU CPIs. Receita Federal PODE compartilhar dados com a polícia/MP para fins penais SEM autorização judicial (STF RE 1.055.941/SP). Mas o MP NÃO pode requisitar diretamente (STJ RHC 83233-MG). DADOS TELEFÔNICOS (registros de chamadas): autoridade judicial OU CPIs. INTERCEPTAÇÃO TELEFÔNICA (conteúdo da conversa): SOMENTE por ordem judicial, para fins de investigação criminal, com previsão em lei.',
-      pegadinha:'CPI pode quebrar sigilo bancário, fiscal e telefônico (registros). Mas NÃO pode determinar interceptação telefônica (conteúdo da conversa) — só o juiz!', caiu:'OAB (múltiplos)' },
-    { id:'d1_f13', frente:'Direito de reunião — depende de autorização? Aviso prévio: CF vs STF divergência:',
-      verso:'Requisitos (CF): (1) pacífica; (2) em local aberto ao público; (3) INDEPENDE de autorização; (4) deve ser comunicada previamente à autoridade competente; (5) não pode frustrar reunião anteriormente marcada. *CAIU NA OAB 26* — DIVERGÊNCIA: STF (RE 806339) entendeu que o aviso prévio NÃO é necessário. Em prova: se pedir "de acordo com a CF" → aviso prévio exigido; se pedir "de acordo com o STF" → NÃO é necessário.',
-      pegadinha:'Se a questão pedir "CF" → aviso prévio necessário. Se pedir "STF" → não necessário. Nunca confunda com autorização — reunião NUNCA precisa de autorização!' }
-  ],
+  flashcards:[],
   checklist:[
-    {id:'c1-1',texto:'Estudar todos os flashcards do Dia 1 — Constitucional'},
-    {id:'c1-2',texto:'Resolver 10 questões de Constitucional no QConcursos'},
-    {id:'c1-3',texto:'Memorizar: PCO vs PCD × eficácias das normas × tratados DH'},
-    {id:'c1-4',texto:'Anotar dúvidas no Caderno de Erros'}
+  {id:'d1_c1',texto:'Poder Constituinte Originário — inicial, autônomo, ilimitado, incondicionado',feito:false},
+  {id:'d1_c2',texto:'Poder Constituinte Derivado — limitações formal, material e circunstancial',feito:false},
+  {id:'d1_c3',texto:'Cláusulas Pétreas (art. 60, §4 CF) — o que é e o que não é pétreo',feito:false},
+  {id:'d1_c4',texto:'Eficácia das normas: plena, contida, limitada (José Afonso da Silva)',feito:false},
+  {id:'d1_c5',texto:'Recepção constitucional e mutação constitucional',feito:false},
+  {id:'d1_c6',texto:'Dimensões dos Direitos Fundamentais (1ª, 2ª, 3ª)',feito:false},
+  {id:'d1_c7',texto:'Tratados Internacionais de DH — status normativo (supralegal vs constitucional)',feito:false},
+  {id:'d1_c8',texto:'Art. 5 CF — rol não exaustivo, aplicabilidade imediata',feito:false}
   ],
   sumula:{ sigla:'Súmula Vinculante 25 · STF', texto:'É ilícita a prisão civil de depositário infiel, qualquer que seja a modalidade do depósito.' },
   incidencia:95, pdf_id:_VDE_PDF_IDS[1], lei_seca:['CF arts. 5, 60, 102'] },
@@ -115,43 +63,16 @@ const PLANO_VDE = [
              'Salário vs Remuneração — conceito e diferenças',
              'Verbas rescisórias — TRCT e prazo de pagamento',
              'FGTS — alíquota, depósito e saque'] }],
-  flashcards:[
-    { id:'d2_f1', frente:'Quais são os 5 requisitos do vínculo empregatício? (Mnemônico: SHOPP)',
-      verso:'S-Subordinação jurídica, H-Habitualidade (não eventualidade), O-Onerosidade (salário), P-Pessoalidade (intuitu personae), P-Pessoa Física. Todos simultâneos e indispensáveis.',
-      pegadinha:'Basta FALTAR UM para não haver vínculo empregatício. Eventual = sem habitualidade.', caiu:'OAB 36, 32' },
-    { id:'d2_f2', frente:'Qual a diferença entre relação de TRABALHO e relação de EMPREGO?',
-      verso:'Relação de TRABALHO: gênero — toda prestação de serviço humano. Relação de EMPREGO: espécie — apenas quando preenchidos os 5 requisitos SHOPP. Todo empregado é trabalhador; nem todo trabalhador é empregado.',
-      caiu:'OAB 29' },
-    { id:'d2_f3', frente:'Trabalhador avulso tem os mesmos direitos do empregado registrado?',
-      verso:'SIM. Art. 7, XXXIV CF garante ao avulso isonomia de direitos em relação ao empregado com vínculo permanente. O avulso NÃO tem FGTS ou férias da mesma forma, pois sua relação é com o OGMO/sindicato.',
-      caiu:'OAB 33' },
-    { id:'d2_f4', frente:'Contrato de trabalho por prazo determinado — prazo máximo e prorrogação:',
-      verso:'Prazo máximo: 2 anos (CLT). Pode ser prorrogado UMA VEZ. Prorrogado por mais de uma vez ou ultrapassado o prazo → vira INDETERMINADO automaticamente. Exceção: contratos de experiência (90 dias, prorrogável uma vez). ATENÇÃO: NÃO há aviso prévio e NEM multa do FGTS no contrato por prazo determinado!',
-      pegadinha:'Contrato de experiência é espécie de contrato por prazo determinado — não é autônomo! E não há FGTS nem aviso prévio nesta modalidade.', caiu:'OAB 30' },
-    { id:'d2_f5', frente:'O que é salário e o que é remuneração?',
-      verso:'SALÁRIO: contraprestação paga diretamente pelo empregador. REMUNERAÇÃO: salário + gorjetas (valores de terceiros). Base de cálculo: salário (FGTS, 13º, aviso prévio). Gorjeta integra o salário para fins de horas extras e adicional noturno.',
-      caiu:'OAB 37' },
-    { id:'d2_f6', frente:'Qual o prazo para pagamento das verbas rescisórias?',
-      verso:'10 dias corridos contados do término do contrato, independentemente do motivo da rescisão (reforma trabalhista — Lei 13.467/2017). Antes da reforma: 1 ou 10 dias. Multa por atraso: 160% sobre o total das verbas.',
-      caiu:'OAB 31' },
-    { id:'d2_f7', frente:'Jornada máxima de trabalho e como são calculadas as horas extras:',
-      verso:'Máximo: 8h/dia e 44h/semanais. Hora extra: adicional de 50% sobre o valor da hora normal (CF). Jornada em turnos ininterruptos de revezamento: 6h (Súmula 423 TST se fixada em ACT).',
-      caiu:'OAB 28' },
-    { id:'d2_f8', frente:'O estagiário tem vínculo empregatício com o tomador de serviços?',
-      verso:'NÃO. Estágio (Lei 11.788/08) NÃO gera vínculo empregatício se observados os requisitos: (a) estudante matriculado; (b) instrumento jurídico (TCE); (c) supervisor na empresa; (d) professor orientador na escola; (e) jornada e prazo compatíveis. EXCEÇÃO: pode haver vínculo se houver FRAUDE no estágio. ATENÇÃO: é PERMITIDA a adoção do regime de teletrabalho para estagiários e aprendizes (art. 75-B, §6 CLT). *CAIU NA OAB 40*',
-      caiu:'OAB 40' },
-    { id:'d2_f9', frente:'Teletrabalho — características e controle de jornada:',
-      verso:'Prestação de serviços preponderantemente FORA das dependências do empregador, com uso de tecnologias de comunicação. COMPARECER à empresa habitualmente NÃO descaracteriza o teletrabalho (Lei 14.442/22). Deve constar no contrato. CONTROLE DE JORNADA: por JORNADA = tem direito a horas extras e intervalo. Por PRODUÇÃO ou TAREFA = NÃO tem controle de jornada (sem direito a horas extras). *CAIU NA OAB 39* PRIORIDADE: empregados com deficiência e empregados com filhos até 4 anos têm prioridade para vagas de teletrabalho. PRESENCIAL → REMOTO: mútuo acordo. REMOTO → PRESENCIAL: vontade do empregador (adaptação de 15 dias).',
-      pegadinha:'Teletrabalho por produção ou tarefa = SEM controle de jornada. Por jornada = COM controle de jornada e horas extras!', caiu:'OAB 34, 28, 29, 39, 40' },
-    { id:'d2_f10', frente:'Contrato de trabalho INTERMITENTE — como funciona?',
-      verso:'Prestação de serviços com subordinação NÃO contínua (art. 452-A CLT). *CAIU NA OAB 35* Características: (1) celebrado por ESCRITO; (2) valor/hora não inferior ao salário mínimo; (3) empregador convoca com antecedência MÍNIMA DE 3 DIAS CORRIDOS; (4) prazo de aceite: 1 DIA ÚTIL; (5) SILÊNCIO = RECUSA (não descaracteriza a subordinação); (6) descumprimento sem justo motivo: multa de 50% da remuneração devida em 30 dias.',
-      pegadinha:'Silêncio no intermitente = RECUSA. Prazo de convocação: 3 dias corridos. Prazo de aceite: 1 dia útil. NÃO se aplica a aeronautas!', caiu:'OAB 35' }
-  ],
+  flashcards:[],
   checklist:[
-    {id:'c2-1',texto:'Estudar todos os flashcards do Dia 2 — Direito do Trabalho'},
-    {id:'c2-2',texto:'Resolver 10 questões de Trabalho no QConcursos'},
-    {id:'c2-3',texto:'Memorizar SHOPP e os requisitos do vínculo empregatício'},
-    {id:'c2-4',texto:'Revisão rápida do Dia 1 — Constitucional (15 min)'}
+  {id:'d2_c1',texto:'Vínculo empregatício — 5 requisitos SHOPP',feito:false},
+  {id:'d2_c2',texto:'Relação de trabalho vs relação de emprego — diferença',feito:false},
+  {id:'d2_c3',texto:'Trabalhador autônomo, eventual, avulso, estagiário',feito:false},
+  {id:'d2_c4',texto:'Contrato de trabalho — prazo determinado e indeterminado',feito:false},
+  {id:'d2_c5',texto:'Jornada de trabalho — regras, horas extras e banco de horas',feito:false},
+  {id:'d2_c6',texto:'Salário vs Remuneração — conceito e diferenças',feito:false},
+  {id:'d2_c7',texto:'Verbas rescisórias — TRCT e prazo de pagamento',feito:false},
+  {id:'d2_c8',texto:'FGTS — alíquota, depósito e saque',feito:false}
   ],
   sumula:{ sigla:'Súmula 423 TST', texto:'Estabelecida a jornada superior a seis horas e limitada a oito horas por meio de regular negociação coletiva, os empregados submetidos a turnos ininterruptos de revezamento não têm direito ao pagamento da 7ª e 8ª horas como extras.' },
   incidencia:90, pdf_id:_VDE_PDF_IDS[1], lei_seca:['CLT arts. 2, 3, 443, 444, 58, 59','CF art. 7','Lei 13.467/17'] },
@@ -170,49 +91,16 @@ const PLANO_VDE = [
              'Negócios jurídicos — vícios do consentimento e sociais',
              'Prescrição vs Decadência — diferenças e prazos críticos',
              'Obrigações — solidariedade ativa e passiva'] }],
-  flashcards:[
-    { id:'d3_f1', frente:'Requisitos da responsabilidade civil SUBJETIVA (CC art. 186):',
-      verso:'(1) Conduta humana (ação ou omissão). (2) Culpa ou dolo. (3) Dano (material, moral ou estético). (4) Nexo de causalidade entre a conduta e o dano. Todos obrigatórios.',
-      pegadinha:'Na responsabilidade OBJETIVA dispensa-se a culpa — exige apenas conduta + dano + nexo.', caiu:'OAB 35' },
-    { id:'d3_f2', frente:'Quando se aplica a responsabilidade civil OBJETIVA?',
-      verso:'(a) Art. 927, parágrafo único CC: atividade que por sua natureza implique risco para terceiros (teoria do risco da atividade). (b) Danos causados por produtos e serviços (CDC). (c) Dano ambiental. (d) Danos causados por agentes públicos (CF art. 37, §6).',
-      caiu:'OAB 32' },
-    { id:'d3_f3', frente:'Teoria MAIOR vs Teoria MENOR da desconsideração da PJ:',
-      verso:'MAIOR (CC art. 50): exige abuso — desvio de finalidade OU confusão patrimonial. MENOR (CDC art. 28; direito ambiental): basta o mero prejuízo ao credor ou a insolvência da PJ — não exige abuso.',
-      pegadinha:'Consumidor aciona Teoria Menor → muito mais fácil de desconsiderar!', caiu:'OAB 37, 41' },
-    { id:'d3_f4', frente:'O dano moral pode ser cumulado com dano material?',
-      verso:'SIM. Súmula 37 STJ: São cumuláveis as indenizações por dano material e moral oriundos do mesmo fato. Também é possível cumular dano moral com dano ESTÉTICO (Súmula 387 STJ).',
-      caiu:'OAB 29' },
-    { id:'d3_f5', frente:'Quais são os vícios do consentimento? Qual a sanção de cada um?',
-      verso:'ERRO, DOLO, COAÇÃO, ESTADO DE PERIGO e LESÃO → ANULABILIDADE (prazo: 4 anos). Diferem dos vícios sociais (simulação → NULIDADE absoluta; fraude contra credores → anulabilidade).',
-      pegadinha:'Coação FÍSICA (vis absoluta) → NULIDADE. Coação MORAL (vis compulsiva) → ANULABILIDADE!', caiu:'OAB 30' },
-    { id:'d3_f6', frente:'Qual a diferença entre prescrição e decadência?',
-      verso:'PRESCRIÇÃO: extinção da pretensão (direito de ação para exigir direito subjetivo violado). Suspende, interrompe e pode ser renunciada. DECADÊNCIA: extinção do próprio direito potestativo. Não suspende nem interrompe (em regra). Pode ser de ofício.',
-      caiu:'OAB 28, 33' },
-    { id:'d3_f7', frente:'Solidariedade ATIVA vs PASSIVA — diferença:',
-      verso:'ATIVA: vários credores — qualquer um pode exigir o total da dívida. PASSIVA: vários devedores — credor pode exigir o total de qualquer devedor. Solidariedade não se presume (CC art. 265): deve decorrer de lei ou contrato.',
-      caiu:'OAB 36' },
-    { id:'d3_f8', frente:'Prazo prescricional geral para responsabilidade civil no CC:',
-      verso:'3 anos (CC art. 206, §3, V) para a pretensão de reparação civil. Prazo de 10 anos é o prazo geral (art. 205) — usado quando não há prazo especial.',
-      caiu:'OAB 31' },
-    { id:'d3_f9', frente:'Capacidade civil — de direito vs de fato. Quem é absolutamente incapaz?',
-      verso:'CAPACIDADE DE DIREITO (de gozo): TODOS possuem — aptidão para ser sujeito de direitos e deveres. CAPACIDADE DE FATO (de exercício): nem todos — aptidão para exercer atos da vida civil por si só. ABSOLUTAMENTE INCAPAZ: apenas os MENORES DE 16 ANOS (após o CC/2002 — ébrios, surdos-mudos e mentais foram retirados da lista). RELATIVAMENTE INCAPAZ: maiores de 16 e menores de 18; ébrios habituais e viciados em tóxico; quem não puder exprimir vontade (transitória ou permanente); pródigos. DEFICIÊNCIA: NÃO gera automaticamente incapacidade. *CAIU NA OAB 35*',
-      pegadinha:'Absolutamente incapaz = SOMENTE menor de 16 anos. A deficiência NÃO é mais causa de incapacidade absoluta!', caiu:'OAB 35' },
-    { id:'d3_f10', frente:'Emancipação — quais as 3 espécies e quando o divórcio reverte?',
-      verso:'VOLUNTÁRIA: pais (ou um deles) concedem por instrumento público, independente de homologação judicial, ao filho com 16 anos completos. *CAIU NA OAB 31* Responsabilidade civil dos pais PERSISTE solidariamente. JUDICIAL: concedida pelo juiz, a pedido do tutor, ao menor com 16 anos. LEGAL (automática): casamento; exercício de emprego público efetivo; colação de grau em ensino superior; estabelecimento civil/comercial ou relação de emprego com economia própria desde 16 anos. DIVÓRCIO NÃO REVERTE a emancipação do casamento. *CAIU NA OAB 30* ATENÇÃO: tutor NÃO pode emancipar — só pode REQUERER. Emancipação não atinge a esfera penal.',
-      pegadinha:'Divórcio = NÃO reverte emancipação! Tutor = NÃO emancipa, apenas requer. Emancipação = irrevogável!', caiu:'OAB 30, 31' },
-    { id:'d3_f11', frente:'Tomada de Decisão Apoiada vs Curatela — diferença:',
-      verso:'TOMADA DE DECISÃO APOIADA (art. 1.783-A CC): a pessoa com deficiência escolhe pessoas de confiança para AUXILIÁ-LA — ela MANTÉM a autonomia e capacidade plena. Contratante pode exigir que os apoiadores contra-assinem contratos. *CAIU NA OAB 35* CURATELA: juiz declara a pessoa incapaz e nomeia curador para representá-la em TODOS os atos. CURADOR COMPARTILHADO: o juiz pode nomear mais de um curador. Cônjuge/companheiro não separado é, de direito, curador do outro quando interdito. Autoridade do curador se estende aos filhos do curatelado. *CAIU NA OAB 39*',
-      pegadinha:'TDA = pessoa continua capaz, apenas assistida. Curatela = pessoa é declarada incapaz, curador a representa!' },
-    { id:'d3_f12', frente:'Morte presumida — com e sem decretação de ausência:',
-      verso:'COM decretação de ausência: pessoa em local incerto/não sabido; prazos para sucessão provisória: 1 ANO sem representante/procurador ou 3 ANOS se houver; sentença produz efeito depois de 180 dias de publicação; sucessão definitiva: 10 anos após o trânsito em julgado da sentença da provisória (ou se ausente tiver 80 anos e 5 anos de últimas notícias). SEM decretação de ausência: extremamente provável a morte de quem estava em perigo de vida; desaparecido em campanha ou prisioneiro não encontrado até 2 anos após o término da guerra. Morte presumida sem ausência enseja SUCESSÃO DEFINITIVA DIRETAMENTE.',
-      pegadinha:'Morte presumida SEM ausência → sucessão definitiva direta. COM ausência → provisória primeiro, depois definitiva (10 anos)!' }
-  ],
+  flashcards:[],
   checklist:[
-    {id:'c3-1',texto:'Estudar todos os flashcards do Dia 3 — Direito Civil'},
-    {id:'c3-2',texto:'Resolver 10 questões de Civil no QConcursos'},
-    {id:'c3-3',texto:'Memorizar: Teoria Maior (CC) vs Teoria Menor (CDC) — desconsideração PJ'},
-    {id:'c3-4',texto:'Revisão rápida dos Dias 1-2 (15 min)'}
+  {id:'d3_c1',texto:'Responsabilidade Civil subjetiva — CC art. 186 (culpa + dano + nexo)',feito:false},
+  {id:'d3_c2',texto:'Responsabilidade Civil objetiva — CC art. 927 e parágrafo único',feito:false},
+  {id:'d3_c3',texto:'Responsabilidade pelo fato do produto e do serviço (CDC)',feito:false},
+  {id:'d3_c4',texto:'Dano moral — arbitramento e cumulação com dano material',feito:false},
+  {id:'d3_c5',texto:'Desconsideração da PJ — Teoria Maior e Teoria Menor',feito:false},
+  {id:'d3_c6',texto:'Negócios jurídicos — vícios do consentimento e sociais',feito:false},
+  {id:'d3_c7',texto:'Prescrição vs Decadência — diferenças e prazos críticos',feito:false},
+  {id:'d3_c8',texto:'Obrigações — solidariedade ativa e passiva',feito:false}
   ],
   sumula:{ sigla:'Súmula 37 STJ', texto:'São cumuláveis as indenizações por dano material e dano moral oriundas do mesmo fato.' },
   incidencia:88, pdf_id:_VDE_PDF_IDS[1], lei_seca:['CC arts. 50, 186, 187, 927, 205-206','CDC arts. 12-14, 28'] },
@@ -231,37 +119,16 @@ const PLANO_VDE = [
              'Competência tributária — privativa, comum, residual, extraordinária',
              'ICMS vs ISS — conflito de incidência',
              'Lançamento tributário — tipos: de ofício, por declaração, por homologação'] }],
-  flashcards:[
-    { id:'d4_f1', frente:'Qual o conteúdo da Anterioridade Anual e da Nonagesimal? Exceções:',
-      verso:'ANUAL: tributo instituído/majorado só pode ser cobrado no exercício SEGUINTE. NONAGESIMAL: também exige 90 dias. Escapam de AMBAS: II, IE, IOF, IEG, Empréstimo Compulsório emergencial (guerra/calamidade). Só nonagesimal (ignora anual): contribuições sociais, CIDE-Combustíveis, ICMS-Combustíveis.',
-      pegadinha:'IPI ignora anual mas respeita nonagesimal. IR ignora nonagesimal mas respeita anual.', caiu:'OAB 36, 40' },
-    { id:'d4_f2', frente:'As imunidades tributárias do art. 150, VI CF — quais são?',
-      verso:'(a) RECÍPROCA: U, E, DF, M não tributam uns aos outros (renda, patrimônio, serviços). (b) RELIGIOSA: templos de qualquer culto. (c) POLÍTICA: partidos, sindicatos de trabalhadores, entidades de ed/assist. social. (d) LIVROS, jornais, periódicos e papel destinado à impressão.',
-      pegadinha:'Imunidade recíproca NÃO se estende a empresas públicas e SEM que exploram atividade econômica com concorrência — Súmula 76 STF.', caiu:'OAB 35' },
-    { id:'d4_f3', frente:'Quais são as 5 espécies tributárias (teoria pentapartida)?',
-      verso:'(1) IMPOSTOS. (2) TAXAS. (3) CONTRIBUIÇÃO DE MELHORIA. (4) EMPRÉSTIMOS COMPULSÓRIOS. (5) CONTRIBUIÇÕES ESPECIAIS (sociais, intervenção no domínio econômico — CIDE, corporativas, iluminação pública — COSIP).',
-      caiu:'OAB 33' },
-    { id:'d4_f4', frente:'Taxa pode ter base de cálculo de imposto?',
-      verso:'NÃO. Súmula Vinculante 29 STF: É constitucional a adoção, no cálculo do valor da taxa, de um ou mais elementos da base de cálculo própria de determinado imposto, desde que não haja integral identidade entre uma base e outra.',
-      caiu:'OAB 37' },
-    { id:'d4_f5', frente:'Tipos de lançamento tributário e quem faz cada um:',
-      verso:'DE OFÍCIO (direto): autoridade fiscal lança sem participação do contribuinte (IPTU, IPVA). POR DECLARAÇÃO (misto): contribuinte declara fatos e fiscal lança (antigo IR, ITBI). POR HOMOLOGAÇÃO (autolançamento): contribuinte apura e paga antecipado; fisco homologa (ICMS, IPI, IR moderno).',
-      caiu:'OAB 32' },
-    { id:'d4_f6', frente:'Competência tributária pode ser delegada?',
-      verso:'NÃO pode ser delegada. CAPACIDADE TRIBUTÁRIA ATIVA (fiscalizar, arrecadar, executar leis) pode ser delegada. Ex: União pode delegar capacidade ativa ao INSS (contribuições previdenciárias).',
-      pegadinha:'Competência = poder de criar o tributo (intransferível). Capacidade = poder de cobrar/administrar (delegável).', caiu:'OAB 30' },
-    { id:'d4_f7', frente:'Princípio da Legalidade Tributária — exceções (pode ser alterado por decreto executivo):',
-      verso:'II, IE, IPI, IOF e CIDE-Combustíveis (quanto às alíquotas) e ICMS-Combustíveis (convênio CONFAZ) podem ter alíquotas alteradas por ato do Executivo, dentro dos limites fixados em lei. Base de cálculo: sempre exige lei.',
-      caiu:'OAB 38' },
-    { id:'d4_f8', frente:'ICMS incide sobre importação por pessoa física não contribuinte?',
-      verso:'SIM. Súmula 661 STF + EC 33/2001: O ICMS incide sobre o valor total da operação, quando mercadorias são importadas por pessoa física, ainda que não seja contribuinte habitual.',
-      caiu:'OAB 41' }
-  ],
+  flashcards:[],
   checklist:[
-    {id:'c4-1',texto:'Estudar todos os flashcards do Dia 4 — Tributário'},
-    {id:'c4-2',texto:'Resolver 10 questões de Tributário no QConcursos'},
-    {id:'c4-3',texto:'Memorizar tabela das anterioridades por tributo'},
-    {id:'c4-4',texto:'Revisão rápida dos Dias 1-3 (15 min)'}
+  {id:'d4_c1',texto:'Princípio da Legalidade tributária — reserva de lei',feito:false},
+  {id:'d4_c2',texto:'Anterioridade Anual e Nonagesimal — exceções por tributo',feito:false},
+  {id:'d4_c3',texto:'Irretroatividade tributária',feito:false},
+  {id:'d4_c4',texto:'Imunidades tributárias — recíproca, religiosa, partidos, sindicatos, livros',feito:false},
+  {id:'d4_c5',texto:'Espécies tributárias — 5 espécies (CTN + CF)',feito:false},
+  {id:'d4_c6',texto:'Competência tributária — privativa, comum, residual, extraordinária',feito:false},
+  {id:'d4_c7',texto:'ICMS vs ISS — conflito de incidência',feito:false},
+  {id:'d4_c8',texto:'Lançamento tributário — tipos: de ofício, por declaração, por homologação',feito:false}
   ],
   sumula:{ sigla:'Súmula Vinculante 29 STF', texto:'É constitucional a adoção, no cálculo do valor de taxa, de um ou mais elementos da base de cálculo própria de determinado imposto, desde que não haja integral identidade entre uma base e outra.' },
   incidencia:92, pdf_id:_VDE_PDF_IDS[1], lei_seca:['CTN arts. 3, 96, 113, 142, 149-150','CF arts. 145-156'] },
@@ -280,34 +147,16 @@ const PLANO_VDE = [
              'Recurso Ordinário, de Revista e Agravo',
              'Execução trabalhista — SATED e impenhorabilidade',
              'Comissão de Conciliação Prévia (CCP)'] }],
-  flashcards:[
-    { id:'d5_f1', frente:'O jus postulandi existe em toda a JT?',
-      verso:'NÃO. Súmula 425 TST: O jus postulandi limita-se às Varas do Trabalho e TRTs (1ª e 2ª instância). NÃO alcança o TST nem as ações: rescisória, cautelar, MS e recursos de competência do TST.',
-      caiu:'OAB 37' },
-    { id:'d5_f2', frente:'Qual a prescrição para créditos trabalhistas?',
-      verso:'QUINQUENAL: durante o contrato (últimos 5 anos contados da propositura). BIENAL: após extinto o contrato (2 anos para ajuizar a ação). TRABALHADOR RURAL antes de 05/10/88: prescrição 30 anos (revogada — agora usa as regras gerais).',
-      caiu:'OAB 36' },
-    { id:'d5_f3', frente:'Qual o prazo geral de recursos trabalhistas e quando começa a contar?',
-      verso:'8 DIAS (art. 6, Lei 5.584/70). Contagem: da publicação da decisão na Imprensa Oficial, ou da intimação pessoal. MP e DPU: prazo em dobro (16 dias). Não há prazo em dobro para litisconsortes com advogados diferentes na JT.',
-      caiu:'OAB 33' },
-    { id:'d5_f4', frente:'Depósito recursal — o que é e quem deve fazer?',
-      verso:'Requisito de admissibilidade dos recursos trabalhistas (não do processo). Obrigação do RECORRENTE (empregador/tomador). MP, DPU, Massa Falida, Herança Jacente e entidades filantrópicas: ISENTOS. Trabalhador: geralmente isento. Valor limitado.',
-      caiu:'OAB 31' },
-    { id:'d5_f5', frente:'A Reclamação Trabalhista pode ser ajuizada verbalmente?',
-      verso:'SIM (art. 840, §2 CLT). O trabalhador pode reclamar VERBALMENTE na secretaria da Vara. A secretaria reduz a termo e o juiz notifica o reclamado. Também pode ser escrita com os requisitos do art. 840 CLT.',
-      caiu:'OAB 29' },
-    { id:'d5_f6', frente:'O que é o Recurso de Revista (RR) e quando cabe?',
-      verso:'É o recurso extraordinário trabalhista ao TST. Cabe de acórdão de TRT em: (a) ofensa à CF; (b) contrariedade a Súmula TST/STF; (c) divergência jurisprudencial entre TRTs; (d) violação de lei federal. Exige esgotamento das instâncias ordinárias.',
-      caiu:'OAB 28' },
-    { id:'d5_f7', frente:'Prazo para pagamento de verbas rescisórias na JT (pós-Reforma):',
-      verso:'10 DIAS CORRIDOS contados da extinção do contrato, independentemente do motivo. Atraso: multa de 160% sobre os valores devidos. Base legal: art. 477, §6 CLT (Reforma 13.467/17).',
-      caiu:'OAB 35' }
-  ],
+  flashcards:[],
   checklist:[
-    {id:'c5-1',texto:'Estudar todos os flashcards do Dia 5 — Processo do Trabalho'},
-    {id:'c5-2',texto:'Resolver 10 questões de Proc. Trabalho no QConcursos'},
-    {id:'c5-3',texto:'Memorizar tabela de prazos: 8 dias recursos; 2 anos pós-contrato'},
-    {id:'c5-4',texto:'Revisão rápida dos Dias 1-4 (15 min)'}
+  {id:'d5_c1',texto:'Competência material e territorial da Justiça do Trabalho',feito:false},
+  {id:'d5_c2',texto:'Jus postulandi na JT — limites (Súmula 425 TST)',feito:false},
+  {id:'d5_c3',texto:'Reclamação trabalhista — prescrição bienal e quinquenal',feito:false},
+  {id:'d5_c4',texto:'Prazos no processo trabalhista (em minutos e dias)',feito:false},
+  {id:'d5_c5',texto:'Recursos trabalhistas — prazo 8 dias, depósito recursal',feito:false},
+  {id:'d5_c6',texto:'Recurso Ordinário, de Revista e Agravo',feito:false},
+  {id:'d5_c7',texto:'Execução trabalhista — SATED e impenhorabilidade',feito:false},
+  {id:'d5_c8',texto:'Comissão de Conciliação Prévia (CCP)',feito:false}
   ],
   sumula:{ sigla:'Súmula 425 TST', texto:'O jus postulandi das partes, estabelecido no art. 791 da CLT, limita-se às Varas do Trabalho e aos Tribunais Regionais do Trabalho, não alcançando a ação rescisória, a ação cautelar, o mandado de segurança e os recursos de competência do Tribunal Superior do Trabalho.' },
   incidencia:84, pdf_id:_VDE_PDF_IDS[1], lei_seca:['CLT arts. 440, 477, 840','Lei 5.584/70 art. 6','CF art. 111-A'] },
@@ -326,37 +175,16 @@ const PLANO_VDE = [
              'Iter criminis — cogitação, preparação, execução, consumação',
              'Tentativa — punição e desistência voluntária vs arrependimento eficaz',
              'Concurso de crimes — material, formal e crime continuado'] }],
-  flashcards:[
-    { id:'d6_f1', frente:'Quais são as 4 dimensões do Princípio da Legalidade Penal?',
-      verso:'Lex SCRIPTA (escrita — não cabe costume incriminador). Lex STRICTA (estrita — proibida analogia in malam partem). Lex PRAEVIA (prévia — irretroatividade da lei mais grave). Lex CERTA (certa — lei deve ser taxativa, clara, determinada).',
-      caiu:'OAB 37, 41' },
-    { id:'d6_f2', frente:'Lei penal mais benéfica retroage? E a mais grave?',
-      verso:'LEI MAIS BENÉFICA: RETROAGE, mesmo que o réu já tenha sido condenado ou esteja cumprindo pena (art. 5, XL CF). JUIZ da execução aplica (Súmula 611 STF). LEI MAIS GRAVE: irretroativa — só alcança fatos futuros.',
-      pegadinha:'Retroatividade benigna alcança sentença transitada em julgado — compete ao JUÍZO DA EXECUÇÃO aplicar!', caiu:'OAB 35' },
-    { id:'d6_f3', frente:'O que é abolitio criminis e quais os seus efeitos?',
-      verso:'Abolitio criminis: lei posterior torna atípico o fato antes criminalizado. RETROAGE. Efeitos: extingue a punibilidade; apaga todos os efeitos PENAIS da sentença (não os civis, como obrigação de indenizar). Súmula 611 STF — juiz da execução aplica.',
-      caiu:'OAB 33' },
-    { id:'d6_f4', frente:'Qual é a teoria do TEMPO DO CRIME adotada pelo CP?',
-      verso:'Teoria da ATIVIDADE (art. 4 CP): considera-se praticado o crime no momento da AÇÃO ou OMISSÃO, ainda que outro seja o momento do resultado.',
-      pegadinha:'Lugar do crime = teoria da UBIQUIDADE (art. 6 CP): tanto onde ocorreu a AÇÃO como onde se PRODUZIU o resultado.', caiu:'OAB 30' },
-    { id:'d6_f5', frente:'Quais as fases do iter criminis e quais são puníveis?',
-      verso:'(1) COGITAÇÃO: pensamento — nunca punível. (2) PREPARAÇÃO: atos preparatórios — regra não punível (exceções: associação criminosa, aparelho de falsificação). (3) EXECUÇÃO: atos executórios — punível (tentativa). (4) CONSUMAÇÃO: resultado — punível (crime consumado).',
-      caiu:'OAB 29' },
-    { id:'d6_f6', frente:'Desistência Voluntária vs Arrependimento Eficaz — diferença:',
-      verso:'DESISTÊNCIA VOLUNTÁRIA: agente interrompe voluntariamente a execução ainda em curso → responde só pelos atos já praticados. ARREPENDIMENTO EFICAZ: execução concluída, mas agente evita o resultado → mesma consequência. Ambos: ponte de ouro; não há tentativa.',
-      pegadinha:'Para desistência/arrependimento, o agente deve agir por VONTADE PRÓPRIA (não precisa ser espontâneo).', caiu:'OAB 36' },
-    { id:'d6_f7', frente:'Concurso FORMAL vs MATERIAL — diferença no cálculo da pena:',
-      verso:'MATERIAL (art. 69): várias condutas, vários crimes → soma as penas. FORMAL (art. 70): UMA conduta, vários crimes → pena mais grave + aumento de 1/6 até 1/2 (ou soma se mais benéfico). FORMAL IMPRÓPRIO: desígnios autônomos → soma as penas.',
-      caiu:'OAB 28' },
-    { id:'d6_f8', frente:'O que é crime continuado e qual o aumento de pena?',
-      verso:'Vários crimes da mesma espécie em condições similares de tempo, lugar, modo e execução — por ficção jurídica, considera-se um único crime. Aumento: 1/6 a 2/3. Qualificado (violência/ameaça contra vítimas diferentes): até o triplo.',
-      pegadinha:'Súmula 711 STF: lei penal mais grave aplica-se ao crime continuado se vigente antes do término da continuidade!', caiu:'OAB 34' }
-  ],
+  flashcards:[],
   checklist:[
-    {id:'c6-1',texto:'Estudar todos os flashcards do Dia 6 — Direito Penal'},
-    {id:'c6-2',texto:'Resolver 10 questões de Penal no QConcursos'},
-    {id:'c6-3',texto:'Memorizar teoria da atividade (tempo) vs ubiquidade (lugar)'},
-    {id:'c6-4',texto:'Revisão geral da Semana 01 — prepare os 6 dias'}
+  {id:'d6_c1',texto:'Princípio da Legalidade — nullum crimen sine lege',feito:false},
+  {id:'d6_c2',texto:'Lei penal no tempo — retroatividade benigna e irretroatividade',feito:false},
+  {id:'d6_c3',texto:'Abolitio criminis vs Novatio legis in pejus',feito:false},
+  {id:'d6_c4',texto:'Tempo do crime — teoria da atividade (art. 4 CP)',feito:false},
+  {id:'d6_c5',texto:'Lugar do crime — teoria da ubiquidade (art. 6 CP)',feito:false},
+  {id:'d6_c6',texto:'Iter criminis — cogitação, preparação, execução, consumação',feito:false},
+  {id:'d6_c7',texto:'Tentativa — punição e desistência voluntária vs arrependimento eficaz',feito:false},
+  {id:'d6_c8',texto:'Concurso de crimes — material, formal e crime continuado',feito:false}
   ],
   sumula:{ sigla:'Súmula 711 STF', texto:'A lei penal mais grave aplica-se ao crime continuado ou ao crime permanente, se a sua vigência é anterior à cessação da continuidade ou da permanência.' },
   incidencia:86, pdf_id:_VDE_PDF_IDS[1], lei_seca:['CP arts. 1-12, 69-71','CF art. 5, XXXIX-XL'] },
@@ -381,25 +209,14 @@ const PLANO_VDE = [
              'Revisão: Tributário — anterioridades e imunidades',
              'Revisão: Processo do Trabalho — prazos e recursos',
              'Revisão: Penal — tempo do crime e lei penal no tempo'] }],
-  flashcards:[
-    { id:'d7_f1', frente:'Revisão: PCO vs PCD — características essenciais',
-      verso:'PCO: inicial, autônomo, ilimitado, incondicionado. PCD: limitado pela CF — formal (art. 60 caput), material (cláusulas pétreas) e circunstancial (estado de sítio/intervenção/emergência).' },
-    { id:'d7_f2', frente:'Revisão: Mnemônico SHOPP — vínculo empregatício',
-      verso:'S-Subordinação, H-Habitualidade, O-Onerosidade, P-Pessoalidade, P-Pessoa Física. Todos simultâneos e obrigatórios.' },
-    { id:'d7_f3', frente:'Revisão: Teoria Maior vs Teoria Menor (desconsideração PJ)',
-      verso:'MAIOR (CC): abuso → desvio de finalidade OU confusão patrimonial. MENOR (CDC/Ambiental): basta prejuízo ao credor / insolvência — não exige abuso.' },
-    { id:'d7_f4', frente:'Revisão: Anterioridade Anual vs Nonagesimal — escapam de AMBAS?',
-      verso:'II, IE, IOF, IEG e Empréstimo Compulsório emergencial escapam de AMBAS. IPI: respeita nonagesimal, ignora anual. IR: respeita anual, ignora nonagesimal.' },
-    { id:'d7_f5', frente:'Revisão: Prazo do Recurso Ordinário na JT',
-      verso:'8 dias. Depósito recursal: requisito de admissibilidade (obrigação do empregador). MP e DPU: prazo em dobro (16 dias).' },
-    { id:'d7_f6', frente:'Revisão: Abolitio criminis — efeitos',
-      verso:'Retroage. Apaga todos os efeitos PENAIS da sentença. Os efeitos CIVIS (indenização) subsistem. Súmula 611 STF: juiz da execução aplica lei mais benéfica.' }
-  ],
+  flashcards:[],
   checklist:[
-    {id:'c7-1',texto:'Resolver 30 questões: 5 de cada matéria da Semana 01'},
-    {id:'c7-2',texto:'Revisar flashcards dos Dias 1 a 6 com erros'},
-    {id:'c7-3',texto:'Anotar pontos mais frágeis no Caderno de Erros'},
-    {id:'c7-4',texto:'Assistir revisão em vídeo das matérias mais difíceis'}
+  {id:'d7_c1',texto:'Revisão: Constitucional — PCO vs PCD e eficácias',feito:false},
+  {id:'d7_c2',texto:'Revisão: Trabalho — SHOPP e tipos de contrato',feito:false},
+  {id:'d7_c3',texto:'Revisão: Civil — responsabilidade e desconsideração PJ',feito:false},
+  {id:'d7_c4',texto:'Revisão: Tributário — anterioridades e imunidades',feito:false},
+  {id:'d7_c5',texto:'Revisão: Processo do Trabalho — prazos e recursos',feito:false},
+  {id:'d7_c6',texto:'Revisão: Penal — tempo do crime e lei penal no tempo',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[2], lei_seca:[] },
 
@@ -416,46 +233,15 @@ const PLANO_VDE = [
              'Revogação do mandato — honorários e extinção',
              'Substabelecimento com e sem reserva de poderes',
              'Consultoria e assessoria — verbal ou escrita'] }],
-  flashcards:[
-    { id:'d8_f1', frente:'Quais são as funções PRIVATIVAS do advogado (EOAB art. 1)?',
-      verso:'(1) Postulação a qualquer órgão do PJ e JE. (2) Consultoria, assessoria e direção jurídica. (3) Visar atos e contratos constitutivos de PJ — EXCEÇÃO: microempresas e EPP são dispensadas do visto do advogado (LC 123/06, art. 9º). (4) Contribuição ao processo legislativo e elaboração de normas jurídicas. Serviços de notória especialização são técnicos e singulares. O advogado constitui múnus público no processo administrativo. O Defensor Público NÃO precisa de inscrição na OAB.',
-      pegadinha:'HC pode ser impetrado por QUALQUER pessoa — NÃO é função privativa do advogado!', caiu:'OAB 34, 27, 36, 39' },
-    { id:'d8_f2', frente:'Exceções ao jus postulandi — quando dispensa advogado?',
-      verso:'(1) Impetração de HC em qualquer instância. (2) Instância inicial da JT (Varas e TRTs — Súmula 425 TST). (3) JE estadual até 20 SM; JE federal até 60 SM.',
-      pegadinha:'TST, ação rescisória, MS e cautelar NÃO dispensam advogado, mesmo na JT.' },
-    { id:'d8_f3', frente:'Quais atos são NULOS quando praticados por advogado irregular?',
-      verso:'Atos de: não inscrito na OAB; advogado IMPEDIDO; SUSPENSO; LICENCIADO; quem exerce atividade INCOMPATÍVEL com a advocacia. A nulidade é do ATO, não do processo inteiro.',
-      caiu:'OAB 34' },
-    { id:'d8_f4', frente:'Advogado pode aceitar procuração de cliente que já tem patrono?',
-      verso:'NÃO, sem prévio conhecimento do patrono atual — SALVO motivo justificável ou medidas urgentes e inadiáveis. Nesse caso o advogado, AFIRMANDO URGÊNCIA, pode atuar sem procuração, obrigando-se a apresentá-la no prazo de 15 dias, prorrogável por igual período.',
-      caiu:'OAB 28, 37' },
-    { id:'d8_f5', frente:'O mandato judicial se extingue com o decurso do tempo?',
-      verso:'NÃO. O mandato não se extingue pelo decurso do tempo, salvo se o contrário for consignado expressamente no instrumento. Prazo indeterminado é a regra.',
-      caiu:'OAB 40' },
-    { id:'d8_f6', frente:'Como funciona a RENÚNCIA DO MANDATO pelo advogado?',
-      verso:'Direito do ADVOGADO. Ato UNILATERAL (não precisa de aceitação). DUPLA COMUNICAÇÃO: ao cliente e ao juízo. Não menciona o motivo. Deve continuar representando por mais 10 DIAS após a notificação — salvo se novo advogado for constituído antes.',
-      caiu:'OAB 30, 33' },
-    { id:'d8_f7', frente:'Como funciona a REVOGAÇÃO DO MANDATO pelo cliente?',
-      verso:'Direito do CLIENTE. Ato unilateral. Forma de extinção expressa. NÃO desobriga o pagamento de honorários contratados, nem impede o recebimento dos honorários sucumbenciais proporcionais.',
-      pegadinha:'Revogação ≠ dispensa de pagar honorários. O advogado tem direito proporcional ao trabalho prestado.' },
-    { id:'d8_f8', frente:'Substabelecimento COM reserva de poderes — características:',
-      verso:'Substituição PARCIAL e PROVISÓRIA. Ato PESSOAL do advogado (independe de ciência do cliente). Honorários do substabelecido devem ser ajustados com o substabelecente. Advogado pode reassumir a qualquer momento.',
-      pegadinha:'COM reserva = provisório, ato pessoal do advogado. SEM reserva = definitivo, exige ciência do cliente.' },
-    { id:'d8_f9', frente:'Substabelecimento SEM reserva de poderes — características:',
-      verso:'Substituição TOTAL e DEFINITIVA. Exige PRÉVIO E INEQUÍVOCO conhecimento do cliente. Extingue o mandato do advogado original.',
-      caiu:'OAB 36' },
-    { id:'d8_f10', frente:'Atividades de consultoria e assessoria podem ser verbais?',
-      verso:'SIM. Podem ser exercidas verbal ou por escrito, a critério do advogado e do cliente, independendo de mandato ou contrato de honorários formais.',
-      caiu:'OAB 39, 41' },
-    { id:'d8_f11', frente:'Advogado que colabora premiada contra seu próprio cliente: qual a sanção disciplinar?',
-      verso:'O advogado que efetuar colaboração premiada contra quem seja ou tenha sido seu cliente estará sujeito a processo disciplinar que poderá culminar na aplicação da pena de EXCLUSÃO dos quadros da OAB — e não mera suspensão. A colaboração premiada viola o dever de sigilo e lealdade ao cliente.',
-      pegadinha:'A pena é EXCLUSÃO (não suspensão) — é uma das infrações disciplinares mais graves previstas no EOAB.' }
-  ],
+  flashcards:[],
   checklist:[
-    {id:'c8-1',texto:'Estudar todos os flashcards do Dia 8 — Ética (Mandato)'},
-    {id:'c8-2',texto:'Resolver 10 questões de Ética no QConcursos'},
-    {id:'c8-3',texto:'Memorizar tabela: Renúncia vs Revogação vs Substabelecimento'},
-    {id:'c8-4',texto:'Anotar dúvidas no Caderno de Erros'}
+  {id:'d8_c1',texto:'Funções privativas do advogado — exceções ao jus postulandi',feito:false},
+  {id:'d8_c2',texto:'Atos nulos por irregularidade do advogado',feito:false},
+  {id:'d8_c3',texto:'Mandato judicial — prazo, aceitação e urgência',feito:false},
+  {id:'d8_c4',texto:'Renúncia do mandato — 10 dias e dupla comunicação',feito:false},
+  {id:'d8_c5',texto:'Revogação do mandato — honorários e extinção',feito:false},
+  {id:'d8_c6',texto:'Substabelecimento com e sem reserva de poderes',feito:false},
+  {id:'d8_c7',texto:'Consultoria e assessoria — verbal ou escrita',feito:false}
   ],
   sumula:{ sigla:'Súmula 425 TST', texto:'O jus postulandi das partes limita-se às Varas do Trabalho e aos TRTs, não alcançando ação rescisória, cautelar, MS e recursos de competência do TST.' },
   incidencia:92, pdf_id:_VDE_PDF_IDS[2], lei_seca:['EOAB arts. 1, 5, 11-12, 24-26, 28-29'] },
@@ -473,47 +259,15 @@ const PLANO_VDE = [
              'Citação — conceito, efeitos e prazo de 45 dias (Lei 14.195/21)',
              'Modalidades: eletrônica, correios, oficial, hora certa, edital',
              'Vedações à citação — situações protegidas'] }],
-  flashcards:[
-    { id:'d9_f1', frente:'Quais são os 3 tipos de atos processuais?',
-      verso:'(a) Das PARTES: declarações uni/bilaterais com efeitos processuais imediatos. (b) Dos MAGISTRADOS: sentenças, decisões interlocutórias, despachos, monocráticas, acórdãos. (c) Dos AUXILIARES: juntada, termos, numeração de folhas, vista obrigatória.' },
-    { id:'d9_f2', frente:'Diferença entre nulidade ABSOLUTA e RELATIVA no processo:',
-      verso:'ABSOLUTA: ordem pública; de ofício ou a requerimento; a qualquer tempo/grau; NÃO convalida. RELATIVA: interesse particular; só a requerimento do prejudicado; na PRIMEIRA OPORTUNIDADE; CONVALIDA após preclusão (art. 278 CPC).',
-      pegadinha:'Relativa: se não arguiu na primeira oportunidade, sanou o vício.' },
-    { id:'d9_f3', frente:'A publicidade dos atos processuais é regra? Quando corre em segredo?',
-      verso:'REGRA é a publicidade. SEGREDO DE JUSTIÇA (art. 189 CPC): (1) interesse público ou social; (2) casamento, separação de corpos, divórcio, separação, união estável, filiação, alimentos e guarda de crianças e adolescentes; (3) dados protegidos pelo direito constitucional à intimidade; (4) arbitragem com cláusula de sigilo.',
-      caiu:'OAB 36' },
-    { id:'d9_f4', frente:'Os prazos processuais são em dias corridos ou úteis?',
-      verso:'DIAS ÚTEIS (CPC). Regra: EXCLUI o dia do início, INCLUI o dia do vencimento. Prazo em DOBRO: MP, Defensoria Pública, advocacia pública e litisconsortes com procuradores de escritórios distintos — EXCETO em processos eletrônicos!',
-      caiu:'OAB 36' },
-    { id:'d9_f5', frente:'O que é o calendário processual?',
-      verso:'Acordo entre partes e magistrado sobre as datas dos atos processuais. DISPENSA a intimação para atos/audiências com datas já designadas. Confere mais celeridade ao processo.' },
-    { id:'d9_f6', frente:'O comparecimento espontâneo do réu supre a falta de citação?',
-      verso:'SIM. Supre a falta ou nulidade da citação. O prazo para contestação flui a partir da data do comparecimento espontâneo.',
-      pegadinha:'Independem de citação: indeferimento da petição inicial e improcedência liminar do pedido!' },
-    { id:'d9_f7', frente:'Quais os 3 efeitos da CITAÇÃO VÁLIDA?',
-      verso:'(1) Induz LITISPENDÊNCIA; (2) Torna LITIGIOSA a coisa; (3) CONSTITUI EM MORA o devedor. Valem MESMO se o juízo for incompetente!',
-      pegadinha:'Litispendência + coisa litigiosa + mora = os 3 efeitos. Decorar!', caiu:'OAB 35' },
-    { id:'d9_f8', frente:'Em quantos dias deve ser efetivada a citação após a propositura da ação?',
-      verso:'Em até 45 DIAS a partir da propositura da ação (Lei 14.195/21, art. 238 CPC).',
-      caiu:'OAB 41' },
-    { id:'d9_f9', frente:'Qual a modalidade PREFERENCIAL de citação e como conta o prazo?',
-      verso:'MEIO ELETRÔNICO (preferencial). Deve ser efetivada em até 2 dias úteis da decisão. O prazo do réu inicia no 5º DIA ÚTIL após a CONFIRMAÇÃO do recebimento. Deixar de confirmar = ato atentatório (multa até 5% do valor da causa). Caso não seja possível a citação eletrônica, será feita pelas demais modalidades; na primeira oportunidade de falar nos autos, o réu deverá apresentar JUSTA CAUSA para a ausência de citação eletrônica.' },
-    { id:'d9_f10', frente:'Citação por HORA CERTA — quando cabe?',
-      verso:'Após 2 tentativas frustradas + suspeita de OCULTAÇÃO. O oficial intima pessoa da família ou vizinho de que voltará no dia útil imediato. Se ausente na volta → citação dada por feita. O oficial procura informar-se das razões da ausência, dando por feita a citação, ainda que o citando se tenha ocultado em outra comarca, seção ou subseção judiciárias.' },
-    { id:'d9_f11', frente:'Citação por EDITAL — quando cabe e qual o prazo?',
-      verso:'Réu desconhecido, em lugar incerto/não sabido, ou quando a lei determinar. Requisitos: (a) circunstâncias autorizadoras; (b) publicação na rede mundial e no sítio do tribunal e plataforma CNJ; (c) prazo de 20 a 60 dias; (d) advertência de que será nomeado curador especial em caso de revelia. Falsa alegação: multa de 5 salários mínimos.',
-      caiu:'OAB 36' },
-    { id:'d9_f13', frente:'Citação pelos CORREIOS — quem assina o recibo e regras especiais?',
-      verso:'O recibo deve ser assinado pelo PRÓPRIO CITANDO. EXCEÇÕES: PJ — é válida a entrega a pessoa com poderes de gerência ou de administração. CONDOMÍNIOS — é válida a entrega na portaria, admitida a recusa por escrito se o destinatário estiver ausente.',
-      pegadinha:'Na PJ, qualquer gerente ou administrador pode receber a citação. No condomínio, a portaria pode recusar por escrito se o destinatário estiver ausente.' },
-    { id:'d9_f12', frente:'Quando NÃO pode ser feita a citação?',
-      verso:'Em culto religioso (salvo perecimento do direito); cônjuge/parente no dia do falecimento e nos 7 dias seguintes; noivos nos 3 primeiros dias após o casamento; doente em estado grave; mentalmente incapaz (juiz nomeia curador ad hoc).' }
-  ],
+  flashcards:[],
   checklist:[
-    {id:'c9-1',texto:'Estudar todos os flashcards do Dia 9 — Processo Civil'},
-    {id:'c9-2',texto:'Resolver 10 questões de Processo Civil no QConcursos'},
-    {id:'c9-3',texto:'Memorizar as modalidades de citação e seus prazos'},
-    {id:'c9-4',texto:'Revisão rápida do Dia 8 — Ética (15 min)'}
+  {id:'d9_c1',texto:'Tipos de atos processuais: partes, magistrados, auxiliares',feito:false},
+  {id:'d9_c2',texto:'Nulidade absoluta vs relativa — convalidação',feito:false},
+  {id:'d9_c3',texto:'Publicidade — regra e exceções (art. 189 CPC)',feito:false},
+  {id:'d9_c4',texto:'Prazos em dias úteis — prazo em dobro e calendário processual',feito:false},
+  {id:'d9_c5',texto:'Citação — conceito, efeitos e prazo de 45 dias (Lei 14.195/21)',feito:false},
+  {id:'d9_c6',texto:'Modalidades: eletrônica, correios, oficial, hora certa, edital',feito:false},
+  {id:'d9_c7',texto:'Vedações à citação — situações protegidas',feito:false}
   ],
   sumula:{ sigla:'Art. 238 CPC (Lei 14.195/21)', texto:'A citação será efetivada em até 45 dias a partir da propositura da ação.' },
   incidencia:88, pdf_id:_VDE_PDF_IDS[2], lei_seca:['CPC arts. 188-189, 200, 203, 229, 231, 238, 246'] },
@@ -529,19 +283,13 @@ const PLANO_VDE = [
              'Revisão: Atos processuais e nulidades',
              'Revisão: Modalidades de citação e prazos',
              'Questões QConcursos — Ética e Proc. Civil'] }],
-  flashcards:[
-    { id:'d10_f1', frente:'Revisão — Substabelecimento: COM vs SEM reserva (tabela rápida)',
-      verso:'COM: parcial/provisório, ato pessoal do advogado, honorários ajustados, pode reassumir. SEM: total/definitivo, ciência do cliente obrigatória, extingue o mandato.' },
-    { id:'d10_f2', frente:'Revisão — Em quais casos NÃO há prazo em dobro no CPC?',
-      verso:'Processos ELETRÔNICOS não têm prazo em dobro para litisconsortes com procuradores distintos (art. 229, §2 CPC).' },
-    { id:'d10_f3', frente:'Revisão — Citação por edital: multa por alegação falsa?',
-      verso:'Multa de 5 vezes o salário mínimo para quem alegar dolosamente as circunstâncias autorizadoras da citação por edital.' }
-  ],
+  flashcards:[],
   checklist:[
-    {id:'c10-1',texto:'Resolver 20 questões: 10 Ética + 10 Processo Civil'},
-    {id:'c10-2',texto:'Revisar erros dos Dias 8 e 9'},
-    {id:'c10-3',texto:'Anotar pegadinhas frequentes no Caderno de Erros'},
-    {id:'c10-4',texto:'Revisar tabela: Renúncia vs Revogação vs Substabelecimento'}
+  {id:'d10_c1',texto:'Revisão: Funções privativas e exceções ao jus postulandi',feito:false},
+  {id:'d10_c2',texto:'Revisão: Renúncia vs Revogação vs Substabelecimento — tabela',feito:false},
+  {id:'d10_c3',texto:'Revisão: Atos processuais e nulidades',feito:false},
+  {id:'d10_c4',texto:'Revisão: Modalidades de citação e prazos',feito:false},
+  {id:'d10_c5',texto:'Questões QConcursos — Ética e Proc. Civil',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[2], lei_seca:[] },
 
@@ -559,47 +307,16 @@ const PLANO_VDE = [
              'Ação Penal Pública e Privada — tipos e peças',
              'ANPP — requisitos, condições e impedimentos',
              'Retratação da representação: CPP vs Lei Maria da Penha'] }],
-  flashcards:[
-    { id:'d11_f1', frente:'Quais as características do Inquérito Policial? (Mnemônico: DISSIDE-O)',
-      verso:'D-Discricionário, I-Indisponível, S-Sigiloso, S-Sistemático/escrito, I-Inquisitivo (sem contraditório ou ampla defesa), D-Dispensável, E-Escrito, O-Oficial e Oficioso.',
-      pegadinha:'INQUISITIVO = sem contraditório. Mas o advogado PODE acompanhar o investigado nos atos!' },
-    { id:'d11_f2', frente:'Denúncia anônima pode instaurar IP diretamente?',
-      verso:'NÃO. A autoridade policial deve realizar DILIGÊNCIAS PRÉVIAS para verificar a veracidade. Confirmados os elementos, pode então instaurar o IP.',
-      caiu:'OAB 27' },
-    { id:'d11_f3', frente:'Prazos para conclusão do IP — tabela resumida:',
-      verso:'Regra (CPP): preso 10d / solto 30d. Justiça Federal: preso 15+15d / solto 30d. Drogas: preso 30+30d / solto 90+90d. Militar: preso 20d / solto 40+20d. Crimes contra Econ. Popular: preso 10d / solto 10d.' },
-    { id:'d11_f4', frente:'Quem solicita e quem ARQUIVA o IP?',
-      verso:'QUEM SOLICITA = MP. QUEM ARQUIVA = JUIZ. Se o juiz discordar, encaminha ao PGJ, que pode: insistir no arquivamento; oferecer a denúncia; designar outro membro do MP. ⚠️ ATENÇÃO: o art. 28 CPP, modificado pelo Pacote Anticrime, está SUSPENSO pelo STF. Portanto, vale ESTA redação original (requerimento ao juiz) e não a nova redação (controle pelo PGJ diretamente).',
-      pegadinha:'O DELEGADO não pode arquivar o IP de ofício! E o art. 28 CPP do Pacote Anticrime está suspenso pelo STF — cai a redação original.', caiu:'OAB 27, 32' },
-    { id:'d11_f5', frente:'Em que situações o IP pode ser DESARQUIVADO?',
-      verso:'PODE: insuficiência de provas (Súmula 524 STF), ausência de pressuposto processual ou de condição da ação penal, falta de justa causa. NÃO PODE: atipicidade; excludente de culpabilidade; excludente de punibilidade — EXCEÇÃO: certidão de óbito FALSA não impede o desarquivamento. Excludente de ilicitude: STJ=NÃO; STF=SIM.' },
-    { id:'d11_f6', frente:'O que é o Juiz das Garantias e qual seu limite?',
-      verso:'Atua APENAS na fase de investigação (até o RECEBIMENTO DA DENÚNCIA). Só em matérias de reserva de jurisdição. Único que pode decretar prisão temporária. NÃO atua em: infrações de menor potencial ofensivo; Tribunal do Júri; violência doméstica.',
-      caiu:'OAB 41' },
-    { id:'d11_f7', frente:'Ação Penal Pública — titular, peça e tipos:',
-      verso:'Titular = MP. Peça = DENÚNCIA. Tipos: (a) Incondicionada (regra); (b) Condicionada à representação da vítima ou requisição do Ministro da Justiça. Estelionato (Pacote Anticrime) = condicionada à representação.',
-      caiu:'OAB 36, 40' },
-    { id:'d11_f8', frente:'Ação Penal Privada — titular, peça e princípio da indivisibilidade:',
-      verso:'Titular = OFENDIDO. Peça = QUEIXA CRIME. Indivisibilidade: deve ser proposta contra TODOS os envolvidos. Tipos: personalíssima; exclusivamente privada (sucessão por CADI); subsidiária da pública (inércia do MP). OFENDIDO INCAPAZ sem representante legal: o direito de queixa pode ser exercido por CURADOR ESPECIAL (menor de 18 anos, mentalmente enfermo ou retardado mental sem representante).',
-      caiu:'OAB 41' },
-    { id:'d11_f9', frente:'Renúncia vs Perdão na ação penal privada — diferenças:',
-      verso:'RENÚNCIA: ANTES do RECEBIMENTO da queixa pelo juiz; ato UNILATERAL; concedida a um = beneficia todos. PERDÃO: DEPOIS do recebimento da queixa (até trânsito em julgado); ato BILATERAL (exige aceitação); concedido por uma vítima NÃO prejudica as demais. PEREMPÇÃO (art. 60 CPP): (1) querelante deixa o processo por 30 dias; (2) incapacidade do querelante sem sucessor em 60 dias; (3) não comparecimento injustificado; (4) PJ querelante que se extingue sem sucessor.',
-      pegadinha:'Renúncia = ANTES do recebimento da queixa. Perdão = APÓS recebimento. Perempção = abandono do querelante após proposta a queixa.' },
-    { id:'d11_f10', frente:'Quais os requisitos CUMULATIVOS e as CONDIÇÕES do ANPP?',
-      verso:'REQUISITOS: (1) Confissão formal e circunstancial. (2) Pena mínima INFERIOR a 4 anos. (3) Crime SEM violência ou grave ameaça. (4) Não é hipótese de arquivamento. (5) Necessário e suficiente para reprovação. Não cabe para reincidentes, hediondos, violência doméstica, ou quem já se beneficiou nos últimos 5 anos. CONDIÇÕES (art. 28-A CPP): (1) reparar o dano ou restituir a coisa; (2) renunciar a bens e direitos; (3) prestar serviço à comunidade; (4) pagar prestação pecuniária; (5) outra condição proporcional e razoável. PRESCIÇÃO: não corre enquanto o ANPP não for cumprido ou rescindido. *CAIU NA OAB 35*',
-      caiu:'OAB 33, 35, 39' },
-    { id:'d11_f11', frente:'Retratação da representação — CPP vs Lei Maria da Penha:',
-      verso:'CPP (art. 25): pode retratar até o OFERECIMENTO da denúncia; sem audiência. Lei Maria da Penha (art. 16): pode retratar até o RECEBIMENTO da denúncia; EXIGE audiência específica com juiz e MP.',
-      pegadinha:'LMP = prazo MAIOR para retratação, mas com mais formalidade (audiência obrigatória).', caiu:'OAB 30' },
-    { id:'d11_f12', frente:'Súmulas 542 STJ e 714 STF — ação penal em violência doméstica e crime contra honra de servidor público:',
-      verso:'Súmula 542 STJ: "A ação penal relativa ao crime de lesão corporal resultante de violência doméstica contra a mulher é PÚBLICA INCONDICIONADA." — Não depende de representação da vítima. Súmula 714 STF: "É CONCORRENTE a legitimidade do ofendido, mediante queixa, e do MP, condicionada à representação do ofendido, para a ação penal por crime contra a honra de servidor público em razão do exercício de suas funções."',
-      pegadinha:'Lesão corporal doméstica = pública incondicionada (Súmula 542). Crime contra honra de servidor = legitimidade concorrente MP + ofendido (Súmula 714).', caiu:'OAB 40, 35, 24' }
-  ],
+  flashcards:[],
   checklist:[
-    {id:'c11-1',texto:'Estudar todos os flashcards do Dia 11 — Processo Penal'},
-    {id:'c11-2',texto:'Resolver 10 questões de Processo Penal no QConcursos'},
-    {id:'c11-3',texto:'Memorizar tabela dos prazos do IP (preso/solto por tipo de crime)'},
-    {id:'c11-4',texto:'Revisão rápida dos Dias 8 e 9 (15 min)'}
+  {id:'d11_c1',texto:'Inquérito Policial: características — DISSIDE-O',feito:false},
+  {id:'d11_c2',texto:'Denúncia anônima — procedimento correto',feito:false},
+  {id:'d11_c3',texto:'Prazos do IP por tipo de crime',feito:false},
+  {id:'d11_c4',texto:'Arquivamento e desarquivamento',feito:false},
+  {id:'d11_c5',texto:'Juiz das Garantias — papel e limitações',feito:false},
+  {id:'d11_c6',texto:'Ação Penal Pública e Privada — tipos e peças',feito:false},
+  {id:'d11_c7',texto:'ANPP — requisitos, condições e impedimentos',feito:false},
+  {id:'d11_c8',texto:'Retratação da representação: CPP vs Lei Maria da Penha',feito:false}
   ],
   sumula:{ sigla:'Súmula 524 STF', texto:'Arquivado o inquérito policial, por falta de base para a denúncia, a autoridade policial poderá proceder a novas pesquisas, se de outras provas tiver notícia.' },
   incidencia:90, pdf_id:_VDE_PDF_IDS[2], lei_seca:['CPP arts. 10, 16, 25, 28-A, 60','Lei 11.343/06 art. 51'] },
@@ -618,41 +335,16 @@ const PLANO_VDE = [
              'Estabelecimento empresarial — físico e virtual',
              'Trespasse — requisitos e responsabilidade por dívidas',
              'Cláusula de não concorrência (5 anos)'] }],
-  flashcards:[
-    { id:'d12_f1', frente:'Definição de EMPRESA e EMPRESÁRIO (art. 966 CC):',
-      verso:'EMPRESA = atividade econômica organizada para produção/circulação de bens/serviços (habitualidade + lucro + fatores de produção). EMPRESÁRIO = quem exerce profissionalmente essa atividade (pessoa física ou jurídica).',
-      pegadinha:'Toda atividade empresária é econômica, mas nem toda atividade econômica é empresária.' },
-    { id:'d12_f2', frente:'Profissional intelectual (artista, cientista, literato) é empresário?',
-      verso:'NÃO, em regra. EXCEÇÃO: se o exercício da profissão constituir ELEMENTO DE EMPRESA (organização estrutural). Ex: hospital com corpo clínico = empresário. Médico solo = NÃO.',
-      pegadinha:'"Elemento de empresa" = quando a organização é o foco, não o talento individual.', caiu:'OAB 37' },
-    { id:'d12_f3', frente:'Quem NÃO pode ser empresário (e pode ser sócio/acionista)?',
-      verso:'Não pode ser EMPRESÁRIO (nem administrador): menores não emancipados; ébrios habituais; viciados em tóxicos; quem não pode exprimir vontade; pródigos; indígenas. PODEM ser sócios/acionistas (cotistas). CONSEQUÊNCIA para impedidos que exercerem a atividade mesmo assim: as obrigações assumidas serão VÁLIDAS em relação ao terceiro que com ele contratar, respondendo ilimitadamente.',
-      pegadinha:'Impedido exerceu a atividade = responde ilimitadamente, mas as obrigações com terceiros de boa-fé são válidas!' },
-    { id:'d12_f4', frente:'É possível existir empresário INCAPAZ?',
-      verso:'SIM, se: (a) já exercia antes (enquanto capaz) ou por sucessão hereditária; (b) autorização JUDICIAL (revogável); (c) seja assistido ou representado; (d) capital social TOTALMENTE INTEGRALIZADO.' },
-    { id:'d12_f5', frente:'Casados podem constituir sociedade entre si?',
-      verso:'NÃO podem: casados em regime de COMUNHÃO UNIVERSAL ou SEPARAÇÃO OBRIGATÓRIA. Nos demais regimes, podem. Empresário casado NÃO precisa de outorga conjugal para alienar imóvel de destinação empresarial.' },
-    { id:'d12_f6', frente:'A inscrição do empresário no RPEM é obrigatória? Qual a natureza?',
-      verso:'OBRIGATÓRIA antes do início da atividade. Natureza DECLARATÓRIA (empresário já existe sem registro — apenas irregular). EXCEÇÃO: empresário RURAL — inscrição FACULTATIVA com natureza CONSTITUTIVA. Mesma regra para associações de futebol profissional.',
-      caiu:'OAB 38' },
-    { id:'d12_f7', frente:'O que é o ESTABELECIMENTO EMPRESARIAL?',
-      verso:'Complexo de BENS ORGANIZADO para o exercício da empresa (universalidade de fato — art. 1.142 CC). Pode ser físico ou VIRTUAL. Estabelecimento virtual: endereço pode ser o do empresário/sócio. HORÁRIO DE FUNCIONAMENTO (estabelecimento físico): competência do MUNICÍPIO para fixar, observada a regra geral federal (art. 1.142, §3º CC; art. 3º, II Lei 13.874/19).',
-      caiu:'OAB 40' },
-    { id:'d12_f8', frente:'O que é TRESPASSE e quais os requisitos para efeito perante terceiros?',
-      verso:'Trespasse = alienação do estabelecimento. Requisitos: (1) Contrato SOLENE e ESCRITO. (2) Se insolvente, pagamento dos credores OU consentimento em 30 dias. (3) REGISTRO na Junta Comercial + PUBLICAÇÃO para eficácia erga omnes.',
-      caiu:'OAB 36, 31' },
-    { id:'d12_f9', frente:'Quem responde pelas DÍVIDAS no trespasse? E os CONTRATOS?',
-      verso:'DÍVIDAS: ADQUIRENTE responde pelas dívidas regularmente contabilizadas. ALIENANTE: solidariamente por 1 ANO. EXCEÇÃO: em recuperação judicial ou falência, o adquirente NÃO responde pelas dívidas. CONTRATOS: todos os contratos relacionados à exploração da atividade empresarial são continuados pelo ADQUIRENTE, SALVO os intuitu personae. DEVEDORES que paguem de boa-fé ao alienante após o trespasse ficam livres de responsabilidade.',
-      pegadinha:'Só dívidas NEGOCIAIS nos livros. Trabalhistas e tributárias têm regime próprio. E os contratos pessoais (intuitu personae) NÃO são transferidos.', caiu:'OAB 36' },
-    { id:'d12_f10', frente:'Cláusula de NÃO CONCORRÊNCIA no trespasse — prazo:',
-      verso:'O alienante NÃO pode concorrer com o adquirente por 5 ANOS após a transferência. STJ: prazo maior é possível se razoável (critérios espaciais, temporais e materiais).',
-      caiu:'OAB 36' }
-  ],
+  flashcards:[],
   checklist:[
-    {id:'c12-1',texto:'Estudar todos os flashcards do Dia 12 — Direito Empresarial'},
-    {id:'c12-2',texto:'Resolver 10 questões de Empresarial no QConcursos'},
-    {id:'c12-3',texto:'Memorizar diferença: empresário regular vs irregular; inscrição rural'},
-    {id:'c12-4',texto:'Revisão rápida do Dia 11 — Processo Penal (15 min)'}
+  {id:'d12_c1',texto:'Conceito de empresa e empresário (art. 966 CC)',feito:false},
+  {id:'d12_c2',texto:'Atividade intelectual como elemento de empresa — exceção',feito:false},
+  {id:'d12_c3',texto:'Empresário incapaz — condições para exercício',feito:false},
+  {id:'d12_c4',texto:'Sociedade entre cônjuges — restrições',feito:false},
+  {id:'d12_c5',texto:'Inscrição no RPEM — declaratória vs constitutiva',feito:false},
+  {id:'d12_c6',texto:'Estabelecimento empresarial — físico e virtual',feito:false},
+  {id:'d12_c7',texto:'Trespasse — requisitos e responsabilidade por dívidas',feito:false},
+  {id:'d12_c8',texto:'Cláusula de não concorrência (5 anos)',feito:false}
   ],
   sumula:{ sigla:'Art. 966 CC', texto:'Considera-se empresário quem exerce profissionalmente atividade econômica organizada para a produção ou a circulação de bens ou de serviços.' },
   incidencia:85, pdf_id:_VDE_PDF_IDS[2], lei_seca:['CC arts. 966-1.195','Lei 14.195/2021','Lei 14.382/2022'] },
@@ -671,38 +363,16 @@ const PLANO_VDE = [
              'Poder de Polícia — atributos: discricionariedade, autoexecutoriedade, coercibilidade',
              'Poder Regulamentar — decreto regulamentar vs decreto autônomo',
              'Poder Vinculado vs Poder Discricionário'] }],
-  flashcards:[
-    { id:'d13_f1', frente:'Quais são os princípios IMPLÍCITOS da Administração Pública?',
-      verso:'(1) Supremacia do interesse público (prevalece sobre o particular). (2) Indisponibilidade do interesse público (agente não pode dispor). (3) Autotutela (revisão dos próprios atos). (4) Continuidade (serviço ininterrupto).',
-      pegadinha:'Continuidade não é absoluta: interrupção permitida em emergência ou após aviso prévio por inadimplemento (art. 6 Lei 8.987/95).' },
-    { id:'d13_f2', frente:'Mnemônico LIMPE — princípios EXPLÍCITOS (CF art. 37):',
-      verso:'L-Legalidade (só faz o que a lei autoriza). I-Impessoalidade (sem discriminar; ato é do Estado). M-Moralidade (honestidade, boa-fé — aplica-se também aos PARTICULARES que se relacionam com a Administração, ex: licitantes). P-Publicidade (regra é a transparência — EXCEÇÕES: atos que comprometam segurança do Estado ou da sociedade, ou que violem intimidade/vida privada; LAI Lei 12.527/11 regulamenta o acesso a informações públicas). *CAIU NA OAB 37* E-Eficiência (qualidade com menos gastos). Aplicáveis a TODOS os Poderes e entes.',
-      caiu:'OAB 37, 38' },
-    { id:'d13_f3', frente:'O que é a AUTOTUTELA e qual o prazo para anulação?',
-      verso:'A Administração pode rever seus próprios atos sem provocação: ANULAR (por ilegalidade — efeito ex tunc) ou REVOGAR (por conveniência/oportunidade — efeito ex nunc). Prazo decadencial de 5 anos se boa-fé do destinatário. Má-fé = sem prazo.',
-      caiu:'OAB 29' },
-    { id:'d13_f4', frente:'O que veda a Súmula Vinculante 13 (nepotismo)?',
-      verso:'Veda a nomeação de cônjuge, companheiro ou parente até 3º grau (linha reta ou colateral) da autoridade nomeante para cargo em comissão, confiança ou função gratificada — em qualquer dos Poderes e entes. Inclui o NEPOTISMO CRUZADO (indicações recíprocas entre autoridades).' },
-    { id:'d13_f5', frente:'Poder HIERÁRQUICO — o que pode e o que NÃO pode ser delegado?',
-      verso:'PODE delegar para mesma ou inferior hierarquia. NÃO pode: atos de COMPETÊNCIA EXCLUSIVA; DECISÃO de recurso hierárquico; EDIÇÃO de atos normativos. AVOCAÇÃO: puxar competência de inferior — apenas EXCEPCIONALMENTE por motivos relevantes justificados.',
-      caiu:'OAB 37, 38' },
-    { id:'d13_f6', frente:'O que é o Poder de POLÍCIA e quais seus 3 atributos?',
-      verso:'Poder de restringir liberdade e propriedade em favor do interesse coletivo. Atributos: (1) DISCRICIONARIEDADE (escolha dentro da lei) — EXCEÇÃO: atos VINCULADOS (quando a lei define todos os elementos, não há margem de escolha); (2) AUTOEXECUTORIEDADE (executa sem precisar do PJ); (3) COERCIBILIDADE (deve ser obedecido independente da vontade do administrado).',
-      caiu:'OAB 30' },
-    { id:'d13_f7', frente:'Decreto REGULAMENTAR vs Decreto AUTÔNOMO — diferenças:',
-      verso:'REGULAMENTAR: complementa a lei para fiel execução — NÃO inova a ordem jurídica. AUTÔNOMO: INOVA a ordem jurídica — EXCEÇÃO, só cabível para: (a) organização da Adm. Pública sem criar despesa/órgãos; (b) extinção de cargos/funções VAGOS.' },
-    { id:'d13_f8', frente:'Poder VINCULADO vs Poder DISCRICIONÁRIO:',
-      verso:'VINCULADO: todos os elementos definidos em lei — sem margem de escolha. Licença = ato vinculado (preenchidos os requisitos, o particular TEM DIREITO SUBJETIVO → cabe MS se negada). DISCRICIONÁRIO: margem de conveniência e oportunidade. Discricionariedade ≠ Arbitrariedade!',
-      caiu:'OAB 27, 30' },
-    { id:'d13_f9', frente:'O que é o Poder DISCIPLINAR e como se aplica?',
-      verso:'Poder de apurar infrações e aplicar penalidades a servidores públicos ou a particulares que possuam vínculo específico com a Administração. Quando a autoridade tiver ciência de irregularidade no serviço público, é OBRIGADA a promover sua apuração, mediante SINDICÂNCIA ou PAD (Processo Administrativo Disciplinar) — art. 143 da Lei 8.112/90. É poder-dever: não pode a autoridade quedar-se inerte.',
-      pegadinha:'Poder disciplinar = obrigação de apurar. A autoridade NÃO pode ignorar irregularidade de que tome conhecimento.' }
-  ],
+  flashcards:[],
   checklist:[
-    {id:'c13-1',texto:'Estudar todos os flashcards do Dia 13 — Administrativo'},
-    {id:'c13-2',texto:'Resolver 10 questões de Administrativo no QConcursos'},
-    {id:'c13-3',texto:'Memorizar a SV 13 (nepotismo) e o mnemônico LIMPE'},
-    {id:'c13-4',texto:'Revisão rápida do Dia 12 — Empresarial (15 min)'}
+  {id:'d13_c1',texto:'Princípios implícitos: supremacia, indisponibilidade, autotutela, continuidade',feito:false},
+  {id:'d13_c2',texto:'Princípios LIMPE — CF art. 37',feito:false},
+  {id:'d13_c3',texto:'Súmula Vinculante 13 — nepotismo e nepotismo cruzado',feito:false},
+  {id:'d13_c4',texto:'Poder Hierárquico — delegação, avocação e limites',feito:false},
+  {id:'d13_c5',texto:'Poder Disciplinar — apuração de infrações funcionais',feito:false},
+  {id:'d13_c6',texto:'Poder de Polícia — atributos: discricionariedade, autoexecutoriedade, coercibilidade',feito:false},
+  {id:'d13_c7',texto:'Poder Regulamentar — decreto regulamentar vs decreto autônomo',feito:false},
+  {id:'d13_c8',texto:'Poder Vinculado vs Poder Discricionário',feito:false}
   ],
   sumula:{ sigla:'Súmula Vinculante 13 · STF', texto:'A nomeação de cônjuge, companheiro ou parente até o terceiro grau [...] para cargo em comissão ou de confiança [...] viola a Constituição Federal.' },
   incidencia:87, pdf_id:_VDE_PDF_IDS[2], lei_seca:['CF art. 37','Lei 8.112/90 arts. 143, 117','Lei 8.987/95 art. 6'] },
@@ -725,57 +395,16 @@ const PLANO_VDE = [
       'Ação Civil Pública — legitimados, bens tutelados',
       'Direito de petição e certidão — gratuidade e remédios cabíveis'
     ] }],
-  flashcards:[
-    { id:'d14_f1',
-      frente:'Quais são as finalidades do Habeas Data (HD)?',
-      verso:'O HD visa: (1) assegurar o ACESSO às informações constantes em registros ou bancos de dados de entidades governamentais ou de caráter público; (2) promover a RETIFICAÇÃO de informações incorretas; (3) proceder à ANOTAÇÃO de informações referentes à pessoa do impetrante. A ação é personalíssima.',
-      pegadinha:'HD protege dados da PRÓPRIA pessoa (personalíssima). Não serve para acessar dados de terceiros. Para certidão de dados de terceiro, o remédio é o direito de petição com posterior MS.',
-      caiu:'OAB 36' },
-    { id:'d14_f2',
-      frente:'Quais são os prazos administrativos que caracterizam o interesse de agir para o Habeas Data?',
-      verso:'É necessário a recusa da autoridade administrativa ou o decurso de prazo sem decisão: (a) RECUSA DE ACESSO às informações: decurso de mais de 10 dias sem decisão; (b) RECUSA DE RETIFICAÇÃO: decurso de mais de 15 dias sem decisão; (c) RECUSA DE ANOTAÇÃO: decurso de mais de 15 dias sem decisão. Sem essa recusa prévia, falta interesse de agir.',
-      pegadinha:'O HD exige recusa administrativa prévia — não pode ir direto ao Judiciário. Diferente do MS, que tem prazo de 120 dias do conhecimento do ato.' },
-    { id:'d14_f3',
-      frente:'Quem tem legitimidade para impetrar Habeas Corpus (HC)? Ele pode ser preventivo?',
-      verso:'A legitimidade ativa para impetrar HC é UNIVERSAL (qualquer pessoa), independentemente de advogado. Pode ser: (1) PREVENTIVO: quando há ameaça à liberdade de locomoção — gera SALVO-CONDUTO; (2) REPRESSIVO: quando há violação concreta à liberdade — gera ALVARÁ DE SOLTURA. Cabível por ilegalidade ou abuso de poder.',
-      pegadinha:'HC não precisa de advogado. MS, sim.' },
-    { id:'d14_f4',
-      frente:'Qual o prazo para impetrar Mandado de Segurança? Qual a natureza desse prazo?',
-      verso:'O prazo é DECADENCIAL de 120 dias, contados do conhecimento OFICIAL pelo interessado do ato a ser impugnado. Por ser decadencial: não se suspende, não se interrompe e não pode ser objeto de renúncia.',
-      pegadinha:'Prazo decadencial — não é prescricional. Começa a contar do CONHECIMENTO OFICIAL, não da prática do ato.' },
-    { id:'d14_f5',
-      frente:'Em quais hipóteses NÃO cabe Mandado de Segurança?',
-      verso:'NÃO cabe MS: (a) contra atos de gestão comercial de administradores de empresas públicas, SEM e concessionárias; (b) de ato do qual caiba recurso administrativo COM efeito suspensivo, independentemente de caução; (c) de decisão judicial da qual caiba recurso com efeito suspensivo; (d) de decisão judicial transitada em julgado; (e) contra lei em tese (Súmula 266 STF); (f) de ato interna corporis.',
-      pegadinha:'Se cabe recurso administrativo COM efeito suspensivo, não cabe MS — independentemente de caução! Se o recurso for SEM efeito suspensivo, cabe MS.' },
-    { id:'d14_f6',
-      frente:'Quem tem legitimidade ativa para o Mandado de Segurança Coletivo?',
-      verso:'Legitimidade ativa do MS Coletivo: (1) Partido Político com representação no Congresso Nacional; (2) Organização Sindical; (3) Entidade de classe; (4) Associações constituídas e em funcionamento há pelo menos 1 ano. Súmula 629 STF: independe de autorização dos associados. Súmula 630 STF: legitimidade existe mesmo que a pretensão interesse apenas a parte da categoria.',
-      caiu:'OAB 31' },
-    { id:'d14_f7',
-      frente:'Qual a diferença entre Mandado de Injunção (MI) e ADO (Ação Direta de Inconstitucionalidade por Omissão)?',
-      verso:'MI: remédio constitucional, processo SUBJETIVO (há partes), viabiliza direitos fundamentais dependentes de norma reguladora; legitimidade ativa varia conforme MI individual ou coletivo; efeitos INTER PARTES; competência STF, STJ e TJs. ADO: ação de controle de constitucionalidade, processo OBJETIVO (sem partes), pode tutelar QUALQUER norma constitucional (não só DH); legitimados do art. 103 CF; efeitos ERGA OMNES; competência EXCLUSIVA do STF.',
-      caiu:'OAB 39' },
-    { id:'d14_f8',
-      frente:'Quem pode propor Ação Popular? Qual a competência para julgá-la?',
-      verso:'Legitimidade ativa exclusiva do CIDADÃO (portador de título de eleitor). PESSOA JURÍDICA não tem legitimidade. OBJETO: anular ato lesivo ao PATRIMÔNIO PÚBLICO, à MORALIDADE ADMINISTRATIVA, ao MEIO AMBIENTE e ao PATRIMÔNIO HISTÓRICO E CULTURAL. *CAIU NA OAB 29* A ação SEMPRE será ajuizada em juízo de 1ª instância, independentemente de quem seja o réu — inclusive contra atos do Presidente da República (STF não tem competência originária para AP). O autor é isento de custas e ônus de sucumbência, salvo comprovada má-fé.',
-      pegadinha:'PJ não pode propor Ação Popular. O STF NÃO tem competência originária para AP — mesmo contra atos do Presidente!',
-      caiu:'OAB 29, 30, 36' },
-    { id:'d14_f9',
-      frente:'Parlamentar pode impetrar MS Preventivo contra PEC que viola cláusula pétrea durante o processo legislativo?',
-      verso:'SIM. Parlamentares possuem legitimidade para impetrar Mandado de Segurança Preventivo ao STF em projetos de lei ou de emenda constitucional com suposta violação a cláusulas pétreas ou disposições constitucionais — MESMO ANTES da lei ser aprovada (controle preventivo judicial).',
-      caiu:'OAB 40, 41' },
-    { id:'d14_f10',
-      frente:'O que é o Direito de Petição e o Direito de Certidão? São gratuitos?',
-      verso:'Art. 5º, XXXIV CF: são assegurados independentemente de pagamento de taxas: (a) direito de petição aos Poderes Públicos em defesa de direitos ou contra ilegalidade/abuso de poder — se negado, cabe MS; (b) obtenção de certidões em repartições públicas para defesa de direitos — se negado, cabe HABEAS DATA. Qualquer exigência de pagamento é inconstitucional.',
-      pegadinha:'Negaram certidão? HD. Negaram petição? MS. Não confundir!',
-      caiu:'OAB 28, 41' }
-  ],
+  flashcards:[],
   checklist:[
-    {id:'c14-1',texto:'Estudar todos os flashcards do Dia 14 — Constitucional (Remédios)'},
-    {id:'c14-2',texto:'Resolver 10 questões de Constitucional (Remédios) no QConcursos'},
-    {id:'c14-3',texto:'Memorizar a tabela comparativa: MI x ADO (processo subjetivo vs objetivo, efeitos, competência)'},
-    {id:'c14-4',texto:'Fixar as hipóteses de NÃO cabimento do MS'},
-    {id:'c14-5',texto:'Revisão rápida do Dia 13 — Administrativo (15 min)'}
+  {id:'d14_c1',texto:'Habeas Data — finalidade, prova do interesse de agir, prazos administrativos',feito:false},
+  {id:'d14_c2',texto:'Habeas Corpus — preventivo (salvo-conduto) e repressivo (alvará de soltura)',feito:false},
+  {id:'d14_c3',texto:'Mandado de Segurança — prazo decadencial de 120 dias, hipóteses de não cabimento',feito:false},
+  {id:'d14_c4',texto:'MS Coletivo — legitimidade ativa, direitos coletivos e individuais homogêneos',feito:false},
+  {id:'d14_c5',texto:'Mandado de Injunção — individual e coletivo, diferença com ADO',feito:false},
+  {id:'d14_c6',texto:'Ação Popular — legitimidade exclusiva do cidadão, competência 1ª instância',feito:false},
+  {id:'d14_c7',texto:'Ação Civil Pública — legitimados, bens tutelados',feito:false},
+  {id:'d14_c8',texto:'Direito de petição e certidão — gratuidade e remédios cabíveis',feito:false}
   ],
   sumula:{ sigla:'Súmula 629 STF', texto:'A impetração de mandado de segurança coletivo por entidade de classe em favor dos associados independe da autorização destes.' },
   incidencia:88, pdf_id:_VDE_PDF_IDS[3], lei_seca:['CF art. 5º LXVIII (HC)', 'CF art. 5º LXIX-LXX (MS)', 'CF art. 5º LXXI (MI)', 'CF art. 5º LXXII (HD)', 'CF art. 5º LXXIII (AP)', 'CF art. 5º XXXIII-XXXIV', 'Lei 12.016/2009 (MS)', 'Lei 9.507/1997 (HD)'] },
@@ -797,51 +426,17 @@ const PLANO_VDE = [
       'Sócio retirante — responsabilidade subsidiária, prazo de 2 anos',
       'Terceirização — responsabilidade subsidiária da tomadora'
     ] }],
-  flashcards:[
-    { id:'d15_f1',
-      frente:'Quais os requisitos para o empregado ser considerado hipersuficiente?',
-      verso:'Art. 444, parágrafo único CLT: (1) possuir diploma de nível superior + (2) receber salário mensal igual ou superior a duas vezes o limite máximo dos benefícios do RGPS. O hipersuficiente pode negociar diretamente com o empregador temas do art. 611 CLT (jornada, banco de horas, intervalo intrajornada, etc.) sem necessidade de intervenção sindical.',
-      pegadinha:'O hipersuficiente pode fazer cláusula compromissória de arbitragem (art. 507-A CLT), mas somente se a INICIATIVA for do empregado ou houver expressa concordância dele — nunca por iniciativa unilateral do empregador.' },
-    { id:'d15_f2',
-      frente:'Quais são os requisitos para caracterizar o empregado doméstico?',
-      verso:'LC 150/2015: (1) SHOPP + (2) prestação de serviço para PESSOA FÍSICA ou FAMÍLIA + (3) prestado em ÂMBITO RESIDENCIAL e suas extensões + (4) prestação por MAIS DE 2 DIAS por semana. Profissionais de saúde que cuidam de pacientes em residência também podem ser domésticos.',
-      pegadinha:'Se trabalha 2 dias ou menos por semana → diarista, não empregado doméstico (sem vínculo empregatício). Menores de 18 anos NÃO podem ser contratados como domésticos.',
-      caiu:'OAB 28' },
-    { id:'d15_f3',
-      frente:'Quais são as vedações de trabalho para menores por faixa etária?',
-      verso:'Art. 7º, XXXIII CF: (1) MENOR DE 14 ANOS: vedado QUALQUER tipo de trabalho; (2) DE 14 A 15 ANOS: somente na condição de APRENDIZ, desde que não seja noturno, perigoso ou insalubre; (3) MENOR DE 18 ANOS: vedado trabalho noturno (22h às 5h), perigoso ou insalubre. LC 150/15 também proíbe trabalho doméstico para menores de 18 anos.',
-      pegadinha:'Aprendiz pode ter 14 anos, mas NÃO pode trabalhar à noite, em local perigoso ou insalubre. A LC 150/15 proíbe trabalho doméstico para menores de 18 (mais restritiva).' },
-    { id:'d15_f4',
-      frente:'Quais as principais proteções trabalhistas da mulher?',
-      verso:'(1) ESTABILIDADE: desde a confirmação da gravidez até 5 meses após o nascimento; (2) LICENÇA-MATERNIDADE: 120 dias; (3) AMAMENTAÇÃO: até os 6 meses da criança (prorrogável por atestado médico) — 2 intervalos de 30 min cada por jornada; (4) LIMITE DE PESO: 20 kg (trabalho contínuo) ou 25 kg (trabalho ocasional) — art. 390 CLT.' },
-    { id:'d15_f5',
-      frente:'O que o empregador pode e o que NÃO pode fazer no controle dos empregados?',
-      verso:'PODE: fiscalizar e-mail corporativo; realizar revista pessoal (sem contato íntimo, sem vexame); instalar câmeras para segurança (não invade banheiros); exames toxicológicos (não discriminatórios). NÃO PODE: fiscalizar e-mail pessoal; fazer revista íntima; instalar câmera em banheiros; usar exame toxicológico com finalidade discriminatória.' },
-    { id:'d15_f6',
-      frente:'Quais são os requisitos para caracterizar Grupo Econômico e qual é a responsabilidade?',
-      verso:'Requisitos (art. 2º, §2º CLT): (1) interesse integrado + (2) efetiva comunhão de interesses + (3) atuação conjunta + (4) direção OU controle OU administração entre as empresas. Responsabilidade: SOLIDÁRIA pelas obrigações trabalhistas. A mera identidade de sócios NÃO caracteriza grupo econômico.',
-      pegadinha:'Mera identidade de sócios = NÃO é grupo econômico. Precisa haver integração efetiva das atividades!',
-      caiu:'OAB 31' },
-    { id:'d15_f7',
-      frente:'Como funciona a responsabilidade na Sucessão de Empregadores?',
-      verso:'Arts. 10 e 448 CLT: ocorre com alteração da estrutura jurídica ou propriedade da empresa + continuidade da atividade. O SUCESSOR arca com TUDO — inclusive obrigações trabalhistas ANTERIORES à aquisição. Qualquer alteração na estrutura ou propriedade NÃO afeta os direitos adquiridos dos empregados.' },
-    { id:'d15_f8',
-      frente:'Qual a responsabilidade do Sócio Retirante por débitos trabalhistas?',
-      verso:'Art. 10-A CLT: responsabilidade SUBSIDIÁRIA pelas obrigações trabalhistas relativas ao período em que figurou como sócio, desde que as ações sejam ajuizadas em até 2 anos após a averbação da modificação do contrato. Ordem: 1º Empresa → 2º Sócios atuais → 3º Sócios retirantes. Se comprovada FRAUDE na retirada: responsabilidade passa a ser SOLIDÁRIA.',
-      pegadinha:'Sócio retirante = subsidiária. Fraude na retirada = solidária!',
-      caiu:'OAB 36' },
-    { id:'d15_f9',
-      frente:'Qual a responsabilidade da empresa tomadora na Terceirização? Resumo da tabela de responsabilidades.',
-      verso:'Lei 6.019/74: tomadora é responsável SUBSIDIÁRIA pelas obrigações trabalhistas dos terceirizados. RESUMÃO: Grupo Econômico = SOLIDÁRIA; Sócio Retirante = SUBSIDIÁRIA; Terceirização = SUBSIDIÁRIA.',
-      pegadinha:'Grupo econômico = SOLIDÁRIA. Terceirização e sócio retirante = SUBSIDIÁRIA. Essa tabela é clássica de prova!',
-      caiu:'OAB 36, 40' }
-  ],
+  flashcards:[],
   checklist:[
-    {id:'c15-1',texto:'Estudar todos os flashcards do Dia 15 — Trabalho (Empregado e Empregador)'},
-    {id:'c15-2',texto:'Resolver 10 questões de Direito do Trabalho no QConcursos'},
-    {id:'c15-3',texto:'Memorizar a tabela: Grupo Econômico (solidária) × Sócio Retirante (subsidiária) × Terceirização (subsidiária)'},
-    {id:'c15-4',texto:'Fixar os requisitos do empregado doméstico e as faixas etárias do trabalho do menor'},
-    {id:'c15-5',texto:'Revisão rápida do Dia 14 — Constitucional (Remédios) (15 min)'}
+  {id:'d15_c1',texto:'Empregado hipersuficiente — requisitos e cláusula compromissória de arbitragem',feito:false},
+  {id:'d15_c2',texto:'Empregado doméstico — requisitos, jornada, intervalo e extinção do contrato',feito:false},
+  {id:'d15_c3',texto:'Trabalho do menor — vedações por faixa etária e aprendiz',feito:false},
+  {id:'d15_c4',texto:'Trabalho da mulher — estabilidade gestante, licença maternidade, amamentação',feito:false},
+  {id:'d15_c5',texto:'Empregador — fiscalização, revista pessoal, câmeras, exame toxicológico',feito:false},
+  {id:'d15_c6',texto:'Grupo econômico — requisitos e responsabilidade solidária',feito:false},
+  {id:'d15_c7',texto:'Sucessão de empregadores — responsabilidade do sucessor',feito:false},
+  {id:'d15_c8',texto:'Sócio retirante — responsabilidade subsidiária, prazo de 2 anos',feito:false},
+  {id:'d15_c9',texto:'Terceirização — responsabilidade subsidiária da tomadora',feito:false}
   ],
   sumula:{ sigla:'Súmula 129 TST', texto:'A prestação de serviços a mais de uma empresa do mesmo grupo econômico, durante a mesma jornada de trabalho, não caracteriza a coexistência de mais de um contrato de trabalho, salvo ajuste em contrário.' },
   incidencia:82, pdf_id:_VDE_PDF_IDS[3], lei_seca:['CLT art. 2º (empregador)', 'CLT art. 2º §2º (grupo econômico)', 'CLT art. 10-A (sócio retirante)', 'CLT art. 444 §único (hipersuficiente)', 'CLT art. 507-A (arbitragem)', 'CF art. 7º XXXIII (trabalho do menor)', 'LC 150/2015 art. 1º (doméstico)', 'Lei 6.019/74 (terceirização)'] },
@@ -862,53 +457,16 @@ const PLANO_VDE = [
       'Simulação — único defeito que causa nulidade absoluta',
       'Negócio jurídico nulo vs anulável — prazos e efeitos'
     ] }],
-  flashcards:[
-    { id:'d16_f1',
-      frente:'Qual a diferença entre Condição, Termo e Encargo no Negócio Jurídico?',
-      verso:'CONDIÇÃO: evento futuro e INCERTO ("se"); condição suspensiva suspende a aquisição e o exercício do direito (expectativa de direito); condição resolutiva extingue o direito após o cumprimento (há direito adquirido). TERMO: evento futuro e CERTO ("quando"); termo suspensivo suspende o exercício (mas há direito adquirido); termo resolutivo encerra a obrigação. ENCARGO: imposição de obrigação ao beneficiário de liberalidade ("para que"); não suspende a aquisição nem o exercício — há direito adquirido, salvo se imposto como condição suspensiva.',
-      pegadinha:'Condição suspensiva = SEM direito adquirido (só expectativa). Condição resolutiva = HÁ direito adquirido. Encargo = HÁ direito adquirido.' },
-    { id:'d16_f2',
-      frente:'O que é ERRO como vício de consentimento e qual o prazo para anular?',
-      verso:'Erro é o engano fático — falsa percepção da realidade em relação à pessoa, objeto ou direito. O agente se engana SOZINHO, sem influência de terceiro. Para ensejar anulabilidade, deve ser SUBSTANCIAL (sem a falsa percepção, o negócio não se firmaria). Prazo: decadencial de 4 ANOS contados da celebração do negócio.',
-      pegadinha:'No erro, o agente se engana sozinho. No dolo, é induzido por terceiro. Ambos têm prazo de 4 anos.' },
-    { id:'d16_f3',
-      frente:'Qual a diferença entre dolo substancial e dolo acidental?',
-      verso:'DOLO SUBSTANCIAL: artifício ardiloso que influiu na formação do próprio negócio — sem ele, o negócio não teria sido celebrado. Causa ANULABILIDADE. DOLO ACIDENTAL (art. 146 CC): sem ele, o negócio teria se realizado de qualquer modo, porém de forma diferente. Não causa anulabilidade — gera apenas obrigação de REPARAR OS DANOS.',
-      pegadinha:'Dolo acidental NÃO anula o negócio, apenas gera indenização!' },
-    { id:'d16_f4',
-      frente:'Como diferenciar Estado de Perigo de Lesão?',
-      verso:'LESÃO (art. 157 CC): premente necessidade OU inexperiência → obrigação desproporcional. NÃO exige dolo de aproveitamento (Enunciado 150 CJF). ESTADO DE PERIGO (art. 156 CC): necessidade de salvar a si, FAMILIAR ou AMIGO ÍNTIMO de GRAVE DANO, CONHECIDO pela outra parte → obrigação excessivamente onerosa. EXIGE dolo de aproveitamento. Prazo de ambos: 4 anos da celebração.',
-      pegadinha:'Estado de perigo: inclui amigo íntimo! Na lesão, NÃO precisa que a outra parte saiba da necessidade. No estado de perigo, a outra parte PRECISA conhecer o perigo!',
-      caiu:'OAB 31, 40' },
-    { id:'d16_f5',
-      frente:'O que é Fraude Contra Credores e como se combate?',
-      verso:'Atuação maliciosa do devedor em estado de insolvência que dispõe do patrimônio para fraudar credores. Requisitos: (1) EVENTO DANOSO AOS CREDORES + (2) CONLUIO entre as partes. Não há processo judicial em andamento. Ato é ANULÁVEL. Combate: AÇÃO PAULIANA. Prazo: decadencial de 4 ANOS da realização do negócio. Só credores com crédito anterior ao ato podem propor.',
-      pegadinha:'Fraude contra credores = sem processo = ato ANULÁVEL = ação pauliana. Fraude à execução = com processo = ato INEFICAZ = sem ação autônoma!' },
-    { id:'d16_f6',
-      frente:'Qual a diferença entre Fraude Contra Credores e Fraude à Execução?',
-      verso:'FRAUDE CONTRA CREDORES: sem processo judicial; combate por ação pauliana (4 anos); sentença → ANULABILIDADE. FRAUDE À EXECUÇÃO: há processo em andamento; executado aliena bens após citação; reconhecimento da má-fé ou registro da penhora (Súmula 375 STJ); sem ação autônoma; sentença → INEFICÁCIA RELATIVA.',
-      pegadinha:'Fraude à execução = INEFICÁCIA. Fraude contra credores = ANULABILIDADE.' },
-    { id:'d16_f7',
-      frente:'O que é Simulação e qual a consequência para o negócio jurídico?',
-      verso:'Simulação é o conluio das partes para declarar vontade falsa, divergente do real querer. (a) ABSOLUTA: declaram praticar negócio que não querem; (b) RELATIVA: escondem negócio real por trás de outro. Consequência: o negócio é NULO (nulidade absoluta). A simulação é o ÚNICO defeito do NJ que causa nulidade — todos os demais causam anulabilidade. IMPORTANTE: a simulação PRESCINDE (não precisa) de ação própria para ser reconhecida — pode ser reconhecida incidentalmente.',
-      pegadinha:'SIMULAÇÃO = NULIDADE ABSOLUTA. É o único defeito que não é anulável! Todos os outros (erro, dolo, coação, lesão, estado de perigo, fraude contra credores) causam anulabilidade.',
-      caiu:'OAB 28' },
-    { id:'d16_f8',
-      frente:'Quais são as hipóteses de Negócio Jurídico NULO e quais as suas consequências?',
-      verso:'NJ NULO (art. 166 CC): agente absolutamente incapaz (SOMENTE menor de 16 anos, após o CC/2002); objeto ilícito/impossível/indeterminável; motivo determinante comum ilícito; forma não prescrita em lei (ex: imóvel acima de 30 SM sem escritura pública); preterida solenidade essencial; fraude à lei imperativa; simulação. Efeitos: juiz reconhece de OFÍCIO, a QUALQUER TEMPO, efeitos ERGA OMNES e EX TUNC.',
-      pegadinha:'Imóvel acima de 30 salários mínimos sem escritura pública = NULO!',
-      caiu:'OAB 41' },
-    { id:'d16_f9',
-      frente:'Quais são os prazos de anulação dos Negócios Jurídicos anuláveis?',
-      verso:'REGRA GERAL (art. 179 CC): 2 anos da conclusão do NJ. VÍCIOS DO NJ (4 anos da celebração): erro, dolo, estado de perigo, lesão, fraude contra credores. COAÇÃO: 4 anos contados da data que CESSAR A COAÇÃO. INCAPACIDADE RELATIVA: 4 anos contados de quando CESSAR A INCAPACIDADE. Nos anuláveis: juiz NÃO pode reconhecer de ofício.',
-      pegadinha:'Coação e incapacidade relativa: prazo começa quando CESSAR a coação/incapacidade, não da celebração!' }
-  ],
+  flashcards:[],
   checklist:[
-    {id:'c16-1',texto:'Estudar todos os flashcards do Dia 16 — Civil (Negócio Jurídico)'},
-    {id:'c16-2',texto:'Resolver 10 questões de Direito Civil (NJ e defeitos) no QConcursos'},
-    {id:'c16-3',texto:'Memorizar a tabela: defeitos do NJ → qual causa nulidade (simulação) e quais causam anulabilidade'},
-    {id:'c16-4',texto:'Fixar todos os prazos de anulação (2 anos regra geral, 4 anos vícios)'},
-    {id:'c16-5',texto:'Revisão rápida do Dia 15 — Trabalho (Empregado/Empregador) (15 min)'}
+  {id:'d16_c1',texto:'Condição (futuro e incerto), termo (futuro e certo) e encargo',feito:false},
+  {id:'d16_c2',texto:'Condição suspensiva vs resolutiva — efeitos e direito adquirido',feito:false},
+  {id:'d16_c3',texto:'Vícios de consentimento: erro, dolo, coação moral, estado de perigo, lesão',feito:false},
+  {id:'d16_c4',texto:'Distinção lesão vs estado de perigo — dolo de aproveitamento',feito:false},
+  {id:'d16_c5',texto:'Fraude contra credores — ação pauliana, prazo de 4 anos',feito:false},
+  {id:'d16_c6',texto:'Fraude contra credores vs fraude à execução',feito:false},
+  {id:'d16_c7',texto:'Simulação — único defeito que causa nulidade absoluta',feito:false},
+  {id:'d16_c8',texto:'Negócio jurídico nulo vs anulável — prazos e efeitos',feito:false}
   ],
   sumula:{ sigla:'Súmula 375 STJ', texto:'O reconhecimento da fraude à execução depende do registro da penhora do bem alienado ou da prova da má-fé do terceiro adquirente.' },
   incidencia:90, pdf_id:_VDE_PDF_IDS[3], lei_seca:['CC art. 121-137 (condição, termo, encargo)', 'CC art. 138-165 (vícios do NJ)', 'CC art. 166-167 (nulidade)', 'CC art. 171-179 (anulabilidade)', 'CC art. 108 (escritura pública imóvel)', 'CC art. 156-157 (estado de perigo e lesão)', 'CC art. 158-165 (fraude contra credores)'] },
@@ -929,52 +487,16 @@ const PLANO_VDE = [
       'Competência residual — lei complementar, vedada aos Estados',
       'Isenção heterônoma — vedada internamente, admitida em tratados'
     ] }],
-  flashcards:[
-    { id:'d17_f1',
-      frente:'O que é Competência Tributária e quais são suas características?',
-      verso:'Competência tributária é a aptidão conferida pela CF aos entes políticos (União, Estados, Municípios e DF) para CRIAR tributos por meio de lei. A CF não cria tributos — confere poder de criação. Características: FACULTATIVA, INALTERÁVEL, IMPRESCRITÍVEL, IRRENUNCIÁVEL e INDELEGÁVEL. O veículo normativo padrão é a LEI ORDINÁRIA do ente competente.',
-      pegadinha:'Competência tributária (instituir tributos) é INDELEGÁVEL. Só a capacidade tributária ativa (cobrar/fiscalizar) é delegável!',
-      caiu:'OAB 40' },
-    { id:'d17_f2',
-      frente:'Qual a diferença entre Competência Tributária e Capacidade Tributária Ativa?',
-      verso:'COMPETÊNCIA TRIBUTÁRIA: aptidão para INSTITUIR/CRIAR tributos; atribuição legislativa; INDELEGÁVEL; titulares: União, Estados, DF e Municípios. CAPACIDADE TRIBUTÁRIA ATIVA: aptidão para FISCALIZAR, COBRAR, ARRECADAR e EXECUTAR tributos; atribuição administrativa; DELEGÁVEL a qualquer PJ de direito público; pode ser REVOGADA a qualquer momento. Exemplo: ITR é de competência da União, mas pode ser fiscalizado/cobrado pelos Municípios (art. 153, §4º, III CF).',
-      caiu:'OAB 40' },
-    { id:'d17_f3',
-      frente:'Quais os impostos de competência privativa da UNIÃO?',
-      verso:'Impostos da União: II (Importação), IE (Exportação), IR (Renda), IPI (Produtos Industrializados), IOF (Operações Financeiras), ITR (Propriedade Territorial Rural), IGF (Grandes Fortunas), Impostos Residuais e IEG (Extraordinário de Guerra). Mnemônico: "II, IE, IR, IPI, IOF, ITR, IGF + residuais + guerra".' },
-    { id:'d17_f4',
-      frente:'Quais os impostos dos ESTADOS e dos MUNICÍPIOS?',
-      verso:'ESTADOS: ITCMD (Transmissão Causa Mortis e Doação), ICMS, IPVA. Mnemônico: "3 I\'s do Estado". MUNICÍPIOS: IPTU (Propriedade Predial e Territorial Urbana), ITBI (Transmissão de Bens Imóveis inter vivos), ISS (Serviços de Qualquer Natureza). Mnemônico: "3 I\'s do Município".' },
-    { id:'d17_f5',
-      frente:'O que é a Competência Tributária Residual e quem a possui?',
-      verso:'Art. 154, I CF: competência EXCLUSIVA DA UNIÃO para instituir, mediante LEI COMPLEMENTAR, impostos não previstos na CF, desde que: sejam NÃO-CUMULATIVOS e não tenham fato gerador ou base de cálculo próprios dos já discriminados na CF. ESTADOS não têm competência residual. Também há competência residual para contribuições sociais da seguridade social (art. 195, §4º CF).',
-      pegadinha:'Estados NÃO têm competência tributária residual. É privativa da União! E exige lei complementar.',
-      caiu:'OAB 28, 38' },
-    { id:'d17_f6',
-      frente:'O que é o Imposto Extraordinário de Guerra (IEG)? Quais suas características?',
-      verso:'Art. 154, II CF: competência da UNIÃO; criado por LEI ORDINÁRIA federal; cabível na IMINÊNCIA ou no caso de GUERRA EXTERNA; pode "invadir" fatos geradores de impostos estaduais e municipais; EXCEÇÃO ao princípio da anterioridade — cobrança imediata; ÚNICA hipótese de bitributação autorizada pela CF; TEMPORÁRIO — suprimido gradativamente cessadas as causas.',
-      pegadinha:'IEG é a ÚNICA hipótese de bitributação autorizada pela CF. Criado por lei ORDINÁRIA (não complementar)!',
-      caiu:'OAB 32, 40' },
-    { id:'d17_f7',
-      frente:'Quais são os requisitos e características do Empréstimo Compulsório?',
-      verso:'Art. 148 CF: competência EXCLUSIVA DA UNIÃO; criado por LEI COMPLEMENTAR; hipóteses: (1) despesas extraordinárias por CALAMIDADE PÚBLICA ou GUERRA EXTERNA (ou sua iminência) — exceção à anterioridade, cobrança imediata; (2) INVESTIMENTO PÚBLICO de caráter urgente e relevante interesse nacional — sujeito à anterioridade. Aplicação dos recursos VINCULADA à despesa que motivou sua criação.',
-      pegadinha:'Empréstimo compulsório SEMPRE exige lei complementar. IEG usa lei ordinária. A calamidade pública dispensa anterioridade; investimento público não!',
-      caiu:'OAB 33, 39' },
-    { id:'d17_f8',
-      frente:'O que é a Competência Tributária Cumulativa e quando se aplica?',
-      verso:'Art. 147 CF: aplica-se nos TERRITÓRIOS FEDERAIS. Se o território NÃO for dividido em Municípios: a União tem competência para impostos federais + estaduais + municipais. Se o território FOR dividido em Municípios: a União acumula os impostos estaduais, mas os municipais ficam com os Municípios. Ao DISTRITO FEDERAL: compete cumulativamente os tributos estaduais e municipais (não há Municípios no DF).' },
-    { id:'d17_f9',
-      frente:'A União pode conceder isenção de tributos de competência dos Estados e Municípios?',
-      verso:'NÃO. Art. 151, III CF: é VEDADO à União instituir isenções de tributos da competência dos Estados, DF ou Municípios — é a isenção heterônoma, proibida no plano interno. Cada ente só pode conceder isenções dos tributos de SUA PRÓPRIA competência. EXCEÇÃO: admitida em tratados internacionais (soberania nacional).',
-      pegadinha:'Isenção heterônoma é proibida internamente! Mas o STF admite que a União conceda isenção de ICMS em tratados internacionais.',
-      caiu:'OAB 40' }
-  ],
+  flashcards:[],
   checklist:[
-    {id:'c17-1',texto:'Estudar todos os flashcards do Dia 17 — Tributário (Competência Tributária)'},
-    {id:'c17-2',texto:'Resolver 10 questões de Direito Tributário no QConcursos'},
-    {id:'c17-3',texto:'Memorizar os impostos de cada ente: União (II, IE, IR, IPI, IOF, ITR, IGF + IEG + residuais), Estados (ITCMD, ICMS, IPVA), Municípios (IPTU, ITBI, ISS)'},
-    {id:'c17-4',texto:'Fixar a tabela: Competência Tributária (indelegável) × Capacidade Tributária Ativa (delegável)'},
-    {id:'c17-5',texto:'Revisão rápida do Dia 16 — Civil (Negócio Jurídico) (15 min)'}
+  {id:'d17_c1',texto:'Competência tributária — conceito, características (indelegável, irrenunciável, imprescritível)',feito:false},
+  {id:'d17_c2',texto:'Capacidade tributária ativa — delegável, administrativa',feito:false},
+  {id:'d17_c3',texto:'Competência privativa, comum, residual e cumulativa',feito:false},
+  {id:'d17_c4',texto:'Impostos da União, Estados e Municípios em espécie',feito:false},
+  {id:'d17_c5',texto:'Competência extraordinária — Imposto Extraordinário de Guerra',feito:false},
+  {id:'d17_c6',texto:'Empréstimo Compulsório — lei complementar, hipóteses, anterioridade',feito:false},
+  {id:'d17_c7',texto:'Competência residual — lei complementar, vedada aos Estados',feito:false},
+  {id:'d17_c8',texto:'Isenção heterônoma — vedada internamente, admitida em tratados',feito:false}
   ],
   sumula:{ sigla:'CTN art. 7º', texto:'A competência tributária é indelegável, salvo atribuição das funções de arrecadar ou fiscalizar tributos, ou de executar leis, serviços, atos ou decisões administrativas em matéria tributária, conferida por uma pessoa jurídica de direito público a outra.' },
   incidencia:85, pdf_id:_VDE_PDF_IDS[3], lei_seca:['CF art. 145-162 (Sistema Tributário Nacional)', 'CF art. 147 (competência cumulativa)', 'CF art. 148 (empréstimo compulsório)', 'CF art. 153 (impostos da União)', 'CF art. 154 (competência residual e extraordinária)', 'CF art. 155 (impostos dos Estados)', 'CF art. 156 (impostos dos Municípios)', 'CTN art. 6º-8º (competência tributária)'] },
@@ -995,49 +517,16 @@ const PLANO_VDE = [
       'ADI 5766 — beneficiário da gratuidade não paga honorários sucumbenciais; União paga perito',
       'Assistente técnico — paga quem contratar, sempre, mesmo vencedor'
     ] }],
-  flashcards:[
-    { id:'d18_f1',
-      frente:'Como são calculadas as custas processuais na Justiça do Trabalho?',
-      verso:'As custas incidem à base de 2% sobre o valor da condenação ou do acordo, observado o mínimo de R$ 10,64 e o máximo de 4 vezes o limite máximo dos benefícios do RGPS. São pagas pelo VENCIDO após o trânsito em julgado. Em caso de RECURSO: pagas e comprovadas dentro do prazo recursal. Isentos: beneficiários da gratuidade, entes federativos, autarquias, fundações públicas, MPT e massa falida.',
-      caiu:'OAB 40' },
-    { id:'d18_f2',
-      frente:'Quem é ISENTO do Depósito Recursal na Justiça do Trabalho? Quem paga METADE?',
-      verso:'ISENTOS: beneficiários da justiça gratuita; entidades filantrópicas; empresa em recuperação judicial; massa falida; entes federativos, autarquias e fundações públicas; MPT. PAGAM METADE: entidades sem fins lucrativos; empregadores domésticos; microempreendedores individuais (MEI); microempresas e empresas de pequeno porte.',
-      pegadinha:'Entidade filantrópica = ISENTA (não paga nada). Entidade sem fins lucrativos = paga METADE. Não confundir!',
-      caiu:'OAB 30, 31, 33, 34' },
-    { id:'d18_f3',
-      frente:'Quais são os critérios para concessão da Justiça Gratuita na Justiça do Trabalho?',
-      verso:'Art. 790 CLT: pode ser concedida em QUALQUER MOMENTO do processo, de ofício ou a requerimento, para: (1) quem perceba até 40% do limite máximo dos benefícios do RGPS; OU (2) quem comprove a insuficiência de recursos (independentemente do valor do salário). A gratuidade cobre custas processuais, honorários periciais e sucumbenciais.' },
-    { id:'d18_f4',
-      frente:'Qual o percentual dos Honorários Advocatícios Sucumbenciais na JT? E se o vencido for beneficiário da gratuidade?',
-      verso:'Art. 791-A CLT: honorários de 5% a 15% sobre o valor da liquidação. Em procedência PARCIAL: juiz arbitra honorários recíprocos, VEDADA a compensação. ADI 5766: STF declarou inconstitucional a cobrança de honorários sucumbenciais de beneficiários da gratuidade que perdem — NÃO PAGAM. ATENÇÃO: honorários advocatícios sucumbenciais = NINGUÉM paga (diferente dos periciais, onde a UNIÃO paga quando o beneficiário perde). Até o presente momento não há decisão sobre quem pagará os honorários advocatícios.',
-      pegadinha:'CLT: 5% a 15%. CPC: 10% a 20%. Na procedência parcial, honorários recíprocos são obrigatórios mas VEDADA a compensação! Honorários SUCUMBENCIAIS do gratuito = ninguém paga. Honorários PERICIAIS do gratuito = União paga.' },
-    { id:'d18_f5',
-      frente:'Quem paga os Honorários Periciais na Justiça do Trabalho? E se o sucumbente for beneficiário da gratuidade?',
-      verso:'Art. 790-B CLT: paga a parte SUCUMBENTE NA PRETENSÃO DO OBJETO DA PERÍCIA (não necessariamente quem perdeu a causa). O juízo NÃO pode exigir adiantamento. ADI 5766: beneficiário da gratuidade que perde a perícia NÃO PAGA honorários periciais → a UNIÃO arca com os custos (Súmula 457 TST).',
-      pegadinha:'Honorários periciais: quem paga é o sucumbente NA PRETENSÃO DA PERÍCIA. Se for beneficiário da gratuidade, paga a UNIÃO!' },
-    { id:'d18_f6',
-      frente:'Quem paga os honorários do Assistente Técnico?',
-      verso:'Súmula 341 TST: os honorários do ASSISTENTE TÉCNICO são pagos pela parte que o CONTRATOU, SEMPRE — mesmo que seja VENCEDORA e mesmo que seja BENEFICIÁRIA DA JUSTIÇA GRATUITA. A contratação de assistente técnico é FACULDADE da parte, portanto ela arca com esse custo em qualquer situação. Diferente do perito nomeado pelo juiz.',
-      pegadinha:'Assistente técnico: paga quem contratar, SEMPRE, sem exceção — nem gratuidade dispensa!' },
-    { id:'d18_f7',
-      frente:'Quem paga os honorários do Intérprete na Justiça do Trabalho?',
-      verso:'O intérprete é pago pela parte SUCUMBENTE, SALVO se for beneficiário da justiça gratuita. Se for beneficiário da gratuidade: a UNIÃO arca com os custos. Lógica similar à do perito. Diferente do assistente técnico (sempre paga quem contratar).',
-      caiu:'OAB 39' },
-    { id:'d18_f8',
-      frente:'É necessário depósito prévio para ajuizar Ação Rescisória na fase de execução?',
-      verso:'SIM. Art. 836 CLT: exige depósito prévio de 20% do valor da causa para ajuizamento de Ação Rescisória na fase de execução. Exceção: prova de hipossuficiência ou miserabilidade jurídica do autor (beneficiário da gratuidade está dispensado do depósito prévio).',
-      pegadinha:'Ação Rescisória na execução = 20% do valor da causa como depósito prévio, salvo gratuidade.' },
-    { id:'d18_f9',
-      frente:'Resuma a tabela de despesas processuais no Processo do Trabalho.',
-      verso:'CUSTAS: vencido (após trânsito em julgado) ou recorrente (no prazo recursal). DEPÓSITO RECURSAL: empresa condenada que recorre. HONORÁRIOS ADVOCATÍCIOS: sucumbente (5-15%); se gratuidade → ninguém paga (ADI 5766). HONORÁRIOS PERICIAIS: sucumbente na perícia; se gratuidade → União (Súm. 457 TST). HONORÁRIOS DO INTÉRPRETE: sucumbente; se gratuidade → União. ASSISTENTE TÉCNICO: sempre quem contratar, sem exceção.' }
-  ],
+  flashcards:[],
   checklist:[
-    {id:'c18-1',texto:'Estudar todos os flashcards do Dia 18 — Processo do Trabalho (Despesas Processuais)'},
-    {id:'c18-2',texto:'Resolver 10 questões de Processo do Trabalho no QConcursos'},
-    {id:'c18-3',texto:'Memorizar a tabela completa: custas, depósito recursal, honorários periciais, advocatícios e assistente técnico'},
-    {id:'c18-4',texto:'Fixar quem é isento do depósito recursal e quem paga metade'},
-    {id:'c18-5',texto:'Revisão rápida do Dia 17 — Tributário (Competência Tributária) (15 min)'}
+  {id:'d18_c1',texto:'Custas processuais — alíquota de 2%, isentos (gratuidade, entes públicos, MPT, massa falida)',feito:false},
+  {id:'d18_c2',texto:'Depósito recursal — função de garantia, isentos e quem paga metade',feito:false},
+  {id:'d18_c3',texto:'Depósito prévio na Ação Rescisória — 20% do valor da causa',feito:false},
+  {id:'d18_c4',texto:'Justiça gratuita — critério de 40% do teto RGPS ou comprovação de insuficiência',feito:false},
+  {id:'d18_c5',texto:'Honorários advocatícios — 5% a 15% (CLT) vs 10% a 20% (CPC)',feito:false},
+  {id:'d18_c6',texto:'Honorários periciais — parte sucumbente no objeto da perícia, isenção para gratuidade',feito:false},
+  {id:'d18_c7',texto:'ADI 5766 — beneficiário da gratuidade não paga honorários sucumbenciais; União paga perito',feito:false},
+  {id:'d18_c8',texto:'Assistente técnico — paga quem contratar, sempre, mesmo vencedor',feito:false}
   ],
   sumula:{ sigla:'Súmula 457 TST', texto:'A União é responsável pelo pagamento dos honorários de perito quando a parte sucumbente no objeto da perícia for beneficiária da assistência judiciária gratuita.' },
   incidencia:80, pdf_id:_VDE_PDF_IDS[3], lei_seca:['CLT art. 789 (custas)', 'CLT art. 790 (justiça gratuita)', 'CLT art. 790-A (isentos de custas)', 'CLT art. 790-B (honorários periciais)', 'CLT art. 791-A (honorários advocatícios)', 'CLT art. 836 (ação rescisória)', 'TST Súmula 341 (assistente técnico)', 'TST Súmula 457 (honorários periciais — gratuidade)'] },
@@ -1055,9 +544,11 @@ const PLANO_VDE = [
                'Ilicitude — excludentes: estado de necessidade, legítima defesa, estrito cumprimento'] }],
   flashcards:[],
   checklist:[
-    {id:'c19-1',texto:'Estudar Direito Penal — Fato Típico e Ilicitude'},
-    {id:'c19-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c19-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d19_c1',texto:'Conduta — ação e omissão; dolo e culpa',feito:false},
+  {id:'d19_c2',texto:'Resultado — naturalístico e normativo',feito:false},
+  {id:'d19_c3',texto:'Nexo de causalidade — teoria da equivalência dos antecedentes',feito:false},
+  {id:'d19_c4',texto:'Tipicidade formal e material',feito:false},
+  {id:'d19_c5',texto:'Ilicitude — excludentes: estado de necessidade, legítima defesa, estrito cumprimento',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[4]||null, lei_seca:[] },
 
@@ -1074,9 +565,11 @@ const PLANO_VDE = [
                'Advocacia pública e Defensoria Pública'] }],
   flashcards:[],
   checklist:[
-    {id:'c20-1',texto:'Estudar Ética Profissional — Inscrição na OAB e Sociedades de Advogados'},
-    {id:'c20-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c20-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d20_c1',texto:'Requisitos para inscrição na OAB (art. 8 EOAB)',feito:false},
+  {id:'d20_c2',texto:'Cancelamento e suspensão da inscrição',feito:false},
+  {id:'d20_c3',texto:'Sociedades de advogados — vedações e registro',feito:false},
+  {id:'d20_c4',texto:'Advogado empregado — garantias e vedações',feito:false},
+  {id:'d20_c5',texto:'Advocacia pública e Defensoria Pública',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[4]||null, lei_seca:[] },
 
@@ -1093,9 +586,11 @@ const PLANO_VDE = [
                'Tutela Provisória — urgência (cautelar/antecipada) e evidência'] }],
   flashcards:[],
   checklist:[
-    {id:'c21-1',texto:'Estudar Direito Processual Civil — Partes, Procuradores e Litisconsórcio'},
-    {id:'c21-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c21-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d21_c1',texto:'Capacidade processual e representação (arts. 70-76 CPC)',feito:false},
+  {id:'d21_c2',texto:'Substituição processual e legitimação extraordinária',feito:false},
+  {id:'d21_c3',texto:'Litisconsórcio — facultativo, necessário, simples e unitário',feito:false},
+  {id:'d21_c4',texto:'Intervenção de terceiros — denunciação, chamamento ao processo',feito:false},
+  {id:'d21_c5',texto:'Tutela Provisória — urgência (cautelar/antecipada) e evidência',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[4]||null, lei_seca:[] },
 
@@ -1112,9 +607,11 @@ const PLANO_VDE = [
                'Dissolução, liquidação e extinção das sociedades'] }],
   flashcards:[],
   checklist:[
-    {id:'c22-1',texto:'Estudar Direito Empresarial — Direito Societário'},
-    {id:'c22-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c22-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d22_c1',texto:'Sociedade Simples vs Sociedade Empresária',feito:false},
+  {id:'d22_c2',texto:'Sociedade Limitada — quotas, administração e responsabilidade',feito:false},
+  {id:'d22_c3',texto:'Sociedade Anônima — tipos, ações, órgãos e dissolução',feito:false},
+  {id:'d22_c4',texto:'Desconsideração da PJ — Teoria Maior (CC) e Menor (CDC)',feito:false},
+  {id:'d22_c5',texto:'Dissolução, liquidação e extinção das sociedades',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[4]||null, lei_seca:[] },
 
@@ -1131,9 +628,11 @@ const PLANO_VDE = [
                'Conflito de competência — STJ e STF'] }],
   flashcards:[],
   checklist:[
-    {id:'c23-1',texto:'Estudar Direito Processual Penal — Competência'},
-    {id:'c23-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c23-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d23_c1',texto:'Competência pela natureza da infração — federal x estadual',feito:false},
+  {id:'d23_c2',texto:'Competência pelo lugar da infração — teoria do resultado',feito:false},
+  {id:'d23_c3',texto:'Competência por prerrogativa de função (foro privilegiado)',feito:false},
+  {id:'d23_c4',texto:'Conexão e continência — unidade de processo',feito:false},
+  {id:'d23_c5',texto:'Conflito de competência — STJ e STF',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[4]||null, lei_seca:[] },
 
@@ -1150,9 +649,11 @@ const PLANO_VDE = [
                'Consórcios Públicos — Lei 11.107/05'] }],
   flashcards:[],
   checklist:[
-    {id:'c24-1',texto:'Estudar Direito Administrativo — Organização da Administração Pública'},
-    {id:'c24-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c24-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d24_c1',texto:'Administração Direta — União, Estados, Municípios, DF',feito:false},
+  {id:'d24_c2',texto:'Administração Indireta — Autarquias, Fundações, EPs, SEMs',feito:false},
+  {id:'d24_c3',texto:'Distinção EP x SEM — capital, falência, foro',feito:false},
+  {id:'d24_c4',texto:'Agências Reguladoras — regime, estabilidade e quarentena',feito:false},
+  {id:'d24_c5',texto:'Consórcios Públicos — Lei 11.107/05',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[4]||null, lei_seca:[] },
 
@@ -1169,9 +670,11 @@ const PLANO_VDE = [
                'Inalistáveis e inelegíveis — art. 14 parágrafos 2 e 4 CF'] }],
   flashcards:[],
   checklist:[
-    {id:'c25-1',texto:'Estudar Direito Constitucional — Nacionalidade e Direitos Políticos'},
-    {id:'c25-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c25-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d25_c1',texto:'Brasileiros natos — art. 12 I CF (jus soli + jus sanguinis)',feito:false},
+  {id:'d25_c2',texto:'Brasileiros naturalizados — requisitos e distinções',feito:false},
+  {id:'d25_c3',texto:'Perda e reaquisição da nacionalidade',feito:false},
+  {id:'d25_c4',texto:'Direitos políticos — sufrágio universal, voto e alistamento',feito:false},
+  {id:'d25_c5',texto:'Inalistáveis e inelegíveis — art. 14 parágrafos 2 e 4 CF',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[5]||null, lei_seca:[] },
 
@@ -1188,9 +691,11 @@ const PLANO_VDE = [
                'Teletrabalho — retorno ao presencial e requisitos'] }],
   flashcards:[],
   checklist:[
-    {id:'c26-1',texto:'Estudar Direito do Trabalho — Alteração, Interrupção e Suspensão do Contrato'},
-    {id:'c26-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c26-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d26_c1',texto:'Alteração lícita e ilícita do contrato (art. 468 CLT)',feito:false},
+  {id:'d26_c2',texto:'Jus variandi — poder de alterar condições dentro dos limites',feito:false},
+  {id:'d26_c3',texto:'Interrupção — remuneração mantida (férias, afastamento médico)',feito:false},
+  {id:'d26_c4',texto:'Suspensão — sem remuneração (licença sem vencimento, layoff)',feito:false},
+  {id:'d26_c5',texto:'Teletrabalho — retorno ao presencial e requisitos',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[5]||null, lei_seca:[] },
 
@@ -1207,9 +712,11 @@ const PLANO_VDE = [
                'Assunção de dívida — consentimento do credor'] }],
   flashcards:[],
   checklist:[
-    {id:'c27-1',texto:'Estudar Direito Civil — Obrigações: Modalidades e Transmissão'},
-    {id:'c27-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c27-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d27_c1',texto:'Obrigações de dar, fazer e não fazer — efeitos',feito:false},
+  {id:'d27_c2',texto:'Obrigações alternativas e facultativas',feito:false},
+  {id:'d27_c3',texto:'Obrigações divisíveis, indivisíveis e solidárias',feito:false},
+  {id:'d27_c4',texto:'Cessão de crédito — forma e notificação ao devedor',feito:false},
+  {id:'d27_c5',texto:'Assunção de dívida — consentimento do credor',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[5]||null, lei_seca:[] },
 
@@ -1226,9 +733,11 @@ const PLANO_VDE = [
                'Diferença entre imunidade e isenção'] }],
   flashcards:[],
   checklist:[
-    {id:'c28-1',texto:'Estudar Direito Tributário — Imunidades Tributárias'},
-    {id:'c28-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c28-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d28_c1',texto:'Imunidade recíproca (art. 150 VI a) — entes federativos',feito:false},
+  {id:'d28_c2',texto:'Imunidade de templos (art. 150 VI b)',feito:false},
+  {id:'d28_c3',texto:'Imunidade de partidos, sindicatos, educação e assistência',feito:false},
+  {id:'d28_c4',texto:'Imunidade de livros, jornais e periódicos',feito:false},
+  {id:'d28_c5',texto:'Diferença entre imunidade e isenção',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[5]||null, lei_seca:[] },
 
@@ -1245,9 +754,11 @@ const PLANO_VDE = [
                'Instrução processual — provas e depoimentos'] }],
   flashcards:[],
   checklist:[
-    {id:'c29-1',texto:'Estudar Processo do Trabalho — Ação Trabalhista e Audiência'},
-    {id:'c29-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c29-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d29_c1',texto:'Reclamação trabalhista — petição inicial e jus postulandi',feito:false},
+  {id:'d29_c2',texto:'Resposta do reclamado — contestação e exceções',feito:false},
+  {id:'d29_c3',texto:'Audiência trabalhista — fases e tentativa de conciliação',feito:false},
+  {id:'d29_c4',texto:'Revelia e confissão ficta no processo do trabalho',feito:false},
+  {id:'d29_c5',texto:'Instrução processual — provas e depoimentos',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[5]||null, lei_seca:[] },
 
@@ -1264,9 +775,11 @@ const PLANO_VDE = [
                'Qualidade de segurado — carência e período de graça'] }],
   flashcards:[],
   checklist:[
-    {id:'c30-1',texto:'Estudar Direito Previdenciário — Seguridade Social e RGPS'},
-    {id:'c30-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c30-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d30_c1',texto:'Seguridade Social — saúde, previdência, assistência (CF arts. 194-204)',feito:false},
+  {id:'d30_c2',texto:'Princípios da Seguridade Social (USECLADO)',feito:false},
+  {id:'d30_c3',texto:'Segurados obrigatórios do RGPS — empregado, avulso, autônomo',feito:false},
+  {id:'d30_c4',texto:'Segurado facultativo — quem pode se inscrever',feito:false},
+  {id:'d30_c5',texto:'Qualidade de segurado — carência e período de graça',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[5]||null, lei_seca:[] },
 
@@ -1283,9 +796,11 @@ const PLANO_VDE = [
                'Cláusula penal — moratória e compensatória'] }],
   flashcards:[],
   checklist:[
-    {id:'c31-1',texto:'Estudar Direito Civil — Obrigações: Adimplemento e Extinção'},
-    {id:'c31-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c31-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d31_c1',texto:'Pagamento — regras gerais, quem paga e a quem se paga',feito:false},
+  {id:'d31_c2',texto:'Pagamento em consignação — hipóteses e procedimento',feito:false},
+  {id:'d31_c3',texto:'Compensação, novação e remissão de dívidas',feito:false},
+  {id:'d31_c4',texto:'Inadimplemento — mora do devedor e mora do credor',feito:false},
+  {id:'d31_c5',texto:'Cláusula penal — moratória e compensatória',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[6]||null, lei_seca:[] },
 
@@ -1302,9 +817,11 @@ const PLANO_VDE = [
                'Salário-maternidade e auxílio-acidente'] }],
   flashcards:[],
   checklist:[
-    {id:'c32-1',texto:'Estudar Direito Previdenciário — Custeio e Benefícios Previdenciários'},
-    {id:'c32-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c32-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d32_c1',texto:'Contribuições do empregado, empregador e autônomo',feito:false},
+  {id:'d32_c2',texto:'Salário de contribuição — teto e limite',feito:false},
+  {id:'d32_c3',texto:'Auxílio por incapacidade temporária — carência e prazo',feito:false},
+  {id:'d32_c4',texto:'Aposentadoria por incapacidade permanente',feito:false},
+  {id:'d32_c5',texto:'Salário-maternidade e auxílio-acidente',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[6]||null, lei_seca:[] },
 
@@ -1321,9 +838,11 @@ const PLANO_VDE = [
                'Honorários periciais e advocatícios na JT'] }],
   flashcards:[],
   checklist:[
-    {id:'c33-1',texto:'Estudar Processo do Trabalho — Defesa do Réu e Audiência de Instrução'},
-    {id:'c33-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c33-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d33_c1',texto:'Defesa do réu na JT — contestação e exceções',feito:false},
+  {id:'d33_c2',texto:'Audiência de instrução — depoimentos e testemunhos',feito:false},
+  {id:'d33_c3',texto:'Inversão do ônus da prova na JT',feito:false},
+  {id:'d33_c4',texto:'Sentença trabalhista — liquidação',feito:false},
+  {id:'d33_c5',texto:'Honorários periciais e advocatícios na JT',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[6]||null, lei_seca:[] },
 
@@ -1340,9 +859,11 @@ const PLANO_VDE = [
                'Abolitio criminis — retroatividade da lei mais benéfica'] }],
   flashcards:[],
   checklist:[
-    {id:'c34-1',texto:'Estudar Direito Penal — Culpabilidade e Extinção da Punibilidade'},
-    {id:'c34-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c34-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d34_c1',texto:'Culpabilidade — imputabilidade, potencial consciência, exigibilidade',feito:false},
+  {id:'d34_c2',texto:'Inimputabilidade — doença mental, menoridade e embriaguez',feito:false},
+  {id:'d34_c3',texto:'Prescrição — prazos, causas suspensivas e interruptivas',feito:false},
+  {id:'d34_c4',texto:'Anistia, graça e indulto — distinções',feito:false},
+  {id:'d34_c5',texto:'Abolitio criminis — retroatividade da lei mais benéfica',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[6]||null, lei_seca:[] },
 
@@ -1359,9 +880,11 @@ const PLANO_VDE = [
                'Prisão especial do advogado'] }],
   flashcards:[],
   checklist:[
-    {id:'c35-1',texto:'Estudar Ética Profissional — Prerrogativas e Imunidades do Advogado'},
-    {id:'c35-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c35-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d35_c1',texto:'Inviolabilidade do escritório e comunicações (art. 7 II EOAB)',feito:false},
+  {id:'d35_c2',texto:'Comunicação reservada com o preso',feito:false},
+  {id:'d35_c3',texto:'Imunidade material — manifestações técnicas',feito:false},
+  {id:'d35_c4',texto:'Prerrogativa de sustentação oral e vista dos autos',feito:false},
+  {id:'d35_c5',texto:'Prisão especial do advogado',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[6]||null, lei_seca:[] },
 
@@ -1378,9 +901,11 @@ const PLANO_VDE = [
                'Estabilização da tutela antecipada antecedente'] }],
   flashcards:[],
   checklist:[
-    {id:'c36-1',texto:'Estudar Direito Processual Civil — Intervenção de Terceiros e Tutela Provisória'},
-    {id:'c36-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c36-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d36_c1',texto:'Assistência simples e litisconsorcial',feito:false},
+  {id:'d36_c2',texto:'Denunciação da lide — hipóteses do art. 125 CPC',feito:false},
+  {id:'d36_c3',texto:'Chamamento ao processo',feito:false},
+  {id:'d36_c4',texto:'Incidente de Desconsideração da PJ — art. 133 CPC',feito:false},
+  {id:'d36_c5',texto:'Estabilização da tutela antecipada antecedente',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[6]||null, lei_seca:[] },
 
@@ -1397,9 +922,11 @@ const PLANO_VDE = [
                'Ato infracional e medidas socioeducativas'] }],
   flashcards:[],
   checklist:[
-    {id:'c37-1',texto:'Estudar Estatuto da Criança e do Adolescente — Direitos Fundamentais e Família Substituta'},
-    {id:'c37-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c37-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d37_c1',texto:'Princípio da proteção integral e prioridade absoluta',feito:false},
+  {id:'d37_c2',texto:'Direitos fundamentais da criança e do adolescente',feito:false},
+  {id:'d37_c3',texto:'Família natural, extensa e substituta',feito:false},
+  {id:'d37_c4',texto:'Adoção — requisitos, estágio e irrevogabilidade',feito:false},
+  {id:'d37_c5',texto:'Ato infracional e medidas socioeducativas',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[7]||null, lei_seca:[] },
 
@@ -1416,9 +943,11 @@ const PLANO_VDE = [
                'Embargos de declaração — prazo 5 dias e efeito interruptivo'] }],
   flashcards:[],
   checklist:[
-    {id:'c38-1',texto:'Estudar Direito Processual Civil — Tutelas Provisórias e Recursos'},
-    {id:'c38-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c38-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d38_c1',texto:'Tutela de urgência — fumus boni iuris e periculum in mora',feito:false},
+  {id:'d38_c2',texto:'Tutela de evidência — hipóteses do art. 311 CPC',feito:false},
+  {id:'d38_c3',texto:'Apelação — cabimento, prazo 15 dias e efeitos',feito:false},
+  {id:'d38_c4',texto:'Agravo interno e agravo regimental',feito:false},
+  {id:'d38_c5',texto:'Embargos de declaração — prazo 5 dias e efeito interruptivo',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[7]||null, lei_seca:[] },
 
@@ -1435,9 +964,11 @@ const PLANO_VDE = [
                'Regime inicial de cumprimento — critérios'] }],
   flashcards:[],
   checklist:[
-    {id:'c39-1',texto:'Estudar Direito Penal — Concurso de Pessoas e Penas'},
-    {id:'c39-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c39-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d39_c1',texto:'Concurso de pessoas — teoria monista x pluralista',feito:false},
+  {id:'d39_c2',texto:'Autoria e participação — espécies',feito:false},
+  {id:'d39_c3',texto:'Comunicabilidade de circunstâncias elementares',feito:false},
+  {id:'d39_c4',texto:'Penas privativas de liberdade — reclusão e detenção',feito:false},
+  {id:'d39_c5',texto:'Regime inicial de cumprimento — critérios',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[7]||null, lei_seca:[] },
 
@@ -1454,9 +985,11 @@ const PLANO_VDE = [
                'Responsabilidade por fato de terceiro'] }],
   flashcards:[],
   checklist:[
-    {id:'c40-1',texto:'Estudar Direito Civil — Obrigações: Inadimplemento e Responsabilidade Civil'},
-    {id:'c40-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c40-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d40_c1',texto:'Inadimplemento absoluto e relativo (mora)',feito:false},
+  {id:'d40_c2',texto:'Cláusula penal — moratória e compensatória; art. 412 CC',feito:false},
+  {id:'d40_c3',texto:'Responsabilidade civil subjetiva — culpa, dano e nexo',feito:false},
+  {id:'d40_c4',texto:'Responsabilidade civil objetiva — risco da atividade',feito:false},
+  {id:'d40_c5',texto:'Responsabilidade por fato de terceiro',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[7]||null, lei_seca:[] },
 
@@ -1473,9 +1006,11 @@ const PLANO_VDE = [
                'Excludentes de responsabilidade no CDC'] }],
   flashcards:[],
   checklist:[
-    {id:'c41-1',texto:'Estudar Direito do Consumidor — Política Nacional e Responsabilidade'},
-    {id:'c41-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c41-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d41_c1',texto:'Conceito de consumidor (art. 2 CDC) e equiparado',feito:false},
+  {id:'d41_c2',texto:'Conceito de fornecedor, produto e serviço',feito:false},
+  {id:'d41_c3',texto:'Responsabilidade pelo fato do produto — objetiva e solidária',feito:false},
+  {id:'d41_c4',texto:'Fato do serviço — acidentes de consumo',feito:false},
+  {id:'d41_c5',texto:'Excludentes de responsabilidade no CDC',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[7]||null, lei_seca:[] },
 
@@ -1492,9 +1027,11 @@ const PLANO_VDE = [
                'Competências dos Municípios (art. 30) — interesse local'] }],
   flashcards:[],
   checklist:[
-    {id:'c42-1',texto:'Estudar Direito Constitucional — Organização do Estado — Federalismo'},
-    {id:'c42-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c42-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d42_c1',texto:'Repartição de competências — arts. 21-25 CF',feito:false},
+  {id:'d42_c2',texto:'Competências privativas da União (art. 22)',feito:false},
+  {id:'d42_c3',texto:'Competências comuns (art. 23) — cooperação federativa',feito:false},
+  {id:'d42_c4',texto:'Competências concorrentes (art. 24) — normas gerais x suplementares',feito:false},
+  {id:'d42_c5',texto:'Competências dos Municípios (art. 30) — interesse local',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[7]||null, lei_seca:[] },
 
@@ -1511,9 +1048,11 @@ const PLANO_VDE = [
                'Banco de horas — condições e liquidação'] }],
   flashcards:[],
   checklist:[
-    {id:'c43-1',texto:'Estudar Processo do Trabalho — Provas e Duração do Trabalho'},
-    {id:'c43-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c43-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d43_c1',texto:'Ônus da prova na JT — art. 818 CLT',feito:false},
+  {id:'d43_c2',texto:'Prova documental e testemunhal',feito:false},
+  {id:'d43_c3',texto:'Jornada de trabalho — limites constitucionais (8h/44h)',feito:false},
+  {id:'d43_c4',texto:'Horas extras — adicional 50% e limite máximo',feito:false},
+  {id:'d43_c5',texto:'Banco de horas — condições e liquidação',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[8]||null, lei_seca:[] },
 
@@ -1530,9 +1069,11 @@ const PLANO_VDE = [
                'Contrato de adesão — cláusulas abusivas'] }],
   flashcards:[],
   checklist:[
-    {id:'c44-1',texto:'Estudar Direito Civil — Contratos em Geral'},
-    {id:'c44-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c44-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d44_c1',texto:'Princípios contratuais — autonomia, boa-fé, função social',feito:false},
+  {id:'d44_c2',texto:'Formação do contrato — proposta e aceitação',feito:false},
+  {id:'d44_c3',texto:'Vícios do consentimento nos contratos',feito:false},
+  {id:'d44_c4',texto:'Extinção dos contratos — resolução, rescisão, resilição',feito:false},
+  {id:'d44_c5',texto:'Contrato de adesão — cláusulas abusivas',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[8]||null, lei_seca:[] },
 
@@ -1549,9 +1090,11 @@ const PLANO_VDE = [
                'Empréstimos compulsórios e contribuições especiais'] }],
   flashcards:[],
   checklist:[
-    {id:'c45-1',texto:'Estudar Direito Tributário — Conceito de Tributo e Espécies Tributárias'},
-    {id:'c45-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c45-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d45_c1',texto:'Tributo — conceito do CTN art. 3',feito:false},
+  {id:'d45_c2',texto:'Impostos — fato gerador não vinculado a atividade estatal',feito:false},
+  {id:'d45_c3',texto:'Taxas — poder de polícia e serviço público',feito:false},
+  {id:'d45_c4',texto:'Contribuição de melhoria — valorização imobiliária e limite',feito:false},
+  {id:'d45_c5',texto:'Empréstimos compulsórios e contribuições especiais',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[8]||null, lei_seca:[] },
 
@@ -1568,9 +1111,11 @@ const PLANO_VDE = [
                'Penas restritivas de direitos — requisitos e espécies'] }],
   flashcards:[],
   checklist:[
-    {id:'c46-1',texto:'Estudar Direito Penal — Concurso de Crimes e Das Penas'},
-    {id:'c46-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c46-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d46_c1',texto:'Concurso material — cumulação de penas',feito:false},
+  {id:'d46_c2',texto:'Concurso formal — exasperação da pena (1/6 a 1/2)',feito:false},
+  {id:'d46_c3',texto:'Crime continuado — Súmula 711 STF (lei mais grave)',feito:false},
+  {id:'d46_c4',texto:'Pena de multa — dias-multa e cálculo',feito:false},
+  {id:'d46_c5',texto:'Penas restritivas de direitos — requisitos e espécies',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[8]||null, lei_seca:[] },
 
@@ -1587,9 +1132,11 @@ const PLANO_VDE = [
                'Advocacia contra ex-empregador — prazo de 2 anos'] }],
   flashcards:[],
   checklist:[
-    {id:'c47-1',texto:'Estudar Ética Profissional — Incompatibilidades e Impedimentos'},
-    {id:'c47-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c47-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d47_c1',texto:'Incompatibilidades — quem não pode exercer a advocacia (art. 28 EOAB)',feito:false},
+  {id:'d47_c2',texto:'Impedimentos — restrições pontuais (art. 30 EOAB)',feito:false},
+  {id:'d47_c3',texto:'Vedação ao servidor público de exercer a advocacia',feito:false},
+  {id:'d47_c4',texto:'Prazo de quarentena — ex-magistrado e MP',feito:false},
+  {id:'d47_c5',texto:'Advocacia contra ex-empregador — prazo de 2 anos',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[8]||null, lei_seca:[] },
 
@@ -1606,9 +1153,11 @@ const PLANO_VDE = [
                'Saneamento e organização do processo'] }],
   flashcards:[],
   checklist:[
-    {id:'c48-1',texto:'Estudar Direito Processual Civil — Petição Inicial, Citação e Defesa do Réu'},
-    {id:'c48-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c48-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d48_c1',texto:'Petição inicial — requisitos do art. 319 CPC e emenda',feito:false},
+  {id:'d48_c2',texto:'Citação — formas, efeitos e nulidade',feito:false},
+  {id:'d48_c3',texto:'Defesa do réu — contestação, preliminares e reconvenção',feito:false},
+  {id:'d48_c4',texto:'Revelia — efeitos e exceções (art. 345 CPC)',feito:false},
+  {id:'d48_c5',texto:'Saneamento e organização do processo',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[8]||null, lei_seca:[] },
 
@@ -1625,9 +1174,11 @@ const PLANO_VDE = [
                'Questões incidentes — insanidade mental'] }],
   flashcards:[],
   checklist:[
-    {id:'c49-1',texto:'Estudar Direito Processual Penal — Provas'},
-    {id:'c49-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c49-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d49_c1',texto:'Provas — conceito, ônus e inadmissibilidade (art. 157 CPP)',feito:false},
+  {id:'d49_c2',texto:'Prova ilícita e derivada — teoria do fruto da árvore envenenada',feito:false},
+  {id:'d49_c3',texto:'Confissão, testemunho e reconhecimento de pessoas',feito:false},
+  {id:'d49_c4',texto:'Interceptação telefônica — Lei 9.296/96',feito:false},
+  {id:'d49_c5',texto:'Questões incidentes — insanidade mental',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[9]||null, lei_seca:[] },
 
@@ -1644,9 +1195,11 @@ const PLANO_VDE = [
                'Ministros de Estado — nomeação e exoneração'] }],
   flashcards:[],
   checklist:[
-    {id:'c50-1',texto:'Estudar Direito Constitucional — Poder Executivo'},
-    {id:'c50-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c50-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d50_c1',texto:'Atribuições do Presidente — arts. 84-91 CF',feito:false},
+  {id:'d50_c2',texto:'Responsabilidade do Presidente — impeachment',feito:false},
+  {id:'d50_c3',texto:'Medidas Provisórias — requisitos, prazo e vedações',feito:false},
+  {id:'d50_c4',texto:'Conselho da República e Conselho de Defesa Nacional',feito:false},
+  {id:'d50_c5',texto:'Ministros de Estado — nomeação e exoneração',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[9]||null, lei_seca:[] },
 
@@ -1663,9 +1216,11 @@ const PLANO_VDE = [
                'Recurso adesivo no processo do trabalho'] }],
   flashcards:[],
   checklist:[
-    {id:'c51-1',texto:'Estudar Processo do Trabalho — Provas e Recursos no TST'},
-    {id:'c51-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c51-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d51_c1',texto:'Ônus da prova — distribuição e inversão',feito:false},
+  {id:'d51_c2',texto:'Prova pericial — honorários e impugnação',feito:false},
+  {id:'d51_c3',texto:'Recurso de revista (RR) — transcendência e cabimento',feito:false},
+  {id:'d51_c4',texto:'Embargos no TST — unificação de jurisprudência',feito:false},
+  {id:'d51_c5',texto:'Recurso adesivo no processo do trabalho',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[9]||null, lei_seca:[] },
 
@@ -1682,9 +1237,11 @@ const PLANO_VDE = [
                'Revisão contratual — onerosidade excessiva (art. 478 CC)'] }],
   flashcards:[],
   checklist:[
-    {id:'c52-1',texto:'Estudar Direito Civil — Contratos em Geral — Continuação'},
-    {id:'c52-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c52-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d52_c1',texto:'Contrato com pessoa a declarar — prazo de indicação',feito:false},
+  {id:'d52_c2',texto:'Estipulação em favor de terceiro',feito:false},
+  {id:'d52_c3',texto:'Promessa de fato de terceiro',feito:false},
+  {id:'d52_c4',texto:'Vício redibitório e evicção',feito:false},
+  {id:'d52_c5',texto:'Revisão contratual — onerosidade excessiva (art. 478 CC)',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[9]||null, lei_seca:[] },
 
@@ -1701,9 +1258,11 @@ const PLANO_VDE = [
                'Extinção do crédito — pagamento, compensação, remissão'] }],
   flashcards:[],
   checklist:[
-    {id:'c53-1',texto:'Estudar Direito Tributário — Crédito Tributário: Lançamento'},
-    {id:'c53-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c53-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d53_c1',texto:'Lançamento — conceito e espécies (ofício, declaração, homologação)',feito:false},
+  {id:'d53_c2',texto:'Decadência do crédito tributário — arts. 150 e 173 CTN',feito:false},
+  {id:'d53_c3',texto:'Prescrição da ação de cobrança — art. 174 CTN',feito:false},
+  {id:'d53_c4',texto:'Suspensão do crédito — MODEFI',feito:false},
+  {id:'d53_c5',texto:'Extinção do crédito — pagamento, compensação, remissão',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[9]||null, lei_seca:[] },
 
@@ -1720,9 +1279,11 @@ const PLANO_VDE = [
                'Suspensão condicional do processo (art. 89 Lei 9.099/95)'] }],
   flashcards:[],
   checklist:[
-    {id:'c54-1',texto:'Estudar Direito Penal — Concurso de Crimes e Penas — Continuação'},
-    {id:'c54-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c54-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d54_c1',texto:'Progressão e regressão de regime',feito:false},
+  {id:'d54_c2',texto:'Remição de pena — trabalho e estudo',feito:false},
+  {id:'d54_c3',texto:'Livramento condicional — requisitos',feito:false},
+  {id:'d54_c4',texto:'Sursis — suspensão condicional da pena',feito:false},
+  {id:'d54_c5',texto:'Suspensão condicional do processo (art. 89 Lei 9.099/95)',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[9]||null, lei_seca:[] },
 
@@ -1739,9 +1300,11 @@ const PLANO_VDE = [
                'Responsabilidade por substituição — ICMS-ST'] }],
   flashcards:[],
   checklist:[
-    {id:'c55-1',texto:'Estudar Direito Tributário — Obrigação Tributária e Responsabilidade'},
-    {id:'c55-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c55-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d55_c1',texto:'Obrigação tributária principal e acessória',feito:false},
+  {id:'d55_c2',texto:'Fato gerador — aspectos material, temporal, espacial',feito:false},
+  {id:'d55_c3',texto:'Sujeito ativo e passivo — contribuinte e responsável',feito:false},
+  {id:'d55_c4',texto:'Responsabilidade por transferência — sucessão e terceiros',feito:false},
+  {id:'d55_c5',texto:'Responsabilidade por substituição — ICMS-ST',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[10]||null, lei_seca:[] },
 
@@ -1758,9 +1321,11 @@ const PLANO_VDE = [
                'Infanticídio e aborto — espécies e excludentes'] }],
   flashcards:[],
   checklist:[
-    {id:'c56-1',texto:'Estudar Direito Penal — Crimes Contra a Honra e Contra a Vida'},
-    {id:'c56-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c56-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d56_c1',texto:'Calúnia, difamação e injúria — distinção e penas',feito:false},
+  {id:'d56_c2',texto:'Injúria racial — crime hediondo (Lei 14.532/2023)',feito:false},
+  {id:'d56_c3',texto:'Homicídio simples, qualificado e privilegiado',feito:false},
+  {id:'d56_c4',texto:'Induzimento, instigação e auxílio ao suicídio',feito:false},
+  {id:'d56_c5',texto:'Infanticídio e aborto — espécies e excludentes',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[10]||null, lei_seca:[] },
 
@@ -1777,9 +1342,11 @@ const PLANO_VDE = [
                'Responsabilidade disciplinar e civil do advogado'] }],
   flashcards:[],
   checklist:[
-    {id:'c57-1',texto:'Estudar Ética Profissional — Ética do Advogado e Relações com o Cliente'},
-    {id:'c57-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c57-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d57_c1',texto:'Sigilo profissional — alcance e exceções absolutas',feito:false},
+  {id:'d57_c2',texto:'Conflito de interesses — partes opostas',feito:false},
+  {id:'d57_c3',texto:'Renúncia ao mandato — dupla comunicação e prazo 10 dias',feito:false},
+  {id:'d57_c4',texto:'Honorários — sucumbência, arbitramento e tabela',feito:false},
+  {id:'d57_c5',texto:'Responsabilidade disciplinar e civil do advogado',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[10]||null, lei_seca:[] },
 
@@ -1796,9 +1363,11 @@ const PLANO_VDE = [
                'Liberdade provisória — com e sem fiança'] }],
   flashcards:[],
   checklist:[
-    {id:'c58-1',texto:'Estudar Direito Processual Penal — Prisão, Medidas Cautelares e Liberdade Provisória'},
-    {id:'c58-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c58-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d58_c1',texto:'Prisão em flagrante — modalidades e comunicação 24h',feito:false},
+  {id:'d58_c2',texto:'Prisão preventiva — requisitos do art. 312 CPP',feito:false},
+  {id:'d58_c3',texto:'Prisão temporária — Lei 7.960/89 e prazos',feito:false},
+  {id:'d58_c4',texto:'Medidas cautelares alternativas — art. 319 CPP',feito:false},
+  {id:'d58_c5',texto:'Liberdade provisória — com e sem fiança',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[10]||null, lei_seca:[] },
 
@@ -1815,9 +1384,11 @@ const PLANO_VDE = [
                'Letra de câmbio — saque, aceite e aval'] }],
   flashcards:[],
   checklist:[
-    {id:'c59-1',texto:'Estudar Direito Empresarial — Títulos de Crédito'},
-    {id:'c59-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c59-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d59_c1',texto:'Princípios — literalidade, autonomia, cartularidade',feito:false},
+  {id:'d59_c2',texto:'Cheque — tipos, endosso e prazo de apresentação',feito:false},
+  {id:'d59_c3',texto:'Nota promissória — natureza e requisitos',feito:false},
+  {id:'d59_c4',texto:'Duplicata — aceite, protesto e circulação',feito:false},
+  {id:'d59_c5',texto:'Letra de câmbio — saque, aceite e aval',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[10]||null, lei_seca:[] },
 
@@ -1834,9 +1405,11 @@ const PLANO_VDE = [
                'Acumulação de cargos — vedações e permissões'] }],
   flashcards:[],
   checklist:[
-    {id:'c60-1',texto:'Estudar Direito Administrativo — Agentes Públicos'},
-    {id:'c60-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c60-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d60_c1',texto:'Servidores estatutários e celetistas — regime e diferenças',feito:false},
+  {id:'d60_c2',texto:'Estabilidade do servidor — requisitos e perda',feito:false},
+  {id:'d60_c3',texto:'Cargo, emprego e função pública — distinção',feito:false},
+  {id:'d60_c4',texto:'Processo administrativo disciplinar — fases (Lei 8.112/90)',feito:false},
+  {id:'d60_c5',texto:'Acumulação de cargos — vedações e permissões',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[10]||null, lei_seca:[] },
 
@@ -1853,9 +1426,11 @@ const PLANO_VDE = [
                'Inversão do ônus da prova — critérios'] }],
   flashcards:[],
   checklist:[
-    {id:'c61-1',texto:'Estudar Direito do Consumidor — Direitos Básicos e Proteção Contratual'},
-    {id:'c61-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c61-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d61_c1',texto:'Direitos básicos do consumidor — art. 6 CDC',feito:false},
+  {id:'d61_c2',texto:'Dever de informação — clareza e proibição de enganosa',feito:false},
+  {id:'d61_c3',texto:'Prazo de reflexão — 7 dias (fora do estabelecimento)',feito:false},
+  {id:'d61_c4',texto:'Cláusulas abusivas — rol do art. 51 CDC',feito:false},
+  {id:'d61_c5',texto:'Inversão do ônus da prova — critérios',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[11]||null, lei_seca:[] },
 
@@ -1872,9 +1447,11 @@ const PLANO_VDE = [
                'Forças Armadas — missão e uso interno'] }],
   flashcards:[],
   checklist:[
-    {id:'c62-1',texto:'Estudar Direito Constitucional — Poder Executivo e Responsabilidade'},
-    {id:'c62-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c62-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d62_c1',texto:'Impeachment — crime de responsabilidade, rito e quórum',feito:false},
+  {id:'d62_c2',texto:'Responsabilidade por crimes comuns — STF',feito:false},
+  {id:'d62_c3',texto:'Estado de defesa e estado de sítio',feito:false},
+  {id:'d62_c4',texto:'Intervenção federal — hipóteses e decreto',feito:false},
+  {id:'d62_c5',texto:'Forças Armadas — missão e uso interno',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[11]||null, lei_seca:[] },
 
@@ -1891,9 +1468,11 @@ const PLANO_VDE = [
                'FGTS — depósito e indenização compensatória'] }],
   flashcards:[],
   checklist:[
-    {id:'c63-1',texto:'Estudar Direito do Trabalho — Estabilidade e Garantias de Emprego'},
-    {id:'c63-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c63-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d63_c1',texto:'Gestante — garantia desde a concepção (Súmula 244 TST)',feito:false},
+  {id:'d63_c2',texto:'Acidentado — estabilidade de 12 meses após alta',feito:false},
+  {id:'d63_c3',texto:'Dirigente sindical — limites e extensão',feito:false},
+  {id:'d63_c4',texto:'Membro da CIPA — titular e suplente',feito:false},
+  {id:'d63_c5',texto:'FGTS — depósito e indenização compensatória',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[11]||null, lei_seca:[] },
 
@@ -1910,9 +1489,11 @@ const PLANO_VDE = [
                'RPPS — aposentadoria e pensão dos servidores'] }],
   flashcards:[],
   checklist:[
-    {id:'c64-1',texto:'Estudar Direito Previdenciário — Benefícios Previdenciários'},
-    {id:'c64-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c64-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d64_c1',texto:'Auxílio-doença — carência, cálculo e cessação',feito:false},
+  {id:'d64_c2',texto:'Pensão por morte — dependentes e cálculo',feito:false},
+  {id:'d64_c3',texto:'Salário-maternidade — seguradas e duração',feito:false},
+  {id:'d64_c4',texto:'BPC/LOAS — renda per capita e miserabilidade',feito:false},
+  {id:'d64_c5',texto:'RPPS — aposentadoria e pensão dos servidores',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[11]||null, lei_seca:[] },
 
@@ -1929,9 +1510,11 @@ const PLANO_VDE = [
                'REsp e RE — cabimento e pressupostos'] }],
   flashcards:[],
   checklist:[
-    {id:'c65-1',texto:'Estudar Direito Processual Civil — Sentença e Coisa Julgada'},
-    {id:'c65-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c65-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d65_c1',texto:'Sentença — elementos obrigatórios (relatório, fundamentação, dispositivo)',feito:false},
+  {id:'d65_c2',texto:'Coisa julgada material e formal — limites',feito:false},
+  {id:'d65_c3',texto:'Ação rescisória — cabimento, prazo 2 anos, art. 966 CPC',feito:false},
+  {id:'d65_c4',texto:'Apelação — prazo 15 dias, efeitos',feito:false},
+  {id:'d65_c5',texto:'REsp e RE — cabimento e pressupostos',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[11]||null, lei_seca:[] },
 
@@ -1948,9 +1531,11 @@ const PLANO_VDE = [
                'Doação — regras, revogação e proibições'] }],
   flashcards:[],
   checklist:[
-    {id:'c66-1',texto:'Estudar Direito Civil — Contratos em Espécie'},
-    {id:'c66-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c66-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d66_c1',texto:'Compra e venda — objeto, preço e cláusulas especiais',feito:false},
+  {id:'d66_c2',texto:'Locação de imóveis urbanos — Lei 8.245/91',feito:false},
+  {id:'d66_c3',texto:'Prestação de serviços — prazo máximo e extinção',feito:false},
+  {id:'d66_c4',texto:'Empreitada — responsabilidade do empreiteiro',feito:false},
+  {id:'d66_c5',texto:'Doação — regras, revogação e proibições',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[11]||null, lei_seca:[] },
 
@@ -1967,9 +1552,11 @@ const PLANO_VDE = [
                'Transação — concessões mútuas e efeito'] }],
   flashcards:[],
   checklist:[
-    {id:'c67-1',texto:'Estudar Direito Civil — Contratos em Espécie — Continuação'},
-    {id:'c67-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c67-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d67_c1',texto:'Comodato e mútuo — gratuidade e juros',feito:false},
+  {id:'d67_c2',texto:'Depósito — responsabilidade e modalidades',feito:false},
+  {id:'d67_c3',texto:'Mandato — poderes especiais e extinção',feito:false},
+  {id:'d67_c4',texto:'Fiança — acessoriedade e benefício de ordem',feito:false},
+  {id:'d67_c5',texto:'Transação — concessões mútuas e efeito',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[12]||null, lei_seca:[] },
 
@@ -1986,9 +1573,11 @@ const PLANO_VDE = [
                'Repetição do indébito — prazo 5 anos e correção'] }],
   flashcards:[],
   checklist:[
-    {id:'c68-1',texto:'Estudar Direito Tributário — Crédito Tributário — Extinção e Exclusão'},
-    {id:'c68-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c68-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d68_c1',texto:'Extinção do crédito — pagamento, compensação, novação',feito:false},
+  {id:'d68_c2',texto:'Remissão — perdão da dívida tributária',feito:false},
+  {id:'d68_c3',texto:'Prescrição e decadência — Súmulas STJ',feito:false},
+  {id:'d68_c4',texto:'Exclusão do crédito — isenção e anistia',feito:false},
+  {id:'d68_c5',texto:'Repetição do indébito — prazo 5 anos e correção',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[12]||null, lei_seca:[] },
 
@@ -2005,9 +1594,11 @@ const PLANO_VDE = [
                'Uso de documento falso'] }],
   flashcards:[],
   checklist:[
-    {id:'c69-1',texto:'Estudar Direito Penal — Crimes Contra a Dignidade Sexual e Fé Pública'},
-    {id:'c69-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c69-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d69_c1',texto:'Estupro — art. 213 CP e presunção de vulnerabilidade',feito:false},
+  {id:'d69_c2',texto:'Importunação sexual — Lei 13.718/2018',feito:false},
+  {id:'d69_c3',texto:'Moeda falsa e falsidade documental',feito:false},
+  {id:'d69_c4',texto:'Falsidade ideológica vs material — distinção',feito:false},
+  {id:'d69_c5',texto:'Uso de documento falso',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[12]||null, lei_seca:[] },
 
@@ -2024,9 +1615,11 @@ const PLANO_VDE = [
                'Procedimentos especiais — lei de drogas e júri'] }],
   flashcards:[],
   checklist:[
-    {id:'c70-1',texto:'Estudar Direito Processual Penal — Citação, Intimação e Procedimentos'},
-    {id:'c70-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c70-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d70_c1',texto:'Citação — modalidades, revelia e edital',feito:false},
+  {id:'d70_c2',texto:'Intimação — réu preso e solto; defensor',feito:false},
+  {id:'d70_c3',texto:'Procedimento comum ordinário — fases',feito:false},
+  {id:'d70_c4',texto:'Procedimento sumário e sumaríssimo (JECRIM)',feito:false},
+  {id:'d70_c5',texto:'Procedimentos especiais — lei de drogas e júri',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[12]||null, lei_seca:[] },
 
@@ -2043,9 +1636,11 @@ const PLANO_VDE = [
                'Reabilitação do inscrito suspenso ou excluído'] }],
   flashcards:[],
   checklist:[
-    {id:'c71-1',texto:'Estudar Ética Profissional — Processo Administrativo Disciplinar da OAB'},
-    {id:'c71-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c71-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d71_c1',texto:'Infrações disciplinares — rol do art. 34 EOAB',feito:false},
+  {id:'d71_c2',texto:'Sanções — advertência, censura, suspensão, exclusão',feito:false},
+  {id:'d71_c3',texto:'PAD — fases: instauração, instrução, defesa, julgamento',feito:false},
+  {id:'d71_c4',texto:'Prescrição disciplinar — prazos',feito:false},
+  {id:'d71_c5',texto:'Reabilitação do inscrito suspenso ou excluído',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[12]||null, lei_seca:[] },
 
@@ -2062,9 +1657,11 @@ const PLANO_VDE = [
                'Publicidade advocatícia — limites do Código de Ética'] }],
   flashcards:[],
   checklist:[
-    {id:'c72-1',texto:'Estudar Ética Profissional — Ética do Advogado — Relação com o Cliente'},
-    {id:'c72-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c72-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d72_c1',texto:'Sigilo profissional — alcance e limites',feito:false},
+  {id:'d72_c2',texto:'Dever de lealdade — não patrocinar interesse contrário',feito:false},
+  {id:'d72_c3',texto:'Contencioso judicial — comportamento ético',feito:false},
+  {id:'d72_c4',texto:'Relação com magistrados e ministério público',feito:false},
+  {id:'d72_c5',texto:'Publicidade advocatícia — limites do Código de Ética',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[12]||null, lei_seca:[] },
 
@@ -2081,9 +1678,11 @@ const PLANO_VDE = [
                'Revisão criminal — fundamentos'] }],
   flashcards:[],
   checklist:[
-    {id:'c73-1',texto:'Estudar Direito Processual Penal — Prisão e Liberdade Provisória — Revisão'},
-    {id:'c73-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c73-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d73_c1',texto:'Revisão de prisão em flagrante — modalidades',feito:false},
+  {id:'d73_c2',texto:'Audiência de custódia — prazo 24h e finalidade',feito:false},
+  {id:'d73_c3',texto:'Habeas corpus — cabimento e competência',feito:false},
+  {id:'d73_c4',texto:'Mandado de segurança no processo penal',feito:false},
+  {id:'d73_c5',texto:'Revisão criminal — fundamentos',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[13]||null, lei_seca:[] },
 
@@ -2100,9 +1699,11 @@ const PLANO_VDE = [
                'Recuperação extrajudicial — negociação privada'] }],
   flashcards:[],
   checklist:[
-    {id:'c74-1',texto:'Estudar Direito Empresarial — Falência e Recuperação Judicial'},
-    {id:'c74-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c74-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d74_c1',texto:'Pressupostos da falência — impontualidade, execução frustrada',feito:false},
+  {id:'d74_c2',texto:'Legitimidade para requerer a falência',feito:false},
+  {id:'d74_c3',texto:'Recuperação judicial — plano, prazo e cram down',feito:false},
+  {id:'d74_c4',texto:'Stay period — blindagem de 180 dias',feito:false},
+  {id:'d74_c5',texto:'Recuperação extrajudicial — negociação privada',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[13]||null, lei_seca:[] },
 
@@ -2119,9 +1720,11 @@ const PLANO_VDE = [
                'Dolo específico exigido após a reforma de 2021'] }],
   flashcards:[],
   checklist:[
-    {id:'c75-1',texto:'Estudar Direito Administrativo — Improbidade Administrativa'},
-    {id:'c75-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c75-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d75_c1',texto:'Sujeitos da improbidade — agente público e particular',feito:false},
+  {id:'d75_c2',texto:'Atos de improbidade — enriquecimento ilícito, dano ao erário',feito:false},
+  {id:'d75_c3',texto:'Sanções — suspensão, multa, ressarcimento, perda da função',feito:false},
+  {id:'d75_c4',texto:'Lei 8.429/92 com alterações da Lei 14.230/2021',feito:false},
+  {id:'d75_c5',texto:'Dolo específico exigido após a reforma de 2021',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[13]||null, lei_seca:[] },
 
@@ -2138,9 +1741,11 @@ const PLANO_VDE = [
                'Responsabilidade civil objetiva do Estado — teoria do risco administrativo'] }],
   flashcards:[],
   checklist:[
-    {id:'c76-1',texto:'Estudar Direito Administrativo — Intervenção na Propriedade e Responsabilidade do Estado'},
-    {id:'c76-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c76-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d76_c1',texto:'Desapropriação — modalidades e indenização justa, prévia e em dinheiro',feito:false},
+  {id:'d76_c2',texto:'Tombamento — restrição ao direito de propriedade',feito:false},
+  {id:'d76_c3',texto:'Servidão administrativa — sem indenização se sem prejuízo',feito:false},
+  {id:'d76_c4',texto:'Requisição administrativa — situações de urgência',feito:false},
+  {id:'d76_c5',texto:'Responsabilidade civil objetiva do Estado — teoria do risco administrativo',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[13]||null, lei_seca:[] },
 
@@ -2157,9 +1762,11 @@ const PLANO_VDE = [
                'Resolução e decreto legislativo'] }],
   flashcards:[],
   checklist:[
-    {id:'c77-1',texto:'Estudar Direito Constitucional — Poder Legislativo e Processo Legislativo'},
-    {id:'c77-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c77-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d77_c1',texto:'Estrutura bicameral — Câmara, Senado e Congresso Nacional',feito:false},
+  {id:'d77_c2',texto:'Processo legislativo ordinário — fases e sanção/veto',feito:false},
+  {id:'d77_c3',texto:'Medida Provisória — requisitos, prazo e reedição',feito:false},
+  {id:'d77_c4',texto:'Lei delegada — solicitação ao CN e vedações',feito:false},
+  {id:'d77_c5',texto:'Resolução e decreto legislativo',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[13]||null, lei_seca:[] },
 
@@ -2176,9 +1783,11 @@ const PLANO_VDE = [
                'Hasta pública — modalidades e preço mínimo'] }],
   flashcards:[],
   checklist:[
-    {id:'c78-1',texto:'Estudar Direito Processual Civil — Cumprimento de Sentença e Execução'},
-    {id:'c78-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c78-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d78_c1',texto:'Cumprimento de sentença — multa 10% e honorários 10%',feito:false},
+  {id:'d78_c2',texto:'Impugnação ao cumprimento — prazo e efeito suspensivo',feito:false},
+  {id:'d78_c3',texto:'Execução extrajudicial — títulos (art. 784 CPC)',feito:false},
+  {id:'d78_c4',texto:'Penhora — ordem legal e substituição',feito:false},
+  {id:'d78_c5',texto:'Hasta pública — modalidades e preço mínimo',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[13]||null, lei_seca:[] },
 
@@ -2195,9 +1804,11 @@ const PLANO_VDE = [
                'Excludentes — caso fortuito, força maior, culpa exclusiva'] }],
   flashcards:[],
   checklist:[
-    {id:'c79-1',texto:'Estudar Direito Civil — Responsabilidade Civil'},
-    {id:'c79-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c79-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d79_c1',texto:'Responsabilidade subjetiva — culpa, dano e nexo causal',feito:false},
+  {id:'d79_c2',texto:'Responsabilidade objetiva — risco da atividade (art. 927 par. único CC)',feito:false},
+  {id:'d79_c3',texto:'Dano moral — arbitramento e cumulação',feito:false},
+  {id:'d79_c4',texto:'Responsabilidade por fato de terceiro — pais, empregadores',feito:false},
+  {id:'d79_c5',texto:'Excludentes — caso fortuito, força maior, culpa exclusiva',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[14]||null, lei_seca:[] },
 
@@ -2214,9 +1825,11 @@ const PLANO_VDE = [
                'Advocacia e OAB — indispensabilidade (art. 133 CF)'] }],
   flashcards:[],
   checklist:[
-    {id:'c80-1',texto:'Estudar Direito Constitucional — Poder Judiciário e Funções Essenciais'},
-    {id:'c80-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c80-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d80_c1',texto:'Estrutura do Judiciário — STF, STJ, TST, TRFs, TJs',feito:false},
+  {id:'d80_c2',texto:'Garantias dos magistrados — vitaliciedade, inamovibilidade, irredutibilidade',feito:false},
+  {id:'d80_c3',texto:'Ministério Público — princípios e atribuições (art. 127 CF)',feito:false},
+  {id:'d80_c4',texto:'Defensoria Pública — garantias constitucionais',feito:false},
+  {id:'d80_c5',texto:'Advocacia e OAB — indispensabilidade (art. 133 CF)',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[14]||null, lei_seca:[] },
 
@@ -2233,9 +1846,11 @@ const PLANO_VDE = [
                'SAC e prazos de atendimento ao consumidor'] }],
   flashcards:[],
   checklist:[
-    {id:'c81-1',texto:'Estudar Direito do Consumidor — Práticas Comerciais e Responsabilidade'},
-    {id:'c81-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c81-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d81_c1',texto:'Publicidade enganosa — omissão de informação essencial',feito:false},
+  {id:'d81_c2',texto:'Publicidade abusiva — discriminação e valores negativos',feito:false},
+  {id:'d81_c3',texto:'Banco de dados e cadastro do consumidor',feito:false},
+  {id:'d81_c4',texto:'Proibição de venda casada',feito:false},
+  {id:'d81_c5',texto:'SAC e prazos de atendimento ao consumidor',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[14]||null, lei_seca:[] },
 
@@ -2252,9 +1867,11 @@ const PLANO_VDE = [
                'Partidos políticos — fidelidade e cláusula de desempenho'] }],
   flashcards:[],
   checklist:[
-    {id:'c82-1',texto:'Estudar Direito Eleitoral — Direitos Políticos e Partidos Políticos'},
-    {id:'c82-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c82-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d82_c1',texto:'Direitos políticos — condições de elegibilidade (art. 14 par. 3 CF)',feito:false},
+  {id:'d82_c2',texto:'Inelegibilidades constitucionais — parentesco, domicílio',feito:false},
+  {id:'d82_c3',texto:'Lei da ficha limpa — inelegibilidades infraconstitucionais',feito:false},
+  {id:'d82_c4',texto:'Registro de candidatura — prazo e documentos',feito:false},
+  {id:'d82_c5',texto:'Partidos políticos — fidelidade e cláusula de desempenho',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[14]||null, lei_seca:[] },
 
@@ -2271,9 +1888,11 @@ const PLANO_VDE = [
                'Parentesco — graus, afinidade e consanguinidade'] }],
   flashcards:[],
   checklist:[
-    {id:'c83-1',texto:'Estudar Direito Civil — Direito de Família — Aspectos Pessoais'},
-    {id:'c83-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c83-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d83_c1',texto:'Casamento — habilitação, impedimentos e causas suspensivas',feito:false},
+  {id:'d83_c2',texto:'Efeitos pessoais do casamento — deveres dos cônjuges',feito:false},
+  {id:'d83_c3',texto:'União estável — requisitos e conversão em casamento',feito:false},
+  {id:'d83_c4',texto:'Divórcio — unilateral e consensual (EC 66/2010)',feito:false},
+  {id:'d83_c5',texto:'Parentesco — graus, afinidade e consanguinidade',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[14]||null, lei_seca:[] },
 
@@ -2290,9 +1909,11 @@ const PLANO_VDE = [
                'Guarda dos filhos — unilateral, compartilhada e alienação parental'] }],
   flashcards:[],
   checklist:[
-    {id:'c84-1',texto:'Estudar Direito Civil — Direito de Família — Aspectos Patrimoniais'},
-    {id:'c84-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c84-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d84_c1',texto:'Regimes de bens — comunhão parcial (regra geral), universal, separação',feito:false},
+  {id:'d84_c2',texto:'Pacto antenupcial — forma e limitações',feito:false},
+  {id:'d84_c3',texto:'Alimentos — pressupostos, espécies e execução',feito:false},
+  {id:'d84_c4',texto:'Bem de família — impenhorabilidade e exceções',feito:false},
+  {id:'d84_c5',texto:'Guarda dos filhos — unilateral, compartilhada e alienação parental',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[14]||null, lei_seca:[] },
 
@@ -2309,9 +1930,11 @@ const PLANO_VDE = [
                'IPTU — progressividade e imunidade'] }],
   flashcards:[],
   checklist:[
-    {id:'c85-1',texto:'Estudar Direito Tributário — Impostos Federais, Estaduais e Municipais'},
-    {id:'c85-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c85-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d85_c1',texto:'IR — fato gerador, contribuintes e isenções',feito:false},
+  {id:'d85_c2',texto:'IPI — não cumulatividade e seletividade',feito:false},
+  {id:'d85_c3',texto:'ICMS — regras gerais, imunidade e diferencial de alíquota',feito:false},
+  {id:'d85_c4',texto:'ISS — competência municipal e lista de serviços',feito:false},
+  {id:'d85_c5',texto:'IPTU — progressividade e imunidade',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[15]||null, lei_seca:[] },
 
@@ -2328,9 +1951,11 @@ const PLANO_VDE = [
                'Comunicação social — vedação ao monopólio'] }],
   flashcards:[],
   checklist:[
-    {id:'c86-1',texto:'Estudar Direito Constitucional — Defesa do Estado e Ordem Social'},
-    {id:'c86-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c86-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d86_c1',texto:'Estado de defesa — art. 136 CF, decreto presidencial e prazo',feito:false},
+  {id:'d86_c2',texto:'Estado de sítio — art. 137 CF, autorização do CN',feito:false},
+  {id:'d86_c3',texto:'Forças Armadas — missões constitucionais',feito:false},
+  {id:'d86_c4',texto:'Ordem social — saúde, previdência, assistência, educação',feito:false},
+  {id:'d86_c5',texto:'Comunicação social — vedação ao monopólio',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[15]||null, lei_seca:[] },
 
@@ -2347,9 +1972,11 @@ const PLANO_VDE = [
                'Crimes praticados por particular contra a Adm. Pública'] }],
   flashcards:[],
   checklist:[
-    {id:'c87-1',texto:'Estudar Direito Penal — Crimes Contra a Administração Pública'},
-    {id:'c87-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c87-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d87_c1',texto:'Peculato — apropriação, desvio e furto (art. 312 CP)',feito:false},
+  {id:'d87_c2',texto:'Concussão e corrupção passiva — distinção',feito:false},
+  {id:'d87_c3',texto:'Corrupção ativa — art. 333 CP',feito:false},
+  {id:'d87_c4',texto:'Prevaricação — interesse pessoal',feito:false},
+  {id:'d87_c5',texto:'Crimes praticados por particular contra a Adm. Pública',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[15]||null, lei_seca:[] },
 
@@ -2366,9 +1993,11 @@ const PLANO_VDE = [
                'Revisão criminal — fundamentos e competência'] }],
   flashcards:[],
   checklist:[
-    {id:'c88-1',texto:'Estudar Direito Processual Penal — Recursos e Ações de Impugnação'},
-    {id:'c88-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c88-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d88_c1',texto:'RSE — cabimento taxativo (art. 581 CPP)',feito:false},
+  {id:'d88_c2',texto:'Apelação criminal — prazo 5 dias e fundamentação',feito:false},
+  {id:'d88_c3',texto:'Embargos de declaração no processo penal',feito:false},
+  {id:'d88_c4',texto:'Habeas corpus — preventivo e repressivo',feito:false},
+  {id:'d88_c5',texto:'Revisão criminal — fundamentos e competência',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[15]||null, lei_seca:[] },
 
@@ -2385,9 +2014,11 @@ const PLANO_VDE = [
                'Execução provisória e definitiva'] }],
   flashcards:[],
   checklist:[
-    {id:'c89-1',texto:'Estudar Processo do Trabalho — Execução Trabalhista'},
-    {id:'c89-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c89-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d89_c1',texto:'Título executivo trabalhista — sentença e TAC',feito:false},
+  {id:'d89_c2',texto:'Liquidação — por cálculo, arbitramento e artigos',feito:false},
+  {id:'d89_c3',texto:'Penhora de bens — ordem e bem de família',feito:false},
+  {id:'d89_c4',texto:'Desconsideração da personalidade jurídica na JT',feito:false},
+  {id:'d89_c5',texto:'Execução provisória e definitiva',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[15]||null, lei_seca:[] },
 
@@ -2404,9 +2035,11 @@ const PLANO_VDE = [
                'Herdeiro necessário — quota obrigatória (50%)'] }],
   flashcards:[],
   checklist:[
-    {id:'c90-1',texto:'Estudar Direito Civil — Direito das Sucessões: Sucessão em Geral'},
-    {id:'c90-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c90-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d90_c1',texto:'Abertura da sucessão — morte real e presumida',feito:false},
+  {id:'d90_c2',texto:'Herança — aceitação e renúncia (art. 1.804 CC)',feito:false},
+  {id:'d90_c3',texto:'Legitimidade para suceder — regras',feito:false},
+  {id:'d90_c4',texto:'Ordem de vocação hereditária',feito:false},
+  {id:'d90_c5',texto:'Herdeiro necessário — quota obrigatória (50%)',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[15]||null, lei_seca:[] },
 
@@ -2423,9 +2056,11 @@ const PLANO_VDE = [
                'Cautelar em ADI — maioria absoluta e efeitos retroativos'] }],
   flashcards:[],
   checklist:[
-    {id:'c91-1',texto:'Estudar Direito Constitucional — Controle de Constitucionalidade Concentrado'},
-    {id:'c91-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c91-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d91_c1',texto:'ADI — legitimados, objeto e efeitos (art. 103 CF)',feito:false},
+  {id:'d91_c2',texto:'ADC — presunção de constitucionalidade e efeito vinculante',feito:false},
+  {id:'d91_c3',texto:'ADPF — subsidiariedade e objeto amplo',feito:false},
+  {id:'d91_c4',texto:'ADI por Omissão — efeitos e prazo',feito:false},
+  {id:'d91_c5',texto:'Cautelar em ADI — maioria absoluta e efeitos retroativos',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[16]||null, lei_seca:[] },
 
@@ -2442,9 +2077,11 @@ const PLANO_VDE = [
                'Dano — elemento subjetivo e qualificadoras'] }],
   flashcards:[],
   checklist:[
-    {id:'c92-1',texto:'Estudar Direito Penal — Crimes Contra o Patrimônio'},
-    {id:'c92-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c92-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d92_c1',texto:'Furto — simples, qualificado e privilégio',feito:false},
+  {id:'d92_c2',texto:'Roubo e extorsão — distinção e penas',feito:false},
+  {id:'d92_c3',texto:'Estelionato — fraude e Súmula 246 STJ',feito:false},
+  {id:'d92_c4',texto:'Receptação — própria e imprópria',feito:false},
+  {id:'d92_c5',texto:'Dano — elemento subjetivo e qualificadoras',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[16]||null, lei_seca:[] },
 
@@ -2461,9 +2098,11 @@ const PLANO_VDE = [
                'Procedimento dos crimes de responsabilidade'] }],
   flashcards:[],
   checklist:[
-    {id:'c93-1',texto:'Estudar Direito Processual Penal — Procedimentos Especiais'},
-    {id:'c93-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c93-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d93_c1',texto:'Procedimento do júri — 1a fase (pronúncia) e 2a fase',feito:false},
+  {id:'d93_c2',texto:'Quesitação no júri — soberania dos veredictos',feito:false},
+  {id:'d93_c3',texto:'JECRIM — transação penal e suspensão condicional',feito:false},
+  {id:'d93_c4',texto:'Procedimento da Lei de Drogas',feito:false},
+  {id:'d93_c5',texto:'Procedimento dos crimes de responsabilidade',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[16]||null, lei_seca:[] },
 
@@ -2480,9 +2119,11 @@ const PLANO_VDE = [
                'OAB e poder disciplinar — alcance'] }],
   flashcards:[],
   checklist:[
-    {id:'c94-1',texto:'Estudar Ética Profissional — Estrutura da OAB e Eleições'},
-    {id:'c94-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c94-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d94_c1',texto:'Órgãos da OAB — Conselho Federal, Seccionais, Subseções',feito:false},
+  {id:'d94_c2',texto:'Eleições da OAB — mandato trienal e elegibilidade',feito:false},
+  {id:'d94_c3',texto:'Publicidade advocatícia — vedações do Código de Ética',feito:false},
+  {id:'d94_c4',texto:'Mercantilização da advocacia — proibições',feito:false},
+  {id:'d94_c5',texto:'OAB e poder disciplinar — alcance',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[16]||null, lei_seca:[] },
 
@@ -2499,9 +2140,11 @@ const PLANO_VDE = [
                'RE — repercussão geral e casos admitidos'] }],
   flashcards:[],
   checklist:[
-    {id:'c95-1',texto:'Estudar Direito Processual Civil — Procedimentos Especiais e Recursos Extraordinários'},
-    {id:'c95-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c95-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d95_c1',texto:'Mandado de segurança — prazo 120 dias, legitimidade e liminar',feito:false},
+  {id:'d95_c2',texto:'Ação popular — objeto, legitimidade e sentença',feito:false},
+  {id:'d95_c3',texto:'Ação civil pública — legitimados e objeto',feito:false},
+  {id:'d95_c4',texto:'REsp — violação de lei federal e prequestionamento',feito:false},
+  {id:'d95_c5',texto:'RE — repercussão geral e casos admitidos',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[16]||null, lei_seca:[] },
 
@@ -2518,9 +2161,11 @@ const PLANO_VDE = [
                'Direitos reais de garantia — penhor, hipoteca, anticrese'] }],
   flashcards:[],
   checklist:[
-    {id:'c96-1',texto:'Estudar Direito Civil — Direitos Reais: Posse e Propriedade'},
-    {id:'c96-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c96-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d96_c1',texto:'Posse — natureza jurídica, classificações e efeitos',feito:false},
+  {id:'d96_c2',texto:'Ações possessórias — reintegração, manutenção, interdito proibitório',feito:false},
+  {id:'d96_c3',texto:'Usucapião — espécies e requisitos',feito:false},
+  {id:'d96_c4',texto:'Propriedade — função social e limitações',feito:false},
+  {id:'d96_c5',texto:'Direitos reais de garantia — penhor, hipoteca, anticrese',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[16]||null, lei_seca:[] },
 
@@ -2537,9 +2182,11 @@ const PLANO_VDE = [
                'Exclusão — isenção e anistia'] }],
   flashcards:[],
   checklist:[
-    {id:'c97-1',texto:'Estudar Direito Tributário — Suspensão, Extinção e Exclusão do Crédito'},
-    {id:'c97-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c97-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d97_c1',texto:'Suspensão — MODEFI: moratória, depósito, defesa, liminar, parcelamento',feito:false},
+  {id:'d97_c2',texto:'Extinção — pagamento, compensação, transação, remissão',feito:false},
+  {id:'d97_c3',texto:'Conversão do depósito em renda',feito:false},
+  {id:'d97_c4',texto:'Pagamento antecipado e homologação',feito:false},
+  {id:'d97_c5',texto:'Exclusão — isenção e anistia',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[17]||null, lei_seca:[] },
 
@@ -2556,9 +2203,11 @@ const PLANO_VDE = [
                'Ação anulatória de cláusula convencional'] }],
   flashcards:[],
   checklist:[
-    {id:'c98-1',texto:'Estudar Processo do Trabalho — Ações Especiais'},
-    {id:'c98-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c98-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d98_c1',texto:'Mandado de segurança na JT — cabimento e prazo',feito:false},
+  {id:'d98_c2',texto:'Ação monitória trabalhista',feito:false},
+  {id:'d98_c3',texto:'Tutelas de urgência no processo do trabalho',feito:false},
+  {id:'d98_c4',texto:'Ação rescisória trabalhista — prazo 2 anos',feito:false},
+  {id:'d98_c5',texto:'Ação anulatória de cláusula convencional',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[17]||null, lei_seca:[] },
 
@@ -2575,9 +2224,11 @@ const PLANO_VDE = [
                'Embargos infringentes e de nulidade'] }],
   flashcards:[],
   checklist:[
-    {id:'c99-1',texto:'Estudar Direito Processual Penal — Nulidades e Recursos'},
-    {id:'c99-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c99-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d99_c1',texto:'Nulidades absolutas e relativas — instrumentalidade',feito:false},
+  {id:'d99_c2',texto:'Princípio do prejuízo — pas de nullite sans grief',feito:false},
+  {id:'d99_c3',texto:'RSE — rol taxativo e prazo 5 dias',feito:false},
+  {id:'d99_c4',texto:'Apelação criminal — efeito suspensivo',feito:false},
+  {id:'d99_c5',texto:'Embargos infringentes e de nulidade',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[17]||null, lei_seca:[] },
 
@@ -2594,9 +2245,11 @@ const PLANO_VDE = [
                'Arbitragem no direito coletivo'] }],
   flashcards:[],
   checklist:[
-    {id:'c100-1',texto:'Estudar Direito do Trabalho — Direito Coletivo do Trabalho'},
-    {id:'c100-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c100-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d100_c1',texto:'Sindicato — unicidade sindical e base territorial',feito:false},
+  {id:'d100_c2',texto:'Negociação coletiva — ACT e CCT',feito:false},
+  {id:'d100_c3',texto:'Hierarquia das fontes — art. 620 CLT',feito:false},
+  {id:'d100_c4',texto:'Greve — Lei 7.783/89, serviços essenciais',feito:false},
+  {id:'d100_c5',texto:'Arbitragem no direito coletivo',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[17]||null, lei_seca:[] },
 
@@ -2613,9 +2266,11 @@ const PLANO_VDE = [
                'Poder familiar — exercício e extinção'] }],
   flashcards:[],
   checklist:[
-    {id:'c101-1',texto:'Estudar Direito Civil — Direito de Família — Patrimonial e Alimentos'},
-    {id:'c101-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c101-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d101_c1',texto:'Regime da comunhão parcial — bens particulares e comuns',feito:false},
+  {id:'d101_c2',texto:'Regime da separação obrigatória — hipóteses',feito:false},
+  {id:'d101_c3',texto:'Alimentos — requisitos e ação de alimentos',feito:false},
+  {id:'d101_c4',texto:'Guarda dos filhos — critérios e alienação parental',feito:false},
+  {id:'d101_c5',texto:'Poder familiar — exercício e extinção',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[17]||null, lei_seca:[] },
 
@@ -2632,9 +2287,11 @@ const PLANO_VDE = [
                'Terceiro setor — OS e OSCIP'] }],
   flashcards:[],
   checklist:[
-    {id:'c102-1',texto:'Estudar Direito Administrativo — Consórcios Públicos, Serviços Públicos e PPP'},
-    {id:'c102-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c102-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d102_c1',texto:'Concessão de serviço público — modalidades e extinção',feito:false},
+  {id:'d102_c2',texto:'Permissão — precariedade e revogabilidade',feito:false},
+  {id:'d102_c3',texto:'Parceria Público-Privada (PPP) — patrocinada e administrativa',feito:false},
+  {id:'d102_c4',texto:'Consórcios públicos — personalidade jurídica',feito:false},
+  {id:'d102_c5',texto:'Terceiro setor — OS e OSCIP',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[17]||null, lei_seca:[] },
 
@@ -2651,9 +2308,11 @@ const PLANO_VDE = [
                'TRCT — prazos para pagamento'] }],
   flashcards:[],
   checklist:[
-    {id:'c103-1',texto:'Estudar Direito do Trabalho — Extinção do Contrato de Trabalho'},
-    {id:'c103-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c103-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d103_c1',texto:'Dispensa sem justa causa — aviso prévio e verbas',feito:false},
+  {id:'d103_c2',texto:'Dispensa por justa causa — art. 482 CLT',feito:false},
+  {id:'d103_c3',texto:'Pedido de demissão — aviso e verbas',feito:false},
+  {id:'d103_c4',texto:'Rescisão indireta — falta grave do empregador (art. 483 CLT)',feito:false},
+  {id:'d103_c5',texto:'TRCT — prazos para pagamento',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[18]||null, lei_seca:[] },
 
@@ -2670,9 +2329,11 @@ const PLANO_VDE = [
                'Recurso adesivo'] }],
   flashcards:[],
   checklist:[
-    {id:'c104-1',texto:'Estudar Processo do Trabalho — Recursos Trabalhistas'},
-    {id:'c104-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c104-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d104_c1',texto:'Recurso ordinário (RO) — prazo 8 dias',feito:false},
+  {id:'d104_c2',texto:'Recurso de revista (RR) — transcendência e cabimento',feito:false},
+  {id:'d104_c3',texto:'Embargos no TST',feito:false},
+  {id:'d104_c4',texto:'Agravo de instrumento trabalhista',feito:false},
+  {id:'d104_c5',texto:'Recurso adesivo',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[18]||null, lei_seca:[] },
 
@@ -2689,9 +2350,11 @@ const PLANO_VDE = [
                'Codicilo — limitações e objeto'] }],
   flashcards:[],
   checklist:[
-    {id:'c105-1',texto:'Estudar Direito Civil — Direito das Sucessões: Legítima e Testamentária'},
-    {id:'c105-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c105-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d105_c1',texto:'Herdeiros necessários — quota indisponível (50%)',feito:false},
+  {id:'d105_c2',texto:'Ordem da vocação hereditária — descendentes e cônjuge',feito:false},
+  {id:'d105_c3',texto:'Colação e redução — proteção do patrimônio',feito:false},
+  {id:'d105_c4',texto:'Testamento — formas (público, cerrado, particular)',feito:false},
+  {id:'d105_c5',texto:'Codicilo — limitações e objeto',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[18]||null, lei_seca:[] },
 
@@ -2708,9 +2371,11 @@ const PLANO_VDE = [
                'Garantias e privilégios do crédito tributário'] }],
   flashcards:[],
   checklist:[
-    {id:'c106-1',texto:'Estudar Direito Tributário — Execução Fiscal e Garantias do Crédito'},
-    {id:'c106-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c106-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d106_c1',texto:'Execução fiscal — Lei 6.830/80',feito:false},
+  {id:'d106_c2',texto:'Citação na execução fiscal',feito:false},
+  {id:'d106_c3',texto:'Embargos à execução fiscal — prazo 30 dias',feito:false},
+  {id:'d106_c4',texto:'Prescrição intercorrente — Súmula 314 STJ',feito:false},
+  {id:'d106_c5',texto:'Garantias e privilégios do crédito tributário',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[18]||null, lei_seca:[] },
 
@@ -2727,9 +2392,11 @@ const PLANO_VDE = [
                'Poder Judiciário — garantias e vedações'] }],
   flashcards:[],
   checklist:[
-    {id:'c107-1',texto:'Estudar Direito Constitucional — Revisão — Poder Legislativo e Judiciário'},
-    {id:'c107-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c107-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d107_c1',texto:'Controle de constitucionalidade difuso e concentrado — revisão',feito:false},
+  {id:'d107_c2',texto:'Súmula vinculante — aprovação, revisão e cancelamento',feito:false},
+  {id:'d107_c3',texto:'IRDR e recursos repetitivos — efeito vinculante',feito:false},
+  {id:'d107_c4',texto:'Ação de inconstitucionalidade por omissão',feito:false},
+  {id:'d107_c5',texto:'Poder Judiciário — garantias e vedações',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[18]||null, lei_seca:[] },
 
@@ -2746,9 +2413,11 @@ const PLANO_VDE = [
                'Lei Anticorrupção (12.846/13) — responsabilidade da PJ'] }],
   flashcards:[],
   checklist:[
-    {id:'c108-1',texto:'Estudar Direito Penal — Legislação Penal Especial'},
-    {id:'c108-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c108-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d108_c1',texto:'Lei Maria da Penha — violência doméstica, medidas protetivas',feito:false},
+  {id:'d108_c2',texto:'Lei de Drogas (11.343/06) — usuário x traficante, tráfico privilegiado',feito:false},
+  {id:'d108_c3',texto:'Estatuto do Desarmamento — porte e posse',feito:false},
+  {id:'d108_c4',texto:'Crimes hediondos — Lei 8.072/90',feito:false},
+  {id:'d108_c5',texto:'Lei Anticorrupção (12.846/13) — responsabilidade da PJ',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[18]||null, lei_seca:[] },
 
@@ -2765,9 +2434,11 @@ const PLANO_VDE = [
                'Cláusulas pétreas e limites da reforma'] }],
   flashcards:[],
   checklist:[
-    {id:'c109-1',texto:'Estudar Direito Constitucional — Revisão Final — Constitucional'},
-    {id:'c109-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c109-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d109_c1',texto:'Revisão de direitos e garantias individuais (art. 5 CF)',feito:false},
+  {id:'d109_c2',texto:'Remédios constitucionais — HC, HD, MS, MI, AP',feito:false},
+  {id:'d109_c3',texto:'Organização dos poderes — síntese',feito:false},
+  {id:'d109_c4',texto:'Controle de constitucionalidade — difuso e concentrado',feito:false},
+  {id:'d109_c5',texto:'Cláusulas pétreas e limites da reforma',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[19]||null, lei_seca:[] },
 
@@ -2784,9 +2455,11 @@ const PLANO_VDE = [
                'Família e sucessões — síntese'] }],
   flashcards:[],
   checklist:[
-    {id:'c110-1',texto:'Estudar Direito Civil — Revisão Final — Civil'},
-    {id:'c110-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c110-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d110_c1',texto:'Revisão de obrigações — modalidades e extinção',feito:false},
+  {id:'d110_c2',texto:'Revisão de contratos — princípios e vícios',feito:false},
+  {id:'d110_c3',texto:'Responsabilidade civil — subjetiva, objetiva, excludentes',feito:false},
+  {id:'d110_c4',texto:'Direitos reais — posse, propriedade, usucapião',feito:false},
+  {id:'d110_c5',texto:'Família e sucessões — síntese',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[19]||null, lei_seca:[] },
 
@@ -2803,9 +2476,11 @@ const PLANO_VDE = [
                'Questões mais cobradas OAB — Trabalho'] }],
   flashcards:[],
   checklist:[
-    {id:'c111-1',texto:'Estudar Direito do Trabalho — Revisão Final — Trabalho e Processo do Trabalho'},
-    {id:'c111-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c111-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d111_c1',texto:'Revisão de contrato de trabalho — modalidades e jornada',feito:false},
+  {id:'d111_c2',texto:'Rescisão — verbas e prazos',feito:false},
+  {id:'d111_c3',texto:'Processo do trabalho — competência, prazos, recursos',feito:false},
+  {id:'d111_c4',texto:'Sindicatos e negociação coletiva',feito:false},
+  {id:'d111_c5',texto:'Questões mais cobradas OAB — Trabalho',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[19]||null, lei_seca:[] },
 
@@ -2822,9 +2497,11 @@ const PLANO_VDE = [
                'Questões mais cobradas OAB — Tributário'] }],
   flashcards:[],
   checklist:[
-    {id:'c112-1',texto:'Estudar Direito Tributário — Revisão Final — Tributário'},
-    {id:'c112-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c112-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d112_c1',texto:'Revisão de princípios tributários — legalidade, anterioridade',feito:false},
+  {id:'d112_c2',texto:'Imunidades — recíproca, templos, cultural',feito:false},
+  {id:'d112_c3',texto:'Crédito tributário — lançamento, suspensão, extinção',feito:false},
+  {id:'d112_c4',texto:'Impostos federais, estaduais e municipais',feito:false},
+  {id:'d112_c5',texto:'Questões mais cobradas OAB — Tributário',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[19]||null, lei_seca:[] },
 
@@ -2841,9 +2518,11 @@ const PLANO_VDE = [
                'Legislação penal especial — Maria da Penha, Drogas'] }],
   flashcards:[],
   checklist:[
-    {id:'c113-1',texto:'Estudar Direito Penal — Revisão Final — Penal e Processo Penal'},
-    {id:'c113-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c113-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d113_c1',texto:'Revisão de teoria do crime — fato típico, ilicitude, culpabilidade',feito:false},
+  {id:'d113_c2',texto:'Crimes contra a pessoa — homicídio, lesão, calúnia',feito:false},
+  {id:'d113_c3',texto:'Crimes contra o patrimônio — furto, roubo, estelionato',feito:false},
+  {id:'d113_c4',texto:'Crimes contra a Adm. Pública — peculato, corrupção',feito:false},
+  {id:'d113_c5',texto:'Legislação penal especial — Maria da Penha, Drogas',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[19]||null, lei_seca:[] },
 
@@ -2860,9 +2539,11 @@ const PLANO_VDE = [
                'Questões mais cobradas OAB — Ética'] }],
   flashcards:[],
   checklist:[
-    {id:'c114-1',texto:'Estudar Ética Profissional — Revisão Final — Ética Profissional'},
-    {id:'c114-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c114-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d114_c1',texto:'Revisão de atividades privativas e jus postulandi',feito:false},
+  {id:'d114_c2',texto:'Mandato, honorários e sigilo profissional',feito:false},
+  {id:'d114_c3',texto:'Infrações disciplinares — rol e sanções',feito:false},
+  {id:'d114_c4',texto:'Incompatibilidades e impedimentos',feito:false},
+  {id:'d114_c5',texto:'Questões mais cobradas OAB — Ética',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[19]||null, lei_seca:[] },
 
@@ -2879,9 +2560,11 @@ const PLANO_VDE = [
                'Técnica de prova — gestão de tempo'] }],
   flashcards:[],
   checklist:[
-    {id:'c115-1',texto:'Estudar Revisão Final — Simulado Completo — 80 Questões'},
-    {id:'c115-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c115-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d115_c1',texto:'Simulado completo com 80 questões cronometrado (2h30)',feito:false},
+  {id:'d115_c2',texto:'Revisão dos erros do simulado',feito:false},
+  {id:'d115_c3',texto:'Leitura das súmulas mais cobradas',feito:false},
+  {id:'d115_c4',texto:'Revisão de lei seca dos principais artigos',feito:false},
+  {id:'d115_c5',texto:'Técnica de prova — gestão de tempo',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[20]||null, lei_seca:[] },
 
@@ -2898,9 +2581,11 @@ const PLANO_VDE = [
                'Flashcards das súmulas STF/STJ'] }],
   flashcards:[],
   checklist:[
-    {id:'c116-1',texto:'Estudar Revisão Final — Revisão — Processo Civil e Administrativo'},
-    {id:'c116-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c116-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d116_c1',texto:'Questões OAB — Proc. Civil (30 questões)',feito:false},
+  {id:'d116_c2',texto:'Questões OAB — Administrativo (30 questões)',feito:false},
+  {id:'d116_c3',texto:'Revisão de recursos no CPC',feito:false},
+  {id:'d116_c4',texto:'Revisão de atos administrativos e poderes',feito:false},
+  {id:'d116_c5',texto:'Flashcards das súmulas STF/STJ',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[20]||null, lei_seca:[] },
 
@@ -2917,9 +2602,11 @@ const PLANO_VDE = [
                'Revisão de títulos de crédito e falência'] }],
   flashcards:[],
   checklist:[
-    {id:'c117-1',texto:'Estudar Revisão Final — Revisão — Civil, Trabalho e Empresarial'},
-    {id:'c117-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c117-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d117_c1',texto:'Questões OAB — Civil (30 questões)',feito:false},
+  {id:'d117_c2',texto:'Questões OAB — Trabalho (30 questões)',feito:false},
+  {id:'d117_c3',texto:'Revisão de contratos e responsabilidade civil',feito:false},
+  {id:'d117_c4',texto:'Revisão de CLT — jornada, rescisão, férias',feito:false},
+  {id:'d117_c5',texto:'Revisão de títulos de crédito e falência',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[20]||null, lei_seca:[] },
 
@@ -2936,9 +2623,11 @@ const PLANO_VDE = [
                'Revisão de prisão e liberdade provisória'] }],
   flashcards:[],
   checklist:[
-    {id:'c118-1',texto:'Estudar Revisão Final — Revisão — Penal, Proc. Penal e Tributário'},
-    {id:'c118-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c118-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d118_c1',texto:'Questões OAB — Penal (30 questões)',feito:false},
+  {id:'d118_c2',texto:'Questões OAB — Tributário (30 questões)',feito:false},
+  {id:'d118_c3',texto:'Revisão de crimes em espécie mais cobrados',feito:false},
+  {id:'d118_c4',texto:'Revisão de princípios tributários e imunidades',feito:false},
+  {id:'d118_c5',texto:'Revisão de prisão e liberdade provisória',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[20]||null, lei_seca:[] },
 
@@ -2955,9 +2644,11 @@ const PLANO_VDE = [
                'Descanso e preparação mental'] }],
   flashcards:[],
   checklist:[
-    {id:'c119-1',texto:'Estudar Revisão Final — Revisão — Ética, Matérias Especiais e Simulado'},
-    {id:'c119-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c119-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d119_c1',texto:'Questões OAB — Ética (30 questões)',feito:false},
+  {id:'d119_c2',texto:'Revisão de todos os simulados anteriores',feito:false},
+  {id:'d119_c3',texto:'Leitura rápida das pegadinhas de banca',feito:false},
+  {id:'d119_c4',texto:'500 Dicas — revisão turbo',feito:false},
+  {id:'d119_c5',texto:'Descanso e preparação mental',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[20]||null, lei_seca:[] },
 
@@ -2974,9 +2665,11 @@ const PLANO_VDE = [
                'Descanso, alimentação e boa noite de sono'] }],
   flashcards:[],
   checklist:[
-    {id:'c120-1',texto:'Estudar Revisão Final — Véspera da Prova — Revisão Final'},
-    {id:'c120-2',texto:'Resolver 10 questões no QConcursos'},
-    {id:'c120-3',texto:'Revisão rápida do dia anterior (15 min)'}
+  {id:'d120_c1',texto:'Revisão dos flashcards mais importantes',feito:false},
+  {id:'d120_c2',texto:'50 súmulas mais cobradas — leitura rápida',feito:false},
+  {id:'d120_c3',texto:'Verificar documentos e local de prova',feito:false},
+  {id:'d120_c4',texto:'Revisão rápida — Ética tem maior peso (10%)',feito:false},
+  {id:'d120_c5',texto:'Descanso, alimentação e boa noite de sono',feito:false}
   ],
   sumula:null, incidencia:0, pdf_id:_VDE_PDF_IDS[20]||null, lei_seca:[] }
 

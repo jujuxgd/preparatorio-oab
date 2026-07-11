@@ -1,120 +1,81 @@
-# CLAUDE.md — Projeto Preparatório OAB 1ª Fase
+# CLAUDE.md — Preparatório OAB 48 · Revisão Ativa
 > Diretrizes permanentes do projeto. Leia antes de qualquer sessão de desenvolvimento.
-> Atualizado: 2026-06-07
+> Atualizado: 2026-07-10
 
 ---
 
 ## 1. Visão Geral
 
-Site de estudos OAB 1ª Fase (Exame de Ordem) baseado na metodologia **VDE 120 Dias** de Ana Clara Fernandes (@viciodeumaestudante).
+Site de **direcionamento e revisão ativa** para o OAB 48 (1ª Fase).  
+Foco exclusivo: **tópicos curtos de direcionamento + flashcards de Q&A** por dia.  
+Teoria densa é estudada por fora (PDFs VDE, livros) — o app não exibe teoria extensa.
 
-- **120 dias** de estudo divididos em **20 semanas × 6 dias**
-- Progresso avança quando Julia marca o dia como concluído (`concluirDia()`)
-- Todo conteúdo pedagógico vem dos **PDFs originais do VDE** — nunca gerado por IA
+**Cronograma:**
+- **Estudo regular:** 10 jul 2026 → 01 jan 2027 · **Seg–Sex apenas** · ~126 dias úteis
+- **Revisão estratégica:** 04–08 jan 2027 (sem conteúdo novo — apenas blocos de revisão)
+- **Dia da prova:** 10 jan 2027 · OAB 48
 
 **Arquitetura frontend:** HTML estático + JS vanilla + CSS custom properties  
-**Backend opcional:** Flask + SQLite em `backend/` (progresso, erros, destaques, comentários)
+**Backend opcional:** Flask + SQLite em `backend/` (progresso, erros)
+
+### Lógica de calendário (script.js)
+- `STUDY_START = new Date(2026, 6, 10)` — 10 de julho de 2026
+- `EXAM_DATE   = new Date(2027, 0, 10)` — 10 de janeiro de 2027
+- `isWeekday(date)` — retorna true para seg–sex
+- `getStudyDayForDate(date)` — nº do dia de estudo (conta só dias úteis desde 10/jul)
+- `getStudyDay()` — retorna o dia atual (fins de semana retornam o último dia útil)
+- `isRevisaoEstrategica()` — true para 04–08 jan 2027
+- `isDiaProva()` — true para 10 jan 2027
 
 ---
 
-## 2. Diretriz de Fidelidade ao PDF (INEGOCIÁVEL)
+## 2. O Que Foi Removido (Pivot Jul 2026)
 
-**O PDF é sempre a fonte da verdade.**
+Os seguintes arquivos foram **deletados** na simplificação arquitetural de 10/07/2026:
+- `conteudo_vde.js`, `data/conteudo_s02.js`, `data/conteudo_s03.js` — teoria extensa dos PDFs
+- `teoria_dia.js` — teoria por dia
+- `cl-civil.js`, `cl-tributario.js`, `cl-proc_civil.js`, `cl-proc_penal.js`, `cl-proc_trabalho.js`, `cl-trabalho.js`, `cl-administrativo.js`, `cl-cdc.js` — cadernos legislativos
+- `caderno-legislativo.html`, `biblioteca.html`, `fichamentos.html` — páginas removidas
+- `highlighter.js`, `plano-oab.js` — funcionalidades descontinuadas
+- `videoaulas.js` foi **reescrito** (não removido) — página própria `videoaulas.html` com player e filtro por matéria
+- `tools/` — scripts Python de extração de PDF
+- `backend/routes/resumos.py`, `highlights.py`, `comments.py` — rotas descontinuadas
 
-Durante qualquer extração, transformação ou atualização de conteúdo:
-
-### PROIBIDO
-- Resumir
-- Simplificar
-- Condensar
-- Reescrever ou parafrasear
-- Omitir exemplos, observações, notas, OBS
-- Omitir exceções ou ressalvas
-- Omitir jurisprudência citada
-- Omitir quadros ou tabelas
-- Omitir pegadinhas da banca
-- Remover conteúdo por considerar repetitivo
-- "Sintetizar mantendo a profundidade" — qualquer síntese é proibida
-
-### PERMITIDO (apenas melhorias de forma)
-- Organização e hierarquia visual
-- Marcação HTML/CSS para melhor legibilidade
-- Navegação entre seções
-- Formatação de tabelas e listas
-
-### Método de extração correto
-1. Ler o PDF com `mcp__claude_ai_Google_Drive__read_file_content`
-2. Reproduzir o conteúdo **fielmente**, parágrafo por parágrafo
-3. Aplicar apenas marcação HTML (classes `vde-*`) — sem alterar palavras
-4. Preservar **todos** os `⚠️ IMPORTANTE`, `⚠️ PEGADINHA`, `⚠️ JURISPRUDÊNCIA`, tabelas e listas originais
+**Regra:** Não recriar nenhum desses arquivos sem pedido explícito.
 
 ---
 
 ## 3. Arquitetura dos Arquivos de Conteúdo
 
-### Camada 1 — Teoria Completa (fiel ao PDF)
-**`conteudo_vde.js`** → `CONTEUDO_VDE[N]`
-- HTML completo extraído do PDF semana a semana
-- Exibido na aba "Conteúdo" de `dia.html?dia=N`
-- **Imutável após validação** — só abre novamente se houver erro factual
-- Semana 01 (dias 1–6): extraída e validada
-- Semanas 02–20: pendentes
+### Arquivo principal de dados
+**`plano-vde.js`** → `PLANO_VDE[]` + `getDadosDia(n)`
+- Array com 120 entradas, uma por dia de estudo
+- Cada entrada: `{ dia, semana, titulo, materia, materias[], flashcards[], checklist[] }`
+- `materias[].topicos[]` — lista curta de tópicos a estudar no dia
+- `flashcards[]` — Q&A de revisão ativa: `{ id, frente, verso, pegadinha?, caiu? }`
+- Dias 1–13: flashcards completos · Dias 14–120: stubs com tópicos (pendentes)
+- **Função principal:** `getDadosDia(n)` retorna a entrada do dia N
 
-### Camada 2 — Flashcards de Revisão
-**`plano-vde.js`** → `PLANO_VDE[]`
-- Array com 120 entradas, uma por dia
-- Cada entrada: `{ dia, semana, titulo, materia, flashcards[], checklist[], sumula, incidencia, lei_seca }`
-- Flashcards são derivados da Camada 1 (não são a fonte primária)
-- Dias 1–13: flashcards completos
-- Dias 14–120: stubs com tópicos (pendentes)
-- Função principal: `getDadosDia(n)` retorna a entrada do dia N
-
-### Camada 3 — Revisão Espaçada
+### Revisão espaçada
 **`cards.js`** → `REVIEW_CARDS`
-- Micro-resumos para a aba Revisar
-- Chave: `'dia_N_0'` (um card por dia)
-- Formato: bullet points + pegadinha da banca
-
-### Camada 4 — Lei Seca
-**`cl-civil.js`, `cl-tributario.js`, `cl-administrativo.js`**, etc.
-- Texto integral dos artigos por matéria
-- `window.CL_MATERIA = \`<div class="cl-native-content">...\``
-- Usado em `caderno-legislativo.html`
-- Formato de artigo: `.cl-artigo` → `.cl-art-num` + `.cl-art-texto`
-- Badges de incidência: `<span class="cl-oab-badge">Caiu OAB XX</span>`
+- Micro-resumos para a aba Revisar (`revisar.html`)
+- Chave: `'dia_N_mIdx'` (um card por matéria por dia)
+- Formato: `{ titulo, pontos[], pegadinha }`
 
 ---
 
-## 4. IDs dos PDFs no Google Drive
+## 4. Status do Plano de Flashcards
 
-Pasta mãe: `1ff-YhR1khjnnZwgM8XnvLQB1Msbrc0nF`
+| Dias    | Flashcards | Tópicos |
+|---------|------------|---------|
+| 1–13    | ✅ Completo | ✅ |
+| 14–120  | ❌ Stubs   | ⚠️ Parcial |
 
-| Semana | Dias   | ID do PDF |
-|--------|--------|-----------|
-| 01 | 1–6    | `1fubBaoKYuxSn7s9nNG5DNyDIbPHgM6mL` |
-| 02 | 7–12   | `1kWdKghftTNhbLD03x1ROF3gtTGd6KiSR` |
-| 03 | 13–18  | `1oiJ7e0ZCiAkmQbxqygNMZCGmTDUf2mtQ` |
-| 04 | 19–24  | `1I8xd9IJRZzTtHHRqWhPkUnwIHkjhub5E` |
-| 05 | 25–30  | `1smrTu6fkv5PgK2k-Sk81AMAEATjWX_aJ` |
-| 06 | 31–36  | `1-dO-Pg5ZGS-VoAhOZgZBxs_1TSNxwnVw` |
-| 07 | 37–42  | `1gn3JLmUH1sEujIDdTmNZLjMZEtejE_nL` |
-| 08 | 43–48  | `1zgj6y79VZkaaF1V91IP5XsDowys3OogC` |
-| 09 | 49–54  | `1AvBg3tRVFHYJJOV1ubayOSBD6v_Hjfvh` |
-| 10 | 55–60  | `1jzt2EzvCq8S0mHc9UZoUU05yiz6cL7cz` |
-| 11 | 61–66  | `1t3gMZCGy4e_pzQyAjrj73MAfv7cZW4Et` |
-| 12 | 67–72  | `1xH4JUZcCv3C3_BIUJRzPHP7InvTKQyEN` |
-| 13 | 73–78  | `1cflsheiFcZWx7R2XRwiYpNEiMSsQw6Q3` |
-| 14 | 79–84  | *(ausente no Drive)* |
-| 15 | 85–90  | `1_AE4xeoSKsa6SbcnVqQmrJZ3kCupjKVB` |
-| 16 | 91–96  | `1vAt_1jny7Tbb7KJVaXCCBXGKh3mvYanG` |
-| 17 | 97–102 | `1FtRRU7O25Gui8CHs5c41esrnQr96xPZs` |
-| 18 | 103–108| `1dUQgt_mZHvRNG9IJSn6pktUnxwaKwG_X` |
-| 19 | 109–114| `1NX0fEpfFZwYrI-eLGFaQdW75-avXolxs` |
-| 20 | 115–120| `1uH5T9KcXNuvo9Gl0azIHANODy358YRlm` |
+**Próxima sessão:** popular flashcards dos dias 14–120 a partir dos PDFs VDE.
 
 ---
 
-## 5. Status de Extração (atualizar após cada sessão)
+## 5. OBSOLETO — seção removida
 
 | Semana | Teoria `conteudo_vde.js` | Flashcards `plano-vde.js` | Flashcards auditados | Teoria auditada |
 |--------|--------------------------|---------------------------|----------------------|-----------------|

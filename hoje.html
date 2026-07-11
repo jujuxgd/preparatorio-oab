@@ -919,64 +919,6 @@
 }
 .sp-expand-btn:hover { background: white; color: var(--rose-deep); }
 
-/* ── Anotações — sub-tabs por matéria ────────── */
-.anot-tabs-bar {
-  display: flex;
-  gap: 0.35rem;
-  margin-bottom: 1.2rem;
-  flex-wrap: wrap;
-}
-.anot-tab {
-  padding: 0.45rem 1rem;
-  border-radius: 20px;
-  font-size: 0.78rem;
-  font-weight: 500;
-  cursor: pointer;
-  border: 1.5px solid var(--line);
-  color: var(--ink-faded);
-  background: var(--bg-soft);
-  transition: all var(--transition);
-  user-select: none;
-}
-.anot-tab:hover { color: var(--ink); background: var(--blush); border-color: var(--rose-soft); }
-.anot-tab.active {
-  background: linear-gradient(135deg, var(--rose) 0%, var(--rose-deep) 100%);
-  color: white;
-  border-color: transparent;
-  box-shadow: var(--shadow-sm);
-}
-.anot-panel { display: none; }
-.anot-panel.active { display: block; animation: fadeInUp 0.25s ease; }
-
-/* ── Quill overrides ───────────────────────── */
-.ql-toolbar.ql-snow {
-  border: 1px solid var(--line) !important;
-  border-radius: var(--radius-sm) var(--radius-sm) 0 0 !important;
-  background: var(--bg-soft) !important;
-  font-family: 'Inter', sans-serif !important;
-}
-.ql-container.ql-snow {
-  border: 1px solid var(--line) !important;
-  border-top: none !important;
-  border-radius: 0 0 var(--radius-sm) var(--radius-sm) !important;
-  background: var(--paper) !important;
-  font-family: 'Inter', sans-serif !important;
-  font-size: 0.9rem !important;
-}
-.ql-editor { min-height: 380px; color: var(--ink) !important; line-height: 1.75 !important; }
-.ql-editor.ql-blank::before { color: var(--ink-faded) !important; font-style: italic !important; }
-.ql-toolbar button .ql-stroke { stroke: var(--ink-faded) !important; }
-.ql-toolbar button .ql-fill  { fill: var(--ink-faded) !important; }
-.ql-toolbar button:hover .ql-stroke,
-.ql-toolbar button.ql-active .ql-stroke { stroke: var(--rose-deep) !important; }
-.ql-toolbar button:hover .ql-fill,
-.ql-toolbar button.ql-active .ql-fill { fill: var(--rose-deep) !important; }
-.ql-toolbar .ql-picker-label { color: var(--ink-soft) !important; }
-.ql-toolbar .ql-picker-label:hover { color: var(--rose-deep) !important; }
-.ql-toolbar .ql-picker-options { background: var(--paper) !important; border-color: var(--line) !important; }
-[data-theme="dark"] .ql-editor { color: var(--ink) !important; }
-[data-theme="dark"] .ql-toolbar.ql-snow { background: var(--bg-soft) !important; }
-
 /* ── Checklist granular (tópicos por matéria) ─ */
 /* ── Preview cards de revisão (aba Resumo) ─── */
 .resumo-prev-card {
@@ -1080,12 +1022,11 @@
     <a href="hoje.html" class="nav-link active"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"/></svg></span><span>Hoje</span></a>
     <a href="calendario.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span><span>Calendário</span></a>
     <a href="revisar.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg></span><span>Revisar</span></a>
-
     <div class="nav-section-label">Estudo</div>
+    <a href="videoaulas.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg></span><span>Videoaulas</span></a>
     <a href="materias.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg></span><span>Matérias</span></a>
     <a href="questoes.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></span><span>Questões</span></a>
     <a href="erros.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.4 2.6a1 1 0 0 1 3 3l-9 9a2 2 0 0 1-.85.5l-2.9.85a.5.5 0 0 1-.62-.62l.85-2.9a2 2 0 0 1 .5-.85z"/></svg></span><span>Caderno de Erros</span></a>
-    <a href="caderno-legislativo.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg></span><span>Caderno Legislativo</span></a>
 
     <div class="nav-section-label">Análise</div>
     <a href="estatisticas.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M7 16v-3"/><path d="M12 16V8"/><path d="M17 16v-5"/></svg></span><span>Estatísticas</span></a>
@@ -1108,6 +1049,7 @@
         <span class="theme-label">Modo escuro</span>
         <span class="toggle-track"><span class="toggle-thumb"></span></span>
       </button>
+      <button onclick="resetarTudo()" style="margin-top:0.5rem;width:100%;padding:0.5rem;background:none;border:1px solid rgba(196,151,143,0.35);border-radius:var(--radius-sm);font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-faded);cursor:pointer;font-family:'Inter',sans-serif;transition:all var(--transition)" onmouseover="this.style.borderColor='var(--rose)';this.style.color='var(--rose-deep)'" onmouseout="this.style.borderColor='rgba(196,151,143,0.35)';this.style.color='var(--ink-faded)'">↺ Resetar Tudo</button>
     </div>
   </aside>
 
@@ -1119,8 +1061,6 @@
         <h1>Dia <em><span data-study-day>—</span></em> de 120</h1>
       </div>
       <div class="topbar-actions">
-        <button class="icon-btn" data-focus-btn="1" onclick="hojeGlobalFocus()" title="Modo foco">✦</button>
-        <button class="icon-btn" onclick="exportarPDF()" title="Exportar como PDF">↓</button>
       </div>
     </div>
 
@@ -1153,33 +1093,56 @@
       </div>
     </div>
 
-    <!-- BARRA SUPERIOR DO MODO FOCO (oculta por padrão) -->
-    <div class="focus-topbar" style="display:none">
-      <div style="font-family:'Fraunces',serif;font-size:1rem;font-weight:500;color:var(--ink)">
-        <span id="focus-day-label" style="color:var(--rose-deep)">Dia —</span>
-        <span style="color:var(--ink-faded);margin:0 0.4rem">·</span>
-        <span id="focus-titulo-label">—</span>
-      </div>
-      <button class="icon-btn" onclick="document.body.classList.remove('focus-mode')" title="Sair do modo foco" style="width:32px;height:32px;font-size:0.85rem">✕</button>
-    </div>
-
     <!-- TABS -->
     <div class="tabs-bar">
-      <div class="tab active" data-tab="teoria">📖 Teoria</div>
-      <div class="tab" data-tab="questoes">📊 Questões</div>
-      <div class="tab" data-tab="resumo">✦ Resumo</div>
+      <div class="tab active" data-tab="topicos">📌 Tópicos</div>
       <div class="tab" data-tab="videoaulas">🎬 Videoaulas</div>
+      <div class="tab" data-tab="questoes">📊 Questões</div>
     </div>
 
     <div class="content-layout">
       <div>
 
-        <!-- TEORIA — painéis por matéria (gerados dinamicamente) -->
-        <div class="tab-content active" data-tab="teoria">
+        <!-- TÓPICOS — o que estudar hoje (vem de plano-vde.js) -->
+        <div class="tab-content active" data-tab="topicos">
           <div id="subject-panels"></div>
+
+          <!-- MICRORESUMO DO DIA -->
+          <div style="margin-top:1.5rem;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-lg);padding:1.4rem 1.5rem;box-shadow:0 2px 10px rgba(44,36,32,.06)">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.9rem;flex-wrap:wrap;gap:0.4rem">
+              <h4 style="font-family:'Fraunces',serif;font-size:0.95rem;font-weight:600;color:var(--ink);margin:0;display:flex;align-items:center;gap:0.4rem">
+                ✦ Meu Microresumo
+              </h4>
+              <span id="mr-saved-label" style="font-size:0.7rem;color:var(--ink-faded);font-style:italic"></span>
+            </div>
+            <textarea id="microresumo-input"
+              placeholder="Escreva aqui os pontos mais importantes que aprendeu hoje — serão revisados nos próximos 1, 7, 15 e 30 dias..."
+              rows="6"
+              oninput="mrAutoSave()"
+              style="width:100%;box-sizing:border-box;background:var(--bg-soft);border:1.5px solid var(--line);border-radius:var(--radius-sm);padding:0.8rem;font-size:0.87rem;color:var(--ink);font-family:'Inter',sans-serif;line-height:1.65;resize:vertical;outline:none;transition:border-color var(--transition)"
+              onfocus="this.style.borderColor='var(--rose)'"
+              onblur="this.style.borderColor='var(--line)'"
+            ></textarea>
+            <div style="margin-top:0.6rem;font-size:0.72rem;color:var(--ink-faded)">
+              Salvo automaticamente · enviado para Revisar ao marcar o dia como concluído
+            </div>
+          </div>
         </div>
 
-        <!-- REVISAR — flashcards de estudo com revisão espaçada -->
+        <!-- VIDEOAULAS — player Pandavideo por matéria do dia -->
+        <div class="tab-content" data-tab="videoaulas">
+          <!-- Player embutido -->
+          <div id="va-player-wrap" style="display:none;margin-bottom:1rem;border-radius:var(--radius);overflow:hidden;box-shadow:0 4px 20px rgba(44,36,32,.12)">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:.6rem 1rem;background:var(--ink);color:white">
+              <span id="va-player-titulo" style="font-size:.82rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:80%"></span>
+              <button onclick="vaFecharPlayer()" style="background:none;border:none;color:rgba(255,255,255,.7);font-size:1.1rem;cursor:pointer;padding:0 .3rem;line-height:1">✕</button>
+            </div>
+            <iframe id="va-player-frame" src="" allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture" allowfullscreen style="width:100%;aspect-ratio:16/9;display:block;border:none"></iframe>
+          </div>
+          <div id="va-header"></div>
+          <div id="va-lista"></div>
+        </div>
+
         <!-- QUESTÕES — REGISTO SIMPLIFICADO -->
         <div class="tab-content" data-tab="questoes">
           <div class="content-card" style="padding:1.5rem">
@@ -1258,43 +1221,6 @@
           </div>
         </div>
 
-        <!-- RESUMO — micro-resumo do dia com agendamento de revisão -->
-        <div class="tab-content" data-tab="resumo">
-          <div class="content-card" style="padding:1.5rem">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem">
-              <div>
-                <div style="font-family:'Fraunces',serif;font-size:1.05rem;font-weight:500">Micro-Resumo do Dia</div>
-                <div style="font-size:.73rem;color:var(--ink-faded);margin-top:.15rem">Tópicos de hoje — após "Estudei Hoje ✦", entram em revisão espaçada (1, 7, 15, 30 dias)</div>
-              </div>
-              <a href="revisar.html" style="font-size:.73rem;color:var(--rose-deep);text-decoration:none;font-weight:500">↻ Ver revisões →</a>
-            </div>
-            <div id="resumo-hoje-content">
-              <p style="font-size:.85rem;color:var(--ink-faded);font-style:italic">Carregando...</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- VIDEOAULAS — links diretos das aulas da matéria do dia -->
-        <div class="tab-content" data-tab="videoaulas">
-          <div class="content-card" style="padding:1.5rem">
-            <!-- Player inline (aparece ao clicar numa aula) -->
-            <div id="va-player-wrap" style="display:none;margin-bottom:1.4rem">
-              <div style="display:flex;align-items:center;justify-content:space-between;gap:0.8rem;margin-bottom:0.6rem">
-                <div id="va-player-titulo" style="font-family:'Fraunces',serif;font-size:1rem;font-weight:500;color:var(--ink)">—</div>
-                <button class="btn btn-ghost" style="font-size:0.72rem;padding:0.35rem 0.8rem" onclick="vaFecharPlayer()">✕ Fechar player</button>
-              </div>
-              <div style="position:relative;width:100%;padding-top:56.25%;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);background:#000">
-                <iframe id="va-player-frame" src="" allow="accelerometer;autoplay;encrypted-media;gyroscope;picture-in-picture;fullscreen" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:none"></iframe>
-              </div>
-            </div>
-
-            <!-- Cabeçalho da matéria do dia -->
-            <div id="va-header" style="margin-bottom:1rem"></div>
-
-            <!-- Lista de aulas da matéria do dia -->
-            <div id="va-lista" style="display:flex;flex-direction:column;gap:0.5rem"></div>
-          </div>
-        </div>
 
       </div>
 
@@ -1352,22 +1278,10 @@
         <a href="hoje.html" id="nav-next">Próximo dia →</a>
       </div>
       <div style="display:flex;gap:0.7rem;align-items:center">
-        <button class="btn btn-ghost" onclick="exportarPDF()" title="Exportar PDF" style="font-size:0.75rem">↓ PDF</button>
         <button class="btn-estudei" id="btn-estudei" onclick="toggleDiaConcluido()">Estudei Hoje ✦</button>
       </div>
     </div>
 
-    <!-- BARRA INFERIOR DO MODO FOCO (oculta por padrão) -->
-    <div class="focus-bottombar" style="display:none">
-      <div class="day-nav" style="display:flex;gap:1rem">
-        <a href="#" id="focus-nav-prev" style="font-size:0.82rem;color:var(--ink-soft);text-decoration:none;transition:color var(--transition)">← Dia anterior</a>
-        <a href="#" id="focus-nav-next" style="font-size:0.82rem;color:var(--ink-soft);text-decoration:none;transition:color var(--transition)">Próximo dia →</a>
-      </div>
-      <div style="display:flex;gap:0.5rem;align-items:center">
-        <div id="focus-progresso" style="font-size:0.72rem;color:var(--ink-faded)">0% concluído</div>
-        <button class="btn-estudei" id="btn-estudei-foco" onclick="toggleDiaConcluido()" style="padding:0.7rem 1.5rem;font-size:0.75rem">Estudei Hoje ✦</button>
-      </div>
-    </div>
   </main>
 </div>
 
@@ -1376,10 +1290,8 @@
 <script src="progresso.js"></script>
 <script src="plano-vde.js"></script>
 <script src="cards.js"></script>
-<script src="conteudo_vde.js"></script>
-<script src="videoaulas.js"></script>
-<!-- quill.min.js removido — aba Anotações foi descontinuada -->
 <script src="cores.js"></script>
+<script src="videoaulas.js"></script>
 <script>
 // ── Tabs ─────────────────────────────────────
 document.querySelectorAll('.tab').forEach(tab => {
@@ -1389,220 +1301,11 @@ document.querySelectorAll('.tab').forEach(tab => {
     document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
     tab.classList.add('active');
     document.querySelector(`.tab-content[data-tab="${target}"]`).classList.add('active');
-    if (target === 'revisar')    _buildRevisar();
-    if (target === 'questoes')   _buildQForm();
-    if (target === 'resumo')     _buildResumoHoje();
     if (target === 'videoaulas') _buildVideoaulas();
+    if (target === 'questoes')   _buildQForm();
   });
 });
 
-// ── Anotações — init Quill por matéria ────────
-let _anotInitialized = false;
-const _quillEditors = {};
-
-function _initAnotacoes() {
-  if (_anotInitialized) return;
-  if (typeof Quill === 'undefined') {
-    const s = document.createElement('script');
-    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/quill/1.3.7/quill.min.js';
-    s.onload = () => _buildAnotacoes();
-    document.head.appendChild(s);
-    return;
-  }
-  _buildAnotacoes();
-}
-
-function _buildAnotacoes() {
-  if (_anotInitialized) return;
-  _anotInitialized = true;
-
-  const dia = _diaCorrente();
-  const dados = getDadosDia(dia);
-  const loadingEl = document.getElementById('anot-loading');
-  if (loadingEl) loadingEl.style.display = 'none';
-  if (!dados) return;
-
-  const tabsBar = document.getElementById('anot-tabs-bar');
-  const panels  = document.getElementById('anot-panels');
-  if (!tabsBar || !panels) return;
-
-  dados.materias.forEach((mat, mIdx) => {
-    // Sub-tab
-    const btn = document.createElement('div');
-    btn.className = 'anot-tab' + (mIdx === 0 ? ' active' : '');
-    btn.innerHTML = `${mat.emoji || '📝'} ${mat.nome.replace('Direito ','').replace('Processual ','Proc. ')}`;
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.anot-tab').forEach((t,i) => t.classList.toggle('active', i === mIdx));
-      document.querySelectorAll('.anot-panel').forEach((p,i) => p.classList.toggle('active', i === mIdx));
-    });
-    tabsBar.appendChild(btn);
-
-    // Painel com editor
-    const panel = document.createElement('div');
-    panel.className = 'anot-panel' + (mIdx === 0 ? ' active' : '');
-    const editorId = `qe-d${dia}-m${mIdx}`;
-    const wrapper = document.createElement('div');
-    wrapper.id = editorId;
-    panel.appendChild(wrapper);
-    panels.appendChild(panel);
-
-    const quill = new Quill('#' + editorId, {
-      theme: 'snow',
-      placeholder: `Anote os pontos principais de ${mat.nome}... (cole texto formatado de qualquer fonte)`,
-      modules: {
-        toolbar: [
-          [{ header: [1, 2, 3, false] }],
-          ['bold', 'italic', 'underline', 'strike'],
-          [{ color: [] }, { background: [] }],
-          [{ list: 'ordered' }, { list: 'bullet' }],
-          ['blockquote', 'code-block'],
-          [{ align: [] }],
-          ['link'],
-          ['clean']
-        ],
-        clipboard: { matchVisual: false }
-      }
-    });
-
-    _quillEditors[`d${dia}_m${mIdx}`] = quill;
-
-    // ── Carrega conteúdo: prioriza fichamento vinculado (fonte única) ──
-    const annotKey  = `oab_anotacao_d${dia}_m${mIdx}`;
-
-    function _getFichLinked() {
-      try {
-        return (JSON.parse(localStorage.getItem('oab_fichamentos') || '[]'))
-          .find(f => f.source_key === sourceKey) || null;
-      } catch { return null; }
-    }
-
-    function _loadQuillContent() {
-      const linked = _getFichLinked();
-      if (linked) {
-        try { quill.setContents(JSON.parse(linked.delta), 'silent'); return; } catch {}
-        quill.root.innerHTML = linked.conteudo || '';
-        return;
-      }
-      const saved = localStorage.getItem(annotKey);
-      if (saved) {
-        try { quill.setContents(JSON.parse(saved), 'silent'); }
-        catch { try { quill.clipboard.dangerouslyPasteHTML(0, saved, 'silent'); } catch {} }
-      }
-    }
-    _loadQuillContent();
-
-    // ── Auto-save: anotação + fichamento vinculado (se existir) ──────
-    let saveTimer;
-    quill.on('text-change', () => {
-      clearTimeout(saveTimer);
-      saveTimer = setTimeout(() => {
-        const delta = JSON.stringify(quill.getContents());
-        localStorage.setItem(annotKey, delta);
-        // Propaga para o fichamento vinculado sem criar um novo
-        try {
-          const arr = JSON.parse(localStorage.getItem('oab_fichamentos') || '[]');
-          const idx = arr.findIndex(f => f.source_key === sourceKey);
-          if (idx >= 0) {
-            arr[idx] = { ...arr[idx], conteudo: quill.root.innerHTML, delta, atualizado: new Date().toISOString() };
-            localStorage.setItem('oab_fichamentos', JSON.stringify(arr));
-          }
-        } catch {}
-      }, 800);
-    });
-
-    // Botão Salvar / Atualizar nos Fichamentos
-    const sourceKey = `anotacao_d${dia}_m${mIdx}`;
-    const saveFichBar = document.createElement('div');
-    saveFichBar.style.cssText = 'display:flex;align-items:center;justify-content:space-between;gap:0.6rem;margin-top:0.9rem;padding-top:0.9rem;border-top:1px solid var(--line)';
-
-    const statusSpan = document.createElement('span');
-    statusSpan.style.cssText = 'font-size:0.72rem;color:var(--ink-faded);line-height:1.4';
-    saveFichBar.appendChild(statusSpan);
-
-    const btnWrap = document.createElement('div');
-    btnWrap.style.cssText = 'display:flex;gap:0.5rem;flex-shrink:0';
-
-    const saveFichBtn = document.createElement('button');
-    saveFichBtn.className = 'btn btn-primary';
-    saveFichBtn.style.cssText = 'font-size:0.75rem;padding:0.45rem 1.1rem';
-
-    const editFichBtn = document.createElement('a');
-    editFichBtn.href = 'fichamentos.html';
-    editFichBtn.className = 'btn btn-ghost';
-    editFichBtn.style.cssText = 'font-size:0.72rem;padding:0.45rem 0.8rem;text-decoration:none;display:none';
-    editFichBtn.textContent = '↗ Ver nos Fichamentos';
-
-    function _refreshFichBtnState() {
-      let arr; try { arr = JSON.parse(localStorage.getItem('oab_fichamentos') || '[]'); } catch { arr = []; }
-      const exists = arr.some(f => f.source_key === sourceKey);
-      saveFichBtn.innerHTML = exists ? '✎ Atualizar fichamento' : '✎ Salvar nos Fichamentos';
-      statusSpan.textContent = exists
-        ? 'Fichamento salvo · edite o texto acima e clique Atualizar'
-        : 'Anotação salva automaticamente · envie para Fichamentos quando terminar';
-      editFichBtn.style.display = exists ? 'inline-flex' : 'none';
-    }
-    _refreshFichBtnState();
-
-    saveFichBtn.addEventListener('click', () => {
-      const ok = _salvarAnotacaoComoFichamento(dia, mIdx, mat, quill);
-      if (ok) {
-        saveFichBtn.innerHTML = '✓ Anotação salva!';
-        saveFichBtn.style.background = 'linear-gradient(135deg,#60b860,#3a9840)';
-        setTimeout(() => {
-          saveFichBtn.style.background = '';
-          _refreshFichBtnState();
-        }, 2500);
-      } else {
-        saveFichBtn.innerHTML = '⚠ Escreva algo primeiro';
-        saveFichBtn.style.background = 'linear-gradient(135deg,#c97a40,#a05a20)';
-        setTimeout(() => {
-          saveFichBtn.style.background = '';
-          _refreshFichBtnState();
-        }, 2000);
-      }
-    });
-
-    btnWrap.appendChild(editFichBtn);
-    btnWrap.appendChild(saveFichBtn);
-    saveFichBar.appendChild(btnWrap);
-    panel.appendChild(saveFichBar);
-  });
-}
-
-// Salva a anotação do Hoje direto no banco de Fichamentos
-function _salvarAnotacaoComoFichamento(dia, mIdx, mat, quill) {
-  if (!quill || !quill.getText().trim()) return false;
-  const FICH_KEY = 'oab_fichamentos';
-  let arr;
-  try { arr = JSON.parse(localStorage.getItem(FICH_KEY) || '[]'); } catch { arr = []; }
-
-  const materiaId = typeof getMateriaId === 'function' ? getMateriaId(mat.nome) : 'geral';
-  const sourceKey = `anotacao_d${dia}_m${mIdx}`;
-
-  // Título = primeiro tópico da matéria (ou nome da matéria + dia)
-  const titulo = (mat.topicos && mat.topicos.length)
-    ? mat.topicos[0]
-    : `${mat.nome} · Dia ${dia}`;
-
-  const existIdx = arr.findIndex(f => f.source_key === sourceKey);
-  const item = {
-    id:         existIdx >= 0 ? arr[existIdx].id : Date.now(),
-    titulo,
-    materia:    materiaId,
-    topico:     `Dia ${dia} — ${mat.nome}`,
-    source_key: sourceKey,
-    conteudo:   quill.root.innerHTML,
-    delta:      JSON.stringify(quill.getContents()),
-    criado:     existIdx >= 0 ? arr[existIdx].criado : new Date().toISOString(),
-    atualizado: new Date().toISOString()
-  };
-
-  if (existIdx >= 0) arr[existIdx] = item;
-  else arr.unshift(item);
-
-  localStorage.setItem(FICH_KEY, JSON.stringify(arr));
-  return true;
-}
 
 // Questões via QConcursos — registo na aba Questões
 
@@ -1625,18 +1328,46 @@ document.addEventListener('DOMContentLoaded', () => {
   const dados   = getDadosDia(dia);
   const progDia = obterDia(dia);
 
-  // Banner pré-início (pré-aquecimento — site em execução, plano começa em Junho)
-  if (isPreview) {
-    const daysLeft = Math.max(0, Math.ceil((new Date(2026, 5, 1) - getCurrentDate()) / 864e5));
-    const banner = document.createElement('div');
-    banner.style.cssText = 'background:linear-gradient(135deg,var(--blush),var(--lavender));padding:0.8rem 1.2rem;border-radius:var(--radius);margin-bottom:1rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap;';
-    banner.innerHTML = daysLeft > 0
-      ? `<span style="font-family:'Fraunces',serif;font-size:1.8rem;color:var(--rose-deep);font-weight:500">${daysLeft}</span><div><div style="font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-faded)">dias para o início</div><div style="font-size:0.85rem;color:var(--ink-soft)">Plano começa <strong>1 de Junho</strong> · Conteúdo disponível para explorar agora</div></div>`
-      : `<span style="color:var(--rose-deep)">🌸</span><span style="font-size:0.88rem;color:var(--ink-soft)">Plano em execução! Bem-vinda ao Dia 1.</span>`;
+  // Banners de estados especiais do calendário
+  (function() {
     const main = document.querySelector('main');
     const hero = document.querySelector('.day-hero');
-    if (main && hero) main.insertBefore(banner, hero);
-  }
+    if (!main || !hero || diaParam) return; // se ?dia=X na URL, não mostrar banners
+
+    let bannerHtml = '';
+    if (isDiaProva()) {
+      bannerHtml = `<div style="background:linear-gradient(135deg,var(--rose-deep),var(--rose));padding:1rem 1.4rem;border-radius:var(--radius);margin-bottom:1rem;display:flex;align-items:center;gap:1rem;color:white">
+        <span style="font-size:2rem">🏛️</span>
+        <div>
+          <div style="font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;opacity:.8;font-weight:700">10 de Janeiro de 2027</div>
+          <div style="font-family:'Fraunces',serif;font-size:1.3rem;font-weight:500">Dia da Prova — OAB 48</div>
+          <div style="font-size:.85rem;opacity:.9;margin-top:.2rem">Você chegou até aqui. Respira fundo, confia no seu preparo. Vai com tudo! ✦</div>
+        </div>
+      </div>`;
+    } else if (isRevisaoEstrategica()) {
+      bannerHtml = `<div style="background:linear-gradient(135deg,var(--lavender),var(--blush));padding:1rem 1.4rem;border-radius:var(--radius);margin-bottom:1rem;display:flex;align-items:center;gap:1rem;border:1px solid var(--line)">
+        <span style="font-size:1.8rem">↻</span>
+        <div>
+          <div style="font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:var(--rose-deep);font-weight:700">4–8 de Janeiro · Revisão Estratégica</div>
+          <div style="font-family:'Fraunces',serif;font-size:1.1rem;font-weight:500;color:var(--ink)">Sem conteúdo novo — só revisão</div>
+          <div style="font-size:.83rem;color:var(--ink-soft);margin-top:.2rem">Use os flashcards das semanas mais difíceis. Revise o caderno de erros. A prova é dia 10.</div>
+        </div>
+      </div>`;
+    } else if (!isWeekday(getCurrentDate())) {
+      bannerHtml = `<div style="background:linear-gradient(135deg,var(--sage),var(--bg));padding:.9rem 1.2rem;border-radius:var(--radius);margin-bottom:1rem;display:flex;align-items:center;gap:1rem;border:1px solid var(--line)">
+        <span style="font-size:1.6rem">🌿</span>
+        <div>
+          <div style="font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-faded);font-weight:700">Fim de Semana Livre</div>
+          <div style="font-size:.9rem;color:var(--ink-soft)">Descanse — o plano retoma na segunda. Mostrando o conteúdo do último dia útil.</div>
+        </div>
+      </div>`;
+    }
+    if (bannerHtml) {
+      const div = document.createElement('div');
+      div.innerHTML = bannerHtml;
+      main.insertBefore(div.firstElementChild, hero);
+    }
+  })();
 
   // Estado do botão Estudei Hoje
   const btn = document.getElementById('btn-estudei');
@@ -1644,6 +1375,9 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.classList.add('concluido');
     btn.textContent = '✓ Dia Concluído';
   }
+
+  // Carregar microresumo do dia
+  mrCarregar(dia);
 
   document.querySelectorAll('[data-study-day]').forEach(el => { el.textContent = dia; });
   const focusDayLabel = document.getElementById('focus-day-label');
@@ -1680,9 +1414,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (panels) {
       panels.innerHTML = '';
 
-      // ── Cabeçalho rápido com link para estudar ───────────────
-      const pdfId = dados.pdf_id;
-      const pdfUrl = pdfId ? 'https://drive.google.com/file/d/' + pdfId + '/view' : null;
+      // ── Cabeçalho do dia ─────────────────────────────────────
       const headerBar = document.createElement('div');
       headerBar.style.cssText = 'display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.6rem;margin-bottom:1rem;padding:.8rem 1rem;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow-sm)';
       headerBar.innerHTML = `
@@ -1691,8 +1423,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <div style="font-family:'Fraunces',serif;font-size:1rem;font-weight:500;color:var(--ink)">${dados.titulo||''}</div>
         </div>
         <div style="display:flex;gap:.5rem;flex-wrap:wrap">
-          ${pdfUrl ? `<a href="${pdfUrl}" target="_blank" class="btn btn-ghost" style="text-decoration:none;font-size:.75rem;padding:.5rem .9rem">📄 PDF</a>` : ''}
-          <button class="btn btn-ghost" style="font-size:.75rem;padding:.5rem .9rem" onclick="hojeToggleFocus()">⊞ Foco</button>
+          <button class="btn btn-ghost" style="font-size:.75rem;padding:.5rem .9rem" onclick="document.querySelector('.tab[data-tab=videoaulas]').click()">🎬 Videoaulas</button>
         </div>`;
       panels.appendChild(headerBar);
 
@@ -1804,34 +1535,6 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       ul.appendChild(rLi);
     });
-
-    // Itens de revisão de dias anteriores (não "Ler teoria", não "Resolver", não "Escrever resumo")
-    const extras = dados.checklist.filter(it =>
-      !it.texto.startsWith('Ler teoria') &&
-      !it.texto.startsWith('Resolver') &&
-      !it.texto.startsWith('Escrever resumo')
-    );
-    if (extras.length) {
-      const eHeader = document.createElement('div');
-      eHeader.className = 'checklist-group-header';
-      eHeader.innerHTML = `<span>↻</span>Revisão`;
-      ul.appendChild(eHeader);
-      extras.forEach(item => {
-        const li = document.createElement('li');
-        li.id = item.id;
-        const isDone = progDia.checklist && progDia.checklist[item.id];
-        if (isDone) li.classList.add('done');
-        li.innerHTML = `<span class="check">${isDone ? '✓' : ''}</span><span style="line-height:1.4">${item.texto}</span>`;
-        li.addEventListener('click', () => {
-          li.classList.toggle('done');
-          const done2 = li.classList.contains('done');
-          li.querySelector('.check').textContent = done2 ? '✓' : '';
-          atualizarChecklist(dia, item.id, done2);
-          _updateChecklistCounter();
-        });
-        ul.appendChild(li);
-      });
-    }
     // Contador inicial após construção do checklist
     setTimeout(_updateChecklistCounter, 0);
 
@@ -1868,20 +1571,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const next = getDadosDia(dia + 1);
     const navPrev = document.getElementById('nav-prev');
     const navNext = document.getElementById('nav-next');
-    const focNavPrev = document.getElementById('focus-nav-prev');
-    const focNavNext = document.getElementById('focus-nav-next');
     const prevText = prev ? `← Dia ${dia-1} · ${matLabel(prev)}` : '← Início';
     const nextText = next ? `Dia ${dia+1} · ${matLabel(next)} →` : 'Plano concluído ✦';
     const prevHref = prev ? `hoje.html?dia=${dia-1}` : 'index.html';
     const nextHref = next ? `hoje.html?dia=${dia+1}` : '#';
     if (navPrev) { navPrev.textContent = prevText; navPrev.href = prevHref; }
     if (navNext) { navNext.textContent = nextText; navNext.href = nextHref; }
-    if (focNavPrev) { focNavPrev.textContent = prevText; focNavPrev.href = prevHref; }
-    if (focNavNext) { focNavNext.textContent = nextText; focNavNext.href = nextHref; }
   }
-
-  // Pré-carrega a aba Resumo (não precisa de clicar)
-  _buildResumoHoje();
 
   // Progresso geral
   const stats = calcularStats();
@@ -1907,6 +1603,37 @@ function _updateChecklistCounter() {
   counter.style.color = total > 0 && done === total ? '#3a8030' : 'var(--rose-deep)';
 }
 
+// ── Resetar Tudo ─────────────────────────────
+function resetarTudo() {
+  if (!confirm('Apagar TODO o progresso, checklists, microresumos e videoaulas?\nEsta ação não pode ser desfeita.')) return;
+  const theme = localStorage.getItem('theme');
+  localStorage.clear();
+  if (theme) localStorage.setItem('theme', theme);
+  location.reload();
+}
+
+// ── Microresumo — auto-save e carga ──────────
+let _mrTimer;
+function _diaCorrente() {
+  const params = new URLSearchParams(window.location.search);
+  const raw = params.get('dia') ? parseInt(params.get('dia')) : getStudyDay();
+  return raw <= 0 ? 1 : Math.min(raw, 120);
+}
+function mrAutoSave() {
+  clearTimeout(_mrTimer);
+  _mrTimer = setTimeout(() => {
+    const dia = _diaCorrente();
+    const val = (document.getElementById('microresumo-input') || {}).value || '';
+    localStorage.setItem('microresumo_dia_' + dia, val);
+    const lbl = document.getElementById('mr-saved-label');
+    if (lbl) { lbl.textContent = 'Salvo'; setTimeout(() => { lbl.textContent = ''; }, 1500); }
+  }, 600);
+}
+function mrCarregar(dia) {
+  const el = document.getElementById('microresumo-input');
+  if (el) el.value = localStorage.getItem('microresumo_dia_' + dia) || '';
+}
+
 // ── Toggle dia concluído/não concluído ───────
 function toggleDiaConcluido() {
   const params   = new URLSearchParams(window.location.search);
@@ -1924,6 +1651,9 @@ function toggleDiaConcluido() {
     btn.classList.remove('concluido');
     btn.textContent = 'Estudei Hoje ✦';
   } else {
+    // Salva microresumo antes de concluir
+    const mrVal = (document.getElementById('microresumo-input') || {}).value || '';
+    if (mrVal.trim()) localStorage.setItem('microresumo_dia_' + dia, mrVal);
     // Concluir + marcar tópicos + gravar próximo dia
     concluirDia(dia, '');
     marcarTopicosEstudados(dia);
@@ -1948,18 +1678,6 @@ function toggleDiaConcluido() {
   }
 }
 
-// ── Exportar como PDF ────────────────────────
-function exportarPDF() {
-  const tab = document.querySelector('.tab.active')?.dataset.tab;
-  // Mostra a aba teoria para impressão se não estiver nela
-  if (tab !== 'teoria') {
-    document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === 'teoria'));
-    document.querySelectorAll('.tab-content').forEach(c => c.classList.toggle('active', c.dataset.tab === 'teoria'));
-  }
-  setTimeout(() => window.print(), 200);
-}
-
-// toggleFocusMode está em script.js (global)
 
 // ── Meta: 6 questões ─────────────────────────
 function _atualizarMeta(dia) {
@@ -2226,6 +1944,38 @@ function _diaCorrente() {
   return r <= 0 ? 1 : Math.min(r, 120);
 }
 
+// ── Flashcards do dia — revisão ativa ─────────
+function _buildFlashcards() {
+  const dia  = _diaCorrente();
+  const cont = document.getElementById('flashcards-container');
+  if (!cont) return;
+  const dados = getDadosDia(dia);
+  if (!dados || !dados.flashcards || !dados.flashcards.length) {
+    cont.innerHTML = `<div class="content-card" style="padding:1.4rem;text-align:center">
+      <div style="font-size:1.6rem;margin-bottom:.5rem">🃏</div>
+      <div style="font-size:.88rem;color:var(--ink-faded);font-style:italic">Sem flashcards para o Dia ${dia}.<br>Consulte o material físico e volte.</div>
+    </div>`;
+    // Atualiza badge
+    const badge = document.getElementById('fc-badge');
+    if (badge) { badge.textContent = '0'; badge.style.display = 'none'; }
+    return;
+  }
+  const cards = dados.flashcards;
+  const badge = document.getElementById('fc-badge');
+  if (badge) { badge.textContent = cards.length; badge.style.display = ''; }
+  cont.innerHTML = cards.map((fc, i) => `
+    <div class="content-card" style="margin-bottom:.8rem;padding:1.4rem 1.6rem">
+      <div style="font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:var(--rose-deep);font-weight:700;margin-bottom:.55rem">
+        Flashcard ${i+1} / ${cards.length}${fc.caiu ? ' · <span style="color:var(--ink-faded);font-weight:500">📌 '+fc.caiu+'</span>' : ''}
+      </div>
+      <div style="font-family:'Fraunces',serif;font-size:1.05rem;font-weight:500;color:var(--ink);margin-bottom:.9rem;line-height:1.4">${fc.frente}</div>
+      <div style="padding:.9rem 1rem;background:var(--bg-soft);border-radius:var(--radius-sm);border-left:3px solid var(--rose);font-size:.88rem;color:var(--ink);line-height:1.65;${fc.pegadinha ? 'margin-bottom:.55rem' : ''}">${fc.verso}</div>
+      ${fc.pegadinha ? `<div style="padding:.7rem 1rem;background:linear-gradient(135deg,var(--blush),var(--rose-soft));border-radius:var(--radius-sm);font-size:.82rem;color:var(--ink);line-height:1.5">
+        <span style="font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--rose-deep);font-weight:700;display:block;margin-bottom:.2rem">⚠ Pegadinha da Banca</span>${fc.pegadinha}
+      </div>` : ''}
+    </div>`).join('');
+}
+
 function _buildQForm() {
   const dia     = _diaCorrente();
   const dados   = getDadosDia(dia);
@@ -2369,11 +2119,8 @@ function _buildResumoHoje() {
     </div>`;
   });
 
-  // Link para o Caderno Legislativo
   html += `<div style="text-align:right;margin-top:.4rem">
-    <a href="caderno-legislativo.html" style="font-size:.72rem;color:var(--rose-deep);text-decoration:none;font-weight:500">§ Caderno Legislativo →</a>
-    <span style="margin:0 .4rem;color:var(--ink-ghost)">·</span>
-    <a href="dia.html?dia=${dia}" style="font-size:.72rem;color:var(--rose-deep);text-decoration:none;font-weight:500">◈ PDF do dia →</a>
+    <a href="revisar.html" style="font-size:.72rem;color:var(--rose-deep);text-decoration:none;font-weight:500">↻ Revisar →</a>
   </div>`;
 
   cont.innerHTML = html;
@@ -2650,97 +2397,6 @@ _pomoUI();
   }
 })();
 
-// ── Modo foco global — aba Hoje completa (todas as tabs + sidebar) ──
-function hojeGlobalFocus() {
-  let overlay = document.getElementById('hoje-global-overlay');
-  if (overlay && overlay.classList.contains('active')) { hojeGlobalClose(); return; }
-  if (!overlay) {
-    overlay = document.createElement('div');
-    overlay.id = 'hoje-global-overlay';
-    overlay.className = 'focus-overlay';
-    overlay.innerHTML = `
-      <div class="focus-panel">
-        <div class="focus-panel-mac">
-          <div class="focus-mac-lights">
-            <span class="fml fml-close" onclick="hojeGlobalClose()" title="Fechar"></span>
-            <span class="fml fml-min"></span>
-            <span class="fml fml-max"></span>
-          </div>
-          <span class="focus-mac-title">MODO FOCO · HOJE</span>
-          <div style="width:54px"></div>
-        </div>
-        <div class="focus-panel-body" id="hoje-global-body"></div>
-      </div>`;
-    overlay.addEventListener('click', e => { if (e.target === overlay) hojeGlobalClose(); });
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') { const o = document.getElementById('hoje-global-overlay'); if (o && o.classList.contains('active')) hojeGlobalClose(); }
-    });
-    document.body.appendChild(overlay);
-  }
-  // Move as DOM nodes reais (não innerHTML) — preserva event listeners e IDs
-  const focusBody = document.getElementById('hoje-global-body');
-  const tabsBar = document.querySelector('main > .tabs-bar');
-  const contentLayout = document.querySelector('main > .content-layout');
-  if (tabsBar && contentLayout && focusBody) {
-    overlay._tabsBarParent  = tabsBar.parentElement;
-    overlay._tabsBarBefore  = tabsBar.nextSibling;
-    overlay._layoutParent   = contentLayout.parentElement;
-    overlay._layoutBefore   = contentLayout.nextSibling;
-    focusBody.appendChild(tabsBar);
-    focusBody.appendChild(contentLayout);
-  }
-  overlay.classList.add('active');
-  document.body.style.overflow = 'hidden';
-}
-function hojeGlobalClose() {
-  const overlay = document.getElementById('hoje-global-overlay');
-  if (!overlay) return;
-  const focusBody = document.getElementById('hoje-global-body');
-  if (focusBody && overlay._tabsBarParent) {
-    const tabsBar = focusBody.querySelector('.tabs-bar');
-    const contentLayout = focusBody.querySelector('.content-layout');
-    if (tabsBar)       overlay._tabsBarParent.insertBefore(tabsBar, overlay._tabsBarBefore);
-    if (contentLayout) overlay._layoutParent.insertBefore(contentLayout, overlay._layoutBefore);
-  }
-  overlay.classList.remove('active');
-  document.body.style.overflow = '';
-}
-
-// ── Focus mode — Teoria (conteúdo da aba ativa) ───────
-function hojeToggleFocus() {
-  let overlay = document.getElementById('hoje-focus-overlay');
-  if (!overlay) {
-    overlay = document.createElement('div');
-    overlay.id = 'hoje-focus-overlay';
-    overlay.className = 'focus-overlay';
-    overlay.innerHTML = `
-      <div class="focus-panel">
-        <div class="focus-panel-mac">
-          <div class="focus-mac-lights">
-            <span class="fml fml-close" onclick="hojeCloseFocus()" title="Fechar"></span>
-            <span class="fml fml-min"></span>
-            <span class="fml fml-max"></span>
-          </div>
-          <span class="focus-mac-title">MODO FOCO · CONTEÚDO DO DIA</span>
-          <div style="width:54px"></div>
-        </div>
-        <div class="focus-panel-body" id="hoje-focus-body"></div>
-      </div>`;
-    overlay.addEventListener('click', e => { if (e.target === overlay) hojeCloseFocus(); });
-    document.body.appendChild(overlay);
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') hojeCloseFocus(); });
-  }
-  const src = document.getElementById('subject-panels');
-  const body = document.getElementById('hoje-focus-body');
-  if (src && body) body.innerHTML = src.innerHTML;
-  overlay.classList.add('active');
-  document.body.style.overflow = 'hidden';
-}
-function hojeCloseFocus() {
-  const overlay = document.getElementById('hoje-focus-overlay');
-  if (overlay) overlay.classList.remove('active');
-  document.body.style.overflow = '';
-}
 
 // ── Caderno de Erros — integração na aba Questões ──
 function _qePreencheSelect() {

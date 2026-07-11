@@ -102,7 +102,11 @@
     window.toggleTheme = function () { _origThemeToggle(); setTimeout(load, 60); };
   }
 
-  document.addEventListener('DOMContentLoaded', () => { buildControl(); load(); });
+  document.addEventListener('DOMContentLoaded', () => {
+    const page = location.pathname.split('/').pop();
+    if (!page || page === '' || page === 'index.html') buildControl();
+    load();
+  });
 
   // API compatível com chamadas externas existentes.
   window._coresOAB = { apply, reset: () => apply('couture') };
