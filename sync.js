@@ -47,10 +47,16 @@
 
     // Aparelho novo (sem progresso local ainda) — tenta restaurar
     // automaticamente o que já existir salvo na nuvem.
+    // Guarda de segurança: só tenta UMA VEZ por aba (sessionStorage),
+    // pra nunca entrar em loop de recarregar a página repetidamente
+    // caso o dado buscado ainda não tenha o que o app espera.
     const temDadosLocais = !!localStorage.getItem('oab_progresso_v1');
-    if (!temDadosLocais) {
+    const jaTentouRestaurar = sessionStorage.getItem('oab_tentou_restaurar') === '1';
+    if (!temDadosLocais && !jaTentouRestaurar) {
+      sessionStorage.setItem('oab_tentou_restaurar', '1');
       baixarDaNuvem(uid).then(data => {
-        if (data) location.reload();
+        const agoraTemDados = !!localStorage.getItem('oab_progresso_v1');
+        if (data && agoraTemDados) location.reload();
       });
     }
 
