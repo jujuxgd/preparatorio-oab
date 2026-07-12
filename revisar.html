@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Inter:opsz,wght@14..32,400..700&family=Caveat:wght@400;500&display=swap" rel="stylesheet">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="style.css?v=1783860149">
+<link rel="stylesheet" href="style.css?v=1783860445">
 <style>
 .revisao-card {
   background: var(--paper);
@@ -468,9 +468,9 @@
           <p>Cada matéria de cada dia tem seu próprio <strong>estágio</strong>, de 1 a 7. Cada estágio tem um intervalo: <strong>1, 3, 7, 14, 30, 60 ou 90 dias</strong>. Quando o intervalo do estágio atual vence, o flashcard aparece aqui em "Pendentes".</p>
           <p>Seu feedback muda o próximo agendamento:</p>
           <ul>
-            <li><strong>😄 Lembrei tudo</strong> → avança pro próximo estágio (intervalo maior, revisa de novo mais pra frente)</li>
-            <li><strong>😐 Mais ou menos</strong> → mantém o estágio atual (revisa de novo no mesmo intervalo)</li>
-            <li><strong>😓 Preciso rever</strong> → volta pro estágio 1 (revisa de novo logo, em 1 dia)</li>
+            <li><strong>✓ Lembrei tudo</strong> → avança pro próximo estágio (intervalo maior, revisa de novo mais pra frente)</li>
+            <li><strong>~ Mais ou menos</strong> → mantém o estágio atual (revisa de novo no mesmo intervalo)</li>
+            <li><strong>✕ Preciso rever</strong> → volta pro estágio 1 (revisa de novo logo, em 1 dia)</li>
           </ul>
           <p>Isso é diferente do esquema antigo, que reagendava tudo em datas fixas (1/7/15/30 dias) sem levar em conta se você realmente lembrava ou não. Agora quem estuda melhor uma matéria a revisa com menos frequência, e quem erra mais a revisa com mais frequência — como o método Leitner de cartões.</p>
         </div>
@@ -505,7 +505,7 @@
   </main>
 </div>
 
-<script src="script.js?v=1783859977"></script>
+<script src="script.js?v=1783860445"></script>
 <script src="perfil.js"></script>
 <script src="progresso.js?v=1783859287"></script>
 <script src="plano-vde.js"></script>
@@ -527,9 +527,9 @@ function buildMatCardHtml(numDia, mIdx, mat, dado, statusHtml, extraClass, semFe
   const matAttr = (mat.nome || '').replace(/"/g, '');
   const feedbackHtml = semFeedback ? '' : `
       <div class="rev-feedback">
-        <button class="feedback-btn lembrei" onclick="registrarFeedbackMat(this,'lembrei',${numDia},${mIdx})">😄 Lembrei tudo</button>
-        <button class="feedback-btn mais-ou-menos" onclick="registrarFeedbackMat(this,'mais-ou-menos',${numDia},${mIdx})">😐 Mais ou menos</button>
-        <button class="feedback-btn esqueci" onclick="registrarFeedbackMat(this,'esqueci',${numDia},${mIdx})">😓 Preciso rever</button>
+        <button class="feedback-btn lembrei" onclick="registrarFeedbackMat(this,'lembrei',${numDia},${mIdx})">✓ Lembrei tudo</button>
+        <button class="feedback-btn mais-ou-menos" onclick="registrarFeedbackMat(this,'mais-ou-menos',${numDia},${mIdx})">~ Mais ou menos</button>
+        <button class="feedback-btn esqueci" onclick="registrarFeedbackMat(this,'esqueci',${numDia},${mIdx})">✕ Preciso rever</button>
       </div>`;
   return `
     <div class="revisao-card${extraClass || ''}" data-materia="${matAttr}">
@@ -623,8 +623,8 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
         <div style="white-space:pre-wrap;font-size:0.88rem;color:var(--ink);line-height:1.7;padding:1rem 1.2rem;background:var(--bg-soft);border-radius:var(--radius-sm);margin-bottom:1rem">${escapedTexto}</div>
         <div class="rev-feedback">
-          <button class="feedback-btn lembrei" onclick="registrarFeedbackMr(this,'lembrei',${numDia})">😄 Revisado</button>
-          <button class="feedback-btn esqueci" onclick="registrarFeedbackMr(this,'esqueci',${numDia})">😓 Rever depois</button>
+          <button class="feedback-btn lembrei" onclick="registrarFeedbackMr(this,'lembrei',${numDia})">✓ Revisado</button>
+          <button class="feedback-btn esqueci" onclick="registrarFeedbackMr(this,'esqueci',${numDia})">↻ Rever depois</button>
         </div>
       </div>` });
   });
@@ -829,9 +829,9 @@ function fmtHistItem(r) {
 }
 
 const RESULTADO_INFO = {
-  'lembrei':        { icon: '😄', label: 'Lembrei tudo',    cor: 'var(--success)' },
-  'mais-ou-menos':  { icon: '😐', label: 'Mais ou menos',   cor: 'var(--gold)' },
-  'esqueci':        { icon: '😓', label: 'Preciso rever',   cor: 'var(--error)' },
+  'lembrei':        { icon: '✓', label: 'Lembrei tudo',    cor: 'var(--success)' },
+  'mais-ou-menos':  { icon: '~', label: 'Mais ou menos',   cor: 'var(--gold)' },
+  'esqueci':        { icon: '✕', label: 'Preciso rever',   cor: 'var(--error)' },
 };
 
 // ── Estatísticas: domínio por matéria + histórico completo ──

@@ -315,9 +315,10 @@ document.addEventListener('DOMContentLoaded', () => {
     window.baterMetaDoDia = function() {
         const todayStr = getCurrentDate().toISOString().split('T')[0];
         const lastBeat = localStorage.getItem('ju_oab_streak_date');
+        const nomeUsuario = (typeof window._perfilOAB !== 'undefined' && window._perfilOAB.getNome) ? window._perfilOAB.getNome() : 'Estudante';
 
         if (lastBeat === todayStr) {
-            alert('Você já bateu a meta hoje, Ju! Volta amanhã e continue o streak! 💖');
+            alert(`Você já bateu a meta hoje, ${nomeUsuario}! Volta amanhã e continue o streak! 💖`);
             return;
         }
 
@@ -327,7 +328,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (streakElement) streakElement.innerText = streak;
         showPetals();
-        setTimeout(() => alert(`Meta batida! Streak: ${streak} dias seguidos! 🌸`), 300);
+        setTimeout(() => alert(`Mandou bem, ${nomeUsuario}! Streak: ${streak} dias seguidos! 🔥`), 300);
     };
 
     // 2. CHECKLIST DE TAREFAS
