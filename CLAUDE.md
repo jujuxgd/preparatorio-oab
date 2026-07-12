@@ -1,6 +1,6 @@
 # CLAUDE.md — Preparatório OAB 48 · Revisão Ativa
 > Diretrizes permanentes do projeto. Leia antes de qualquer sessão de desenvolvimento.
-> Atualizado: 2026-07-10
+> Atualizado: 2026-07-12
 
 ---
 
@@ -53,8 +53,25 @@ Os seguintes arquivos foram **deletados** na simplificação arquitetural de 10/
 - Cada entrada: `{ dia, semana, titulo, materia, materias[], flashcards[], checklist[] }`
 - `materias[].topicos[]` — lista curta de tópicos a estudar no dia
 - `flashcards[]` — Q&A de revisão ativa: `{ id, frente, verso, pegadinha?, caiu? }`
-- Dias 1–13: flashcards completos · Dias 14–120: stubs com tópicos (pendentes)
 - **Função principal:** `getDadosDia(n)` retorna a entrada do dia N
+
+**Reorganização de 2026-07-12 (fonte: cronograma oficial VDE 120D em PDF):**
+O cronograma VDE só define **72 dias de conteúdo novo** (o resto das 16 semanas do PDF
+são dias de folga, "Revisão Quinzenal", "Simulado" ou as 2 semanas 100% de revisão nos
+dias 43–49 e 85–91 do calendário original do VDE). Dia N do projeto = N-ésimo dia de
+conteúdo novo do VDE em ordem (pulando os dias sem conteúdo), documentado em comentário
+`// VDE dia X` acima de cada entrada.
+- **Dias 1–72:** conteúdo, `materias[].topicos[]` e `checklist[]` reescritos para bater
+  exatamente com o tema atribuído a cada dia no cronograma oficial — sem antecipar nem
+  agrupar temas de dias diferentes. Múltiplas matérias no mesmo dia (ex.: dia 21 =
+  Administrativo + Processo Penal) refletem dias em que o próprio VDE junta 2 matérias.
+- **Dias 73–120:** sem correspondência no VDE (que só tem 72 dias de conteúdo). Viraram
+  ciclo de revisão espaçada próprio do projeto — 2 ciclos por matéria (dias 73–89 e
+  90–106) + reta final com simulados (dias 107–120).
+- `flashcards[]` **continua vazio em todos os dias** — popular o Q&A é tarefa futura
+  separada, não afetada por esta reorganização.
+- `sumula` e `lei_seca` foram atualizados quando havia alta confiança na referência: não
+  foram auditados linha a linha contra os PDFs semanais (ver seção 5).
 
 ### Revisão espaçada
 **`cards.js`** → `REVIEW_CARDS`
@@ -68,10 +85,12 @@ Os seguintes arquivos foram **deletados** na simplificação arquitetural de 10/
 
 | Dias    | Flashcards | Tópicos |
 |---------|------------|---------|
-| 1–13    | ✅ Completo | ✅ |
-| 14–120  | ❌ Stubs   | ⚠️ Parcial |
+| 1–72    | ❌ Vazio (pendente) | ✅ Reorganizado fielmente ao cronograma VDE (2026-07-12) |
+| 73–120  | ❌ Vazio (pendente) | ✅ Ciclo de revisão espaçada próprio (sem referência VDE) |
 
-**Próxima sessão:** popular flashcards dos dias 14–120 a partir dos PDFs VDE.
+**Próxima sessão:** popular `flashcards[]` (Q&A) dia a dia a partir dos PDFs semanais do VDE — os
+tópicos de cada dia (`materias[].topicos[]`) já servem de roteiro exato do que cada flashcard deve
+cobrir, já que foram reorganizados para bater com o cronograma oficial.
 
 ---
 
