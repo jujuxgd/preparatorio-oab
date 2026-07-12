@@ -243,7 +243,12 @@ function toggleSidebar() {
       bd = document.createElement('div');
       bd.id = 'sidebar-backdrop';
       bd.addEventListener('click', toggleSidebar);
-      document.body.appendChild(bd);
+      // Precisa nascer dentro de .app (mesmo stacking context da sidebar).
+      // Se ficar no <body>, o z-index dele passa a competir no contexto
+      // raiz e acaba renderizando por cima da sidebar no iOS, bloqueando
+      // os toques nos links de navegação.
+      const app = document.querySelector('.app') || document.body;
+      app.appendChild(bd);
     }
     bd.classList.add('show');
     document.body.style.overflow = 'hidden';
