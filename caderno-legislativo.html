@@ -55,6 +55,7 @@
   min-height: 400px;
   animation: fadeInUp 0.25s ease;
   box-shadow: 0 2px 12px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.04);
+  overflow-x: hidden;
 }
 
 @keyframes fadeInUp {
@@ -107,6 +108,8 @@
   max-width: min(1180px, 100%);
   margin: 0 auto;
   text-align: left;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 /* ── Seção principal (cl-part) ──────────────── */
@@ -439,6 +442,9 @@ mark.cl-user-hl[data-color="purple"] { background: rgba(237, 233, 254, 0.9); box
     max-height: none;
     height: calc(100dvh - 210px);
     overflow-y: auto;
+    overflow-x: hidden;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .cl-native-content { font-size: 0.92rem; line-height: 1.78; }

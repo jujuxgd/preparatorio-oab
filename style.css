@@ -1043,13 +1043,22 @@ select:focus {
 .focus-panel-body {
   flex: 1;
   overflow-y: auto;
+  overflow-x: hidden;
   min-height: 0;
   padding: 1.5rem 2rem;
   scroll-behavior: smooth;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 .focus-panel-body::-webkit-scrollbar { width: 5px; }
 .focus-panel-body::-webkit-scrollbar-thumb { background: var(--rose-soft); border-radius: 3px; }
 .focus-panel-body::-webkit-scrollbar-track { background: transparent; }
+
+@media (max-width: 640px) {
+  .focus-overlay { padding: 0.5rem; }
+  .focus-panel-body { padding: 1.1rem 0.9rem; }
+  .focus-panel-mac { padding: 0 0.75rem; }
+}
 
 /* ── 6. Animação de entrada ───────────────────────── */
 @keyframes focusIn {
