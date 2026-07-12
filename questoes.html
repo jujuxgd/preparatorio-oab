@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<script src="cores-early.js?v=1783859287"></script>
+<script src="cores-early.js?v=1783859734"></script>
 <title>Preparatório - OAB</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Inter:opsz,wght@14..32,400..700&family=Caveat:wght@400;500&display=swap" rel="stylesheet">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="style.css?v=1783859530">
+<link rel="stylesheet" href="style.css?v=1783859734">
 <style>
 /* Hero de totais */
 .q-hero {
@@ -152,12 +152,18 @@
 .q-chip { padding:0.3rem 0.8rem; background:var(--bg-soft); border:1px solid transparent; border-radius:20px; font-size:0.74rem; color:var(--ink-soft); cursor:pointer; transition:all 0.2s; white-space:nowrap; }
 .q-chip:hover { background:var(--blush); }
 .q-chip.active { background: var(--rose-deep); color: #fff; }
-.hist-wrap { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-sm); overflow: hidden; }
+.hist-wrap { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-sm); overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.hist-table { min-width: 480px; }
 .hist-table { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
 .hist-table th { padding: 0.7rem 1rem; background: var(--bg-soft); text-align: left; font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faded); font-weight: 600; }
 .hist-table td { padding: 0.65rem 1rem; border-bottom: 1px solid var(--line); color: var(--ink-soft); }
 .hist-table tr:last-child td { border-bottom: none; }
 .hist-table tr:hover td { background: var(--bg-soft); }
+
+/* Rede de segurança contra overflow horizontal — nenhum elemento
+   dentro do conteúdo principal pode ultrapassar a largura do container */
+main * { max-width: 100%; box-sizing: border-box; }
+main { overflow-x: hidden; }
 </style>
 </head>
 <body>
@@ -284,7 +290,7 @@
   </main>
 </div>
 
-<script src="script.js?v=1783859530"></script>
+<script src="script.js?v=1783859734"></script>
 <script src="perfil.js"></script>
 <script src="progresso.js?v=1783859287"></script>
 <script src="plano-vde.js"></script>
