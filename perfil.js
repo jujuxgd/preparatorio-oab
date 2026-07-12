@@ -5,6 +5,7 @@
 (function () {
   const NAME_KEY = 'oab_perfil_nome';
   const FOTO_KEY = 'oab_perfil_foto';
+  const GENERO_KEY = 'oab_perfil_genero'; // 'f' (padrão) ou 'm'
   const DEFAULT_NAME = 'Estudante';
 
   function getNome() {
@@ -21,6 +22,39 @@
       if (dataUrl) localStorage.setItem(FOTO_KEY, dataUrl);
       else localStorage.removeItem(FOTO_KEY);
     } catch (e) {}
+  }
+  function getGenero() {
+    try { return localStorage.getItem(GENERO_KEY) === 'm' ? 'm' : 'f'; } catch (e) { return 'f'; }
+  }
+  function setGenero(g) {
+    try { localStorage.setItem(GENERO_KEY, g === 'm' ? 'm' : 'f'); } catch (e) {}
+  }
+
+  // Formas masculinas equivalentes — usadas só para EXIBIÇÃO. Os dados
+  // internos (humor.js, estatísticas etc.) continuam sempre salvos e
+  // comparados no feminino, isso é puramente cosmético na tela.
+  const MASC_MAP = {
+    'Cansada': 'Cansado',   'cansada': 'cansado',
+    'Perdida': 'Perdido',   'perdida': 'perdido',
+    'Focada': 'Focado',     'focada': 'focado',
+    'Confiante': 'Confiante', 'confiante': 'confiante',
+    'Empolgada': 'Empolgado', 'empolgada': 'empolgado',
+    'Estudante': 'Estudante', 'estudante': 'estudante',
+  };
+  // Troca o final de uma frase que termina numa palavra no feminino
+  // (ex: "Você esteve focada" -> "Você esteve focado"), sem precisar
+  // reescrever a frase toda em cada tela que exibe isso.
+  function formatarGenero(texto) {
+    if (getGenero() !== 'm' || !texto) return texto;
+    if (Object.prototype.hasOwnProperty.call(MASC_MAP, texto)) return MASC_MAP[texto];
+    // Tenta trocar a última palavra da frase, se for uma das conhecidas
+    const partes = texto.split(' ');
+    const ultima = partes[partes.length - 1];
+    if (Object.prototype.hasOwnProperty.call(MASC_MAP, ultima)) {
+      partes[partes.length - 1] = MASC_MAP[ultima];
+      return partes.join(' ');
+    }
+    return texto;
   }
 
   function renderAvatar(container, nome, foto) {
@@ -93,6 +127,13 @@
           <label for="perfil-modal-nome">Nome</label>
           <input type="text" id="perfil-modal-nome" maxlength="40" placeholder="Seu nome">
         </div>
+        <div class="ju-modal-field">
+          <label>Quer ser chamado(a) no...</label>
+          <div style="display:flex;gap:0.5rem;margin-top:0.3rem">
+            <button type="button" class="perfil-genero-btn" data-genero="f" style="flex:1;padding:0.55rem;border:1.5px solid var(--line);border-radius:var(--radius-sm);background:var(--paper);color:var(--ink);font-family:inherit;font-size:0.85rem;cursor:pointer;transition:all var(--transition)">Feminino</button>
+            <button type="button" class="perfil-genero-btn" data-genero="m" style="flex:1;padding:0.55rem;border:1.5px solid var(--line);border-radius:var(--radius-sm);background:var(--paper);color:var(--ink);font-family:inherit;font-size:0.85rem;cursor:pointer;transition:all var(--transition)">Masculino</button>
+          </div>
+        </div>
         <div class="ju-modal-actions">
           <button class="btn" id="perfil-modal-cancelar">Cancelar</button>
           <button class="btn btn-primary" id="perfil-modal-salvar">Salvar</button>
@@ -111,13 +152,31 @@
         renderAvatar(document.getElementById('perfil-modal-avatar'), getNome(), _fotoTmp);
       });
     });
+    document.querySelectorAll('.perfil-genero-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        _generoTmp = btn.dataset.genero;
+        _marcarGeneroSelecionado();
+      });
+    });
+  }
+
+  let _generoTmp = 'f';
+  function _marcarGeneroSelecionado() {
+    document.querySelectorAll('.perfil-genero-btn').forEach(btn => {
+      const ativo = btn.dataset.genero === _generoTmp;
+      btn.style.background = ativo ? 'var(--rose-deep)' : 'var(--paper)';
+      btn.style.borderColor = ativo ? 'var(--rose-deep)' : 'var(--line)';
+      btn.style.color = ativo ? '#fff' : 'var(--ink)';
+    });
   }
 
   function abrirModal() {
     construirModal();
     _fotoTmp = getFoto();
+    _generoTmp = getGenero();
     document.getElementById('perfil-modal-nome').value = getNome() === DEFAULT_NAME ? '' : getNome();
     renderAvatar(document.getElementById('perfil-modal-avatar'), getNome(), _fotoTmp);
+    _marcarGeneroSelecionado();
     document.getElementById('perfil-modal-overlay').classList.add('active');
   }
 
@@ -130,8 +189,12 @@
     const nomeInput = document.getElementById('perfil-modal-nome').value;
     setNome(nomeInput);
     setFoto(_fotoTmp);
+    setGenero(_generoTmp);
     aplicarPerfil();
     fecharModal();
+    // Recarrega pra qualquer texto gendrado na tela (humor, insights
+    // etc.) já nascer certo, sem precisar de lógica extra em cada tela
+    location.reload();
   }
 
   // ── Backup completo: exporta/importa TODO o localStorage do app ──
@@ -217,5 +280,5 @@
     injetarClickCard();
   });
 
-  window._perfilOAB = { getNome, getFoto, abrirModal, exportarBackupCompleto, importarBackupCompleto };
+  window._perfilOAB = { getNome, getFoto, getGenero, setGenero, formatarGenero, abrirModal, exportarBackupCompleto, importarBackupCompleto };
 })();

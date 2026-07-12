@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Inter:opsz,wght@14..32,400..700&family=Caveat:wght@400;500&display=swap" rel="stylesheet">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="style.css?v=1783860648">
+<link rel="stylesheet" href="style.css?v=1783860863">
 <style>
 /* Estilos específicos do dashboard — denso, mas com respiro proporcional a cada elemento */
 main { padding: 2rem 2.5rem 2.25rem; }
@@ -775,11 +775,11 @@ main { padding: 2rem 2.5rem 2.25rem; }
         <div class="side-card mood-widget">
           <h4>Como você tá hoje? <span class="icon">♡</span></h4>
           <div class="mood-options">
-            <button class="mood-btn" title="Cansada">😮‍💨</button>
-            <button class="mood-btn" title="Perdida">🌀</button>
-            <button class="mood-btn selected" title="Focada">✨</button>
-            <button class="mood-btn" title="Confiante">🌷</button>
-            <button class="mood-btn" title="Empolgada">🎀</button>
+            <button class="mood-btn" data-mood="Cansada" title="Cansada">😮‍💨</button>
+            <button class="mood-btn" data-mood="Perdida" title="Perdida">🌀</button>
+            <button class="mood-btn selected" data-mood="Focada" title="Focada">✨</button>
+            <button class="mood-btn" data-mood="Confiante" title="Confiante">🌷</button>
+            <button class="mood-btn" data-mood="Empolgada" title="Empolgada">🎀</button>
           </div>
           <div class="mood-label">Selecionado: <em id="mood-text">focada</em></div>
         </div>
@@ -866,7 +866,7 @@ main { padding: 2rem 2.5rem 2.25rem; }
 <script src="humor.js"></script>
 <script src="script.js?v=1783860648"></script>
 <script src="cores.js?v=1783859287"></script>
-<script src="perfil.js"></script>
+<script src="perfil.js?v=1783860863"></script>
 <script>
 const QUOTES_OAB = [
   { text: "A advocacia não é profissão de covardes. Quem tem medo de perder a banca, de cair do cartaz, de comprometer o sucesso, que se faça funcionário, guarda-livros, ou que vá vender picolés à porta das escolas.", author: "Sobral Pinto" },
@@ -1056,24 +1056,28 @@ document.addEventListener('DOMContentLoaded', () => {
   // Mood tracker
   const moodBtns = document.querySelectorAll('.mood-btn');
   const moodText = document.getElementById('mood-text');
+  const fmtGenero = (t) => (window._perfilOAB && window._perfilOAB.formatarGenero) ? window._perfilOAB.formatarGenero(t) : t;
+  // Tooltip/rótulo visível respeita a preferência de gênero do perfil;
+  // o data-mood (usado pra salvar/comparar) permanece sempre estável.
+  moodBtns.forEach(btn => { btn.title = fmtGenero(btn.dataset.mood); });
   const todayStr = getCurrentDate().toISOString().split('T')[0];
   const savedMood = localStorage.getItem(`mood_${todayStr}`);
   if (savedMood) {
     moodBtns.forEach(btn => btn.classList.remove('selected'));
-    const activeBtn = Array.from(moodBtns).find(btn => btn.getAttribute('title') === savedMood);
+    const activeBtn = Array.from(moodBtns).find(btn => btn.dataset.mood === savedMood);
     if (activeBtn) {
       activeBtn.classList.add('selected');
-      if (moodText) moodText.innerText = savedMood.toLowerCase();
+      if (moodText) moodText.innerText = fmtGenero(savedMood).toLowerCase();
     }
   }
   moodBtns.forEach(btn => {
     btn.addEventListener('click', (e) => {
       moodBtns.forEach(b => b.classList.remove('selected'));
       e.currentTarget.classList.add('selected');
-      const moodName = e.currentTarget.getAttribute('title');
+      const moodName = e.currentTarget.getAttribute('data-mood');
       if (typeof HumorOAB !== 'undefined') HumorOAB.registrarHumor(moodName);
       else localStorage.setItem(`mood_${todayStr}`, moodName); // fallback se humor.js não carregou
-      if (moodText) moodText.innerText = moodName.toLowerCase();
+      if (moodText) moodText.innerText = fmtGenero(moodName).toLowerCase();
     });
   });
 });

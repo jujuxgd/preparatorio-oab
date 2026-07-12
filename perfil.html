@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Inter:opsz,wght@14..32,400..700&family=Caveat:wght@400;500&display=swap" rel="stylesheet">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="style.css?v=1783860648">
+<link rel="stylesheet" href="style.css?v=1783860863">
 <style>
 /* ════════════════════════════════════════════
    PERFIL — diário de evolução pessoal
@@ -490,7 +490,7 @@
 <script src="humor.js"></script>
 <script src="script.js?v=1783860648"></script>
 <script src="cores.js"></script>
-<script src="perfil.js"></script>
+<script src="perfil.js?v=1783860863"></script>
 <script>
 // ── Helpers de agregação semanal (produtividade / horas / tarefas) ──
 function _segundaDe(dataStr) {
@@ -551,6 +551,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const insightsHumor = HumorOAB.getInsights();
   const sessoes = getSessoesPomodoro();
   const totalSessoes = sessoes.reduce((s, x) => s + x.count, 0);
+  const fmtG = (t) => (window._perfilOAB && window._perfilOAB.formatarGenero) ? window._perfilOAB.formatarGenero(t) : t;
 
   // ── RESUMO ──
   let tarefasConcluidas = 0;
@@ -586,7 +587,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const cards = [];
     if (insightsHumor.maisFrequente) {
       cards.push({ e: insightsHumor.maisFrequente.emoji, t: 'Humor mais frequente',
-        x: `Você esteve <strong>${insightsHumor.maisFrequente.humor.toLowerCase()}</strong> em ${insightsHumor.maisFrequente.pct}% dos dias registrados.` });
+        x: `Você esteve <strong>${fmtG(insightsHumor.maisFrequente.humor).toLowerCase()}</strong> em ${insightsHumor.maisFrequente.pct}% dos dias registrados.` });
     }
     if (insightsHumor.melhorDia) {
       cards.push({ e: '🌟', t: 'Melhor dia da semana',
@@ -633,7 +634,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('mood-calendar').innerHTML = diasCal.map(ds => {
     const reg = porDiaHumor[ds];
     const cls = reg ? `v${reg.valor}` : '';
-    const titulo = reg ? `${ds} — ${reg.emoji} ${reg.humor}` : ds;
+    const titulo = reg ? `${ds} — ${reg.emoji} ${fmtG(reg.humor)}` : ds;
     return `<div class="mc-cell ${cls}" title="${titulo}"></div>`;
   }).join('');
 
@@ -650,7 +651,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="mt-emoji">${e.emoji}</div>
         <div class="mt-date">${dataFmt}</div>
         <div class="mt-info">
-          <div class="mt-humor">${e.humor}</div>
+          <div class="mt-humor">${fmtG(e.humor)}</div>
           <div class="mt-hora">${e.hora}</div>
         </div>
       </div>`;
@@ -664,7 +665,7 @@ document.addEventListener('DOMContentLoaded', () => {
     rotulo: new Date(e.data + 'T12:00:00').getDate(),
     _data: e.data,
     _registro: e.registro,
-  })), p => p._registro ? `${p._data} — ${p._registro.emoji} ${p._registro.humor}` : `${p._data} — sem registro`);
+  })), p => p._registro ? `${p._data} — ${p._registro.emoji} ${fmtG(p._registro.humor)}` : `${p._data} — sem registro`);
 
   // ── DISTRIBUIÇÃO DAS EMOÇÕES ──
   const distEl = document.getElementById('mood-dist-list');
@@ -681,7 +682,7 @@ document.addEventListener('DOMContentLoaded', () => {
     distEl.innerHTML = insightsHumor.distribuicao.map(d => `
       <li class="rank-item">
         <span class="rank-emoji">${d.emoji}</span>
-        <span class="rank-name">${d.label}</span>
+        <span class="rank-name">${fmtG(d.label)}</span>
         <span class="rank-bar"><span class="rank-fill" style="width:${d.pct}%;background:${CORES_HUMOR[d.label]}"></span></span>
         <span class="rank-val">${d.pct}%</span>
       </li>`).join('');
