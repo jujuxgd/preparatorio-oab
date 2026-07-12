@@ -2,6 +2,11 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="firebase-init.js?v=1783862902"></script>
+<script src="auth-guard.js?v=1783862902"></script>
 <script src="cores-early.js?v=1783859977"></script>
 <script src="page-transition.js?v=1783861010"></script>
 <title>Perfil - Preparatório OAB</title>
@@ -546,30 +551,33 @@
         </div>
       </div>
       <div class="config-card">
-        <div class="config-card-label">Seus dados</div>
+        <div class="config-card-label">Sua conta</div>
         <p class="config-hint">
-          Tudo aqui fica salvo <strong>só neste navegador, neste aparelho</strong> — não existe conta
-          nem nuvem. Se você limpar os dados do navegador, trocar de celular/computador, ou usar
-          modo anônimo, <strong>todo o progresso, humor e configurações somem</strong>, sem aviso e sem
-          como recuperar. O backup é a única forma de não perder isso.
+          Logada como <strong id="perfil-email-logado">—</strong>. Seus dados agora sincronizam
+          automaticamente com a nuvem sempre que você troca de aba ou fecha a página — se usar o
+          site em outro celular ou computador com essa mesma conta, o progresso aparece lá também.
         </p>
-        <div id="perfil-backup-status" class="config-backup-status"></div>
+        <div id="perfil-sync-status" class="config-backup-status"></div>
         <div style="display:flex;gap:0.6rem;flex-wrap:wrap;margin-top:0.7rem">
-          <button class="btn btn-primary" id="ph-exportar" style="font-size:0.78rem">⬇ Exportar backup</button>
-          <button class="btn btn-ghost" id="ph-importar-btn" style="font-size:0.78rem">⬆ Importar backup</button>
-          <input type="file" id="ph-importar-file" accept="application/json" style="display:none">
+          <button class="btn btn-primary" id="ph-sync-enviar" style="font-size:0.78rem">☁ Sincronizar agora</button>
+          <button class="btn btn-ghost" id="ph-sync-baixar" style="font-size:0.78rem">⬇ Baixar da nuvem</button>
+        </div>
+        <div style="margin-top:0.9rem;padding-top:0.9rem;border-top:1px dotted var(--line)">
+          <button class="btn btn-ghost" id="ph-logout" style="font-size:0.76rem;color:var(--error)">Sair da conta</button>
         </div>
       </div>
       <div class="config-card">
-        <div class="config-card-label">Dica</div>
+        <div class="config-card-label">Backup em arquivo</div>
         <p class="config-hint">
-          Fazer backup <strong>todo dia</strong> é exagero pra maioria — o mais realista é criar o
-          hábito de exportar <strong>uma vez por semana</strong> (por exemplo, todo domingo à noite,
-          fechando o ciclo de estudos) ou logo depois de bater alguma meta importante, tipo terminar
-          uma semana do plano ou registrar um simulado. Guarde o arquivo baixado em algum lugar que
-          não seja só o próprio celular — um e-mail pra você, Google Drive, iCloud — assim,
-          mesmo perdendo o aparelho, o progresso não se perde junto.
+          A sincronização com a nuvem já protege o essencial, mas um arquivo baixado é uma cópia
+          extra que não depende de internet nem da sua conta — útil pra guardar de vez em quando
+          num e-mail, Google Drive ou iCloud.
         </p>
+        <div style="display:flex;gap:0.6rem;flex-wrap:wrap;margin-top:0.7rem">
+          <button class="btn btn-ghost" id="ph-exportar" style="font-size:0.78rem">⬇ Exportar backup</button>
+          <button class="btn btn-ghost" id="ph-importar-btn" style="font-size:0.78rem">⬆ Importar backup</button>
+          <input type="file" id="ph-importar-file" accept="application/json" style="display:none">
+        </div>
       </div>
     </div>
 
@@ -674,6 +682,7 @@
 <script src="script.js?v=1783860648"></script>
 <script src="cores.js"></script>
 <script src="perfil.js?v=1783861604"></script>
+<script src="sync.js?v=1783862905"></script>
 <script>
 // ── Helpers de agregação semanal (produtividade / horas / tarefas) ──
 function _segundaDe(dataStr) {
@@ -816,30 +825,71 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    // Status do último backup
-    const statusEl = document.getElementById('perfil-backup-status');
+    // E-mail logado
+    const emailEl = document.getElementById('perfil-email-logado');
+    if (emailEl && window._fbAuth && window._fbAuth.currentUser) {
+      emailEl.textContent = window._fbAuth.currentUser.email || '—';
+    }
+
+    // Status de sincronização (última vez que enviou pra nuvem OU
+    // exportou um arquivo — o que for mais recente)
+    const statusEl = document.getElementById('perfil-sync-status');
     if (statusEl) {
       const ultimo = (window._perfilOAB && window._perfilOAB.getUltimoBackup) ? window._perfilOAB.getUltimoBackup() : null;
       if (!ultimo) {
-        statusEl.className = 'config-backup-status late';
-        statusEl.textContent = '⚠ Você nunca exportou um backup';
+        statusEl.className = 'config-backup-status warn';
+        statusEl.textContent = '⏳ Ainda sincronizando pela primeira vez...';
       } else {
         const dias = Math.floor((Date.now() - new Date(ultimo).getTime()) / 864e5);
         const dataFmt = new Date(ultimo).toLocaleDateString('pt-BR', { day: 'numeric', month: 'short' });
         if (dias <= 1) {
           statusEl.className = 'config-backup-status ok';
-          statusEl.textContent = `✓ Último backup: hoje/ontem (${dataFmt})`;
+          statusEl.textContent = `✓ Sincronizado recentemente (${dataFmt})`;
         } else if (dias <= 7) {
           statusEl.className = 'config-backup-status ok';
-          statusEl.textContent = `✓ Último backup: ${dias} dias atrás (${dataFmt})`;
-        } else if (dias <= 21) {
-          statusEl.className = 'config-backup-status warn';
-          statusEl.textContent = `⏰ Último backup: ${dias} dias atrás — considere exportar de novo`;
+          statusEl.textContent = `✓ Última sincronização: ${dias} dias atrás`;
         } else {
-          statusEl.className = 'config-backup-status late';
-          statusEl.textContent = `⚠ Último backup: ${dias} dias atrás — bem atrasado`;
+          statusEl.className = 'config-backup-status warn';
+          statusEl.textContent = `⏰ Última sincronização: ${dias} dias atrás — clique em "Sincronizar agora"`;
         }
       }
+    }
+
+    // Botões de sincronização manual
+    const btnEnviar = document.getElementById('ph-sync-enviar');
+    const btnBaixar = document.getElementById('ph-sync-baixar');
+    const uid = window._fbAuth && window._fbAuth.currentUser ? window._fbAuth.currentUser.uid : null;
+    if (btnEnviar && uid) {
+      btnEnviar.addEventListener('click', () => {
+        btnEnviar.disabled = true;
+        btnEnviar.textContent = 'Enviando…';
+        window._syncOAB.enviarParaNuvem(uid).then(ok => {
+          btnEnviar.disabled = false;
+          btnEnviar.textContent = ok ? '✓ Sincronizado!' : '✕ Falhou, tente de novo';
+          setTimeout(() => { btnEnviar.textContent = '☁ Sincronizar agora'; }, 2000);
+        });
+      });
+    }
+    if (btnBaixar && uid) {
+      btnBaixar.addEventListener('click', () => {
+        const ok = confirm('Isso vai substituir o progresso deste aparelho pelo que estiver salvo na nuvem. Continuar?');
+        if (!ok) return;
+        btnBaixar.disabled = true;
+        btnBaixar.textContent = 'Baixando…';
+        window._syncOAB.baixarDaNuvem(uid).then(data => {
+          if (data) { alert('Dados restaurados! A página vai recarregar.'); location.reload(); }
+          else { btnBaixar.disabled = false; btnBaixar.textContent = '⬇ Baixar da nuvem'; alert('Nenhum dado encontrado na nuvem ainda.'); }
+        });
+      });
+    }
+
+    // Sair da conta
+    const btnLogout = document.getElementById('ph-logout');
+    if (btnLogout) {
+      btnLogout.addEventListener('click', () => {
+        const ok = confirm('Sair da conta? Você vai precisar entrar de novo pra acessar o site.');
+        if (ok && window._fbAuth) window._fbAuth.signOut().then(() => location.reload());
+      });
     }
   })();
 

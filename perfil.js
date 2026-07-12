@@ -202,12 +202,24 @@
   function getUltimoBackup() {
     try { return localStorage.getItem(ULTIMO_BACKUP_KEY) || null; } catch (e) { return null; }
   }
-  function exportarBackupCompleto() {
+  // Reaproveitada tanto pelo export pra arquivo quanto pelo envio pra nuvem
+  function coletarDadosLocalStorage() {
     const dados = {};
     for (let i = 0; i < localStorage.length; i++) {
       const k = localStorage.key(i);
       dados[k] = localStorage.getItem(k);
     }
+    return dados;
+  }
+  // Reaproveitada tanto pelo import de arquivo quanto pelo download da nuvem
+  function aplicarDadosLocalStorage(dados) {
+    if (!dados || typeof dados !== 'object') throw new Error('Dados inválidos');
+    Object.keys(dados).forEach(k => {
+      try { localStorage.setItem(k, dados[k]); } catch (e) {}
+    });
+  }
+  function exportarBackupCompleto() {
+    const dados = coletarDadosLocalStorage();
     const payload = { app: 'preparatorio-oab', exportado_em: new Date().toISOString(), dados };
     const json = JSON.stringify(payload, null, 2);
     const blob = new Blob([json], { type: 'application/json' });
@@ -230,10 +242,7 @@
         try {
           const payload = JSON.parse(e.target.result);
           const dados = (payload && typeof payload === 'object' && payload.dados) ? payload.dados : payload;
-          if (!dados || typeof dados !== 'object') throw new Error('Arquivo inválido');
-          Object.keys(dados).forEach(k => {
-            try { localStorage.setItem(k, dados[k]); } catch (e) {}
-          });
+          aplicarDadosLocalStorage(dados);
           resolve();
         } catch (err) { reject(err); }
       };
@@ -285,5 +294,5 @@
     injetarClickCard();
   });
 
-  window._perfilOAB = { getNome, getFoto, getGenero, setGenero, formatarGenero, abrirModal, exportarBackupCompleto, importarBackupCompleto, getUltimoBackup };
+  window._perfilOAB = { getNome, getFoto, getGenero, setGenero, formatarGenero, abrirModal, exportarBackupCompleto, importarBackupCompleto, getUltimoBackup, coletarDadosLocalStorage, aplicarDadosLocalStorage };
 })();
