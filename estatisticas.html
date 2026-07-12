@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Inter:opsz,wght@14..32,400..700&family=Caveat:wght@400;500&display=swap" rel="stylesheet">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="style.css?v=1783859977">
+<link rel="stylesheet" href="style.css?v=1783860149">
 <style>
 /* STATS HERO */
 .stats-hero {
@@ -643,7 +643,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('hero-questoes').textContent  = q.total;
   document.getElementById('hero-questoes-sub').innerHTML = q.total > 0 ? `acerto <em>${q.pct}%</em>` : 'sem registros';
   document.getElementById('hero-streak').innerHTML    = `${p.streak||0}<small> dias</small>`;
-  document.getElementById('hero-streak-sub').textContent = p.streak >= 7 ? `recorde 🌸 ${p.streak} dias` : p.streak > 0 ? 'continue assim!' : 'comece a estudar!';
+  document.getElementById('hero-streak-sub').textContent = p.streak >= 7 ? `recorde 🔥 ${p.streak} dias` : p.streak > 0 ? 'continue assim!' : 'comece a estudar!';
   document.getElementById('hero-progresso').innerHTML = `${stats.pct}<small>%</small>`;
   document.getElementById('hero-progresso-sub').textContent = `${stats.concluidos} de 60 dias do plano`;
 
