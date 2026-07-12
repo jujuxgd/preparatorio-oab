@@ -10,11 +10,11 @@
   // Escala 1–5 na mesma ordem em que os botões já aparecem no card
   // "Como você tá hoje?" — do estado mais desgastante ao mais positivo.
   const MOODS = [
-    { label: 'Cansada',   emoji: '😮‍💨', valor: 1 },
-    { label: 'Perdida',   emoji: '🌀',          valor: 2 },
-    { label: 'Focada',    emoji: '✨',          valor: 3 },
-    { label: 'Confiante', emoji: '🌷',          valor: 4 },
-    { label: 'Empolgada', emoji: '🎀',          valor: 5 },
+    { label: 'Cansada',   emoji: '🌙', valor: 1 },
+    { label: 'Perdida',   emoji: '🌀', valor: 2 },
+    { label: 'Focada',    emoji: '✨', valor: 3 },
+    { label: 'Confiante', emoji: '⚡', valor: 4 },
+    { label: 'Empolgada', emoji: '🎉', valor: 5 },
   ];
   const POSITIVOS = ['Focada', 'Confiante', 'Empolgada'];
   const NEGATIVOS = ['Cansada', 'Perdida'];
