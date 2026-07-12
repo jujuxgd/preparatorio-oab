@@ -258,5 +258,5 @@
   });
 
   // API compatível com chamadas externas existentes.
-  window._coresOAB = { apply, reset: () => apply('couture') };
+  window._coresOAB = { apply, applyCustom, reset: () => apply('couture') };
 })();
