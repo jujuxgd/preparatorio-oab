@@ -1230,10 +1230,12 @@ select:focus {
   to   { transform: translate(30px, -50px) scale(1.03); }
 }
 
-/* App senta acima da aurora */
+/* App senta acima da aurora (e acima dos botões fixos fora da .app,
+   como mobile-menu-btn e sidebar-toggle-btn — senão qualquer modal
+   interno, mesmo com z-index alto, fica preso abaixo deles) */
 .app {
   position: relative;
-  z-index: 1;
+  z-index: 700;
 }
 
 /* Glassmorphism na sidebar */
