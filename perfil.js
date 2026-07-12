@@ -198,6 +198,10 @@
   }
 
   // ── Backup completo: exporta/importa TODO o localStorage do app ──
+  const ULTIMO_BACKUP_KEY = 'oab_ultimo_backup';
+  function getUltimoBackup() {
+    try { return localStorage.getItem(ULTIMO_BACKUP_KEY) || null; } catch (e) { return null; }
+  }
   function exportarBackupCompleto() {
     const dados = {};
     for (let i = 0; i < localStorage.length; i++) {
@@ -216,6 +220,7 @@
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+    try { localStorage.setItem(ULTIMO_BACKUP_KEY, new Date().toISOString()); } catch (e) {}
   }
 
   function importarBackupCompleto(file) {
@@ -280,5 +285,5 @@
     injetarClickCard();
   });
 
-  window._perfilOAB = { getNome, getFoto, getGenero, setGenero, formatarGenero, abrirModal, exportarBackupCompleto, importarBackupCompleto };
+  window._perfilOAB = { getNome, getFoto, getGenero, setGenero, formatarGenero, abrirModal, exportarBackupCompleto, importarBackupCompleto, getUltimoBackup };
 })();

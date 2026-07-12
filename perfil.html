@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Inter:opsz,wght@14..32,400..700&family=Caveat:wght@400;500&display=swap" rel="stylesheet">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="style.css?v=1783861489">
+<link rel="stylesheet" href="style.css?v=1783861604">
 <style>
 /* ════════════════════════════════════════════
    PERFIL — diário de evolução pessoal
@@ -369,7 +369,7 @@
 /* ── Configurações ── */
 .config-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
   margin-bottom: 1.8rem;
 }
@@ -412,6 +412,28 @@
   transition: all var(--transition);
 }
 .config-mini-btn.active { background: var(--rose-deep); border-color: var(--rose-deep); color: #fff; }
+
+.config-hint {
+  font-size: 0.78rem;
+  line-height: 1.65;
+  color: var(--ink-soft);
+  margin: 0;
+}
+.config-hint strong { color: var(--ink); }
+
+.config-backup-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.76rem;
+  font-weight: 600;
+  padding: 0.4rem 0.7rem;
+  border-radius: 20px;
+  margin-top: 0.8rem;
+}
+.config-backup-status.ok    { background: rgba(94, 140, 106, 0.14); color: var(--success); }
+.config-backup-status.warn  { background: rgba(184, 137, 62, 0.14); color: var(--gold); }
+.config-backup-status.late  { background: rgba(192, 82, 75, 0.14); color: var(--error); }
 </style>
 </head>
 <body>
@@ -539,14 +561,29 @@
       </div>
       <div class="config-card">
         <div class="config-card-label">Seus dados</div>
-        <div class="config-row">
-          <span>Backup completo (progresso + configurações)</span>
-        </div>
-        <div style="display:flex;gap:0.6rem;flex-wrap:wrap;margin-top:0.4rem">
+        <p class="config-hint">
+          Tudo aqui fica salvo <strong>só neste navegador, neste aparelho</strong> — não existe conta
+          nem nuvem. Se você limpar os dados do navegador, trocar de celular/computador, ou usar
+          modo anônimo, <strong>todo o progresso, humor e configurações somem</strong>, sem aviso e sem
+          como recuperar. O backup é a única forma de não perder isso.
+        </p>
+        <div id="perfil-backup-status" class="config-backup-status"></div>
+        <div style="display:flex;gap:0.6rem;flex-wrap:wrap;margin-top:0.7rem">
           <button class="btn btn-primary" id="ph-exportar" style="font-size:0.78rem">⬇ Exportar backup</button>
           <button class="btn btn-ghost" id="ph-importar-btn" style="font-size:0.78rem">⬆ Importar backup</button>
           <input type="file" id="ph-importar-file" accept="application/json" style="display:none">
         </div>
+      </div>
+      <div class="config-card">
+        <div class="config-card-label">Dica</div>
+        <p class="config-hint">
+          Fazer backup <strong>todo dia</strong> é exagero pra maioria — o mais realista é criar o
+          hábito de exportar <strong>uma vez por semana</strong> (por exemplo, todo domingo à noite,
+          fechando o ciclo de estudos) ou logo depois de bater alguma meta importante, tipo terminar
+          uma semana do plano ou registrar um simulado. Guarde o arquivo baixado em algum lugar que
+          não seja só o próprio celular — um e-mail pra você mesma, Google Drive, iCloud — assim,
+          mesmo perdendo o aparelho, o progresso não se perde junto.
+        </p>
       </div>
     </div>
 
@@ -650,7 +687,7 @@
 <script src="humor.js"></script>
 <script src="script.js?v=1783860648"></script>
 <script src="cores.js"></script>
-<script src="perfil.js?v=1783861348"></script>
+<script src="perfil.js?v=1783861604"></script>
 <script>
 // ── Helpers de agregação semanal (produtividade / horas / tarefas) ──
 function _segundaDe(dataStr) {
@@ -805,6 +842,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Gênero (reaproveita _perfilOAB.getGenero/setGenero)
     _perfilAtualizarGeneroBtns();
+
+    // Status do último backup
+    const statusEl = document.getElementById('perfil-backup-status');
+    if (statusEl) {
+      const ultimo = (window._perfilOAB && window._perfilOAB.getUltimoBackup) ? window._perfilOAB.getUltimoBackup() : null;
+      if (!ultimo) {
+        statusEl.className = 'config-backup-status late';
+        statusEl.textContent = '⚠ Você nunca exportou um backup';
+      } else {
+        const dias = Math.floor((Date.now() - new Date(ultimo).getTime()) / 864e5);
+        const dataFmt = new Date(ultimo).toLocaleDateString('pt-BR', { day: 'numeric', month: 'short' });
+        if (dias <= 1) {
+          statusEl.className = 'config-backup-status ok';
+          statusEl.textContent = `✓ Último backup: hoje/ontem (${dataFmt})`;
+        } else if (dias <= 7) {
+          statusEl.className = 'config-backup-status ok';
+          statusEl.textContent = `✓ Último backup: ${dias} dias atrás (${dataFmt})`;
+        } else if (dias <= 21) {
+          statusEl.className = 'config-backup-status warn';
+          statusEl.textContent = `⏰ Último backup: ${dias} dias atrás — considere exportar de novo`;
+        } else {
+          statusEl.className = 'config-backup-status late';
+          statusEl.textContent = `⚠ Último backup: ${dias} dias atrás — bem atrasado`;
+        }
+      }
+    }
   })();
 
   // ── RESUMO ──
