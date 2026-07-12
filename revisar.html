@@ -2,6 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
+<script src="cores-early.js?v=1783859287"></script>
 <title>Preparatório - OAB</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
@@ -9,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Inter:opsz,wght@14..32,400..700&family=Caveat:wght@400;500&display=swap" rel="stylesheet">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="style.css?v=1783858291">
+<link rel="stylesheet" href="style.css?v=1783859287">
 <style>
 .revisao-card {
   background: var(--paper);
@@ -141,6 +142,78 @@
 }
 .rev-tab-btn:hover { color: var(--ink); }
 .rev-tab-btn.active { color: var(--rose-deep); border-bottom-color: var(--rose-deep); }
+
+/* Caixa explicativa colapsável (Como funciona a revisão) */
+.rev-explain {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--bg-soft);
+  margin-bottom: 1.4rem;
+  overflow: hidden;
+}
+.rev-explain-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1.1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink);
+  text-align: left;
+}
+.rev-explain-toggle .chevron {
+  transition: transform var(--transition);
+  color: var(--ink-faded);
+}
+.rev-explain.open .rev-explain-toggle .chevron { transform: rotate(90deg); }
+.rev-explain-body {
+  display: none;
+  padding: 0 1.1rem 1.1rem;
+  font-size: 0.84rem;
+  color: var(--ink-soft);
+  line-height: 1.65;
+}
+.rev-explain.open .rev-explain-body { display: block; }
+.rev-explain-body p { margin: 0 0 0.7rem; }
+.rev-explain-body ul { margin: 0 0 0.7rem; padding-left: 1.2rem; }
+.rev-explain-body li { margin-bottom: 0.35rem; }
+
+/* Cards de estatística por matéria */
+.stat-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.4rem 1.6rem;
+  margin-bottom: 1.2rem;
+}
+.stat-bar-track {
+  height: 8px;
+  background: var(--bg-soft);
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 0.6rem 0 0.9rem;
+}
+.stat-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.4s ease;
+}
+.stat-hist-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px dotted var(--line);
+  font-size: 0.8rem;
+}
+.stat-hist-item:last-child { border-bottom: none; }
+.stat-hist-icon { flex-shrink: 0; width: 1.3rem; text-align: center; }
+.stat-hist-when { color: var(--ink-faded); font-size: 0.72rem; margin-left: auto; white-space: nowrap; }
 
 /* Pills de filtro por matéria (Arquivo) */
 .rev-filter-pills {
@@ -293,6 +366,9 @@
 
   .rev-tab-btn { padding: 0.6rem 0.7rem; font-size: 0.78rem; }
   .rev-filter-pill { padding: 0.35rem 0.7rem; font-size: 0.72rem; }
+  .rev-explain-toggle { padding: 0.7rem 0.9rem; font-size: 0.8rem; }
+  .rev-explain-body { padding: 0 0.9rem 0.9rem; font-size: 0.8rem; }
+  .stat-card { padding: 1.1rem 1.1rem; }
 }
 </style>
 </head>
@@ -373,13 +449,32 @@
       </div>
     </div>
 
-    <!-- Abas: Pendentes / Arquivo de Flashcards -->
+    <!-- Abas: Pendentes / Arquivo / Estatísticas -->
     <div class="rev-tabs">
       <button class="rev-tab-btn active" data-tab="pendentes" onclick="revSwitchTab('pendentes')">Pendentes</button>
       <button class="rev-tab-btn" data-tab="arquivo" onclick="revSwitchTab('arquivo')">📚 Arquivo de Flashcards</button>
+      <button class="rev-tab-btn" data-tab="stats" onclick="revSwitchTab('stats')">📊 Estatísticas</button>
     </div>
 
     <div id="rev-tab-pendentes">
+      <!-- Explicação do sistema de repetição espaçada -->
+      <div class="rev-explain">
+        <button class="rev-explain-toggle" onclick="this.parentElement.classList.toggle('open')">
+          <span>ℹ️ Como funciona a revisão aqui</span>
+          <span class="chevron">›</span>
+        </button>
+        <div class="rev-explain-body">
+          <p>Cada matéria de cada dia tem seu próprio <strong>estágio</strong>, de 1 a 7. Cada estágio tem um intervalo: <strong>1, 3, 7, 14, 30, 60 ou 90 dias</strong>. Quando o intervalo do estágio atual vence, o flashcard aparece aqui em "Pendentes".</p>
+          <p>Seu feedback muda o próximo agendamento:</p>
+          <ul>
+            <li><strong>✓ Lembrei tudo</strong> → avança pro próximo estágio (intervalo maior, revisa de novo mais pra frente)</li>
+            <li><strong>~ Mais ou menos</strong> → mantém o estágio atual (revisa de novo no mesmo intervalo)</li>
+            <li><strong>✕ Preciso rever</strong> → volta pro estágio 1 (revisa de novo logo, em 1 dia)</li>
+          </ul>
+          <p>Isso é diferente do esquema antigo, que reagendava tudo em datas fixas (1/7/15/30 dias) sem levar em conta se você realmente lembrava ou não. Agora quem estuda melhor uma matéria a revisa com menos frequência, e quem erra mais a revisa com mais frequência — como o método Leitner de cartões.</p>
+        </div>
+      </div>
+
       <!-- SEÇÃO: revisões pendentes hoje/atrasadas -->
       <div id="revisao-cards"></div>
 
@@ -396,23 +491,29 @@
     </div>
 
     <div id="rev-tab-arquivo" style="display:none">
-      <p style="font-size:0.78rem;color:var(--ink-faded);margin-bottom:1rem">Todos os flashcards já gerados a partir do seu plano de estudos, filtráveis por matéria — não só os que vencem hoje.</p>
+      <p style="font-size:0.78rem;color:var(--ink-faded);margin-bottom:1rem">Todos os flashcards já gerados a partir do seu plano de estudos, filtráveis por matéria — só consulta, não agenda nada (sem botões de feedback aqui).</p>
       <div id="arquivo-filtros" class="rev-filter-pills"></div>
       <div id="arquivo-cards"></div>
+    </div>
+
+    <div id="rev-tab-stats" style="display:none">
+      <p style="font-size:0.78rem;color:var(--ink-faded);margin-bottom:1rem">Seu domínio de cada matéria (baseado no estágio atual) e o histórico completo de cada feedback que você já deu.</p>
+      <div id="stats-filtros" class="rev-filter-pills"></div>
+      <div id="stats-cards"></div>
     </div>
   </main>
 </div>
 
-<script src="script.js?v=1783858291"></script>
+<script src="script.js?v=1783859287"></script>
 <script src="perfil.js"></script>
-<script src="progresso.js?v=1783858291"></script>
+<script src="progresso.js?v=1783859287"></script>
 <script src="plano-vde.js"></script>
 <script src="cards.js"></script>
 <script src="cores.js"></script>
 <script>
 // Constrói o HTML de um card de matéria — reaproveitado pela aba
 // "Pendentes" e pela aba "Arquivo".
-function buildMatCardHtml(numDia, mIdx, mat, dado, statusHtml, extraClass) {
+function buildMatCardHtml(numDia, mIdx, mat, dado, statusHtml, extraClass, semFeedback) {
   const cardKey  = `${numDia}_${mIdx}`;
   const cardData = (typeof REVIEW_CARDS !== 'undefined') ? REVIEW_CARDS[cardKey] : null;
   const titulo   = cardData ? cardData.titulo : `${mat.emoji || '📖'} ${mat.nome}`;
@@ -423,6 +524,12 @@ function buildMatCardHtml(numDia, mIdx, mat, dado, statusHtml, extraClass) {
     ? `<div style="margin-top:0.8rem;padding:0.8rem 1rem;background:linear-gradient(135deg,#fff0d8,#ffe8c0);border-left:3px solid #d4903a;border-radius:var(--radius-sm);font-size:0.82rem;color:#7a4010"><strong style="display:block;font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:#d4903a;margin-bottom:0.3rem">⚠ Pegadinha da Banca</strong>${cardData.pegadinha}</div>`
     : '';
   const matAttr = (mat.nome || '').replace(/"/g, '');
+  const feedbackHtml = semFeedback ? '' : `
+      <div class="rev-feedback">
+        <button class="feedback-btn lembrei" onclick="registrarFeedbackMat(this,'lembrei',${numDia},${mIdx})">✓ Lembrei tudo</button>
+        <button class="feedback-btn mais-ou-menos" onclick="registrarFeedbackMat(this,'mais-ou-menos',${numDia},${mIdx})">~ Mais ou menos</button>
+        <button class="feedback-btn esqueci" onclick="registrarFeedbackMat(this,'esqueci',${numDia},${mIdx})">✕ Preciso rever</button>
+      </div>`;
   return `
     <div class="revisao-card${extraClass || ''}" data-materia="${matAttr}">
       <div class="rev-head">
@@ -437,12 +544,7 @@ function buildMatCardHtml(numDia, mIdx, mat, dado, statusHtml, extraClass) {
         <a href="hoje.html?dia=${numDia}" style="font-size:0.72rem;color:var(--rose-deep);text-decoration:none;white-space:nowrap;align-self:flex-start;margin-top:0.3rem">Ver conteúdo →</a>
       </div>
       <ul class="rev-bullets">${pontosHtml}</ul>
-      ${pegadinhaHtml}
-      <div class="rev-feedback">
-        <button class="feedback-btn lembrei" onclick="registrarFeedbackMat(this,'lembrei',${numDia},${mIdx})">✓ Lembrei tudo</button>
-        <button class="feedback-btn mais-ou-menos" onclick="registrarFeedbackMat(this,'mais-ou-menos',${numDia},${mIdx})">~ Mais ou menos</button>
-        <button class="feedback-btn esqueci" onclick="registrarFeedbackMat(this,'esqueci',${numDia},${mIdx})">✕ Preciso rever</button>
-      </div>
+      ${pegadinhaHtml}${feedbackHtml}
     </div>`;
 }
 
@@ -544,9 +646,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const streakEl = document.querySelector('.streak-pill .count');
   if (streakEl) streakEl.textContent = (p.streak || 0);
 
-  // Agenda de revisões futuras + arquivo completo
+  // Agenda de revisões futuras + arquivo completo + estatísticas
   buildAgenda();
   buildArquivo();
+  buildStats();
 });
 
 
@@ -679,12 +782,12 @@ function buildArquivo() {
       ? `<span class="rev-tag" style="background:var(--blush);color:var(--rose-deep)">⏰ vencida</span>`
       : `<span class="rev-tag" style="background:var(--bg-soft);color:var(--ink-faded);font-weight:400;text-transform:none;letter-spacing:0">próxima: ${fmtDataCurta(t.agenda.proxima)}</span>`;
     const estagioBadge = `<span style="font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;background:${dominado?'var(--rose-soft)':'var(--bg-soft)'};color:${dominado?'var(--rose-deep)':'var(--ink-faded)'};padding:0.2rem 0.6rem;border-radius:20px;font-weight:600">${dominado?'✓ Dominado':`Estágio ${(t.agenda.estagio||0)+1}/${REV_STAGES.length}`}</span>`;
-    return buildMatCardHtml(t.numDia, t.mIdx, t.mat, t.dado, statusHtml + estagioBadge, '');
+    return buildMatCardHtml(t.numDia, t.mIdx, t.mat, t.dado, statusHtml + estagioBadge, '', /* semFeedback */ true);
   }).join('');
 }
 
 function arquivoFiltrar(nomeMateria) {
-  document.querySelectorAll('.rev-filter-pill').forEach(b => b.classList.toggle('active', b.dataset.mat === nomeMateria));
+  document.querySelectorAll('#arquivo-filtros .rev-filter-pill').forEach(b => b.classList.toggle('active', b.dataset.mat === nomeMateria));
   document.querySelectorAll('#arquivo-cards .revisao-card').forEach(card => {
     const show = !nomeMateria || card.dataset.materia === nomeMateria;
     card.style.display = show ? '' : 'none';
@@ -695,8 +798,123 @@ function revSwitchTab(tab) {
   document.querySelectorAll('.rev-tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
   const elP = document.getElementById('rev-tab-pendentes');
   const elA = document.getElementById('rev-tab-arquivo');
+  const elS = document.getElementById('rev-tab-stats');
   if (elP) elP.style.display = tab === 'pendentes' ? '' : 'none';
   if (elA) elA.style.display = tab === 'arquivo' ? '' : 'none';
+  if (elS) elS.style.display = tab === 'stats' ? '' : 'none';
+}
+
+// Formata um timestamp completo (ISO) como "hoje às 14:32", "ontem às 09:10"
+// ou "12 de jul às 14:32". Entradas antigas só tinham a data (sem hora).
+function fmtHistItem(r) {
+  const hoje = new Date();
+  const hojeStr = hoje.toISOString().split('T')[0];
+  const ontem = new Date(hoje); ontem.setDate(ontem.getDate() - 1);
+  const ontemStr = ontem.toISOString().split('T')[0];
+
+  if (r.ts) {
+    const d = new Date(r.ts);
+    const dStr = d.toISOString().split('T')[0];
+    const hora = d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    if (dStr === hojeStr) return `hoje às ${hora}`;
+    if (dStr === ontemStr) return `ontem às ${hora}`;
+    return d.toLocaleDateString('pt-BR', { day: 'numeric', month: 'short' }) + ` às ${hora}`;
+  }
+  // Sem horário registrado (feedback dado antes desta atualização)
+  if (r.data === hojeStr) return 'hoje (sem horário)';
+  if (r.data === ontemStr) return 'ontem (sem horário)';
+  const d = new Date(r.data + 'T12:00:00');
+  return d.toLocaleDateString('pt-BR', { day: 'numeric', month: 'short' }) + ' (sem horário)';
+}
+
+const RESULTADO_INFO = {
+  'lembrei':        { icon: '✓', label: 'Lembrei tudo',    cor: 'var(--success)' },
+  'mais-ou-menos':  { icon: '~', label: 'Mais ou menos',   cor: 'var(--gold)' },
+  'esqueci':        { icon: '✕', label: 'Preciso rever',   cor: 'var(--error)' },
+};
+
+// ── Estatísticas: domínio por matéria + histórico completo ──
+function buildStats() {
+  const p = _revP || carregarProgresso();
+  const wrap = document.getElementById('stats-cards');
+  const filtrosWrap = document.getElementById('stats-filtros');
+  if (!wrap) return;
+
+  const todos = [];
+  const materiasMap = new Map();
+
+  Object.entries(p.dias || {}).forEach(([numDia, dData]) => {
+    if (!dData.concluido || !dData.data_conclusao) return;
+    const dado = typeof getDadosDia === 'function' ? getDadosDia(parseInt(numDia)) : null;
+    if (!dado) return;
+    dado.materias.forEach((mat, mIdx) => {
+      const agenda = getAgendaMat(p, numDia, mIdx, dData.data_conclusao);
+      const historico = (dData.revisoes_mat && dData.revisoes_mat[mIdx]) || [];
+      todos.push({ numDia, mIdx, mat, dado, agenda, historico });
+      if (!materiasMap.has(mat.nome)) materiasMap.set(mat.nome, mat.emoji || '📖');
+    });
+  });
+
+  if (!todos.length) {
+    if (filtrosWrap) filtrosWrap.innerHTML = '';
+    wrap.innerHTML = `<div style="text-align:center;padding:2.5rem;background:var(--paper);border-radius:var(--radius);border:1px dashed var(--line)">
+      <div style="font-family:'Fraunces',serif;font-size:1.3rem;font-style:italic;color:var(--rose-deep);margin-bottom:0.5rem">✦ Sem dados ainda</div>
+      <p style="font-size:0.88rem;color:var(--ink-soft)">Complete dias e dê feedback nos flashcards pra ver seu domínio de cada matéria aqui.</p>
+    </div>`;
+    return;
+  }
+
+  let pillsHtml = `<button class="rev-filter-pill active" data-mat="" onclick="statsFiltrar('')">Todas <span class="count">${todos.length}</span></button>`;
+  Array.from(materiasMap.entries()).sort((a,b) => a[0].localeCompare(b[0])).forEach(([nome, emoji]) => {
+    const n = todos.filter(t => t.mat.nome === nome).length;
+    const nomeAttr = nome.replace(/'/g, "\\'");
+    pillsHtml += `<button class="rev-filter-pill" data-mat="${nome.replace(/"/g,'')}" onclick="statsFiltrar('${nomeAttr}')">${emoji} ${nome} <span class="count">${n}</span></button>`;
+  });
+  if (filtrosWrap) filtrosWrap.innerHTML = pillsHtml;
+
+  todos.sort((a,b) => a.mat.nome.localeCompare(b.mat.nome) || (parseInt(a.numDia) - parseInt(b.numDia)));
+
+  wrap.innerHTML = todos.map(t => {
+    const pct = Math.round(((t.agenda.estagio || 0) / (REV_STAGES.length - 1)) * 100);
+    const corBarra = pct >= 80 ? 'var(--success)' : pct >= 40 ? 'var(--gold)' : 'var(--error)';
+    const matAttr = (t.mat.nome || '').replace(/"/g, '');
+
+    const histOrdenado = t.historico.slice().sort((a,b) => (b.ts || b.data).localeCompare(a.ts || a.data));
+    const histHtml = histOrdenado.length
+      ? histOrdenado.map(r => {
+          const info = RESULTADO_INFO[r.resultado] || { icon: '•', label: r.resultado, cor: 'var(--ink-faded)' };
+          return `<div class="stat-hist-item">
+            <span class="stat-hist-icon" style="color:${info.cor}">${info.icon}</span>
+            <span>${info.label}</span>
+            <span class="stat-hist-when">${fmtHistItem(r)}</span>
+          </div>`;
+        }).join('')
+      : `<div style="font-size:0.78rem;color:var(--ink-faded);padding:0.5rem 0">Nenhum feedback registrado ainda pra este flashcard.</div>`;
+
+    return `
+      <div class="stat-card" data-materia="${matAttr}">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:0.6rem;flex-wrap:wrap;margin-bottom:0.2rem">
+          <h3 class="rev-title" style="font-size:1.05rem">${t.mat.emoji || '📖'} ${t.mat.nome}</h3>
+          <span style="font-size:0.68rem;background:var(--bg-soft);color:var(--ink-faded);padding:0.2rem 0.5rem;border-radius:20px">Dia ${t.numDia}</span>
+        </div>
+        <div class="rev-meta" style="margin-bottom:0.2rem">${t.dado.titulo.split(' · ')[0]}</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;font-size:0.72rem;color:var(--ink-faded);margin-top:0.8rem">
+          <span>Domínio</span>
+          <span style="font-weight:700;color:${corBarra}">${pct}%</span>
+        </div>
+        <div class="stat-bar-track"><div class="stat-bar-fill" style="width:${pct}%;background:${corBarra}"></div></div>
+        <div style="font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-faded);margin:0.9rem 0 0.3rem">Histórico</div>
+        ${histHtml}
+      </div>`;
+  }).join('');
+}
+
+function statsFiltrar(nomeMateria) {
+  document.querySelectorAll('#stats-filtros .rev-filter-pill').forEach(b => b.classList.toggle('active', b.dataset.mat === nomeMateria));
+  document.querySelectorAll('#stats-cards .stat-card').forEach(card => {
+    const show = !nomeMateria || card.dataset.materia === nomeMateria;
+    card.style.display = show ? '' : 'none';
+  });
 }
 
 // Feedback por matéria — atualiza o estágio da repetição espaçada
@@ -716,7 +934,7 @@ function registrarFeedbackMat(btn, tipo, numDia, mIdx) {
   aplicarFeedbackAgenda(agenda, tipo, today);
   if (!p.dias[key].revisoes_mat) p.dias[key].revisoes_mat = {};
   if (!p.dias[key].revisoes_mat[mIdx]) p.dias[key].revisoes_mat[mIdx] = [];
-  p.dias[key].revisoes_mat[mIdx].push({ data: today, resultado: tipo, proxima: agenda.proxima, estagio: agenda.estagio });
+  p.dias[key].revisoes_mat[mIdx].push({ data: today, ts: new Date().toISOString(), resultado: tipo, proxima: agenda.proxima, estagio: agenda.estagio });
   salvarProgresso(p);
   _revP = p;
   atualizarBadgeRevisar();

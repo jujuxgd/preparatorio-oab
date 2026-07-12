@@ -2,6 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
+<script src="cores-early.js?v=1783859287"></script>
 <title>Preparatório - OAB</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
@@ -9,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Inter:opsz,wght@14..32,400..700&family=Caveat:wght@400;500&display=swap" rel="stylesheet">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="style.css?v=1783858291">
+<link rel="stylesheet" href="style.css?v=1783859287">
 <!-- quill.snow.css removido — aba Anotações foi descontinuada -->
 <style>
 /* ════════════════════════════════════════════
@@ -841,7 +842,7 @@
   width: 64px;
   text-align: center;
   padding: 0.4rem 0.5rem;
-  font-size: 0.85rem;
+  font-size: 1rem;
   resize: none;
 }
 
@@ -1128,10 +1129,10 @@
               <span id="mr-saved-label" style="font-size:0.7rem;color:var(--ink-faded);font-style:italic"></span>
             </div>
             <textarea id="microresumo-input"
-              placeholder="Escreva aqui os pontos mais importantes que aprendeu hoje — serão revisados nos próximos 1, 7, 15 e 30 dias..."
+              placeholder="Escreva aqui os pontos mais importantes que aprendeu hoje — será revisado nos próximos dias, com intervalo que se ajusta ao seu feedback..."
               rows="6"
               oninput="mrAutoSave()"
-              style="width:100%;box-sizing:border-box;background:var(--bg-soft);border:1.5px solid var(--line);border-radius:var(--radius-sm);padding:0.8rem;font-size:0.87rem;color:var(--ink);font-family:'Inter',sans-serif;line-height:1.65;resize:vertical;outline:none;transition:border-color var(--transition)"
+              style="width:100%;box-sizing:border-box;background:var(--bg-soft);border:1.5px solid var(--line);border-radius:var(--radius-sm);padding:0.8rem;font-size:1rem;color:var(--ink);font-family:'Inter',sans-serif;line-height:1.65;resize:vertical;outline:none;transition:border-color var(--transition)"
               onfocus="this.style.borderColor='var(--rose)'"
               onblur="this.style.borderColor='var(--line)'"
             ></textarea>
@@ -1187,17 +1188,17 @@
               <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.6rem;margin-bottom:.9rem">
                 <div>
                   <div style="font-size:.63rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faded);margin-bottom:.3rem;font-weight:500">Matéria</div>
-                  <select id="qe-materia" style="width:100%;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-sm);padding:.5rem .6rem;font-size:.82rem;color:var(--ink);font-family:'Inter',sans-serif">
+                  <select id="qe-materia" style="width:100%;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-sm);padding:.5rem .6rem;font-size:1rem;color:var(--ink);font-family:'Inter',sans-serif">
                     <option value="">Selecione...</option>
                   </select>
                 </div>
                 <div>
                   <div style="font-size:.63rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faded);margin-bottom:.3rem;font-weight:500">Tópico</div>
-                  <input id="qe-topico" type="text" placeholder="ex: Capacidade Civil" style="width:100%;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-sm);padding:.5rem .6rem;font-size:.82rem;color:var(--ink);font-family:'Inter',sans-serif;box-sizing:border-box">
+                  <input id="qe-topico" type="text" placeholder="ex: Capacidade Civil" style="width:100%;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-sm);padding:.5rem .6rem;font-size:1rem;color:var(--ink);font-family:'Inter',sans-serif;box-sizing:border-box">
                 </div>
                 <div>
                   <div style="font-size:.63rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faded);margin-bottom:.3rem;font-weight:500">Subtópico</div>
-                  <input id="qe-subtopico" type="text" placeholder="ex: Emancipação" style="width:100%;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-sm);padding:.5rem .6rem;font-size:.82rem;color:var(--ink);font-family:'Inter',sans-serif;box-sizing:border-box">
+                  <input id="qe-subtopico" type="text" placeholder="ex: Emancipação" style="width:100%;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-sm);padding:.5rem .6rem;font-size:1rem;color:var(--ink);font-family:'Inter',sans-serif;box-sizing:border-box">
                 </div>
               </div>
 
@@ -1214,12 +1215,12 @@
 
               <div style="margin-bottom:.8rem">
                 <div style="font-size:.63rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faded);margin-bottom:.3rem;font-weight:500">O que faltou para acertar *</div>
-                <textarea id="qe-faltou" rows="3" placeholder="O ponto-chave que você não sabia ou confundiu..." style="width:100%;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-sm);padding:.6rem .7rem;font-size:.82rem;color:var(--ink);font-family:'Inter',sans-serif;resize:vertical;box-sizing:border-box"></textarea>
+                <textarea id="qe-faltou" rows="3" placeholder="O ponto-chave que você não sabia ou confundiu..." style="width:100%;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-sm);padding:.6rem .7rem;font-size:1rem;color:var(--ink);font-family:'Inter',sans-serif;resize:vertical;box-sizing:border-box"></textarea>
               </div>
 
               <div style="margin-bottom:1rem">
                 <div style="font-size:.63rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faded);margin-bottom:.3rem;font-weight:500">Explicação (cole do QConcursos)</div>
-                <textarea id="qe-explicacao" rows="3" placeholder="Cole aqui o comentário do gabarito..." style="width:100%;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-sm);padding:.6rem .7rem;font-size:.82rem;color:var(--ink);font-family:'Inter',sans-serif;resize:vertical;box-sizing:border-box"></textarea>
+                <textarea id="qe-explicacao" rows="3" placeholder="Cole aqui o comentário do gabarito..." style="width:100%;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-sm);padding:.6rem .7rem;font-size:1rem;color:var(--ink);font-family:'Inter',sans-serif;resize:vertical;box-sizing:border-box"></textarea>
               </div>
 
               <div style="display:flex;gap:.6rem;align-items:center">
@@ -1300,9 +1301,9 @@
 <button class="sidebar-toggle-btn" onclick="toggleSidebarCollapse()" title="Esconder menu">‹</button>
 
 <script src="erros-core.js"></script>
-<script src="script.js?v=1783858291"></script>
+<script src="script.js?v=1783859287"></script>
 <script src="perfil.js"></script>
-<script src="progresso.js?v=1783858291"></script>
+<script src="progresso.js?v=1783859287"></script>
 <script src="plano-vde.js"></script>
 <script src="cards.js"></script>
 <script src="cores.js"></script>
@@ -1998,8 +1999,8 @@ function _buildQForm() {
     const bg   = acc===null ? 'var(--bg-soft)' : acc>=70 ? 'rgba(100,180,80,.15)' : 'rgba(200,100,80,.12)';
     return `<div class="questao-reg" data-mid="${mid}">
       <div class="mat-label"><span>${m.emoji||'📖'}</span> ${m.nome.replace('Direito ','').replace('Processual ','Proc. ')}</div>
-      <input type="number" min="0" max="999" placeholder="0" value="${sv.total||''}" id="qt-${mid}" oninput="updateAcc('${mid}')" style="width:100%;text-align:center;padding:0.4rem;border-radius:6px;border:1px solid var(--line);font-size:0.9rem;background:var(--paper);color:var(--ink)">
-      <input type="number" min="0" max="999" placeholder="0" value="${sv.acertos||''}" id="qa-${mid}" oninput="updateAcc('${mid}')" style="width:100%;text-align:center;padding:0.4rem;border-radius:6px;border:1px solid var(--line);font-size:0.9rem;background:var(--paper);color:var(--ink)">
+      <input type="number" min="0" max="999" placeholder="0" value="${sv.total||''}" id="qt-${mid}" oninput="updateAcc('${mid}')" style="width:100%;text-align:center;padding:0.4rem;border-radius:6px;border:1px solid var(--line);font-size:1rem;background:var(--paper);color:var(--ink)">
+      <input type="number" min="0" max="999" placeholder="0" value="${sv.acertos||''}" id="qa-${mid}" oninput="updateAcc('${mid}')" style="width:100%;text-align:center;padding:0.4rem;border-radius:6px;border:1px solid var(--line);font-size:1rem;background:var(--paper);color:var(--ink)">
       <div class="acc-pill" id="qp-${mid}" style="background:${bg};color:${col}">${acc!==null ? acc+'%' : '—'}</div>
     </div>`;
   }).join('');

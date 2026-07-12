@@ -2,6 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
+<script src="cores-early.js?v=1783859287"></script>
 <title>Preparatório - OAB</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
@@ -9,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Inter:opsz,wght@14..32,400..700&family=Caveat:wght@400;500&display=swap" rel="stylesheet">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="style.css?v=1783858291">
+<link rel="stylesheet" href="style.css?v=1783859287">
 <style>
 .mat-grid {
   display: grid;
@@ -294,9 +295,9 @@
   </main>
 </div>
 
-<script src="script.js?v=1783858291"></script>
+<script src="script.js?v=1783859287"></script>
 <script src="perfil.js"></script>
-<script src="progresso.js?v=1783858291"></script>
+<script src="progresso.js?v=1783859287"></script>
 <script src="plano-vde.js"></script>
 <script src="cores.js"></script>
 <script>
@@ -766,9 +767,9 @@ function renderGrid() {
           <div style="font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-faded);margin-bottom:0.4rem">◎ Registrar questões desta matéria</div>
           <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:0.4rem;align-items:center">
             <input type="number" placeholder="Total" min="1" id="qinput-t-${mat.id}"
-              style="background:var(--bg-soft);border:1px solid var(--line);padding:0.4rem 0.6rem;border-radius:var(--radius-sm);font-size:0.8rem;color:var(--ink);font-family:inherit">
+              style="background:var(--bg-soft);border:1px solid var(--line);padding:0.4rem 0.6rem;border-radius:var(--radius-sm);font-size:1rem;color:var(--ink);font-family:inherit">
             <input type="number" placeholder="Acertos" min="0" id="qinput-a-${mat.id}"
-              style="background:var(--bg-soft);border:1px solid var(--line);padding:0.4rem 0.6rem;border-radius:var(--radius-sm);font-size:0.8rem;color:var(--ink);font-family:inherit">
+              style="background:var(--bg-soft);border:1px solid var(--line);padding:0.4rem 0.6rem;border-radius:var(--radius-sm);font-size:1rem;color:var(--ink);font-family:inherit">
             <button class="btn btn-primary" style="font-size:0.72rem;padding:0.4rem 0.8rem;white-space:nowrap" onclick="registrarQuestoesMat('${mat.id}')">Registrar</button>
           </div>
           <div id="qfb-${mat.id}" style="font-size:0.75rem;margin-top:0.3rem;min-height:1em;color:var(--ink-soft)"></div>
