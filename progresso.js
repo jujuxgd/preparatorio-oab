@@ -250,7 +250,67 @@ function getProgressoMateria(materiaId) {
   return { total, feitos, pct: total > 0 ? Math.round((feitos/total)*100) : 0, dias };
 }
 
-// Sincroniza streak da antiga chave com o progresso
+// ── Repetição espaçada adaptativa (revisão) ──────────────────
+// Substitui os antigos checkpoints fixos (1/7/15/30 dias, iguais pra
+// todo mundo) por um sistema tipo Leitner: cada matéria de cada dia
+// tem seu próprio "estágio", e o feedback do usuário decide o ritmo:
+//   lembrei tudo    → avança de estágio (intervalo maior)
+//   mais ou menos   → mantém o estágio atual
+//   esqueci         → volta pro estágio 0 (revisa de novo logo)
+const REV_STAGES = [1, 3, 7, 14, 30, 60, 90]; // dias até a próxima revisão, por estágio
+
+function _addDiasISO(dataISO, dias) {
+  const d = new Date(dataISO + 'T12:00:00');
+  d.setDate(d.getDate() + dias);
+  return d.toISOString().split('T')[0];
+}
+
+// Garante (e inicializa se preciso) a agenda de revisão de uma matéria
+// de um dia específico. Retorna { estagio, proxima }.
+function getAgendaMat(p, numDia, mIdx, dataConclusao) {
+  const key = String(numDia);
+  if (!p.dias[key]) p.dias[key] = {};
+  if (!p.dias[key].agenda_mat) p.dias[key].agenda_mat = {};
+  if (!p.dias[key].agenda_mat[mIdx]) {
+    p.dias[key].agenda_mat[mIdx] = { estagio: 0, proxima: _addDiasISO(dataConclusao || new Date().toISOString().split('T')[0], REV_STAGES[0]) };
+  }
+  return p.dias[key].agenda_mat[mIdx];
+}
+
+// Aplica o feedback do usuário à agenda, recalculando a próxima data.
+function aplicarFeedbackAgenda(agenda, tipo, hojeStr) {
+  if (tipo === 'lembrei') agenda.estagio = Math.min((agenda.estagio || 0) + 1, REV_STAGES.length - 1);
+  else if (tipo === 'esqueci') agenda.estagio = 0;
+  // 'mais-ou-menos' mantém o estágio atual, só reagenda pro mesmo intervalo
+  agenda.proxima = _addDiasISO(hojeStr, REV_STAGES[agenda.estagio || 0]);
+  return agenda;
+}
+
+// Conta quantos cards de matéria estão vencidos (usado no badge da sidebar)
+function contarRevisoesPendentes() {
+  try {
+    const p = carregarProgresso();
+    const hojeStr = new Date().toISOString().split('T')[0];
+    let count = 0;
+    let alterado = false;
+    Object.entries(p.dias || {}).forEach(([numDia, dData]) => {
+      if (!dData.concluido || !dData.data_conclusao) return;
+      if (typeof getDadosDia !== 'function') return;
+      const dado = getDadosDia(parseInt(numDia));
+      if (!dado) return;
+      dado.materias.forEach((mat, mIdx) => {
+        const existia = !!(dData.agenda_mat && dData.agenda_mat[mIdx]);
+        const agenda = getAgendaMat(p, numDia, mIdx, dData.data_conclusao);
+        if (!existia) alterado = true;
+        if (agenda.proxima <= hojeStr) count++;
+      });
+    });
+    if (alterado) salvarProgresso(p);
+    return count;
+  } catch (e) { return 0; }
+}
+
+
 (function _syncStreak() {
   const p     = carregarProgresso();
   const saved = parseInt(localStorage.getItem('ju_oab_streak') || '0');

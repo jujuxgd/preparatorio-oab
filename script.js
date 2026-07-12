@@ -156,18 +156,17 @@ function atualizarBadgeRevisar() {
   });
   let count = 0;
   try {
-    if (typeof carregarProgresso === 'function') {
+    if (typeof contarRevisoesPendentes === 'function') {
+      count = contarRevisoesPendentes();
+    } else if (typeof carregarProgresso === 'function') {
+      // Fallback (progresso.js antigo ainda não recarregado/cacheado)
       const prog    = carregarProgresso();
       const hoje    = new Date();
-      const hojeStr = hoje.toISOString().split('T')[0];
       Object.entries(prog.dias || {}).forEach(([numDia, d]) => {
         if (!d.concluido || !d.data_conclusao) return;
         const diff = Math.round((hoje - new Date(d.data_conclusao)) / 864e5);
-        if (diff < 1) return;                          // concluído hoje — ainda não é revisão
-        if (d.ultima_revisao === hojeStr) return;      // já foi revisado hoje
-        if (typeof getDadosDia === 'function') {       // dia precisa existir no plano
-          if (!getDadosDia(parseInt(numDia))) return;
-        }
+        if (diff < 1) return;
+        if (typeof getDadosDia === 'function' && !getDadosDia(parseInt(numDia))) return;
         count++;
       });
     }

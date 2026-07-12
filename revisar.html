@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Inter:opsz,wght@14..32,400..700&family=Caveat:wght@400;500&display=swap" rel="stylesheet">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="style.css?v=1783857493">
+<link rel="stylesheet" href="style.css?v=1783858291">
 <style>
 .revisao-card {
   background: var(--paper);
@@ -118,6 +118,57 @@
 .feedback-btn.lembrei:hover { background: var(--success); color: var(--paper); border-color: var(--success); }
 .feedback-btn.mais-ou-menos:hover { background: var(--gold); color: var(--paper); border-color: var(--gold); }
 .feedback-btn.esqueci:hover { background: var(--error); color: var(--paper); border-color: var(--error); }
+
+/* Abas: Pendentes / Arquivo */
+.rev-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.4rem;
+  border-bottom: 1px solid var(--line);
+}
+.rev-tab-btn {
+  padding: 0.7rem 1rem;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink-faded);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: all var(--transition);
+}
+.rev-tab-btn:hover { color: var(--ink); }
+.rev-tab-btn.active { color: var(--rose-deep); border-bottom-color: var(--rose-deep); }
+
+/* Pills de filtro por matéria (Arquivo) */
+.rev-filter-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1.4rem;
+}
+.rev-filter-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.4rem 0.85rem;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  border-radius: 20px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.76rem;
+  color: var(--ink-soft);
+  transition: all var(--transition);
+}
+.rev-filter-pill:hover { border-color: var(--rose); }
+.rev-filter-pill.active { background: var(--rose-deep); border-color: var(--rose-deep); color: #fff; }
+.rev-filter-pill .count {
+  font-size: 0.66rem;
+  opacity: 0.75;
+}
 
 /* Agenda de revisões */
 .agenda-date-group {
@@ -239,6 +290,9 @@
 
   .agenda-date-header { padding: 0.5rem 0.8rem; }
   .agenda-mat-row { padding: 0.4rem 0.8rem; font-size: 0.78rem; gap: 0.5rem; }
+
+  .rev-tab-btn { padding: 0.6rem 0.7rem; font-size: 0.78rem; }
+  .rev-filter-pill { padding: 0.35rem 0.7rem; font-size: 0.72rem; }
 }
 </style>
 </head>
@@ -308,7 +362,7 @@
     <div class="info-banner">
       <div>
         <h3 id="rev-banner-title"><em>Nenhuma revisão</em> pendente</h3>
-        <p>A curva do esquecimento de Ebbinghaus mostra que esquecemos 70% do conteúdo em 24h sem revisão. Revisar nos intervalos certos (1, 7, 15 e 30 dias) consolida o aprendizado a longo prazo.</p>
+        <p>A curva do esquecimento de Ebbinghaus mostra que esquecemos 70% do conteúdo em 24h sem revisão. Aqui o intervalo se adapta a você: quando você lembra bem, o próximo intervalo aumenta; quando esquece, ele volta a ser curto.</p>
       </div>
       <div class="curve-viz">
         <div class="curve-bar" style="height:80px;opacity:1"></div>
@@ -319,95 +373,121 @@
       </div>
     </div>
 
-    <!-- SEÇÃO: revisões pendentes hoje/atrasadas -->
-    <div id="revisao-cards"></div>
+    <!-- Abas: Pendentes / Arquivo de Flashcards -->
+    <div class="rev-tabs">
+      <button class="rev-tab-btn active" data-tab="pendentes" onclick="revSwitchTab('pendentes')">Pendentes</button>
+      <button class="rev-tab-btn" data-tab="arquivo" onclick="revSwitchTab('arquivo')">📚 Arquivo de Flashcards</button>
+    </div>
 
-    <!-- SEÇÃO: agenda completa de datas -->
-    <div id="agenda-wrap" style="margin-top:2rem;display:none">
-      <div style="display:flex;align-items:center;gap:0.8rem;margin-bottom:1rem">
-        <div style="flex:1;height:1px;background:var(--line)"></div>
-        <span style="font-family:'Fraunces',serif;font-size:1rem;font-weight:500;color:var(--ink-faded);white-space:nowrap">Agenda de Revisões</span>
-        <div style="flex:1;height:1px;background:var(--line)"></div>
+    <div id="rev-tab-pendentes">
+      <!-- SEÇÃO: revisões pendentes hoje/atrasadas -->
+      <div id="revisao-cards"></div>
+
+      <!-- SEÇÃO: agenda completa de datas -->
+      <div id="agenda-wrap" style="margin-top:2rem;display:none">
+        <div style="display:flex;align-items:center;gap:0.8rem;margin-bottom:1rem">
+          <div style="flex:1;height:1px;background:var(--line)"></div>
+          <span style="font-family:'Fraunces',serif;font-size:1rem;font-weight:500;color:var(--ink-faded);white-space:nowrap">Agenda de Revisões</span>
+          <div style="flex:1;height:1px;background:var(--line)"></div>
+        </div>
+        <p style="font-size:0.78rem;color:var(--ink-faded);margin-bottom:1.2rem">Próxima data de revisão de cada matéria — o intervalo se ajusta ao seu feedback (lembrei / mais ou menos / esqueci).</p>
+        <div id="agenda-revisoes"></div>
       </div>
-      <p style="font-size:0.78rem;color:var(--ink-faded);margin-bottom:1.2rem">Todas as suas revisões programadas com base na curva do esquecimento — 1, 7, 15 e 30 dias após estudar cada matéria.</p>
-      <div id="agenda-revisoes"></div>
+    </div>
+
+    <div id="rev-tab-arquivo" style="display:none">
+      <p style="font-size:0.78rem;color:var(--ink-faded);margin-bottom:1rem">Todos os flashcards já gerados a partir do seu plano de estudos, filtráveis por matéria — não só os que vencem hoje.</p>
+      <div id="arquivo-filtros" class="rev-filter-pills"></div>
+      <div id="arquivo-cards"></div>
     </div>
   </main>
 </div>
 
-<script src="script.js?v=1783857493"></script>
+<script src="script.js?v=1783858291"></script>
 <script src="perfil.js"></script>
-<script src="progresso.js"></script>
+<script src="progresso.js?v=1783858291"></script>
 <script src="plano-vde.js"></script>
 <script src="cards.js"></script>
 <script src="cores.js"></script>
 <script>
+// Constrói o HTML de um card de matéria — reaproveitado pela aba
+// "Pendentes" e pela aba "Arquivo".
+function buildMatCardHtml(numDia, mIdx, mat, dado, statusHtml, extraClass) {
+  const cardKey  = `${numDia}_${mIdx}`;
+  const cardData = (typeof REVIEW_CARDS !== 'undefined') ? REVIEW_CARDS[cardKey] : null;
+  const titulo   = cardData ? cardData.titulo : `${mat.emoji || '📖'} ${mat.nome}`;
+  const pontosHtml = cardData
+    ? cardData.pontos.map(p => `<li>${p}</li>`).join('')
+    : (mat.topicos || []).map(t => `<li>${t.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</li>`).join('');
+  const pegadinhaHtml = cardData && cardData.pegadinha
+    ? `<div style="margin-top:0.8rem;padding:0.8rem 1rem;background:linear-gradient(135deg,#fff0d8,#ffe8c0);border-left:3px solid #d4903a;border-radius:var(--radius-sm);font-size:0.82rem;color:#7a4010"><strong style="display:block;font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:#d4903a;margin-bottom:0.3rem">⚠ Pegadinha da Banca</strong>${cardData.pegadinha}</div>`
+    : '';
+  const matAttr = (mat.nome || '').replace(/"/g, '');
+  return `
+    <div class="revisao-card${extraClass || ''}" data-materia="${matAttr}">
+      <div class="rev-head">
+        <div style="flex:1">
+          <div style="display:flex;gap:0.5rem;margin-bottom:0.4rem;align-items:center;flex-wrap:wrap">
+            ${statusHtml}
+            <span style="font-size:0.65rem;background:var(--bg-soft);color:var(--ink-faded);padding:0.2rem 0.5rem;border-radius:20px">Dia ${numDia}</span>
+          </div>
+          <h3 class="rev-title">${titulo.replace(' · ',' <em>·</em> ')}</h3>
+          <div class="rev-meta">${mat.nome} · ${dado.titulo.split(' · ')[0]}</div>
+        </div>
+        <a href="hoje.html?dia=${numDia}" style="font-size:0.72rem;color:var(--rose-deep);text-decoration:none;white-space:nowrap;align-self:flex-start;margin-top:0.3rem">Ver conteúdo →</a>
+      </div>
+      <ul class="rev-bullets">${pontosHtml}</ul>
+      ${pegadinhaHtml}
+      <div class="rev-feedback">
+        <button class="feedback-btn lembrei" onclick="registrarFeedbackMat(this,'lembrei',${numDia},${mIdx})">✓ Lembrei tudo</button>
+        <button class="feedback-btn mais-ou-menos" onclick="registrarFeedbackMat(this,'mais-ou-menos',${numDia},${mIdx})">~ Mais ou menos</button>
+        <button class="feedback-btn esqueci" onclick="registrarFeedbackMat(this,'esqueci',${numDia},${mIdx})">✕ Preciso rever</button>
+      </div>
+    </div>`;
+}
+
+function fmtDataCurta(iso) {
+  const d = new Date(iso + 'T12:00:00');
+  return d.toLocaleDateString('pt-BR', { day: 'numeric', month: 'short' });
+}
+
+let _revP = null; // progresso carregado uma vez, reaproveitado pelas duas abas
+
 document.addEventListener('DOMContentLoaded', () => {
-  const INTERVALS = [1, 7, 15, 30];
   const p = carregarProgresso();
+  _revP = p;
   const hoje = new Date();
   const hojeStr = hoje.toISOString().split('T')[0];
   const cards = [];
+  let agendaAlterada = false;
 
   Object.entries(p.dias || {}).forEach(([numDia, dData]) => {
     if (!dData.concluido || !dData.data_conclusao) return;
-    const concl = new Date(dData.data_conclusao);
-    const diff  = Math.round((hoje - concl) / 864e5);
-    // Está em algum intervalo de revisão (1, 7, 15, 30 dias ou mais)
-    if (diff < 1) return;
     const dado = typeof getDadosDia === 'function' ? getDadosDia(parseInt(numDia)) : null;
     if (!dado) return;
 
-    const intervalo = INTERVALS.filter(iv => diff >= iv).pop() || 1;
-    const isUrgent  = diff <= 3;
-    const quando    = diff === 1 ? 'há 1 dia' : `há ${diff} dias`;
-    const ivLabel   = `Intervalo ${intervalo}d`;
-
-    // Um card por matéria, com conteúdo do cards.js quando disponível
     dado.materias.forEach((mat, mIdx) => {
-      const jaRevMatHoje = (dData[`revisao_mat_${mIdx}`] === hojeStr);
-      if (jaRevMatHoje) return;
+      const existia = !!(dData.agenda_mat && dData.agenda_mat[mIdx]);
+      const agenda  = getAgendaMat(p, numDia, mIdx, dData.data_conclusao);
+      if (!existia) agendaAlterada = true;
+      if (agenda.proxima > hojeStr) return; // ainda não venceu — não aparece em Pendentes
 
-      // Tenta usar o card do cards.js (resumo real); fallback: tópicos do plano
-      const cardKey  = `${numDia}_${mIdx}`;
-      const cardData = (typeof REVIEW_CARDS !== 'undefined') ? REVIEW_CARDS[cardKey] : null;
+      const diffAtraso = Math.round((hoje - new Date(agenda.proxima + 'T12:00:00')) / 864e5);
+      const isUrgent = diffAtraso <= 3;
+      const quando = diffAtraso <= 0 ? 'venceu hoje' : `atrasada ${diffAtraso}d`;
+      const estagio = agenda.estagio || 0;
+      const statusHtml = `
+        <span class="rev-tag">${quando}</span>
+        <span style="font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;background:var(--rose-soft);color:var(--rose-deep);padding:0.2rem 0.6rem;border-radius:20px;font-weight:600">Estágio ${estagio+1}/${REV_STAGES.length} · ${REV_STAGES[estagio]}d</span>`;
 
-      const titulo   = cardData ? cardData.titulo : `${mat.emoji || '📖'} ${mat.nome}`;
-      const pontosHtml = cardData
-        ? cardData.pontos.map(p => `<li>${p}</li>`).join('')
-        : (mat.topicos || []).map(t => `<li>${t.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</li>`).join('');
-      const pegadinhaHtml = cardData && cardData.pegadinha
-        ? `<div style="margin-top:0.8rem;padding:0.8rem 1rem;background:linear-gradient(135deg,#fff0d8,#ffe8c0);border-left:3px solid #d4903a;border-radius:var(--radius-sm);font-size:0.82rem;color:#7a4010"><strong style="display:block;font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:#d4903a;margin-bottom:0.3rem">⚠ Pegadinha da Banca</strong>${cardData.pegadinha}</div>`
-        : '';
-
-      cards.push({ diff, isUrgent, html: `
-        <div class="revisao-card${isUrgent?' urgent':''}">
-          <div class="rev-head">
-            <div style="flex:1">
-              <div style="display:flex;gap:0.5rem;margin-bottom:0.4rem;align-items:center;flex-wrap:wrap">
-                <span class="rev-tag">${quando}</span>
-                <span style="font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;background:var(--rose-soft);color:var(--rose-deep);padding:0.2rem 0.6rem;border-radius:20px;font-weight:600">${ivLabel}</span>
-                <span style="font-size:0.65rem;background:var(--bg-soft);color:var(--ink-faded);padding:0.2rem 0.5rem;border-radius:20px">Dia ${numDia}</span>
-              </div>
-              <h3 class="rev-title">${titulo.replace(' · ',' <em>·</em> ')}</h3>
-              <div class="rev-meta">${mat.nome} · ${dado.titulo.split(' · ')[0]}</div>
-            </div>
-            <a href="hoje.html?dia=${numDia}" style="font-size:0.72rem;color:var(--rose-deep);text-decoration:none;white-space:nowrap;align-self:flex-start;margin-top:0.3rem">Ver conteúdo →</a>
-          </div>
-          <ul class="rev-bullets">${pontosHtml}</ul>
-          ${pegadinhaHtml}
-          <div class="rev-feedback">
-            <button class="feedback-btn lembrei" onclick="registrarFeedbackMat(this,'lembrei',${numDia},${mIdx})">✓ Lembrei tudo</button>
-            <button class="feedback-btn mais-ou-menos" onclick="registrarFeedbackMat(this,'mais-ou-menos',${numDia},${mIdx})">~ Mais ou menos</button>
-            <button class="feedback-btn esqueci" onclick="registrarFeedbackMat(this,'esqueci',${numDia},${mIdx})">✕ Preciso rever</button>
-          </div>
-        </div>`
-      });
+      cards.push({ diff: diffAtraso, isUrgent, html: buildMatCardHtml(numDia, mIdx, mat, dado, statusHtml, isUrgent ? ' urgent' : '') });
     });
   });
 
-  // Urgentes primeiro, depois por diff crescente
-  cards.sort((a,b) => (b.isUrgent - a.isUrgent) || (a.diff - b.diff));
+  if (agendaAlterada) salvarProgresso(p);
+
+  // Mais atrasadas primeiro
+  cards.sort((a,b) => (b.isUrgent - a.isUrgent) || (b.diff - a.diff));
 
   // Adiciona microresumos do usuário para dias dentro do intervalo de revisão
   Object.entries(p.dias || {}).forEach(([numDia, dData]) => {
@@ -452,7 +532,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (cards.length === 0) {
     container.innerHTML = `<div style="text-align:center;padding:2.5rem;background:var(--paper);border-radius:var(--radius);border:1px dashed var(--line)">
       <div style="font-family:'Fraunces',serif;font-size:1.4rem;font-style:italic;color:var(--rose-deep);margin-bottom:0.5rem">✦ Sem revisões pendentes</div>
-      <p style="font-size:0.9rem;color:var(--ink-soft)">Complete dias no plano de estudos para gerar cards de revisão automáticos nos intervalos de 1, 7, 15 e 30 dias.</p>
+      <p style="font-size:0.9rem;color:var(--ink-soft)">Complete dias no plano de estudos pra gerar flashcards de revisão. O ritmo se ajusta ao seu feedback — veja todos no Arquivo.</p>
     </div>`;
     if (banner) banner.innerHTML = '<em>Nenhuma revisão</em> pendente';
   } else {
@@ -464,48 +544,25 @@ document.addEventListener('DOMContentLoaded', () => {
   const streakEl = document.querySelector('.streak-pill .count');
   if (streakEl) streakEl.textContent = (p.streak || 0);
 
-  // Agenda de revisões
+  // Agenda de revisões futuras + arquivo completo
   buildAgenda();
+  buildArquivo();
 });
 
-function buildAgenda() {
-  const p        = carregarProgresso();
-  const hoje     = new Date();
-  const hojeStr  = hoje.toISOString().split('T')[0];
-  const INTERVALS  = [1, 7, 15, 30];
-  const IV_LABELS  = ['1ª revisão', '2ª revisão', '3ª revisão', '4ª revisão'];
-  const IV_CLASSES = ['iv1', 'iv2', 'iv3', 'iv4'];
 
-  const items = []; // { dateStr, reviewDate, numDia, mIdx, mat, ivIdx, interval, status, done }
+function buildAgenda() {
+  const p = _revP || carregarProgresso();
+  const hoje = new Date();
+  const hojeStr = hoje.toISOString().split('T')[0];
+  const items = []; // { dateStr, numDia, mIdx, mat, estagio }
 
   Object.entries(p.dias || {}).forEach(([numDia, dData]) => {
     if (!dData.concluido || !dData.data_conclusao) return;
     const dado = (typeof getDadosDia === 'function') ? getDadosDia(parseInt(numDia)) : null;
     if (!dado) return;
-
-    const studyDate = new Date(dData.data_conclusao + 'T12:00:00');
-
     dado.materias.forEach((mat, mIdx) => {
-      const reviews = (dData.revisoes_mat && dData.revisoes_mat[mIdx]) || [];
-
-      INTERVALS.forEach((interval, ivIdx) => {
-        const reviewDate = new Date(studyDate);
-        reviewDate.setDate(reviewDate.getDate() + interval);
-        const dateStr = reviewDate.toISOString().split('T')[0];
-
-        // Revisão deste intervalo concluída = há registro após study + interval dias
-        const done = reviews.some(r => {
-          if (r.resultado === 'esqueci') return false;
-          const rDate = new Date(r.data + 'T12:00:00');
-          return Math.round((rDate - studyDate) / 864e5) >= interval;
-        });
-
-        const isPast  = dateStr < hojeStr;
-        const isToday = dateStr === hojeStr;
-        const status  = done ? 'done' : isPast ? 'atrasada' : isToday ? 'hoje' : 'futura';
-
-        items.push({ dateStr, reviewDate, numDia, mIdx, mat, ivIdx, interval, status, done });
-      });
+      const agenda = getAgendaMat(p, numDia, mIdx, dData.data_conclusao);
+      items.push({ dateStr: agenda.proxima, numDia, mIdx, mat, estagio: agenda.estagio || 0 });
     });
   });
 
@@ -519,35 +576,24 @@ function buildAgenda() {
   });
   const sortedDates = Object.keys(groups).sort();
 
-  // Conta pendentes (não done)
-  const totalPendentes = items.filter(i => !i.done).length;
-  if (totalPendentes === 0) return; // nada a mostrar
-
-  // Mostra a seção
   const wrap = document.getElementById('agenda-wrap');
   if (wrap) wrap.style.display = 'block';
 
   let html = '';
   sortedDates.forEach(dateStr => {
     const groupItems = groups[dateStr];
-    const allDone    = groupItems.every(i => i.done);
-    if (allDone) return; // pula datas totalmente concluídas
-
     const date    = new Date(dateStr + 'T12:00:00');
     const isPast  = dateStr < hojeStr;
     const isToday = dateStr === hojeStr;
-    const pending = groupItems.filter(i => !i.done);
-    if (!pending.length) return;
 
     const dateFmt = isToday
       ? 'Hoje · ' + date.toLocaleDateString('pt-BR', { day:'numeric', month:'long' })
       : date.toLocaleDateString('pt-BR', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
-    const dateClass  = isPast ? 'past' : isToday ? 'today' : 'future';
-    const labelClass = isPast ? 'past' : isToday ? 'today' : 'future';
-    const pillHtml   = isPast  ? '<span class="agenda-status-pill atrasada">atrasada</span>'
-                     : isToday ? '<span class="agenda-status-pill hoje">hoje</span>'
-                     : '';
-    const daysLabel  = isPast
+    const dateClass = isPast ? 'past' : isToday ? 'today' : 'future';
+    const pillHtml  = isPast  ? '<span class="agenda-status-pill atrasada">atrasada</span>'
+                    : isToday ? '<span class="agenda-status-pill hoje">hoje</span>'
+                    : '';
+    const daysLabel = isPast
       ? `<span style="font-size:0.68rem;color:#c03050;margin-left:auto">${Math.round((hoje - date) / 864e5)} dias atrás</span>`
       : isToday
       ? `<span style="font-size:0.68rem;color:var(--rose-deep);margin-left:auto">hoje!</span>`
@@ -558,22 +604,21 @@ function buildAgenda() {
 
     html += `<div class="agenda-date-group">
       <div class="agenda-date-header ${dateClass}">
-        <span class="agenda-date-label ${labelClass}">${dateFmt}</span>
+        <span class="agenda-date-label ${dateClass}">${dateFmt}</span>
         ${pillHtml}
         ${daysLabel}
-        <span style="font-size:0.68rem;color:var(--ink-faded);margin-left:0.4rem">${pending.length} item${pending.length!==1?'s':''}</span>
+        <span style="font-size:0.68rem;color:var(--ink-faded);margin-left:0.4rem">${groupItems.length} item${groupItems.length!==1?'s':''}</span>
       </div>
       <div>`;
 
-    pending.forEach(item => {
+    groupItems.forEach(item => {
       const matCurta = item.mat.nome.replace('Direito ','').replace('Processual ','Proc. ');
-      const ivClass  = IV_CLASSES[item.ivIdx];
-      const ivLabel  = IV_LABELS[item.ivIdx];
+      const ivClass  = 'iv' + Math.min(item.estagio + 1, 4);
       html += `<div class="agenda-mat-row">
         <span style="font-size:1rem;flex-shrink:0">${item.mat.emoji || '📖'}</span>
         <span style="flex:1;color:var(--ink)">${matCurta}</span>
         <span style="font-size:0.68rem;color:var(--ink-faded)">Dia ${item.numDia}</span>
-        <span class="agenda-iv-badge ${ivClass}">${ivLabel} (+${item.interval}d)</span>
+        <span class="agenda-iv-badge ${ivClass}">Estágio ${item.estagio+1} · ${REV_STAGES[item.estagio]}d</span>
       </div>`;
     });
 
@@ -581,10 +626,80 @@ function buildAgenda() {
   });
 
   const container = document.getElementById('agenda-revisoes');
-  if (container) container.innerHTML = html || '<div style="font-size:0.85rem;color:var(--ink-faded);text-align:center;padding:1rem">Todas as revisões concluídas ✦</div>';
+  if (container) container.innerHTML = html;
 }
 
-// Feedback por matéria (novo sistema)
+// ── Arquivo de Flashcards: todas as matérias já estudadas, filtráveis ──
+function buildArquivo() {
+  const p = _revP || carregarProgresso();
+  const wrap = document.getElementById('arquivo-cards');
+  const filtrosWrap = document.getElementById('arquivo-filtros');
+  if (!wrap) return;
+
+  const todos = [];
+  const materiasMap = new Map(); // nome -> emoji
+
+  Object.entries(p.dias || {}).forEach(([numDia, dData]) => {
+    if (!dData.concluido || !dData.data_conclusao) return;
+    const dado = typeof getDadosDia === 'function' ? getDadosDia(parseInt(numDia)) : null;
+    if (!dado) return;
+    dado.materias.forEach((mat, mIdx) => {
+      const agenda = getAgendaMat(p, numDia, mIdx, dData.data_conclusao);
+      todos.push({ numDia, mIdx, mat, dado, agenda });
+      if (!materiasMap.has(mat.nome)) materiasMap.set(mat.nome, mat.emoji || '📖');
+    });
+  });
+
+  if (!todos.length) {
+    if (filtrosWrap) filtrosWrap.innerHTML = '';
+    wrap.innerHTML = `<div style="text-align:center;padding:2.5rem;background:var(--paper);border-radius:var(--radius);border:1px dashed var(--line)">
+      <div style="font-family:'Fraunces',serif;font-size:1.3rem;font-style:italic;color:var(--rose-deep);margin-bottom:0.5rem">✦ Nenhum flashcard ainda</div>
+      <p style="font-size:0.88rem;color:var(--ink-soft)">Complete dias no plano de estudos pra gerar flashcards de cada matéria.</p>
+    </div>`;
+    return;
+  }
+
+  // Pills de filtro por matéria
+  let pillsHtml = `<button class="rev-filter-pill active" data-mat="" onclick="arquivoFiltrar('')">Todas <span class="count">${todos.length}</span></button>`;
+  Array.from(materiasMap.entries()).sort((a,b) => a[0].localeCompare(b[0])).forEach(([nome, emoji]) => {
+    const n = todos.filter(t => t.mat.nome === nome).length;
+    const nomeAttr = nome.replace(/'/g, "\\'");
+    pillsHtml += `<button class="rev-filter-pill" data-mat="${nome.replace(/"/g,'')}" onclick="arquivoFiltrar('${nomeAttr}')">${emoji} ${nome} <span class="count">${n}</span></button>`;
+  });
+  if (filtrosWrap) filtrosWrap.innerHTML = pillsHtml;
+
+  // Ordena por matéria, depois por dia
+  todos.sort((a,b) => a.mat.nome.localeCompare(b.mat.nome) || (parseInt(a.numDia) - parseInt(b.numDia)));
+
+  const hojeStr = new Date().toISOString().split('T')[0];
+  wrap.innerHTML = todos.map(t => {
+    const venceu = t.agenda.proxima <= hojeStr;
+    const dominado = (t.agenda.estagio || 0) >= REV_STAGES.length - 1;
+    const statusHtml = venceu
+      ? `<span class="rev-tag" style="background:var(--blush);color:var(--rose-deep)">⏰ vencida</span>`
+      : `<span class="rev-tag" style="background:var(--bg-soft);color:var(--ink-faded);font-weight:400;text-transform:none;letter-spacing:0">próxima: ${fmtDataCurta(t.agenda.proxima)}</span>`;
+    const estagioBadge = `<span style="font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;background:${dominado?'var(--rose-soft)':'var(--bg-soft)'};color:${dominado?'var(--rose-deep)':'var(--ink-faded)'};padding:0.2rem 0.6rem;border-radius:20px;font-weight:600">${dominado?'✓ Dominado':`Estágio ${(t.agenda.estagio||0)+1}/${REV_STAGES.length}`}</span>`;
+    return buildMatCardHtml(t.numDia, t.mIdx, t.mat, t.dado, statusHtml + estagioBadge, '');
+  }).join('');
+}
+
+function arquivoFiltrar(nomeMateria) {
+  document.querySelectorAll('.rev-filter-pill').forEach(b => b.classList.toggle('active', b.dataset.mat === nomeMateria));
+  document.querySelectorAll('#arquivo-cards .revisao-card').forEach(card => {
+    const show = !nomeMateria || card.dataset.materia === nomeMateria;
+    card.style.display = show ? '' : 'none';
+  });
+}
+
+function revSwitchTab(tab) {
+  document.querySelectorAll('.rev-tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+  const elP = document.getElementById('rev-tab-pendentes');
+  const elA = document.getElementById('rev-tab-arquivo');
+  if (elP) elP.style.display = tab === 'pendentes' ? '' : 'none';
+  if (elA) elA.style.display = tab === 'arquivo' ? '' : 'none';
+}
+
+// Feedback por matéria — atualiza o estágio da repetição espaçada
 function registrarFeedbackMat(btn, tipo, numDia, mIdx) {
   const card = btn.closest('.revisao-card');
   if (card) {
@@ -596,14 +711,14 @@ function registrarFeedbackMat(btn, tipo, numDia, mIdx) {
   const p = carregarProgresso();
   const key = String(numDia);
   if (!p.dias[key]) p.dias[key] = {};
-  // Marca revisão desta matéria hoje
-  p.dias[key][`revisao_mat_${mIdx}`] = today;
+  const dConcl = p.dias[key].data_conclusao || today;
+  const agenda = getAgendaMat(p, numDia, mIdx, dConcl);
+  aplicarFeedbackAgenda(agenda, tipo, today);
   if (!p.dias[key].revisoes_mat) p.dias[key].revisoes_mat = {};
   if (!p.dias[key].revisoes_mat[mIdx]) p.dias[key].revisoes_mat[mIdx] = [];
-  p.dias[key].revisoes_mat[mIdx].push({ data: today, resultado: tipo });
-  // Se esqueceu, limpa a marca de revisão para reaparecer no próximo carregamento
-  if (tipo === 'esqueci') delete p.dias[key][`revisao_mat_${mIdx}`];
+  p.dias[key].revisoes_mat[mIdx].push({ data: today, resultado: tipo, proxima: agenda.proxima, estagio: agenda.estagio });
   salvarProgresso(p);
+  _revP = p;
   atualizarBadgeRevisar();
 }
 
