@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Inter:opsz,wght@14..32,400..700&family=Caveat:wght@400;500&display=swap" rel="stylesheet">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="style.css?v=1783861604">
+<link rel="stylesheet" href="style.css?v=1783861722">
 <style>
 /* ════════════════════════════════════════════
    PERFIL — diário de evolução pessoal
@@ -369,7 +369,7 @@
 /* ── Configurações ── */
 .config-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 1rem;
   margin-bottom: 1.8rem;
 }
@@ -542,20 +542,6 @@
           <div style="display:flex;align-items:center;gap:0.6rem">
             <input type="color" id="perfil-cor-picker" style="width:38px;height:38px;padding:0;border:1px solid var(--line);border-radius:var(--radius-sm);cursor:pointer;background:none;flex-shrink:0">
             <input type="text" id="perfil-cor-hex" placeholder="#RRGGBB" maxlength="7" style="flex:1;min-width:0;padding:0.5rem 0.7rem;border:1px solid var(--line);border-radius:var(--radius-sm);font-size:0.82rem;font-family:inherit;background:var(--paper-tint);color:var(--ink)">
-          </div>
-        </div>
-      </div>
-      <div class="config-card">
-        <div class="config-card-label">Conta</div>
-        <div class="config-row">
-          <span>Nome e foto</span>
-          <button class="btn btn-ghost" style="font-size:0.76rem;padding:0.4rem 0.8rem" onclick="window._perfilOAB.abrirModal()">Editar</button>
-        </div>
-        <div class="config-row">
-          <span>Como quer ser chamado(a)</span>
-          <div style="display:flex;gap:0.4rem">
-            <button class="config-mini-btn" id="perfil-genero-f" onclick="window._perfilOAB.setGenero('f'); _perfilAtualizarGeneroBtns(); location.reload();">Feminino</button>
-            <button class="config-mini-btn" id="perfil-genero-m" onclick="window._perfilOAB.setGenero('m'); _perfilAtualizarGeneroBtns(); location.reload();">Masculino</button>
           </div>
         </div>
       </div>
@@ -742,16 +728,6 @@ function renderLineChart(containerId, pontos, formatador) {
   }).join('');
 }
 
-// Reflete no botão qual gênero está selecionado — chamada tanto no
-// carregamento da página quanto depois de clicar num dos botões.
-function _perfilAtualizarGeneroBtns() {
-  const genero = (window._perfilOAB && window._perfilOAB.getGenero) ? window._perfilOAB.getGenero() : 'f';
-  const btnF = document.getElementById('perfil-genero-f');
-  const btnM = document.getElementById('perfil-genero-m');
-  if (btnF) btnF.classList.toggle('active', genero === 'f');
-  if (btnM) btnM.classList.toggle('active', genero === 'm');
-}
-
 document.addEventListener('DOMContentLoaded', () => {
   const p = carregarProgresso();
   const stats = calcularStats();
@@ -839,9 +815,6 @@ document.addEventListener('DOMContentLoaded', () => {
         else hexField.style.borderColor = '#c0392b';
       });
     }
-
-    // Gênero (reaproveita _perfilOAB.getGenero/setGenero)
-    _perfilAtualizarGeneroBtns();
 
     // Status do último backup
     const statusEl = document.getElementById('perfil-backup-status');
