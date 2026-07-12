@@ -225,7 +225,24 @@
   function _toggle(force) {
     _open = force !== undefined ? force : !_open;
     const dd = document.getElementById('_ri-dd');
-    if (dd) dd.style.display = _open ? 'block' : 'none';
+    const wrap = document.getElementById('_ri-wrap');
+    if (!dd) return;
+    if (!_open) { dd.style.display = 'none'; return; }
+    dd.style.display = 'block';
+    if (!wrap) return;
+    // Posiciona com coordenadas fixas calculadas em JS: no mobile o
+    // botão fica perto da borda esquerda da tela, e o painel (aberto
+    // sempre pra esquerda via right:0) vazava pra fora, ficando
+    // inacessível. Assim ele nunca ultrapassa a viewport.
+    dd.style.position = 'fixed';
+    dd.style.right = 'auto';
+    const wrapRect = wrap.getBoundingClientRect();
+    const ddWidth = Math.min(dd.offsetWidth || 220, window.innerWidth - 16);
+    dd.style.maxWidth = (window.innerWidth - 16) + 'px';
+    let left = wrapRect.right - ddWidth; // tenta alinhar pela direita do botão (padrão)
+    left = Math.max(8, Math.min(left, window.innerWidth - ddWidth - 8));
+    dd.style.left = left + 'px';
+    dd.style.top = (wrapRect.bottom + 8) + 'px';
   }
 
   // Re-aplica ao alternar claro/escuro (mantém compat com toggleTheme).
