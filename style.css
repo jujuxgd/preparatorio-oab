@@ -1290,6 +1290,12 @@ body.menu-open .mobile-menu-btn {
   transform: scale(0.85);
 }
 
+/* Cooldown breve após fechar o Modo Foco (Caderno Legislativo) — o botão
+   de fechar fica na mesma posição de tela que o botão de menu mobile */
+body.cl-focus-closing .mobile-menu-btn {
+  pointer-events: none;
+}
+
 [data-theme="dark"] .mobile-menu-btn {
   background: rgba(32, 26, 22, 0.55);
 }

@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Inter:opsz,wght@14..32,400..700&family=Caveat:wght@400;500&display=swap" rel="stylesheet">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="style.css?v=1783839682">
+<link rel="stylesheet" href="style.css?v=1783839891">
 <style>
 /* ── Tabs de matéria ────────────────────────── */
 .cl-tabs-outer {
@@ -650,7 +650,7 @@ mark.cl-user-hl[data-color="purple"] { background: rgba(237, 233, 254, 0.9); box
       <div class="focus-panel" id="cl-focus-panel">
         <div class="focus-panel-mac">
           <div class="focus-mac-lights">
-            <span class="fml fml-close" onclick="clToggleFocus()" title="Fechar"></span>
+            <span class="fml fml-close" onclick="event.stopPropagation(); clToggleFocus();" title="Fechar"></span>
             <span class="fml fml-min"></span>
             <span class="fml fml-max"></span>
           </div>
@@ -665,7 +665,7 @@ mark.cl-user-hl[data-color="purple"] { background: rgba(237, 233, 254, 0.9); box
   </main>
 </div>
 
-<script src="script.js?v=1783839682"></script>
+<script src="script.js?v=1783839891"></script>
 <script src="perfil.js"></script>
 <script src="progresso.js"></script>
 <script src="plano-vde.js"></script>
@@ -950,6 +950,11 @@ function clToggleFocus() {
   if (isOpen) {
     overlay.classList.remove('active');
     document.body.style.overflow = '';
+    // O botão de fechar (canto sup. esquerdo do painel) fica na mesma
+    // posição de tela que o botão de menu mobile. Bloqueia brevemente
+    // esse botão pra evitar que o mesmo toque "vaze" e abra a sidebar.
+    document.body.classList.add('cl-focus-closing');
+    setTimeout(() => document.body.classList.remove('cl-focus-closing'), 400);
     return;
   }
   // Copia conteúdo para o painel de foco
