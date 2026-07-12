@@ -418,6 +418,57 @@ mark.cl-user-hl[data-color="blue"]   { background: rgba(219, 234, 254, 0.9); box
 mark.cl-user-hl[data-color="pink"]   { background: rgba(252, 231, 243, 0.9); box-shadow: inset 0 -2px 0 rgba(236, 72, 153, 0.40); }
 mark.cl-user-hl[data-color="purple"] { background: rgba(237, 233, 254, 0.9); box-shadow: inset 0 -2px 0 rgba(139, 92, 246, 0.40); }
 
+/* ── Responsivo (mobile) ─────────────────────── */
+@media (max-width: 640px) {
+  .cl-tabs-outer { padding: 0.25rem; gap: 0.25rem; }
+  .cl-tab { padding: 0.42rem 0.8rem; font-size: 0.72rem; }
+
+  .cl-search-bar { padding: 0.45rem 0.7rem; font-size: 0.8rem; }
+
+  .cl-toolbar { padding: 0.8rem 1rem; gap: 0.5rem; }
+  .cl-toolbar .title { font-size: 0.94rem; }
+  .cl-toolbar .actions .btn { padding: 0.3rem 0.7rem !important; font-size: 0.68rem !important; }
+
+  .cl-sumario-nav { padding: 0.7rem 1rem; gap: 0.35rem; }
+  .cl-sumario-chip { padding: 0.24rem 0.65rem; font-size: 0.66rem; }
+
+  /* Altura fixa de 320px descontados não sobra quase nada em tela
+     pequena — usa altura dinâmica (dvh) e desconta menos */
+  .cl-scroll-body {
+    padding: 1.2rem 0.4rem 3rem;
+    max-height: none;
+    height: calc(100dvh - 210px);
+    overflow-y: auto;
+  }
+
+  .cl-native-content { font-size: 0.92rem; line-height: 1.78; }
+
+  .cl-native-content .cl-part {
+    font-size: 0.7rem;
+    padding: 0.75rem 1rem;
+    margin: 2rem 0 1.1rem;
+  }
+  .cl-native-content .cl-section {
+    font-size: 0.7rem;
+    padding: 0.45rem 0.8rem;
+    margin: 1.8rem 0 0.8rem;
+  }
+  .cl-native-content .cl-artigo {
+    padding: 0.75rem 0.9rem;
+    font-size: 0.92rem;
+    line-height: 1.78;
+  }
+  /* Recuos menores — em telas estreitas, 1.6rem/3.6rem de margem
+     esquerda deixam pouquíssima largura útil pro texto */
+  .cl-native-content .cl-paragrafo { margin: 0.3rem 0 0.3rem 0.9rem; padding-left: 0.55rem; font-size: 0.9rem; }
+  .cl-native-content .cl-inciso { margin: 0.24rem 0 0.24rem 0.9rem; font-size: 0.9rem; gap: 0.4rem; }
+  .cl-native-content .cl-inc-num { min-width: 1.8rem; font-size: 0.7rem; }
+  .cl-native-content .cl-alinea { margin: 0.22rem 0 0.22rem 1.8rem; font-size: 0.88rem; }
+  .cl-native-content .cl-texto { font-size: 0.88rem; padding: 0.35rem 0.75rem; }
+
+  .cl-oab-badge { font-size: 0.55rem; padding: 0.1rem 0.45rem; }
+}
+
 /* ── Toolbar flutuante de grifos ─────────────── */
 #cl-hl-toolbar {
   position: fixed;

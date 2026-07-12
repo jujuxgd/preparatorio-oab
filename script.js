@@ -252,9 +252,11 @@ function toggleSidebar() {
     }
     bd.classList.add('show');
     document.body.style.overflow = 'hidden';
+    document.body.classList.add('menu-open');
   } else {
     if (bd) bd.classList.remove('show');
     document.body.style.overflow = '';
+    document.body.classList.remove('menu-open');
   }
 }
 

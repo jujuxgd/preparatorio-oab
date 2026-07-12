@@ -217,6 +217,29 @@
   border-radius: 4px 4px 0 0;
   opacity: 0.8;
 }
+
+/* ── Responsivo (mobile) ─────────────────────── */
+@media (max-width: 640px) {
+  .revisao-card { padding: 1.2rem 1.1rem; }
+  .rev-title { font-size: 1.15rem; }
+  .rev-bullets { padding: 0.8rem 1rem; }
+  .rev-bullets li { font-size: 0.85rem; padding-left: 1.3rem; }
+
+  .rev-feedback { gap: 0.4rem; }
+  .feedback-btn { padding: 0.6rem 0.3rem; font-size: 0.62rem; letter-spacing: 0.04em; }
+
+  .info-banner {
+    grid-template-columns: 1fr !important;
+    padding: 1.2rem 1.1rem !important;
+    gap: 1rem;
+    text-align: left;
+  }
+  .info-banner h3 { font-size: 1.15rem; }
+  .curve-viz { align-self: flex-start; }
+
+  .agenda-date-header { padding: 0.5rem 0.8rem; }
+  .agenda-mat-row { padding: 0.4rem 0.8rem; font-size: 0.78rem; gap: 0.5rem; }
+}
 </style>
 </head>
 <body>

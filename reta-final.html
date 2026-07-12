@@ -178,6 +178,28 @@
   border-top: 2px solid var(--line);
   margin: 2rem 0;
 }
+
+/* ── Responsivo (mobile) ─────────────────────── */
+@media (max-width: 640px) {
+  .rf-hero::after { font-size: 3rem; right: 1rem; }
+  .rf-hero h2 { font-size: 1.4rem; }
+
+  .rf-grid { grid-template-columns: 1fr; gap: 0.7rem; margin-bottom: 1.6rem; }
+  .rf-card { padding: 1rem 1.1rem; }
+
+  .rf-warning { padding: 0.8rem 1rem; font-size: 0.78rem; }
+
+  .rf-modal-overlay { padding: 0.6rem; }
+  .rf-modal {
+    height: 100vh;
+    height: 100dvh;
+    border-radius: var(--radius);
+  }
+  .rf-modal-bar { padding: 0.6rem 0.9rem; }
+  .rf-modal-title { font-size: 0.85rem; }
+
+  .rf-divider { margin: 1.4rem 0; }
+}
 </style>
 </head>
 <body>

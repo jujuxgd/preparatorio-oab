@@ -333,6 +333,54 @@ body.overlay-open .aurora-bg {
   height: 14px;
   border-radius: 4px;
 }
+
+/* ── Responsivo (mobile) ─────────────────────── */
+@media (max-width: 640px) {
+  .filter-bar { padding: 0.8rem 0.9rem; gap: 0.4rem; margin-bottom: 1.2rem; }
+  .chip { padding: 0.32rem 0.7rem; font-size: 0.73rem; }
+
+  .month-section { padding: 1.1rem 0.8rem; margin-bottom: 1rem; }
+  .month-header { flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem; padding-bottom: 0.7rem; }
+  .month-name { font-size: 1.4rem; }
+  .month-stats { gap: 0.9rem; font-size: 0.72rem; flex-wrap: wrap; }
+
+  .calendar-grid { gap: 4px; }
+  .dow { font-size: 0.58rem; padding: 0.3rem 0; letter-spacing: 0.08em; }
+
+  .day-cell { min-height: 58px; padding: 0.3rem 0.3rem; gap: 0.15rem; border-radius: 6px; }
+  .day-cell.empty { min-height: 58px; }
+  .day-cell .num { font-size: 0.82rem; }
+  .day-cell.done::after { font-size: 0.6rem; top: 0.2rem; right: 0.3rem; }
+
+  /* Em telas estreitas os chips de matéria viram só um ponto colorido,
+     texto completo não cabe em ~48px de célula */
+  .day-chips { flex-direction: row; flex-wrap: wrap; gap: 3px; margin-top: auto; }
+  .mat-chip {
+    width: 7px; height: 7px; padding: 0; border-radius: 50%;
+    font-size: 0; overflow: visible; white-space: normal;
+  }
+
+  .legend { gap: 0.8rem; font-size: 0.7rem; margin-top: 1rem; }
+  .legend-dot { width: 10px; height: 10px; }
+
+  /* Overlay do dia ocupa a tela quase inteira, sem margens grandes */
+  .day-overlay { padding: 0.6rem; }
+  .overlay-panel {
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+    max-width: none;
+    border-radius: var(--radius);
+  }
+  .overlay-header { padding: 0.8rem 1rem; }
+  .overlay-title { font-size: 0.92rem; }
+}
+
+@media (max-width: 380px) {
+  .calendar-grid { gap: 3px; }
+  .day-cell { min-height: 48px; padding: 0.22rem; }
+  .day-cell .num { font-size: 0.74rem; }
+}
 </style>
 </head>
 <body>
