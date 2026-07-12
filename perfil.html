@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Inter:opsz,wght@14..32,400..700&family=Caveat:wght@400;500&display=swap" rel="stylesheet">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="style.css?v=1783861010">
+<link rel="stylesheet" href="style.css?v=1783861348">
 <style>
 /* ════════════════════════════════════════════
    PERFIL — diário de evolução pessoal
@@ -306,6 +306,123 @@
   margin: 0 0 0.6rem 0.1rem;
 }
 .section-label::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+
+/* ── Jornada (linha narrativa no cabeçalho) ── */
+.perfil-header-jornada {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 0.9rem;
+  font-size: 0.76rem;
+  color: var(--ink-soft);
+  margin-top: 0.45rem;
+}
+.perfil-header-jornada span { white-space: nowrap; }
+.perfil-header-jornada strong { color: var(--rose-deep); font-weight: 700; }
+
+/* ── Conquistas (badges) ── */
+.conquistas-wrap { margin-bottom: 1.8rem; }
+.conquistas-sub {
+  font-size: 0.8rem;
+  color: var(--ink-faded);
+  margin: 0 0 0.9rem;
+}
+.badge-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 0.8rem;
+}
+.badge-tile {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1rem 0.8rem;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition), box-shadow var(--transition), opacity var(--transition);
+}
+.badge-tile .b-icon {
+  font-size: 1.7rem;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+.badge-tile .b-title {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 0.2rem;
+}
+.badge-tile .b-sub {
+  font-size: 0.68rem;
+  color: var(--ink-faded);
+}
+.badge-tile.locked {
+  opacity: 0.42;
+  filter: grayscale(0.6);
+}
+.badge-tile.locked .b-icon { filter: grayscale(1); }
+.badge-tile.unlocked {
+  border-color: var(--rose-300);
+  background: linear-gradient(160deg, var(--paper) 60%, var(--blush) 140%);
+}
+
+/* ── Configurações ── */
+.config-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.8rem;
+}
+@media (max-width: 900px) { .config-grid { grid-template-columns: 1fr; } }
+.config-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.1rem 1.2rem;
+  box-shadow: var(--shadow-sm);
+}
+.config-card-label {
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--ink-faded);
+  margin-bottom: 0.8rem;
+}
+.config-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  font-size: 0.82rem;
+  color: var(--ink);
+  padding: 0.5rem 0;
+  border-bottom: 1px dotted var(--line);
+}
+.config-row:last-child { border-bottom: none; }
+.config-swatches { display: flex; gap: 0.5rem; }
+.config-swatch {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid var(--paper);
+  box-shadow: 0 0 0 1.5px var(--line);
+  transition: all var(--transition);
+  padding: 0;
+}
+.config-swatch.active { box-shadow: 0 0 0 2px var(--rose-deep); transform: scale(1.1); }
+.config-mini-btn {
+  padding: 0.35rem 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--paper);
+  color: var(--ink-soft);
+  font-family: inherit;
+  font-size: 0.72rem;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.config-mini-btn.active { background: var(--rose-deep); border-color: var(--rose-deep); color: #fff; }
 </style>
 </head>
 <body>
@@ -379,13 +496,11 @@
         <div>
           <div class="perfil-header-nome" data-user-name>—</div>
           <div class="perfil-header-tag">Estudante de Direito · Preparatório OAB 48</div>
+          <div class="perfil-header-jornada" id="perfil-jornada"></div>
         </div>
       </div>
       <div class="perfil-header-backup">
         <button class="btn btn-ghost" onclick="window._perfilOAB.abrirModal()">✎ Editar perfil</button>
-        <button class="btn btn-primary" id="ph-exportar">⬇ Exportar backup</button>
-        <button class="btn btn-ghost" id="ph-importar-btn">⬆ Importar backup</button>
-        <input type="file" id="ph-importar-file" accept="application/json" style="display:none">
       </div>
     </div>
 
@@ -393,9 +508,92 @@
     <div class="section-label">Resumo</div>
     <div class="resumo-grid" id="resumo-grid"></div>
 
+    <!-- CONQUISTAS -->
+    <div class="section-label">Conquistas</div>
+    <div class="conquistas-wrap">
+      <p class="conquistas-sub" id="conquistas-sub-txt"></p>
+      <div class="badge-grid" id="badge-grid"></div>
+    </div>
+
+    <!-- CONFIGURAÇÕES -->
+    <div class="section-label">Configurações</div>
+    <div class="config-grid">
+      <div class="config-card">
+        <div class="config-card-label">Aparência</div>
+        <div class="config-row">
+          <span>Modo escuro</span>
+          <button class="theme-toggle" id="perfil-theme-toggle" onclick="toggleTheme()">
+            <span class="toggle-track"><span class="toggle-thumb"></span></span>
+          </button>
+        </div>
+        <div class="config-row" style="align-items:flex-start;flex-direction:column;gap:0.5rem">
+          <span>Intensidade da cor</span>
+          <div class="config-swatches" id="perfil-cor-swatches"></div>
+        </div>
+      </div>
+      <div class="config-card">
+        <div class="config-card-label">Conta</div>
+        <div class="config-row">
+          <span>Nome e foto</span>
+          <button class="btn btn-ghost" style="font-size:0.76rem;padding:0.4rem 0.8rem" onclick="window._perfilOAB.abrirModal()">Editar</button>
+        </div>
+        <div class="config-row">
+          <span>Como quer ser chamado(a)</span>
+          <div style="display:flex;gap:0.4rem">
+            <button class="config-mini-btn" id="perfil-genero-f" onclick="window._perfilOAB.setGenero('f'); _perfilAtualizarGeneroBtns(); location.reload();">Feminino</button>
+            <button class="config-mini-btn" id="perfil-genero-m" onclick="window._perfilOAB.setGenero('m'); _perfilAtualizarGeneroBtns(); location.reload();">Masculino</button>
+          </div>
+        </div>
+      </div>
+      <div class="config-card">
+        <div class="config-card-label">Seus dados</div>
+        <div class="config-row">
+          <span>Backup completo (progresso + configurações)</span>
+        </div>
+        <div style="display:flex;gap:0.6rem;flex-wrap:wrap;margin-top:0.4rem">
+          <button class="btn btn-primary" id="ph-exportar" style="font-size:0.78rem">⬇ Exportar backup</button>
+          <button class="btn btn-ghost" id="ph-importar-btn" style="font-size:0.78rem">⬆ Importar backup</button>
+          <input type="file" id="ph-importar-file" accept="application/json" style="display:none">
+        </div>
+      </div>
+    </div>
+
     <!-- INSIGHTS -->
     <div class="section-label">Insights</div>
     <div class="insights-grid" id="insights-grid"></div>
+
+    <!-- PROGRESSO DE ESTUDO (antes vinha depois do humor — trazido pra cima
+         pra dar mais peso visual ao progresso real, não só ao humor) -->
+    <div class="section-label">Progresso de estudo</div>
+    <div class="graficos-grid-3">
+      <div class="chart-card">
+        <div class="chart-head">
+          <div>
+            <div class="chart-title">Produtividade</div>
+            <div class="chart-sub">Últimas 8 semanas</div>
+          </div>
+        </div>
+        <div class="line-chart" id="prod-chart"></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-head">
+          <div>
+            <div class="chart-title">Horas estudadas</div>
+            <div class="chart-sub">Últimas 8 semanas</div>
+          </div>
+        </div>
+        <div class="line-chart" id="horas-chart"></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-head">
+          <div>
+            <div class="chart-title">Tarefas concluídas</div>
+            <div class="chart-sub">Últimas 8 semanas</div>
+          </div>
+        </div>
+        <div class="line-chart" id="tarefas-chart"></div>
+      </div>
+    </div>
 
     <!-- HISTÓRICO -->
     <div class="section-label">Histórico de humor</div>
@@ -429,8 +627,8 @@
       </div>
     </div>
 
-    <!-- GRÁFICOS -->
-    <div class="section-label">Gráficos</div>
+    <!-- GRÁFICOS DE HUMOR -->
+    <div class="section-label">Gráficos de humor</div>
     <div class="graficos-grid">
       <div class="chart-card">
         <div class="chart-head">
@@ -452,45 +650,15 @@
       </div>
     </div>
 
-    <div class="graficos-grid-3">
-      <div class="chart-card">
-        <div class="chart-head">
-          <div>
-            <div class="chart-title">Produtividade</div>
-            <div class="chart-sub">Últimas 8 semanas</div>
-          </div>
-        </div>
-        <div class="line-chart" id="prod-chart"></div>
-      </div>
-      <div class="chart-card">
-        <div class="chart-head">
-          <div>
-            <div class="chart-title">Horas estudadas</div>
-            <div class="chart-sub">Últimas 8 semanas</div>
-          </div>
-        </div>
-        <div class="line-chart" id="horas-chart"></div>
-      </div>
-      <div class="chart-card">
-        <div class="chart-head">
-          <div>
-            <div class="chart-title">Tarefas concluídas</div>
-            <div class="chart-sub">Últimas 8 semanas</div>
-          </div>
-        </div>
-        <div class="line-chart" id="tarefas-chart"></div>
-      </div>
-    </div>
-
   </main>
 </div>
 
 <script src="plano-vde.js"></script>
-<script src="progresso.js?v=1783859287"></script>
+<script src="progresso.js?v=1783861348"></script>
 <script src="humor.js"></script>
 <script src="script.js?v=1783860648"></script>
 <script src="cores.js"></script>
-<script src="perfil.js?v=1783860863"></script>
+<script src="perfil.js?v=1783861348"></script>
 <script>
 // ── Helpers de agregação semanal (produtividade / horas / tarefas) ──
 function _segundaDe(dataStr) {
@@ -545,6 +713,16 @@ function renderLineChart(containerId, pontos, formatador) {
   }).join('');
 }
 
+// Reflete no botão qual gênero está selecionado — chamada tanto no
+// carregamento da página quanto depois de clicar num dos botões.
+function _perfilAtualizarGeneroBtns() {
+  const genero = (window._perfilOAB && window._perfilOAB.getGenero) ? window._perfilOAB.getGenero() : 'f';
+  const btnF = document.getElementById('perfil-genero-f');
+  const btnM = document.getElementById('perfil-genero-m');
+  if (btnF) btnF.classList.toggle('active', genero === 'f');
+  if (btnM) btnM.classList.toggle('active', genero === 'm');
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const p = carregarProgresso();
   const stats = calcularStats();
@@ -552,6 +730,83 @@ document.addEventListener('DOMContentLoaded', () => {
   const sessoes = getSessoesPomodoro();
   const totalSessoes = sessoes.reduce((s, x) => s + x.count, 0);
   const fmtG = (t) => (window._perfilOAB && window._perfilOAB.formatarGenero) ? window._perfilOAB.formatarGenero(t) : t;
+
+  // ── JORNADA (linha narrativa no cabeçalho) ──
+  (function renderJornada() {
+    const el = document.getElementById('perfil-jornada');
+    if (!el) return;
+    const datasConclusao = Object.values(p.dias || {})
+      .filter(d => d.concluido && d.data_conclusao)
+      .map(d => d.data_conclusao)
+      .sort();
+    const partes = [];
+    if (datasConclusao.length) {
+      const inicio = new Date(datasConclusao[0] + 'T12:00:00');
+      partes.push(`<span>📅 Estudando desde <strong>${inicio.toLocaleDateString('pt-BR', { day: 'numeric', month: 'long' })}</strong></span>`);
+    }
+    partes.push(`<span>✨ Sequência atual: <strong>${p.streak || 0} dia${(p.streak||0) !== 1 ? 's' : ''}</strong></span>`);
+    partes.push(`<span>📈 <strong>${stats.pct}%</strong> do plano concluído</span>`);
+    el.innerHTML = partes.join('');
+  })();
+
+  // ── CONQUISTAS (badges) ──
+  (function renderConquistas() {
+    const grid = document.getElementById('badge-grid');
+    const sub = document.getElementById('conquistas-sub-txt');
+    if (!grid) return;
+    const q = (typeof getTotaisQuestoes === 'function') ? getTotaisQuestoes() : { total: 0, pct: 0 };
+    const streak = p.streak || 0;
+
+    const badges = [
+      { icon: '🌸', title: 'Primeiro passo', sub: 'Conclua seu 1º dia', ok: stats.concluidos >= 1 },
+      { icon: '✦', title: 'Primeira semana', sub: '7 dias concluídos', ok: stats.concluidos >= 7 },
+      { icon: '🏆', title: 'Metade do caminho', sub: '30 dias concluídos', ok: stats.concluidos >= 30 },
+      { icon: '👑', title: 'Reta final', sub: '60 dias concluídos', ok: stats.concluidos >= 60 },
+      { icon: '✨', title: 'Constância', sub: '7 dias seguidos', ok: streak >= 7 },
+      { icon: '🔥', title: 'Disciplina', sub: '15 dias seguidos', ok: streak >= 15 },
+      { icon: '📚', title: 'Primeiras questões', sub: '50 questões resolvidas', ok: q.total >= 50 },
+      { icon: '📖', title: 'Maratonista', sub: '100 questões resolvidas', ok: q.total >= 100 },
+      { icon: '🎯', title: 'Dedicação', sub: '500 questões resolvidas', ok: q.total >= 500 },
+      { icon: '⚖️', title: 'Acima do corte', sub: '70%+ de acerto (10+ questões)', ok: q.pct >= 70 && q.total >= 10 },
+      { icon: '🌱', title: 'Autoconhecimento', sub: 'Registre seu humor 7 vezes', ok: (insightsHumor && insightsHumor.totalDias >= 7) },
+      { icon: '🌟', title: 'Rotina firme', sub: 'Registre seu humor 30 vezes', ok: (insightsHumor && insightsHumor.totalDias >= 30) },
+    ];
+
+    const desbloqueadas = badges.filter(b => b.ok).length;
+    if (sub) sub.textContent = `${desbloqueadas} de ${badges.length} desbloqueadas`;
+    grid.innerHTML = badges.map(b => `
+      <div class="badge-tile ${b.ok ? 'unlocked' : 'locked'}">
+        <span class="b-icon">${b.icon}</span>
+        <div class="b-title">${b.title}</div>
+        <div class="b-sub">${b.sub}</div>
+      </div>`).join('');
+  })();
+
+  // ── CONFIGURAÇÕES ──
+  (function renderConfiguracoes() {
+    // Intensidade da cor (reaproveita a API global de cores.js)
+    const swWrap = document.getElementById('perfil-cor-swatches');
+    if (swWrap) {
+      const niveis = [
+        { id: 'sutil', cor: '#B14A77' },
+        { id: 'couture', cor: '#C8336F' },
+        { id: 'vibrante', cor: '#E01571' },
+      ];
+      let atual = 'couture';
+      try { atual = localStorage.getItem('oab_rose_intensity') || 'couture'; } catch (e) {}
+      swWrap.innerHTML = niveis.map(n => `<button type="button" class="config-swatch ${n.id === atual ? 'active' : ''}" data-nivel="${n.id}" style="background:${n.cor}" title="${n.id}"></button>`).join('');
+      swWrap.querySelectorAll('.config-swatch').forEach(btn => {
+        btn.addEventListener('click', () => {
+          if (window._coresOAB) window._coresOAB.apply(btn.dataset.nivel);
+          swWrap.querySelectorAll('.config-swatch').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+        });
+      });
+    }
+
+    // Gênero (reaproveita _perfilOAB.getGenero/setGenero)
+    _perfilAtualizarGeneroBtns();
+  })();
 
   // ── RESUMO ──
   let tarefasConcluidas = 0;
