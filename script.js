@@ -328,7 +328,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (streakElement) streakElement.innerText = streak;
         showPetals();
-        setTimeout(() => alert(`Mandou bem, ${nomeUsuario}! Streak: ${streak} dias seguidos! 🔥`), 300);
+        setTimeout(() => alert(`Mandou bem, ${nomeUsuario}! Streak: ${streak} dias seguidos! ✨`), 300);
     };
 
     // 2. CHECKLIST DE TAREFAS

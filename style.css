@@ -1441,7 +1441,7 @@ tr:hover td { background: var(--bg-soft); }
   from { opacity: 0; transform: translateY(10px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-main { animation: pageEnter 0.45s cubic-bezier(0.16, 1, 0.3, 1); }
+main { animation: pageEnter 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
 
 /* Botões — feedback de toque/clique (scale sutil no :active) */
 .btn, .feedback-btn, .nav-link, .chip, .mat-chip, .rev-tab-btn,
@@ -1534,22 +1534,22 @@ main { animation: pageEnter 0.45s cubic-bezier(0.16, 1, 0.3, 1); }
   from { opacity: 0; transform: translateX(-8px); }
   to   { opacity: 1; transform: translateX(0); }
 }
-.sidebar a.nav-link:nth-of-type(1) { animation-delay: 0.02s; }
-.sidebar a.nav-link:nth-of-type(2) { animation-delay: 0.04s; }
-.sidebar a.nav-link:nth-of-type(3) { animation-delay: 0.06s; }
-.sidebar a.nav-link:nth-of-type(4) { animation-delay: 0.08s; }
-.sidebar a.nav-link:nth-of-type(5) { animation-delay: 0.1s; }
-.sidebar a.nav-link:nth-of-type(6) { animation-delay: 0.12s; }
-.sidebar a.nav-link:nth-of-type(7) { animation-delay: 0.14s; }
-.sidebar a.nav-link:nth-of-type(8) { animation-delay: 0.16s; }
-.sidebar a.nav-link:nth-of-type(9) { animation-delay: 0.18s; }
-.sidebar a.nav-link:nth-of-type(10) { animation-delay: 0.2s; }
-.sidebar a.nav-link:nth-of-type(11) { animation-delay: 0.22s; }
-.sidebar a.nav-link:nth-of-type(12) { animation-delay: 0.24s; }
-.sidebar a.nav-link:nth-of-type(13) { animation-delay: 0.26s; }
-.sidebar a.nav-link:nth-of-type(14) { animation-delay: 0.28s; }
-.sidebar a.nav-link:nth-of-type(15) { animation-delay: 0.3s; }
-.sidebar a.nav-link:nth-of-type(16) { animation-delay: 0.32s; }
+.sidebar a.nav-link:nth-of-type(1) { animation-delay: 0.013s; }
+.sidebar a.nav-link:nth-of-type(2) { animation-delay: 0.026s; }
+.sidebar a.nav-link:nth-of-type(3) { animation-delay: 0.039s; }
+.sidebar a.nav-link:nth-of-type(4) { animation-delay: 0.052s; }
+.sidebar a.nav-link:nth-of-type(5) { animation-delay: 0.065s; }
+.sidebar a.nav-link:nth-of-type(6) { animation-delay: 0.078s; }
+.sidebar a.nav-link:nth-of-type(7) { animation-delay: 0.091s; }
+.sidebar a.nav-link:nth-of-type(8) { animation-delay: 0.104s; }
+.sidebar a.nav-link:nth-of-type(9) { animation-delay: 0.117s; }
+.sidebar a.nav-link:nth-of-type(10) { animation-delay: 0.13s; }
+.sidebar a.nav-link:nth-of-type(11) { animation-delay: 0.143s; }
+.sidebar a.nav-link:nth-of-type(12) { animation-delay: 0.156s; }
+.sidebar a.nav-link:nth-of-type(13) { animation-delay: 0.169s; }
+.sidebar a.nav-link:nth-of-type(14) { animation-delay: 0.182s; }
+.sidebar a.nav-link:nth-of-type(15) { animation-delay: 0.195s; }
+.sidebar a.nav-link:nth-of-type(16) { animation-delay: 0.208s; }
 /* Cards entram em sequência (efeito cascata), não tudo de uma vez */
 .revisao-card, .stat-card, .mat-card, .q-card, .rf-card, .month-section, .va-row {
   animation: cardBloomIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) backwards;
@@ -1558,18 +1558,18 @@ main { animation: pageEnter 0.45s cubic-bezier(0.16, 1, 0.3, 1); }
   from { opacity: 0; transform: translateY(14px) scale(0.98); }
   to   { opacity: 1; transform: translateY(0) scale(1); }
 }
-.revisao-card:nth-child(1), .stat-card:nth-child(1), .mat-card:nth-child(1), .q-card:nth-child(1), .rf-card:nth-child(1), .month-section:nth-child(1), .va-row:nth-child(1) { animation-delay: 0.03s; }
-.revisao-card:nth-child(2), .stat-card:nth-child(2), .mat-card:nth-child(2), .q-card:nth-child(2), .rf-card:nth-child(2), .month-section:nth-child(2), .va-row:nth-child(2) { animation-delay: 0.06s; }
-.revisao-card:nth-child(3), .stat-card:nth-child(3), .mat-card:nth-child(3), .q-card:nth-child(3), .rf-card:nth-child(3), .month-section:nth-child(3), .va-row:nth-child(3) { animation-delay: 0.09s; }
-.revisao-card:nth-child(4), .stat-card:nth-child(4), .mat-card:nth-child(4), .q-card:nth-child(4), .rf-card:nth-child(4), .month-section:nth-child(4), .va-row:nth-child(4) { animation-delay: 0.12s; }
-.revisao-card:nth-child(5), .stat-card:nth-child(5), .mat-card:nth-child(5), .q-card:nth-child(5), .rf-card:nth-child(5), .month-section:nth-child(5), .va-row:nth-child(5) { animation-delay: 0.15s; }
-.revisao-card:nth-child(6), .stat-card:nth-child(6), .mat-card:nth-child(6), .q-card:nth-child(6), .rf-card:nth-child(6), .month-section:nth-child(6), .va-row:nth-child(6) { animation-delay: 0.18s; }
-.revisao-card:nth-child(7), .stat-card:nth-child(7), .mat-card:nth-child(7), .q-card:nth-child(7), .rf-card:nth-child(7), .month-section:nth-child(7), .va-row:nth-child(7) { animation-delay: 0.21s; }
-.revisao-card:nth-child(8), .stat-card:nth-child(8), .mat-card:nth-child(8), .q-card:nth-child(8), .rf-card:nth-child(8), .month-section:nth-child(8), .va-row:nth-child(8) { animation-delay: 0.24s; }
-.revisao-card:nth-child(9), .stat-card:nth-child(9), .mat-card:nth-child(9), .q-card:nth-child(9), .rf-card:nth-child(9), .month-section:nth-child(9), .va-row:nth-child(9) { animation-delay: 0.27s; }
-.revisao-card:nth-child(10), .stat-card:nth-child(10), .mat-card:nth-child(10), .q-card:nth-child(10), .rf-card:nth-child(10), .month-section:nth-child(10), .va-row:nth-child(10) { animation-delay: 0.3s; }
-.revisao-card:nth-child(11), .stat-card:nth-child(11), .mat-card:nth-child(11), .q-card:nth-child(11), .rf-card:nth-child(11), .month-section:nth-child(11), .va-row:nth-child(11) { animation-delay: 0.33s; }
-.revisao-card:nth-child(12), .stat-card:nth-child(12), .mat-card:nth-child(12), .q-card:nth-child(12), .rf-card:nth-child(12), .month-section:nth-child(12), .va-row:nth-child(12) { animation-delay: 0.36s; }
+.revisao-card:nth-child(1), .stat-card:nth-child(1), .mat-card:nth-child(1), .q-card:nth-child(1), .rf-card:nth-child(1), .month-section:nth-child(1), .va-row:nth-child(1) { animation-delay: 0.019s; }
+.revisao-card:nth-child(2), .stat-card:nth-child(2), .mat-card:nth-child(2), .q-card:nth-child(2), .rf-card:nth-child(2), .month-section:nth-child(2), .va-row:nth-child(2) { animation-delay: 0.039s; }
+.revisao-card:nth-child(3), .stat-card:nth-child(3), .mat-card:nth-child(3), .q-card:nth-child(3), .rf-card:nth-child(3), .month-section:nth-child(3), .va-row:nth-child(3) { animation-delay: 0.058s; }
+.revisao-card:nth-child(4), .stat-card:nth-child(4), .mat-card:nth-child(4), .q-card:nth-child(4), .rf-card:nth-child(4), .month-section:nth-child(4), .va-row:nth-child(4) { animation-delay: 0.078s; }
+.revisao-card:nth-child(5), .stat-card:nth-child(5), .mat-card:nth-child(5), .q-card:nth-child(5), .rf-card:nth-child(5), .month-section:nth-child(5), .va-row:nth-child(5) { animation-delay: 0.098s; }
+.revisao-card:nth-child(6), .stat-card:nth-child(6), .mat-card:nth-child(6), .q-card:nth-child(6), .rf-card:nth-child(6), .month-section:nth-child(6), .va-row:nth-child(6) { animation-delay: 0.117s; }
+.revisao-card:nth-child(7), .stat-card:nth-child(7), .mat-card:nth-child(7), .q-card:nth-child(7), .rf-card:nth-child(7), .month-section:nth-child(7), .va-row:nth-child(7) { animation-delay: 0.137s; }
+.revisao-card:nth-child(8), .stat-card:nth-child(8), .mat-card:nth-child(8), .q-card:nth-child(8), .rf-card:nth-child(8), .month-section:nth-child(8), .va-row:nth-child(8) { animation-delay: 0.156s; }
+.revisao-card:nth-child(9), .stat-card:nth-child(9), .mat-card:nth-child(9), .q-card:nth-child(9), .rf-card:nth-child(9), .month-section:nth-child(9), .va-row:nth-child(9) { animation-delay: 0.176s; }
+.revisao-card:nth-child(10), .stat-card:nth-child(10), .mat-card:nth-child(10), .q-card:nth-child(10), .rf-card:nth-child(10), .month-section:nth-child(10), .va-row:nth-child(10) { animation-delay: 0.195s; }
+.revisao-card:nth-child(11), .stat-card:nth-child(11), .mat-card:nth-child(11), .q-card:nth-child(11), .rf-card:nth-child(11), .month-section:nth-child(11), .va-row:nth-child(11) { animation-delay: 0.215s; }
+.revisao-card:nth-child(12), .stat-card:nth-child(12), .mat-card:nth-child(12), .q-card:nth-child(12), .rf-card:nth-child(12), .month-section:nth-child(12), .va-row:nth-child(12) { animation-delay: 0.234s; }
 /* Botões primários — brilho que varre ao passar o mouse (só hover real) */
 @media (hover: hover) and (pointer: fine) {
   .btn-primary, .feedback-btn.lembrei, #btn-estudei {

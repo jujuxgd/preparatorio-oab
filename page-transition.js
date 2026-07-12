@@ -17,23 +17,20 @@
   // Cobre a tela imediatamente, antes de qualquer CSS externo carregar
   veil.style.cssText = 'position:fixed;inset:0;z-index:100000;opacity:1;pointer-events:none;' +
     'background:radial-gradient(circle at 50% 42%, ' + rose100 + ' 0%, ' + paper + ' 62%);' +
-    'transition:opacity .38s cubic-bezier(.16,1,.3,1);';
+    'transition:opacity .2s ease-out;';
   document.documentElement.appendChild(veil);
 
   function reveal() {
     veil.style.opacity = '0';
   }
-  // Duas camadas de segurança: revela assim que o DOM estiver pronto,
-  // e de novo no window.load (recursos pesados), o que vier primeiro
-  // já resolve — o resto é só garantia.
+  // Revela assim que possível — sem dupla espera, pra não parecer travado
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function () { requestAnimationFrame(function(){ requestAnimationFrame(reveal); }); });
+    document.addEventListener('DOMContentLoaded', function () { requestAnimationFrame(reveal); });
   } else {
-    requestAnimationFrame(function(){ requestAnimationFrame(reveal); });
+    requestAnimationFrame(reveal);
   }
-  window.addEventListener('load', reveal);
   // Rede de segurança final — nunca deixa o véu preso na tela
-  setTimeout(reveal, 900);
+  setTimeout(reveal, 500);
 
   // ── Intercepta cliques em links internos pra floração de saída ──
   document.addEventListener('click', function (e) {
@@ -50,6 +47,8 @@
     e.preventDefault();
     veil.style.pointerEvents = 'auto';
     veil.style.opacity = '1';
-    setTimeout(function () { window.location.href = href; }, 260);
+    // Espera só o suficiente pra sentir o toque respondeu, sem
+    // atrasar a navegação de verdade
+    setTimeout(function () { window.location.href = href; }, 110);
   }, true);
 })();
