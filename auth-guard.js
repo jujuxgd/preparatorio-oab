@@ -1,8 +1,15 @@
 // ============================================================
 // OAB · Guarda de autenticação + sincronização com a nuvem
 // Precisa ser um <script> comum, carregado logo após firebase-init.js
-// no topo do <head>: cria um véu cobrindo a tela ANTES do primeiro
-// paint, e só revela o conteúdo depois de confirmar o login.
+// no topo do <head>.
+//
+// Estratégia "otimista": se este navegador já logou com sucesso antes
+// (marca oab_auth_ok no localStorage), mostra o app IMEDIATAMENTE, sem
+// esperar o Firebase confirmar de novo a cada página — só confere em
+// segundo plano. Isso evita o "piscando toda hora" de esperar o
+// Firebase em toda navegação, já que esse app é multi-página (não é
+// um app de página única). Só espera de verdade — cobrindo a tela —
+// na primeira vez, quando ainda não existe essa marca local.
 // ============================================================
 (function () {
   var isDark = (localStorage.getItem('theme') || 'light') === 'dark';
@@ -12,8 +19,6 @@
   var roseDeep = '#C8336F';
   try { roseDeep = getComputedStyle(document.documentElement).getPropertyValue('--rose-600').trim() || roseDeep; } catch (e) {}
 
-  // Estilos próprios do gate (funciona mesmo antes do style.css carregar,
-  // e cobre estados como :focus/:hover que não dá pra fazer só inline)
   var css = document.createElement('style');
   css.textContent =
     '#auth-gate input:focus { outline:none; border-color:' + roseDeep + ' !important; box-shadow:0 0 0 3px ' + roseDeep + '22; }' +
@@ -28,17 +33,29 @@
   overlay.style.cssText = 'position:fixed;inset:0;z-index:200000;display:flex;align-items:center;' +
     'justify-content:center;background:radial-gradient(circle at 50% 38%, ' + cores.bg1 + ' 0%, ' + cores.bg2 + ' 65%);' +
     'font-family:Inter,-apple-system,sans-serif;padding:1.5rem;box-sizing:border-box;opacity:0;transition:opacity .15s ease;';
-  document.documentElement.appendChild(overlay);
-  requestAnimationFrame(function () { overlay.style.opacity = '1'; });
 
-  // Só mostra o texto "Carregando" se a verificação de login demorar
-  // mais que um piscar de olhos — a maioria das vezes é quase instantâneo
-  // (a sessão já fica salva no aparelho), então não precisa mostrar nada.
-  var loadingTimer = setTimeout(function () {
-    if (overlay.parentNode) overlay.innerHTML = '<div style="color:' + roseDeep + ';font-size:0.85rem">Carregando…</div>';
-  }, 280);
+  var jaLogouAntes = false;
+  try { jaLogouAntes = localStorage.getItem('oab_auth_ok') === '1'; } catch (e) {}
+  var overlayAtivo = false;
+  var loadingTimer = null;
+
+  function marcarLogado(sim) {
+    try {
+      if (sim) localStorage.setItem('oab_auth_ok', '1');
+      else localStorage.removeItem('oab_auth_ok');
+    } catch (e) {}
+  }
+
+  function ativarOverlay() {
+    if (overlayAtivo) return;
+    overlayAtivo = true;
+    if (!overlay.parentNode) document.documentElement.appendChild(overlay);
+    requestAnimationFrame(function () { overlay.style.opacity = '1'; });
+    esconderApp();
+  }
 
   function esconderApp() {
+    if (document.getElementById('auth-gate-hide-app')) return;
     var style = document.createElement('style');
     style.id = 'auth-gate-hide-app';
     style.textContent = '.app, .mobile-menu-btn, .sidebar-toggle-btn { visibility: hidden !important; }';
@@ -46,15 +63,30 @@
   }
   function mostrarApp() {
     clearTimeout(loadingTimer);
+    marcarLogado(true);
     var style = document.getElementById('auth-gate-hide-app');
     if (style) style.remove();
-    overlay.remove();
-    css.remove();
+    if (overlay.parentNode) overlay.remove();
+    overlayAtivo = false;
   }
-  esconderApp();
+
+  if (jaLogouAntes) {
+    // Confiança otimista: não bloqueia nada. Só prepara um timer que
+    // ativa o véu se a checagem em segundo plano demorar de verdade
+    // (bem raro) — assim o usuário não fica travado numa tela em
+    // branco se a internet estiver ruim.
+    loadingTimer = setTimeout(ativarOverlay, 1200);
+  } else {
+    ativarOverlay();
+    loadingTimer = setTimeout(function () {
+      if (overlay.parentNode) overlay.innerHTML = '<div style="color:' + roseDeep + ';font-size:0.85rem">Carregando…</div>';
+    }, 280);
+  }
 
   function renderLoginForm(erro) {
     clearTimeout(loadingTimer);
+    marcarLogado(false);
+    ativarOverlay();
     overlay.style.opacity = '1';
     overlay.innerHTML =
       '<div style="width:100%;max-width:360px;background:' + cores.paper + ';border:1px solid ' + cores.linha + ';border-radius:20px;padding:2.4rem 2rem;box-shadow:0 8px 32px rgba(33,28,25,0.13), 0 20px 48px rgba(33,28,25,0.08)">' +
@@ -104,6 +136,8 @@
   }
 
   if (typeof window._fbAuth === 'undefined') {
+    ativarOverlay();
+    overlay.style.opacity = '1';
     overlay.innerHTML = '<div style="max-width:320px;text-align:center;font-size:0.85rem;color:#c0524b">Não foi possível carregar o sistema de login. Verifique sua conexão e recarregue a página.</div>';
     return;
   }
