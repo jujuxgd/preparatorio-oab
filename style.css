@@ -862,16 +862,6 @@ select:focus {
   .sidebar.open { left: 0; }
   main { padding: 1.5rem 1.2rem 2rem; }
   .page-title h1 { font-size: 1.8rem; }
-
-  /* Logo maior no mobile — a fonte cursiva não cabe numa linha só
-     em 240px, então deixa quebrar em 2 linhas e centraliza tudo */
-  .logo { text-align: center; }
-  .logo h1 {
-    font-size: 2.4rem;
-    line-height: 1.05;
-    margin-bottom: 0.3rem;
-    white-space: normal;
-  }
 }
 
 /* ============================================
