@@ -200,7 +200,9 @@ body {
   position: sticky;
   top: 0;
   height: 100vh;
+  height: 100dvh;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   display: flex;
   flex-direction: column;
 }
@@ -846,10 +848,16 @@ select:focus {
   .sidebar {
     position: fixed;
     left: -240px;
+    top: 0;
     width: 240px;
+    height: 100vh;
+    height: 100dvh;
     z-index: 100;
     transition: left var(--transition);
     box-shadow: var(--shadow-lg);
+    padding-top: calc(1.3rem + env(safe-area-inset-top));
+    padding-bottom: calc(1.3rem + env(safe-area-inset-bottom));
+    padding-left: calc(1rem + env(safe-area-inset-left));
   }
   .sidebar.open { left: 0; }
   main { padding: 1.5rem 1.2rem 2rem; }
@@ -1224,6 +1232,9 @@ select:focus {
   background: rgba(253, 252, 250, 0.88) !important;
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  will-change: transform;
 }
 
 [data-theme="dark"] .sidebar {
@@ -1236,8 +1247,8 @@ select:focus {
 .mobile-menu-btn {
   display: none;
   position: fixed;
-  top: 1rem;
-  left: 1rem;
+  top: calc(1rem + env(safe-area-inset-top));
+  left: calc(1rem + env(safe-area-inset-left));
   z-index: 200;
   width: 40px;
   height: 40px;

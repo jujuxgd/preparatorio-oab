@@ -246,8 +246,10 @@ function toggleSidebar() {
       document.body.appendChild(bd);
     }
     bd.classList.add('show');
-  } else if (bd) {
-    bd.classList.remove('show');
+    document.body.style.overflow = 'hidden';
+  } else {
+    if (bd) bd.classList.remove('show');
+    document.body.style.overflow = '';
   }
 }
 
