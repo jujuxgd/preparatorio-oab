@@ -111,6 +111,13 @@
   overflow-wrap: break-word;
   word-break: break-word;
 }
+/* Rede de segurança: nenhum elemento dentro do texto (badge, span,
+   mark de busca, highlight manual etc.) pode ultrapassar a largura
+   do contêiner, seja qual for a origem do HTML injetado */
+.cl-native-content * {
+  max-width: 100%;
+  box-sizing: border-box;
+}
 
 /* ── Seção principal (cl-part) ──────────────── */
 .cl-native-content .cl-part {
@@ -212,28 +219,35 @@
 }
 
 /* ── Incisos ────────────────────────────────── */
+/* Recuo suspenso (hanging indent) em vez de flex: o texto do inciso
+   nos dados (cl-*.js) não vem envolto em .cl-ic-text, então um flex
+   item anônimo sem min-width:0 podia não encolher em telas estreitas
+   e vazar pra fora da tela. text-indent negativo resolve sem
+   depender de nenhum wrapper extra no HTML gerado. */
 .cl-native-content .cl-inciso {
   margin: 0.28rem 0 0.28rem 1.6rem;
   color: var(--ink);
   font-size: 0.97rem;
   line-height: 1.88;
-  display: flex;
-  gap: 0.55rem;
-  align-items: baseline;
+  display: block;
+  padding-left: 2.15rem;
+  text-indent: -2.15rem;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 .cl-native-content .cl-inc-num {
+  display: inline-block;
   font-weight: 800;
   color: var(--rose-deep);
-  min-width: 2.4rem;
-  flex-shrink: 0;
+  width: 2.4rem;
+  text-indent: 0;
   font-family: 'Inter', sans-serif;
   font-size: 0.74rem;
   letter-spacing: 0.02em;
 }
 /* wrapper que mantém texto + badges como bloco único dentro do flex */
 .cl-native-content .cl-ic-text {
-  flex: 1;
-  min-width: 0;
+  display: inline;
 }
 
 /* ── Alíneas ────────────────────────────────── */
@@ -442,7 +456,8 @@ mark.cl-user-hl[data-color="purple"] { background: rgba(237, 233, 254, 0.9); box
     max-height: none;
     height: calc(100dvh - 210px);
     overflow-y: auto;
-    overflow-x: hidden;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
     width: 100%;
     box-sizing: border-box;
   }
