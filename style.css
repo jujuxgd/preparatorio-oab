@@ -1168,7 +1168,7 @@ select:focus {
 .aurora-bg {
   position: fixed;
   inset: 0;
-  z-index: 0;
+  z-index: -1;
   overflow: hidden;
   pointer-events: none;
 }
@@ -1230,13 +1230,12 @@ select:focus {
   to   { transform: translate(30px, -50px) scale(1.03); }
 }
 
-/* App senta acima da aurora (e acima dos botões fixos fora da .app,
-   como mobile-menu-btn e sidebar-toggle-btn — senão qualquer modal
-   interno, mesmo com z-index alto, fica preso abaixo deles) */
-.app {
-  position: relative;
-  z-index: 700;
-}
+/* App não precisa de position/z-index próprio — a aurora usa
+   z-index negativo (abaixo do fluxo normal) em vez disso. Assim
+   .app não cria seu próprio stacking context e todo modal interno
+   (Modo Foco, Editar Perfil, overlays de calendário/reta-final)
+   compete de forma justa com mobile-menu-btn/sidebar-toggle-btn
+   usando o z-index real de cada um, sem nenhum ficar "preso". */
 
 /* Glassmorphism na sidebar */
 .sidebar {
