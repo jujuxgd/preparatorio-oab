@@ -6,7 +6,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
 <script src="firebase-init.js?v=1783862902"></script>
-<script src="auth-guard.js?v=1783863448"></script>
+<script src="auth-guard.js?v=1783863611"></script>
 <script src="cores-early.js?v=1783859977"></script>
 <script src="page-transition.js?v=1783861010"></script>
 <title>Perfil - Preparatório OAB</title>
@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Inter:opsz,wght@14..32,400..700&family=Caveat:wght@400;500&display=swap" rel="stylesheet">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="style.css?v=1783861897">
+<link rel="stylesheet" href="style.css?v=1783863611">
 <style>
 /* ════════════════════════════════════════════
    PERFIL — diário de evolução pessoal
@@ -517,6 +517,7 @@
       </div>
       <div class="perfil-header-backup">
         <button class="btn btn-ghost" onclick="window._perfilOAB.abrirModal()">✎ Editar perfil</button>
+        <button class="btn btn-ghost" id="ph-logout-topo" style="color:var(--error)">⏻ Sair</button>
       </div>
     </div>
 
@@ -884,13 +885,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Sair da conta
+    const fazerLogout = () => {
+      const ok = confirm('Sair da conta? Você vai precisar entrar de novo pra acessar o site.');
+      if (ok && window._fbAuth) window._fbAuth.signOut().then(() => location.reload());
+    };
     const btnLogout = document.getElementById('ph-logout');
-    if (btnLogout) {
-      btnLogout.addEventListener('click', () => {
-        const ok = confirm('Sair da conta? Você vai precisar entrar de novo pra acessar o site.');
-        if (ok && window._fbAuth) window._fbAuth.signOut().then(() => location.reload());
-      });
-    }
+    if (btnLogout) btnLogout.addEventListener('click', fazerLogout);
+    const btnLogoutTopo = document.getElementById('ph-logout-topo');
+    if (btnLogoutTopo) btnLogoutTopo.addEventListener('click', fazerLogout);
   })();
 
   // ── RESUMO ──

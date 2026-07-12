@@ -27,9 +27,16 @@
   overlay.id = 'auth-gate';
   overlay.style.cssText = 'position:fixed;inset:0;z-index:200000;display:flex;align-items:center;' +
     'justify-content:center;background:radial-gradient(circle at 50% 38%, ' + cores.bg1 + ' 0%, ' + cores.bg2 + ' 65%);' +
-    'font-family:Inter,-apple-system,sans-serif;padding:1.5rem;box-sizing:border-box;';
-  overlay.innerHTML = '<div style="color:' + roseDeep + ';font-size:0.85rem">Carregando…</div>';
+    'font-family:Inter,-apple-system,sans-serif;padding:1.5rem;box-sizing:border-box;opacity:0;transition:opacity .15s ease;';
   document.documentElement.appendChild(overlay);
+  requestAnimationFrame(function () { overlay.style.opacity = '1'; });
+
+  // Só mostra o texto "Carregando" se a verificação de login demorar
+  // mais que um piscar de olhos — a maioria das vezes é quase instantâneo
+  // (a sessão já fica salva no aparelho), então não precisa mostrar nada.
+  var loadingTimer = setTimeout(function () {
+    if (overlay.parentNode) overlay.innerHTML = '<div style="color:' + roseDeep + ';font-size:0.85rem">Carregando…</div>';
+  }, 280);
 
   function esconderApp() {
     var style = document.createElement('style');
@@ -38,6 +45,7 @@
     document.head.appendChild(style);
   }
   function mostrarApp() {
+    clearTimeout(loadingTimer);
     var style = document.getElementById('auth-gate-hide-app');
     if (style) style.remove();
     overlay.remove();
@@ -46,6 +54,8 @@
   esconderApp();
 
   function renderLoginForm(erro) {
+    clearTimeout(loadingTimer);
+    overlay.style.opacity = '1';
     overlay.innerHTML =
       '<div style="width:100%;max-width:360px;background:' + cores.paper + ';border:1px solid ' + cores.linha + ';border-radius:20px;padding:2.4rem 2rem;box-shadow:0 8px 32px rgba(33,28,25,0.13), 0 20px 48px rgba(33,28,25,0.08)">' +
         '<div style="display:flex;justify-content:center;margin-bottom:1rem">' +
