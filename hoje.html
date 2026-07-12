@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Inter:opsz,wght@14..32,400..700&family=Caveat:wght@400;500&display=swap" rel="stylesheet">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="style.css?v=1783859287">
+<link rel="stylesheet" href="style.css?v=1783859530">
 <!-- quill.snow.css removido — aba Anotações foi descontinuada -->
 <style>
 /* ════════════════════════════════════════════
@@ -1301,7 +1301,7 @@
 <button class="sidebar-toggle-btn" onclick="toggleSidebarCollapse()" title="Esconder menu">‹</button>
 
 <script src="erros-core.js"></script>
-<script src="script.js?v=1783859287"></script>
+<script src="script.js?v=1783859530"></script>
 <script src="perfil.js"></script>
 <script src="progresso.js?v=1783859287"></script>
 <script src="plano-vde.js"></script>
@@ -1668,7 +1668,7 @@ function toggleDiaConcluido() {
     // Gravar próximo dia para auto-avançar
     if (getDadosDia(dia + 1)) localStorage.setItem('oab_current_day', String(dia + 1));
     btn.classList.add('concluido');
-    btn.textContent = '✓ Dia Concluído · Revisão programada (1, 7, 15, 30 dias)';
+    btn.textContent = '✓ Dia Concluído · Revisão programada';
     const s2 = calcularStats();
     const pctEl2  = document.getElementById('progresso-pct');
     const diasEl2 = document.getElementById('progresso-dias');
@@ -1677,9 +1677,13 @@ function toggleDiaConcluido() {
     if (diasEl2) diasEl2.textContent = `${s2.diasConcluidos ?? 0} de 120 dias`;
     if (barEl2)  barEl2.style.width  = `${s2.pct}%`;
     // Toast elegante com auto-avanço
+    if (btn) {
+      btn.classList.add('celebrate-pop');
+      setTimeout(() => btn.classList.remove('celebrate-pop'), 500);
+    }
+    showPetals();
     const nextD = getDadosDia(dia + 1);
     if (nextD) {
-      showPetals();
       _mostrarToastAvanco(dia + 1, nextD);
     }
   }

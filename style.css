@@ -1422,3 +1422,77 @@ tr:hover td { background: var(--bg-soft); }
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover { background: var(--rose-deep); }
+
+/* ============================================
+   ANIMAÇÕES · Transições, micro-interações
+============================================ */
+
+/* Respeita quem pediu menos movimento no sistema — desliga tudo */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* Entrada suave do conteúdo principal ao carregar cada página */
+@keyframes pageEnter {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+main { animation: pageEnter 0.45s cubic-bezier(0.16, 1, 0.3, 1); }
+
+/* Botões — feedback de toque/clique (scale sutil no :active) */
+.btn, .feedback-btn, .nav-link, .chip, .mat-chip, .rev-tab-btn,
+.rev-filter-pill, .cl-tab, .tab, .day-cell, .theme-toggle,
+.mobile-menu-btn, .sidebar-toggle-btn {
+  transition: transform 0.15s ease, background-color var(--transition), border-color var(--transition), color var(--transition), box-shadow var(--transition), opacity var(--transition);
+}
+.btn:active, .feedback-btn:active, .chip:active, .mat-chip:active,
+.rev-filter-pill:active, .cl-tab:active, .theme-toggle:active {
+  transform: scale(0.96);
+}
+
+/* Cards — leve elevação ao passar o mouse (só em dispositivos com hover de verdade,
+   pra não deixar "hover preso" ao tocar no mobile) */
+@media (hover: hover) and (pointer: fine) {
+  .revisao-card, .stat-card, .month-section, .rf-card, .agenda-date-group,
+  .day-cell:not(.empty), .va-row, .mat-card {
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .revisao-card:hover, .stat-card:hover, .rf-card:hover, .mat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+  }
+  .day-cell:not(.empty):hover { transform: translateY(-2px) scale(1.02); }
+}
+
+/* Preenchimento animado de barras de progresso (usa a var já existente
+   em vários lugares do site, garante consistência) */
+.stat-bar-fill, .mat-pbar-fill, .curve-bar, progress {
+  transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Pulso suave para indicar "dominado" / conquista */
+@keyframes gentlePulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(200, 51, 111, 0.35); }
+  50%      { box-shadow: 0 0 0 6px rgba(200, 51, 111, 0); }
+}
+.badge-dominado { animation: gentlePulse 2.2s ease-in-out infinite; }
+
+/* Fade+scale suave para elementos que aparecem dinamicamente (toasts,
+   modais, resultado de feedback) */
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.94) translateY(6px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* Salto comemorativo — usado ao concluir um dia de estudo */
+@keyframes celebratePop {
+  0%   { transform: scale(1); }
+  35%  { transform: scale(1.08) rotate(-1deg); }
+  60%  { transform: scale(0.97) rotate(1deg); }
+  100% { transform: scale(1) rotate(0); }
+}
+.celebrate-pop { animation: celebratePop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }

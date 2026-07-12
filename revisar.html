@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Inter:opsz,wght@14..32,400..700&family=Caveat:wght@400;500&display=swap" rel="stylesheet">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="style.css?v=1783859287">
+<link rel="stylesheet" href="style.css?v=1783859530">
 <style>
 .revisao-card {
   background: var(--paper);
@@ -504,7 +504,7 @@
   </main>
 </div>
 
-<script src="script.js?v=1783859287"></script>
+<script src="script.js?v=1783859530"></script>
 <script src="perfil.js"></script>
 <script src="progresso.js?v=1783859287"></script>
 <script src="plano-vde.js"></script>
@@ -781,7 +781,7 @@ function buildArquivo() {
     const statusHtml = venceu
       ? `<span class="rev-tag" style="background:var(--blush);color:var(--rose-deep)">⏰ vencida</span>`
       : `<span class="rev-tag" style="background:var(--bg-soft);color:var(--ink-faded);font-weight:400;text-transform:none;letter-spacing:0">próxima: ${fmtDataCurta(t.agenda.proxima)}</span>`;
-    const estagioBadge = `<span style="font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;background:${dominado?'var(--rose-soft)':'var(--bg-soft)'};color:${dominado?'var(--rose-deep)':'var(--ink-faded)'};padding:0.2rem 0.6rem;border-radius:20px;font-weight:600">${dominado?'✓ Dominado':`Estágio ${(t.agenda.estagio||0)+1}/${REV_STAGES.length}`}</span>`;
+    const estagioBadge = `<span class="${dominado?'badge-dominado':''}" style="font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;background:${dominado?'var(--rose-soft)':'var(--bg-soft)'};color:${dominado?'var(--rose-deep)':'var(--ink-faded)'};padding:0.2rem 0.6rem;border-radius:20px;font-weight:600">${dominado?'✓ Dominado':`Estágio ${(t.agenda.estagio||0)+1}/${REV_STAGES.length}`}</span>`;
     return buildMatCardHtml(t.numDia, t.mIdx, t.mat, t.dado, statusHtml + estagioBadge, '', /* semFeedback */ true);
   }).join('');
 }
@@ -921,9 +921,20 @@ function statsFiltrar(nomeMateria) {
 function registrarFeedbackMat(btn, tipo, numDia, mIdx) {
   const card = btn.closest('.revisao-card');
   if (card) {
-    card.style.opacity = '0.5';
-    card.style.transition = 'opacity 0.4s';
-    setTimeout(() => card.remove(), 400);
+    card.style.transition = 'opacity 0.35s ease, transform 0.35s ease, max-height 0.4s ease 0.1s, margin 0.4s ease 0.1s, padding 0.4s ease 0.1s';
+    card.style.maxHeight = card.offsetHeight + 'px';
+    card.style.overflow = 'hidden';
+    requestAnimationFrame(() => {
+      card.style.opacity = '0';
+      card.style.transform = 'scale(0.97) translateY(-4px)';
+      setTimeout(() => {
+        card.style.maxHeight = '0px';
+        card.style.marginBottom = '0px';
+        card.style.paddingTop = '0px';
+        card.style.paddingBottom = '0px';
+      }, 100);
+    });
+    setTimeout(() => card.remove(), 550);
   }
   const today = new Date().toISOString().split('T')[0];
   const p = carregarProgresso();
@@ -947,7 +958,22 @@ function registrarFeedback(btn, tipo, numDia) {
 
 function registrarFeedbackMr(btn, tipo, numDia) {
   const card = btn.closest('.revisao-card');
-  if (card) { card.style.opacity = '0.5'; card.style.transition = 'opacity 0.4s'; setTimeout(() => card.remove(), 400); }
+  if (card) {
+    card.style.transition = 'opacity 0.35s ease, transform 0.35s ease, max-height 0.4s ease 0.1s, margin 0.4s ease 0.1s, padding 0.4s ease 0.1s';
+    card.style.maxHeight = card.offsetHeight + 'px';
+    card.style.overflow = 'hidden';
+    requestAnimationFrame(() => {
+      card.style.opacity = '0';
+      card.style.transform = 'scale(0.97) translateY(-4px)';
+      setTimeout(() => {
+        card.style.maxHeight = '0px';
+        card.style.marginBottom = '0px';
+        card.style.paddingTop = '0px';
+        card.style.paddingBottom = '0px';
+      }, 100);
+    });
+    setTimeout(() => card.remove(), 550);
+  }
   const today = new Date().toISOString().split('T')[0];
   const p = carregarProgresso();
   const key = String(numDia);
