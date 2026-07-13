@@ -1104,7 +1104,7 @@ document.getElementById('apostila-modal-overlay').addEventListener('click', e =>
   if (e.target.id === 'apostila-modal-overlay') fecharApostilaModal();
 });
 </script>
-<script>function resetarTudo(){if(!confirm("Apagar TODO o progresso?\nEsta acao nao pode ser desfeita."))return;var t=localStorage.getItem("theme");localStorage.clear();if(t)localStorage.setItem("theme",t);location.reload();}</script>
+<script>function resetarTudo(){if(!confirm("Apagar TODO o progresso?\nEsta acao nao pode ser desfeita."))return;var t=localStorage.getItem("theme");localStorage.clear();if(t)localStorage.setItem("theme",t);localStorage.setItem("oab_local_rev",String(Date.now()));var uid=window._syncOAB&&window._syncOAB._uid;if(uid&&window._syncOAB.enviarParaNuvem){window._syncOAB.enviarParaNuvem(uid).then(function(){location.reload();}).catch(function(){location.reload();});}else{location.reload();}}</script>
 </body>
 </html>
 
