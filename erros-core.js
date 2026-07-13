@@ -42,7 +42,7 @@ function erros_add(dados) {
   const list = erros_get();
   const registro = {
     id: 'e' + Date.now(),
-    data: new Date().toISOString().split('T')[0],
+    data: dataLocalHoje(),
     materia:    dados.materia    || '',
     topico:     dados.topico     || '',
     subtopico:  dados.subtopico  || '',
@@ -78,7 +78,7 @@ function erros_dominar(id) {
   const list = erros_get();
   const i = list.findIndex(e => e.id === id);
   if (i < 0) return;
-  list[i] = { ...list[i], status: 'dominada', dominada_em: new Date().toISOString().split('T')[0] };
+  list[i] = { ...list[i], status: 'dominada', dominada_em: dataLocalHoje() };
   erros_save(list);
 }
 

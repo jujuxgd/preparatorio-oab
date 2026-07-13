@@ -52,11 +52,15 @@
 .dia-tab{
   padding:.4rem .9rem;border-radius:var(--radius-sm);font-size:.78rem;font-weight:500;
   cursor:pointer;border:1px solid transparent;color:var(--ink-faded);background:transparent;
-  transition:all var(--transition);
+  transition:all var(--transition);white-space:nowrap;flex:0 0 auto;
 }
 .dia-tab:hover{background:var(--blush);color:var(--ink)}
 .dia-tab.active{background:linear-gradient(135deg,var(--rose),var(--rose-deep));color:white;box-shadow:var(--shadow-sm)}
 .dia-panel{display:none}.dia-panel.active{display:block}
+/* 5 abas não cabem lado a lado numa tela estreita — vira tira rolável */
+@media (max-width: 700px) {
+  .dia-tabs { overflow-x: auto; -webkit-overflow-scrolling: touch; flex-wrap: nowrap; }
+}
 
 /* Content area */
 .dia-content-card{
@@ -355,7 +359,7 @@ function qrCancelar(tipo, manterMsg) {
   document.getElementById(pfx + '-acertos').value = '';
   document.getElementById(pfx + '-tempo').value = '';
   document.getElementById(pfx + '-obs').value = '';
-  document.getElementById(pfx + '-data').value = new Date().toISOString().split('T')[0];
+  document.getElementById(pfx + '-data').value = dataLocalHoje();
   document.getElementById('qr-btn-' + tipo).textContent = tipo === 'sessao' ? 'Registrar' : 'Registrar revisão';
   document.getElementById('qr-cancel-' + tipo).style.display = 'none';
   if (!manterMsg) document.getElementById('qr-msg-' + tipo).textContent = '';
@@ -577,7 +581,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var sel = document.getElementById(selId);
     if (sel) sel.innerHTML = materiaOpts;
   });
-  var hojeStr = new Date().toISOString().split('T')[0];
+  var hojeStr = dataLocalHoje();
   var qrDataEl = document.getElementById('qr-data'); if (qrDataEl) qrDataEl.value = hojeStr;
   var rvDataEl = document.getElementById('rv-data'); if (rvDataEl) rvDataEl.value = hojeStr;
   if (typeof qrRenderHistorico === 'function') {
@@ -603,9 +607,10 @@ window.marcarEstudado = function() {
   var dia = parseInt(params.get('dia')) || getStudyDay();
   concluirDia(dia);
 
-  var hoje = new Date().toISOString().split('T')[0];
+  var hoje = dataLocalHoje();
   var prog = carregarProgresso();
-  var ontem = new Date(Date.now() - 864e5).toISOString().split('T')[0];
+  var ontemDate = getCurrentDate(); ontemDate.setDate(ontemDate.getDate() - 1);
+  var ontem = dataLocalDe(ontemDate);
   if (prog.streak_data === ontem) prog.streak = (prog.streak || 0) + 1;
   else if (prog.streak_data !== hoje) prog.streak = 1;
   prog.streak_data = hoje;

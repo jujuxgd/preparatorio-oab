@@ -225,7 +225,7 @@
     const blob = new Blob([json], { type: 'application/json' });
     const url  = URL.createObjectURL(blob);
     const a    = document.createElement('a');
-    const data = new Date().toISOString().split('T')[0];
+    const data = dataLocalHoje();
     a.href = url;
     a.download = `oab_backup_${data}.json`;
     document.body.appendChild(a);

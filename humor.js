@@ -28,6 +28,14 @@
     try { return typeof getCurrentDate === 'function' ? getCurrentDate() : new Date(); } catch (e) { return new Date(); }
   }
 
+  // Data local (YYYY-MM-DD) — nunca usar toISOString().split('T')[0]
+  // aqui, pois isso usa UTC e "vira o dia" perto da meia-noite em fusos
+  // negativos (Brasil, UTC-3), fazendo o humor registado à noite cair
+  // no dia errado.
+  function _dataLocal(d) {
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  }
+
   function getLog() {
     try { return JSON.parse(localStorage.getItem(LOG_KEY) || '[]'); } catch (e) { return []; }
   }
@@ -42,7 +50,7 @@
     if (!info) return null;
     const agora = new Date(); // horário real do clique, mesmo com data simulada em getCurrentDate
     const dataBase = _agora();
-    const data = dataBase.toISOString().split('T')[0];
+    const data = _dataLocal(dataBase);
     const hora = String(agora.getHours()).padStart(2, '0') + ':' + String(agora.getMinutes()).padStart(2, '0');
     const entry = { data, hora, humor: label, emoji: info.emoji, valor: info.valor };
 
@@ -54,7 +62,7 @@
   }
 
   function getHumorHoje() {
-    const data = _agora().toISOString().split('T')[0];
+    const data = _dataLocal(_agora());
     const doDia = getLog().filter(e => e.data === data);
     return doDia.length ? doDia[doDia.length - 1] : null;
   }
@@ -150,7 +158,7 @@
     for (let i = dias - 1; i >= 0; i--) {
       const d = new Date(hoje);
       d.setDate(d.getDate() - i);
-      const ds = d.toISOString().split('T')[0];
+      const ds = _dataLocal(d);
       out.push({ data: ds, registro: porDia[ds] || null });
     }
     return out;

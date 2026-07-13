@@ -702,7 +702,7 @@ document.addEventListener('DOMContentLoaded', () => {
     for (let i = 13; i >= 0; i--) {
       const d = new Date(hoje);
       d.setDate(d.getDate() - i);
-      const ds = d.toISOString().split('T')[0];
+      const ds = dataLocalDe(d);
       const dayLabel = d.getDate();
       const entry = Object.entries(p.dias || {}).find(([,dd]) => dd.data_conclusao === ds);
       let horas = 0;

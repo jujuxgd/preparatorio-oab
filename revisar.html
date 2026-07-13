@@ -598,7 +598,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const p = carregarProgresso();
   _revP = p;
   const hoje = new Date();
-  const hojeStr = hoje.toISOString().split('T')[0];
+  const hojeStr = dataLocalDe(hoje);
   const cards = [];
   let agendaAlterada = false;
 
@@ -695,7 +695,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function buildAgenda() {
   const p = _revP || carregarProgresso();
   const hoje = new Date();
-  const hojeStr = hoje.toISOString().split('T')[0];
+  const hojeStr = dataLocalDe(hoje);
   const items = []; // { dateStr, numDia, mIdx, mat, estagio }
 
   Object.entries(p.dias || {}).forEach(([numDia, dData]) => {
@@ -813,7 +813,7 @@ function buildArquivo() {
   // Ordena por matéria, depois por dia
   todos.sort((a,b) => a.mat.nome.localeCompare(b.mat.nome) || (parseInt(a.numDia) - parseInt(b.numDia)));
 
-  const hojeStr = new Date().toISOString().split('T')[0];
+  const hojeStr = dataLocalHoje();
   wrap.innerHTML = todos.map(t => {
     const venceu = t.agenda.proxima <= hojeStr;
     const dominado = (t.agenda.estagio || 0) >= REV_STAGES.length - 1;
@@ -847,13 +847,13 @@ function revSwitchTab(tab) {
 // ou "12 de jul às 14:32". Entradas antigas só tinham a data (sem hora).
 function fmtHistItem(r) {
   const hoje = new Date();
-  const hojeStr = hoje.toISOString().split('T')[0];
+  const hojeStr = dataLocalDe(hoje);
   const ontem = new Date(hoje); ontem.setDate(ontem.getDate() - 1);
-  const ontemStr = ontem.toISOString().split('T')[0];
+  const ontemStr = dataLocalDe(ontem);
 
   if (r.ts) {
     const d = new Date(r.ts);
-    const dStr = d.toISOString().split('T')[0];
+    const dStr = dataLocalDe(d);
     const hora = d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
     if (dStr === hojeStr) return `hoje às ${hora}`;
     if (dStr === ontemStr) return `ontem às ${hora}`;
@@ -975,7 +975,7 @@ function registrarFeedbackMat(btn, tipo, numDia, mIdx) {
     });
     setTimeout(() => card.remove(), 550);
   }
-  const today = new Date().toISOString().split('T')[0];
+  const today = dataLocalHoje();
   const p = carregarProgresso();
   const key = String(numDia);
   if (!p.dias[key]) p.dias[key] = {};
@@ -1013,7 +1013,7 @@ function registrarFeedbackMr(btn, tipo, numDia) {
     });
     setTimeout(() => card.remove(), 550);
   }
-  const today = new Date().toISOString().split('T')[0];
+  const today = dataLocalHoje();
   const p = carregarProgresso();
   const key = String(numDia);
   if (!p.dias[key]) p.dias[key] = {};

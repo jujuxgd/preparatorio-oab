@@ -277,6 +277,14 @@
 }
 .tab.active .badge { background: rgba(255,255,255,0.25); color: white; }
 
+/* Com 5 abas, telas estreitas (iPhone etc.) não têm espaço pra caber
+   tudo lado a lado sem espremer — a barra vira uma tira rolável
+   horizontalmente em vez de forçar tudo no mesmo espaço. */
+@media (max-width: 700px) {
+  .tabs-bar { overflow-x: auto; -webkit-overflow-scrolling: touch; flex-wrap: nowrap; }
+  .tab { flex: 0 0 auto; padding: 0.65rem 0.9rem; }
+}
+
 .tab-content {
   display: none;
   animation: fadeInUp 0.3s ease;
@@ -1666,7 +1674,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const painelRev = document.getElementById('painel-revisoes');
     if (painelRev && typeof carregarProgresso === 'function') {
       const prog = carregarProgresso();
-      const hoje_data = new Date().toISOString().slice(0,10);
+      const hoje_data = dataLocalHoje();
       const pendentes = (prog.revisoes || []).filter(r => r.data <= hoje_data && !r.concluida);
       if (pendentes.length > 0) {
         painelRev.style.display = '';
@@ -2120,7 +2128,7 @@ function _buildRevisoesTab() {
   const sel = document.getElementById('rv-materia');
   if (sel) sel.innerHTML = opts;
   const dataEl = document.getElementById('rv-data');
-  if (dataEl && !dataEl.value) dataEl.value = new Date().toISOString().split('T')[0];
+  if (dataEl && !dataEl.value) dataEl.value = dataLocalHoje();
   qrRenderHistorico('revisao');
 }
 
@@ -2154,7 +2162,7 @@ function qrCancelar(tipo) {
     document.getElementById('rv-acertos').value = '';
     document.getElementById('rv-tempo').value = '';
     document.getElementById('rv-obs').value = '';
-    document.getElementById('rv-data').value = new Date().toISOString().split('T')[0];
+    document.getElementById('rv-data').value = dataLocalHoje();
     document.getElementById('qr-btn-revisao').textContent = 'Registrar revisão';
     document.getElementById('qr-cancel-revisao').style.display = 'none';
   }
@@ -2596,7 +2604,7 @@ function _pomoNext() {
 
 // ── Pomodoro: persistir sessões concluídas ─────
 function _pomoSaveSession() {
-  const today = new Date().toISOString().slice(0,10);
+  const today = dataLocalHoje();
   const key   = `pomo_sessions_${today}`;
   const prev  = parseInt(localStorage.getItem(key) || '0');
   localStorage.setItem(key, String(prev + 1));
@@ -2640,7 +2648,7 @@ function pomoSkip() {
 _pomoUI();
 // Mostra sessões já feitas hoje no status inicial
 (function() {
-  const today   = new Date().toISOString().slice(0,10);
+  const today   = dataLocalHoje();
   const sessoes = parseInt(localStorage.getItem(`pomo_sessions_${today}`) || '0');
   if (sessoes > 0) {
     const statusEl = document.getElementById('pomo-status');

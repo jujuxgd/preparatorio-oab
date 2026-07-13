@@ -6,6 +6,24 @@
 const PROGRESSO_KEY   = 'oab_progresso_v1';
 const PROGRESSO_VERSAO = '2.0';
 
+// Data de HOJE no fuso horário LOCAL do usuário, formato YYYY-MM-DD.
+// `new Date().toISOString()` usa UTC — em fusos negativos (ex.: Brasil,
+// UTC-3), isso faz a data "virar o dia seguinte" entre ~21h e meia-noite
+// no horário local, fazendo formulários, streak e agenda de revisão
+// mostrarem a data de amanhã enquanto ainda é hoje. Usar sempre esta
+// função (nunca new Date().toISOString().split('T')[0]) pra pegar
+// "a data de hoje" em qualquer lugar do app. Usa getCurrentDate() do
+// script.js quando disponível, pra respeitar o simulatedDate de teste.
+function dataLocalDe(d) {
+  const ano = d.getFullYear();
+  const mes = String(d.getMonth() + 1).padStart(2, '0');
+  const dia = String(d.getDate()).padStart(2, '0');
+  return `${ano}-${mes}-${dia}`;
+}
+function dataLocalHoje() {
+  return dataLocalDe((typeof getCurrentDate === 'function') ? getCurrentDate() : new Date());
+}
+
 // Carimba a revisão local e avisa o sync em tempo real (se disponível).
 // Chamada por toda função de gravação deste arquivo e por erros-core.js
 // / simulados.html, pra manter a sincronização entre dispositivos.
@@ -39,7 +57,7 @@ function _migrarQuestoesLegado(p) {
       seq++;
       registros.push({
         id: 'q' + Date.now() + '_' + seq,
-        data: r.data || new Date().toISOString().split('T')[0],
+        data: r.data || dataLocalHoje(),
         dia: r.dia != null ? parseInt(r.dia) : null,
         materia,
         total: parseInt(r.total) || 0,
@@ -92,7 +110,7 @@ function concluirDia(numDia, nota) {
   const key = String(n);
   if (!p.dias[key]) p.dias[key] = {};
   p.dias[key].concluido       = true;
-  p.dias[key].data_conclusao  = new Date().toISOString().split('T')[0];
+  p.dias[key].data_conclusao  = dataLocalHoje();
   if (nota) p.dias[key].nota  = nota;
   salvarProgresso(p);
   return p;
@@ -140,7 +158,7 @@ function exportarProgresso() {
   const blob = new Blob([json], { type: 'application/json' });
   const url  = URL.createObjectURL(blob);
   const a    = document.createElement('a');
-  const data = new Date().toISOString().split('T')[0];
+  const data = dataLocalHoje();
   a.href     = url;
   a.download = `oab_progresso_${data}.json`;
   document.body.appendChild(a);
@@ -181,7 +199,7 @@ function adicionarQuestaoRegistro(dados) {
   if (!p.questoes_registros) p.questoes_registros = [];
   const registro = {
     id: 'q' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
-    data: dados.data || new Date().toISOString().split('T')[0],
+    data: dados.data || dataLocalHoje(),
     dia: dados.dia != null ? parseInt(dados.dia) : null,
     materia: dados.materia,
     total,
@@ -378,7 +396,7 @@ function getAgendaMat(p, numDia, mIdx, dataConclusao) {
   if (!p.dias[key]) p.dias[key] = {};
   if (!p.dias[key].agenda_mat) p.dias[key].agenda_mat = {};
   if (!p.dias[key].agenda_mat[mIdx]) {
-    p.dias[key].agenda_mat[mIdx] = { estagio: 0, proxima: _addDiasISO(dataConclusao || new Date().toISOString().split('T')[0], REV_STAGES[0]) };
+    p.dias[key].agenda_mat[mIdx] = { estagio: 0, proxima: _addDiasISO(dataConclusao || dataLocalHoje(), REV_STAGES[0]) };
   }
   return p.dias[key].agenda_mat[mIdx];
 }
@@ -396,7 +414,7 @@ function aplicarFeedbackAgenda(agenda, tipo, hojeStr) {
 function contarRevisoesPendentes() {
   try {
     const p = carregarProgresso();
-    const hojeStr = new Date().toISOString().split('T')[0];
+    const hojeStr = dataLocalHoje();
     let count = 0;
     let alterado = false;
     Object.entries(p.dias || {}).forEach(([numDia, dData]) => {

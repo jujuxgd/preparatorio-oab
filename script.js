@@ -313,7 +313,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (streakElement) streakElement.innerText = streak;
 
     window.baterMetaDoDia = function() {
-        const todayStr = getCurrentDate().toISOString().split('T')[0];
+        const _hoje = getCurrentDate();
+        const todayStr = _hoje.getFullYear() + '-' + String(_hoje.getMonth()+1).padStart(2,'0') + '-' + String(_hoje.getDate()).padStart(2,'0');
         const lastBeat = localStorage.getItem('ju_oab_streak_date');
         const nomeUsuario = (typeof window._perfilOAB !== 'undefined' && window._perfilOAB.getNome) ? window._perfilOAB.getNome() : 'Estudante';
 
@@ -347,7 +348,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // 3. MOOD TRACKER (Como estou me sentindo hoje?)
     const moodSelect = document.getElementById('mood-selector'); 
     if (moodSelect) {
-        const today = getCurrentDate().toISOString().split('T')[0];
+        const _mdHoje = getCurrentDate();
+        const today = _mdHoje.getFullYear() + '-' + String(_mdHoje.getMonth()+1).padStart(2,'0') + '-' + String(_mdHoje.getDate()).padStart(2,'0');
         moodSelect.value = localStorage.getItem(`mood_${today}`) || '';
 
         moodSelect.addEventListener('change', (e) => {

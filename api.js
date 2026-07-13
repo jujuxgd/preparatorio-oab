@@ -187,8 +187,13 @@ export async function sendReviewFeedback(card_id, feedback) {
 
 // ── MOOD ──────────────────────────────────────────────────────────
 
+function _dataLocal(d) {
+  d = d || new Date();
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+
 export async function saveMood(emoji, data) {
-  const today = data || new Date().toISOString().split('T')[0];
+  const today = data || _dataLocal();
   if (await _checkBackend()) return _api('POST', '/mood', { emoji, data: today });
   _lsSet(`mood_${today}`, emoji);
   return { ok: true };
@@ -209,7 +214,7 @@ export async function getMoodHistory() {
 
 export async function getMoodToday() {
   if (await _checkBackend()) return _api('GET', '/mood/today');
-  const today = new Date().toISOString().split('T')[0];
+  const today = _dataLocal();
   return { emoji: localStorage.getItem(`mood_${today}`) || null };
 }
 

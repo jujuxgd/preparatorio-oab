@@ -1004,7 +1004,7 @@ document.addEventListener('DOMContentLoaded', () => {
     for (let i = 27; i >= 0; i--) {
       const d = new Date(hoje);
       d.setDate(d.getDate() - i);
-      const ds = d.toISOString().split('T')[0];
+      const ds = dataLocalDe(d);
       const concluido = Object.values(p.dias || {}).some(dd => dd.data_conclusao === ds);
       cells.push(`<div class="heat-cell ${concluido ? 'l4' : ''}" title="${ds}"></div>`);
     }
@@ -1066,7 +1066,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Tooltip/rótulo visível respeita a preferência de gênero do perfil;
   // o data-mood (usado pra salvar/comparar) permanece sempre estável.
   moodBtns.forEach(btn => { btn.title = fmtGenero(btn.dataset.mood); });
-  const todayStr = getCurrentDate().toISOString().split('T')[0];
+  const todayStr = dataLocalHoje();
   const savedMood = localStorage.getItem(`mood_${todayStr}`);
   if (savedMood) {
     moodBtns.forEach(btn => btn.classList.remove('selected'));

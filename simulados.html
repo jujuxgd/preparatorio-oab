@@ -533,7 +533,7 @@ function toggleForm() {
     form.classList.add('open');
     document.getElementById('btn-novo-sim').textContent = '✕ Cancelar';
     // Default date = today
-    const today = new Date().toISOString().split('T')[0];
+    const today = dataLocalHoje();
     document.getElementById('sim-data').value = today;
     setTimeout(() => {
       if (_currentTipo === 'simulado') document.getElementById('sim-fonte').focus();
@@ -664,7 +664,7 @@ function registrarSimulado() {
         ...arr[i],
         tipo: _currentTipo,
         nome,
-        data: data || new Date().toISOString().split('T')[0],
+        data: data || dataLocalHoje(),
         total, acertos,
         erros: total - acertos,
         pct: Math.round((acertos / total) * 100),
@@ -676,7 +676,7 @@ function registrarSimulado() {
       id:       Date.now(),
       tipo:     _currentTipo,
       nome,
-      data:     data || new Date().toISOString().split('T')[0],
+      data:     data || dataLocalHoje(),
       total,
       acertos,
       erros:    total - acertos,
