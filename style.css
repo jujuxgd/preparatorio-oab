@@ -493,6 +493,12 @@ body {
 main {
   padding: 2.5rem 3rem 3rem;
   min-height: 100vh;
+  /* main é o único item da grid .app numa tela estreita — sem isso,
+     qualquer filho com largura mínima maior que a tela (uma tabela,
+     um grid de formulário, uma barra de abas) empurra a grid inteira
+     pra fora, e o overflow-x:hidden do body corta o conteúdo em vez
+     de deixar rolar. */
+  min-width: 0;
 }
 
 .topbar {

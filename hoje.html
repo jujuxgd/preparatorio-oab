@@ -292,8 +292,10 @@
 .tab-content.active { display: block; }
 
 /* ── Questões / Revisões (registros unificados) ── */
-.qr-form-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.7rem}
+.qr-form-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.7rem;min-width:0}
 @media(max-width:600px){.qr-form-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:420px){.qr-form-grid{grid-template-columns:1fr}}
+.qr-form-grid > *{min-width:0}
 .qr-input{width:100%;box-sizing:border-box;padding:.6rem .75rem;border:1px solid var(--line);border-radius:var(--radius-sm);font-size:.88rem;font-family:inherit;background:var(--paper);color:var(--ink)}
 .qr-hist-table{width:100%;border-collapse:collapse;font-size:.82rem}
 .qr-hist-table th{text-align:left;color:var(--ink-faded);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;padding:.4rem .5rem;border-bottom:1px solid var(--line)}
