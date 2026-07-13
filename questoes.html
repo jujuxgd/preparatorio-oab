@@ -435,7 +435,7 @@ function limparFormQ() {
   document.getElementById('q-materia').value = '';
   document.getElementById('q-total').value   = '';
   document.getElementById('q-acertos').value = '';
-  document.getElementById('q-data').value    = '';
+  document.getElementById('q-data').value    = new Date().toISOString().split('T')[0];
   document.getElementById('q-tempo').value   = '';
   document.getElementById('q-obs').value     = '';
 }
@@ -510,7 +510,10 @@ function submitForm() {
   document.getElementById(id)?.addEventListener('keydown', e => { if (e.key === 'Enter') submitForm(); });
 });
 
-document.addEventListener('DOMContentLoaded', renderAll);
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('q-data').value = new Date().toISOString().split('T')[0];
+  renderAll();
+});
 </script>
 </body>
 </html>
