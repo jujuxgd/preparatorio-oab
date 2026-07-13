@@ -473,7 +473,7 @@
 
       <div class="sim-form-actions">
         <button class="btn btn-ghost" onclick="cancelarForm()">Cancelar</button>
-        <button class="btn btn-primary" style="padding:0.6rem 1.8rem" onclick="registrarSimulado()">Registrar</button>
+        <button class="btn btn-primary" id="btn-salvar-sim" style="padding:0.6rem 1.8rem" onclick="registrarSimulado()">Registrar</button>
       </div>
     </div>
 
@@ -506,7 +506,13 @@ let _currentTipo = 'simulado';
 function _loadSims() {
   try { return JSON.parse(localStorage.getItem(SIM_KEY) || '[]'); } catch { return []; }
 }
-function _saveSims(arr) { localStorage.setItem(SIM_KEY, JSON.stringify(arr)); }
+function _saveSims(arr) {
+  localStorage.setItem(SIM_KEY, JSON.stringify(arr));
+  try { localStorage.setItem('oab_local_rev', String(Date.now())); } catch (e) {}
+  if (window._syncOAB && window._syncOAB.notificarAlteracaoLocal) {
+    try { window._syncOAB.notificarAlteracaoLocal(); } catch (e) {}
+  }
+}
 
 // ── Tipo toggle ───────────────────────────────
 function setTipo(tipo) {
@@ -518,6 +524,8 @@ function setTipo(tipo) {
 }
 
 // ── Form toggle ───────────────────────────────
+let _editingId = null;
+
 function toggleForm() {
   const form = document.getElementById('sim-form');
   const isOpen = form.classList.contains('open');
@@ -536,8 +544,11 @@ function toggleForm() {
 }
 
 function cancelarForm() {
+  _editingId = null;
   document.getElementById('sim-form').classList.remove('open');
   document.getElementById('btn-novo-sim').textContent = '+ Registrar simulado';
+  const submitBtn = document.getElementById('btn-salvar-sim');
+  if (submitBtn) submitBtn.textContent = 'Registrar';
   document.getElementById('sim-fonte').value = '';
   document.getElementById('sim-ano').value = '';
   document.getElementById('sim-exame').value = '';
@@ -546,6 +557,31 @@ function cancelarForm() {
   document.getElementById('sim-erros').value = '';
   document.getElementById('sim-obs').value = '';
   document.getElementById('resultado-preview').style.display = 'none';
+}
+
+function editarSim(id) {
+  const s = _loadSims().find(x => x.id === id);
+  if (!s) return;
+  _editingId = id;
+  setTipo(s.tipo);
+  document.getElementById('sim-form').classList.add('open');
+  document.getElementById('btn-novo-sim').textContent = '✕ Cancelar';
+  const submitBtn = document.getElementById('btn-salvar-sim');
+  if (submitBtn) submitBtn.textContent = 'Salvar alterações';
+  document.getElementById('sim-data').value = s.data || '';
+  document.getElementById('sim-total').value = s.total;
+  document.getElementById('sim-acertos').value = s.acertos;
+  document.getElementById('sim-erros').value = s.erros;
+  document.getElementById('sim-obs').value = s.obs || '';
+  if (s.tipo === 'simulado') {
+    document.getElementById('sim-fonte').value = s.nome || '';
+  } else {
+    const m = /^Exame\s+(.+?)(?:\s+\((\d+)\))?$/.exec(s.nome || '');
+    document.getElementById('sim-exame').value = m ? m[1] : (s.nome || '');
+    document.getElementById('sim-ano').value = m && m[2] ? m[2] : '';
+  }
+  _showPreview(s.acertos, s.total);
+  document.getElementById('sim-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 // ── Preview em tempo real ─────────────────────
@@ -621,18 +657,34 @@ function registrarSimulado() {
   }
 
   const arr = _loadSims();
-  arr.unshift({
-    id:       Date.now(),
-    tipo:     _currentTipo,
-    nome,
-    data:     data || new Date().toISOString().split('T')[0],
-    total,
-    acertos,
-    erros:    total - acertos,
-    pct:      Math.round((acertos / total) * 100),
-    obs:      document.getElementById('sim-obs').value.trim(),
-    criado:   new Date().toISOString()
-  });
+  if (_editingId) {
+    const i = arr.findIndex(s => s.id === _editingId);
+    if (i >= 0) {
+      arr[i] = {
+        ...arr[i],
+        tipo: _currentTipo,
+        nome,
+        data: data || new Date().toISOString().split('T')[0],
+        total, acertos,
+        erros: total - acertos,
+        pct: Math.round((acertos / total) * 100),
+        obs: document.getElementById('sim-obs').value.trim(),
+      };
+    }
+  } else {
+    arr.unshift({
+      id:       Date.now(),
+      tipo:     _currentTipo,
+      nome,
+      data:     data || new Date().toISOString().split('T')[0],
+      total,
+      acertos,
+      erros:    total - acertos,
+      pct:      Math.round((acertos / total) * 100),
+      obs:      document.getElementById('sim-obs').value.trim(),
+      criado:   new Date().toISOString()
+    });
+  }
   _saveSims(arr);
   cancelarForm();
   render();
@@ -752,6 +804,7 @@ function renderList() {
         <div class="sim-card-detail">${s.acertos}/${s.total} · ${aprovado ? '✅ Aprovado' : '❌ Reprovado'}</div>
       </div>
       <div class="sim-card-actions">
+        <button class="btn btn-ghost" style="font-size:0.7rem;padding:0.3rem 0.6rem" onclick="editarSim(${s.id})" title="Editar">✎</button>
         <button class="btn btn-ghost" style="font-size:0.7rem;padding:0.3rem 0.6rem;color:var(--error)" onclick="deletarSim(${s.id})" title="Excluir">✕</button>
       </div>
     </div>`;
