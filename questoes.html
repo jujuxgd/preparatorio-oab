@@ -237,7 +237,7 @@ main { overflow-x: hidden; }
 
     <!-- Form de registo -->
     <div class="q-form">
-      <div class="q-form-title">◎ Registar sessão de questões</div>
+      <div class="q-form-title" id="q-form-title">◎ Registar sessão de questões</div>
       <div class="q-form-grid">
         <div class="q-field">
           <label class="q-label">Matéria</label>
@@ -273,9 +273,22 @@ main { overflow-x: hidden; }
           <label class="q-label">Acertos</label>
           <input type="number" id="q-acertos" class="q-input" placeholder="Ex: 21" min="0">
         </div>
+        <div class="q-field">
+          <label class="q-label">Data</label>
+          <input type="date" id="q-data" class="q-input">
+        </div>
+        <div class="q-field">
+          <label class="q-label">Tempo (min, opcional)</label>
+          <input type="number" id="q-tempo" class="q-input" placeholder="Ex: 45" min="0">
+        </div>
+        <div class="q-field" style="grid-column:1/-1">
+          <label class="q-label">Observações (opcional)</label>
+          <input type="text" id="q-obs" class="q-input" placeholder="Ex: revisão de contratos">
+        </div>
       </div>
       <div class="q-form-actions">
-        <button class="btn btn-primary" onclick="submitForm()">Registar sessão</button>
+        <button class="btn btn-primary" id="q-submit-btn" onclick="submitForm()">Registar sessão</button>
+        <button class="btn btn-ghost" id="q-cancel-btn" onclick="cancelarEdicao()" style="display:none">Cancelar</button>
         <div id="form-feedback" class="q-feedback"></div>
       </div>
     </div>
@@ -289,7 +302,7 @@ main { overflow-x: hidden; }
     <div class="q-section-title">Histórico recente</div>
     <div class="hist-wrap">
       <table class="hist-table" id="hist-table">
-        <thead><tr><th>Data</th><th>Matéria</th><th>Total</th><th>Acertos</th><th>Taxa</th></tr></thead>
+        <thead><tr><th>Data</th><th>Matéria</th><th>Total</th><th>Acertos</th><th>Taxa</th><th>Ações</th></tr></thead>
         <tbody id="hist-tbody"></tbody>
       </table>
     </div>
@@ -392,46 +405,103 @@ function renderHistorico() {
   regs.sort((a,b) => b.data.localeCompare(a.data));
   const tbody = document.getElementById('hist-tbody');
   if (regs.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--ink-faded);font-style:italic;padding:1rem">Nenhum registo ainda</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--ink-faded);font-style:italic;padding:1rem">Nenhum registo ainda</td></tr>';
     return;
   }
   tbody.innerHTML = regs.slice(0, 30).map(r => {
     const info = MATERIAS_INFO[r.mat] || { nome: r.mat, emoji: '📖' };
     const pct  = Math.round((r.acertos/r.total)*100);
     const cor  = pctColor(pct);
+    const tipoTag = r.tipo === 'revisao' ? ' <span style="font-size:.68rem;color:var(--ink-faded)">↻ revisão</span>' : '';
     return `<tr>
-      <td>${r.data}</td>
+      <td>${r.data}${tipoTag}</td>
       <td>${info.emoji} ${info.nome}</td>
       <td>${r.total}</td>
       <td>${r.acertos}</td>
       <td style="font-weight:600;color:${cor}">${pct}%</td>
+      <td style="white-space:nowrap">
+        <button class="btn btn-ghost" style="font-size:.7rem;padding:.25rem .5rem" onclick="editarQuestao('${r.id}')" title="Editar">✎</button>
+        <button class="btn btn-ghost" style="font-size:.7rem;padding:.25rem .5rem;color:var(--error,#c0524b)" onclick="excluirQuestao('${r.id}')" title="Excluir">✕</button>
+      </td>
     </tr>`;
   }).join('');
 }
 
 function renderAll() { renderSummary(); buildFilterChips(); renderCards(); renderHistorico(); }
 
+let _editingId = null;
+
+function limparFormQ() {
+  document.getElementById('q-materia').value = '';
+  document.getElementById('q-total').value   = '';
+  document.getElementById('q-acertos').value = '';
+  document.getElementById('q-data').value    = '';
+  document.getElementById('q-tempo').value   = '';
+  document.getElementById('q-obs').value     = '';
+}
+
+function cancelarEdicao(manterFeedback) {
+  _editingId = null;
+  document.getElementById('q-form-title').textContent = '◎ Registar sessão de questões';
+  document.getElementById('q-submit-btn').textContent = 'Registar sessão';
+  document.getElementById('q-cancel-btn').style.display = 'none';
+  limparFormQ();
+  if (!manterFeedback) document.getElementById('form-feedback').textContent = '';
+}
+
+function editarQuestao(id) {
+  const registro = getQuestaoRegistros().find(r => r.id === id);
+  if (!registro) return;
+  _editingId = id;
+  document.getElementById('q-form-title').textContent = '✎ Editar sessão de questões';
+  document.getElementById('q-submit-btn').textContent = 'Salvar alterações';
+  document.getElementById('q-cancel-btn').style.display = 'inline-block';
+  document.getElementById('q-materia').value = registro.materia;
+  document.getElementById('q-total').value   = registro.total;
+  document.getElementById('q-acertos').value = registro.acertos;
+  document.getElementById('q-data').value    = registro.data || '';
+  document.getElementById('q-tempo').value   = registro.tempo != null ? registro.tempo : '';
+  document.getElementById('q-obs').value     = registro.observacoes || '';
+  document.querySelector('.q-form-card')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function excluirQuestao(id) {
+  if (!confirm('Excluir este registro de questões?')) return;
+  excluirQuestaoRegistro(id);
+  if (_editingId === id) cancelarEdicao();
+  renderAll();
+}
+
 function submitForm() {
   const materia = document.getElementById('q-materia').value;
   const total   = parseInt(document.getElementById('q-total').value) || 0;
   const acertos = parseInt(document.getElementById('q-acertos').value) ?? -1;
+  const data    = document.getElementById('q-data').value;
+  const tempo   = document.getElementById('q-tempo').value;
+  const obs     = document.getElementById('q-obs').value.trim();
   const fb      = document.getElementById('form-feedback');
 
   if (!materia) { fb.textContent = '⚠ Selecciona uma matéria.'; fb.style.color='var(--rose-deep)'; return; }
   if (total <= 0) { fb.textContent = '⚠ Indica o número total de questões.'; fb.style.color='var(--rose-deep)'; return; }
   if (acertos < 0 || acertos > total) { fb.textContent = '⚠ Acertos deve ser entre 0 e ' + total + '.'; fb.style.color='var(--rose-deep)'; return; }
 
-  registrarQuestoes(materia, total, acertos);
+  const dados = { materia, total, acertos, tempo: tempo || null, observacoes: obs };
+  if (data) dados.data = data;
+
+  if (_editingId) {
+    editarQuestaoRegistro(_editingId, dados);
+  } else {
+    adicionarQuestaoRegistro(dados);
+  }
 
   const info = MATERIAS_INFO[materia] || { nome: materia };
   const pct  = Math.round((acertos/total)*100);
-  fb.textContent = `✓ Registado: ${info.nome} — ${acertos}/${total} (${pct}%)`;
-  fb.style.color = pct >= 70 ? '#4a9850' : 'var(--ink-soft)';
+  const msg  = (_editingId ? '✓ Alterações salvas: ' : '✓ Registado: ') + `${info.nome} — ${acertos}/${total} (${pct}%)`;
+  const cor  = pct >= 70 ? '#4a9850' : 'var(--ink-soft)';
 
-  document.getElementById('q-materia').value = '';
-  document.getElementById('q-total').value   = '';
-  document.getElementById('q-acertos').value = '';
-
+  cancelarEdicao(true);
+  fb.textContent = msg;
+  fb.style.color = cor;
   renderAll();
 }
 
