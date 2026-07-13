@@ -102,6 +102,21 @@
   box-shadow:var(--shadow-sm);margin-top:1rem;
 }
 
+/* Questões / Revisões tabs */
+.qr-form-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.7rem}
+@media(max-width:600px){.qr-form-grid{grid-template-columns:1fr 1fr}}
+.qr-input{width:100%;box-sizing:border-box;padding:.6rem .75rem;border:1px solid var(--line);border-radius:var(--radius-sm);font-size:.88rem;font-family:inherit;background:var(--paper);color:var(--ink)}
+.qr-hist-table{width:100%;border-collapse:collapse;font-size:.82rem}
+.qr-hist-table th{text-align:left;color:var(--ink-faded);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;padding:.4rem .5rem;border-bottom:1px solid var(--line)}
+.qr-hist-table td{padding:.5rem;border-bottom:1px dotted var(--line)}
+.qr-empty{color:var(--ink-faded);font-style:italic;font-size:.85rem;padding:.6rem 0}
+
+/* PDF viewer */
+.pdf-embed-wrap{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-lg);box-shadow:var(--shadow);overflow:hidden}
+.pdf-embed-bar{display:flex;align-items:center;justify-content:space-between;padding:.7rem 1rem;border-bottom:1px solid var(--line)}
+.pdf-embed-title{font-size:.8rem;font-weight:600;color:var(--ink)}
+.pdf-embed-iframe{width:100%;height:75vh;border:none;display:block}
+
 /* Sidebar */
 .dia-side{display:flex;flex-direction:column;gap:1rem}
 .side-card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:1.1rem;box-shadow:var(--shadow-sm)}
@@ -185,6 +200,9 @@
         <div class="dia-tabs">
           <div class="dia-tab active" onclick="switchTab('conteudo',this)">📄 Conteúdo do PDF</div>
           <div class="dia-tab" onclick="switchTab('resumo',this)">✦ Micro-Resumo</div>
+          <div class="dia-tab" onclick="switchTab('questoes',this)">📊 Questões</div>
+          <div class="dia-tab" onclick="switchTab('revisoes',this)">🔄 Revisões</div>
+          <div class="dia-tab" onclick="switchTab('pdfsemana',this)">📎 PDF da Semana</div>
         </div>
 
         <!-- Tab: Conteúdo extraído do PDF -->
@@ -208,6 +226,71 @@
               <strong>⚠️ ATENÇÃO — Pegadinha da Banca</strong>
               <span id="res-peg-txt"></span>
             </div>
+          </div>
+        </div>
+
+        <!-- Tab: Questões -->
+        <div class="dia-panel" id="panel-questoes">
+          <div class="dia-content-card">
+            <h4 style="font-family:'Fraunces',serif;font-size:1rem;margin-bottom:1rem">Registrar sessão de questões</h4>
+            <div class="qr-form-grid">
+              <select id="qr-materia" class="qr-input"></select>
+              <input type="number" id="qr-total" class="qr-input" placeholder="Total de questões" min="1">
+              <input type="number" id="qr-acertos" class="qr-input" placeholder="Acertos" min="0">
+              <input type="number" id="qr-tempo" class="qr-input" placeholder="Tempo (min, opcional)" min="0">
+              <input type="date" id="qr-data" class="qr-input">
+              <input type="text" id="qr-obs" class="qr-input" placeholder="Observações (opcional)">
+            </div>
+            <div style="margin-top:.9rem;display:flex;gap:.6rem;align-items:center;flex-wrap:wrap">
+              <button class="btn btn-primary" id="qr-btn-sessao" onclick="qrSalvar('sessao')">Registrar</button>
+              <button class="btn btn-ghost" id="qr-cancel-sessao" onclick="qrCancelar('sessao')" style="display:none">Cancelar</button>
+              <span id="qr-msg-sessao" style="font-size:.78rem;color:var(--ink-faded)"></span>
+            </div>
+          </div>
+          <div class="dia-content-card" style="margin-top:1rem">
+            <h4 style="font-family:'Fraunces',serif;font-size:1rem;margin-bottom:.8rem">Histórico deste dia</h4>
+            <div id="qr-historico-sessao"></div>
+          </div>
+        </div>
+
+        <!-- Tab: Revisões -->
+        <div class="dia-panel" id="panel-revisoes">
+          <div class="dia-content-card">
+            <h4 style="font-family:'Fraunces',serif;font-size:1rem;margin-bottom:1rem">Registrar revisão</h4>
+            <p style="font-size:.8rem;color:var(--ink-faded);margin-bottom:.9rem">Uma mesma matéria pode ter várias revisões ao longo do tempo — cada uma fica registrada aqui e também conta nas estatísticas gerais de questões.</p>
+            <div class="qr-form-grid">
+              <select id="rv-materia" class="qr-input"></select>
+              <input type="number" id="rv-total" class="qr-input" placeholder="Total de questões" min="1">
+              <input type="number" id="rv-acertos" class="qr-input" placeholder="Acertos" min="0">
+              <input type="number" id="rv-tempo" class="qr-input" placeholder="Tempo (min, opcional)" min="0">
+              <input type="date" id="rv-data" class="qr-input">
+              <input type="text" id="rv-obs" class="qr-input" placeholder="Observações (opcional)">
+            </div>
+            <div style="margin-top:.9rem;display:flex;gap:.6rem;align-items:center;flex-wrap:wrap">
+              <button class="btn btn-primary" id="qr-btn-revisao" onclick="qrSalvar('revisao')">Registrar revisão</button>
+              <button class="btn btn-ghost" id="qr-cancel-revisao" onclick="qrCancelar('revisao')" style="display:none">Cancelar</button>
+              <span id="qr-msg-revisao" style="font-size:.78rem;color:var(--ink-faded)"></span>
+            </div>
+          </div>
+          <div class="dia-content-card" style="margin-top:1rem">
+            <h4 style="font-family:'Fraunces',serif;font-size:1rem;margin-bottom:.8rem">Histórico de revisões</h4>
+            <div id="qr-historico-revisao"></div>
+          </div>
+        </div>
+
+        <!-- Tab: PDF da Semana -->
+        <div class="dia-panel" id="panel-pdfsemana">
+          <div class="pdf-embed-wrap" id="pdf-embed-wrap" style="display:none">
+            <div class="pdf-embed-bar">
+              <span class="pdf-embed-title" id="pdf-embed-title">PDF da semana</span>
+              <a id="pdf-embed-drive-link" href="#" target="_blank" rel="noopener" class="btn btn-ghost" style="font-size:.75rem;text-decoration:none">↗ Abrir no Drive</a>
+            </div>
+            <iframe class="pdf-embed-iframe" id="pdf-embed-iframe" src="" title="PDF da semana" allow="autoplay"></iframe>
+          </div>
+          <div class="dia-stub" id="pdf-embed-stub" style="display:none">
+            <div class="s-em">📎</div>
+            <h3>Sem PDF mapeado para este período</h3>
+            <p>Esta semana do cronograma não tem um PDF de resumo específico (ou este dia faz parte do ciclo de revisão espaçada, sem PDF de semana associado).</p>
           </div>
         </div>
 
@@ -256,6 +339,119 @@ function switchTab(name, el) {
   document.getElementById('panel-' + name).classList.add('active');
 }
 
+// ── Questões / Revisões — CRUD sobre o array unificado questoes_registros ──
+var _qrEditingId = { sessao: null, revisao: null };
+var _qrPrefix = { sessao: 'qr', revisao: 'rv' };
+
+function qrCancelar(tipo, manterMsg) {
+  _qrEditingId[tipo] = null;
+  var pfx = _qrPrefix[tipo];
+  document.getElementById(pfx + '-total').value = '';
+  document.getElementById(pfx + '-acertos').value = '';
+  document.getElementById(pfx + '-tempo').value = '';
+  document.getElementById(pfx + '-obs').value = '';
+  document.getElementById(pfx + '-data').value = new Date().toISOString().split('T')[0];
+  document.getElementById('qr-btn-' + tipo).textContent = tipo === 'sessao' ? 'Registrar' : 'Registrar revisão';
+  document.getElementById('qr-cancel-' + tipo).style.display = 'none';
+  if (!manterMsg) document.getElementById('qr-msg-' + tipo).textContent = '';
+}
+
+function qrSalvar(tipo) {
+  var pfx = _qrPrefix[tipo];
+  var materia = document.getElementById(pfx + '-materia').value;
+  var total   = parseInt(document.getElementById(pfx + '-total').value) || 0;
+  var acertos = parseInt(document.getElementById(pfx + '-acertos').value);
+  var tempo   = document.getElementById(pfx + '-tempo').value;
+  var data    = document.getElementById(pfx + '-data').value;
+  var obs     = document.getElementById(pfx + '-obs').value.trim();
+  var msgEl   = document.getElementById('qr-msg-' + tipo);
+
+  if (!materia) { msgEl.textContent = '⚠ Selecione a matéria.'; msgEl.style.color = 'var(--rose-deep)'; return; }
+  if (total <= 0) { msgEl.textContent = '⚠ Informe o total de questões.'; msgEl.style.color = 'var(--rose-deep)'; return; }
+  if (isNaN(acertos) || acertos < 0 || acertos > total) { msgEl.textContent = '⚠ Acertos deve ser entre 0 e ' + total + '.'; msgEl.style.color = 'var(--rose-deep)'; return; }
+
+  var dados = {
+    materia: materia, total: total, acertos: acertos,
+    tempo: tempo || null, observacoes: obs, dia: window._diaAtualQR, tipo: tipo
+  };
+  if (data) dados.data = data;
+
+  if (_qrEditingId[tipo]) {
+    editarQuestaoRegistro(_qrEditingId[tipo], dados);
+  } else {
+    adicionarQuestaoRegistro(dados);
+  }
+
+  var pct = Math.round((acertos / total) * 100);
+  var msg = (_qrEditingId[tipo] ? '✓ Alterações salvas — ' : '✓ Registrado — ') + acertos + '/' + total + ' (' + pct + '%)';
+  var cor = pct >= 70 ? '#4a9850' : 'var(--ink-faded)';
+
+  qrCancelar(tipo, true);
+  msgEl.textContent = msg;
+  msgEl.style.color = cor;
+  qrRenderHistorico(tipo);
+  if (typeof atualizarBadgeRevisar === 'function') atualizarBadgeRevisar();
+}
+
+function qrEditar(tipo, id) {
+  var registro = getQuestaoRegistros({ dia: window._diaAtualQR, tipo: tipo }).find(function(r){ return r.id === id; });
+  if (!registro) return;
+  var pfx = _qrPrefix[tipo];
+  _qrEditingId[tipo] = id;
+  document.getElementById(pfx + '-materia').value = registro.materia;
+  document.getElementById(pfx + '-total').value = registro.total;
+  document.getElementById(pfx + '-acertos').value = registro.acertos;
+  document.getElementById(pfx + '-tempo').value = registro.tempo != null ? registro.tempo : '';
+  document.getElementById(pfx + '-data').value = registro.data || '';
+  document.getElementById(pfx + '-obs').value = registro.observacoes || '';
+  document.getElementById('qr-btn-' + tipo).textContent = 'Salvar alterações';
+  document.getElementById('qr-cancel-' + tipo).style.display = 'inline-block';
+}
+
+function qrExcluir(tipo, id) {
+  if (!confirm('Excluir este registro?')) return;
+  excluirQuestaoRegistro(id);
+  if (_qrEditingId[tipo] === id) qrCancelar(tipo);
+  qrRenderHistorico(tipo);
+}
+
+function qrRenderHistorico(tipo) {
+  var cont = document.getElementById('qr-historico-' + tipo);
+  if (!cont) return;
+  var regs = getQuestaoRegistros({ dia: window._diaAtualQR, tipo: tipo }).slice().sort(function(a,b){ return b.data.localeCompare(a.data); });
+  if (!regs.length) {
+    cont.innerHTML = '<div class="qr-empty">Nenhum registro ainda para este dia.</div>';
+    return;
+  }
+  var materiasMap = {};
+  (getDadosDia(window._diaAtualQR).materias || []).forEach(function(m) {
+    var mid = (typeof getMateriaId === 'function') ? getMateriaId(m.nome) : m.nome;
+    materiasMap[mid] = m;
+  });
+  var rows = regs.map(function(r) {
+    var pct = r.total > 0 ? Math.round((r.acertos / r.total) * 100) : 0;
+    var cor = pct >= 70 ? '#4a9850' : pct >= 50 ? '#c9960a' : '#c05050';
+    var matInfo = materiasMap[r.materia];
+    var matLabel = matInfo ? ((matInfo.emoji || '📖') + ' ' + matInfo.nome) : r.materia;
+    return '<tr>' +
+      '<td>' + r.data + '</td>' +
+      '<td>' + matLabel + '</td>' +
+      '<td>' + r.total + '</td>' +
+      '<td>' + r.acertos + '</td>' +
+      '<td style="font-weight:600;color:' + cor + '">' + pct + '%</td>' +
+      '<td>' + (r.tempo != null ? r.tempo + ' min' : '—') + '</td>' +
+      '<td>' + (r.observacoes ? r.observacoes.replace(/</g,'&lt;') : '—') + '</td>' +
+      '<td style="white-space:nowrap">' +
+        '<button class="btn btn-ghost" style="font-size:.7rem;padding:.25rem .5rem" onclick="qrEditar(\'' + tipo + '\',\'' + r.id + '\')" title="Editar">✎</button> ' +
+        '<button class="btn btn-ghost" style="font-size:.7rem;padding:.25rem .5rem;color:var(--error,#c0524b)" onclick="qrExcluir(\'' + tipo + '\',\'' + r.id + '\')" title="Excluir">✕</button>' +
+      '</td>' +
+    '</tr>';
+  }).join('');
+  cont.innerHTML = '<div style="overflow-x:auto"><table class="qr-hist-table"><thead><tr>' +
+    '<th>Data</th><th>Matéria</th><th>Total</th><th>Acertos</th><th>Taxa</th><th>Tempo</th><th>Obs.</th><th>Ações</th>' +
+    '</tr></thead><tbody>' + rows + '</tbody></table></div>';
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   var prog = carregarProgresso();
   var sEl = document.getElementById('streak-count');
@@ -292,8 +488,10 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('btn-estudei').style.opacity = '.75';
   }
 
-  // Topics sidebar
-  var topicos = (dados.materias && dados.materias[0] && dados.materias[0].topicos) || [];
+  // Topics sidebar — junta os tópicos de TODAS as matérias do dia (alguns
+  // dias do cronograma reorganizado têm 2 matérias, ex.: Administrativo + Proc. Penal)
+  var topicos = [];
+  (dados.materias || []).forEach(function(m) { topicos = topicos.concat(m.topicos || []); });
   var tList = document.getElementById('topic-list');
   tList.innerHTML = topicos.length
     ? topicos.map(function(t){ return '<li>' + t + '</li>'; }).join('')
@@ -345,6 +543,36 @@ document.addEventListener('DOMContentLoaded', function() {
       document.getElementById('res-peg').style.display = 'block';
       document.getElementById('res-peg-txt').textContent = card.pegadinha;
     }
+  }
+
+  // ── Questões / Revisões — mesmo array unificado do progresso.js ──
+  window._diaAtualQR = dia;
+  var materiaOpts = (dados.materias || []).map(function(m) {
+    var mid = (typeof getMateriaId === 'function') ? getMateriaId(m.nome) : m.nome;
+    return '<option value="' + mid + '">' + (m.emoji || '📖') + ' ' + m.nome + '</option>';
+  }).join('');
+  ['qr-materia', 'rv-materia'].forEach(function(selId) {
+    var sel = document.getElementById(selId);
+    if (sel) sel.innerHTML = materiaOpts;
+  });
+  var hojeStr = new Date().toISOString().split('T')[0];
+  var qrDataEl = document.getElementById('qr-data'); if (qrDataEl) qrDataEl.value = hojeStr;
+  var rvDataEl = document.getElementById('rv-data'); if (rvDataEl) rvDataEl.value = hojeStr;
+  if (typeof qrRenderHistorico === 'function') {
+    qrRenderHistorico('sessao');
+    qrRenderHistorico('revisao');
+  }
+
+  // ── PDF da Semana — embutido via iframe do Drive ──────────────
+  var pdfWrap  = document.getElementById('pdf-embed-wrap');
+  var pdfStub  = document.getElementById('pdf-embed-stub');
+  if (pdfId) {
+    document.getElementById('pdf-embed-title').textContent = 'PDF · Semana ' + (dados.semana || '');
+    document.getElementById('pdf-embed-drive-link').href = 'https://drive.google.com/file/d/' + pdfId + '/view';
+    document.getElementById('pdf-embed-iframe').src = 'https://drive.google.com/file/d/' + pdfId + '/preview';
+    pdfWrap.style.display = 'block';
+  } else {
+    pdfStub.style.display = 'block';
   }
 });
 
