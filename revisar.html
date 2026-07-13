@@ -100,6 +100,19 @@
   color: var(--rose-deep);
 }
 
+.rev-bullets li.rev-subgroup {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 500;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  border-bottom: none;
+  padding-left: 0;
+  padding-top: 0.7rem;
+}
+.rev-bullets li.rev-subgroup::before { content: ''; }
+.rev-bullets li.rev-subgroup:first-child { padding-top: 0.5rem; }
+
 .rev-feedback {
   display: flex;
   gap: 0.6rem;
@@ -518,6 +531,25 @@
 <script src="cards.js"></script>
 <script src="cores.js"></script>
 <script>
+// Monta a lista de tópicos de uma matéria, com subcabeçalhos de macrotema
+// quando mat.grupos existir (não altera a lista original de topicos).
+function buildTopicosHtml(mat) {
+  const tp = mat.topicos || [];
+  const boundaries = {};
+  if (mat.grupos && mat.grupos.length) {
+    let acc = 0;
+    mat.grupos.forEach(g => { boundaries[acc] = g.titulo; acc += g.qtd; });
+  }
+  let html = '';
+  tp.forEach((t, i) => {
+    if (boundaries[i] !== undefined) {
+      html += `<li class="rev-subgroup">${boundaries[i]}</li>`;
+    }
+    html += `<li>${t.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</li>`;
+  });
+  return html;
+}
+
 // Constrói o HTML de um card de matéria — reaproveitado pela aba
 // "Pendentes" e pela aba "Arquivo".
 function buildMatCardHtml(numDia, mIdx, mat, dado, statusHtml, extraClass, semFeedback) {
@@ -526,7 +558,7 @@ function buildMatCardHtml(numDia, mIdx, mat, dado, statusHtml, extraClass, semFe
   const titulo   = cardData ? cardData.titulo : `${mat.emoji || '📖'} ${mat.nome}`;
   const pontosHtml = cardData
     ? cardData.pontos.map(p => `<li>${p}</li>`).join('')
-    : (mat.topicos || []).map(t => `<li>${t.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</li>`).join('');
+    : buildTopicosHtml(mat);
   const pegadinhaHtml = cardData && cardData.pegadinha
     ? `<div style="margin-top:0.8rem;padding:0.8rem 1rem;background:linear-gradient(135deg,#fff0d8,#ffe8c0);border-left:3px solid #d4903a;border-radius:var(--radius-sm);font-size:0.82rem;color:#7a4010"><strong style="display:block;font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:#d4903a;margin-bottom:0.3rem">⚠ Pegadinha da Banca</strong>${cardData.pegadinha}</div>`
     : '';

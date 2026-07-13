@@ -66,6 +66,10 @@ const PLANO_VDE = [
       'Art. 5º CF — destinatários, rol exemplificativo (§2º) e aplicabilidade imediata (§1º)',
       'Tratados internacionais de direitos humanos — status supralegal vs equivalência a emenda constitucional (§3º, EC 45/04)',
       'Colisão de direitos fundamentais — proporcionalidade, razoabilidade e concordância prática'
+    ],
+    grupos:[
+      { titulo:'Teoria da Constituição', qtd:7 },
+      { titulo:'Direitos Fundamentais', qtd:5 }
     ] }],
   flashcards:[],
   checklist:[
@@ -104,6 +108,10 @@ const PLANO_VDE = [
       'Contrato de experiência — prazo máximo de 90 dias e prorrogação única',
       'Sucessão trabalhista — arts. 10 e 448 CLT',
       'Alteração contratual — art. 468 CLT, mútuo consentimento e vedação ao prejuízo'
+    ],
+    grupos:[
+      { titulo:'Relação de Trabalho', qtd:5 },
+      { titulo:'Contrato de Trabalho', qtd:7 }
     ] }],
   flashcards:[],
   checklist:[
@@ -144,6 +152,10 @@ const PLANO_VDE = [
       'Associações (sem fins econômicos) vs sociedades (fins econômicos) — distinção',
       'Fundações — só podem ter as finalidades do art. 62, parágrafo único (assistencial, cultural, religioso, etc.)',
       'Desconsideração da personalidade jurídica — Teoria Maior (art. 50 CC: abuso, desvio de finalidade ou confusão patrimonial) e desconsideração inversa'
+    ],
+    grupos:[
+      { titulo:'Pessoa Natural', qtd:9 },
+      { titulo:'Pessoa Jurídica', qtd:5 }
     ] }],
   flashcards:[],
   checklist:[
@@ -218,6 +230,10 @@ const PLANO_VDE = [
       'Competência territorial — regra do local da prestação de serviços (art. 651 CLT)',
       'Competência funcional e competência em razão da pessoa',
       'Conflito de competência — hipóteses e órgão competente para dirimir'
+    ],
+    grupos:[
+      { titulo:'Atos, Termos e Prazos Processuais', qtd:6 },
+      { titulo:'Competência', qtd:4 }
     ] }],
   flashcards:[],
   checklist:[
@@ -252,6 +268,10 @@ const PLANO_VDE = [
       'Territorialidade e extraterritorialidade da lei penal (arts. 5º a 7º CP)',
       'Lugar do crime — teoria da ubiquidade (art. 6º CP)',
       'Hipóteses de extraterritorialidade — princípios real/defesa, nacionalidade, justiça universal e representação'
+    ],
+    grupos:[
+      { titulo:'Lei Penal no Tempo', qtd:7 },
+      { titulo:'Lei Penal no Espaço', qtd:3 }
     ] }],
   flashcards:[],
   checklist:[
@@ -290,6 +310,10 @@ const PLANO_VDE = [
       'Revogação do mandato pelo cliente — efeitos sobre honorários',
       'Substabelecimento com reserva de poderes vs sem reserva de poderes',
       'Consultoria e assessoria jurídicas — forma verbal ou escrita'
+    ],
+    grupos:[
+      { titulo:'Atividades Privativas e Capacidade Postulatória', qtd:3 },
+      { titulo:'Mandato Judicial', qtd:6 }
     ] }],
   flashcards:[],
   checklist:[
@@ -322,6 +346,11 @@ const PLANO_VDE = [
       'Prazo em dobro — litisconsortes com procuradores distintos e defensoria/MP/Fazenda',
       'Nulidade absoluta vs relativa dos atos processuais — convalidação e princípio do prejuízo',
       'Preclusão temporal, lógica e consumativa no processo civil'
+    ],
+    grupos:[
+      { titulo:'Forma, Tempo, Lugar e Publicidade dos Atos', qtd:5 },
+      { titulo:'Prazos Processuais', qtd:2 },
+      { titulo:'Nulidade e Preclusão', qtd:2 }
     ] }],
   flashcards:[],
   checklist:[
@@ -357,6 +386,10 @@ const PLANO_VDE = [
       'Trespasse — requisitos de eficácia perante terceiros e responsabilidade por dívidas anteriores',
       'Cláusula de não concorrência — prazo legal de 5 anos após o trespasse',
       'Ponto empresarial e proteção pela ação renovatória (locação empresarial)'
+    ],
+    grupos:[
+      { titulo:'Empresa e Empresário', qtd:6 },
+      { titulo:'Estabelecimento Empresarial e Registro', qtd:6 }
     ] }],
   flashcards:[],
   checklist:[
@@ -393,6 +426,10 @@ const PLANO_VDE = [
       'Ação Penal Pública Incondicionada e Condicionada (representação)',
       'Ação Penal Privada — exclusiva, personalíssima e subsidiária da pública',
       'Retratação da representação — CPP (até o oferecimento da denúncia) vs Lei Maria da Penha (perante o juiz)'
+    ],
+    grupos:[
+      { titulo:'Inquérito Policial', qtd:6 },
+      { titulo:'Ação Penal', qtd:4 }
     ] }],
   flashcards:[],
   checklist:[
@@ -426,6 +463,10 @@ const PLANO_VDE = [
       'Poder de Polícia — conceito e atributos: discricionariedade, autoexecutoriedade e coercibilidade',
       'Poder Regulamentar — decreto regulamentar (art. 84, IV CF) vs decreto autônomo (art. 84, VI CF)',
       'Abuso de poder — excesso de poder e desvio de finalidade'
+    ],
+    grupos:[
+      { titulo:'Princípios da Administração Pública', qtd:3 },
+      { titulo:'Poderes Administrativos', qtd:6 }
     ] }],
   flashcards:[],
   checklist:[
@@ -493,6 +534,10 @@ const PLANO_VDE = [
       'Sucessão de empregadores — responsabilidade do sucessor pelas obrigações trabalhistas (arts. 10 e 448 CLT)',
       'Sócio retirante — responsabilidade subsidiária pelo prazo de 2 anos (art. 10-A CLT)',
       'Terceirização — Lei 6.019/74 e responsabilidade subsidiária da tomadora dos serviços'
+    ],
+    grupos:[
+      { titulo:'Empregado', qtd:4 },
+      { titulo:'Empregador', qtd:5 }
     ] }],
   flashcards:[],
   checklist:[
@@ -525,6 +570,12 @@ const PLANO_VDE = [
       'Simulação — único vício social que gera nulidade absoluta do negócio jurídico',
       'Negócio jurídico nulo vs anulável — legitimidade para arguir, prazos e efeitos (ex tunc/ex nunc)',
       'Reserva mental e representação no negócio jurídico'
+    ],
+    grupos:[
+      { titulo:'Elementos do Negócio Jurídico', qtd:2 },
+      { titulo:'Vícios de Consentimento', qtd:2 },
+      { titulo:'Vícios Sociais e Fraude', qtd:3 },
+      { titulo:'Invalidade do Negócio Jurídico', qtd:2 }
     ] }],
   flashcards:[],
   checklist:[
@@ -557,6 +608,11 @@ const PLANO_VDE = [
       'Competência extraordinária — Imposto Extraordinário de Guerra, exceção às anterioridades',
       'Empréstimo Compulsório — exige lei complementar, hipóteses do art. 148 CF (calamidade/guerra e investimento público urgente)',
       'Isenção heterônoma — vedada internamente (regra), admitida em tratados internacionais firmados pela União'
+    ],
+    grupos:[
+      { titulo:'Competência Tributária e Capacidade Tributária Ativa', qtd:2 },
+      { titulo:'Espécies de Competência', qtd:5 },
+      { titulo:'Empréstimo Compulsório e Isenção Heterônoma', qtd:2 }
     ] }],
   flashcards:[],
   checklist:[
@@ -588,6 +644,10 @@ const PLANO_VDE = [
       'Honorários periciais — pagos pela parte sucumbente no objeto da perícia',
       'ADI 5766 — beneficiário da gratuidade de justiça não paga honorários sucumbenciais nem periciais; ônus assumido pela União',
       'Assistente técnico — honorários pagos por quem o contratar, independentemente do resultado'
+    ],
+    grupos:[
+      { titulo:'Custas, Depósitos e Justiça Gratuita', qtd:4 },
+      { titulo:'Honorários', qtd:4 }
     ] }],
   flashcards:[],
   checklist:[
@@ -620,6 +680,12 @@ const PLANO_VDE = [
       'Causas absolutamente e relativamente independentes — superveniência causal (art. 13, §1º CP)',
       'Tipicidade formal — adequação típica direta e por subordinação mediata',
       'Tipicidade material e princípio da insignificância — requisitos jurisprudenciais'
+    ],
+    grupos:[
+      { titulo:'Conduta e Elementos Subjetivos', qtd:4 },
+      { titulo:'Resultado', qtd:2 },
+      { titulo:'Nexo de Causalidade', qtd:2 },
+      { titulo:'Tipicidade', qtd:2 }
     ] }],
   flashcards:[],
   checklist:[
@@ -656,6 +722,10 @@ const PLANO_VDE = [
       'Sociedade de Advogados — natureza, registro na OAB e vedação de sócio não advogado (Lei 13.247/16)',
       'Advogado empregado da sociedade — direitos e vedação de subordinação técnica',
       'Advogado associado — regime de participação nos resultados'
+    ],
+    grupos:[
+      { titulo:'Inscrição na OAB', qtd:5 },
+      { titulo:'Sociedade de Advogados e Advogado Empregado', qtd:3 }
     ] }],
   flashcards:[],
   checklist:[
@@ -685,6 +755,11 @@ const PLANO_VDE = [
       'Poderes do procurador — cláusula geral (ad judicia) e cláusula especial (poderes específicos do art. 105 CPC)',
       'Deveres do advogado no processo — art. 77 CPC',
       'Curador especial — hipóteses de nomeação (art. 72 CPC)'
+    ],
+    grupos:[
+      { titulo:'Das Partes', qtd:3 },
+      { titulo:'Litisconsórcio', qtd:2 },
+      { titulo:'Dos Procuradores', qtd:3 }
     ] }],
   flashcards:[],
   checklist:[
@@ -717,6 +792,12 @@ const PLANO_VDE = [
       'Sociedade Anônima — natureza sempre empresária, capital dividido em ações',
       'Exclusão de sócio — justa causa e exclusão extrajudicial (art. 1.085 CC)',
       'Dissolução da sociedade — total vs parcial, causas'
+    ],
+    grupos:[
+      { titulo:'Disposições Gerais das Sociedades', qtd:4 },
+      { titulo:'Sociedade Limitada', qtd:4 },
+      { titulo:'Sociedade Anônima', qtd:1 },
+      { titulo:'Exclusão de Sócio e Dissolução', qtd:2 }
     ] }],
   flashcards:[],
   checklist:[
@@ -754,6 +835,10 @@ const PLANO_VDE = [
         'Empresas públicas e sociedades de economia mista — distinção quanto ao capital e à forma societária',
         'Regime jurídico das estatais — Lei 13.303/2016 (Lei das Estatais)',
         'Consórcios públicos e entidades paraestatais (serviços sociais autônomos)'
+      ],
+      grupos:[
+        { titulo:'Administração Direta e Indireta', qtd:1 },
+        { titulo:'Entidades da Administração Indireta', qtd:6 }
       ] },
     { nome:'Processo Penal', emoji:'🔍', horas:2, cor:'rose',
       topicos:[
@@ -763,6 +848,10 @@ const PLANO_VDE = [
         'Competência por conexão e continência — reunião de processos e prevenção',
         'Foro por prerrogativa de função — hipóteses e limites (após a EC e jurisprudência do STF)',
         'Competência da Justiça Federal em matéria penal (art. 109 CF)'
+      ],
+      grupos:[
+        { titulo:'Critérios de Competência', qtd:3 },
+        { titulo:'Conexão, Continência e Foro Especial', qtd:3 }
       ] }
   ],
   flashcards:[],
@@ -802,6 +891,11 @@ const PLANO_VDE = [
         'Mérito administrativo — motivo e objeto nos atos discricionários',
         'Atos administrativos nulos e anuláveis — convalidação (motivo e finalidade não são convalidáveis)',
         'Revogação vs anulação vs cassação do ato administrativo — efeitos ex nunc e ex tunc'
+      ],
+      grupos:[
+        { titulo:'Conceito e Elementos do Ato', qtd:3 },
+        { titulo:'Vinculação, Discricionariedade e Mérito', qtd:2 },
+        { titulo:'Invalidade e Extinção do Ato', qtd:2 }
       ] },
     { nome:'Direito Constitucional', emoji:'🏛️', horas:2, cor:'lavender',
       topicos:[
@@ -812,6 +906,11 @@ const PLANO_VDE = [
         'Português equiparado — quase-nacionalidade e reciprocidade',
         'Cargos privativos de brasileiro nato (art. 12, §3º CF)',
         'Perda da nacionalidade — cancelamento da naturalização e aquisição voluntária de outra nacionalidade'
+      ],
+      grupos:[
+        { titulo:'Nacionalidade Originária', qtd:3 },
+        { titulo:'Naturalização e Nacionalidade Derivada', qtd:2 },
+        { titulo:'Cargos Privativos e Perda da Nacionalidade', qtd:2 }
       ] }
   ],
   flashcards:[],
@@ -849,6 +948,11 @@ const PLANO_VDE = [
       'Suspensão do contrato de trabalho — conceito: cessação recíproca de obrigações, sem salário nem contagem de tempo (regra)',
       'Hipóteses de suspensão — afastamento por auxílio-doença/acidente após 15º dia, suspensão disciplinar, aposentadoria por invalidez, greve (regra)',
       'Efeitos sobre FGTS, férias e 13º durante interrupção e suspensão'
+    ],
+    grupos:[
+      { titulo:'Alteração do Contrato', qtd:4 },
+      { titulo:'Interrupção do Contrato', qtd:2 },
+      { titulo:'Suspensão do Contrato e Efeitos', qtd:3 }
     ] }],
   flashcards:[],
   checklist:[
@@ -883,6 +987,10 @@ const PLANO_VDE = [
       'Obrigações de fazer — fungível vs infungível; execução específica e perdas e danos',
       'Obrigações quanto aos sujeitos — divisíveis e indivisíveis; solidariedade ativa e passiva',
       'Obrigação alternativa vs facultativa — distinção quanto à concentração e perecimento'
+    ],
+    grupos:[
+      { titulo:'Adimplemento e Extinção das Obrigações', qtd:7 },
+      { titulo:'Modalidades das Obrigações', qtd:4 }
     ] }],
   flashcards:[],
   checklist:[
@@ -915,6 +1023,10 @@ const PLANO_VDE = [
         'Segurado facultativo — quem pode se filiar e requisitos',
         'Qualidade de segurado — manutenção e período de graça (art. 15 Lei 8.213/91)',
         'Dependentes do RGPS — classes I, II e III e a presunção de dependência econômica'
+      ],
+      grupos:[
+        { titulo:'Seguridade Social e Princípios Constitucionais', qtd:2 },
+        { titulo:'Beneficiários do RGPS', qtd:5 }
       ] },
     { nome:'Direito Tributário', emoji:'💰', horas:2, cor:'gold',
       topicos:[
@@ -924,6 +1036,10 @@ const PLANO_VDE = [
         'Imunidade dos partidos políticos, entidades sindicais dos trabalhadores, instituições de educação e assistência social sem fins lucrativos',
         'Imunidade cultural — livros, jornais, periódicos e o papel destinado à sua impressão (art. 150, VI, d CF)',
         'Imunidade musical — fonogramas e videofonogramas de obras musicais brasileiras (art. 150, VI, e CF)'
+      ],
+      grupos:[
+        { titulo:'Imunidade Tributária — Conceito', qtd:1 },
+        { titulo:'Espécies de Imunidades', qtd:5 }
       ] }
   ],
   flashcards:[],
@@ -960,6 +1076,11 @@ const PLANO_VDE = [
       'Defesa do réu — contestação, exceções (incompetência, suspeição, impedimento) e reconvenção',
       'Revelia — efeitos e hipóteses em que não se aplica a confissão ficta',
       'Conciliação — obrigatoriedade da proposta em todas as audiências trabalhistas'
+    ],
+    grupos:[
+      { titulo:'Ação Trabalhista', qtd:2 },
+      { titulo:'Audiência Una', qtd:3 },
+      { titulo:'Defesa do Réu, Revelia e Conciliação', qtd:3 }
     ] }],
   flashcards:[],
   checklist:[
@@ -992,6 +1113,10 @@ const PLANO_VDE = [
       'Estado de necessidade — requisitos e teoria unitária adotada pelo CP',
       'Legítima defesa — requisitos: agressão injusta, atual ou iminente, uso moderado dos meios necessários',
       'Excesso doloso e culposo nas excludentes de ilicitude'
+    ],
+    grupos:[
+      { titulo:'Culpabilidade', qtd:6 },
+      { titulo:'Ilicitude', qtd:4 }
     ] }],
   flashcards:[],
   checklist:[
@@ -1029,6 +1154,10 @@ const PLANO_VDE = [
       'Honorários sucumbenciais — pertencem ao advogado, natureza alimentar',
       'Honorários arbitrados judicialmente — critérios de fixação (art. 22 EOAB)',
       'Direito de retenção de autos e bens do cliente até a satisfação dos honorários'
+    ],
+    grupos:[
+      { titulo:'Direitos e Prerrogativas dos Advogados', qtd:5 },
+      { titulo:'Honorários Advocatícios', qtd:4 }
     ] }],
   flashcards:[],
   checklist:[
@@ -1061,6 +1190,11 @@ const PLANO_VDE = [
       'Tutela de urgência cautelar vs antecipada — requisitos comuns: probabilidade do direito e perigo de dano (art. 300 CPC)',
       'Tutela de urgência antecedente — estabilização da tutela antecipada (art. 304 CPC)',
       'Tutela de evidência — hipóteses do art. 311 CPC, dispensa de urgência'
+    ],
+    grupos:[
+      { titulo:'Intervenção de Terceiros', qtd:5 },
+      { titulo:'Litisconsórcio', qtd:1 },
+      { titulo:'Tutela Provisória', qtd:4 }
     ] }],
   flashcards:[],
   checklist:[
@@ -1096,6 +1230,11 @@ const PLANO_VDE = [
       'Ato infracional — conduta descrita como crime ou contravenção penal praticada por criança ou adolescente',
       'Medidas socioeducativas — advertência, obrigação de reparar o dano, prestação de serviços à comunidade, liberdade assistida, semiliberdade, internação',
       'Internação — princípios da excepcionalidade, brevidade e respeito à condição de pessoa em desenvolvimento; prazo máximo de 3 anos'
+    ],
+    grupos:[
+      { titulo:'Direitos Fundamentais', qtd:4 },
+      { titulo:'Família Substituta', qtd:5 },
+      { titulo:'Ato Infracional e Medidas Socioeducativas', qtd:3 }
     ] }],
   flashcards:[],
   checklist:[
@@ -1134,6 +1273,10 @@ const PLANO_VDE = [
       'Renúncia e perdão do ofendido — distinção quanto ao momento (antes/depois do início da ação)',
       'Retratação do agente — hipóteses expressas em lei (calúnia, difamação, falso testemunho)',
       'Prescrição — da pretensão punitiva (abstrata, retroativa, intercorrente) e da pretensão executória'
+    ],
+    grupos:[
+      { titulo:'Concurso de Pessoas', qtd:7 },
+      { titulo:'Extinção da Punibilidade', qtd:5 }
     ] }],
   flashcards:[],
   checklist:[
@@ -1166,6 +1309,10 @@ const PLANO_VDE = [
         'Cláusula penal — moratória vs compensatória; função de pré-fixação de perdas e danos',
         'Perdas e danos — danos emergentes e lucros cessantes',
         'Juros legais, correção monetária e arras (confirmatórias e penitenciais)'
+      ],
+      grupos:[
+        { titulo:'Inadimplemento e Mora', qtd:3 },
+        { titulo:'Cláusula Penal, Perdas e Danos', qtd:3 }
       ] },
     { nome:'Direito do Consumidor', emoji:'🛒', horas:2, cor:'lavender',
       topicos:[
@@ -1175,6 +1322,10 @@ const PLANO_VDE = [
         'Direitos básicos do consumidor — rol do art. 6º CDC (visão introdutória)',
         'Conceito de consumidor — padrão (finalista) e por equiparação (arts. 2º, parágrafo único, 17 e 29 CDC)',
         'Conceito de fornecedor — amplitude da cadeia de fornecimento'
+      ],
+      grupos:[
+        { titulo:'Política Nacional das Relações de Consumo', qtd:3 },
+        { titulo:'Conceitos Básicos do CDC', qtd:3 }
       ] }
   ],
   flashcards:[],
@@ -1216,6 +1367,11 @@ const PLANO_VDE = [
       'Competência comum administrativa (art. 23 CF) — atuação material paralela de todos os entes',
       'Competência dos Municípios — interesse local e suplementar (art. 30 CF)',
       'Intervenção federal e estadual — hipóteses e limites (excepcionalidade)'
+    ],
+    grupos:[
+      { titulo:'Organização do Estado', qtd:3 },
+      { titulo:'Repartição de Competências', qtd:6 },
+      { titulo:'Intervenção Federal e Estadual', qtd:1 }
     ] }],
   flashcards:[],
   checklist:[
@@ -1245,6 +1401,10 @@ const PLANO_VDE = [
         'Meios de prova no processo do trabalho — depoimento pessoal, testemunhal, documental, pericial',
         'Prova emprestada — requisitos de admissibilidade',
         'Confissão — ficta (revelia) e real (depoimento pessoal)'
+      ],
+      grupos:[
+        { titulo:'Ônus da Prova', qtd:2 },
+        { titulo:'Meios de Prova', qtd:3 }
       ] },
     { nome:'Direito do Trabalho', emoji:'👷', horas:2, cor:'sage',
       topicos:[
@@ -1255,6 +1415,11 @@ const PLANO_VDE = [
         'Trabalho noturno — hora reduzida (52min30s) e adicional mínimo de 20%',
         'Regimes de compensação de jornada — 12x36 e sua previsão em lei (Lei 13.467/17)',
         'Sobreaviso e prontidão — remuneração diferenciada'
+      ],
+      grupos:[
+        { titulo:'Jornada e Horas Extras', qtd:3 },
+        { titulo:'Intervalos e Trabalho Noturno', qtd:2 },
+        { titulo:'Regimes Especiais de Jornada', qtd:2 }
       ] }
   ],
   flashcards:[],
@@ -1292,6 +1457,12 @@ const PLANO_VDE = [
       'Extinção dos contratos — cumprimento, resilição (uni/bilateral), resolução e rescisão',
       'Exceção do contrato não cumprido (exceptio non adimpleti contractus)',
       'Teoria da imprevisão e onerosidade excessiva — art. 478 CC'
+    ],
+    grupos:[
+      { titulo:'Princípios Contratuais', qtd:2 },
+      { titulo:'Formação e Classificação dos Contratos', qtd:3 },
+      { titulo:'Vícios Redibitórios e Evicção', qtd:2 },
+      { titulo:'Extinção dos Contratos', qtd:3 }
     ] }],
   flashcards:[],
   checklist:[
@@ -1324,6 +1495,10 @@ const PLANO_VDE = [
       'Contribuição de melhoria — vinculada à valorização imobiliária decorrente de obra pública',
       'Empréstimo compulsório — restituível, exige lei complementar',
       'Contribuições especiais — sociais, de intervenção no domínio econômico (CIDE), corporativas e de iluminação pública (COSIP)'
+    ],
+    grupos:[
+      { titulo:'Conceito de Tributo', qtd:2 },
+      { titulo:'Espécies Tributárias', qtd:7 }
     ] }],
   flashcards:[],
   checklist:[
@@ -1357,6 +1532,10 @@ const PLANO_VDE = [
       'Requisitos para substituição da pena privativa por restritiva (art. 44 CP)',
       'Pena de multa — critério do dia-multa e cálculo',
       'Dosimetria da pena — sistema trifásico (circunstâncias judiciais, atenuantes/agravantes, causas de aumento/diminuição)'
+    ],
+    grupos:[
+      { titulo:'Concurso de Crimes', qtd:4 },
+      { titulo:'Das Penas', qtd:6 }
     ] }],
   flashcards:[],
   checklist:[
@@ -1396,6 +1575,10 @@ const PLANO_VDE = [
       'Exclusão — hipótese mais grave, exige procedimento específico e quórum qualificado',
       'Prescrição da pretensão disciplinar — prazo de 5 anos (art. 43 EOAB)',
       'Processo disciplinar — competência do Tribunal de Ética e Disciplina'
+    ],
+    grupos:[
+      { titulo:'Incompatibilidades e Impedimentos', qtd:3 },
+      { titulo:'Infrações e Sanções Disciplinares', qtd:7 }
     ] }],
   flashcards:[],
   checklist:[
@@ -1429,6 +1612,11 @@ const PLANO_VDE = [
       'Providências preliminares e saneamento do processo — julgamento conforme o estado do processo (art. 354-357 CPC)',
       'Julgamento antecipado do mérito (total e parcial) — hipóteses do art. 355-356 CPC',
       'Audiência de instrução e julgamento — estrutura e ordem dos atos'
+    ],
+    grupos:[
+      { titulo:'Petição Inicial', qtd:4 },
+      { titulo:'Audiência de Conciliação e Resposta do Réu', qtd:3 },
+      { titulo:'Saneamento e Julgamento', qtd:3 }
     ] }],
   flashcards:[],
   checklist:[
@@ -1463,6 +1651,11 @@ const PLANO_VDE = [
       'Nota promissória — promessa direta de pagamento, dispensa de aceite',
       'Cheque — ordem de pagamento à vista, prazo de apresentação e sustação/revogação',
       'Duplicata — título causal, vinculado à compra e venda mercantil ou prestação de serviços; aceite obrigatório, presumido ou por comunicação'
+    ],
+    grupos:[
+      { titulo:'Princípios Cambiários', qtd:5 },
+      { titulo:'Endosso e Aval', qtd:2 },
+      { titulo:'Títulos em Espécie', qtd:4 }
     ] }],
   flashcards:[],
   checklist:[
@@ -1499,6 +1692,10 @@ const PLANO_VDE = [
       'Exceções processuais — suspeição, incompetência, litispendência, ilegitimidade de parte, coisa julgada',
       'Conflito de competência e conflito de atribuições — distinção e órgão julgador',
       'Restituição de coisas apreendidas — procedimento incidental'
+    ],
+    grupos:[
+      { titulo:'Provas', qtd:8 },
+      { titulo:'Questões e Processos Incidentes', qtd:3 }
     ] }],
   flashcards:[],
   checklist:[
@@ -1533,6 +1730,11 @@ const PLANO_VDE = [
       'Vacância — exoneração, demissão, aposentadoria, falecimento, promoção',
       'Acumulação de cargos públicos — regra da vedação e exceções constitucionais (art. 37, XVI CF)',
       'Responsabilidade do servidor — civil, penal e administrativa; independência das instâncias'
+    ],
+    grupos:[
+      { titulo:'Classificação dos Agentes Públicos', qtd:3 },
+      { titulo:'Cargo e Provimento', qtd:3 },
+      { titulo:'Estabilidade, Vacância e Responsabilidade', qtd:4 }
     ] }],
   flashcards:[],
   checklist:[
@@ -1569,6 +1771,10 @@ const PLANO_VDE = [
         'Cláusulas abusivas — rol exemplificativo do art. 51 CDC e nulidade de pleno direito',
         'Direito de arrependimento — 7 dias em contratações fora do estabelecimento comercial (art. 49 CDC)',
         'Contratos de adesão — limites e cláusulas que implicam limitação de direito (destaque obrigatório)'
+      ],
+      grupos:[
+        { titulo:'Direitos Básicos do Consumidor', qtd:3 },
+        { titulo:'Proteção Contratual', qtd:4 }
       ] },
     { nome:'Processo Civil', emoji:'📋', horas:2, cor:'sage',
       topicos:[
@@ -1579,6 +1785,10 @@ const PLANO_VDE = [
         'Limites objetivos e subjetivos da coisa julgada',
         'Coisa julgada e questão prejudicial — extensão pelo art. 503, §1º CPC',
         'Relativização da coisa julgada — hipóteses excepcionais e ação rescisória'
+      ],
+      grupos:[
+        { titulo:'Sentença', qtd:3 },
+        { titulo:'Coisa Julgada', qtd:4 }
       ] }
   ],
   flashcards:[],
@@ -1615,6 +1825,10 @@ const PLANO_VDE = [
         'Eleição, mandato e reeleição do Presidente da República',
         'Perda do mandato presidencial — crimes de responsabilidade e infrações penais comuns',
         'Ministros de Estado — atribuições e responsabilidade'
+      ],
+      grupos:[
+        { titulo:'Intervenção Federal e Estadual', qtd:3 },
+        { titulo:'Poder Executivo', qtd:4 }
       ] },
     { nome:'Direito Previdenciário', emoji:'🛡️', horas:2, cor:'gold',
       topicos:[
@@ -1625,6 +1839,10 @@ const PLANO_VDE = [
         'Salário-maternidade — carência e beneficiárias',
         'Auxílio-acidente — natureza indenizatória, sem carência',
         'Pensão por morte — dependentes e requisitos após a Reforma da Previdência'
+      ],
+      grupos:[
+        { titulo:'Aposentadorias', qtd:3 },
+        { titulo:'Auxílios e Pensão por Morte', qtd:4 }
       ] }
   ],
   flashcards:[],
@@ -1664,6 +1882,10 @@ const PLANO_VDE = [
       'Salário complessivo — vedação (Súmula 91 TST)',
       'Salário in natura — utilidades e seus limites (art. 458 CLT)',
       'Equiparação salarial — requisitos do art. 461 CLT (mesma função, mesma localidade, diferença de tempo não superior a 4 anos)'
+    ],
+    grupos:[
+      { titulo:'Estabilidade', qtd:6 },
+      { titulo:'Remuneração e Salário', qtd:5 }
     ] }],
   flashcards:[],
   checklist:[
@@ -1700,6 +1922,12 @@ const PLANO_VDE = [
       'Empreitada — de lavor vs mista; responsabilidade do empreiteiro por solidez e segurança (art. 618 CC)',
       'Mandato — outorga, poderes, obrigações do mandatário e extinção',
       'Fiança — natureza acessória, benefício de ordem e exoneração do fiador'
+    ],
+    grupos:[
+      { titulo:'Compra e Venda, Troca e Doação', qtd:4 },
+      { titulo:'Locação, Comodato e Mútuo', qtd:3 },
+      { titulo:'Prestação de Serviços e Empreitada', qtd:2 },
+      { titulo:'Mandato e Fiança', qtd:2 }
     ] }],
   flashcards:[],
   checklist:[
@@ -1735,6 +1963,10 @@ const PLANO_VDE = [
       'Responsabilidade por transferência — sucessão empresarial, sucessão causa mortis, sucessão imobiliária',
       'Responsabilidade de terceiros (art. 134 CTN) — atuação regular vs irregular (art. 135 CTN)',
       'Responsabilidade pessoal dos administradores por atos com excesso de poder ou infração à lei'
+    ],
+    grupos:[
+      { titulo:'Obrigação Tributária', qtd:5 },
+      { titulo:'Responsabilidade Tributária', qtd:5 }
     ] }],
   flashcards:[],
   checklist:[
@@ -1774,6 +2006,10 @@ const PLANO_VDE = [
       'Induzimento, instigação e auxílio ao suicídio ou automutilação (art. 122 CP, redação Lei 13.968/19)',
       'Infanticídio — sujeito ativo próprio (mãe), estado puerperal e durante ou logo após o parto',
       'Aborto — espécies (natural, criminoso, legal) e excludentes: aborto necessário e aborto sentimental/humanitário'
+    ],
+    grupos:[
+      { titulo:'Crimes Contra a Honra', qtd:5 },
+      { titulo:'Crimes Contra a Vida', qtd:5 }
     ] }],
   flashcards:[],
   checklist:[
@@ -1807,6 +2043,10 @@ const PLANO_VDE = [
       'Direito de defesa — contraditório, ampla defesa e possibilidade de constituir defensor dativo',
       'Julgamento — recursos cabíveis das decisões do Tribunal de Ética (recurso ao Conselho Seccional e ao Conselho Federal)',
       'Prescrição da pretensão disciplinar — 5 anos (art. 43 EOAB)'
+    ],
+    grupos:[
+      { titulo:'Ética do Advogado e Relações com o Cliente', qtd:5 },
+      { titulo:'Processo Administrativo Disciplinar', qtd:5 }
     ] }],
   flashcards:[],
   checklist:[
@@ -1839,6 +2079,12 @@ const PLANO_VDE = [
       'Princípio da excepcionalidade da prisão cautelar e da homogeneidade',
       'Liberdade provisória — com e sem fiança; fiança como caução para responder ao processo em liberdade',
       'Relaxamento de prisão (ilegalidade) vs revogação (desaparecimento dos requisitos) vs concessão de liberdade provisória'
+    ],
+    grupos:[
+      { titulo:'Prisão em Flagrante', qtd:2 },
+      { titulo:'Prisão Preventiva e Temporária', qtd:3 },
+      { titulo:'Medidas Cautelares Diversas da Prisão', qtd:2 },
+      { titulo:'Liberdade Provisória', qtd:2 }
     ] }],
   flashcards:[],
   checklist:[
@@ -1872,6 +2118,10 @@ const PLANO_VDE = [
       'Requisitos para requerer recuperação judicial — exercício regular há mais de 2 anos, não falido, não condenado por crime falimentar',
       'Plano de recuperação judicial — prazo de apresentação e aprovação pela assembleia geral de credores',
       'Recuperação extrajudicial — negociação prévia com credores e homologação judicial'
+    ],
+    grupos:[
+      { titulo:'Falência', qtd:6 },
+      { titulo:'Recuperação Judicial', qtd:4 }
     ] }],
   flashcards:[],
   checklist:[
@@ -1905,6 +2155,11 @@ const PLANO_VDE = [
       'Sanções — perda da função pública, suspensão dos direitos políticos, multa civil, proibição de contratar com o Poder Público',
       'Individualização das sanções conforme a gravidade e proporcionalidade',
       'Prescrição — 8 anos, contados do fato ou da cessação da permanência/continuidade'
+    ],
+    grupos:[
+      { titulo:'Disposições Gerais', qtd:2 },
+      { titulo:'Atos de Improbidade', qtd:4 },
+      { titulo:'Sanções e Prescrição', qtd:3 }
     ] }],
   flashcards:[],
   checklist:[
@@ -1942,6 +2197,10 @@ const PLANO_VDE = [
       'Embargos à execução — meio de defesa do executado no processo autônomo, independe de garantia do juízo',
       'Penhora — ordem preferencial e bens impenhoráveis (art. 833 CPC)',
       'Expropriação — adjudicação, alienação por iniciativa particular e leilão judicial'
+    ],
+    grupos:[
+      { titulo:'Cumprimento de Sentença', qtd:4 },
+      { titulo:'Processo de Execução', qtd:6 }
     ] }],
   flashcards:[],
   checklist:[
@@ -1975,6 +2234,10 @@ const PLANO_VDE = [
       'Excludentes de responsabilidade — culpa exclusiva da vítima, força maior, caso fortuito, fato de terceiro',
       'Responsabilidade por omissão do Estado — divergência entre responsabilidade subjetiva e objetiva',
       'Direito de regresso do Estado contra o agente causador do dano — exige dolo ou culpa (subjetiva)'
+    ],
+    grupos:[
+      { titulo:'Intervenção do Estado na Propriedade', qtd:6 },
+      { titulo:'Responsabilidade Civil do Estado', qtd:4 }
     ] }],
   flashcards:[],
   checklist:[
@@ -2009,6 +2272,10 @@ const PLANO_VDE = [
       'Veto — total ou parcial, motivado (inconstitucionalidade ou contrariedade ao interesse público), prazo de 15 dias úteis',
       'Medida provisória — requisitos de relevância e urgência, prazo de 60+60 dias, vedações materiais (art. 62, §1º CF)',
       'Lei delegada — delegação do Congresso ao Presidente, matérias vedadas'
+    ],
+    grupos:[
+      { titulo:'Poder Legislativo', qtd:3 },
+      { titulo:'Processo Legislativo', qtd:7 }
     ] }],
   flashcards:[],
   checklist:[
@@ -2043,6 +2310,10 @@ const PLANO_VDE = [
       'Responsabilidade pelo vício do produto e do serviço — solidária entre a cadeia de fornecedores (arts. 18 e 20 CDC)',
       'Excludentes de responsabilidade do fornecedor — inexistência do defeito, culpa exclusiva do consumidor ou de terceiro',
       'Desconsideração da personalidade jurídica no CDC — Teoria Menor (art. 28, §5º CDC)'
+    ],
+    grupos:[
+      { titulo:'Práticas Comerciais', qtd:7 },
+      { titulo:'Responsabilidade Civil nas Relações de Consumo', qtd:4 }
     ] }],
   flashcards:[],
   checklist:[
@@ -2076,6 +2347,10 @@ const PLANO_VDE = [
         'Dano moral, material e estético — cumulação (Súmula 387 STJ)',
         'Excludentes de responsabilidade — culpa exclusiva da vítima, caso fortuito, força maior, fato de terceiro',
         'Responsabilidade por fato de terceiro e por fato da coisa/animal (arts. 932-936 CC)'
+      ],
+      grupos:[
+        { titulo:'Responsabilidade Subjetiva e Objetiva', qtd:4 },
+        { titulo:'Dano e Excludentes de Responsabilidade', qtd:3 }
       ] },
     { nome:'Direito Eleitoral', emoji:'🗳️', horas:2, cor:'lavender',
       topicos:[
@@ -2086,6 +2361,10 @@ const PLANO_VDE = [
         'Direitos políticos negativos — perda e suspensão dos direitos políticos (art. 15 CF, vedado o cassação)',
         'Partidos políticos — natureza jurídica de direito privado, liberdade de criação, autonomia e fidelidade partidária',
         'Filiação partidária como condição de elegibilidade e prazo mínimo exigido'
+      ],
+      grupos:[
+        { titulo:'Direitos Políticos', qtd:5 },
+        { titulo:'Partidos Políticos', qtd:2 }
       ] }
   ],
   flashcards:[],
@@ -2129,6 +2408,10 @@ const PLANO_VDE = [
         'Poder Judiciário — órgãos do art. 92 CF e princípio do juiz natural',
         'Garantias da magistratura — vitaliciedade, inamovibilidade, irredutibilidade de subsídio',
         'Súmula vinculante — requisitos (2/3 dos membros do STF, reiteradas decisões) e efeito vinculante'
+      ],
+      grupos:[
+        { titulo:'Controle de Constitucionalidade', qtd:5 },
+        { titulo:'Poder Judiciário', qtd:3 }
       ] },
     { nome:'Ética Profissional', emoji:'⚖️', horas:2, cor:'champagne',
       topicos:[
@@ -2138,6 +2421,10 @@ const PLANO_VDE = [
         'Publicidade profissional — princípios da moderação, discrição e sobriedade (art. 39 CED)',
         'Vedações na publicidade — captação de clientela, mercantilização, comparação entre profissionais',
         'Meios permitidos de publicidade — placas, cartões, sítios eletrônicos e redes sociais, com limites'
+      ],
+      grupos:[
+        { titulo:'Estrutura da OAB e Eleições', qtd:3 },
+        { titulo:'Publicidade Profissional', qtd:3 }
       ] }
   ],
   flashcards:[],
@@ -2177,6 +2464,11 @@ const PLANO_VDE = [
       'Roubo — subtração mediante violência/grave ameaça; causas de aumento (art. 157, §2º CP)',
       'Estelionato — fraude, ardil ou meio fraudulento para obter vantagem ilícita; ação penal pública condicionada (regra, Lei 13.964/19)',
       'Apropriação indébita — inversão da posse lícita em propriedade ilícita'
+    ],
+    grupos:[
+      { titulo:'Crimes Contra a Dignidade Sexual', qtd:4 },
+      { titulo:'Crimes Contra a Fé Pública', qtd:3 },
+      { titulo:'Crimes Contra o Patrimônio', qtd:4 }
     ] }],
   flashcards:[],
   checklist:[
@@ -2211,6 +2503,10 @@ const PLANO_VDE = [
       'Rito do Tribunal do Júri — fases: sumário de culpa (juízo de admissibilidade) e juízo de mérito (plenário)',
       'Pronúncia, impronúncia, absolvição sumária e desclassificação — decisões da 1ª fase do júri',
       'Procedimentos especiais — crimes de responsabilidade de funcionários públicos, crimes contra a honra de competência originária'
+    ],
+    grupos:[
+      { titulo:'Citação e Intimação', qtd:3 },
+      { titulo:'Procedimentos no CPP', qtd:6 }
     ] }],
   flashcards:[],
   checklist:[
@@ -2243,6 +2539,10 @@ const PLANO_VDE = [
       'Apelação, agravo de instrumento, embargos de declaração, recurso especial e extraordinário — cabimento',
       'Ação rescisória — hipóteses do art. 966 CPC e prazo decadencial de 2 anos',
       'Mandado de segurança contra ato judicial — cabimento excepcional'
+    ],
+    grupos:[
+      { titulo:'Procedimentos Especiais', qtd:4 },
+      { titulo:'Recursos e Ações Autônomas de Impugnação', qtd:6 }
     ] }],
   flashcards:[],
   checklist:[
@@ -2274,6 +2574,10 @@ const PLANO_VDE = [
         'Aquisição da propriedade imóvel — registro (regra) e usucapião (originária)',
         'Modalidades de usucapião — extraordinária, ordinária, especial urbana, especial rural, familiar',
         'Aquisição da propriedade móvel — tradição, usucapião, achado do tesouro, especificação'
+      ],
+      grupos:[
+        { titulo:'Posse', qtd:4 },
+        { titulo:'Propriedade', qtd:3 }
       ] },
     { nome:'Processo do Trabalho', emoji:'⚖️', horas:2, cor:'sage',
       topicos:[
@@ -2284,6 +2588,10 @@ const PLANO_VDE = [
         'Citação do executado para pagamento em 48h ou garantia da execução',
         'Embargos à execução trabalhista — prazo de 5 dias, exige garantia do juízo',
         'Impenhorabilidade de bens na execução trabalhista'
+      ],
+      grupos:[
+        { titulo:'Ações Especiais Trabalhistas', qtd:2 },
+        { titulo:'Execução Trabalhista', qtd:5 }
       ] }
   ],
   flashcards:[],
@@ -2322,6 +2630,10 @@ const PLANO_VDE = [
       'Prescrição tributária — prazo de 5 anos para cobrar o crédito já constituído',
       'Exclusão do crédito tributário — isenção e anistia (art. 175 CTN)',
       'Isenção — dispensa legal do pagamento antes do fato gerador; anistia — perdão de infrações/penalidades'
+    ],
+    grupos:[
+      { titulo:'Impostos Federais, Estaduais e Municipais', qtd:4 },
+      { titulo:'Suspensão, Extinção e Exclusão do Crédito Tributário', qtd:6 }
     ] }],
   flashcards:[],
   checklist:[
@@ -2361,6 +2673,10 @@ const PLANO_VDE = [
       'Habeas Corpus como ação autônoma de impugnação — cabimento contra constrangimento ilegal',
       'Revisão criminal — hipóteses do art. 621 CPP, sem prazo (pode ser proposta a qualquer tempo, inclusive após a morte do réu)',
       'Mandado de segurança em matéria criminal — cabimento residual'
+    ],
+    grupos:[
+      { titulo:'Nulidades', qtd:4 },
+      { titulo:'Recursos e Ações Autônomas de Impugnação', qtd:6 }
     ] }],
   flashcards:[],
   checklist:[
@@ -2395,6 +2711,10 @@ const PLANO_VDE = [
       'Extinção por culpa recíproca, força maior e término do contrato a termo',
       'Verbas rescisórias por modalidade de extinção — tabela comparativa (aviso prévio, multa FGTS, seguro-desemprego)',
       'Homologação da rescisão e prazo para pagamento (art. 477 CLT)'
+    ],
+    grupos:[
+      { titulo:'Direito Coletivo do Trabalho', qtd:6 },
+      { titulo:'Extinção do Contrato de Trabalho', qtd:5 }
     ] }],
   flashcards:[],
   checklist:[
@@ -2429,6 +2749,10 @@ const PLANO_VDE = [
       'Alimentos gravídicos — Lei 11.804/2008',
       'Divórcio — direto, sem necessidade de prévia separação ou prazo mínimo (EC 66/2010)',
       'Dissolução da união estável — reconhecimento e partilha de bens'
+    ],
+    grupos:[
+      { titulo:'Direito Patrimonial — Regimes de Bens', qtd:5 },
+      { titulo:'Direito Pessoal — Poder Familiar, Alimentos e Dissolução', qtd:5 }
     ] }],
   flashcards:[],
   checklist:[
@@ -2463,6 +2787,10 @@ const PLANO_VDE = [
       'Autorização de serviço público — ato unilateral, discricionário e precário',
       'Parceria Público-Privada (PPP) — Lei 11.079/2004, modalidades patrocinada e administrativa',
       'PPP — contraprestação pecuniária da Administração, prazo de 5 a 35 anos, valor mínimo do contrato'
+    ],
+    grupos:[
+      { titulo:'Consórcios Públicos', qtd:3 },
+      { titulo:'Serviços Públicos e Parceria Público-Privada', qtd:7 }
     ] }],
   flashcards:[],
   checklist:[
@@ -2495,6 +2823,12 @@ const PLANO_VDE = [
       'Embargos ao TST — de declaração e de divergência (SDI)',
       'Recurso de Embargos de Declaração — hipóteses: omissão, contradição, obscuridade, erro material',
       'Prazo recursal trabalhista uniforme de 8 dias e depósito recursal como pressuposto extrínseco'
+    ],
+    grupos:[
+      { titulo:'Recursos Ordinários e Agravos', qtd:4 },
+      { titulo:'Recurso de Revista e Transcendência', qtd:2 },
+      { titulo:'Embargos ao TST', qtd:2 },
+      { titulo:'Prazo e Depósito Recursal', qtd:1 }
     ] }],
   flashcards:[],
   checklist:[
@@ -2529,6 +2863,11 @@ const PLANO_VDE = [
       'Testamento — formas ordinárias (público, cerrado, particular) e especiais (marítimo, aeronáutico, militar)',
       'Legítima — metade indisponível do patrimônio quando há herdeiros necessários (art. 1.846 CC)',
       'Deserdação — exige testamento e causa expressa, mais ampla que a indignidade'
+    ],
+    grupos:[
+      { titulo:'Sucessão em Geral', qtd:4 },
+      { titulo:'Sucessão Legítima', qtd:4 },
+      { titulo:'Sucessão Testamentária', qtd:3 }
     ] }],
   flashcards:[],
   checklist:[
@@ -2571,6 +2910,10 @@ const PLANO_VDE = [
       'Lei Maria da Penha (Lei 11.340/06) — medidas protetivas de urgência e vedação a penas alternativas isoladas',
       'Estatuto do Desarmamento (Lei 10.826/03) — porte e posse ilegal de arma de fogo',
       'Lei de Crimes Hediondos (Lei 8.072/90) — rol e consequências (regime inicial, progressão, livramento)'
+    ],
+    grupos:[
+      { titulo:'Crimes Contra a Administração Pública', qtd:7 },
+      { titulo:'Legislação Penal Especial', qtd:4 }
     ] }],
   flashcards:[],
   checklist:[
@@ -2605,6 +2948,10 @@ const PLANO_VDE = [
       'Saúde — princípios do SUS: universalidade, integralidade, descentralização, participação da comunidade',
       'Assistência social — independe de contribuição, para quem dela necessitar (art. 203 CF), benefício de prestação continuada (BPC/LOAS)',
       'Educação, cultura, desporto, ciência e tecnologia, meio ambiente, família — direitos sociais previstos na Ordem Social'
+    ],
+    grupos:[
+      { titulo:'Defesa do Estado', qtd:5 },
+      { titulo:'Ordem Social', qtd:5 }
     ] }],
   flashcards:[],
   checklist:[
@@ -2638,6 +2985,11 @@ const PLANO_VDE = [
       'Exceção de pré-executividade — defesa sem necessidade de garantia, restrita a matérias de ordem pública cognoscíveis de ofício',
       'Redirecionamento da execução fiscal — hipóteses do art. 135 CTN (dissolução irregular, Súmula 435 STJ)',
       'Prescrição intercorrente — Súmula 314 STJ, suspensão por 1 ano e arquivamento sem baixa'
+    ],
+    grupos:[
+      { titulo:'Certidão de Dívida Ativa e Legitimidade', qtd:4 },
+      { titulo:'Citação, Penhora e Embargos', qtd:3 },
+      { titulo:'Defesas e Incidentes na Execução Fiscal', qtd:3 }
     ] }],
   flashcards:[],
   checklist:[

@@ -1014,6 +1014,18 @@
 }
 .checklist-group-header:first-child { border-top: none; padding-top: 0; margin-top: 0; }
 
+/* Macrotema — subdivisão dentro de uma matéria (índice de capítulo) */
+.checklist-subgroup-header {
+  font-family: 'Fraunces', serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  font-style: italic;
+  color: var(--ink-soft);
+  padding: 0.5rem 0 0.3rem 0.2rem;
+  margin-top: 0.15rem;
+}
+.checklist-group-header + .checklist-subgroup-header { margin-top: 0; padding-top: 0.15rem; }
+
 /* ── Botões motivo no form de erro inline ── */
 .qe-motivo {
   padding: 0.35rem 0.85rem;
@@ -1587,8 +1599,22 @@ document.addEventListener('DOMContentLoaded', () => {
       groupHeader.innerHTML = `<span>${mat.emoji || '📖'}</span>${mat.nome.replace('Direito ','').replace('Processual ','Proc. ')}`;
       ul.appendChild(groupHeader);
 
-      // Tópicos
+      // Tópicos — se a matéria tiver "grupos" (macrotemas), insere um
+      // subcabeçalho de capítulo nos pontos de corte, sem alterar a
+      // lista/índice original de topicos (mesmo tIdx de sempre).
+      const grupoBoundaries = {};
+      if (mat.grupos && mat.grupos.length) {
+        let acc = 0;
+        mat.grupos.forEach(g => { grupoBoundaries[acc] = g.titulo; acc += g.qtd; });
+      }
       (mat.topicos || []).forEach((topico, tIdx) => {
+        if (grupoBoundaries[tIdx] !== undefined) {
+          const sub = document.createElement('li');
+          sub.className = 'checklist-subgroup-header';
+          sub.textContent = grupoBoundaries[tIdx];
+          sub.style.cursor = 'default';
+          ul.appendChild(sub);
+        }
         const li = document.createElement('li');
         const isDone = isTopicoEstudado(dia, mIdx, tIdx);
         if (isDone) li.classList.add('done');

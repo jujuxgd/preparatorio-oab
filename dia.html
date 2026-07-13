@@ -125,6 +125,11 @@
 .topic-list li{font-size:.79rem;color:var(--ink-soft);padding:.3rem 0;border-bottom:1px dotted var(--line);display:flex;gap:.4rem;align-items:flex-start}
 .topic-list li:last-child{border-bottom:none}
 .topic-list li::before{content:'›';color:var(--rose);flex-shrink:0;margin-top:1px}
+.topic-list li.topic-subgroup{
+  font-family:'Fraunces',serif;font-style:italic;font-weight:500;font-size:.8rem;
+  color:var(--ink-soft);border-bottom:none;padding:.5rem 0 .2rem;
+}
+.topic-list li.topic-subgroup::before{content:''}
 .sum-sigla{font-size:.7rem;font-weight:600;color:var(--rose-deep);margin-bottom:.3rem}
 .sum-body{font-family:'Fraunces',serif;font-size:.87rem;font-style:italic;line-height:1.5;color:var(--ink)}
 </style>
@@ -489,12 +494,29 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // Topics sidebar — junta os tópicos de TODAS as matérias do dia (alguns
-  // dias do cronograma reorganizado têm 2 matérias, ex.: Administrativo + Proc. Penal)
-  var topicos = [];
-  (dados.materias || []).forEach(function(m) { topicos = topicos.concat(m.topicos || []); });
+  // dias do cronograma reorganizado têm 2 matérias, ex.: Administrativo + Proc. Penal).
+  // Quando a matéria tem "grupos" (macrotemas), exibe subcabeçalhos de
+  // capítulo entre os tópicos, sem alterar a lista original.
+  var topicosHtml = '';
+  var totalTopicos = 0;
+  (dados.materias || []).forEach(function(m) {
+    var tp = m.topicos || [];
+    totalTopicos += tp.length;
+    var boundaries = {};
+    if (m.grupos && m.grupos.length) {
+      var acc = 0;
+      m.grupos.forEach(function(g) { boundaries[acc] = g.titulo; acc += g.qtd; });
+    }
+    tp.forEach(function(t, i) {
+      if (boundaries[i] !== undefined) {
+        topicosHtml += '<li class="topic-subgroup">' + boundaries[i] + '</li>';
+      }
+      topicosHtml += '<li>' + t + '</li>';
+    });
+  });
   var tList = document.getElementById('topic-list');
-  tList.innerHTML = topicos.length
-    ? topicos.map(function(t){ return '<li>' + t + '</li>'; }).join('')
+  tList.innerHTML = totalTopicos
+    ? topicosHtml
     : '<li>Ver PDF da Semana ' + dados.semana + '</li>';
 
   if (dados.lei_seca && dados.lei_seca.length) {
