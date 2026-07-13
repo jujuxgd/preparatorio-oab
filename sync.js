@@ -1,16 +1,31 @@
 // ============================================================
 // OAB · Sincronização com a nuvem (Firestore)
 // Guarda um "snapshot" completo do localStorage num documento por
-// usuário (users/{uid}), reaproveitando a mesma estrutura de dados
+// usuário (backups/{uid}), reaproveitando a mesma estrutura de dados
 // do backup em arquivo já existente em perfil.js. Não substitui o
 // localStorage como fonte principal — só mantém uma cópia sincronizada
 // na nuvem, protegida por login.
+//
+// Sincronização em tempo real: cada gravação local carimba
+// localStorage['oab_local_rev'] com Date.now() (feito pelas próprias
+// funções de gravação — salvarProgresso, erros_save, _saveSims, etc.).
+// Esse carimbo viaja pro Firestore dentro do próprio blob de dados.
+// Um listener onSnapshot compara a revisão da nuvem com a local: só
+// aplica quando a nuvem é ESTRITAMENTE mais nova, o que naturalmente
+// ignora o eco da própria escrita (mesma revisão) e evita repetir o
+// loop de recarregamento que já existiu aqui antes.
 // ============================================================
 (function () {
   const COLECAO = 'backups';
+  let _unsubscribe = null;
+  let _aplicando = false;
 
   function docRef(uid) {
     return window._fbDb.collection(COLECAO).doc(uid);
+  }
+
+  function localRev() {
+    return Number(localStorage.getItem('oab_local_rev') || 0);
   }
 
   // Envia o estado atual do localStorage pro Firestore.
@@ -26,7 +41,8 @@
     }).catch(err => { console.error('Erro ao enviar pra nuvem:', err); return false; });
   }
 
-  // Baixa o snapshot da nuvem e aplica no localStorage deste aparelho.
+  // Baixa o snapshot da nuvem e aplica no localStorage deste aparelho
+  // (fetch único — usado pelo botão manual "Baixar da nuvem").
   function baixarDaNuvem(uid) {
     if (!window._fbDb || !uid || !window._perfilOAB) return Promise.resolve(null);
     return docRef(uid).get().then(snap => {
@@ -40,33 +56,68 @@
     }).catch(err => { console.error('Erro ao baixar da nuvem:', err); return null; });
   }
 
+  // Um campo de formulário focado não deve levar um reload no meio da
+  // digitação — tenta de novo em breve em vez de aplicar na hora.
+  function aguardandoDigitacao() {
+    const el = document.activeElement;
+    if (!el) return false;
+    const tag = el.tagName;
+    return tag === 'INPUT' || tag === 'TEXTAREA' || el.isContentEditable;
+  }
+
+  function aplicarSnapshotRemoto(uid, data, tentativa) {
+    if (_aplicando) return;
+    if (aguardandoDigitacao() && (tentativa || 0) < 20) {
+      setTimeout(() => aplicarSnapshotRemoto(uid, data, (tentativa || 0) + 1), 1000);
+      return;
+    }
+    _aplicando = true;
+    window._perfilOAB.aplicarDadosLocalStorage(data.dados);
+    location.reload();
+  }
+
+  function handleSnapshot(uid, snap) {
+    if (_aplicando) return;
+    if (!snap.exists) {
+      // Primeira vez usando sync nesta conta — envia o que já existe localmente.
+      enviarParaNuvem(uid);
+      return;
+    }
+    const data = snap.data();
+    if (!data || !data.dados) return;
+    const cloudRev = Number(data.dados.oab_local_rev || 0);
+    if (cloudRev > localRev()) {
+      aplicarSnapshotRemoto(uid, data);
+    }
+  }
+
   // Chamada pelo auth-guard.js assim que o login é confirmado.
   function iniciar(user) {
     const uid = user.uid;
     window._syncOAB._uid = uid;
 
-    // Aparelho novo (sem progresso local ainda) — tenta restaurar
-    // automaticamente o que já existir salvo na nuvem.
-    // Guarda de segurança: só tenta UMA VEZ por aba (sessionStorage),
-    // pra nunca entrar em loop de recarregar a página repetidamente
-    // caso o dado buscado ainda não tenha o que o app espera.
-    const temDadosLocais = !!localStorage.getItem('oab_progresso_v1');
-    const jaTentouRestaurar = sessionStorage.getItem('oab_tentou_restaurar') === '1';
-    if (!temDadosLocais && !jaTentouRestaurar) {
-      sessionStorage.setItem('oab_tentou_restaurar', '1');
-      baixarDaNuvem(uid).then(data => {
-        const agoraTemDados = !!localStorage.getItem('oab_progresso_v1');
-        if (data && agoraTemDados) location.reload();
-      });
-    }
+    if (_unsubscribe) { _unsubscribe(); _unsubscribe = null; }
+    _unsubscribe = docRef(uid).onSnapshot(
+      snap => handleSnapshot(uid, snap),
+      err => console.error('Erro no listener de sincronização:', err)
+    );
 
     // Envia pra nuvem silenciosamente ao trocar de aba/sair da página,
-    // pra manter tudo sincronizado sem precisar de ação manual sempre.
+    // como rede de segurança além do push logo após cada gravação.
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'hidden') enviarParaNuvem(uid);
     });
     window.addEventListener('pagehide', () => enviarParaNuvem(uid));
   }
 
-  window._syncOAB = { iniciar, enviarParaNuvem, baixarDaNuvem, _uid: null };
+  // Chamada pelas funções de gravação (salvarProgresso, erros_save,
+  // _saveSims, etc.) logo depois de carimbar oab_local_rev, pra propagar
+  // a mudança rápido em vez de esperar o usuário trocar de aba.
+  function notificarAlteracaoLocal() {
+    const uid = window._syncOAB._uid;
+    if (!uid) return;
+    enviarParaNuvem(uid);
+  }
+
+  window._syncOAB = { iniciar, enviarParaNuvem, baixarDaNuvem, notificarAlteracaoLocal, _uid: null };
 })();
