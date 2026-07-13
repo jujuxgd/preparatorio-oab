@@ -6,6 +6,16 @@
 const PROGRESSO_KEY   = 'oab_progresso_v1';
 const PROGRESSO_VERSAO = '2.0';
 
+// Carimba a revisão local e avisa o sync em tempo real (se disponível).
+// Chamada por toda função de gravação deste arquivo e por erros-core.js
+// / simulados.html, pra manter a sincronização entre dispositivos.
+function marcarAlteracaoLocal() {
+  try { localStorage.setItem('oab_local_rev', String(Date.now())); } catch (e) {}
+  if (window._syncOAB && window._syncOAB.notificarAlteracaoLocal) {
+    try { window._syncOAB.notificarAlteracaoLocal(); } catch (e) {}
+  }
+}
+
 function _criarEstrutura() {
   return {
     versao:      PROGRESSO_VERSAO,
@@ -16,6 +26,33 @@ function _criarEstrutura() {
     streak_data: localStorage.getItem('ju_oab_streak_date') || null,
     dias:        {}
   };
+}
+
+// Migração única: achata a estrutura antiga prog.questoes[materia].registros[]
+// (sem id, sem tempo/observações/tipo) pro array plano prog.questoes_registros[].
+function _migrarQuestoesLegado(p) {
+  if (p.questoes_registros || !p.questoes) return false;
+  const registros = [];
+  let seq = 0;
+  Object.entries(p.questoes).forEach(([materia, dados]) => {
+    (dados.registros || []).forEach(r => {
+      seq++;
+      registros.push({
+        id: 'q' + Date.now() + '_' + seq,
+        data: r.data || new Date().toISOString().split('T')[0],
+        dia: r.dia != null ? parseInt(r.dia) : null,
+        materia,
+        total: parseInt(r.total) || 0,
+        acertos: parseInt(r.acertos) || 0,
+        tempo: null,
+        observacoes: '',
+        tipo: 'sessao'
+      });
+    });
+  });
+  p.questoes_registros = registros;
+  delete p.questoes;
+  return true;
 }
 
 function carregarProgresso() {
@@ -31,6 +68,7 @@ function carregarProgresso() {
           if (isNaN(n) || n < 1 || n > 120) delete p.dias[k];
         });
       }
+      if (_migrarQuestoesLegado(p)) salvarProgresso(p);
       return p;
     }
   } catch(e) {}
@@ -40,6 +78,7 @@ function carregarProgresso() {
 function salvarProgresso(p) {
   p.atualizado = new Date().toISOString();
   try { localStorage.setItem(PROGRESSO_KEY, JSON.stringify(p)); } catch(e) {}
+  marcarAlteracaoLocal();
 }
 
 function obterDia(numDia) {
@@ -127,39 +166,106 @@ function importarProgresso(file) {
   });
 }
 
-// ── Questões (QConcursos tracking) ──────────
-// materia: string (ex: "etica", "constitucional")
-// Estrutura: progresso.questoes[materia] = { total, acertos, registros: [{data,total,acertos}] }
+// ── Questões (registro único e plano — usado por questoes.html, hoje.html, dia.html) ──
+// Estrutura: progresso.questoes_registros = [
+//   { id, data, dia: Number|null, materia, total, acertos, tempo: Number|null,
+//     observacoes: '', tipo: 'sessao'|'revisao' }
+// ]
+// 'sessao' = sessão avulsa de questões. 'revisao' = revisão de conteúdo já estudado
+// (também conta nas estatísticas gerais — ver getTotaisQuestoes/getTodasQuestoes).
 
-function registrarQuestoes(materia, total, acertos) {
-  if (!materia || total <= 0) return;
+function adicionarQuestaoRegistro(dados) {
+  const total = parseInt(dados.total) || 0;
+  if (!dados.materia || total <= 0) return null;
   const p = carregarProgresso();
-  if (!p.questoes) p.questoes = {};
-  if (!p.questoes[materia]) p.questoes[materia] = { total: 0, acertos: 0, registros: [] };
-  p.questoes[materia].total   += parseInt(total)   || 0;
-  p.questoes[materia].acertos += parseInt(acertos) || 0;
-  p.questoes[materia].registros.push({
-    data: new Date().toISOString().split('T')[0],
-    total: parseInt(total), acertos: parseInt(acertos)
-  });
+  if (!p.questoes_registros) p.questoes_registros = [];
+  const registro = {
+    id: 'q' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
+    data: dados.data || new Date().toISOString().split('T')[0],
+    dia: dados.dia != null ? parseInt(dados.dia) : null,
+    materia: dados.materia,
+    total,
+    acertos: Math.min(parseInt(dados.acertos) || 0, total),
+    tempo: (dados.tempo != null && dados.tempo !== '') ? parseInt(dados.tempo) : null,
+    observacoes: dados.observacoes || '',
+    tipo: dados.tipo === 'revisao' ? 'revisao' : 'sessao'
+  };
+  p.questoes_registros.push(registro);
   salvarProgresso(p);
-  return p.questoes[materia];
+  return registro;
+}
+
+function editarQuestaoRegistro(id, dados) {
+  const p = carregarProgresso();
+  if (!p.questoes_registros) return null;
+  const i = p.questoes_registros.findIndex(r => r.id === id);
+  if (i < 0) return null;
+  const atual = p.questoes_registros[i];
+  const total = dados.total != null ? (parseInt(dados.total) || 0) : atual.total;
+  p.questoes_registros[i] = {
+    ...atual,
+    data: dados.data ?? atual.data,
+    dia: dados.dia !== undefined ? (dados.dia != null ? parseInt(dados.dia) : null) : atual.dia,
+    materia: dados.materia ?? atual.materia,
+    total,
+    acertos: dados.acertos != null ? Math.min(parseInt(dados.acertos) || 0, total) : Math.min(atual.acertos, total),
+    tempo: dados.tempo !== undefined ? ((dados.tempo != null && dados.tempo !== '') ? parseInt(dados.tempo) : null) : atual.tempo,
+    observacoes: dados.observacoes ?? atual.observacoes,
+    tipo: dados.tipo ?? atual.tipo
+  };
+  salvarProgresso(p);
+  return p.questoes_registros[i];
+}
+
+function excluirQuestaoRegistro(id) {
+  const p = carregarProgresso();
+  if (!p.questoes_registros) return;
+  p.questoes_registros = p.questoes_registros.filter(r => r.id !== id);
+  salvarProgresso(p);
+}
+
+function getQuestaoRegistros(filtro) {
+  const p = carregarProgresso();
+  let regs = p.questoes_registros || [];
+  if (filtro) {
+    if (filtro.dia != null)    regs = regs.filter(r => r.dia === parseInt(filtro.dia));
+    if (filtro.tipo)           regs = regs.filter(r => r.tipo === filtro.tipo);
+    if (filtro.materia)        regs = regs.filter(r => r.materia === filtro.materia);
+  }
+  return regs;
+}
+
+// Compat: assinatura antiga (materia, total, acertos), usada por materias.html.
+function registrarQuestoes(materia, total, acertos) {
+  return adicionarQuestaoRegistro({ materia, total, acertos });
 }
 
 function getQuestoesPorMateria(materia) {
-  const p = carregarProgresso();
-  return (p.questoes && p.questoes[materia]) || { total: 0, acertos: 0, registros: [] };
+  const regs = getQuestaoRegistros({ materia });
+  return {
+    total: regs.reduce((s, r) => s + r.total, 0),
+    acertos: regs.reduce((s, r) => s + r.acertos, 0),
+    registros: regs
+  };
 }
 
+// Agrupa ao vivo por matéria — nunca fica desatualizado após editar/excluir.
 function getTodasQuestoes() {
-  const p = carregarProgresso();
-  return p.questoes || {};
+  const regs = getQuestaoRegistros();
+  const porMateria = {};
+  regs.forEach(r => {
+    if (!porMateria[r.materia]) porMateria[r.materia] = { total: 0, acertos: 0, registros: [] };
+    porMateria[r.materia].total   += r.total;
+    porMateria[r.materia].acertos += r.acertos;
+    porMateria[r.materia].registros.push(r);
+  });
+  return porMateria;
 }
 
 function getTotaisQuestoes() {
-  const q = getTodasQuestoes();
-  let total = 0, acertos = 0;
-  Object.values(q).forEach(m => { total += m.total; acertos += m.acertos; });
+  const regs = getQuestaoRegistros();
+  const total   = regs.reduce((s, r) => s + r.total, 0);
+  const acertos = regs.reduce((s, r) => s + r.acertos, 0);
   return { total, acertos, pct: total > 0 ? Math.round((acertos/total)*100) : 0 };
 }
 
