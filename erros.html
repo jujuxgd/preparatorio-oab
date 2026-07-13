@@ -353,7 +353,7 @@
 
     <!-- FORM NOVO REGISTRO -->
     <div class="novo-form-wrap" id="novo-form">
-      <h3>Registrar aprendizado</h3>
+      <h3 id="novo-form-title">Registrar aprendizado</h3>
       <div class="form-row">
         <div class="form-group">
           <label>Matéria *</label>
@@ -394,7 +394,7 @@
       </div>
 
       <div class="form-actions">
-        <button class="btn btn-primary" onclick="salvarRegistro()">Salvar</button>
+        <button class="btn btn-primary" id="salvar-registro-btn" onclick="salvarRegistro()">Salvar</button>
         <button class="btn" onclick="toggleForm()">Cancelar</button>
         <span id="form-msg" style="font-size:.78rem;color:var(--ink-faded);align-self:center"></span>
       </div>
@@ -450,7 +450,9 @@ document.querySelectorAll('.motivo-btn').forEach(btn => {
   });
 });
 
-// ── Toggle form
+// ── Toggle form (também usado no modo de edição — prefill.id presente)
+let _editandoId = null;
+
 function toggleForm(prefill) {
   const wrap = document.getElementById('novo-form');
   const open = wrap.classList.toggle('open');
@@ -467,6 +469,9 @@ function toggleForm(prefill) {
 }
 
 function limparForm() {
+  _editandoId = null;
+  document.getElementById('novo-form-title').textContent = 'Registrar aprendizado';
+  document.getElementById('salvar-registro-btn').textContent = 'Salvar';
   document.getElementById('f-materia').value    = '';
   document.getElementById('f-topico').value     = '';
   document.getElementById('f-subtopico').value  = '';
@@ -478,6 +483,28 @@ function limparForm() {
   document.getElementById('form-msg').textContent = '';
 }
 
+function editarErro(id) {
+  const registro = erros_get().find(e => e.id === id);
+  if (!registro) return;
+  document.getElementById('novo-form').classList.add('open');
+  _editandoId = null; // reseta antes do prefill pra toggleForm() não reabrir vazio depois
+  toggleFormPrefill(registro);
+  document.getElementById('novo-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function toggleFormPrefill(prefill) {
+  _editandoId = prefill.id || null;
+  document.getElementById('f-materia').value    = prefill.materia    || '';
+  document.getElementById('f-topico').value     = prefill.topico     || '';
+  document.getElementById('f-subtopico').value  = prefill.subtopico  || '';
+  document.getElementById('f-faltou').value     = prefill.o_que_faltou || '';
+  document.getElementById('f-explicacao').value = prefill.explicacao   || '';
+  document.querySelectorAll('.motivo-btn').forEach(b => b.classList.toggle('sel', b.dataset.motivo === (prefill.motivo || 'nao_sabia')));
+  document.getElementById('novo-form-title').textContent = _editandoId ? 'Editar registro' : 'Registrar aprendizado';
+  document.getElementById('salvar-registro-btn').textContent = _editandoId ? 'Salvar alterações' : 'Salvar';
+  document.getElementById('f-faltou').focus();
+}
+
 function salvarRegistro() {
   const materia   = document.getElementById('f-materia').value;
   const o_que_faltou = document.getElementById('f-faltou').value.trim();
@@ -485,15 +512,20 @@ function salvarRegistro() {
   if (!o_que_faltou) { document.getElementById('form-msg').textContent = 'Preencha o campo obrigatório.'; return; }
 
   const motivo = document.querySelector('.motivo-btn.sel')?.dataset.motivo || 'nao_sabia';
-
-  erros_add({
+  const dados = {
     materia,
     topico:      document.getElementById('f-topico').value.trim(),
     subtopico:   document.getElementById('f-subtopico').value.trim(),
     motivo,
     o_que_faltou,
     explicacao:  document.getElementById('f-explicacao').value.trim()
-  });
+  };
+
+  if (_editandoId) {
+    erros_editar(_editandoId, dados);
+  } else {
+    erros_add(dados);
+  }
 
   document.getElementById('novo-form').classList.remove('open');
   limparForm();
@@ -561,6 +593,9 @@ function renderLista() {
       renderAll();
     });
   });
+  lista.querySelectorAll('[data-editar]').forEach(btn => {
+    btn.addEventListener('click', () => editarErro(btn.dataset.editar));
+  });
   lista.querySelectorAll('[data-deletar]').forEach(btn => {
     btn.addEventListener('click', () => {
       if (confirm('Excluir este registro?')) {
@@ -586,9 +621,11 @@ function renderCard(e) {
     ? `<div class="error-tip"><div class="lbl">Explicação (QConcursos)</div>${escHtml(e.explicacao)}</div>`
     : '';
   const acoes = isDominada
-    ? `<button class="btn" style="font-size:.76rem;padding:.35rem .8rem" data-deletar="${e.id}">✕ Excluir</button>
+    ? `<button class="btn" style="font-size:.76rem;padding:.35rem .8rem" data-editar="${e.id}">✎ Editar</button>
+       <button class="btn" style="font-size:.76rem;padding:.35rem .8rem" data-deletar="${e.id}">✕ Excluir</button>
        <div class="tags"><span class="tag tag-${e.motivo}">${motivoLabel}</span></div>`
     : `<button class="btn btn-primary" style="font-size:.76rem;padding:.35rem .8rem" data-dominar="${e.id}">✓ Dominei</button>
+       <button class="btn" style="font-size:.76rem;padding:.35rem .8rem" data-editar="${e.id}">✎ Editar</button>
        <button class="btn" style="font-size:.76rem;padding:.35rem .8rem" data-deletar="${e.id}">✕ Excluir</button>
        <div class="tags"><span class="tag tag-${e.motivo}">${motivoLabel}</span></div>`;
 

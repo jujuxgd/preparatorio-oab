@@ -32,6 +32,10 @@ function erros_get() {
 
 function erros_save(list) {
   localStorage.setItem(ERROS_KEY, JSON.stringify(list));
+  try { localStorage.setItem('oab_local_rev', String(Date.now())); } catch (e) {}
+  if (window._syncOAB && window._syncOAB.notificarAlteracaoLocal) {
+    try { window._syncOAB.notificarAlteracaoLocal(); } catch (e) {}
+  }
 }
 
 function erros_add(dados) {
@@ -51,6 +55,23 @@ function erros_add(dados) {
   list.unshift(registro);
   erros_save(list);
   return registro;
+}
+
+function erros_editar(id, dados) {
+  const list = erros_get();
+  const i = list.findIndex(e => e.id === id);
+  if (i < 0) return null;
+  list[i] = {
+    ...list[i],
+    materia:      dados.materia      ?? list[i].materia,
+    topico:       dados.topico       ?? list[i].topico,
+    subtopico:    dados.subtopico    ?? list[i].subtopico,
+    motivo:       dados.motivo       ?? list[i].motivo,
+    o_que_faltou: dados.o_que_faltou ?? list[i].o_que_faltou,
+    explicacao:   dados.explicacao   ?? list[i].explicacao,
+  };
+  erros_save(list);
+  return list[i];
 }
 
 function erros_dominar(id) {
