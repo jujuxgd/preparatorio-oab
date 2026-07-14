@@ -118,6 +118,14 @@
     try { uidAnterior = localStorage.getItem('oab_uid_ativo'); } catch (e) {}
     if (uidAnterior && uidAnterior !== uid) {
       limparDadosLocaisDoApp();
+      try { localStorage.setItem('oab_uid_ativo', uid); } catch (e) {}
+      // A página já desenhou na tela com os dados antigos antes desta
+      // limpeza rodar (ela só acontece depois que o login termina de
+      // confirmar) -- sem recarregar, o visual continuaria mostrando
+      // o nome/progresso da conta anterior mesmo com o localStorage
+      // já limpo por baixo.
+      location.reload();
+      return;
     }
     try { localStorage.setItem('oab_uid_ativo', uid); } catch (e) {}
 
