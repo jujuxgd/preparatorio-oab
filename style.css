@@ -865,6 +865,10 @@ select:focus {
   .app { grid-template-columns: 200px 1fr; }
   main { padding: 2rem 2rem 2rem; }
   .page-title h1 { font-size: 2rem; }
+  /* Sidebar mais estreita (200px) nessa faixa — evita que o título
+     cursivo da logo estoure a largura e fique cortado (ex: tablets
+     como o Galaxy Tab S6 em modo retrato, ~800px) */
+  .logo h1 { font-size: 1.6rem; }
 }
 
 @media (max-width: 768px) {
