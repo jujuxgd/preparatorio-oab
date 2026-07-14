@@ -39,6 +39,14 @@
   var css = document.createElement('style');
   css.textContent = `
     #auth-gate * { box-sizing: border-box; }
+    /* Blindagem: o resto do site tem regras globais em elementos "nus"
+       (label, h1-h4 etc.) que, sem isso, vazariam pra dentro do overlay
+       de login e desconfigurariam o visual sem aviso. */
+    #auth-gate h1, #auth-gate h2, #auth-gate h3, #auth-gate p, #auth-gate label, #auth-gate button, #auth-gate input {
+      all: revert;
+      box-sizing: border-box;
+      font-family: inherit;
+    }
     #auth-gate {
       position: fixed; inset: 0; z-index: 200000;
       display: flex; align-items: stretch; justify-content: stretch;
@@ -75,9 +83,9 @@
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     }
 
-    .ag-brandmark { font-family: MagicalFeather, cursive; font-size: 1.5rem; font-weight: normal; color: ${T.ink}; opacity: 0.88; position: relative; z-index: 1; }
+    .ag-brandmark { font-family: MagicalFeather, cursive; font-size: 2.3rem; font-weight: normal; color: ${T.ink}; opacity: 0.94; position: relative; z-index: 1; line-height: 1; }
     .ag-hero { position: relative; z-index: 1; max-width: 420px; }
-    .ag-hero h1 { font-family: 'Inter', sans-serif; font-size: 2.5rem; font-weight: 600; letter-spacing: -0.02em; line-height: 1.12; color: ${T.ink}; margin: 0 0 0.9rem; }
+    .ag-hero h1 { font-family: 'Inter', sans-serif; font-size: 2.1rem; font-weight: 600; letter-spacing: -0.02em; line-height: 1.15; color: ${T.ink}; margin: 0 0 0.9rem; }
     .ag-hero p { font-size: 0.98rem; line-height: 1.6; color: ${T.inkSoft}; margin: 0; font-weight: 400; }
     .ag-footer-row { position: relative; z-index: 1; display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
     .ag-quote { font-size: 0.82rem; font-style: italic; color: ${T.inkFaint}; max-width: 300px; line-height: 1.5; margin: 0; }
@@ -99,10 +107,10 @@
     @keyframes agShake { 15%,85% { transform: translateX(-1px); } 25%,75% { transform: translateX(3px); } 35%,65% { transform: translateX(-6px); } 45%,55% { transform: translateX(6px); } }
 
     .ag-card-mark { display: none; }
-    @media (max-width: 899px) { .ag-card-mark { display: block; text-align: center; font-family: MagicalFeather, cursive; font-size: 1.6rem; color: ${T.ink}; opacity: 0.85; margin-bottom: 0.6rem; } }
+    @media (max-width: 899px) { .ag-card-mark { display: block; text-align: center; font-family: MagicalFeather, cursive; font-size: 2.1rem; color: ${T.ink}; opacity: 0.94; margin-bottom: 0.9rem; line-height: 1; } }
 
-    .ag-card h2 { font-size: 1.28rem; font-weight: 600; letter-spacing: -0.01em; color: ${T.ink}; margin: 0 0 0.3rem; }
-    .ag-card .ag-sub { font-size: 0.84rem; color: ${T.inkSoft}; margin: 0 0 1.6rem; line-height: 1.5; }
+    .ag-card h2 { font-size: 1.28rem; font-weight: 600; letter-spacing: -0.01em; text-transform: none; color: ${T.ink}; margin: 0 0 0.3rem; text-align: center; }
+    .ag-card .ag-sub { font-size: 0.84rem; color: ${T.inkSoft}; margin: 0 0 1.6rem; line-height: 1.5; text-align: center; }
 
     .ag-alert { font-size: 0.8rem; padding: 0.7rem 0.9rem; border-radius: 12px; margin-bottom: 1.1rem; line-height: 1.45; animation: agAlertIn .25s ease; }
     @keyframes agAlertIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
@@ -126,7 +134,7 @@
     }
     .ag-field-toggle:hover { color: ${T.inkSoft}; }
 
-    .ag-remember { display: flex; align-items: center; gap: 0.55rem; font-size: 0.82rem; color: ${T.inkSoft}; cursor: pointer; user-select: none; margin: 0.3rem 0 1.3rem; }
+    .ag-remember { display: flex; align-items: center; gap: 0.55rem; font-size: 0.82rem; font-weight: 400; letter-spacing: normal; text-transform: none; color: ${T.inkSoft}; cursor: pointer; user-select: none; margin: 0.3rem 0 1.3rem; }
     .ag-remember input { width: 16px; height: 16px; accent-color: ${ACCENT}; cursor: pointer; }
 
     .ag-btn {
