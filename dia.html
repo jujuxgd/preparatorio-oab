@@ -211,6 +211,7 @@
         <div class="dia-tabs">
           <div class="dia-tab active" onclick="switchTab('conteudo',this)">📄 Conteúdo do PDF</div>
           <div class="dia-tab" onclick="switchTab('resumo',this)">✦ Micro-Resumo</div>
+          <div class="dia-tab" onclick="switchTab('meuresumo',this)">📖 Meu Resumo</div>
           <div class="dia-tab" onclick="switchTab('questoes',this)">📊 Questões</div>
           <div class="dia-tab" onclick="switchTab('revisoes',this)">🔄 Revisões</div>
           <div class="dia-tab" onclick="switchTab('pdfsemana',this)">📎 PDF da Semana</div>
@@ -237,6 +238,23 @@
               <strong>⚠️ ATENÇÃO — Pegadinha da Banca</strong>
               <span id="res-peg-txt"></span>
             </div>
+          </div>
+        </div>
+
+        <!-- Tab: Meu Resumo — Resumo do Dia + Microresumo escritos no editor rico de hoje.html -->
+        <div class="dia-panel" id="panel-meuresumo">
+          <div class="dia-content-card" id="mr-view-resumodia" style="margin-bottom:1rem">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.7rem;flex-wrap:wrap;gap:.4rem">
+              <h4 style="font-family:'Fraunces',serif;font-size:1rem;margin:0">📖 Resumo do Dia</h4>
+              <a id="mr-view-edit-link" href="hoje.html" style="font-size:.75rem;color:var(--rose-deep);text-decoration:none;white-space:nowrap">Editar em Hoje →</a>
+            </div>
+            <div id="mr-view-resumodia-empty" style="font-size:.85rem;color:var(--ink-faded);font-style:italic">Você ainda não escreveu um Resumo do Dia pra esse dia.</div>
+            <div id="mr-view-resumodia-html" class="mr-render" style="display:none"></div>
+          </div>
+          <div class="dia-content-card">
+            <h4 style="font-family:'Fraunces',serif;font-size:1rem;margin-bottom:.7rem">🧠 Microresumo</h4>
+            <div id="mr-view-microresumo-empty" style="font-size:.85rem;color:var(--ink-faded);font-style:italic">Você ainda não escreveu um Microresumo pra esse dia.</div>
+            <div id="mr-view-microresumo-html" class="mr-render" style="display:none"></div>
           </div>
         </div>
 
@@ -572,6 +590,25 @@ document.addEventListener('DOMContentLoaded', function() {
       document.getElementById('res-peg-txt').textContent = card.pegadinha;
     }
   }
+
+  // ── Meu Resumo — Resumo do Dia + Microresumo escritos no editor rico
+  // de hoje.html (localStorage, mesmo formato JSON {html, delta}) ──
+  document.getElementById('mr-view-edit-link').href = 'hoje.html?dia=' + dia;
+  function _mrViewExtrairHtml(raw) {
+    if (!raw) return '';
+    var parsed = null;
+    try { parsed = JSON.parse(raw); } catch (e) {}
+    if (parsed && typeof parsed.html === 'string') return parsed.html;
+    return raw.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+  }
+  [['resumo_dia_', 'resumodia'], ['microresumo_dia_', 'microresumo']].forEach(function(par) {
+    var html = _mrViewExtrairHtml(localStorage.getItem(par[0] + dia));
+    var vazio = !html || !html.replace(/<[^>]*>/g, '').trim();
+    var elHtml  = document.getElementById('mr-view-' + par[1] + '-html');
+    var elEmpty = document.getElementById('mr-view-' + par[1] + '-empty');
+    if (vazio) { elHtml.style.display = 'none'; elEmpty.style.display = 'block'; }
+    else { elHtml.innerHTML = html; elHtml.style.display = 'block'; elEmpty.style.display = 'none'; }
+  });
 
   // ── Questões / Revisões — mesmo array unificado do progresso.js ──
   window._diaAtualQR = dia;

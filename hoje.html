@@ -777,10 +777,11 @@
   box-shadow: var(--shadow-lg);
 }
 
-/* Toast de avanço de dia */
+/* Toast de avanço de dia — topo central: embaixo cobria outras caixas
+   de texto da página (ex.: microresumo, formulário de questões) */
 .day-toast {
   position: fixed;
-  bottom: 2rem;
+  top: 1.4rem;
   left: 50%;
   transform: translateX(-50%) translateY(0);
   background: var(--paper);
@@ -798,7 +799,7 @@
 }
 
 @keyframes toastIn {
-  from { opacity: 0; transform: translateX(-50%) translateY(30px); }
+  from { opacity: 0; transform: translateX(-50%) translateY(-30px); }
   to   { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
 
@@ -807,7 +808,7 @@
 }
 
 @keyframes toastOut {
-  to { opacity: 0; transform: translateX(-50%) translateY(20px); }
+  to { opacity: 0; transform: translateX(-50%) translateY(-20px); }
 }
 
 .toast-icon { font-size: 1.8rem; flex-shrink: 0; }
@@ -1172,7 +1173,11 @@
               <h4 style="font-family:'Fraunces',serif;font-size:0.95rem;font-weight:600;color:var(--ink);margin:0;display:flex;align-items:center;gap:0.4rem">
                 🧠 Microresumo
               </h4>
-              <span id="mr-saved-label" style="font-size:0.7rem;color:var(--ink-faded);font-style:italic"></span>
+              <div style="display:flex;align-items:center;gap:0.6rem">
+                <span id="mr-saved-label" style="font-size:0.7rem;color:var(--ink-faded);font-style:italic"></span>
+                <button type="button" class="rt-code-btn" data-editor="mr" title="Colar código HTML">&lt;/&gt;</button>
+                <button type="button" class="btn btn-ghost rt-save-btn" data-editor="mr" style="font-size:0.72rem;padding:0.35rem 0.8rem">💾 Salvar</button>
+              </div>
             </div>
             <div id="mr-toolbar" class="ql-app-toolbar">
               <span class="ql-formats">
@@ -1210,9 +1215,16 @@
                 <button class="ql-clean"></button>
               </span>
             </div>
+            <div class="rt-code-panel" data-editor="mr" style="display:none">
+              <textarea class="rt-code-textarea" placeholder="Cole aqui o código-fonte HTML (ex.: <h1>...</h1>) — vira visual ao clicar em Inserir"></textarea>
+              <div class="rt-code-actions">
+                <button type="button" class="btn btn-primary rt-code-apply" style="font-size:0.72rem;padding:0.35rem 0.9rem">Inserir</button>
+                <button type="button" class="btn btn-ghost rt-code-cancel" style="font-size:0.72rem;padding:0.35rem 0.9rem">Cancelar</button>
+              </div>
+            </div>
             <div id="microresumo-input"></div>
             <div style="margin-top:0.6rem;font-size:0.72rem;color:var(--ink-faded)">
-              Salvo automaticamente · enviado para Revisar ao marcar o dia como concluído
+              Auto-save a cada pausa (apoio) · use 💾 Salvar pra garantir · enviado para Revisar ao marcar o dia como concluído
             </div>
           </div>
         </div>
@@ -1224,7 +1236,11 @@
               <h4 style="font-family:'Fraunces',serif;font-size:0.95rem;font-weight:600;color:var(--ink);margin:0;display:flex;align-items:center;gap:0.4rem">
                 📖 Resumo do Dia
               </h4>
-              <span id="rd-saved-label" style="font-size:0.7rem;color:var(--ink-faded);font-style:italic"></span>
+              <div style="display:flex;align-items:center;gap:0.6rem">
+                <span id="rd-saved-label" style="font-size:0.7rem;color:var(--ink-faded);font-style:italic"></span>
+                <button type="button" class="rt-code-btn" data-editor="rd" title="Colar código HTML">&lt;/&gt;</button>
+                <button type="button" class="btn btn-ghost rt-save-btn" data-editor="rd" style="font-size:0.72rem;padding:0.35rem 0.8rem">💾 Salvar</button>
+              </div>
             </div>
             <div id="rd-toolbar" class="ql-app-toolbar">
               <span class="ql-formats">
@@ -1270,9 +1286,16 @@
                 <button class="ql-clean"></button>
               </span>
             </div>
+            <div class="rt-code-panel" data-editor="rd" style="display:none">
+              <textarea class="rt-code-textarea" placeholder="Cole aqui o código-fonte HTML (ex.: <h1>...</h1>) — vira visual ao clicar em Inserir"></textarea>
+              <div class="rt-code-actions">
+                <button type="button" class="btn btn-primary rt-code-apply" style="font-size:0.72rem;padding:0.35rem 0.9rem">Inserir</button>
+                <button type="button" class="btn btn-ghost rt-code-cancel" style="font-size:0.72rem;padding:0.35rem 0.9rem">Cancelar</button>
+              </div>
+            </div>
             <div id="resumodia-input"></div>
             <div style="margin-top:0.6rem;font-size:0.72rem;color:var(--ink-faded)">
-              Salvo automaticamente · material completo de estudo e consulta
+              Auto-save a cada pausa (apoio) · use 💾 Salvar pra garantir
             </div>
           </div>
         </div>
@@ -2051,6 +2074,59 @@ function _iniciarEditoresRicos(dia) {
   }
   _editorCarregar(_mrQuill, 'microresumo_dia_', dia);
   _editorCarregar(_rdQuill, 'resumo_dia_', dia);
+  _wireBotoesEditor();
+}
+
+// Config de cada editor: instância, chave no localStorage e label de "Salvo"
+function _configEditor(key) {
+  if (key === 'mr') return { get quill() { return _mrQuill; }, keyPrefix: 'microresumo_dia_', labelId: 'mr-saved-label' };
+  return { get quill() { return _rdQuill; }, keyPrefix: 'resumo_dia_', labelId: 'rd-saved-label' };
+}
+
+let _botoesEditorWired = false;
+function _wireBotoesEditor() {
+  if (_botoesEditorWired) return;
+  _botoesEditorWired = true;
+
+  // Botão "Salvar" explícito — o auto-save continua rodando como apoio
+  document.querySelectorAll('.rt-save-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const cfg = _configEditor(btn.dataset.editor);
+      _editorSalvar(cfg.quill, cfg.keyPrefix, _diaCorrente(), cfg.labelId);
+    });
+  });
+
+  // Colar código HTML — painel discreto (fechado por padrão) que renderiza
+  // o código colado como conteúdo visual no editor
+  document.querySelectorAll('.rt-code-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const painel = document.querySelector(`.rt-code-panel[data-editor="${btn.dataset.editor}"]`);
+      if (!painel) return;
+      const aberto = painel.style.display !== 'none';
+      painel.style.display = aberto ? 'none' : 'block';
+      if (!aberto) painel.querySelector('.rt-code-textarea').focus();
+    });
+  });
+  document.querySelectorAll('.rt-code-cancel').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const painel = btn.closest('.rt-code-panel');
+      painel.style.display = 'none';
+      painel.querySelector('.rt-code-textarea').value = '';
+    });
+  });
+  document.querySelectorAll('.rt-code-apply').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const painel = btn.closest('.rt-code-panel');
+      const codigo = painel.querySelector('.rt-code-textarea').value;
+      if (!codigo.trim()) return;
+      const cfg = _configEditor(painel.dataset.editor);
+      if (!cfg.quill) return;
+      const range = cfg.quill.getSelection(true) || { index: cfg.quill.getLength() };
+      cfg.quill.clipboard.dangerouslyPasteHTML(range.index, codigo, 'user');
+      painel.style.display = 'none';
+      painel.querySelector('.rt-code-textarea').value = '';
+    });
+  });
 }
 
 // ── Toggle dia concluído/não concluído ───────

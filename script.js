@@ -113,6 +113,21 @@ function toggleTheme() {
   if (label) label.textContent = next === 'dark' ? 'Modo claro' : 'Modo escuro';
 }
 
+// Aviso visível quando simulatedDate está ativo — sem isso, uma data de
+// teste esquecida no localStorage faz "Hoje" mostrar o dia errado de forma
+// silenciosa e muito difícil de perceber (só um F12 revelaria a causa).
+(function _avisarDataSimulada() {
+  const sim = localStorage.getItem('simulatedDate');
+  if (!sim) return;
+  const badge = document.createElement('div');
+  badge.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;background:#c0524b;color:#fff;font-family:Inter,sans-serif;font-size:0.78rem;padding:0.4rem 0.8rem;text-align:center;display:flex;align-items:center;justify-content:center;gap:0.8rem';
+  badge.innerHTML = `<span>🧪 Data simulada ativa: <strong>${sim}</strong> — "Hoje" não reflete a data real</span><button type="button" style="background:#fff;color:#c0524b;border:none;border-radius:4px;padding:0.15rem 0.6rem;font-size:0.72rem;font-weight:600;cursor:pointer">Limpar e usar data real</button>`;
+  badge.querySelector('button').addEventListener('click', () => { if (typeof clearSimulatedDate === 'function') clearSimulatedDate(); });
+  const _inserir = () => document.body.prepend(badge);
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', _inserir);
+  else _inserir();
+})();
+
 document.addEventListener('DOMContentLoaded', () => {
   const label = document.querySelector('.theme-label');
   if (label) {
