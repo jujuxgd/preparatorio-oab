@@ -165,6 +165,24 @@
     #auth-gate .ag-card h2 { font-family: 'Fraunces', serif; font-size: 1.44rem; font-weight: 500; letter-spacing: -0.005em; text-transform: none; color: ${T.ink}; margin: 0 0 0.3rem; text-align: center; }
     #auth-gate .ag-card .ag-sub { font-size: 0.84rem; color: ${T.inkSoft}; margin: 0 0 1.6rem; line-height: 1.5; text-align: center; }
 
+    /* Celular: o card tem o MESMO max-width de 380px do desktop, mas em
+       telas estreitas (depois de descontar o padding do .ag-formside) ele
+       nunca chega perto disso — sobra menos espaço real pro mesmo tamanho
+       fixo de fonte, e a proporção que funciona nos 380px do desktop fica
+       apertada/desequilibrada num card de ~300px. Reduz só aqui. */
+    @media (max-width: 480px) {
+      .ag-formside { padding: 1rem; }
+      .ag-card { padding: 1.9rem 1.5rem; }
+      .ag-card-mark { font-size: 1.7rem; margin-bottom: 0.7rem; }
+      #auth-gate .ag-card h2 { font-size: 1.18rem; }
+      #auth-gate .ag-card .ag-sub { font-size: 0.8rem; margin-bottom: 1.3rem; }
+      /* 16px é o limiar do zoom automático do Safari iOS ao focar um campo
+         — abaixo disso (0.94rem ≈ 15px) a página pula de tamanho sozinha
+         ao tocar no e-mail/senha. Só sobe no celular pra não alterar a
+         aparência no desktop, que já está do jeito certo. */
+      #auth-gate .ag-field input { font-size: 1rem; }
+    }
+
     .ag-alert { font-size: 0.8rem; padding: 0.7rem 0.9rem; border-radius: 12px; margin-bottom: 1.1rem; line-height: 1.45; animation: agAlertIn .25s ease; }
     @keyframes agAlertIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
     .ag-alert-err { background: ${isDark ? 'rgba(224,102,102,0.14)' : '#FDECEC'}; color: ${isDark ? '#F0A0A0' : '#B23A3A'}; }
@@ -534,7 +552,7 @@
       (erro ? '<div class="ag-alert ag-alert-err" role="alert">' + erro + '</div>' : '') +
       (mensagem ? '<div class="ag-alert ag-alert-ok" role="status">' + mensagem + '</div>' : '') +
       '<form id="auth-gate-recuperar-form">' +
-        '<div class="ag-field">' + ICO.mail + '<input id="auth-gate-recuperar-email" type="email" placeholder="E-mail" autocomplete="username" required value="' + (emailInicial || '').replace(/"/g, '') + '" style="margin-bottom:1.3rem"></div>' +
+        '<div class="ag-field" style="margin-bottom:1.3rem">' + ICO.mail + '<input id="auth-gate-recuperar-email" type="email" placeholder="E-mail" autocomplete="username" required value="' + (emailInicial || '').replace(/"/g, '') + '"></div>' +
         '<button type="submit" class="ag-btn" id="auth-gate-recuperar-btn">Enviar link de recuperação</button>' +
       '</form>' +
       '<div class="ag-links" style="justify-content:center">' +
