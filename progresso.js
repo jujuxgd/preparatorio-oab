@@ -253,6 +253,44 @@ function getQuestaoRegistros(filtro) {
   return regs;
 }
 
+// ── Revisão de teoria — sem taxa de acerto (diferente de questoes_registros,
+// que é pra sessões com total/acertos). Usado pela aba Revisões de hoje.html
+// quando a revisão foi reler conteúdo em vez de resolver questões. ──
+function adicionarTeoriaRegistro(dados) {
+  if (!dados.materia) return null;
+  const p = carregarProgresso();
+  if (!p.teoria_registros) p.teoria_registros = [];
+  const registro = {
+    id: 't' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
+    data: dados.data || dataLocalHoje(),
+    dia: dados.dia != null ? parseInt(dados.dia) : null,
+    materia: dados.materia,
+    topicos: Array.isArray(dados.topicos) ? dados.topicos : [],
+    confianca: ['lembrei', 'mais-ou-menos', 'esqueci'].includes(dados.confianca) ? dados.confianca : null,
+    observacoes: dados.observacoes || ''
+  };
+  p.teoria_registros.push(registro);
+  salvarProgresso(p);
+  return registro;
+}
+
+function getTeoriaRegistros(filtro) {
+  const p = carregarProgresso();
+  let regs = p.teoria_registros || [];
+  if (filtro) {
+    if (filtro.dia != null) regs = regs.filter(r => r.dia === parseInt(filtro.dia));
+    if (filtro.materia)     regs = regs.filter(r => r.materia === filtro.materia);
+  }
+  return regs;
+}
+
+function excluirTeoriaRegistro(id) {
+  const p = carregarProgresso();
+  if (!p.teoria_registros) return;
+  p.teoria_registros = p.teoria_registros.filter(r => r.id !== id);
+  salvarProgresso(p);
+}
+
 // Compat: assinatura antiga (materia, total, acertos), usada por materias.html.
 function registrarQuestoes(materia, total, acertos) {
   return adicionarQuestaoRegistro({ materia, total, acertos });

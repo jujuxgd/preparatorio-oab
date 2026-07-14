@@ -1758,6 +1758,17 @@ main { animation: pageEnter 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
 }
 .rt-code-actions { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
 
+/* Modo leitura/edição — Resumo do Dia e Microresumo abrem em somente-leitura
+   por padrão (.rt-view-wrap); "Editar" troca pra .rt-edit-wrap (toolbar +
+   Quill). Estado vazio convida a criar o primeiro resumo. */
+.rt-view-empty {
+  text-align: center; padding: 1.6rem 1rem; border: 1px dashed var(--line);
+  border-radius: var(--radius-sm); background: var(--bg-soft);
+}
+.rt-view-empty p { font-size: 0.85rem; color: var(--ink-faded); margin: 0 0 0.8rem; }
+.rt-view-content.mr-render { padding: 0.2rem 0.1rem; }
+.rt-view-actions, .rt-edit-actions { display: flex; align-items: center; gap: 0.5rem; }
+
 /* Blots customizados — separador, caixa de destaque, tabela simples.
    Selecionados tanto dentro do editor (.ql-editor) quanto no card de
    revisão em revisar.html (.mr-render), já que o HTML salvo é o mesmo. */
@@ -1774,6 +1785,13 @@ main { animation: pageEnter 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
 .ql-editor table td, .mr-render table td,
 .ql-editor table th, .mr-render table th {
   border: 1px solid var(--line); padding: 0.45rem 0.6rem; vertical-align: top;
+  /* !important: texto colado (ex.: do ChatGPT) às vezes carrega cor inline
+     clara/cinza no HTML original — tabela sempre legível, cor forte fixa. */
+  color: var(--ink) !important;
+}
+.ql-editor table td *, .mr-render table td *,
+.ql-editor table th *, .mr-render table th * {
+  color: inherit !important;
 }
 
 /* ── Leitura fora do editor (revisar.html — card "Meu Resumo") ── */

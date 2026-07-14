@@ -302,6 +302,30 @@
 .qr-hist-table td{padding:.5rem;border-bottom:1px dotted var(--line)}
 .qr-empty{color:var(--ink-faded);font-style:italic;font-size:.85rem;padding:.6rem 0}
 
+/* ── Revisões: escolha Questões x Teoria ── */
+.rv-tipo-escolha{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
+@media(max-width:480px){.rv-tipo-escolha{grid-template-columns:1fr}}
+.rv-tipo-btn{
+  display:flex;flex-direction:column;align-items:flex-start;gap:.15rem;text-align:left;
+  padding:.9rem 1rem;border:1.5px solid var(--line);border-radius:var(--radius-sm);
+  background:var(--paper);cursor:pointer;font-family:'Inter',sans-serif;font-size:.92rem;
+  font-weight:600;color:var(--ink);transition:all var(--transition)
+}
+.rv-tipo-btn span{font-size:.72rem;font-weight:400;color:var(--ink-faded)}
+.rv-tipo-btn:hover{border-color:var(--rose)}
+.rv-tipo-btn.active{border-color:var(--rose-deep);background:var(--blush)}
+.rv-conf-escolha{display:flex;gap:.5rem;flex-wrap:wrap}
+.rv-conf-btn{
+  padding:.5rem .9rem;border:1.5px solid var(--line);border-radius:20px;background:var(--paper);
+  cursor:pointer;font-family:'Inter',sans-serif;font-size:.8rem;color:var(--ink-soft);
+  transition:all var(--transition)
+}
+.rv-conf-btn:hover{border-color:var(--rose)}
+.rv-conf-btn.active{border-color:var(--rose-deep);background:var(--blush);color:var(--rose-deep);font-weight:600}
+.tr-topicos-list{display:flex;flex-direction:column;gap:.4rem;max-height:220px;overflow-y:auto;padding:.2rem}
+.tr-topico-item{display:flex;align-items:flex-start;gap:.5rem;font-size:.82rem;color:var(--ink);cursor:pointer}
+.tr-topico-item input{margin-top:.2rem;accent-color:var(--rose-deep)}
+
 /* ── PDF da semana embutido ── */
 .pdf-embed-wrap{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-lg);box-shadow:var(--shadow);overflow:hidden}
 .pdf-embed-bar{display:flex;align-items:center;justify-content:space-between;padding:.7rem 1rem;border-bottom:1px solid var(--line)}
@@ -1168,17 +1192,31 @@
           <div id="subject-panels"></div>
 
           <!-- MICRORESUMO DO DIA — editor rico enxuto, pra revisão espaçada rápida -->
-          <div style="margin-top:1.5rem;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-lg);padding:1.4rem 1.5rem;box-shadow:0 2px 10px rgba(44,36,32,.06)">
+          <div class="rt-card" data-editor="mr" style="margin-top:1.5rem;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-lg);padding:1.4rem 1.5rem;box-shadow:0 2px 10px rgba(44,36,32,.06)">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.9rem;flex-wrap:wrap;gap:0.4rem">
               <h4 style="font-family:'Fraunces',serif;font-size:0.95rem;font-weight:600;color:var(--ink);margin:0;display:flex;align-items:center;gap:0.4rem">
                 🧠 Microresumo
               </h4>
               <div style="display:flex;align-items:center;gap:0.6rem">
                 <span id="mr-saved-label" style="font-size:0.7rem;color:var(--ink-faded);font-style:italic"></span>
-                <button type="button" class="rt-code-btn" data-editor="mr" title="Colar código HTML">&lt;/&gt;</button>
-                <button type="button" class="btn btn-ghost rt-save-btn" data-editor="mr" style="font-size:0.72rem;padding:0.35rem 0.8rem">💾 Salvar</button>
+                <div class="rt-view-actions" data-editor="mr">
+                  <button type="button" class="btn btn-ghost rt-edit-btn" data-editor="mr" style="font-size:0.72rem;padding:0.35rem 0.8rem">✏️ Editar</button>
+                </div>
+                <div class="rt-edit-actions" data-editor="mr" style="display:none">
+                  <button type="button" class="rt-code-btn" data-editor="mr" title="Colar código HTML">&lt;/&gt;</button>
+                  <button type="button" class="btn btn-ghost rt-save-btn" data-editor="mr" style="font-size:0.72rem;padding:0.35rem 0.8rem">💾 Salvar</button>
+                  <button type="button" class="btn btn-primary rt-done-btn" data-editor="mr" style="font-size:0.72rem;padding:0.35rem 0.8rem">✓ Concluir</button>
+                </div>
               </div>
             </div>
+            <div class="rt-view-wrap" data-editor="mr">
+              <div class="rt-view-empty" data-editor="mr">
+                <p>Você ainda não escreveu um Microresumo pra esse dia.</p>
+                <button type="button" class="btn btn-primary rt-add-btn" data-editor="mr">+ Adicionar Microresumo</button>
+              </div>
+              <div class="rt-view-content mr-render" data-editor="mr" style="display:none"></div>
+            </div>
+            <div class="rt-edit-wrap" data-editor="mr" style="display:none">
             <div id="mr-toolbar" class="ql-app-toolbar">
               <span class="ql-formats">
                 <select class="ql-header"><option value="1"></option><option value="2"></option><option value="3"></option><option selected></option></select>
@@ -1226,22 +1264,37 @@
             <div style="margin-top:0.6rem;font-size:0.72rem;color:var(--ink-faded)">
               Auto-save a cada pausa (apoio) · use 💾 Salvar pra garantir · enviado para Revisar ao marcar o dia como concluído
             </div>
+            </div>
           </div>
         </div>
 
         <!-- RESUMO DO DIA — editor rico completo, material de estudo/consulta -->
         <div class="tab-content" data-tab="resumodia">
-          <div style="background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-lg);padding:1.4rem 1.5rem;box-shadow:0 2px 10px rgba(44,36,32,.06)">
+          <div class="rt-card" data-editor="rd" style="background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-lg);padding:1.4rem 1.5rem;box-shadow:0 2px 10px rgba(44,36,32,.06)">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.9rem;flex-wrap:wrap;gap:0.4rem">
               <h4 style="font-family:'Fraunces',serif;font-size:0.95rem;font-weight:600;color:var(--ink);margin:0;display:flex;align-items:center;gap:0.4rem">
                 📖 Resumo do Dia
               </h4>
               <div style="display:flex;align-items:center;gap:0.6rem">
                 <span id="rd-saved-label" style="font-size:0.7rem;color:var(--ink-faded);font-style:italic"></span>
-                <button type="button" class="rt-code-btn" data-editor="rd" title="Colar código HTML">&lt;/&gt;</button>
-                <button type="button" class="btn btn-ghost rt-save-btn" data-editor="rd" style="font-size:0.72rem;padding:0.35rem 0.8rem">💾 Salvar</button>
+                <div class="rt-view-actions" data-editor="rd">
+                  <button type="button" class="btn btn-ghost rt-edit-btn" data-editor="rd" style="font-size:0.72rem;padding:0.35rem 0.8rem">✏️ Editar</button>
+                </div>
+                <div class="rt-edit-actions" data-editor="rd" style="display:none">
+                  <button type="button" class="rt-code-btn" data-editor="rd" title="Colar código HTML">&lt;/&gt;</button>
+                  <button type="button" class="btn btn-ghost rt-save-btn" data-editor="rd" style="font-size:0.72rem;padding:0.35rem 0.8rem">💾 Salvar</button>
+                  <button type="button" class="btn btn-primary rt-done-btn" data-editor="rd" style="font-size:0.72rem;padding:0.35rem 0.8rem">✓ Concluir</button>
+                </div>
               </div>
             </div>
+            <div class="rt-view-wrap" data-editor="rd">
+              <div class="rt-view-empty" data-editor="rd">
+                <p>Você ainda não escreveu um Resumo do Dia pra esse dia.</p>
+                <button type="button" class="btn btn-primary rt-add-btn" data-editor="rd">+ Adicionar Resumo do Dia</button>
+              </div>
+              <div class="rt-view-content mr-render" data-editor="rd" style="display:none"></div>
+            </div>
+            <div class="rt-edit-wrap" data-editor="rd" style="display:none">
             <div id="rd-toolbar" class="ql-app-toolbar">
               <span class="ql-formats">
                 <select class="ql-header"><option value="1"></option><option value="2"></option><option value="3"></option><option selected></option></select>
@@ -1296,6 +1349,7 @@
             <div id="resumodia-input"></div>
             <div style="margin-top:0.6rem;font-size:0.72rem;color:var(--ink-faded)">
               Auto-save a cada pausa (apoio) · use 💾 Salvar pra garantir
+            </div>
             </div>
           </div>
         </div>
@@ -1399,25 +1453,62 @@
         <!-- REVISÕES -->
         <div class="tab-content" data-tab="revisoes">
           <div class="content-card" style="padding:1.5rem">
-            <div style="font-family:'Fraunces',serif;font-size:1.05rem;font-weight:500">Registrar revisão</div>
-            <div style="font-size:.75rem;color:var(--ink-faded);margin:.2rem 0 1rem">Uma mesma matéria pode ter várias revisões ao longo do tempo — contam nas estatísticas gerais de questões.</div>
-            <div class="qr-form-grid">
-              <select id="rv-materia" class="qr-input"></select>
-              <input type="number" id="rv-total" class="qr-input" placeholder="Total de questões" min="1">
-              <input type="number" id="rv-acertos" class="qr-input" placeholder="Acertos" min="0">
-              <input type="number" id="rv-tempo" class="qr-input" placeholder="Tempo (min, opcional)" min="0">
-              <input type="date" id="rv-data" class="qr-input">
-              <input type="text" id="rv-obs" class="qr-input" placeholder="Observações (opcional)">
+            <div style="font-family:'Fraunces',serif;font-size:1.05rem;font-weight:500">O que você revisou agora?</div>
+            <div style="font-size:.75rem;color:var(--ink-faded);margin:.2rem 0 1rem">Escolha o tipo pra abrir o formulário certo</div>
+            <div class="rv-tipo-escolha">
+              <button type="button" class="rv-tipo-btn" data-tipo="questoes">📊 Questões<span>quantidade, acertos, tempo</span></button>
+              <button type="button" class="rv-tipo-btn" data-tipo="teoria">📖 Teoria<span>reler conteúdo, tópicos, flashcards...</span></button>
             </div>
-            <div style="margin-top:.9rem;display:flex;gap:.6rem;align-items:center;flex-wrap:wrap">
-              <button class="btn btn-primary" id="qr-btn-revisao" onclick="qrSalvar('revisao')">Registrar revisão</button>
-              <button class="btn btn-ghost" id="qr-cancel-revisao" onclick="qrCancelar('revisao')" style="display:none">Cancelar</button>
-              <span id="qr-msg-revisao" style="font-size:.78rem;color:var(--ink-faded)"></span>
+
+            <!-- Questões — formulário existente (total/acertos → taxa calculada, tempo, obs) -->
+            <div class="rv-form-wrap" data-tipo="questoes" style="display:none;margin-top:1.2rem;padding-top:1.1rem;border-top:1px solid var(--line)">
+              <div style="font-size:.75rem;color:var(--ink-faded);margin-bottom:.8rem">Uma mesma matéria pode ter várias revisões ao longo do tempo — contam nas estatísticas gerais de questões.</div>
+              <div class="qr-form-grid">
+                <select id="rv-materia" class="qr-input"></select>
+                <input type="number" id="rv-total" class="qr-input" placeholder="Total de questões" min="1">
+                <input type="number" id="rv-acertos" class="qr-input" placeholder="Acertos" min="0">
+                <input type="number" id="rv-tempo" class="qr-input" placeholder="Tempo (min, opcional)" min="0">
+                <input type="date" id="rv-data" class="qr-input">
+                <input type="text" id="rv-obs" class="qr-input" placeholder="Observações (opcional)">
+              </div>
+              <div style="margin-top:.9rem;display:flex;gap:.6rem;align-items:center;flex-wrap:wrap">
+                <button class="btn btn-primary" id="qr-btn-revisao" onclick="qrSalvar('revisao')">Registrar revisão</button>
+                <button class="btn btn-ghost" id="qr-cancel-revisao" onclick="qrCancelar('revisao')" style="display:none">Cancelar</button>
+                <span id="qr-msg-revisao" style="font-size:.78rem;color:var(--ink-faded)"></span>
+              </div>
+            </div>
+
+            <!-- Teoria — sem taxa de acerto, só registra que houve revisão + o que achar útil -->
+            <div class="rv-form-wrap" data-tipo="teoria" style="display:none;margin-top:1.2rem;padding-top:1.1rem;border-top:1px solid var(--line)">
+              <div style="font-size:.75rem;color:var(--ink-faded);margin-bottom:.8rem">Sem taxa de acerto aqui — é só marcar que você revisou a teoria e, se quiser, o que revisou e como foi a lembrança.</div>
+              <div class="qr-form-grid">
+                <select id="tr-materia" class="qr-input"></select>
+                <input type="date" id="tr-data" class="qr-input">
+                <input type="text" id="tr-obs" class="qr-input" placeholder="Observações (opcional)" style="grid-column:1/-1">
+              </div>
+              <div style="margin-top:.9rem">
+                <div style="font-size:.72rem;color:var(--ink-faded);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem">Tópicos revisados (opcional)</div>
+                <div id="tr-topicos" class="tr-topicos-list"></div>
+              </div>
+              <div style="margin-top:.9rem">
+                <div style="font-size:.72rem;color:var(--ink-faded);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem">Como foi a lembrança? (opcional)</div>
+                <div class="rv-conf-escolha">
+                  <button type="button" class="rv-conf-btn" data-conf="esqueci">😕 Esqueci</button>
+                  <button type="button" class="rv-conf-btn" data-conf="mais-ou-menos">😐 Mais ou menos</button>
+                  <button type="button" class="rv-conf-btn" data-conf="lembrei">😊 Lembrei bem</button>
+                </div>
+              </div>
+              <div style="margin-top:.9rem;display:flex;gap:.6rem;align-items:center;flex-wrap:wrap">
+                <button class="btn btn-primary" id="tr-btn-registrar" onclick="trRegistrar()">Registrar revisão de teoria</button>
+                <button class="btn btn-ghost" id="tr-cancel" onclick="trCancelar()" style="display:none">Cancelar</button>
+                <span id="tr-msg" style="font-size:.78rem;color:var(--ink-faded)"></span>
+              </div>
             </div>
           </div>
           <div class="content-card" style="padding:1.5rem;margin-top:1rem">
             <div style="font-family:'Fraunces',serif;font-size:.95rem;font-weight:500;margin-bottom:.8rem">Histórico de revisões</div>
             <div id="qr-historico-revisao"></div>
+            <div id="tr-historico"></div>
           </div>
         </div>
 
@@ -1538,24 +1629,31 @@
   // Tabela simples — table > tbody > tr > td, células editáveis (sem
   // merge de células nem redimensionar coluna: fora do escopo de "tabela
   // simples"). Quill não tem suporte a tabela nenhum nativamente.
-  const Container = Quill.import('blots/container');
+  const Container  = Quill.import('blots/container');
+  const Parchment  = Quill.import('parchment');
   class TableCell extends Block {}
   TableCell.blotName = 'table-cell';
   TableCell.tagName = 'td';
 
+  // blots/container não tem scope padrão (só blots/block e blots/block/embed
+  // têm) — sem setar isso, Quill.register() falha em silêncio e o blot some
+  // do registro (era a causa da tabela não renderizar nenhuma vez).
   class TableRow extends Container {}
   TableRow.blotName = 'table-row';
   TableRow.tagName = 'tr';
+  TableRow.scope = Parchment.Scope.BLOCK_BLOT;
   TableRow.allowedChildren = [TableCell];
 
   class TableBody extends Container {}
   TableBody.blotName = 'table-body';
   TableBody.tagName = 'tbody';
+  TableBody.scope = Parchment.Scope.BLOCK_BLOT;
   TableBody.allowedChildren = [TableRow];
 
   class TableContainer extends Container {}
   TableContainer.blotName = 'table-container';
   TableContainer.tagName = 'table';
+  TableContainer.scope = Parchment.Scope.BLOCK_BLOT;
   TableContainer.allowedChildren = [TableBody];
 
   TableCell.requiredContainer = TableRow;
@@ -1581,32 +1679,64 @@
     palavrachave:   { text: 'var(--dest-palavrachave-text)',   bg: 'var(--dest-palavrachave-bg)' }
   };
 
-  // Insere uma tabela rows×cols na posição do cursor. `cellText`, se vier,
-  // preenche cada célula (usado no matcher de colar <table> do ChatGPT).
-  function _qlInsertTable(quill, rows, cols, cellText) {
-    const range = quill.getSelection(true) || { index: quill.getLength() - 1, length: 0 };
-    quill.insertText(range.index, '\n', Quill.sources.USER);
-    const table = quill.scroll.create('table-container');
-    const body  = quill.scroll.create('table-body');
+  // Insere uma tabela rows×cols na posição indicada (ou no cursor, se
+  // `atIndex` não vier). `cellText`, se vier, preenche cada célula.
+  function _qlInsertTable(quill, rows, cols, cellText, atIndex) {
+    const index = atIndex != null ? atIndex
+      : (quill.getSelection(true) || { index: quill.getLength() - 1 }).index;
+    const [line] = quill.getLine(index);
+    // Quill 1.3.7 não tem quill.scroll.create() (isso é da v2) — a criação
+    // de blot nessa versão é via Parchment.create(), registrada acima.
+    const table = Parchment.create('table-container');
+    const body  = Parchment.create('table-body');
     table.appendChild(body);
     for (let r = 0; r < rows; r++) {
-      const row = quill.scroll.create('table-row');
+      const row = Parchment.create('table-row');
       body.appendChild(row);
       for (let c = 0; c < cols; c++) {
-        const cell = quill.scroll.create('table-cell');
+        const cell = Parchment.create('table-cell');
         const txt  = (cellText && cellText[r] && cellText[r][c]) || '';
         if (txt) cell.domNode.appendChild(document.createTextNode(txt));
-        else cell.appendChild(quill.scroll.create('break'));
+        else cell.appendChild(Parchment.create('break'));
         row.appendChild(cell);
       }
     }
-    const [line] = quill.getLine(range.index);
+    // Insere antes da linha em `index` — não precisa criar linha extra depois:
+    // a linha que já existia ali continua existindo logo após a tabela.
     quill.scroll.insertBefore(table, line);
-    const afterBlock = quill.scroll.create('block');
-    afterBlock.appendChild(quill.scroll.create('break'));
-    quill.scroll.insertBefore(afterBlock, line);
     quill.update(Quill.sources.USER);
-    quill.setSelection(range.index + 1, 0, Quill.sources.SILENT);
+    if (atIndex == null) quill.setSelection(index, 0, Quill.sources.SILENT);
+  }
+
+  // Insere um HTML que pode conter <table> preservando a ORDEM original —
+  // ao contrário de deixar o Quill converter tudo de uma vez (onde a tabela
+  // vira parágrafos soltos) e inserir a tabela de verdade depois via
+  // setTimeout, o que a jogava pro fim do texto (o cursor já tinha avançado
+  // com o resto do conteúdo colado). Aqui percorremos os nós de nível
+  // superior do HTML em ordem e inserimos cada um na posição certa, uma
+  // tabela de cada vez, tudo síncrono.
+  function _inserirConteudoComTabelas(quill, html, index) {
+    const container = document.createElement('div');
+    container.innerHTML = html;
+    let idx = index;
+    Array.from(container.childNodes).forEach(node => {
+      if (node.nodeType === 1 && node.tagName === 'TABLE') {
+        const grid = Array.from(node.rows || []).map(row =>
+          Array.from(row.cells || []).map(cell => (cell.innerText || '').replace(/\s+/g, ' ').trim())
+        );
+        if (!grid.length || !grid[0].length) return;
+        const before = quill.getLength();
+        _qlInsertTable(quill, grid.length, grid[0].length, grid, idx);
+        idx += quill.getLength() - before;
+      } else {
+        const frag = node.nodeType === 1 ? node.outerHTML : node.textContent;
+        if (!frag || !frag.trim()) return;
+        const before = quill.getLength();
+        quill.clipboard.dangerouslyPasteHTML(idx, frag, 'silent');
+        idx += quill.getLength() - before;
+      }
+    });
+    quill.setSelection(idx, 0, Quill.sources.SILENT);
   }
 
   function _wireToolbarButtons(quill, toolbarEl) {
@@ -1644,20 +1774,25 @@
 
   function _wireClipboardMatchers(quill) {
     const Delta = Quill.import('delta');
-    // <hr> colado vira o blot de separador direto via Delta.
+    // <hr> colado vira o blot de separador direto via Delta — isso é
+    // síncrono e mantém a posição certa (BlockEmbed cabe num único op).
     quill.clipboard.addMatcher('hr', () => new Delta().insert({ hr: true }));
+
     // <table> colada: Quill não tem formato de tabela nativo pra
-    // representar via Delta, então cancela a conversão padrão (parágrafos
-    // soltos por célula) e insere nossa tabela de verdade logo em seguida.
-    quill.clipboard.addMatcher('table', (node) => {
-      const grid = Array.from(node.rows || []).map(row =>
-        Array.from(row.cells || []).map(cell => (cell.innerText || '').replace(/\s+/g, ' ').trim())
-      );
-      setTimeout(() => {
-        if (grid.length && grid[0].length) _qlInsertTable(quill, grid.length, grid[0].length, grid);
-      }, 0);
-      return new Delta();
-    });
+    // representar via Delta, e tentar consertar depois com setTimeout
+    // jogava a tabela pro fim do texto (o resto do paste já tinha
+    // avançado o cursor). Em vez de deixar o Quill processar o paste,
+    // interceptamos o evento ANTES dele (capture:true) quando o HTML
+    // colado tem <table>, e inserimos tudo nós mesmos, em ordem.
+    quill.root.addEventListener('paste', (e) => {
+      const html = e.clipboardData && e.clipboardData.getData('text/html');
+      if (!html || !/<table/i.test(html)) return; // sem tabela, deixa o Quill cuidar normalmente
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      const range = quill.getSelection(true) || { index: quill.getLength() - 1, length: 0 };
+      if (range.length) quill.deleteText(range.index, range.length, Quill.sources.USER);
+      _inserirConteudoComTabelas(quill, html, range.index);
+    }, true);
   }
 
   // Cria um editor Quill num container, com sua própria toolbar customizada
@@ -1675,6 +1810,7 @@
     _wireClipboardMatchers(quill);
     return quill;
   };
+  window._inserirConteudoComTabelas = _inserirConteudoComTabelas;
 })();
 
 // ── Tabs ─────────────────────────────────────
@@ -2075,6 +2211,8 @@ function _iniciarEditoresRicos(dia) {
   _editorCarregar(_mrQuill, 'microresumo_dia_', dia);
   _editorCarregar(_rdQuill, 'resumo_dia_', dia);
   _wireBotoesEditor();
+  _atualizarModoVisualizacao('mr');
+  _atualizarModoVisualizacao('rd');
 }
 
 // Config de cada editor: instância, chave no localStorage e label de "Salvo"
@@ -2122,11 +2260,62 @@ function _wireBotoesEditor() {
       const cfg = _configEditor(painel.dataset.editor);
       if (!cfg.quill) return;
       const range = cfg.quill.getSelection(true) || { index: cfg.quill.getLength() };
-      cfg.quill.clipboard.dangerouslyPasteHTML(range.index, codigo, 'user');
+      if (typeof window._inserirConteudoComTabelas === 'function') {
+        window._inserirConteudoComTabelas(cfg.quill, codigo, range.index);
+      } else {
+        cfg.quill.clipboard.dangerouslyPasteHTML(range.index, codigo, 'user');
+      }
       painel.style.display = 'none';
       painel.querySelector('.rt-code-textarea').value = '';
     });
   });
+
+  // Modo leitura/edição — por padrão mostra .mr-render (ou estado vazio
+  // convidando a criar); "Editar"/"+ Adicionar" abrem o Quill; "Concluir"
+  // salva e volta pra leitura.
+  document.querySelectorAll('.rt-edit-btn, .rt-add-btn').forEach(btn => {
+    btn.addEventListener('click', () => _entrarModoEdicao(btn.dataset.editor));
+  });
+  document.querySelectorAll('.rt-done-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const cfg = _configEditor(btn.dataset.editor);
+      _editorSalvar(cfg.quill, cfg.keyPrefix, _diaCorrente(), cfg.labelId);
+      _atualizarModoVisualizacao(btn.dataset.editor);
+    });
+  });
+}
+
+function _card(key) { return document.querySelector(`.rt-card[data-editor="${key}"]`); }
+
+function _entrarModoEdicao(key) {
+  const card = _card(key);
+  if (!card) return;
+  card.querySelector('.rt-view-wrap').style.display = 'none';
+  card.querySelector('.rt-edit-wrap').style.display = 'block';
+  card.querySelector('.rt-view-actions').style.display = 'none';
+  card.querySelector('.rt-edit-actions').style.display = 'flex';
+  const cfg = _configEditor(key);
+  if (cfg.quill) setTimeout(() => cfg.quill.focus(), 50);
+}
+
+// Mostra a versão somente-leitura (estado vazio ou o HTML salvo) e volta
+// os botões do cabeçalho pro grupo de visualização.
+function _atualizarModoVisualizacao(key) {
+  const card = _card(key);
+  if (!card) return;
+  const cfg = _configEditor(key);
+  const html = cfg.quill ? cfg.quill.root.innerHTML : '';
+  const vazio = !html || !html.replace(/<[^>]*>/g, '').trim();
+  card.querySelector('.rt-view-wrap').style.display = 'block';
+  card.querySelector('.rt-edit-wrap').style.display = 'none';
+  card.querySelector('.rt-view-actions').style.display = 'flex';
+  card.querySelector('.rt-edit-actions').style.display = 'none';
+  const empty   = card.querySelector('.rt-view-empty');
+  const content = card.querySelector('.rt-view-content');
+  if (vazio) { empty.style.display = 'block'; content.style.display = 'none'; }
+  else { empty.style.display = 'none'; content.style.display = 'block'; content.innerHTML = html; }
+  // "Editar" só faz sentido quando já existe conteúdo — vazio usa "+ Adicionar"
+  card.querySelector('.rt-edit-btn').style.display = vazio ? 'none' : 'inline-block';
 }
 
 // ── Toggle dia concluído/não concluído ───────
@@ -2152,8 +2341,8 @@ function toggleDiaConcluido() {
     }
   } else {
     // Salva microresumo (e resumo do dia) antes de concluir
-    if (_mrQuill) _editorSalvar(_mrQuill, 'microresumo_dia_', dia, 'mr-saved-label');
-    if (_rdQuill) _editorSalvar(_rdQuill, 'resumo_dia_', dia, 'rd-saved-label');
+    if (_mrQuill) { _editorSalvar(_mrQuill, 'microresumo_dia_', dia, 'mr-saved-label'); _atualizarModoVisualizacao('mr'); }
+    if (_rdQuill) { _editorSalvar(_rdQuill, 'resumo_dia_', dia, 'rd-saved-label'); _atualizarModoVisualizacao('rd'); }
     // Concluir + marcar tópicos + gravar próximo dia
     concluirDia(dia, '');
     marcarTopicosEstudados(dia);
@@ -2510,7 +2699,11 @@ function _buildQForm() {
   qrRenderHistorico('sessao');
 }
 
-// ── Revisões — mesmo array unificado questoes_registros (tipo:'revisao') ──
+// ── Revisões — Questões (questoes_registros, tipo:'revisao') ou Teoria
+// (teoria_registros, sem taxa de acerto) ──
+var _rvTipoWired = false;
+var _trConfSelecionada = null;
+
 function _buildRevisoesTab() {
   const dia   = _diaCorrente();
   const dados = getDadosDia(dia);
@@ -2519,11 +2712,127 @@ function _buildRevisoesTab() {
     const mid = typeof getMateriaId==='function' ? getMateriaId(m.nome) : m.nome;
     return `<option value="${mid}">${m.emoji||'📖'} ${m.nome}</option>`;
   }).join('');
-  const sel = document.getElementById('rv-materia');
-  if (sel) sel.innerHTML = opts;
-  const dataEl = document.getElementById('rv-data');
-  if (dataEl && !dataEl.value) dataEl.value = dataLocalHoje();
+  const selQ = document.getElementById('rv-materia');
+  if (selQ) selQ.innerHTML = opts;
+  const dataElQ = document.getElementById('rv-data');
+  if (dataElQ && !dataElQ.value) dataElQ.value = dataLocalHoje();
+  const selT = document.getElementById('tr-materia');
+  if (selT) selT.innerHTML = opts;
+  const dataElT = document.getElementById('tr-data');
+  if (dataElT && !dataElT.value) dataElT.value = dataLocalHoje();
+
+  // Checklist opcional de tópicos revisados — reaproveita os tópicos do
+  // dia já cadastrados em plano-vde.js (mesmos exibidos na aba Tópicos)
+  const topicosWrap = document.getElementById('tr-topicos');
+  if (topicosWrap) {
+    const todosTopicos = [];
+    (dados.materias || []).forEach(m => (m.topicos || []).forEach(t => todosTopicos.push(t)));
+    topicosWrap.innerHTML = todosTopicos.length
+      ? todosTopicos.map((t, i) => `
+          <label class="tr-topico-item">
+            <input type="checkbox" class="tr-topico-check" value="${t.replace(/"/g,'&quot;')}">
+            <span>${t}</span>
+          </label>`).join('')
+      : '<div style="font-size:.78rem;color:var(--ink-faded);font-style:italic">Sem tópicos cadastrados pra esse dia.</div>';
+  }
+
   qrRenderHistorico('revisao');
+  trRenderHistorico();
+  _wireRevisoesTipo();
+}
+
+function _wireRevisoesTipo() {
+  if (_rvTipoWired) return;
+  _rvTipoWired = true;
+  document.querySelectorAll('.rv-tipo-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.rv-tipo-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const tipo = btn.dataset.tipo;
+      document.querySelectorAll('.rv-form-wrap').forEach(w => {
+        w.style.display = w.dataset.tipo === tipo ? 'block' : 'none';
+      });
+    });
+  });
+  document.querySelectorAll('.rv-conf-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const jaAtivo = btn.classList.contains('active');
+      document.querySelectorAll('.rv-conf-btn').forEach(b => b.classList.remove('active'));
+      _trConfSelecionada = jaAtivo ? null : btn.dataset.conf;
+      if (!jaAtivo) btn.classList.add('active');
+    });
+  });
+}
+
+function trCancelar() {
+  document.getElementById('tr-obs').value = '';
+  document.getElementById('tr-data').value = dataLocalHoje();
+  document.querySelectorAll('.tr-topico-check').forEach(c => { c.checked = false; });
+  document.querySelectorAll('.rv-conf-btn').forEach(b => b.classList.remove('active'));
+  _trConfSelecionada = null;
+  document.getElementById('tr-btn-registrar').textContent = 'Registrar revisão de teoria';
+  document.getElementById('tr-cancel').style.display = 'none';
+  document.getElementById('tr-msg').textContent = '';
+}
+
+function trRegistrar() {
+  const dia     = _diaCorrente();
+  const materia = document.getElementById('tr-materia').value;
+  const data    = document.getElementById('tr-data').value;
+  const obs     = document.getElementById('tr-obs').value.trim();
+  const msgEl   = document.getElementById('tr-msg');
+  if (!materia) { msgEl.textContent = '⚠ Selecione a matéria.'; msgEl.style.color = 'var(--rose-deep)'; return; }
+
+  const topicos = Array.from(document.querySelectorAll('.tr-topico-check:checked')).map(c => c.value);
+  const dadosReg = { dia, materia, topicos, confianca: _trConfSelecionada, observacoes: obs };
+  if (data) dadosReg.data = data;
+
+  adicionarTeoriaRegistro(dadosReg);
+  msgEl.textContent = '✓ Revisão de teoria registrada';
+  msgEl.style.color = '#4a9850';
+  trCancelar();
+  trRenderHistorico();
+  if (typeof atualizarBadgeRevisar === 'function') atualizarBadgeRevisar();
+}
+
+function trExcluir(id) {
+  if (!confirm('Excluir este registro?')) return;
+  excluirTeoriaRegistro(id);
+  trRenderHistorico();
+}
+
+const _trConfLabel = { lembrei: '😊 Lembrei bem', 'mais-ou-menos': '😐 Mais ou menos', esqueci: '😕 Esqueci' };
+
+function trRenderHistorico() {
+  const cont = document.getElementById('tr-historico');
+  if (!cont) return;
+  const dia  = _diaCorrente();
+  const dados = getDadosDia(dia);
+  const regs = getTeoriaRegistros({ dia }).slice().sort((a, b) => b.data.localeCompare(a.data));
+  if (!regs.length) { cont.innerHTML = ''; return; }
+  const materiasMap = {};
+  (dados?.materias || []).forEach(m => {
+    const mid = typeof getMateriaId === 'function' ? getMateriaId(m.nome) : m.nome;
+    materiasMap[mid] = m;
+  });
+  const rows = regs.map(r => {
+    const matInfo = materiasMap[r.materia];
+    const matLabel = matInfo ? `${matInfo.emoji||'📖'} ${matInfo.nome}` : r.materia;
+    const topicos = r.topicos && r.topicos.length ? r.topicos.join(', ') : '—';
+    return `<tr>
+      <td>${r.data}</td>
+      <td>${matLabel}</td>
+      <td>${r.confianca ? _trConfLabel[r.confianca] : '—'}</td>
+      <td>${topicos}</td>
+      <td>${r.observacoes ? r.observacoes.replace(/</g,'&lt;') : '—'}</td>
+      <td style="white-space:nowrap">
+        <button class="btn btn-ghost" style="font-size:.7rem;padding:.25rem .5rem;color:var(--error,#c0524b)" onclick="trExcluir('${r.id}')" title="Excluir">✕</button>
+      </td>
+    </tr>`;
+  }).join('');
+  cont.innerHTML = `<div style="overflow-x:auto;margin-top:.8rem"><table class="qr-hist-table"><thead><tr>
+    <th>Data</th><th>Matéria</th><th>Lembrança</th><th>Tópicos</th><th>Obs.</th><th>Ações</th>
+    </tr></thead><tbody>${rows}</tbody></table></div>`;
 }
 
 // ── PDF da Semana — embutido via iframe do Drive, usa dados.pdf_id ──

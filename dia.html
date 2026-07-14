@@ -209,41 +209,16 @@
       <div>
         <!-- Tabs -->
         <div class="dia-tabs">
-          <div class="dia-tab active" onclick="switchTab('conteudo',this)">📄 Conteúdo do PDF</div>
-          <div class="dia-tab" onclick="switchTab('resumo',this)">✦ Micro-Resumo</div>
-          <div class="dia-tab" onclick="switchTab('meuresumo',this)">📖 Meu Resumo</div>
+          <div class="dia-tab active" onclick="switchTab('pdfsemana',this)">📎 PDF da Semana</div>
+          <div class="dia-tab" onclick="switchTab('resumodia',this)">📖 Resumo</div>
+          <div class="dia-tab" onclick="switchTab('microresumo',this)">🧠 Micro-resumo</div>
           <div class="dia-tab" onclick="switchTab('questoes',this)">📊 Questões</div>
           <div class="dia-tab" onclick="switchTab('revisoes',this)">🔄 Revisões</div>
-          <div class="dia-tab" onclick="switchTab('pdfsemana',this)">📎 PDF da Semana</div>
         </div>
 
-        <!-- Tab: Conteúdo extraído do PDF -->
-        <div class="dia-panel active" id="panel-conteudo">
-          <div class="dia-stub" id="conteudo-stub" style="display:none">
-            <div class="s-em">📄</div>
-            <h3>Conteúdo ainda não extraído</h3>
-            <p>O conteúdo deste dia ainda não foi adicionado. Peça a extração do PDF da Semana correspondente.</p>
-            <a id="stub-pdf-link" href="#" target="_blank" class="btn btn-primary" style="text-decoration:none">↗ Abrir PDF da Semana no Drive</a>
-          </div>
-          <div class="dia-content-card" id="conteudo-body"></div>
-        </div>
-
-        <!-- Tab: Micro-Resumo -->
-        <div class="dia-panel" id="panel-resumo">
-          <div class="dia-content-card">
-            <div class="resumo-label"><span></span><span id="res-titulo">—</span><span></span></div>
-            <div id="res-no-content" style="font-size:.85rem;color:var(--ink-faded);font-style:italic">Sem resumo para este dia ainda.</div>
-            <ul class="resumo-list" id="res-pontos" style="display:none"></ul>
-            <div class="resumo-peg" id="res-peg" style="display:none">
-              <strong>⚠️ ATENÇÃO — Pegadinha da Banca</strong>
-              <span id="res-peg-txt"></span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Tab: Meu Resumo — Resumo do Dia + Microresumo escritos no editor rico de hoje.html -->
-        <div class="dia-panel" id="panel-meuresumo">
-          <div class="dia-content-card" id="mr-view-resumodia" style="margin-bottom:1rem">
+        <!-- Tab: Resumo do Dia (editor rico de hoje.html, somente leitura aqui) -->
+        <div class="dia-panel" id="panel-resumodia">
+          <div class="dia-content-card" id="mr-view-resumodia">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.7rem;flex-wrap:wrap;gap:.4rem">
               <h4 style="font-family:'Fraunces',serif;font-size:1rem;margin:0">📖 Resumo do Dia</h4>
               <a id="mr-view-edit-link" href="hoje.html" style="font-size:.75rem;color:var(--rose-deep);text-decoration:none;white-space:nowrap">Editar em Hoje →</a>
@@ -251,8 +226,24 @@
             <div id="mr-view-resumodia-empty" style="font-size:.85rem;color:var(--ink-faded);font-style:italic">Você ainda não escreveu um Resumo do Dia pra esse dia.</div>
             <div id="mr-view-resumodia-html" class="mr-render" style="display:none"></div>
           </div>
+        </div>
+
+        <!-- Tab: Micro-resumo — resumo curado do curso (cards.js, se existir) + o
+             microresumo que a usuária escreveu no editor rico de hoje.html -->
+        <div class="dia-panel" id="panel-microresumo">
+          <div class="dia-content-card" id="res-card" style="display:none;margin-bottom:1rem">
+            <div class="resumo-label"><span></span><span id="res-titulo">—</span><span></span></div>
+            <ul class="resumo-list" id="res-pontos"></ul>
+            <div class="resumo-peg" id="res-peg" style="display:none">
+              <strong>⚠️ ATENÇÃO — Pegadinha da Banca</strong>
+              <span id="res-peg-txt"></span>
+            </div>
+          </div>
           <div class="dia-content-card">
-            <h4 style="font-family:'Fraunces',serif;font-size:1rem;margin-bottom:.7rem">🧠 Microresumo</h4>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.7rem;flex-wrap:wrap;gap:.4rem">
+              <h4 style="font-family:'Fraunces',serif;font-size:1rem;margin:0">🧠 Meu Microresumo</h4>
+              <a href="hoje.html" style="font-size:.75rem;color:var(--rose-deep);text-decoration:none;white-space:nowrap">Editar em Hoje →</a>
+            </div>
             <div id="mr-view-microresumo-empty" style="font-size:.85rem;color:var(--ink-faded);font-style:italic">Você ainda não escreveu um Microresumo pra esse dia.</div>
             <div id="mr-view-microresumo-html" class="mr-render" style="display:none"></div>
           </div>
@@ -308,7 +299,7 @@
         </div>
 
         <!-- Tab: PDF da Semana -->
-        <div class="dia-panel" id="panel-pdfsemana">
+        <div class="dia-panel active" id="panel-pdfsemana">
           <div class="pdf-embed-wrap" id="pdf-embed-wrap" style="display:none">
             <div class="pdf-embed-bar">
               <span class="pdf-embed-title" id="pdf-embed-title">PDF da semana</span>
@@ -495,7 +486,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
   if (!dados) {
     document.getElementById('dia-titulo').textContent = 'Dia ' + dia + ' não encontrado';
-    document.getElementById('conteudo-stub').style.display = 'block';
     return;
   }
 
@@ -553,38 +543,17 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('sum-body').textContent = dados.sumula.texto;
   }
 
-  // PDF stub link — usa o PDF da semana; sem ID mapeado, cai na pasta partilhada
+  // pdfId é usado mais abaixo pelo embed da aba "PDF da Semana"
   var pdfId = dados.pdf_id;
-  document.getElementById('stub-pdf-link').href = pdfId
-    ? 'https://drive.google.com/file/d/' + pdfId + '/view'
-    : 'https://drive.google.com/drive/folders/17-gxzWdpd8aoBj_ztp_ANsOIhDroPWck?usp=sharing';
 
-  // ── Conteúdo extraído do PDF ──────────────────────────────
-  var conteudo = (typeof CONTEUDO_VDE !== 'undefined') ? CONTEUDO_VDE[dia] : null;
-  var conteudoBody = document.getElementById('conteudo-body');
-  if (conteudo) {
-    // Inject CSS once
-    if (typeof CONTEUDO_VDE_CSS !== 'undefined' && !document.getElementById('vde-css')) {
-      var tmp = document.createElement('div');
-      tmp.innerHTML = CONTEUDO_VDE_CSS;
-      tmp.firstElementChild.id = 'vde-css';
-      document.head.appendChild(tmp.firstElementChild);
-    }
-    conteudoBody.innerHTML = conteudo;
-  } else {
-    document.getElementById('conteudo-stub').style.display = 'block';
-    conteudoBody.style.display = 'none';
-  }
-
-  // ── Micro-Resumo ──────────────────────────────────────────
+  // ── Micro-Resumo curado (cards.js — pode não existir pra todo dia) ──
   var cardKey = dia + '_0';
   var card = (typeof REVIEW_CARDS !== 'undefined') ? REVIEW_CARDS[cardKey] : null;
   if (card) {
+    document.getElementById('res-card').style.display = 'block';
     document.getElementById('res-titulo').textContent = card.titulo;
     var pontosList = document.getElementById('res-pontos');
     pontosList.innerHTML = card.pontos.map(function(p){ return '<li>' + p + '</li>'; }).join('');
-    pontosList.style.display = 'flex';
-    document.getElementById('res-no-content').style.display = 'none';
     if (card.pegadinha) {
       document.getElementById('res-peg').style.display = 'block';
       document.getElementById('res-peg-txt').textContent = card.pegadinha;
