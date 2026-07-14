@@ -17,7 +17,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Inter:opsz,wght@14..32,400..700&family=Caveat:wght@400;500&display=swap" rel="stylesheet">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="style.css?v=1783863778">
-<!-- quill.snow.css removido — aba Anotações foi descontinuada -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/quill/1.3.7/quill.snow.css">
 <style>
 /* ════════════════════════════════════════════
    PÁGINA HOJE — Redesign UI/UX Senior
@@ -1152,6 +1152,7 @@
     <!-- TABS -->
     <div class="tabs-bar">
       <div class="tab active" data-tab="topicos">📌 Tópicos</div>
+      <div class="tab" data-tab="resumodia">📖 Resumo do Dia</div>
       <div class="tab" data-tab="videoaulas">🎬 Videoaulas</div>
       <div class="tab" data-tab="questoes">📊 Questões</div>
       <div class="tab" data-tab="revisoes">🔄 Revisões</div>
@@ -1165,24 +1166,113 @@
         <div class="tab-content active" data-tab="topicos">
           <div id="subject-panels"></div>
 
-          <!-- MICRORESUMO DO DIA -->
+          <!-- MICRORESUMO DO DIA — editor rico enxuto, pra revisão espaçada rápida -->
           <div style="margin-top:1.5rem;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-lg);padding:1.4rem 1.5rem;box-shadow:0 2px 10px rgba(44,36,32,.06)">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.9rem;flex-wrap:wrap;gap:0.4rem">
               <h4 style="font-family:'Fraunces',serif;font-size:0.95rem;font-weight:600;color:var(--ink);margin:0;display:flex;align-items:center;gap:0.4rem">
-                ✦ Meu Microresumo
+                🧠 Microresumo
               </h4>
               <span id="mr-saved-label" style="font-size:0.7rem;color:var(--ink-faded);font-style:italic"></span>
             </div>
-            <textarea id="microresumo-input"
-              placeholder="Escreva aqui os pontos mais importantes que aprendeu hoje — será revisado nos próximos dias, com intervalo que se ajusta ao seu feedback..."
-              rows="6"
-              oninput="mrAutoSave()"
-              style="width:100%;box-sizing:border-box;background:var(--bg-soft);border:1.5px solid var(--line);border-radius:var(--radius-sm);padding:0.8rem;font-size:1rem;color:var(--ink);font-family:'Inter',sans-serif;line-height:1.65;resize:vertical;outline:none;transition:border-color var(--transition)"
-              onfocus="this.style.borderColor='var(--rose)'"
-              onblur="this.style.borderColor='var(--line)'"
-            ></textarea>
+            <div id="mr-toolbar" class="ql-app-toolbar">
+              <span class="ql-formats">
+                <select class="ql-header"><option value="1"></option><option value="2"></option><option value="3"></option><option selected></option></select>
+              </span>
+              <span class="ql-formats">
+                <button class="ql-bold"></button>
+                <button class="ql-italic"></button>
+                <button class="ql-underline"></button>
+                <button class="ql-strike"></button>
+              </span>
+              <span class="ql-formats">
+                <select class="ql-color"></select>
+                <select class="ql-background"></select>
+              </span>
+              <span class="ql-formats">
+                <button class="ql-list" value="ordered"></button>
+                <button class="ql-list" value="bullet"></button>
+                <button class="ql-list" value="check"></button>
+              </span>
+              <span class="ql-formats">
+                <button class="ql-link"></button>
+              </span>
+              <span class="ql-formats hl-formats">
+                <button type="button" class="hl-btn" data-hl="conceito" title="Conceito principal">🟥</button>
+                <button type="button" class="hl-btn" data-hl="lei" title="Artigo de lei">🟦</button>
+                <button type="button" class="hl-btn" data-hl="excecao" title="Exceção">🟩</button>
+                <button type="button" class="hl-btn" data-hl="pegadinha" title="Pegadinha de prova">🟨</button>
+                <button type="button" class="hl-btn" data-hl="jurisprudencia" title="Jurisprudência/STF">🟪</button>
+                <button type="button" class="hl-btn" data-hl="prazo" title="Prazo">🟧</button>
+                <button type="button" class="hl-btn" data-hl="palavrachave" title="Palavra-chave">⚫</button>
+                <button type="button" class="hl-clear-btn" title="Limpar destaque">✕</button>
+              </span>
+              <span class="ql-formats">
+                <button class="ql-clean"></button>
+              </span>
+            </div>
+            <div id="microresumo-input"></div>
             <div style="margin-top:0.6rem;font-size:0.72rem;color:var(--ink-faded)">
               Salvo automaticamente · enviado para Revisar ao marcar o dia como concluído
+            </div>
+          </div>
+        </div>
+
+        <!-- RESUMO DO DIA — editor rico completo, material de estudo/consulta -->
+        <div class="tab-content" data-tab="resumodia">
+          <div style="background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-lg);padding:1.4rem 1.5rem;box-shadow:0 2px 10px rgba(44,36,32,.06)">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.9rem;flex-wrap:wrap;gap:0.4rem">
+              <h4 style="font-family:'Fraunces',serif;font-size:0.95rem;font-weight:600;color:var(--ink);margin:0;display:flex;align-items:center;gap:0.4rem">
+                📖 Resumo do Dia
+              </h4>
+              <span id="rd-saved-label" style="font-size:0.7rem;color:var(--ink-faded);font-style:italic"></span>
+            </div>
+            <div id="rd-toolbar" class="ql-app-toolbar">
+              <span class="ql-formats">
+                <select class="ql-header"><option value="1"></option><option value="2"></option><option value="3"></option><option selected></option></select>
+              </span>
+              <span class="ql-formats">
+                <button class="ql-bold"></button>
+                <button class="ql-italic"></button>
+                <button class="ql-underline"></button>
+                <button class="ql-strike"></button>
+              </span>
+              <span class="ql-formats">
+                <select class="ql-color"></select>
+                <select class="ql-background"></select>
+              </span>
+              <span class="ql-formats">
+                <button class="ql-list" value="ordered"></button>
+                <button class="ql-list" value="bullet"></button>
+                <button class="ql-list" value="check"></button>
+                <button class="ql-indent" value="-1"></button>
+                <button class="ql-indent" value="+1"></button>
+              </span>
+              <span class="ql-formats">
+                <button class="ql-blockquote"></button>
+                <button class="ql-link"></button>
+              </span>
+              <span class="ql-formats">
+                <button type="button" class="rt-hr-btn" title="Separador">─</button>
+                <button type="button" class="rt-callout-btn" title="Caixa de destaque">▤</button>
+                <button type="button" class="rt-table-btn" title="Inserir tabela">▦</button>
+              </span>
+              <span class="ql-formats hl-formats">
+                <button type="button" class="hl-btn" data-hl="conceito" title="Conceito principal">🟥</button>
+                <button type="button" class="hl-btn" data-hl="lei" title="Artigo de lei">🟦</button>
+                <button type="button" class="hl-btn" data-hl="excecao" title="Exceção">🟩</button>
+                <button type="button" class="hl-btn" data-hl="pegadinha" title="Pegadinha de prova">🟨</button>
+                <button type="button" class="hl-btn" data-hl="jurisprudencia" title="Jurisprudência/STF">🟪</button>
+                <button type="button" class="hl-btn" data-hl="prazo" title="Prazo">🟧</button>
+                <button type="button" class="hl-btn" data-hl="palavrachave" title="Palavra-chave">⚫</button>
+                <button type="button" class="hl-clear-btn" title="Limpar destaque">✕</button>
+              </span>
+              <span class="ql-formats">
+                <button class="ql-clean"></button>
+              </span>
+            </div>
+            <div id="resumodia-input"></div>
+            <div style="margin-top:0.6rem;font-size:0.72rem;color:var(--ink-faded)">
+              Salvo automaticamente · material completo de estudo e consulta
             </div>
           </div>
         </div>
@@ -1389,6 +1479,7 @@
 
 <button class="sidebar-toggle-btn" onclick="toggleSidebarCollapse()" title="Esconder menu">‹</button>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/quill/1.3.7/quill.min.js"></script>
 <script src="erros-core.js"></script>
 <script src="script.js?v=1783860648"></script>
 <script src="perfil.js?v=1783860863"></script>
@@ -1399,6 +1490,170 @@
 <script src="cores.js"></script>
 <script src="videoaulas.js"></script>
 <script>
+// ── Editor rico (Quill) — Blots customizados + setup compartilhado ──
+// Reaproveita a config/CSS de tema já usada antes nesse arquivo (aba
+// Anotações, removida no pivot de julho — ver histórico do git).
+(function () {
+  if (typeof Quill === 'undefined') return;
+
+  // Separador horizontal — embed de bloco simples
+  const BlockEmbed = Quill.import('blots/block/embed');
+  class HrBlot extends BlockEmbed {}
+  HrBlot.blotName = 'hr';
+  HrBlot.tagName = 'hr';
+  Quill.register(HrBlot);
+
+  // Caixa de destaque — bloco com classe própria, igual ao blockquote nativo
+  // (linhas consecutivas com o mesmo formato se agrupam automaticamente).
+  const Block = Quill.import('blots/block');
+  class CalloutBlot extends Block {}
+  CalloutBlot.blotName = 'callout';
+  CalloutBlot.tagName = 'div';
+  CalloutBlot.className = 'ql-callout';
+  Quill.register(CalloutBlot);
+
+  // Tabela simples — table > tbody > tr > td, células editáveis (sem
+  // merge de células nem redimensionar coluna: fora do escopo de "tabela
+  // simples"). Quill não tem suporte a tabela nenhum nativamente.
+  const Container = Quill.import('blots/container');
+  class TableCell extends Block {}
+  TableCell.blotName = 'table-cell';
+  TableCell.tagName = 'td';
+
+  class TableRow extends Container {}
+  TableRow.blotName = 'table-row';
+  TableRow.tagName = 'tr';
+  TableRow.allowedChildren = [TableCell];
+
+  class TableBody extends Container {}
+  TableBody.blotName = 'table-body';
+  TableBody.tagName = 'tbody';
+  TableBody.allowedChildren = [TableRow];
+
+  class TableContainer extends Container {}
+  TableContainer.blotName = 'table-container';
+  TableContainer.tagName = 'table';
+  TableContainer.allowedChildren = [TableBody];
+
+  TableCell.requiredContainer = TableRow;
+  TableRow.requiredContainer = TableBody;
+  TableBody.requiredContainer = TableContainer;
+
+  Quill.register(TableCell);
+  Quill.register(TableRow);
+  Quill.register(TableBody);
+  Quill.register(TableContainer);
+
+  // ── Destaques semânticos: cor + fundo + negrito num só clique ──
+  // Usa var(--hl-*) como valor de cor/fundo, então o realce fica correto
+  // automaticamente no modo claro e escuro (a variável resolve na hora de
+  // renderizar, tanto no editor quanto no card de revisão).
+  const HL_MAP = {
+    conceito:       { text: 'var(--dest-conceito-text)',       bg: 'var(--dest-conceito-bg)' },
+    lei:            { text: 'var(--dest-lei-text)',            bg: 'var(--dest-lei-bg)' },
+    excecao:        { text: 'var(--dest-excecao-text)',        bg: 'var(--dest-excecao-bg)' },
+    pegadinha:      { text: 'var(--dest-pegadinha-text)',      bg: 'var(--dest-pegadinha-bg)' },
+    jurisprudencia: { text: 'var(--dest-jurisprudencia-text)', bg: 'var(--dest-jurisprudencia-bg)' },
+    prazo:          { text: 'var(--dest-prazo-text)',          bg: 'var(--dest-prazo-bg)' },
+    palavrachave:   { text: 'var(--dest-palavrachave-text)',   bg: 'var(--dest-palavrachave-bg)' }
+  };
+
+  // Insere uma tabela rows×cols na posição do cursor. `cellText`, se vier,
+  // preenche cada célula (usado no matcher de colar <table> do ChatGPT).
+  function _qlInsertTable(quill, rows, cols, cellText) {
+    const range = quill.getSelection(true) || { index: quill.getLength() - 1, length: 0 };
+    quill.insertText(range.index, '\n', Quill.sources.USER);
+    const table = quill.scroll.create('table-container');
+    const body  = quill.scroll.create('table-body');
+    table.appendChild(body);
+    for (let r = 0; r < rows; r++) {
+      const row = quill.scroll.create('table-row');
+      body.appendChild(row);
+      for (let c = 0; c < cols; c++) {
+        const cell = quill.scroll.create('table-cell');
+        const txt  = (cellText && cellText[r] && cellText[r][c]) || '';
+        if (txt) cell.domNode.appendChild(document.createTextNode(txt));
+        else cell.appendChild(quill.scroll.create('break'));
+        row.appendChild(cell);
+      }
+    }
+    const [line] = quill.getLine(range.index);
+    quill.scroll.insertBefore(table, line);
+    const afterBlock = quill.scroll.create('block');
+    afterBlock.appendChild(quill.scroll.create('break'));
+    quill.scroll.insertBefore(afterBlock, line);
+    quill.update(Quill.sources.USER);
+    quill.setSelection(range.index + 1, 0, Quill.sources.SILENT);
+  }
+
+  function _wireToolbarButtons(quill, toolbarEl) {
+    toolbarEl.querySelectorAll('.hl-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const hl = HL_MAP[btn.dataset.hl];
+        if (!hl) return;
+        quill.format('color', hl.text);
+        quill.format('background', hl.bg);
+        quill.format('bold', true);
+      });
+    });
+    const clearBtn = toolbarEl.querySelector('.hl-clear-btn');
+    if (clearBtn) clearBtn.addEventListener('click', () => {
+      quill.format('color', false);
+      quill.format('background', false);
+      quill.format('bold', false);
+    });
+    const hrBtn = toolbarEl.querySelector('.rt-hr-btn');
+    if (hrBtn) hrBtn.addEventListener('click', () => {
+      const range = quill.getSelection(true);
+      quill.insertText(range.index, '\n', Quill.sources.USER);
+      quill.insertEmbed(range.index + 1, 'hr', true, Quill.sources.USER);
+      quill.setSelection(range.index + 2, 0, Quill.sources.SILENT);
+    });
+    const calloutBtn = toolbarEl.querySelector('.rt-callout-btn');
+    if (calloutBtn) calloutBtn.addEventListener('click', () => {
+      const range = quill.getSelection(true);
+      const fmt = quill.getFormat(range);
+      quill.format('callout', !fmt.callout);
+    });
+    const tableBtn = toolbarEl.querySelector('.rt-table-btn');
+    if (tableBtn) tableBtn.addEventListener('click', () => _qlInsertTable(quill, 3, 3));
+  }
+
+  function _wireClipboardMatchers(quill) {
+    const Delta = Quill.import('delta');
+    // <hr> colado vira o blot de separador direto via Delta.
+    quill.clipboard.addMatcher('hr', () => new Delta().insert({ hr: true }));
+    // <table> colada: Quill não tem formato de tabela nativo pra
+    // representar via Delta, então cancela a conversão padrão (parágrafos
+    // soltos por célula) e insere nossa tabela de verdade logo em seguida.
+    quill.clipboard.addMatcher('table', (node) => {
+      const grid = Array.from(node.rows || []).map(row =>
+        Array.from(row.cells || []).map(cell => (cell.innerText || '').replace(/\s+/g, ' ').trim())
+      );
+      setTimeout(() => {
+        if (grid.length && grid[0].length) _qlInsertTable(quill, grid.length, grid[0].length, grid);
+      }, 0);
+      return new Delta();
+    });
+  }
+
+  // Cria um editor Quill num container, com sua própria toolbar customizada
+  // (HTML já presente na página) e os destaques/blots acima.
+  window._criarEditorRico = function (editorId, toolbarId) {
+    const quill = new Quill('#' + editorId, {
+      theme: 'snow',
+      placeholder: 'Cole aqui um resumo em HTML gerado pelo ChatGPT/Claude, ou escreva diretamente...',
+      modules: {
+        toolbar: '#' + toolbarId,
+        clipboard: { matchVisual: false }
+      }
+    });
+    _wireToolbarButtons(quill, document.getElementById(toolbarId));
+    _wireClipboardMatchers(quill);
+    return quill;
+  };
+})();
+
 // ── Tabs ─────────────────────────────────────
 document.querySelectorAll('.tab').forEach(tab => {
   tab.addEventListener('click', () => {
@@ -1495,8 +1750,9 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.textContent = '✓ Dia Concluído';
   }
 
-  // Carregar microresumo do dia
-  mrCarregar(dia);
+  // Inicializar os editores ricos (Microresumo + Resumo do Dia) e carregar
+  // o conteúdo salvo do dia
+  _iniciarEditoresRicos(dia);
 
   document.querySelectorAll('[data-study-day]').forEach(el => { el.textContent = dia; });
   const focusDayLabel = document.getElementById('focus-day-label');
@@ -1737,25 +1993,64 @@ function _updateChecklistCounter() {
 }
 
 // ── Microresumo — auto-save e carga ──────────
-let _mrTimer;
 function _diaCorrente() {
   const params = new URLSearchParams(window.location.search);
   const raw = params.get('dia') ? parseInt(params.get('dia')) : getStudyDay();
   return raw <= 0 ? 1 : Math.min(raw, 120);
 }
-function mrAutoSave() {
-  clearTimeout(_mrTimer);
-  _mrTimer = setTimeout(() => {
-    const dia = _diaCorrente();
-    const val = (document.getElementById('microresumo-input') || {}).value || '';
-    localStorage.setItem('microresumo_dia_' + dia, val);
-    const lbl = document.getElementById('mr-saved-label');
-    if (lbl) { lbl.textContent = 'Salvo'; setTimeout(() => { lbl.textContent = ''; }, 1500); }
-  }, 600);
+// ── Editores ricos (Quill) — Resumo do Dia + Microresumo ─────
+// Salva {html, delta} em JSON: delta recarrega fiel no editor, html é o
+// que revisar.html usa pra exibir fora do editor.
+let _mrQuill, _rdQuill;
+
+function _editorSalvar(quill, keyPrefix, dia, labelId) {
+  if (!quill) return;
+  const payload = JSON.stringify({ html: quill.root.innerHTML, delta: quill.getContents() });
+  localStorage.setItem(keyPrefix + dia, payload);
+  const lbl = document.getElementById(labelId);
+  if (lbl) { lbl.textContent = 'Salvo'; setTimeout(() => { lbl.textContent = ''; }, 1500); }
 }
-function mrCarregar(dia) {
-  const el = document.getElementById('microresumo-input');
-  if (el) el.value = localStorage.getItem('microresumo_dia_' + dia) || '';
+
+function _editorCarregar(quill, keyPrefix, dia) {
+  if (!quill) return;
+  const raw = localStorage.getItem(keyPrefix + dia);
+  quill.setContents([], 'silent');
+  if (!raw) return;
+  let parsed = null;
+  try { parsed = JSON.parse(raw); } catch (e) {}
+  if (parsed && parsed.delta) {
+    quill.setContents(parsed.delta, 'silent');
+  } else if (parsed && typeof parsed.html === 'string') {
+    quill.clipboard.dangerouslyPasteHTML(parsed.html, 'silent');
+  } else if (raw.trim()) {
+    // Valor legado: texto puro salvo antes do editor rico
+    const escapado = raw.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+    quill.clipboard.dangerouslyPasteHTML(escapado, 'silent');
+  }
+}
+
+function _iniciarEditoresRicos(dia) {
+  if (typeof Quill === 'undefined' || typeof window._criarEditorRico !== 'function') return;
+  if (!_mrQuill) {
+    _mrQuill = window._criarEditorRico('microresumo-input', 'mr-toolbar');
+    let mrTimer;
+    _mrQuill.on('text-change', (_d, _o, source) => {
+      if (source !== 'user') return;
+      clearTimeout(mrTimer);
+      mrTimer = setTimeout(() => _editorSalvar(_mrQuill, 'microresumo_dia_', _diaCorrente(), 'mr-saved-label'), 600);
+    });
+  }
+  if (!_rdQuill) {
+    _rdQuill = window._criarEditorRico('resumodia-input', 'rd-toolbar');
+    let rdTimer;
+    _rdQuill.on('text-change', (_d, _o, source) => {
+      if (source !== 'user') return;
+      clearTimeout(rdTimer);
+      rdTimer = setTimeout(() => _editorSalvar(_rdQuill, 'resumo_dia_', _diaCorrente(), 'rd-saved-label'), 600);
+    });
+  }
+  _editorCarregar(_mrQuill, 'microresumo_dia_', dia);
+  _editorCarregar(_rdQuill, 'resumo_dia_', dia);
 }
 
 // ── Toggle dia concluído/não concluído ───────
@@ -1780,9 +2075,9 @@ function toggleDiaConcluido() {
       localStorage.removeItem('oab_current_day_date');
     }
   } else {
-    // Salva microresumo antes de concluir
-    const mrVal = (document.getElementById('microresumo-input') || {}).value || '';
-    if (mrVal.trim()) localStorage.setItem('microresumo_dia_' + dia, mrVal);
+    // Salva microresumo (e resumo do dia) antes de concluir
+    if (_mrQuill) _editorSalvar(_mrQuill, 'microresumo_dia_', dia, 'mr-saved-label');
+    if (_rdQuill) _editorSalvar(_rdQuill, 'resumo_dia_', dia, 'rd-saved-label');
     // Concluir + marcar tópicos + gravar próximo dia
     concluirDia(dia, '');
     marcarTopicosEstudados(dia);

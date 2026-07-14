@@ -72,6 +72,15 @@
   --highlight-3: #F6E4D2;
   --highlight-4: #E5E1F2;
 
+  /* ── Destaques semânticos de estudo (editor rico — Resumo/Microresumo) ── */
+  --dest-conceito-bg: #FBE4E1;        --dest-conceito-text: #B03A2E;
+  --dest-lei-bg: #DCEBF7;             --dest-lei-text: #2B5E8C;
+  --dest-excecao-bg: #E1F0DE;         --dest-excecao-text: #4A7A45;
+  --dest-pegadinha-bg: #FBF0CC;       --dest-pegadinha-text: #9C7A1E;
+  --dest-jurisprudencia-bg: #EAE3F5;  --dest-jurisprudencia-text: #6B4FA0;
+  --dest-prazo-bg: #FBE7D4;           --dest-prazo-text: #B36A1E;
+  --dest-palavrachave-bg: #E7E0D9;    --dest-palavrachave-text: #211C19;
+
   /* ── Codificação por matéria (base / deep) ── */
   --mat-const: #E5E1F2;       --mat-const-deep: #5B4F9E;
   --mat-civil: #FCE7EF;       --mat-civil-deep: #A8265C;
@@ -129,6 +138,15 @@
   --highlight-2: #3A1E2B;
   --highlight-3: #3C2C20;
   --highlight-4: #2A2638;
+
+  /* destaques semânticos — bases escuras, texto clareado para legibilidade */
+  --dest-conceito-bg: #3A211D;        --dest-conceito-text: #E8998C;
+  --dest-lei-bg: #1C2A38;             --dest-lei-text: #8FC0E8;
+  --dest-excecao-bg: #1E2E1B;         --dest-excecao-text: #9EC79A;
+  --dest-pegadinha-bg: #362E14;       --dest-pegadinha-text: #E8C767;
+  --dest-jurisprudencia-bg: #2A2138;  --dest-jurisprudencia-text: #C0AEE8;
+  --dest-prazo-bg: #362615;           --dest-prazo-text: #E8A867;
+  --dest-palavrachave-bg: #332C25;    --dest-palavrachave-text: #F1ECE4;
 
   /* matéria — bases escuras, deep clareado para legibilidade */
   --mat-const: #2A2638;       --mat-const-deep: #B3A8E0;
@@ -1658,3 +1676,98 @@ main { animation: pageEnter 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
 .q-hero-stat .num, .stats-hero .num, .progresso-pct, #progresso-pct {
   animation: numberPop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s backwards;
 }
+
+/* ============================================
+   EDITOR RICO (Quill) — Resumo do Dia / Microresumo
+   Tema reaproveitado da implementação anterior de Quill
+   nesse projeto (aba Anotações, removida no pivot de julho).
+============================================ */
+.ql-toolbar.ql-snow {
+  border: 1px solid var(--line) !important;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0 !important;
+  background: var(--bg-soft) !important;
+  font-family: 'Inter', sans-serif !important;
+}
+.ql-container.ql-snow {
+  border: 1px solid var(--line) !important;
+  border-top: none !important;
+  border-radius: 0 0 var(--radius-sm) var(--radius-sm) !important;
+  background: var(--paper) !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 0.9rem !important;
+}
+.ql-editor { min-height: 260px; color: var(--ink) !important; line-height: 1.75 !important; }
+#microresumo-input.ql-container .ql-editor { min-height: 140px; }
+.ql-editor.ql-blank::before { color: var(--ink-faded) !important; font-style: italic !important; }
+.ql-toolbar button .ql-stroke { stroke: var(--ink-faded) !important; }
+.ql-toolbar button .ql-fill  { fill: var(--ink-faded) !important; }
+.ql-toolbar button:hover .ql-stroke, .ql-toolbar button.ql-active .ql-stroke { stroke: var(--rose-deep) !important; }
+.ql-toolbar button:hover .ql-fill,  .ql-toolbar button.ql-active .ql-fill  { fill: var(--rose-deep) !important; }
+.ql-toolbar .ql-picker-label { color: var(--ink-soft) !important; }
+.ql-toolbar .ql-picker-label:hover { color: var(--rose-deep) !important; }
+.ql-toolbar .ql-picker-options { background: var(--paper) !important; border-color: var(--line) !important; }
+[data-theme="dark"] .ql-editor { color: var(--ink) !important; }
+[data-theme="dark"] .ql-toolbar.ql-snow { background: var(--bg-soft) !important; }
+
+/* Toolbar custom (HTML própria em hoje.html) — flex-wrap pra caber em telas
+   estreitas sem precisar de scroll horizontal, ao contrário das .tabs-bar */
+.ql-app-toolbar.ql-toolbar.ql-snow { display: flex; flex-wrap: wrap; align-items: center; gap: 0.15rem 0; padding: 0.5rem !important; }
+.ql-app-toolbar .ql-formats { margin-right: 0.5rem !important; }
+
+/* Botões customizados (separador / caixa de destaque / tabela) — mesmo
+   tamanho/hover dos botões nativos do Quill */
+.rt-hr-btn, .rt-callout-btn, .rt-table-btn {
+  width: 28px; height: 24px; border: none; background: none; cursor: pointer;
+  color: var(--ink-faded); font-size: 0.95rem; line-height: 1; border-radius: 4px;
+  transition: color var(--transition), background var(--transition);
+}
+.rt-hr-btn:hover, .rt-callout-btn:hover, .rt-table-btn:hover { color: var(--rose-deep); background: var(--blush); }
+
+/* Botões de destaque semântico — emoji + leve fundo no hover/foco */
+.hl-formats { display: inline-flex; align-items: center; gap: 0.1rem; padding: 0 0.3rem; border-left: 1px solid var(--line); border-right: 1px solid var(--line); }
+.hl-btn, .hl-clear-btn {
+  width: 26px; height: 24px; border: none; background: none; cursor: pointer;
+  font-size: 0.9rem; line-height: 1; border-radius: 4px; padding: 0;
+  transition: background var(--transition), transform 0.15s ease;
+}
+.hl-btn:hover, .hl-clear-btn:hover { background: var(--blush); transform: scale(1.12); }
+.hl-clear-btn { color: var(--ink-faded); font-size: 0.72rem; font-weight: 600; }
+
+/* Blots customizados — separador, caixa de destaque, tabela simples.
+   Selecionados tanto dentro do editor (.ql-editor) quanto no card de
+   revisão em revisar.html (.mr-render), já que o HTML salvo é o mesmo. */
+.ql-editor hr, .mr-render hr {
+  border: none; border-top: 1.5px solid var(--line); margin: 1.1rem 0;
+}
+.ql-editor .ql-callout, .mr-render .ql-callout {
+  background: var(--bg-soft); border: 1px solid var(--line); border-left: 3px solid var(--rose);
+  border-radius: var(--radius-sm); padding: 0.7rem 1rem; margin: 0.6rem 0;
+}
+.ql-editor table, .mr-render table {
+  border-collapse: collapse; width: 100%; margin: 0.8rem 0; font-size: 0.88rem;
+}
+.ql-editor table td, .mr-render table td,
+.ql-editor table th, .mr-render table th {
+  border: 1px solid var(--line); padding: 0.45rem 0.6rem; vertical-align: top;
+}
+
+/* ── Leitura fora do editor (revisar.html — card "Meu Resumo") ── */
+.mr-render { color: var(--ink); line-height: 1.7; font-size: 0.88rem; }
+.mr-render h1, .mr-render h2, .mr-render h3 {
+  font-family: 'Fraunces', serif; color: var(--rose-deep); font-weight: 600;
+  margin: 0.9rem 0 0.4rem;
+}
+.mr-render h1 { font-size: 1.25rem; } .mr-render h2 { font-size: 1.1rem; } .mr-render h3 { font-size: 1rem; }
+.mr-render p { margin: 0.4rem 0; }
+.mr-render ul, .mr-render ol { margin: 0.4rem 0; padding-left: 1.4rem; }
+.mr-render li { margin: 0.2rem 0; }
+/* Checklist (formato "list: checked/unchecked" do Quill) — sem carregar
+   quill.snow.css nessa página, recria só o ✓/□ que o tema do editor usa */
+.mr-render ul[data-checked] { list-style: none; padding-left: 1.2rem; }
+.mr-render ul[data-checked="true"] > li::before { content: '\2611\a0\a0'; }
+.mr-render ul[data-checked="false"] > li::before { content: '\2610\a0\a0'; }
+.mr-render blockquote {
+  border-left: 3px solid var(--rose); margin: 0.6rem 0; padding: 0.2rem 0 0.2rem 0.9rem;
+  color: var(--ink-soft); font-style: italic;
+}
+.mr-render a { color: var(--rose-deep); }

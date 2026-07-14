@@ -587,6 +587,17 @@ function buildMatCardHtml(numDia, mIdx, mat, dado, statusHtml, extraClass, semFe
     </div>`;
 }
 
+// Microresumo agora é salvo pelo editor rico (hoje.html) como JSON
+// {html, delta}. Aqui só precisamos do HTML pra exibir — com fallback pro
+// formato antigo (texto puro, salvo antes do editor rico existir).
+function _mrExtrairHtml(raw) {
+  if (!raw) return '';
+  let parsed = null;
+  try { parsed = JSON.parse(raw); } catch (e) {}
+  if (parsed && typeof parsed.html === 'string') return parsed.html;
+  return raw.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+}
+
 function fmtDataCurta(iso) {
   const d = new Date(iso + 'T12:00:00');
   return d.toLocaleDateString('pt-BR', { day: 'numeric', month: 'short' });
@@ -633,8 +644,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // Adiciona microresumos do usuário para dias dentro do intervalo de revisão
   Object.entries(p.dias || {}).forEach(([numDia, dData]) => {
     if (!dData.concluido || !dData.data_conclusao) return;
-    const mrTexto = localStorage.getItem('microresumo_dia_' + numDia) || '';
-    if (!mrTexto.trim()) return;
+    const mrHtml = _mrExtrairHtml(localStorage.getItem('microresumo_dia_' + numDia));
+    if (!mrHtml || !mrHtml.replace(/<[^>]*>/g, '').trim()) return;
     const concl = new Date(dData.data_conclusao);
     const diff  = Math.round((hoje - concl) / 864e5);
     if (diff < 1) return;
@@ -644,7 +655,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const isUrgent = diff <= 3;
     const dado = typeof getDadosDia === 'function' ? getDadosDia(parseInt(numDia)) : null;
     const matNome = dado ? dado.materia : `Dia ${numDia}`;
-    const escapedTexto = mrTexto.replace(/</g,'&lt;').replace(/>/g,'&gt;');
     cards.push({ diff, isUrgent, html: `
       <div class="revisao-card${isUrgent?' urgent':''}" style="border-left:4px solid var(--rose)">
         <div class="rev-head">
@@ -659,7 +669,7 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
           <a href="hoje.html?dia=${numDia}" style="font-size:0.72rem;color:var(--rose-deep);text-decoration:none;white-space:nowrap;align-self:flex-start;margin-top:0.3rem">Ver conteúdo →</a>
         </div>
-        <div style="white-space:pre-wrap;font-size:0.88rem;color:var(--ink);line-height:1.7;padding:1rem 1.2rem;background:var(--bg-soft);border-radius:var(--radius-sm);margin-bottom:1rem">${escapedTexto}</div>
+        <div class="mr-render" style="padding:1rem 1.2rem;background:var(--bg-soft);border-radius:var(--radius-sm);margin-bottom:1rem">${mrHtml}</div>
         <div class="rev-feedback">
           <button class="feedback-btn lembrei" onclick="registrarFeedbackMr(this,'lembrei',${numDia})">✓ Revisado</button>
           <button class="feedback-btn esqueci" onclick="registrarFeedbackMr(this,'esqueci',${numDia})">↻ Rever depois</button>
