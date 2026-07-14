@@ -99,7 +99,7 @@
       for (let c = 0; c < cols; c++) {
         const cell = Parchment.create('table-cell');
         const txt  = (cellText && cellText[r] && cellText[r][c]) || '';
-        if (txt) cell.domNode.appendChild(document.createTextNode(txt));
+        if (txt) cell.domNode.innerHTML = txt;
         else cell.appendChild(Parchment.create('break'));
         row.appendChild(cell);
       }
@@ -109,6 +109,37 @@
     quill.scroll.insertBefore(table, line);
     quill.update(Quill.sources.USER);
     if (atIndex == null) quill.setSelection(index, 0, Quill.sources.SILENT);
+  }
+
+  // Extrai o conteúdo de uma célula preservando negrito/itálico/sublinhado/
+  // cor — célula de tabela é um blot simples (sem suporte a formato via
+  // Delta, só DOM), então filtra pra uma allowlist pequena de tags/estilos
+  // em vez de aceitar o HTML colado inteiro (evita script/estilo estranho
+  // vazando pra dentro da tabela).
+  function _sanitizarInlineHtml(node) {
+    if (node.nodeType === 3) {
+      return (node.textContent || '').replace(/\s+/g, ' ').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+    if (node.nodeType !== 1) return '';
+    const tag = node.tagName.toLowerCase();
+    const miolo = Array.from(node.childNodes).map(_sanitizarInlineHtml).join('');
+    if (tag === 'br') return '<br>';
+    if (tag === 'strong' || tag === 'b') return '<strong>' + miolo + '</strong>';
+    if (tag === 'em' || tag === 'i') return '<em>' + miolo + '</em>';
+    if (tag === 'u') return '<u>' + miolo + '</u>';
+    // span/font/div/p etc.: descarta a tag, mas preserva cor/fundo/negrito
+    // do style inline, se tiver.
+    const estilo = node.style;
+    const negrito = estilo && (estilo.fontWeight === 'bold' || Number(estilo.fontWeight) >= 600);
+    const cores = [];
+    if (estilo && estilo.color) cores.push('color:' + estilo.color);
+    if (estilo && estilo.backgroundColor) cores.push('background-color:' + estilo.backgroundColor);
+    let out = cores.length ? '<span style="' + cores.join(';') + '">' + miolo + '</span>' : miolo;
+    if (negrito) out = '<strong>' + out + '</strong>';
+    return out;
+  }
+  function _celulaParaHtml(cell) {
+    return Array.from(cell.childNodes).map(_sanitizarInlineHtml).join('').trim();
   }
 
   // Insere um HTML que pode conter <table> preservando a ORDEM original —
@@ -125,7 +156,12 @@
 
     function inserirTabela(node) {
       const grid = Array.from(node.rows || []).map(row =>
-        Array.from(row.cells || []).map(cell => (cell.innerText || '').replace(/\s+/g, ' ').trim())
+        Array.from(row.cells || []).map(cell => {
+          const html = _celulaParaHtml(cell);
+          // <th> costuma vir em negrito só pelo estilo padrão do navegador
+          // (sem font-weight inline pra _sanitizarInlineHtml pegar) — preserva.
+          return cell.tagName === 'TH' && html ? '<strong>' + html + '</strong>' : html;
+        })
       );
       if (!grid.length || !grid[0].length) return;
       // Garante uma quebra de linha antes da tabela: sem isso, quando `idx`

@@ -1789,13 +1789,11 @@ main { animation: pageEnter 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
 .ql-editor table td, .mr-render table td,
 .ql-editor table th, .mr-render table th {
   border: 1px solid var(--line); padding: 0.45rem 0.6rem; vertical-align: top;
-  /* !important: texto colado (ex.: do ChatGPT) às vezes carrega cor inline
-     clara/cinza no HTML original — tabela sempre legível, cor forte fixa. */
-  color: var(--ink) !important;
-}
-.ql-editor table td *, .mr-render table td *,
-.ql-editor table th *, .mr-render table th * {
-  color: inherit !important;
+  /* Cor padrão da célula — SEM !important, pra negrito/cor que o editor de
+     tabela preserva (editor-quill-rico.js) conseguir se sobrepor
+     normalmente. Um !important aqui (como já foi) cancelava qualquer
+     cor de destaque colocada de propósito numa célula. */
+  color: var(--ink);
 }
 
 /* ── Leitura fora do editor (revisar.html — card "Meu Resumo") ── */
