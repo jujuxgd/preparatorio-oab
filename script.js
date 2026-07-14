@@ -214,6 +214,24 @@ function updateCountdowns() {
   });
 }
 
+// TOAST GLOBAL — feedback visual no lugar de alert()/confirm() nativos
+function mostrarToast(mensagem, emoji) {
+  let wrap = document.querySelector('.app-toast-wrap');
+  if (!wrap) {
+    wrap = document.createElement('div');
+    wrap.className = 'app-toast-wrap';
+    document.body.appendChild(wrap);
+  }
+  const toast = document.createElement('div');
+  toast.className = 'app-toast';
+  toast.innerHTML = `<span class="app-toast-icon">${emoji || '✦'}</span><span class="app-toast-text">${mensagem}</span>`;
+  wrap.appendChild(toast);
+  setTimeout(() => {
+    toast.classList.add('hiding');
+    setTimeout(() => toast.remove(), 300);
+  }, 3200);
+}
+
 // CONFETE DE PÉTALAS
 function showPetals() {
   const petals = ['🌸', '🌺', '💮', '🌷'];
@@ -319,7 +337,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const nomeUsuario = (typeof window._perfilOAB !== 'undefined' && window._perfilOAB.getNome) ? window._perfilOAB.getNome() : 'Estudante';
 
         if (lastBeat === todayStr) {
-            alert(`Você já bateu a meta hoje, ${nomeUsuario}! Volta amanhã e continue o streak! 💖`);
+            mostrarToast(`Você já bateu a meta hoje, ${nomeUsuario}! Volta amanhã e continue o streak!`, '💖');
             return;
         }
 
@@ -329,7 +347,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (streakElement) streakElement.innerText = streak;
         showPetals();
-        setTimeout(() => alert(`Mandou bem, ${nomeUsuario}! Streak: ${streak} dias seguidos! ✨`), 300);
+        setTimeout(() => mostrarToast(`Mandou bem, ${nomeUsuario}! Streak: ${streak} dias seguidos!`, '✨'), 300);
     };
 
     // 2. CHECKLIST DE TAREFAS

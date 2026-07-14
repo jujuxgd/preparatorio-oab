@@ -1423,15 +1423,26 @@ function togglePanel(idx) {
   if (panel) panel.classList.toggle('collapsed');
 }
 
+// Resolve o dia de estudo "de hoje" pelo calendário real. O avanço
+// manual salvo em oab_current_day (usado ao concluir um dia cedo, pra já
+// mostrar o próximo) só é respeitado se foi gravado no mesmo dia real de
+// hoje — senão fica preso num dia velho pra sempre e o "Hoje" nunca mais
+// bate com a data atual (era a causa raiz do dia errado ao abrir a página).
+function _diaAtualResolvido() {
+  const hojeReal  = getStudyDay();
+  const savedDay  = localStorage.getItem('oab_current_day');
+  const savedDate = localStorage.getItem('oab_current_day_date');
+  if (savedDay && savedDate === dataLocalHoje()) return parseInt(savedDay);
+  return hojeReal;
+}
+
 // ── Carregar dia dinâmico ────────────────────
 document.addEventListener('DOMContentLoaded', () => {
-  // Suporta ?dia=X na URL; fallback para oab_current_day ou getStudyDay()
+  // Suporta ?dia=X na URL; fallback para o dia real resolvido acima
   const params   = new URLSearchParams(window.location.search);
   const diaParam = params.get('dia');
-  const savedDay = localStorage.getItem('oab_current_day');
-  const rawDay   = diaParam ? parseInt(diaParam) :
-                   (savedDay ? parseInt(savedDay) : getStudyDay());
-  const isPreview = !diaParam && !savedDay && rawDay <= 0;
+  const rawDay   = diaParam ? parseInt(diaParam) : _diaAtualResolvido();
+  const isPreview = !diaParam && rawDay <= 0;
   const dia      = (rawDay <= 0) ? 1 : Math.min(rawDay, 120);
   const dados   = getDadosDia(dia);
   const progDia = obterDia(dia);
@@ -1763,6 +1774,11 @@ function toggleDiaConcluido() {
     salvarProgresso(p);
     btn.classList.remove('concluido');
     btn.textContent = 'Estudei Hoje ✦';
+    // Se o avanço automático apontava pro dia seguinte, desfaz também
+    if (parseInt(localStorage.getItem('oab_current_day')) === dia + 1) {
+      localStorage.removeItem('oab_current_day');
+      localStorage.removeItem('oab_current_day_date');
+    }
   } else {
     // Salva microresumo antes de concluir
     const mrVal = (document.getElementById('microresumo-input') || {}).value || '';
@@ -1771,8 +1787,11 @@ function toggleDiaConcluido() {
     concluirDia(dia, '');
     marcarTopicosEstudados(dia);
     baterMetaDoDia();
-    // Gravar próximo dia para auto-avançar
-    if (getDadosDia(dia + 1)) localStorage.setItem('oab_current_day', String(dia + 1));
+    // Gravar próximo dia para auto-avançar (só vale hoje — ver _diaAtualResolvido)
+    if (getDadosDia(dia + 1)) {
+      localStorage.setItem('oab_current_day', String(dia + 1));
+      localStorage.setItem('oab_current_day_date', dataLocalHoje());
+    }
     btn.classList.add('concluido');
     btn.textContent = '✓ Dia Concluído · Revisão programada';
     const s2 = calcularStats();
@@ -2028,14 +2047,17 @@ function _mostrarToastAvanco(proximoDia, dadosNext) {
     </div>
     <div style="display:flex;flex-direction:column;gap:0.4rem;flex-shrink:0">
       <button onclick="_irProximoDia(${proximoDia})" style="background:linear-gradient(135deg,var(--rose),var(--rose-deep));color:var(--paper);border:none;border-radius:var(--radius-sm);padding:0.4rem 0.9rem;font-size:0.74rem;font-family:inherit;font-weight:600;cursor:pointer;white-space:nowrap">Ir agora →</button>
-      <button onclick="this.closest('.day-toast').remove()" style="background:transparent;border:none;color:var(--ink-faded);font-size:0.72rem;cursor:pointer;font-family:inherit">Ficar aqui</button>
+      <button class="toast-stay-btn" style="background:transparent;border:none;color:var(--ink-faded);font-size:0.72rem;cursor:pointer;font-family:inherit">Ficar aqui</button>
     </div>
     <div class="toast-progress"></div>`;
   document.body.appendChild(toast);
 
   // Auto-avança após 5s
   const timer = setTimeout(() => _irProximoDia(proximoDia), 5000);
-  toast.querySelector('[onclick*="Ficar"]').addEventListener('click', () => clearTimeout(timer));
+  toast.querySelector('.toast-stay-btn').addEventListener('click', () => {
+    clearTimeout(timer);
+    toast.remove();
+  });
 }
 
 function _irProximoDia(dia) {
@@ -2056,8 +2078,7 @@ function handleImport(event) {
 // ── Questões diárias ─────────────────────────
 function _diaCorrente() {
   const p = new URLSearchParams(window.location.search).get('dia');
-  const s = localStorage.getItem('oab_current_day');
-  const r = p ? parseInt(p) : (s ? parseInt(s) : getStudyDay());
+  const r = p ? parseInt(p) : _diaAtualResolvido();
   return r <= 0 ? 1 : Math.min(r, 120);
 }
 

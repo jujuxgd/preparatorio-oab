@@ -1504,6 +1504,48 @@ main { animation: pageEnter 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
 .celebrate-pop { animation: celebratePop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
 
 /* ============================================
+   TOAST GLOBAL — substitui alert()/confirm() nativos
+   por um aviso no mesmo estilo visual do app.
+============================================ */
+.app-toast-wrap {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9500;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  align-items: center;
+  pointer-events: none;
+}
+.app-toast {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: 0.9rem 1.3rem;
+  min-width: 280px;
+  max-width: 420px;
+  animation: toastIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.app-toast.hiding { animation: toastOut 0.3s ease forwards; }
+.app-toast .app-toast-icon { font-size: 1.5rem; flex-shrink: 0; }
+.app-toast .app-toast-text { flex: 1; font-size: 0.86rem; color: var(--ink); line-height: 1.4; }
+.app-toast .app-toast-text strong { display: block; font-family: 'Fraunces', serif; font-size: 0.98rem; color: var(--rose-deep); font-weight: 500; }
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes toastOut {
+  to { opacity: 0; transform: translateY(20px); }
+}
+
+/* ============================================
    ANIMAÇÕES · Camada 2 — mais presença
    Assinatura: "floração" — elementos abrem como
    uma pétala se desdobrando, ecoando a marca rosa.
