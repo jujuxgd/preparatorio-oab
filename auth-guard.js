@@ -22,16 +22,28 @@
   var css = document.createElement('style');
   css.textContent =
     '#auth-gate input:focus { outline:none; border-color:' + roseDeep + ' !important; box-shadow:0 0 0 3px ' + roseDeep + '22; }' +
-    '#auth-gate button[type="submit"]:hover { filter:brightness(1.06); }' +
-    '#auth-gate button[type="submit"]:active { transform:scale(0.98); }' +
-    '#auth-gate label.remember { display:flex; align-items:center; gap:0.5rem; font-size:0.8rem; color:' + cores.inkFaded + '; cursor:pointer; user-select:none; }' +
-    '#auth-gate input[type="checkbox"] { width:16px; height:16px; accent-color:' + roseDeep + '; cursor:pointer; }';
+    '#auth-gate button[type="submit"]:hover:not(:disabled) { filter:brightness(1.06); }' +
+    '#auth-gate button[type="submit"]:active:not(:disabled) { transform:scale(0.98); }' +
+    '#auth-gate button[type="submit"]:disabled { opacity:0.85; cursor:default; }' +
+    '#auth-gate label.remember { display:flex; align-items:center; gap:0.5rem; font-size:0.8rem; font-style:normal; color:' + cores.ink + '; opacity:0.75; cursor:pointer; user-select:none; }' +
+    '#auth-gate input[type="checkbox"] { width:16px; height:16px; accent-color:' + roseDeep + '; cursor:pointer; }' +
+    '@keyframes agFloatIn { from { opacity:0; transform:translateY(14px) scale(0.98); } to { opacity:1; transform:translateY(0) scale(1); } }' +
+    '@keyframes agBreathe { 0%,100% { background-position:50% 35%; } 50% { background-position:50% 45%; } }' +
+    '@keyframes agPulse { 0%,100% { transform:scale(1); opacity:1; } 50% { transform:scale(1.06); opacity:0.85; } }' +
+    '@keyframes agShake { 10%,90% { transform:translateX(-1px); } 20%,80% { transform:translateX(2px); } 30%,50%,70% { transform:translateX(-4px); } 40%,60% { transform:translateX(4px); } }' +
+    '#auth-gate .ag-card { animation: agFloatIn .5s cubic-bezier(.16,1,.3,1); }' +
+    '#auth-gate .ag-card.ag-shake { animation: agShake .5s; }' +
+    '#auth-gate .ag-seal { animation: agPulse 3.2s ease-in-out infinite; }' +
+    '#auth-gate .ag-spinner { display:inline-block; width:15px; height:15px; border:2px solid rgba(255,255,255,0.4); border-top-color:#fff; border-radius:50%; animation: agSpin .7s linear infinite; vertical-align:-3px; margin-right:0.4rem; }' +
+    '@keyframes agSpin { to { transform:rotate(360deg); } }' +
+    '@media (prefers-reduced-motion: reduce) { #auth-gate * { animation-duration:0.001ms !important; } }';
   document.head.appendChild(css);
 
   var overlay = document.createElement('div');
   overlay.id = 'auth-gate';
   overlay.style.cssText = 'position:fixed;inset:0;z-index:200000;display:flex;align-items:center;' +
     'justify-content:center;background:radial-gradient(circle at 50% 38%, ' + cores.bg1 + ' 0%, ' + cores.bg2 + ' 65%);' +
+    'background-size:140% 140%;animation:agBreathe 8s ease-in-out infinite;' +
     'font-family:Inter,-apple-system,sans-serif;padding:1.5rem;box-sizing:border-box;opacity:0;transition:opacity .15s ease;';
 
   var jaLogouAntes = false;
@@ -89,11 +101,11 @@
     ativarOverlay();
     overlay.style.opacity = '1';
     overlay.innerHTML =
-      '<div style="width:100%;max-width:360px;background:' + cores.paper + ';border:1px solid ' + cores.linha + ';border-radius:20px;padding:2.4rem 2rem;box-shadow:0 8px 32px rgba(33,28,25,0.13), 0 20px 48px rgba(33,28,25,0.08)">' +
-        '<div style="display:flex;justify-content:center;margin-bottom:1rem">' +
+      '<div class="ag-card" style="width:100%;max-width:360px;background:' + cores.paper + ';border:1px solid ' + cores.linha + ';border-radius:20px;padding:2.4rem 2rem;box-shadow:0 8px 32px rgba(33,28,25,0.13), 0 20px 48px rgba(33,28,25,0.08)">' +
+        '<div class="ag-seal" style="display:flex;justify-content:center;margin-bottom:0.7rem">' +
           '<svg viewBox="0 0 64 64" width="42" height="42" aria-hidden="true"><circle cx="32" cy="32" r="23" fill="none" stroke="' + roseDeep + '" stroke-width="1.6"/><text x="32" y="33" font-size="19" letter-spacing="1.2" text-anchor="middle" dominant-baseline="central" font-family="Georgia,serif" font-weight="700" fill="' + roseDeep + '">OAB</text></svg>' +
         '</div>' +
-        '<div style="font-family:Fraunces,Georgia,serif;font-size:1.6rem;text-align:center;color:' + roseDeep + ';margin-bottom:0.25rem;letter-spacing:-0.01em">Exame da Ordem</div>' +
+        '<div style="font-family:MagicalFeather,cursive;font-size:2.1rem;font-weight:normal;text-align:center;color:' + roseDeep + ';margin-bottom:0.1rem;line-height:1">Exame da Ordem</div>' +
         '<div style="font-size:0.8rem;text-align:center;color:' + cores.inkFaded + ';margin-bottom:1.6rem">Entre para acessar seu preparatório</div>' +
         (erro ? '<div style="background:#fdecea;color:#c0524b;font-size:0.78rem;padding:0.65rem 0.85rem;border-radius:10px;margin-bottom:1rem;line-height:1.4">' + erro + '</div>' : '') +
         '<form id="auth-gate-form">' +
@@ -116,7 +128,7 @@
       var lembrar = document.getElementById('auth-gate-lembrar').checked;
       var btn = document.getElementById('auth-gate-btn');
       btn.disabled = true;
-      btn.textContent = 'Entrando…';
+      btn.innerHTML = '<span class="ag-spinner"></span>Entrando…';
       var persistencia = lembrar ? firebase.auth.Auth.Persistence.LOCAL : firebase.auth.Auth.Persistence.SESSION;
       window._fbAuth.setPersistence(persistencia)
         .then(function () { return window._fbAuth.signInWithEmailAndPassword(email, senha); })
@@ -124,6 +136,12 @@
           var msg = 'Não foi possível entrar. Confira o e-mail e a senha.';
           if (err && err.code === 'auth/invalid-email') msg = 'E-mail inválido.';
           if (err && err.code === 'auth/too-many-requests') msg = 'Muitas tentativas — aguarde um pouco e tente de novo.';
+          var cardEl = overlay.querySelector('.ag-card');
+          if (cardEl) {
+            cardEl.classList.remove('ag-shake');
+            void cardEl.offsetWidth; // reinicia a animação se já tinha rodado
+            cardEl.classList.add('ag-shake');
+          }
           renderLoginForm(msg);
         });
     });

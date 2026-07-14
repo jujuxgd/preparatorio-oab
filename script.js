@@ -86,15 +86,29 @@ function getDaysUntilExam() {
 
 // Retorna o dia de estudo atual baseado no calendário.
 // Fins de semana retornam o número do último dia útil.
+// Retorna o dia de estudo atual baseado no SEU PROGRESSO — não mais no
+// calendário fixo. É sempre o primeiro dia do plano que você ainda não
+// concluiu, então o app acompanha o seu ritmo (nos dias que você pode
+// estudar), em vez de cobrar um cronograma rígido de datas.
 function getStudyDay() {
-  let today = getCurrentDate();
-  today.setHours(0,0,0,0);
-  if (!isWeekday(today)) {
-    const prev = new Date(today);
-    while (!isWeekday(prev)) prev.setDate(prev.getDate() - 1);
-    return getStudyDayForDate(prev);
+  if (typeof carregarProgresso !== 'function') {
+    // progresso.js ainda não carregou nesta página — usa o calendário
+    // fixo só como último recurso, pra nunca quebrar a página
+    let today = getCurrentDate();
+    today.setHours(0,0,0,0);
+    if (!isWeekday(today)) {
+      const prev = new Date(today);
+      while (!isWeekday(prev)) prev.setDate(prev.getDate() - 1);
+      return getStudyDayForDate(prev);
+    }
+    return getStudyDayForDate(today) || 1;
   }
-  return getStudyDayForDate(today) || 1;
+  const prog = carregarProgresso();
+  let dia = 1;
+  while (dia < 120 && prog.dias && prog.dias[String(dia)] && prog.dias[String(dia)].concluido) {
+    dia++;
+  }
+  return dia;
 }
 
 // THEME TOGGLE
