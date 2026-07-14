@@ -332,12 +332,12 @@ function criarGerenciadorEditores(diaAtualFn) {
   function iniciarEditor(key, containerId, toolbarId, keyPrefix, labelId) {
     if (typeof Quill === 'undefined' || typeof window._criarEditorRico !== 'function') return null;
     const quill = window._criarEditorRico(containerId, toolbarId);
-    registro[key] = { quill, keyPrefix, labelId };
-    let timer;
+    const reg = { quill, keyPrefix, labelId, timer: null, snapshotAntesEdicao: null };
+    registro[key] = reg;
     quill.on('text-change', (_d, _o, source) => {
       if (source !== 'user') return;
-      clearTimeout(timer);
-      timer = setTimeout(() => _editorSalvar(quill, keyPrefix, diaAtualFn(), labelId), 600);
+      clearTimeout(reg.timer);
+      reg.timer = setTimeout(() => _editorSalvar(quill, keyPrefix, diaAtualFn(), labelId), 600);
     });
     _editorCarregar(quill, keyPrefix, diaAtualFn());
     return quill;
@@ -348,12 +348,36 @@ function criarGerenciadorEditores(diaAtualFn) {
   function entrarModoEdicao(key) {
     const c = card(key);
     if (!c) return;
+    const cfg = configEditor(key);
+    if (cfg) {
+      // Guarda o que estava salvo ANTES de começar a editar — o autosave
+      // (debounce de 600ms no text-change) grava no localStorage enquanto
+      // a pessoa digita, então só reler o localStorage no Cancelar não
+      // basta: precisa desse retrato de antes pra "Cancelar" voltar pro
+      // que realmente estava lá quando a edição começou.
+      try { cfg.snapshotAntesEdicao = localStorage.getItem(cfg.keyPrefix + diaAtualFn()); } catch (e) { cfg.snapshotAntesEdicao = null; }
+    }
     c.querySelector('.rt-view-wrap').style.display = 'none';
     c.querySelector('.rt-edit-wrap').style.display = 'block';
     c.querySelector('.rt-view-actions').style.display = 'none';
     c.querySelector('.rt-edit-actions').style.display = 'flex';
-    const cfg = configEditor(key);
     if (cfg && cfg.quill) setTimeout(() => cfg.quill.focus(), 50);
+  }
+
+  // Descarta o que foi digitado nesta sessão de edição (inclusive o que já
+  // tiver sido autosalvo) e volta pro estado de antes de clicar em Editar.
+  function cancelarEdicao(key) {
+    const cfg = configEditor(key);
+    if (!cfg) return;
+    clearTimeout(cfg.timer);
+    const dia = diaAtualFn();
+    const chave = cfg.keyPrefix + dia;
+    try {
+      if (cfg.snapshotAntesEdicao == null) localStorage.removeItem(chave);
+      else localStorage.setItem(chave, cfg.snapshotAntesEdicao);
+    } catch (e) {}
+    if (cfg.quill) _editorCarregar(cfg.quill, cfg.keyPrefix, dia);
+    atualizarModoVisualizacao(key);
   }
 
   // Mostra a versão somente-leitura (estado vazio ou o HTML salvo) e volta
@@ -432,9 +456,12 @@ function criarGerenciadorEditores(diaAtualFn) {
         atualizarModoVisualizacao(btn.dataset.editor);
       });
     });
+    document.querySelectorAll('.rt-cancel-btn').forEach(btn => {
+      btn.addEventListener('click', () => cancelarEdicao(btn.dataset.editor));
+    });
   }
 
-  return { iniciarEditor, configEditor, entrarModoEdicao, atualizarModoVisualizacao, wireBotoes, card };
+  return { iniciarEditor, configEditor, entrarModoEdicao, cancelarEdicao, atualizarModoVisualizacao, wireBotoes, card };
 }
 
 window.criarGerenciadorEditores = criarGerenciadorEditores;
