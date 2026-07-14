@@ -91,9 +91,36 @@
     }
   }
 
+  // Dados pessoais ficam em dezenas de chaves diferentes no localStorage
+  // (progresso, humor, perfil, microresumos, questões, simulados...).
+  // Mais seguro limpar TUDO exceto uma pequena lista de preferências de
+  // aparelho (tema, cor) do que tentar listar cada chave pessoal à mão.
+  const PRESERVAR_AO_TROCAR_CONTA = ['theme', 'oab_rose_intensity', 'oab_rose_custom_hex', 'simulatedDate'];
+  function limparDadosLocaisDoApp() {
+    const chaves = [];
+    for (let i = 0; i < localStorage.length; i++) chaves.push(localStorage.key(i));
+    chaves.forEach(k => {
+      if (!PRESERVAR_AO_TROCAR_CONTA.includes(k)) {
+        try { localStorage.removeItem(k); } catch (e) {}
+      }
+    });
+  }
+
   // Chamada pelo auth-guard.js assim que o login é confirmado.
   function iniciar(user) {
     const uid = user.uid;
+
+    // Este aparelho pode ter sido usado por outra conta antes (ex: testar
+    // o cadastro no mesmo navegador do admin) -- se o dono da sessão
+    // mudou, os dados locais pertencem à pessoa anterior e não podem
+    // "vazar" pra conta nova.
+    let uidAnterior = null;
+    try { uidAnterior = localStorage.getItem('oab_uid_ativo'); } catch (e) {}
+    if (uidAnterior && uidAnterior !== uid) {
+      limparDadosLocaisDoApp();
+    }
+    try { localStorage.setItem('oab_uid_ativo', uid); } catch (e) {}
+
     window._syncOAB._uid = uid;
 
     if (_unsubscribe) { _unsubscribe(); _unsubscribe = null; }
