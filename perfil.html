@@ -6,7 +6,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
 <script src="firebase-init.js?v=1783862902"></script>
-<script src="auth-guard.js?v=1784043341"></script>
+<script src="auth-guard.js?v=1784043939"></script>
 <script src="cores-early.js?v=1783859977"></script>
 <script src="page-transition.js?v=1783861010"></script>
 <title>Perfil - Preparatório OAB</title>
@@ -940,55 +940,63 @@ document.addEventListener('DOMContentLoaded', () => {
   (function renderSolicitacoesAcesso() {
     const wrap = document.getElementById('admin-solicitacoes-wrap');
     if (!wrap || !window._fbAuth || !window._fbDb) return;
-    const usuarioAtual = window._fbAuth.currentUser;
-    if (!usuarioAtual || usuarioAtual.email !== ADMIN_EMAIL) return;
-    wrap.style.display = 'block';
 
-    const lista = document.getElementById('admin-solicitacoes-lista');
-    const sub = document.getElementById('admin-solicitacoes-sub');
+    // window._fbAuth.currentUser pode ainda estar vazio nesse momento --
+    // o app libera a tela antes do Firebase confirmar de verdade quem
+    // está logada (pra não travar a navegação). Por isso espera o
+    // onAuthStateChanged em vez de checar currentUser direto aqui.
+    window._fbAuth.onAuthStateChanged(function (usuarioAtual) {
+      if (!usuarioAtual || usuarioAtual.email !== ADMIN_EMAIL) { wrap.style.display = 'none'; return; }
+      wrap.style.display = 'block';
+      if (wrap.dataset.iniciado === '1') return; // já montou o listener antes
+      wrap.dataset.iniciado = '1';
 
-    function render(snap) {
-      if (snap.empty) {
-        sub.textContent = 'Nenhuma solicitação pendente no momento.';
-        lista.innerHTML = '';
-        return;
+      const lista = document.getElementById('admin-solicitacoes-lista');
+      const sub = document.getElementById('admin-solicitacoes-sub');
+
+      function render(snap) {
+        if (snap.empty) {
+          sub.textContent = 'Nenhuma solicitação pendente no momento.';
+          lista.innerHTML = '';
+          return;
+        }
+        sub.textContent = `${snap.size} pedido${snap.size > 1 ? 's' : ''} aguardando aprovação`;
+        lista.innerHTML = snap.docs.map(doc => {
+          const d = doc.data();
+          const dataFmt = d.criado_em && d.criado_em.toDate ? d.criado_em.toDate().toLocaleDateString('pt-BR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : '';
+          return `<div class="admin-req-item" data-uid="${doc.id}">
+            <div>
+              <div class="admin-req-email">${(d.email || 'sem e-mail').replace(/</g,'&lt;')}</div>
+              <div class="admin-req-data">${dataFmt}</div>
+            </div>
+            <div class="admin-req-actions">
+              <button class="admin-req-aprovar" data-uid="${doc.id}">✓ Aprovar</button>
+              <button class="admin-req-recusar" data-uid="${doc.id}">Recusar</button>
+            </div>
+          </div>`;
+        }).join('');
+
+        lista.querySelectorAll('.admin-req-aprovar').forEach(btn => {
+          btn.addEventListener('click', () => {
+            btn.disabled = true; btn.textContent = 'Aprovando…';
+            window._fbDb.collection('usuarios_autorizados').doc(btn.dataset.uid)
+              .update({ aprovado: true, aprovado_em: firebase.firestore.FieldValue.serverTimestamp() })
+              .catch(() => { btn.disabled = false; btn.textContent = '✓ Aprovar'; alert('Não foi possível aprovar. Tenta de novo.'); });
+          });
+        });
+        lista.querySelectorAll('.admin-req-recusar').forEach(btn => {
+          btn.addEventListener('click', () => {
+            if (!confirm('Recusar e remover esse pedido de acesso?')) return;
+            window._fbDb.collection('usuarios_autorizados').doc(btn.dataset.uid).delete()
+              .catch(() => alert('Não foi possível recusar. Tenta de novo.'));
+          });
+        });
       }
-      sub.textContent = `${snap.size} pedido${snap.size > 1 ? 's' : ''} aguardando aprovação`;
-      lista.innerHTML = snap.docs.map(doc => {
-        const d = doc.data();
-        const dataFmt = d.criado_em && d.criado_em.toDate ? d.criado_em.toDate().toLocaleDateString('pt-BR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : '';
-        return `<div class="admin-req-item" data-uid="${doc.id}">
-          <div>
-            <div class="admin-req-email">${(d.email || 'sem e-mail').replace(/</g,'&lt;')}</div>
-            <div class="admin-req-data">${dataFmt}</div>
-          </div>
-          <div class="admin-req-actions">
-            <button class="admin-req-aprovar" data-uid="${doc.id}">✓ Aprovar</button>
-            <button class="admin-req-recusar" data-uid="${doc.id}">Recusar</button>
-          </div>
-        </div>`;
-      }).join('');
 
-      lista.querySelectorAll('.admin-req-aprovar').forEach(btn => {
-        btn.addEventListener('click', () => {
-          btn.disabled = true; btn.textContent = 'Aprovando…';
-          window._fbDb.collection('usuarios_autorizados').doc(btn.dataset.uid)
-            .update({ aprovado: true, aprovado_em: firebase.firestore.FieldValue.serverTimestamp() })
-            .catch(() => { btn.disabled = false; btn.textContent = '✓ Aprovar'; alert('Não foi possível aprovar. Tenta de novo.'); });
-        });
-      });
-      lista.querySelectorAll('.admin-req-recusar').forEach(btn => {
-        btn.addEventListener('click', () => {
-          if (!confirm('Recusar e remover esse pedido de acesso?')) return;
-          window._fbDb.collection('usuarios_autorizados').doc(btn.dataset.uid).delete()
-            .catch(() => alert('Não foi possível recusar. Tenta de novo.'));
-        });
-      });
-    }
-
-    // Tempo real: some da lista sozinho assim que aprovar/recusar
-    window._fbDb.collection('usuarios_autorizados').where('aprovado', '==', false)
-      .onSnapshot(render, () => { sub.textContent = 'Não foi possível carregar as solicitações.'; });
+      // Tempo real: some da lista sozinho assim que aprovar/recusar
+      window._fbDb.collection('usuarios_autorizados').where('aprovado', '==', false)
+        .onSnapshot(render, (err) => { sub.textContent = 'Não foi possível carregar as solicitações (' + (err && err.message ? err.message : 'erro') + ').'; });
+    });
   })();
 
   // ── RESUMO ──

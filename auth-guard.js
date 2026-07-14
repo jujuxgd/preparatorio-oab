@@ -209,8 +209,10 @@
         .catch(function (err) {
           var msg = 'Não foi possível enviar a solicitação.';
           if (err && err.code === 'auth/email-already-in-use') msg = 'Esse e-mail já tem uma conta — tenta entrar em vez de solicitar de novo.';
-          if (err && err.code === 'auth/invalid-email') msg = 'E-mail inválido.';
-          if (err && err.code === 'auth/weak-password') msg = 'Senha muito fraca — use pelo menos 6 caracteres.';
+          else if (err && err.code === 'auth/invalid-email') msg = 'E-mail inválido.';
+          else if (err && err.code === 'auth/weak-password') msg = 'Senha muito fraca — use pelo menos 6 caracteres.';
+          else if (err && err.code === 'permission-denied') msg = 'A conta foi criada, mas o pedido de acesso não pôde ser salvo (regras do banco de dados). Avise a administradora.';
+          else if (err && err.code) msg = 'Erro: ' + err.code;
           var cardEl = overlay.querySelector('.ag-card');
           if (cardEl) { cardEl.classList.remove('ag-shake'); void cardEl.offsetWidth; cardEl.classList.add('ag-shake'); }
           renderSignupForm(msg);
