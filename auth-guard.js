@@ -6,65 +6,184 @@
 // Estratégia "otimista": se este navegador já logou com sucesso antes
 // (marca oab_auth_ok no localStorage), mostra o app IMEDIATAMENTE, sem
 // esperar o Firebase confirmar de novo a cada página — só confere em
-// segundo plano. Isso evita o "piscando toda hora" de esperar o
-// Firebase em toda navegação, já que esse app é multi-página (não é
-// um app de página única). Só espera de verdade — cobrindo a tela —
-// na primeira vez, quando ainda não existe essa marca local.
+// segundo plano. Isso evita esperar o Firebase em toda navegação, já
+// que esse app é multi-página (não é um app de página única). Só
+// espera de verdade — cobrindo a tela — na primeira vez.
+//
+// Visual: identidade própria pra essa tela específica (gelo/lilás/
+// rosa-queimado, gradiente mesh, card em vidro fosco) — mais neutra
+// e "premium SaaS" que o resto do site, que é mais rosa/caloroso.
+// Só a assinatura cursiva da logo conecta com a marca.
 // ============================================================
 (function () {
   var ADMIN_EMAIL = 'juliagabriellems@icloud.com';
   var isDark = (localStorage.getItem('theme') || 'light') === 'dark';
-  var cores = isDark
-    ? { paper: '#211C18', ink: '#F1ECE4', inkFaded: '#B3A99C', linha: '#332C25', bg1: '#2A1F22', bg2: '#211C18' }
-    : { paper: '#FFFFFF', ink: '#211C19', inkFaded: '#8a8078', linha: '#E7E0D9', bg1: '#FCE7EF', bg2: '#FFFFFF' };
-  var roseDeep = '#C8336F';
-  try { roseDeep = getComputedStyle(document.documentElement).getPropertyValue('--rose-600').trim() || roseDeep; } catch (e) {}
 
+  var T = isDark ? {
+    ink: '#F2F0F5', inkSoft: 'rgba(242,240,245,0.68)', inkFaint: 'rgba(242,240,245,0.42)',
+    paper: '#1B1A20', paperGlass: 'rgba(30,28,36,0.62)', border: 'rgba(255,255,255,0.09)',
+    borderStrong: 'rgba(255,255,255,0.16)', bg0: '#111016', bg1: '#17151D',
+    blobLav: 'rgba(169,155,201,0.22)', blobRose: 'rgba(195,154,163,0.16)', blobMist: 'rgba(120,130,160,0.14)',
+    inputBg: 'rgba(255,255,255,0.04)', shadow: '0 24px 70px rgba(0,0,0,0.55), 0 8px 24px rgba(0,0,0,0.4)',
+  } : {
+    ink: '#1C1A20', inkSoft: 'rgba(28,26,32,0.62)', inkFaint: 'rgba(28,26,32,0.4)',
+    paper: '#FFFFFF', paperGlass: 'rgba(255,255,255,0.68)', border: 'rgba(28,26,32,0.08)',
+    borderStrong: 'rgba(28,26,32,0.14)', bg0: '#F7F5F3', bg1: '#EFECF3',
+    blobLav: 'rgba(169,155,201,0.38)', blobRose: 'rgba(195,154,163,0.30)', blobMist: 'rgba(180,188,214,0.30)',
+    inputBg: 'rgba(28,26,32,0.025)', shadow: '0 24px 70px rgba(28,26,32,0.14), 0 6px 18px rgba(28,26,32,0.07)',
+  };
+  var ACCENT = '#8B6B80';       // mauve fosco — cor funcional única (botão, foco, links)
+  var ACCENT_SOFT = isDark ? 'rgba(139,107,128,0.35)' : 'rgba(139,107,128,0.16)';
+
+  // ── Estilos (classes, não inline) — permite pseudo-classes/animações reais ──
   var css = document.createElement('style');
-  css.textContent =
-    '#auth-gate input:focus { outline:none; border-color:' + roseDeep + ' !important; box-shadow:0 0 0 3px ' + roseDeep + '22; }' +
-    '#auth-gate button[type="submit"]:hover:not(:disabled) { filter:brightness(1.06); }' +
-    '#auth-gate button[type="submit"]:active:not(:disabled) { transform:scale(0.98); }' +
-    '#auth-gate button[type="submit"]:disabled { opacity:0.85; cursor:default; }' +
-    '#auth-gate label.remember { display:flex; align-items:center; gap:0.5rem; font-size:0.8rem; font-style:normal; color:' + cores.ink + '; opacity:0.75; cursor:pointer; user-select:none; }' +
-    '#auth-gate input[type="checkbox"] { width:16px; height:16px; accent-color:' + roseDeep + '; cursor:pointer; }' +
-    '@keyframes agFloatIn { from { opacity:0; transform:translateY(14px) scale(0.98); } to { opacity:1; transform:translateY(0) scale(1); } }' +
-    '@keyframes agBreathe { 0%,100% { background-position:50% 35%; } 50% { background-position:50% 45%; } }' +
-    '@keyframes agPulse { 0%,100% { transform:scale(1); opacity:1; } 50% { transform:scale(1.06); opacity:0.85; } }' +
-    '@keyframes agShake { 10%,90% { transform:translateX(-1px); } 20%,80% { transform:translateX(2px); } 30%,50%,70% { transform:translateX(-4px); } 40%,60% { transform:translateX(4px); } }' +
-    '#auth-gate .ag-card { animation: agFloatIn .5s cubic-bezier(.16,1,.3,1); }' +
-    '#auth-gate .ag-card.ag-shake { animation: agShake .5s; }' +
-    '#auth-gate .ag-seal { animation: agPulse 3.2s ease-in-out infinite; }' +
-    '#auth-gate .ag-spinner { display:inline-block; width:15px; height:15px; border:2px solid rgba(255,255,255,0.4); border-top-color:#fff; border-radius:50%; animation: agSpin .7s linear infinite; vertical-align:-3px; margin-right:0.4rem; }' +
-    '@keyframes agSpin { to { transform:rotate(360deg); } }' +
-    '@media (prefers-reduced-motion: reduce) { #auth-gate * { animation-duration:0.001ms !important; } }';
+  css.textContent = `
+    #auth-gate * { box-sizing: border-box; }
+    #auth-gate {
+      position: fixed; inset: 0; z-index: 200000;
+      display: flex; align-items: stretch; justify-content: stretch;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: ${T.bg0};
+      opacity: 0; transition: opacity .2s ease;
+    }
+    .ag-shell { position: relative; display: flex; width: 100%; min-height: 100%; overflow: hidden; }
+
+    /* Painel de atmosfera (mesh gradient) — só desktop */
+    .ag-atmos {
+      position: relative; flex: 1.35; display: none; overflow: hidden;
+      background: linear-gradient(160deg, ${T.bg0} 0%, ${T.bg1} 100%);
+    }
+    @media (min-width: 900px) { .ag-atmos { display: flex; flex-direction: column; justify-content: space-between; padding: 3.2rem 3.6rem; } }
+    .ag-blob { position: absolute; border-radius: 50%; filter: blur(60px); will-change: transform; pointer-events: none; }
+    .ag-blob-1 { width: 480px; height: 480px; top: -10%; left: -8%; background: ${T.blobLav}; animation: agDrift1 26s ease-in-out infinite; }
+    .ag-blob-2 { width: 420px; height: 420px; bottom: -12%; left: 18%; background: ${T.blobRose}; animation: agDrift2 32s ease-in-out infinite; }
+    .ag-blob-3 { width: 380px; height: 380px; top: 30%; right: -10%; background: ${T.blobMist}; animation: agDrift3 22s ease-in-out infinite; }
+    @keyframes agDrift1 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(40px,30px) scale(1.08); } }
+    @keyframes agDrift2 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(-30px,-40px) scale(1.05); } }
+    @keyframes agDrift3 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(-25px,25px) scale(0.95); } }
+    .ag-grain {
+      position: absolute; inset: -50%; opacity: ${isDark ? '0.05' : '0.035'}; pointer-events: none; mix-blend-mode: ${isDark ? 'overlay' : 'multiply'};
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    .ag-brandmark { font-family: MagicalFeather, cursive; font-size: 1.5rem; font-weight: normal; color: ${T.ink}; opacity: 0.88; position: relative; z-index: 1; }
+    .ag-hero { position: relative; z-index: 1; max-width: 420px; }
+    .ag-hero h1 { font-family: 'Inter', sans-serif; font-size: 2.5rem; font-weight: 600; letter-spacing: -0.02em; line-height: 1.12; color: ${T.ink}; margin: 0 0 0.9rem; }
+    .ag-hero p { font-size: 0.98rem; line-height: 1.6; color: ${T.inkSoft}; margin: 0; font-weight: 400; }
+    .ag-footer-row { position: relative; z-index: 1; display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
+    .ag-quote { font-size: 0.82rem; font-style: italic; color: ${T.inkFaint}; max-width: 300px; line-height: 1.5; margin: 0; }
+    .ag-clock { font-variant-numeric: tabular-nums; font-size: 0.82rem; color: ${T.inkFaint}; white-space: nowrap; letter-spacing: 0.02em; }
+
+    /* Painel do formulário */
+    .ag-formside { flex: 1; display: flex; align-items: center; justify-content: center; padding: 1.5rem; background: ${T.bg0}; position: relative; overflow-y: auto; }
+    @media (min-width: 900px) { .ag-formside { flex: 1; background: ${T.paper}; } }
+
+    .ag-card {
+      width: 100%; max-width: 380px;
+      background: ${T.paperGlass}; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border: 1px solid ${T.border}; border-radius: 22px;
+      padding: 2.4rem 2.1rem; box-shadow: ${T.shadow};
+      animation: agCardIn .55s cubic-bezier(.16,1,.3,1);
+    }
+    @keyframes agCardIn { from { opacity: 0; transform: translateY(16px) scale(0.97); filter: blur(4px); } to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
+    .ag-card.ag-shake { animation: agShake .45s; }
+    @keyframes agShake { 15%,85% { transform: translateX(-1px); } 25%,75% { transform: translateX(3px); } 35%,65% { transform: translateX(-6px); } 45%,55% { transform: translateX(6px); } }
+
+    .ag-card-mark { display: none; }
+    @media (max-width: 899px) { .ag-card-mark { display: block; text-align: center; font-family: MagicalFeather, cursive; font-size: 1.6rem; color: ${T.ink}; opacity: 0.85; margin-bottom: 0.6rem; } }
+
+    .ag-card h2 { font-size: 1.28rem; font-weight: 600; letter-spacing: -0.01em; color: ${T.ink}; margin: 0 0 0.3rem; }
+    .ag-card .ag-sub { font-size: 0.84rem; color: ${T.inkSoft}; margin: 0 0 1.6rem; line-height: 1.5; }
+
+    .ag-alert { font-size: 0.8rem; padding: 0.7rem 0.9rem; border-radius: 12px; margin-bottom: 1.1rem; line-height: 1.45; animation: agAlertIn .25s ease; }
+    @keyframes agAlertIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+    .ag-alert-err { background: ${isDark ? 'rgba(224,102,102,0.14)' : '#FDECEC'}; color: ${isDark ? '#F0A0A0' : '#B23A3A'}; }
+    .ag-alert-ok  { background: ${isDark ? 'rgba(107,168,120,0.14)' : '#E9F5EC'}; color: ${isDark ? '#9CD1A8' : '#2F7A44'}; }
+
+    .ag-field { position: relative; margin-bottom: 0.85rem; }
+    .ag-field svg { position: absolute; left: 0.95rem; top: 50%; transform: translateY(-50%); width: 17px; height: 17px; color: ${T.inkFaint}; pointer-events: none; transition: color .18s ease; }
+    .ag-field input {
+      width: 100%; padding: 0.82rem 0.95rem 0.82rem 2.6rem; border-radius: 12px;
+      border: 1.5px solid ${T.border}; background: ${T.inputBg}; color: ${T.ink};
+      font-family: inherit; font-size: 0.94rem; transition: border-color .18s ease, box-shadow .18s ease, background .18s ease;
+    }
+    .ag-field input::placeholder { color: ${T.inkFaint}; }
+    .ag-field input:focus { outline: none; border-color: ${ACCENT}; box-shadow: 0 0 0 4px ${ACCENT_SOFT}; background: ${T.paper}; }
+    .ag-field:focus-within svg { color: ${ACCENT}; }
+    .ag-field-toggle {
+      position: absolute; right: 0.6rem; top: 50%; transform: translateY(-50%);
+      background: none; border: none; cursor: pointer; padding: 0.4rem; color: ${T.inkFaint};
+      display: flex; align-items: center; border-radius: 8px; transition: color .15s ease;
+    }
+    .ag-field-toggle:hover { color: ${T.inkSoft}; }
+
+    .ag-remember { display: flex; align-items: center; gap: 0.55rem; font-size: 0.82rem; color: ${T.inkSoft}; cursor: pointer; user-select: none; margin: 0.3rem 0 1.3rem; }
+    .ag-remember input { width: 16px; height: 16px; accent-color: ${ACCENT}; cursor: pointer; }
+
+    .ag-btn {
+      width: 100%; padding: 0.85rem; border: none; border-radius: 12px;
+      background: ${ACCENT}; color: #fff; font-family: inherit; font-size: 0.92rem; font-weight: 600;
+      cursor: pointer; transition: filter .15s ease, transform .08s ease, box-shadow .18s ease;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+      display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+    }
+    .ag-btn:hover:not(:disabled) { filter: brightness(1.08); box-shadow: 0 6px 18px ${ACCENT_SOFT}; }
+    .ag-btn:active:not(:disabled) { transform: scale(0.98); }
+    .ag-btn:disabled { opacity: 0.82; cursor: default; }
+    .ag-btn:focus-visible { outline: 2px solid ${ACCENT}; outline-offset: 2px; }
+
+    .ag-spinner { width: 15px; height: 15px; border: 2px solid rgba(255,255,255,0.4); border-top-color: #fff; border-radius: 50%; animation: agSpin .7s linear infinite; flex-shrink: 0; }
+    @keyframes agSpin { to { transform: rotate(360deg); } }
+
+    .ag-links { display: flex; justify-content: space-between; align-items: center; margin-top: 1.2rem; gap: 0.6rem; flex-wrap: wrap; }
+    .ag-link { background: none; border: none; color: ${T.inkFaint}; font-size: 0.78rem; cursor: pointer; font-family: inherit; padding: 0.2rem 0; transition: color .15s ease; border-bottom: 1px solid transparent; }
+    .ag-link:hover { color: ${ACCENT}; border-bottom-color: ${ACCENT}; }
+    .ag-link:focus-visible { outline: 2px solid ${ACCENT}; outline-offset: 2px; border-radius: 4px; }
+
+    .ag-hint { font-size: 0.76rem; color: ${T.inkFaint}; line-height: 1.5; margin: 0 0 1rem; }
+
+    .ag-waiting { text-align: center; }
+    .ag-waiting-icon { width: 46px; height: 46px; margin: 0 auto 1rem; border-radius: 50%; background: ${ACCENT_SOFT}; display: flex; align-items: center; justify-content: center; animation: agPulseRing 2.4s ease-in-out infinite; }
+    @keyframes agPulseRing { 0%,100% { box-shadow: 0 0 0 0 ${ACCENT_SOFT}; } 50% { box-shadow: 0 0 0 10px transparent; } }
+
+    @media (prefers-reduced-motion: reduce) {
+      #auth-gate, #auth-gate * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; }
+    }
+  `;
   document.head.appendChild(css);
+
+  // ── Ícones (inline, sem dependência externa) ──
+  var ICO = {
+    mail: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4.5" width="19" height="15" rx="3"/><path d="m3 6.5 9 6.5 9-6.5"/></svg>',
+    lock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10.5" width="16" height="10" rx="2.5"/><path d="M7.5 10.5V7a4.5 4.5 0 0 1 9 0v3.5"/></svg>',
+    eye: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.8-7 10-7 10 7 10 7-3.8 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>',
+    eyeOff: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l18 18"/><path d="M10.6 5.2A10.6 10.6 0 0 1 12 5c6.2 0 10 7 10 7a17.6 17.6 0 0 1-3.2 4.1M6.5 6.6C3.7 8.4 2 12 2 12s3.8 7 10 7c1.4 0 2.7-.3 3.8-.8"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>',
+    hourglass: '<svg viewBox="0 0 24 24" fill="none" stroke="' + ACCENT + '" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12M6 21h12M7 3c0 5 5 6 5 9s-5 4-5 9M17 3c0 5-5 6-5 9s5 4 5 9"/></svg>',
+  };
+
+  var FRASES = [
+    'Devagar se chega mais rápido do que parece.',
+    'Todo capítulo estudado é um passo a menos até a aprovação.',
+    'Constância vence intensidade — um pouco todo dia.',
+    'A calma também é estratégia de prova.',
+    'Foco no processo; a aprovação é consequência.',
+  ];
 
   var overlay = document.createElement('div');
   overlay.id = 'auth-gate';
-  overlay.style.cssText = 'position:fixed;inset:0;z-index:200000;display:flex;align-items:center;' +
-    'justify-content:center;background:radial-gradient(circle at 50% 38%, ' + cores.bg1 + ' 0%, ' + cores.bg2 + ' 65%);' +
-    'background-size:140% 140%;animation:agBreathe 8s ease-in-out infinite;' +
-    'font-family:Inter,-apple-system,sans-serif;padding:1.5rem;box-sizing:border-box;opacity:0;transition:opacity .15s ease;';
+  document.documentElement.appendChild(overlay);
 
   var jaLogouAntes = false;
   try { jaLogouAntes = localStorage.getItem('oab_auth_ok') === '1'; } catch (e) {}
   var overlayAtivo = false;
   var loadingTimer = null;
+  var clockTimer = null;
 
   function marcarLogado(sim) {
     try {
       if (sim) localStorage.setItem('oab_auth_ok', '1');
       else localStorage.removeItem('oab_auth_ok');
     } catch (e) {}
-  }
-
-  function ativarOverlay() {
-    if (overlayAtivo) return;
-    overlayAtivo = true;
-    if (!overlay.parentNode) document.documentElement.appendChild(overlay);
-    requestAnimationFrame(function () { overlay.style.opacity = '1'; });
-    esconderApp();
   }
 
   function esconderApp() {
@@ -74,66 +193,114 @@
     style.textContent = '.app, .mobile-menu-btn, .sidebar-toggle-btn { visibility: hidden !important; }';
     document.head.appendChild(style);
   }
+
+  function ativarOverlay() {
+    if (overlayAtivo) return;
+    overlayAtivo = true;
+    requestAnimationFrame(function () { overlay.style.opacity = '1'; });
+    esconderApp();
+  }
+
   function mostrarApp() {
     clearTimeout(loadingTimer);
+    clearInterval(clockTimer);
     marcarLogado(true);
     var style = document.getElementById('auth-gate-hide-app');
     if (style) style.remove();
-    if (overlay.parentNode) overlay.remove();
+    overlay.style.opacity = '0';
+    setTimeout(function () { if (overlay.parentNode) overlay.remove(); }, 220);
     overlayAtivo = false;
   }
 
-  if (jaLogouAntes) {
-    // Confiança otimista: não bloqueia nada. Só prepara um timer que
-    // ativa o véu se a checagem em segundo plano demorar de verdade
-    // (bem raro) — assim o usuário não fica travado numa tela em
-    // branco se a internet estiver ruim.
-    loadingTimer = setTimeout(ativarOverlay, 1200);
-  } else {
-    ativarOverlay();
-    loadingTimer = setTimeout(function () {
-      if (overlay.parentNode) overlay.innerHTML = '<div style="color:' + roseDeep + ';font-size:0.85rem">Carregando…</div>';
-    }, 280);
+  function saudacaoAtual() {
+    var h = new Date().getHours();
+    return h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite';
   }
 
-  function renderLoginForm(erro) {
+  // Monta a casca comum (atmosfera + card) — cada tela só passa o miolo do card
+  function montarShell(cardHtml) {
     clearTimeout(loadingTimer);
-    marcarLogado(false);
     ativarOverlay();
-    overlay.style.opacity = '1';
+    var frase = FRASES[Math.floor(Math.random() * FRASES.length)];
     overlay.innerHTML =
-      '<div class="ag-card" style="width:100%;max-width:360px;background:' + cores.paper + ';border:1px solid ' + cores.linha + ';border-radius:20px;padding:2.4rem 2rem;box-shadow:0 8px 32px rgba(33,28,25,0.13), 0 20px 48px rgba(33,28,25,0.08)">' +
-        '<div class="ag-seal" style="display:flex;justify-content:center;margin-bottom:0.7rem">' +
-          '<svg viewBox="0 0 64 64" width="42" height="42" aria-hidden="true"><circle cx="32" cy="32" r="23" fill="none" stroke="' + roseDeep + '" stroke-width="1.6"/><text x="32" y="33" font-size="19" letter-spacing="1.2" text-anchor="middle" dominant-baseline="central" font-family="Georgia,serif" font-weight="700" fill="' + roseDeep + '">OAB</text></svg>' +
+      '<div class="ag-shell">' +
+        '<div class="ag-atmos">' +
+          '<div class="ag-blob ag-blob-1"></div><div class="ag-blob ag-blob-2"></div><div class="ag-blob ag-blob-3"></div>' +
+          '<div class="ag-grain"></div>' +
+          '<div class="ag-brandmark">Exame da Ordem</div>' +
+          '<div class="ag-hero">' +
+            '<h1 id="ag-greeting">' + saudacaoAtual() + '.</h1>' +
+            '<p>Um espaço quieto pra organizar o estudo e manter o ritmo até a prova.</p>' +
+          '</div>' +
+          '<div class="ag-footer-row">' +
+            '<p class="ag-quote">“' + frase + '”</p>' +
+            '<span class="ag-clock" id="ag-clock"></span>' +
+          '</div>' +
         '</div>' +
-        '<div style="font-family:MagicalFeather,cursive;font-size:2.1rem;font-weight:normal;text-align:center;color:' + roseDeep + ';margin-bottom:0.1rem;line-height:1">Exame da Ordem</div>' +
-        '<div style="font-size:0.8rem;text-align:center;color:' + cores.inkFaded + ';margin-bottom:1.6rem">Entre para acessar seu preparatório</div>' +
-        (erro ? '<div style="background:#fdecea;color:#c0524b;font-size:0.78rem;padding:0.65rem 0.85rem;border-radius:10px;margin-bottom:1rem;line-height:1.4">' + erro + '</div>' : '') +
-        '<form id="auth-gate-form">' +
-          '<input id="auth-gate-email" type="email" placeholder="E-mail" autocomplete="username" required ' +
-            'style="width:100%;box-sizing:border-box;padding:0.8rem 1rem;border:1.5px solid ' + cores.linha + ';border-radius:10px;font-size:1rem;margin-bottom:0.7rem;font-family:inherit;background:' + cores.paper + ';color:' + cores.ink + ';transition:border-color .2s,box-shadow .2s">' +
-          '<input id="auth-gate-senha" type="password" placeholder="Senha" autocomplete="current-password" required ' +
-            'style="width:100%;box-sizing:border-box;padding:0.8rem 1rem;border:1.5px solid ' + cores.linha + ';border-radius:10px;font-size:1rem;margin-bottom:0.9rem;font-family:inherit;background:' + cores.paper + ';color:' + cores.ink + ';transition:border-color .2s,box-shadow .2s">' +
-          '<label class="remember" style="margin-bottom:1.2rem">' +
-            '<input type="checkbox" id="auth-gate-lembrar" checked> Manter conectada neste navegador' +
-          '</label>' +
-          '<button type="submit" id="auth-gate-btn" ' +
-            'style="width:100%;padding:0.85rem;border:none;border-radius:10px;background:linear-gradient(135deg,' + roseDeep + ',' + roseDeep + 'dd);color:#fff;font-size:0.92rem;font-weight:600;cursor:pointer;font-family:inherit;transition:filter .15s, transform .1s">Entrar</button>' +
-        '</form>' +
-        '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:1.1rem;gap:0.6rem;flex-wrap:wrap">' +
-          '<button type="button" id="auth-gate-esqueci" style="background:none;border:none;color:' + cores.inkFaded + ';font-size:0.76rem;cursor:pointer;font-family:inherit;text-decoration:underline;padding:0">Esqueci minha senha</button>' +
-          '<button type="button" id="auth-gate-ir-cadastro" style="background:none;border:none;color:' + cores.inkFaded + ';font-size:0.76rem;cursor:pointer;font-family:inherit;text-decoration:underline;padding:0">Solicitar acesso</button>' +
-        '</div>' +
+        '<div class="ag-formside"><div class="ag-card"><div class="ag-card-mark">Exame da Ordem</div>' + cardHtml + '</div></div>' +
       '</div>';
 
-    document.getElementById('auth-gate-ir-cadastro').addEventListener('click', function () {
-      renderSignupForm(null);
-    });
+    clearInterval(clockTimer);
+    var clockEl = document.getElementById('ag-clock');
+    function tick() {
+      if (!clockEl || !clockEl.isConnected) { clearInterval(clockTimer); return; }
+      clockEl.textContent = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    }
+    tick();
+    clockTimer = setInterval(tick, 15000);
+  }
 
+  function fazerCartaoTremer() {
+    var cardEl = overlay.querySelector('.ag-card');
+    if (!cardEl) return;
+    cardEl.classList.remove('ag-shake');
+    void cardEl.offsetWidth;
+    cardEl.classList.add('ag-shake');
+  }
+
+  function montarCampoSenha(id, placeholder, autocomplete) {
+    return '<div class="ag-field">' + ICO.lock +
+      '<input id="' + id + '" type="password" placeholder="' + placeholder + '" autocomplete="' + autocomplete + '" required minlength="6" style="padding-right:2.6rem">' +
+      '<button type="button" class="ag-field-toggle" data-alvo="' + id + '" aria-label="Mostrar senha">' + ICO.eye + '</button>' +
+    '</div>';
+  }
+
+  function wireTogglesSenha(root) {
+    root.querySelectorAll('.ag-field-toggle').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var input = document.getElementById(btn.dataset.alvo);
+        if (!input) return;
+        var mostrando = input.type === 'text';
+        input.type = mostrando ? 'password' : 'text';
+        btn.innerHTML = mostrando ? ICO.eye : ICO.eyeOff;
+        btn.setAttribute('aria-label', mostrando ? 'Mostrar senha' : 'Ocultar senha');
+      });
+    });
+  }
+
+  // ── Tela: login ──
+  function renderLoginForm(erro) {
+    montarShell(
+      '<h2>Bem-vinda de volta</h2>' +
+      '<p class="ag-sub">Entre para continuar seus estudos</p>' +
+      (erro ? '<div class="ag-alert ag-alert-err" role="alert">' + erro + '</div>' : '') +
+      '<form id="auth-gate-form">' +
+        '<div class="ag-field">' + ICO.mail + '<input id="auth-gate-email" type="email" placeholder="E-mail" autocomplete="username" required></div>' +
+        montarCampoSenha('auth-gate-senha', 'Senha', 'current-password') +
+        '<label class="ag-remember"><input type="checkbox" id="auth-gate-lembrar" checked> Manter conectada neste navegador</label>' +
+        '<button type="submit" class="ag-btn" id="auth-gate-btn">Entrar</button>' +
+      '</form>' +
+      '<div class="ag-links">' +
+        '<button type="button" class="ag-link" id="auth-gate-esqueci">Esqueci minha senha</button>' +
+        '<button type="button" class="ag-link" id="auth-gate-ir-cadastro">Solicitar acesso</button>' +
+      '</div>'
+    );
+    wireTogglesSenha(overlay);
+
+    document.getElementById('auth-gate-ir-cadastro').addEventListener('click', function () { renderSignupForm(null); });
     document.getElementById('auth-gate-esqueci').addEventListener('click', function () {
       var emailField = document.getElementById('auth-gate-email');
-      var email = (emailField && emailField.value.trim()) || '';
-      renderRecuperarSenha(email);
+      renderRecuperarSenha((emailField && emailField.value.trim()) || '');
     });
 
     document.getElementById('auth-gate-form').addEventListener('submit', function (e) {
@@ -151,44 +318,29 @@
           var msg = 'Não foi possível entrar. Confira o e-mail e a senha.';
           if (err && err.code === 'auth/invalid-email') msg = 'E-mail inválido.';
           if (err && err.code === 'auth/too-many-requests') msg = 'Muitas tentativas — aguarde um pouco e tente de novo.';
-          var cardEl = overlay.querySelector('.ag-card');
-          if (cardEl) {
-            cardEl.classList.remove('ag-shake');
-            void cardEl.offsetWidth; // reinicia a animação se já tinha rodado
-            cardEl.classList.add('ag-shake');
-          }
+          fazerCartaoTremer();
           renderLoginForm(msg);
         });
     });
   }
 
+  // ── Tela: recuperar senha ──
   function renderRecuperarSenha(emailInicial, mensagem, erro) {
-    clearTimeout(loadingTimer);
-    ativarOverlay();
-    overlay.style.opacity = '1';
-    overlay.innerHTML =
-      '<div class="ag-card" style="width:100%;max-width:360px;background:' + cores.paper + ';border:1px solid ' + cores.linha + ';border-radius:20px;padding:2.4rem 2rem;box-shadow:0 8px 32px rgba(33,28,25,0.13), 0 20px 48px rgba(33,28,25,0.08)">' +
-        '<div class="ag-seal" style="display:flex;justify-content:center;margin-bottom:0.7rem">' +
-          '<svg viewBox="0 0 64 64" width="42" height="42" aria-hidden="true"><circle cx="32" cy="32" r="23" fill="none" stroke="' + roseDeep + '" stroke-width="1.6"/><text x="32" y="33" font-size="19" letter-spacing="1.2" text-anchor="middle" dominant-baseline="central" font-family="Georgia,serif" font-weight="700" fill="' + roseDeep + '">OAB</text></svg>' +
-        '</div>' +
-        '<div style="font-family:MagicalFeather,cursive;font-size:1.8rem;text-align:center;color:' + roseDeep + ';margin-bottom:0.5rem;line-height:1">Recuperar senha</div>' +
-        '<p style="font-size:0.8rem;text-align:center;color:' + cores.inkFaded + ';margin:0 0 1.4rem;line-height:1.5">Digite seu e-mail — enviamos um link pra você criar uma senha nova.</p>' +
-        (erro ? '<div style="background:#fdecea;color:#c0524b;font-size:0.78rem;padding:0.65rem 0.85rem;border-radius:10px;margin-bottom:1rem;line-height:1.4">' + erro + '</div>' : '') +
-        (mensagem ? '<div style="background:#eaf6ec;color:#2f6b3a;font-size:0.78rem;padding:0.65rem 0.85rem;border-radius:10px;margin-bottom:1rem;line-height:1.4">' + mensagem + '</div>' : '') +
-        '<form id="auth-gate-recuperar-form">' +
-          '<input id="auth-gate-recuperar-email" type="email" placeholder="E-mail" autocomplete="username" required value="' + (emailInicial || '').replace(/"/g,'') + '" ' +
-            'style="width:100%;box-sizing:border-box;padding:0.8rem 1rem;border:1.5px solid ' + cores.linha + ';border-radius:10px;font-size:1rem;margin-bottom:1.2rem;font-family:inherit;background:' + cores.paper + ';color:' + cores.ink + ';transition:border-color .2s,box-shadow .2s">' +
-          '<button type="submit" id="auth-gate-recuperar-btn" ' +
-            'style="width:100%;padding:0.85rem;border:none;border-radius:10px;background:linear-gradient(135deg,' + roseDeep + ',' + roseDeep + 'dd);color:#fff;font-size:0.92rem;font-weight:600;cursor:pointer;font-family:inherit;transition:filter .15s, transform .1s">Enviar link de recuperação</button>' +
-        '</form>' +
-        '<div style="text-align:center;margin-top:1.1rem">' +
-          '<button type="button" id="auth-gate-voltar-login" style="background:none;border:none;color:' + cores.inkFaded + ';font-size:0.76rem;cursor:pointer;font-family:inherit;text-decoration:underline">Voltar pro login</button>' +
-        '</div>' +
-      '</div>';
+    montarShell(
+      '<h2>Recuperar senha</h2>' +
+      '<p class="ag-sub">Digite seu e-mail — enviamos um link pra criar uma senha nova.</p>' +
+      (erro ? '<div class="ag-alert ag-alert-err" role="alert">' + erro + '</div>' : '') +
+      (mensagem ? '<div class="ag-alert ag-alert-ok" role="status">' + mensagem + '</div>' : '') +
+      '<form id="auth-gate-recuperar-form">' +
+        '<div class="ag-field">' + ICO.mail + '<input id="auth-gate-recuperar-email" type="email" placeholder="E-mail" autocomplete="username" required value="' + (emailInicial || '').replace(/"/g, '') + '" style="margin-bottom:1.3rem"></div>' +
+        '<button type="submit" class="ag-btn" id="auth-gate-recuperar-btn">Enviar link de recuperação</button>' +
+      '</form>' +
+      '<div class="ag-links" style="justify-content:center">' +
+        '<button type="button" class="ag-link" id="auth-gate-voltar-login">Voltar pro login</button>' +
+      '</div>'
+    );
 
-    document.getElementById('auth-gate-voltar-login').addEventListener('click', function () {
-      renderLoginForm(null);
-    });
+    document.getElementById('auth-gate-voltar-login').addEventListener('click', function () { renderLoginForm(null); });
 
     document.getElementById('auth-gate-recuperar-form').addEventListener('submit', function (e) {
       e.preventDefault();
@@ -201,8 +353,6 @@
           renderRecuperarSenha(email, 'Link enviado! Confere sua caixa de entrada (e o spam) e clica no link pra criar uma senha nova.');
         })
         .catch(function (err) {
-          // Por segurança, o Firebase às vezes não diferencia "não existe"
-          // de outros erros -- trata de forma genérica e amigável mesmo assim
           var msg = 'Não foi possível enviar o link. Confere se o e-mail está certo.';
           if (err && err.code === 'auth/invalid-email') msg = 'E-mail inválido.';
           if (err && err.code === 'auth/too-many-requests') msg = 'Muitas tentativas — aguarde um pouco e tente de novo.';
@@ -211,44 +361,33 @@
     });
   }
 
+  // ── Tela: solicitar acesso ──
   function renderSignupForm(erro) {
-    clearTimeout(loadingTimer);
-    ativarOverlay();
-    overlay.style.opacity = '1';
-    overlay.innerHTML =
-      '<div class="ag-card" style="width:100%;max-width:360px;background:' + cores.paper + ';border:1px solid ' + cores.linha + ';border-radius:20px;padding:2.4rem 2rem;box-shadow:0 8px 32px rgba(33,28,25,0.13), 0 20px 48px rgba(33,28,25,0.08)">' +
-        '<div class="ag-seal" style="display:flex;justify-content:center;margin-bottom:0.7rem">' +
-          '<svg viewBox="0 0 64 64" width="42" height="42" aria-hidden="true"><circle cx="32" cy="32" r="23" fill="none" stroke="' + roseDeep + '" stroke-width="1.6"/><text x="32" y="33" font-size="19" letter-spacing="1.2" text-anchor="middle" dominant-baseline="central" font-family="Georgia,serif" font-weight="700" fill="' + roseDeep + '">OAB</text></svg>' +
-        '</div>' +
-        '<div style="font-family:MagicalFeather,cursive;font-size:2.1rem;font-weight:normal;text-align:center;color:' + roseDeep + ';margin-bottom:0.1rem;line-height:1">Exame da Ordem</div>' +
-        '<div style="font-size:0.8rem;text-align:center;color:' + cores.inkFaded + ';margin-bottom:1.6rem">Solicitar acesso ao preparatório</div>' +
-        (erro ? '<div style="background:#fdecea;color:#c0524b;font-size:0.78rem;padding:0.65rem 0.85rem;border-radius:10px;margin-bottom:1rem;line-height:1.4">' + erro + '</div>' : '') +
-        '<form id="auth-gate-signup-form">' +
-          '<input id="auth-gate-signup-email" type="email" placeholder="E-mail" autocomplete="username" required ' +
-            'style="width:100%;box-sizing:border-box;padding:0.8rem 1rem;border:1.5px solid ' + cores.linha + ';border-radius:10px;font-size:1rem;margin-bottom:0.7rem;font-family:inherit;background:' + cores.paper + ';color:' + cores.ink + ';transition:border-color .2s,box-shadow .2s">' +
-          '<input id="auth-gate-signup-senha" type="password" placeholder="Crie uma senha (mín. 6 caracteres)" autocomplete="new-password" required minlength="6" ' +
-            'style="width:100%;box-sizing:border-box;padding:0.8rem 1rem;border:1.5px solid ' + cores.linha + ';border-radius:10px;font-size:1rem;margin-bottom:0.7rem;font-family:inherit;background:' + cores.paper + ';color:' + cores.ink + ';transition:border-color .2s,box-shadow .2s">' +
-          '<input id="auth-gate-signup-senha2" type="password" placeholder="Confirme a senha" autocomplete="new-password" required minlength="6" ' +
-            'style="width:100%;box-sizing:border-box;padding:0.8rem 1rem;border:1.5px solid ' + cores.linha + ';border-radius:10px;font-size:1rem;margin-bottom:1.2rem;font-family:inherit;background:' + cores.paper + ';color:' + cores.ink + ';transition:border-color .2s,box-shadow .2s">' +
-          '<div style="font-size:0.74rem;color:' + cores.inkFaded + ';margin-bottom:1rem;line-height:1.4">Depois de enviar, o acesso fica pendente até ser aprovado — você recebe um aviso assim que puder entrar.</div>' +
-          '<button type="submit" id="auth-gate-signup-btn" ' +
-            'style="width:100%;padding:0.85rem;border:none;border-radius:10px;background:linear-gradient(135deg,' + roseDeep + ',' + roseDeep + 'dd);color:#fff;font-size:0.92rem;font-weight:600;cursor:pointer;font-family:inherit;transition:filter .15s, transform .1s">Solicitar acesso</button>' +
-        '</form>' +
-        '<div style="text-align:center;margin-top:1.1rem">' +
-          '<button type="button" id="auth-gate-ir-login" style="background:none;border:none;color:' + cores.inkFaded + ';font-size:0.76rem;cursor:pointer;font-family:inherit;text-decoration:underline">Já tenho acesso — entrar</button>' +
-        '</div>' +
-      '</div>';
+    montarShell(
+      '<h2>Solicitar acesso</h2>' +
+      '<p class="ag-sub">Crie uma conta — o acesso fica pendente até ser aprovado.</p>' +
+      (erro ? '<div class="ag-alert ag-alert-err" role="alert">' + erro + '</div>' : '') +
+      '<form id="auth-gate-signup-form">' +
+        '<div class="ag-field">' + ICO.mail + '<input id="auth-gate-signup-email" type="email" placeholder="E-mail" autocomplete="username" required></div>' +
+        montarCampoSenha('auth-gate-signup-senha', 'Crie uma senha (mín. 6 caracteres)', 'new-password') +
+        montarCampoSenha('auth-gate-signup-senha2', 'Confirme a senha', 'new-password') +
+        '<p class="ag-hint">Depois de enviar, você recebe um aviso assim que o acesso for liberado.</p>' +
+        '<button type="submit" class="ag-btn" id="auth-gate-signup-btn">Solicitar acesso</button>' +
+      '</form>' +
+      '<div class="ag-links" style="justify-content:center">' +
+        '<button type="button" class="ag-link" id="auth-gate-ir-login">Já tenho acesso — entrar</button>' +
+      '</div>'
+    );
+    wireTogglesSenha(overlay);
 
-    document.getElementById('auth-gate-ir-login').addEventListener('click', function () {
-      renderLoginForm(null);
-    });
+    document.getElementById('auth-gate-ir-login').addEventListener('click', function () { renderLoginForm(null); });
 
     document.getElementById('auth-gate-signup-form').addEventListener('submit', function (e) {
       e.preventDefault();
       var email = document.getElementById('auth-gate-signup-email').value.trim();
       var senha = document.getElementById('auth-gate-signup-senha').value;
       var senha2 = document.getElementById('auth-gate-signup-senha2').value;
-      if (senha !== senha2) { renderSignupForm('As senhas não coincidem.'); return; }
+      if (senha !== senha2) { fazerCartaoTremer(); renderSignupForm('As senhas não coincidem.'); return; }
       var btn = document.getElementById('auth-gate-signup-btn');
       btn.disabled = true;
       btn.innerHTML = '<span class="ag-spinner"></span>Enviando…';
@@ -257,9 +396,7 @@
         .then(function (cred) {
           if (!window._fbDb) return;
           return window._fbDb.collection('usuarios_autorizados').doc(cred.user.uid).set({
-            email: email,
-            aprovado: false,
-            criado_em: firebase.firestore.FieldValue.serverTimestamp(),
+            email: email, aprovado: false, criado_em: firebase.firestore.FieldValue.serverTimestamp(),
           });
         })
         .catch(function (err) {
@@ -267,35 +404,29 @@
           if (err && err.code === 'auth/email-already-in-use') msg = 'Esse e-mail já tem uma conta — tenta entrar em vez de solicitar de novo.';
           else if (err && err.code === 'auth/invalid-email') msg = 'E-mail inválido.';
           else if (err && err.code === 'auth/weak-password') msg = 'Senha muito fraca — use pelo menos 6 caracteres.';
-          else if (err && err.code === 'permission-denied') msg = 'A conta foi criada, mas o pedido de acesso não pôde ser salvo (regras do banco de dados). Avise a administradora.';
+          else if (err && err.code === 'permission-denied') msg = 'A conta foi criada, mas o pedido de acesso não pôde ser salvo. Avise a administradora.';
           else if (err && err.code) msg = 'Erro: ' + err.code;
-          var cardEl = overlay.querySelector('.ag-card');
-          if (cardEl) { cardEl.classList.remove('ag-shake'); void cardEl.offsetWidth; cardEl.classList.add('ag-shake'); }
+          fazerCartaoTremer();
           renderSignupForm(msg);
         });
-      // onAuthStateChanged cuida do que acontece depois (tela de
-      // aguardando aprovação, já que aprovado começa como false)
+      // onAuthStateChanged cuida do que acontece depois (tela de aguardando aprovação)
     });
   }
 
+  // ── Tela: aguardando aprovação ──
   function renderAguardandoAprovacao(email) {
-    clearTimeout(loadingTimer);
-    ativarOverlay();
-    overlay.style.opacity = '1';
-    overlay.innerHTML =
-      '<div class="ag-card" style="width:100%;max-width:360px;background:' + cores.paper + ';border:1px solid ' + cores.linha + ';border-radius:20px;padding:2.4rem 2rem;box-shadow:0 8px 32px rgba(33,28,25,0.13), 0 20px 48px rgba(33,28,25,0.08);text-align:center">' +
-        '<div class="ag-seal" style="display:flex;justify-content:center;margin-bottom:0.9rem">' +
-          '<svg viewBox="0 0 64 64" width="42" height="42" aria-hidden="true"><circle cx="32" cy="32" r="23" fill="none" stroke="' + roseDeep + '" stroke-width="1.6"/><text x="32" y="33" font-size="19" letter-spacing="1.2" text-anchor="middle" dominant-baseline="central" font-family="Georgia,serif" font-weight="700" fill="' + roseDeep + '">OAB</text></svg>' +
-        '</div>' +
-        '<div style="font-family:MagicalFeather,cursive;font-size:1.8rem;color:' + roseDeep + ';margin-bottom:0.6rem;line-height:1">Quase lá</div>' +
-        '<p style="font-size:0.86rem;color:' + cores.ink + ';line-height:1.55;margin:0 0 1.5rem">Seu pedido de acesso (<strong>' + email + '</strong>) está aguardando aprovação. Assim que for liberado, esta página atualiza sozinha — pode deixar aberta.</p>' +
-        '<button type="button" id="auth-gate-sair-espera" style="background:none;border:1px solid ' + cores.linha + ';border-radius:10px;padding:0.6rem 1.1rem;color:' + cores.inkFaded + ';font-size:0.78rem;cursor:pointer;font-family:inherit">Sair</button>' +
-      '</div>';
+    montarShell(
+      '<div class="ag-waiting">' +
+        '<div class="ag-waiting-icon">' + ICO.hourglass + '</div>' +
+        '<h2>Quase lá</h2>' +
+        '<p class="ag-sub">Seu pedido de acesso (<strong>' + email + '</strong>) está aguardando aprovação. Esta página atualiza sozinha assim que for liberado — pode deixar aberta.</p>' +
+        '<button type="button" class="ag-link" id="auth-gate-sair-espera">Sair</button>' +
+      '</div>'
+    );
     document.getElementById('auth-gate-sair-espera').addEventListener('click', function () {
       window._fbAuth.signOut().then(function () { location.reload(); });
     });
   }
-
 
   function iniciarSincronizacao(user) {
     if (typeof window._syncOAB !== 'undefined' && window._syncOAB.iniciar) {
@@ -303,10 +434,15 @@
     }
   }
 
+  if (jaLogouAntes) {
+    loadingTimer = setTimeout(ativarOverlay, 1200);
+  } else {
+    ativarOverlay();
+  }
+
   if (typeof window._fbAuth === 'undefined') {
     ativarOverlay();
-    overlay.style.opacity = '1';
-    overlay.innerHTML = '<div style="max-width:320px;text-align:center;font-size:0.85rem;color:#c0524b">Não foi possível carregar o sistema de login. Verifique sua conexão e recarregue a página.</div>';
+    overlay.innerHTML = '<div class="ag-shell"><div class="ag-formside"><div class="ag-card" style="text-align:center"><p class="ag-sub">Não foi possível carregar o sistema de login. Verifique sua conexão e recarregue a página.</p></div></div></div>';
     return;
   }
 
@@ -315,30 +451,13 @@
     if (_unsubAprovacao) { _unsubAprovacao(); _unsubAprovacao = null; }
     if (!user) { renderLoginForm(null); return; }
 
-    // Administradora sempre tem acesso — não depende de aprovação
-    if (user.email === ADMIN_EMAIL) {
-      mostrarApp();
-      iniciarSincronizacao(user);
-      return;
-    }
-
+    if (user.email === ADMIN_EMAIL) { mostrarApp(); iniciarSincronizacao(user); return; }
     if (!window._fbDb) { mostrarApp(); iniciarSincronizacao(user); return; }
 
-    // Ouve em tempo real: se a administradora aprovar enquanto esta
-    // tela de espera está aberta, libera sozinho, sem precisar recarregar
-    _unsubAprovacao = window._fbDb.collection('usuarios_autorizados').doc(user.uid)
-      .onSnapshot(function (snap) {
-        var dados = snap.exists ? snap.data() : null;
-        if (dados && dados.aprovado === true) {
-          mostrarApp();
-          iniciarSincronizacao(user);
-        } else {
-          renderAguardandoAprovacao(user.email || '');
-        }
-      }, function () {
-        // sem permissão de ler (regra ainda não publicada, etc.) — trata
-        // como pendente em vez de travar numa tela de erro
-        renderAguardandoAprovacao(user.email || '');
-      });
+    _unsubAprovacao = window._fbDb.collection('usuarios_autorizados').doc(user.uid).onSnapshot(function (snap) {
+      var dados = snap.exists ? snap.data() : null;
+      if (dados && dados.aprovado === true) { mostrarApp(); iniciarSincronizacao(user); }
+      else { renderAguardandoAprovacao(user.email || ''); }
+    }, function () { renderAguardandoAprovacao(user.email || ''); });
   });
 })();
