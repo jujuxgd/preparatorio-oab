@@ -128,6 +128,15 @@
           Array.from(row.cells || []).map(cell => (cell.innerText || '').replace(/\s+/g, ' ').trim())
         );
         if (!grid.length || !grid[0].length) return;
+        // Garante uma quebra de linha antes da tabela: sem isso, quando `idx`
+        // cai bem na borda final do parágrafo anterior, quill.getLine(idx)
+        // (usado dentro de _qlInsertTable) resolve pra ESSE parágrafo, e a
+        // tabela acaba inserida ANTES dele em vez de depois — era a causa da
+        // tabela "pular" pro início e do texto ao redor virar uma bagunça.
+        if (idx > 0) {
+          quill.insertText(idx, '\n', Quill.sources.SILENT);
+          idx += 1;
+        }
         const before = quill.getLength();
         _qlInsertTable(quill, grid.length, grid[0].length, grid, idx);
         idx += quill.getLength() - before;
@@ -235,7 +244,15 @@ function _editorCarregar(quill, keyPrefix, dia) {
   if (!raw) return;
   let parsed = null;
   try { parsed = JSON.parse(raw); } catch (e) {}
-  if (parsed && parsed.delta) {
+  if (parsed && typeof parsed.html === 'string' && /<table/i.test(parsed.html) && typeof window._inserirConteudoComTabelas === 'function') {
+    // A tabela é um blot customizado sem representação em Delta — ao passar
+    // por quill.getContents(), cada célula vira um op solto e perde o texto
+    // (some por completo). dangerouslyPasteHTML também não serve aqui: o
+    // conversor padrão do Quill não conhece esse blot e transforma a
+    // tabela em parágrafos soltos. Reconstrói pelo HTML salvo usando o
+    // mesmo caminho do paste/"inserir código", que sabe montar os blots.
+    window._inserirConteudoComTabelas(quill, parsed.html, 0);
+  } else if (parsed && parsed.delta) {
     quill.setContents(parsed.delta, 'silent');
   } else if (parsed && typeof parsed.html === 'string') {
     quill.clipboard.dangerouslyPasteHTML(parsed.html, 'silent');

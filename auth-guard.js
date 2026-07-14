@@ -85,10 +85,10 @@
 
     .ag-brandmark { font-family: MagicalFeather, cursive; font-size: 2.3rem; font-weight: normal; color: ${T.ink}; opacity: 0.94; position: relative; z-index: 1; line-height: 1; }
     .ag-hero { position: relative; z-index: 1; max-width: 420px; }
-    .ag-hero h1 { font-family: 'Inter', sans-serif; font-size: 2.1rem; font-weight: 600; letter-spacing: -0.02em; line-height: 1.15; color: ${T.ink}; margin: 0 0 0.9rem; }
-    .ag-hero p { font-size: 0.98rem; line-height: 1.6; color: ${T.inkSoft}; margin: 0; font-weight: 400; }
+    #auth-gate .ag-hero h1 { font-family: 'Inter', sans-serif; font-size: 2.1rem; font-weight: 600; letter-spacing: -0.02em; line-height: 1.15; color: ${T.ink}; margin: 0 0 0.9rem; }
+    #auth-gate .ag-hero p { font-size: 0.98rem; line-height: 1.6; color: ${T.inkSoft}; margin: 0; font-weight: 400; }
     .ag-footer-row { position: relative; z-index: 1; display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
-    .ag-quote { font-size: 0.82rem; font-style: italic; color: ${T.inkFaint}; max-width: 300px; line-height: 1.5; margin: 0; }
+    #auth-gate .ag-quote { font-size: 0.82rem; font-style: italic; color: ${T.inkFaint}; max-width: 300px; line-height: 1.5; margin: 0; }
     .ag-clock { font-variant-numeric: tabular-nums; font-size: 0.82rem; color: ${T.inkFaint}; white-space: nowrap; letter-spacing: 0.02em; }
 
     /* Painel do formulário */
@@ -109,8 +109,8 @@
     .ag-card-mark { display: none; }
     @media (max-width: 899px) { .ag-card-mark { display: block; text-align: center; font-family: MagicalFeather, cursive; font-size: 2.1rem; color: ${T.ink}; opacity: 0.94; margin-bottom: 0.9rem; line-height: 1; } }
 
-    .ag-card h2 { font-size: 1.28rem; font-weight: 600; letter-spacing: -0.01em; text-transform: none; color: ${T.ink}; margin: 0 0 0.3rem; text-align: center; }
-    .ag-card .ag-sub { font-size: 0.84rem; color: ${T.inkSoft}; margin: 0 0 1.6rem; line-height: 1.5; text-align: center; }
+    #auth-gate .ag-card h2 { font-size: 1.28rem; font-weight: 600; letter-spacing: -0.01em; text-transform: none; color: ${T.ink}; margin: 0 0 0.3rem; text-align: center; }
+    #auth-gate .ag-card .ag-sub { font-size: 0.84rem; color: ${T.inkSoft}; margin: 0 0 1.6rem; line-height: 1.5; text-align: center; }
 
     .ag-alert { font-size: 0.8rem; padding: 0.7rem 0.9rem; border-radius: 12px; margin-bottom: 1.1rem; line-height: 1.45; animation: agAlertIn .25s ease; }
     @keyframes agAlertIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
@@ -119,45 +119,45 @@
 
     .ag-field { position: relative; margin-bottom: 0.85rem; }
     .ag-field svg { position: absolute; left: 0.95rem; top: 50%; transform: translateY(-50%); width: 17px; height: 17px; color: ${T.inkFaint}; pointer-events: none; transition: color .18s ease; }
-    .ag-field input {
+    #auth-gate .ag-field input {
       width: 100%; padding: 0.82rem 0.95rem 0.82rem 2.6rem; border-radius: 12px;
       border: 1.5px solid ${T.border}; background: ${T.inputBg}; color: ${T.ink};
       font-family: inherit; font-size: 0.94rem; transition: border-color .18s ease, box-shadow .18s ease, background .18s ease;
     }
-    .ag-field input::placeholder { color: ${T.inkFaint}; }
-    .ag-field input:focus { outline: none; border-color: ${ACCENT}; box-shadow: 0 0 0 4px ${ACCENT_SOFT}; background: ${T.paper}; }
+    #auth-gate .ag-field input::placeholder { color: ${T.inkFaint}; }
+    #auth-gate .ag-field input:focus { outline: none; border-color: ${ACCENT}; box-shadow: 0 0 0 4px ${ACCENT_SOFT}; background: ${T.paper}; }
     .ag-field:focus-within svg { color: ${ACCENT}; }
-    .ag-field-toggle {
+    #auth-gate .ag-field-toggle {
       position: absolute; right: 0.6rem; top: 50%; transform: translateY(-50%);
       background: none; border: none; cursor: pointer; padding: 0.4rem; color: ${T.inkFaint};
       display: flex; align-items: center; border-radius: 8px; transition: color .15s ease;
     }
-    .ag-field-toggle:hover { color: ${T.inkSoft}; }
+    #auth-gate .ag-field-toggle:hover { color: ${T.inkSoft}; }
 
-    .ag-remember { display: flex; align-items: center; gap: 0.55rem; font-size: 0.82rem; font-weight: 400; letter-spacing: normal; text-transform: none; color: ${T.inkSoft}; cursor: pointer; user-select: none; margin: 0.3rem 0 1.3rem; }
-    .ag-remember input { width: 16px; height: 16px; accent-color: ${ACCENT}; cursor: pointer; }
+    #auth-gate .ag-remember { display: flex; align-items: center; gap: 0.55rem; font-size: 0.82rem; font-weight: 400; letter-spacing: normal; text-transform: none; color: ${T.inkSoft}; cursor: pointer; user-select: none; margin: 0.3rem 0 1.3rem; }
+    #auth-gate .ag-remember input { width: 16px; height: 16px; accent-color: ${ACCENT}; cursor: pointer; }
 
-    .ag-btn {
+    #auth-gate .ag-btn {
       width: 100%; padding: 0.85rem; border: none; border-radius: 12px;
       background: ${ACCENT}; color: #fff; font-family: inherit; font-size: 0.92rem; font-weight: 600;
       cursor: pointer; transition: filter .15s ease, transform .08s ease, box-shadow .18s ease;
       box-shadow: 0 1px 2px rgba(0,0,0,0.08);
       display: flex; align-items: center; justify-content: center; gap: 0.5rem;
     }
-    .ag-btn:hover:not(:disabled) { filter: brightness(1.08); box-shadow: 0 6px 18px ${ACCENT_SOFT}; }
-    .ag-btn:active:not(:disabled) { transform: scale(0.98); }
-    .ag-btn:disabled { opacity: 0.82; cursor: default; }
-    .ag-btn:focus-visible { outline: 2px solid ${ACCENT}; outline-offset: 2px; }
+    #auth-gate .ag-btn:hover:not(:disabled) { filter: brightness(1.08); box-shadow: 0 6px 18px ${ACCENT_SOFT}; }
+    #auth-gate .ag-btn:active:not(:disabled) { transform: scale(0.98); }
+    #auth-gate .ag-btn:disabled { opacity: 0.82; cursor: default; }
+    #auth-gate .ag-btn:focus-visible { outline: 2px solid ${ACCENT}; outline-offset: 2px; }
 
     .ag-spinner { width: 15px; height: 15px; border: 2px solid rgba(255,255,255,0.4); border-top-color: #fff; border-radius: 50%; animation: agSpin .7s linear infinite; flex-shrink: 0; }
     @keyframes agSpin { to { transform: rotate(360deg); } }
 
     .ag-links { display: flex; justify-content: space-between; align-items: center; margin-top: 1.2rem; gap: 0.6rem; flex-wrap: wrap; }
-    .ag-link { background: none; border: none; color: ${T.inkFaint}; font-size: 0.78rem; cursor: pointer; font-family: inherit; padding: 0.2rem 0; transition: color .15s ease; border-bottom: 1px solid transparent; }
-    .ag-link:hover { color: ${ACCENT}; border-bottom-color: ${ACCENT}; }
-    .ag-link:focus-visible { outline: 2px solid ${ACCENT}; outline-offset: 2px; border-radius: 4px; }
+    #auth-gate .ag-link { background: none; border: none; color: ${T.inkFaint}; font-size: 0.78rem; cursor: pointer; font-family: inherit; padding: 0.2rem 0; transition: color .15s ease; border-bottom: 1px solid transparent; }
+    #auth-gate .ag-link:hover { color: ${ACCENT}; border-bottom-color: ${ACCENT}; }
+    #auth-gate .ag-link:focus-visible { outline: 2px solid ${ACCENT}; outline-offset: 2px; border-radius: 4px; }
 
-    .ag-hint { font-size: 0.76rem; color: ${T.inkFaint}; line-height: 1.5; margin: 0 0 1rem; }
+    #auth-gate .ag-hint { font-size: 0.76rem; color: ${T.inkFaint}; line-height: 1.5; margin: 0 0 1rem; }
 
     .ag-waiting { text-align: center; }
     .ag-waiting-icon { width: 46px; height: 46px; margin: 0 auto 1rem; border-radius: 50%; background: ${ACCENT_SOFT}; display: flex; align-items: center; justify-content: center; animation: agPulseRing 2.4s ease-in-out infinite; }
@@ -451,7 +451,7 @@
   }
 
   if (jaLogouAntes) {
-    loadingTimer = setTimeout(ativarOverlay, 1200);
+    loadingTimer = setTimeout(ativarOverlay, 2000);
   } else {
     ativarOverlay();
   }
@@ -462,18 +462,37 @@
     return;
   }
 
+  // Cache local de aprovação — evita esperar a Firestore ir e voltar em
+  // toda navegação (site multi-página, sem SPA: cada clique recarrega
+  // tudo do zero). Sem isso, o overlay otimista (1200ms) quase sempre
+  // vencia antes da resposta da Firestore chegar, causando o "pisca e
+  // demora ~5s" — o app aparecia, sumia, e só voltava quando a rede
+  // respondia. Guarda o uid já aprovado e mostra o app na hora nas
+  // próximas vezes; a checagem em segundo plano continua rodando e
+  // revoga o acesso se o status realmente mudar.
+  var APROVADO_KEY = 'oab_approved_uid';
+
   var _unsubAprovacao = null;
   window._fbAuth.onAuthStateChanged(function (user) {
     if (_unsubAprovacao) { _unsubAprovacao(); _unsubAprovacao = null; }
-    if (!user) { renderLoginForm(null); return; }
+    if (!user) { try { localStorage.removeItem(APROVADO_KEY); } catch (e) {} renderLoginForm(null); return; }
 
     if (user.email === ADMIN_EMAIL) { mostrarApp(); iniciarSincronizacao(user); return; }
     if (!window._fbDb) { mostrarApp(); iniciarSincronizacao(user); return; }
 
+    var jaAprovadoAntes = false;
+    try { jaAprovadoAntes = localStorage.getItem(APROVADO_KEY) === user.uid; } catch (e) {}
+    if (jaAprovadoAntes) { mostrarApp(); iniciarSincronizacao(user); }
+
     _unsubAprovacao = window._fbDb.collection('usuarios_autorizados').doc(user.uid).onSnapshot(function (snap) {
       var dados = snap.exists ? snap.data() : null;
-      if (dados && dados.aprovado === true) { mostrarApp(); iniciarSincronizacao(user); }
-      else { renderAguardandoAprovacao(user.email || ''); }
-    }, function () { renderAguardandoAprovacao(user.email || ''); });
+      if (dados && dados.aprovado === true) {
+        try { localStorage.setItem(APROVADO_KEY, user.uid); } catch (e) {}
+        mostrarApp(); iniciarSincronizacao(user);
+      } else {
+        try { localStorage.removeItem(APROVADO_KEY); } catch (e) {}
+        renderAguardandoAprovacao(user.email || '');
+      }
+    }, function () { if (!jaAprovadoAntes) renderAguardandoAprovacao(user.email || ''); });
   });
 })();

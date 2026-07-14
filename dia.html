@@ -118,6 +118,30 @@
 .qr-hist-table td{padding:.5rem;border-bottom:1px dotted var(--line)}
 .qr-empty{color:var(--ink-faded);font-style:italic;font-size:.85rem;padding:.6rem 0}
 
+/* ── Revisões: escolha Questões x Teoria ── */
+.rv-tipo-escolha{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
+@media(max-width:480px){.rv-tipo-escolha{grid-template-columns:1fr}}
+.rv-tipo-btn{
+  display:flex;flex-direction:column;align-items:flex-start;gap:.15rem;text-align:left;
+  padding:.9rem 1rem;border:1.5px solid var(--line);border-radius:var(--radius-sm);
+  background:var(--paper);cursor:pointer;font-family:'Inter',sans-serif;font-size:.92rem;
+  font-weight:600;color:var(--ink);transition:all var(--transition)
+}
+.rv-tipo-btn span{font-size:.72rem;font-weight:400;color:var(--ink-faded)}
+.rv-tipo-btn:hover{border-color:var(--rose)}
+.rv-tipo-btn.active{border-color:var(--rose-deep);background:var(--blush)}
+.rv-conf-escolha{display:flex;gap:.5rem;flex-wrap:wrap}
+.rv-conf-btn{
+  padding:.5rem .9rem;border:1.5px solid var(--line);border-radius:20px;background:var(--paper);
+  cursor:pointer;font-family:'Inter',sans-serif;font-size:.8rem;color:var(--ink-soft);
+  transition:all var(--transition)
+}
+.rv-conf-btn:hover{border-color:var(--rose)}
+.rv-conf-btn.active{border-color:var(--rose-deep);background:var(--blush);color:var(--rose-deep);font-weight:600}
+.tr-topicos-list{display:flex;flex-direction:column;gap:.4rem;max-height:220px;overflow-y:auto;padding:.2rem}
+.tr-topico-item{display:flex;align-items:flex-start;gap:.5rem;font-size:.82rem;color:var(--ink);cursor:pointer}
+.tr-topico-item input{margin-top:.2rem;accent-color:var(--rose-deep)}
+
 /* PDF viewer */
 .pdf-embed-wrap{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-lg);box-shadow:var(--shadow);overflow:hidden}
 .pdf-embed-bar{display:flex;align-items:center;justify-content:space-between;padding:.7rem 1rem;border-bottom:1px solid var(--line)}
@@ -417,25 +441,62 @@
         <!-- Tab: Revisões -->
         <div class="dia-panel" id="panel-revisoes">
           <div class="dia-content-card">
-            <h4 style="font-family:'Fraunces',serif;font-size:1rem;margin-bottom:1rem">Registrar revisão</h4>
-            <p style="font-size:.8rem;color:var(--ink-faded);margin-bottom:.9rem">Uma mesma matéria pode ter várias revisões ao longo do tempo — cada uma fica registrada aqui e também conta nas estatísticas gerais de questões.</p>
-            <div class="qr-form-grid">
-              <select id="rv-materia" class="qr-input"></select>
-              <input type="number" id="rv-total" class="qr-input" placeholder="Total de questões" min="1">
-              <input type="number" id="rv-acertos" class="qr-input" placeholder="Acertos" min="0">
-              <input type="number" id="rv-tempo" class="qr-input" placeholder="Tempo (min, opcional)" min="0">
-              <input type="date" id="rv-data" class="qr-input">
-              <input type="text" id="rv-obs" class="qr-input" placeholder="Observações (opcional)">
+            <h4 style="font-family:'Fraunces',serif;font-size:1rem;margin-bottom:.2rem">O que você revisou agora?</h4>
+            <p style="font-size:.75rem;color:var(--ink-faded);margin-bottom:1rem">Escolha o tipo pra abrir o formulário certo</p>
+            <div class="rv-tipo-escolha">
+              <button type="button" class="rv-tipo-btn" data-tipo="questoes">📊 Questões<span>quantidade, acertos, tempo</span></button>
+              <button type="button" class="rv-tipo-btn" data-tipo="teoria">📖 Teoria<span>reler conteúdo, tópicos, flashcards...</span></button>
             </div>
-            <div style="margin-top:.9rem;display:flex;gap:.6rem;align-items:center;flex-wrap:wrap">
-              <button class="btn btn-primary" id="qr-btn-revisao" onclick="qrSalvar('revisao')">Registrar revisão</button>
-              <button class="btn btn-ghost" id="qr-cancel-revisao" onclick="qrCancelar('revisao')" style="display:none">Cancelar</button>
-              <span id="qr-msg-revisao" style="font-size:.78rem;color:var(--ink-faded)"></span>
+
+            <!-- Questões -->
+            <div class="rv-form-wrap" data-tipo="questoes" style="display:none;margin-top:1.2rem;padding-top:1.1rem;border-top:1px solid var(--line)">
+              <p style="font-size:.8rem;color:var(--ink-faded);margin-bottom:.9rem">Uma mesma matéria pode ter várias revisões ao longo do tempo — cada uma fica registrada aqui e também conta nas estatísticas gerais de questões.</p>
+              <div class="qr-form-grid">
+                <select id="rv-materia" class="qr-input"></select>
+                <input type="number" id="rv-total" class="qr-input" placeholder="Total de questões" min="1">
+                <input type="number" id="rv-acertos" class="qr-input" placeholder="Acertos" min="0">
+                <input type="number" id="rv-tempo" class="qr-input" placeholder="Tempo (min, opcional)" min="0">
+                <input type="date" id="rv-data" class="qr-input">
+                <input type="text" id="rv-obs" class="qr-input" placeholder="Observações (opcional)">
+              </div>
+              <div style="margin-top:.9rem;display:flex;gap:.6rem;align-items:center;flex-wrap:wrap">
+                <button class="btn btn-primary" id="qr-btn-revisao" onclick="qrSalvar('revisao')">Registrar revisão</button>
+                <button class="btn btn-ghost" id="qr-cancel-revisao" onclick="qrCancelar('revisao')" style="display:none">Cancelar</button>
+                <span id="qr-msg-revisao" style="font-size:.78rem;color:var(--ink-faded)"></span>
+              </div>
+            </div>
+
+            <!-- Teoria — sem taxa de acerto, só registra que houve revisão + o que achar útil -->
+            <div class="rv-form-wrap" data-tipo="teoria" style="display:none;margin-top:1.2rem;padding-top:1.1rem;border-top:1px solid var(--line)">
+              <p style="font-size:.75rem;color:var(--ink-faded);margin-bottom:.8rem">Sem taxa de acerto aqui — é só marcar que você revisou a teoria e, se quiser, o que revisou e como foi a lembrança.</p>
+              <div class="qr-form-grid">
+                <select id="tr-materia" class="qr-input"></select>
+                <input type="date" id="tr-data" class="qr-input">
+                <input type="text" id="tr-obs" class="qr-input" placeholder="Observações (opcional)" style="grid-column:1/-1">
+              </div>
+              <div style="margin-top:.9rem">
+                <div style="font-size:.72rem;color:var(--ink-faded);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem">Tópicos revisados (opcional)</div>
+                <div id="tr-topicos" class="tr-topicos-list"></div>
+              </div>
+              <div style="margin-top:.9rem">
+                <div style="font-size:.72rem;color:var(--ink-faded);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem">Como foi a lembrança? (opcional)</div>
+                <div class="rv-conf-escolha">
+                  <button type="button" class="rv-conf-btn" data-conf="esqueci">😕 Esqueci</button>
+                  <button type="button" class="rv-conf-btn" data-conf="mais-ou-menos">😐 Mais ou menos</button>
+                  <button type="button" class="rv-conf-btn" data-conf="lembrei">😊 Lembrei bem</button>
+                </div>
+              </div>
+              <div style="margin-top:.9rem;display:flex;gap:.6rem;align-items:center;flex-wrap:wrap">
+                <button class="btn btn-primary" id="tr-btn-registrar" onclick="trRegistrar()">Registrar revisão de teoria</button>
+                <button class="btn btn-ghost" id="tr-cancel" onclick="trCancelar()" style="display:none">Cancelar</button>
+                <span id="tr-msg" style="font-size:.78rem;color:var(--ink-faded)"></span>
+              </div>
             </div>
           </div>
           <div class="dia-content-card" style="margin-top:1rem">
             <h4 style="font-family:'Fraunces',serif;font-size:1rem;margin-bottom:.8rem">Histórico de revisões</h4>
             <div id="qr-historico-revisao"></div>
+            <div id="tr-historico"></div>
           </div>
         </div>
 
@@ -615,6 +676,104 @@ function qrRenderHistorico(tipo) {
     '</tr></thead><tbody>' + rows + '</tbody></table></div>';
 }
 
+// ── Revisões — escolha Questões x Teoria (mesma UI/lógica de hoje.html) ──
+var _rvTipoWired = false;
+var _trConfSelecionada = null;
+
+function _wireRevisoesTipo() {
+  if (_rvTipoWired) return;
+  _rvTipoWired = true;
+  document.querySelectorAll('.rv-tipo-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.rv-tipo-btn').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      var tipo = btn.dataset.tipo;
+      document.querySelectorAll('.rv-form-wrap').forEach(function(w) {
+        w.style.display = w.dataset.tipo === tipo ? 'block' : 'none';
+      });
+    });
+  });
+  document.querySelectorAll('.rv-conf-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var jaAtivo = btn.classList.contains('active');
+      document.querySelectorAll('.rv-conf-btn').forEach(function(b){ b.classList.remove('active'); });
+      _trConfSelecionada = jaAtivo ? null : btn.dataset.conf;
+      if (!jaAtivo) btn.classList.add('active');
+    });
+  });
+}
+
+function trCancelar() {
+  document.getElementById('tr-obs').value = '';
+  document.getElementById('tr-data').value = dataLocalHoje();
+  document.querySelectorAll('.tr-topico-check').forEach(function(c){ c.checked = false; });
+  document.querySelectorAll('.rv-conf-btn').forEach(function(b){ b.classList.remove('active'); });
+  _trConfSelecionada = null;
+  document.getElementById('tr-btn-registrar').textContent = 'Registrar revisão de teoria';
+  document.getElementById('tr-cancel').style.display = 'none';
+  document.getElementById('tr-msg').textContent = '';
+}
+
+function trRegistrar() {
+  var dia     = window._diaAtualQR;
+  var materia = document.getElementById('tr-materia').value;
+  var data    = document.getElementById('tr-data').value;
+  var obs     = document.getElementById('tr-obs').value.trim();
+  var msgEl   = document.getElementById('tr-msg');
+  if (!materia) { msgEl.textContent = '⚠ Selecione a matéria.'; msgEl.style.color = 'var(--rose-deep)'; return; }
+
+  var topicos = Array.from(document.querySelectorAll('.tr-topico-check:checked')).map(function(c){ return c.value; });
+  var dadosReg = { dia: dia, materia: materia, topicos: topicos, confianca: _trConfSelecionada, observacoes: obs };
+  if (data) dadosReg.data = data;
+
+  adicionarTeoriaRegistro(dadosReg);
+  msgEl.textContent = '✓ Revisão de teoria registrada';
+  msgEl.style.color = '#4a9850';
+  trCancelar();
+  trRenderHistorico();
+  if (typeof atualizarBadgeRevisar === 'function') atualizarBadgeRevisar();
+}
+
+function trExcluir(id) {
+  if (!confirm('Excluir este registro?')) return;
+  excluirTeoriaRegistro(id);
+  trRenderHistorico();
+}
+
+var _trConfLabel = { lembrei: '😊 Lembrei bem', 'mais-ou-menos': '😐 Mais ou menos', esqueci: '😕 Esqueci' };
+
+function trRenderHistorico() {
+  var cont = document.getElementById('tr-historico');
+  if (!cont) return;
+  var dia   = window._diaAtualQR;
+  var dados = getDadosDia(dia);
+  var regs  = getTeoriaRegistros({ dia: dia }).slice().sort(function(a,b){ return b.data.localeCompare(a.data); });
+  if (!regs.length) { cont.innerHTML = ''; return; }
+  var materiasMap = {};
+  (dados && dados.materias || []).forEach(function(m) {
+    var mid = (typeof getMateriaId === 'function') ? getMateriaId(m.nome) : m.nome;
+    materiasMap[mid] = m;
+  });
+  var rows = regs.map(function(r) {
+    var matInfo  = materiasMap[r.materia];
+    var matLabel = matInfo ? ((matInfo.emoji || '📖') + ' ' + matInfo.nome) : r.materia;
+    var topicos  = r.topicos && r.topicos.length ? r.topicos.join(', ') : '—';
+    return '<tr>' +
+      '<td>' + r.data + '</td>' +
+      '<td>' + matLabel + '</td>' +
+      '<td>' + (r.confianca ? _trConfLabel[r.confianca] : '—') + '</td>' +
+      '<td>' + topicos + '</td>' +
+      '<td>' + (r.observacoes ? r.observacoes.replace(/</g,'&lt;') : '—') + '</td>' +
+      '<td style="white-space:nowrap">' +
+        '<button class="btn btn-ghost" style="font-size:.7rem;padding:.25rem .5rem;color:var(--error,#c0524b)" onclick="trExcluir(\'' + r.id + '\')" title="Excluir">✕</button>' +
+      '</td>' +
+    '</tr>';
+  }).join('');
+  cont.innerHTML = '<div style="overflow-x:auto;margin-top:.8rem"><table class="qr-hist-table"><thead><tr>' +
+    '<th>Data</th><th>Matéria</th><th>Lembrança</th><th>Tópicos</th><th>Obs.</th><th>Ações</th>' +
+    '</tr></thead><tbody>' + rows + '</tbody></table></div>';
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   var prog = carregarProgresso();
   var sEl = document.getElementById('streak-count');
@@ -721,17 +880,33 @@ document.addEventListener('DOMContentLoaded', function() {
     var mid = (typeof getMateriaId === 'function') ? getMateriaId(m.nome) : m.nome;
     return '<option value="' + mid + '">' + (m.emoji || '📖') + ' ' + m.nome + '</option>';
   }).join('');
-  ['qr-materia', 'rv-materia'].forEach(function(selId) {
+  ['qr-materia', 'rv-materia', 'tr-materia'].forEach(function(selId) {
     var sel = document.getElementById(selId);
     if (sel) sel.innerHTML = materiaOpts;
   });
   var hojeStr = dataLocalHoje();
   var qrDataEl = document.getElementById('qr-data'); if (qrDataEl) qrDataEl.value = hojeStr;
   var rvDataEl = document.getElementById('rv-data'); if (rvDataEl) rvDataEl.value = hojeStr;
+  var trDataEl = document.getElementById('tr-data'); if (trDataEl) trDataEl.value = hojeStr;
   if (typeof qrRenderHistorico === 'function') {
     qrRenderHistorico('sessao');
     qrRenderHistorico('revisao');
   }
+
+  // Checklist opcional de tópicos revisados — reaproveita os tópicos do
+  // dia já cadastrados (mesmos exibidos na aba Tópicos)
+  var topicosWrap = document.getElementById('tr-topicos');
+  if (topicosWrap) {
+    var todosTopicos = [];
+    (dados.materias || []).forEach(function(m) { (m.topicos || []).forEach(function(t){ todosTopicos.push(t); }); });
+    topicosWrap.innerHTML = todosTopicos.length
+      ? todosTopicos.map(function(t) {
+          return '<label class="tr-topico-item"><input type="checkbox" class="tr-topico-check" value="' + t.replace(/"/g,'&quot;') + '"><span>' + t + '</span></label>';
+        }).join('')
+      : '<div style="font-size:.78rem;color:var(--ink-faded);font-style:italic">Sem tópicos cadastrados pra esse dia.</div>';
+  }
+  if (typeof trRenderHistorico === 'function') trRenderHistorico();
+  _wireRevisoesTipo();
 
   // ── PDF da Semana — embutido via iframe do Drive ──────────────
   var pdfWrap  = document.getElementById('pdf-embed-wrap');

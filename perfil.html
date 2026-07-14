@@ -582,17 +582,14 @@
       <div class="config-card">
         <div class="config-card-label">Sua conta</div>
         <p class="config-hint">
-          Logada como <strong id="perfil-email-logado">—</strong>. Seus dados agora sincronizam
-          automaticamente com a nuvem sempre que você troca de aba ou fecha a página — se usar o
-          site em outro celular ou computador com essa mesma conta, o progresso aparece lá também.
+          Logada como <strong id="perfil-email-logado">—</strong>. Seus dados sincronizam com a
+          nuvem automaticamente — em outro celular ou computador, entrando com essa mesma conta,
+          o progresso aparece lá também.
         </p>
         <div id="perfil-sync-status" class="config-backup-status"></div>
         <div style="display:flex;gap:0.6rem;flex-wrap:wrap;margin-top:0.7rem">
           <button class="btn btn-primary" id="ph-sync-enviar" style="font-size:0.78rem">☁ Sincronizar agora</button>
           <button class="btn btn-ghost" id="ph-sync-baixar" style="font-size:0.78rem">⬇ Baixar da nuvem</button>
-        </div>
-        <div style="margin-top:0.9rem;padding-top:0.9rem;border-top:1px dotted var(--line)">
-          <button class="btn btn-ghost" id="ph-logout" style="font-size:0.76rem;color:var(--error)">Sair da conta</button>
         </div>
       </div>
       <div class="config-card">
@@ -928,8 +925,6 @@ document.addEventListener('DOMContentLoaded', () => {
       try { localStorage.removeItem('oab_auth_ok'); } catch (e) {}
       if (window._fbAuth) window._fbAuth.signOut().then(() => location.reload());
     };
-    const btnLogout = document.getElementById('ph-logout');
-    if (btnLogout) btnLogout.addEventListener('click', fazerLogout);
     const btnLogoutTopo = document.getElementById('ph-logout-topo');
     if (btnLogoutTopo) btnLogoutTopo.addEventListener('click', fazerLogout);
   })();
