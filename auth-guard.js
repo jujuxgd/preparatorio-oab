@@ -46,21 +46,30 @@
       background: ${T.bg0};
       opacity: 0; transition: opacity .2s ease;
     }
-    .ag-shell { position: relative; display: flex; width: 100%; min-height: 100%; overflow: hidden; }
+    .ag-shell { position: relative; display: flex; width: 100%; min-height: 100%; overflow: hidden; background: linear-gradient(160deg, ${T.bg0} 0%, ${T.bg1} 100%); }
 
-    /* Painel de atmosfera (mesh gradient) — só desktop */
-    .ag-atmos {
-      position: relative; flex: 1.35; display: none; overflow: hidden;
-      background: linear-gradient(160deg, ${T.bg0} 0%, ${T.bg1} 100%);
+    /* Fundo com blobs — cobre a tela inteira sempre (mobile inclusive),
+       senão o card em vidro fosco não tem nada colorido pra borrar por
+       trás e fica com aparência lisa/incompleta */
+    .ag-bg { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
+    .ag-blob { position: absolute; border-radius: 50%; filter: blur(60px); will-change: transform; opacity: 0.75; }
+    .ag-blob-1 { width: 300px; height: 300px; top: -8%; left: -12%; background: ${T.blobLav}; animation: agDrift1 26s ease-in-out infinite; }
+    .ag-blob-2 { width: 260px; height: 260px; bottom: -10%; left: 10%; background: ${T.blobRose}; animation: agDrift2 32s ease-in-out infinite; }
+    .ag-blob-3 { width: 240px; height: 240px; top: 18%; right: -14%; background: ${T.blobMist}; animation: agDrift3 22s ease-in-out infinite; }
+    @media (min-width: 900px) {
+      .ag-blob { opacity: 1; }
+      .ag-blob-1 { width: 480px; height: 480px; }
+      .ag-blob-2 { width: 420px; height: 420px; }
+      .ag-blob-3 { width: 380px; height: 380px; }
     }
-    @media (min-width: 900px) { .ag-atmos { display: flex; flex-direction: column; justify-content: space-between; padding: 3.2rem 3.6rem; } }
-    .ag-blob { position: absolute; border-radius: 50%; filter: blur(60px); will-change: transform; pointer-events: none; }
-    .ag-blob-1 { width: 480px; height: 480px; top: -10%; left: -8%; background: ${T.blobLav}; animation: agDrift1 26s ease-in-out infinite; }
-    .ag-blob-2 { width: 420px; height: 420px; bottom: -12%; left: 18%; background: ${T.blobRose}; animation: agDrift2 32s ease-in-out infinite; }
-    .ag-blob-3 { width: 380px; height: 380px; top: 30%; right: -10%; background: ${T.blobMist}; animation: agDrift3 22s ease-in-out infinite; }
     @keyframes agDrift1 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(40px,30px) scale(1.08); } }
     @keyframes agDrift2 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(-30px,-40px) scale(1.05); } }
     @keyframes agDrift3 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(-25px,25px) scale(0.95); } }
+
+    /* Painel de atmosfera (saudação, frase, relógio) — conteúdo textual
+       só no desktop; o fundo com blobs (acima) já é universal */
+    .ag-atmos { position: relative; z-index: 1; flex: 1.35; display: none; }
+    @media (min-width: 900px) { .ag-atmos { display: flex; flex-direction: column; justify-content: space-between; padding: 3.2rem 3.6rem; } }
     .ag-grain {
       position: absolute; inset: -50%; opacity: ${isDark ? '0.05' : '0.035'}; pointer-events: none; mix-blend-mode: ${isDark ? 'overlay' : 'multiply'};
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
@@ -75,8 +84,8 @@
     .ag-clock { font-variant-numeric: tabular-nums; font-size: 0.82rem; color: ${T.inkFaint}; white-space: nowrap; letter-spacing: 0.02em; }
 
     /* Painel do formulário */
-    .ag-formside { flex: 1; display: flex; align-items: center; justify-content: center; padding: 1.5rem; background: ${T.bg0}; position: relative; overflow-y: auto; }
-    @media (min-width: 900px) { .ag-formside { flex: 1; background: ${T.paper}; } }
+    .ag-formside { flex: 1; display: flex; align-items: center; justify-content: center; padding: 1.5rem; position: relative; z-index: 1; overflow-y: auto; }
+    @media (min-width: 900px) { .ag-formside { background: ${T.paper}; box-shadow: -1px 0 0 ${T.border}; } }
 
     .ag-card {
       width: 100%; max-width: 380px;
@@ -224,9 +233,8 @@
     var frase = FRASES[Math.floor(Math.random() * FRASES.length)];
     overlay.innerHTML =
       '<div class="ag-shell">' +
+        '<div class="ag-bg"><div class="ag-blob ag-blob-1"></div><div class="ag-blob ag-blob-2"></div><div class="ag-blob ag-blob-3"></div><div class="ag-grain"></div></div>' +
         '<div class="ag-atmos">' +
-          '<div class="ag-blob ag-blob-1"></div><div class="ag-blob ag-blob-2"></div><div class="ag-blob ag-blob-3"></div>' +
-          '<div class="ag-grain"></div>' +
           '<div class="ag-brandmark">Exame da Ordem</div>' +
           '<div class="ag-hero">' +
             '<h1 id="ag-greeting">' + saudacaoAtual() + '.</h1>' +
