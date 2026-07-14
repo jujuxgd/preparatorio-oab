@@ -12,6 +12,7 @@
 // na primeira vez, quando ainda não existe essa marca local.
 // ============================================================
 (function () {
+  var ADMIN_EMAIL = 'juliagabriellems@icloud.com';
   var isDark = (localStorage.getItem('theme') || 'light') === 'dark';
   var cores = isDark
     ? { paper: '#211C18', ink: '#F1ECE4', inkFaded: '#B3A99C', linha: '#332C25', bg1: '#2A1F22', bg2: '#211C18' }
@@ -119,7 +120,14 @@
           '<button type="submit" id="auth-gate-btn" ' +
             'style="width:100%;padding:0.85rem;border:none;border-radius:10px;background:linear-gradient(135deg,' + roseDeep + ',' + roseDeep + 'dd);color:#fff;font-size:0.92rem;font-weight:600;cursor:pointer;font-family:inherit;transition:filter .15s, transform .1s">Entrar</button>' +
         '</form>' +
+        '<div style="text-align:center;margin-top:1.1rem">' +
+          '<button type="button" id="auth-gate-ir-cadastro" style="background:none;border:none;color:' + cores.inkFaded + ';font-size:0.76rem;cursor:pointer;font-family:inherit;text-decoration:underline">Ainda não tem acesso? Solicitar acesso</button>' +
+        '</div>' +
       '</div>';
+
+    document.getElementById('auth-gate-ir-cadastro').addEventListener('click', function () {
+      renderSignupForm(null);
+    });
 
     document.getElementById('auth-gate-form').addEventListener('submit', function (e) {
       e.preventDefault();
@@ -147,6 +155,90 @@
     });
   }
 
+  function renderSignupForm(erro) {
+    clearTimeout(loadingTimer);
+    ativarOverlay();
+    overlay.style.opacity = '1';
+    overlay.innerHTML =
+      '<div class="ag-card" style="width:100%;max-width:360px;background:' + cores.paper + ';border:1px solid ' + cores.linha + ';border-radius:20px;padding:2.4rem 2rem;box-shadow:0 8px 32px rgba(33,28,25,0.13), 0 20px 48px rgba(33,28,25,0.08)">' +
+        '<div class="ag-seal" style="display:flex;justify-content:center;margin-bottom:0.7rem">' +
+          '<svg viewBox="0 0 64 64" width="42" height="42" aria-hidden="true"><circle cx="32" cy="32" r="23" fill="none" stroke="' + roseDeep + '" stroke-width="1.6"/><text x="32" y="33" font-size="19" letter-spacing="1.2" text-anchor="middle" dominant-baseline="central" font-family="Georgia,serif" font-weight="700" fill="' + roseDeep + '">OAB</text></svg>' +
+        '</div>' +
+        '<div style="font-family:MagicalFeather,cursive;font-size:2.1rem;font-weight:normal;text-align:center;color:' + roseDeep + ';margin-bottom:0.1rem;line-height:1">Exame da Ordem</div>' +
+        '<div style="font-size:0.8rem;text-align:center;color:' + cores.inkFaded + ';margin-bottom:1.6rem">Solicitar acesso ao preparatório</div>' +
+        (erro ? '<div style="background:#fdecea;color:#c0524b;font-size:0.78rem;padding:0.65rem 0.85rem;border-radius:10px;margin-bottom:1rem;line-height:1.4">' + erro + '</div>' : '') +
+        '<form id="auth-gate-signup-form">' +
+          '<input id="auth-gate-signup-email" type="email" placeholder="E-mail" autocomplete="username" required ' +
+            'style="width:100%;box-sizing:border-box;padding:0.8rem 1rem;border:1.5px solid ' + cores.linha + ';border-radius:10px;font-size:1rem;margin-bottom:0.7rem;font-family:inherit;background:' + cores.paper + ';color:' + cores.ink + ';transition:border-color .2s,box-shadow .2s">' +
+          '<input id="auth-gate-signup-senha" type="password" placeholder="Crie uma senha (mín. 6 caracteres)" autocomplete="new-password" required minlength="6" ' +
+            'style="width:100%;box-sizing:border-box;padding:0.8rem 1rem;border:1.5px solid ' + cores.linha + ';border-radius:10px;font-size:1rem;margin-bottom:0.7rem;font-family:inherit;background:' + cores.paper + ';color:' + cores.ink + ';transition:border-color .2s,box-shadow .2s">' +
+          '<input id="auth-gate-signup-senha2" type="password" placeholder="Confirme a senha" autocomplete="new-password" required minlength="6" ' +
+            'style="width:100%;box-sizing:border-box;padding:0.8rem 1rem;border:1.5px solid ' + cores.linha + ';border-radius:10px;font-size:1rem;margin-bottom:1.2rem;font-family:inherit;background:' + cores.paper + ';color:' + cores.ink + ';transition:border-color .2s,box-shadow .2s">' +
+          '<div style="font-size:0.74rem;color:' + cores.inkFaded + ';margin-bottom:1rem;line-height:1.4">Depois de enviar, o acesso fica pendente até ser aprovado — você recebe um aviso assim que puder entrar.</div>' +
+          '<button type="submit" id="auth-gate-signup-btn" ' +
+            'style="width:100%;padding:0.85rem;border:none;border-radius:10px;background:linear-gradient(135deg,' + roseDeep + ',' + roseDeep + 'dd);color:#fff;font-size:0.92rem;font-weight:600;cursor:pointer;font-family:inherit;transition:filter .15s, transform .1s">Solicitar acesso</button>' +
+        '</form>' +
+        '<div style="text-align:center;margin-top:1.1rem">' +
+          '<button type="button" id="auth-gate-ir-login" style="background:none;border:none;color:' + cores.inkFaded + ';font-size:0.76rem;cursor:pointer;font-family:inherit;text-decoration:underline">Já tenho acesso — entrar</button>' +
+        '</div>' +
+      '</div>';
+
+    document.getElementById('auth-gate-ir-login').addEventListener('click', function () {
+      renderLoginForm(null);
+    });
+
+    document.getElementById('auth-gate-signup-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      var email = document.getElementById('auth-gate-signup-email').value.trim();
+      var senha = document.getElementById('auth-gate-signup-senha').value;
+      var senha2 = document.getElementById('auth-gate-signup-senha2').value;
+      if (senha !== senha2) { renderSignupForm('As senhas não coincidem.'); return; }
+      var btn = document.getElementById('auth-gate-signup-btn');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="ag-spinner"></span>Enviando…';
+      window._fbAuth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+        .then(function () { return window._fbAuth.createUserWithEmailAndPassword(email, senha); })
+        .then(function (cred) {
+          if (!window._fbDb) return;
+          return window._fbDb.collection('usuarios_autorizados').doc(cred.user.uid).set({
+            email: email,
+            aprovado: false,
+            criado_em: firebase.firestore.FieldValue.serverTimestamp(),
+          });
+        })
+        .catch(function (err) {
+          var msg = 'Não foi possível enviar a solicitação.';
+          if (err && err.code === 'auth/email-already-in-use') msg = 'Esse e-mail já tem uma conta — tenta entrar em vez de solicitar de novo.';
+          if (err && err.code === 'auth/invalid-email') msg = 'E-mail inválido.';
+          if (err && err.code === 'auth/weak-password') msg = 'Senha muito fraca — use pelo menos 6 caracteres.';
+          var cardEl = overlay.querySelector('.ag-card');
+          if (cardEl) { cardEl.classList.remove('ag-shake'); void cardEl.offsetWidth; cardEl.classList.add('ag-shake'); }
+          renderSignupForm(msg);
+        });
+      // onAuthStateChanged cuida do que acontece depois (tela de
+      // aguardando aprovação, já que aprovado começa como false)
+    });
+  }
+
+  function renderAguardandoAprovacao(email) {
+    clearTimeout(loadingTimer);
+    ativarOverlay();
+    overlay.style.opacity = '1';
+    overlay.innerHTML =
+      '<div class="ag-card" style="width:100%;max-width:360px;background:' + cores.paper + ';border:1px solid ' + cores.linha + ';border-radius:20px;padding:2.4rem 2rem;box-shadow:0 8px 32px rgba(33,28,25,0.13), 0 20px 48px rgba(33,28,25,0.08);text-align:center">' +
+        '<div class="ag-seal" style="display:flex;justify-content:center;margin-bottom:0.9rem">' +
+          '<svg viewBox="0 0 64 64" width="42" height="42" aria-hidden="true"><circle cx="32" cy="32" r="23" fill="none" stroke="' + roseDeep + '" stroke-width="1.6"/><text x="32" y="33" font-size="19" letter-spacing="1.2" text-anchor="middle" dominant-baseline="central" font-family="Georgia,serif" font-weight="700" fill="' + roseDeep + '">OAB</text></svg>' +
+        '</div>' +
+        '<div style="font-family:MagicalFeather,cursive;font-size:1.8rem;color:' + roseDeep + ';margin-bottom:0.6rem;line-height:1">Quase lá</div>' +
+        '<p style="font-size:0.86rem;color:' + cores.ink + ';line-height:1.55;margin:0 0 1.5rem">Seu pedido de acesso (<strong>' + email + '</strong>) está aguardando aprovação. Assim que for liberado, esta página atualiza sozinha — pode deixar aberta.</p>' +
+        '<button type="button" id="auth-gate-sair-espera" style="background:none;border:1px solid ' + cores.linha + ';border-radius:10px;padding:0.6rem 1.1rem;color:' + cores.inkFaded + ';font-size:0.78rem;cursor:pointer;font-family:inherit">Sair</button>' +
+      '</div>';
+    document.getElementById('auth-gate-sair-espera').addEventListener('click', function () {
+      window._fbAuth.signOut().then(function () { location.reload(); });
+    });
+  }
+
+
   function iniciarSincronizacao(user) {
     if (typeof window._syncOAB !== 'undefined' && window._syncOAB.iniciar) {
       window._syncOAB.iniciar(user);
@@ -160,12 +252,35 @@
     return;
   }
 
+  var _unsubAprovacao = null;
   window._fbAuth.onAuthStateChanged(function (user) {
-    if (user) {
+    if (_unsubAprovacao) { _unsubAprovacao(); _unsubAprovacao = null; }
+    if (!user) { renderLoginForm(null); return; }
+
+    // Administradora sempre tem acesso — não depende de aprovação
+    if (user.email === ADMIN_EMAIL) {
       mostrarApp();
       iniciarSincronizacao(user);
-    } else {
-      renderLoginForm(null);
+      return;
     }
+
+    if (!window._fbDb) { mostrarApp(); iniciarSincronizacao(user); return; }
+
+    // Ouve em tempo real: se a administradora aprovar enquanto esta
+    // tela de espera está aberta, libera sozinho, sem precisar recarregar
+    _unsubAprovacao = window._fbDb.collection('usuarios_autorizados').doc(user.uid)
+      .onSnapshot(function (snap) {
+        var dados = snap.exists ? snap.data() : null;
+        if (dados && dados.aprovado === true) {
+          mostrarApp();
+          iniciarSincronizacao(user);
+        } else {
+          renderAguardandoAprovacao(user.email || '');
+        }
+      }, function () {
+        // sem permissão de ler (regra ainda não publicada, etc.) — trata
+        // como pendente em vez de travar numa tela de erro
+        renderAguardandoAprovacao(user.email || '');
+      });
   });
 })();

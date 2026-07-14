@@ -6,7 +6,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
 <script src="firebase-init.js?v=1783862902"></script>
-<script src="auth-guard.js?v=1784021867"></script>
+<script src="auth-guard.js?v=1784043341"></script>
 <script src="cores-early.js?v=1783859977"></script>
 <script src="page-transition.js?v=1783861010"></script>
 <title>Perfil - Preparatório OAB</title>
@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Inter:opsz,wght@14..32,400..700&family=Caveat:wght@400;500&display=swap" rel="stylesheet">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="style.css?v=1784042658">
+<link rel="stylesheet" href="style.css?v=1784043341">
 <style>
 /* ════════════════════════════════════════════
    PERFIL — diário de evolução pessoal
@@ -439,6 +439,34 @@
 .config-backup-status.ok    { background: rgba(94, 140, 106, 0.14); color: var(--success); }
 .config-backup-status.warn  { background: rgba(184, 137, 62, 0.14); color: var(--gold); }
 .config-backup-status.late  { background: rgba(192, 82, 75, 0.14); color: var(--error); }
+
+.admin-req-item {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 0.9rem 1.1rem;
+}
+.admin-req-email { font-size: 0.86rem; color: var(--ink); font-weight: 600; flex: 1; min-width: 160px; }
+.admin-req-data { font-size: 0.7rem; color: var(--ink-faded); }
+.admin-req-actions { display: flex; gap: 0.5rem; }
+.admin-req-aprovar, .admin-req-recusar {
+  padding: 0.4rem 0.85rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  font-family: inherit;
+  font-size: 0.76rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.admin-req-aprovar { background: var(--success); color: #fff; }
+.admin-req-aprovar:hover { filter: brightness(1.08); }
+.admin-req-recusar { background: none; border-color: var(--line); color: var(--ink-faded); }
+.admin-req-recusar:hover { border-color: var(--error); color: var(--error); }
 </style>
 </head>
 <body>
@@ -579,6 +607,15 @@
           <button class="btn btn-ghost" id="ph-importar-btn" style="font-size:0.78rem">⬆ Importar backup</button>
           <input type="file" id="ph-importar-file" accept="application/json" style="display:none">
         </div>
+      </div>
+    </div>
+
+    <!-- SOLICITAÇÕES DE ACESSO (só aparece pra administradora) -->
+    <div id="admin-solicitacoes-wrap" style="display:none">
+      <div class="section-label">Solicitações de acesso</div>
+      <div class="conquistas-wrap">
+        <p class="conquistas-sub" id="admin-solicitacoes-sub">Carregando…</p>
+        <div id="admin-solicitacoes-lista" style="display:flex;flex-direction:column;gap:0.6rem"></div>
       </div>
     </div>
 
@@ -895,6 +932,63 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnLogout) btnLogout.addEventListener('click', fazerLogout);
     const btnLogoutTopo = document.getElementById('ph-logout-topo');
     if (btnLogoutTopo) btnLogoutTopo.addEventListener('click', fazerLogout);
+  })();
+
+  // ── SOLICITAÇÕES DE ACESSO (só visível/funcional pra administradora —
+  // a proteção de verdade é a regra do Firestore, isso aqui é só UI) ──
+  const ADMIN_EMAIL = 'juliagabriellems@icloud.com';
+  (function renderSolicitacoesAcesso() {
+    const wrap = document.getElementById('admin-solicitacoes-wrap');
+    if (!wrap || !window._fbAuth || !window._fbDb) return;
+    const usuarioAtual = window._fbAuth.currentUser;
+    if (!usuarioAtual || usuarioAtual.email !== ADMIN_EMAIL) return;
+    wrap.style.display = 'block';
+
+    const lista = document.getElementById('admin-solicitacoes-lista');
+    const sub = document.getElementById('admin-solicitacoes-sub');
+
+    function render(snap) {
+      if (snap.empty) {
+        sub.textContent = 'Nenhuma solicitação pendente no momento.';
+        lista.innerHTML = '';
+        return;
+      }
+      sub.textContent = `${snap.size} pedido${snap.size > 1 ? 's' : ''} aguardando aprovação`;
+      lista.innerHTML = snap.docs.map(doc => {
+        const d = doc.data();
+        const dataFmt = d.criado_em && d.criado_em.toDate ? d.criado_em.toDate().toLocaleDateString('pt-BR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : '';
+        return `<div class="admin-req-item" data-uid="${doc.id}">
+          <div>
+            <div class="admin-req-email">${(d.email || 'sem e-mail').replace(/</g,'&lt;')}</div>
+            <div class="admin-req-data">${dataFmt}</div>
+          </div>
+          <div class="admin-req-actions">
+            <button class="admin-req-aprovar" data-uid="${doc.id}">✓ Aprovar</button>
+            <button class="admin-req-recusar" data-uid="${doc.id}">Recusar</button>
+          </div>
+        </div>`;
+      }).join('');
+
+      lista.querySelectorAll('.admin-req-aprovar').forEach(btn => {
+        btn.addEventListener('click', () => {
+          btn.disabled = true; btn.textContent = 'Aprovando…';
+          window._fbDb.collection('usuarios_autorizados').doc(btn.dataset.uid)
+            .update({ aprovado: true, aprovado_em: firebase.firestore.FieldValue.serverTimestamp() })
+            .catch(() => { btn.disabled = false; btn.textContent = '✓ Aprovar'; alert('Não foi possível aprovar. Tenta de novo.'); });
+        });
+      });
+      lista.querySelectorAll('.admin-req-recusar').forEach(btn => {
+        btn.addEventListener('click', () => {
+          if (!confirm('Recusar e remover esse pedido de acesso?')) return;
+          window._fbDb.collection('usuarios_autorizados').doc(btn.dataset.uid).delete()
+            .catch(() => alert('Não foi possível recusar. Tenta de novo.'));
+        });
+      });
+    }
+
+    // Tempo real: some da lista sozinho assim que aprovar/recusar
+    window._fbDb.collection('usuarios_autorizados').where('aprovado', '==', false)
+      .onSnapshot(render, () => { sub.textContent = 'Não foi possível carregar as solicitações.'; });
   })();
 
   // ── RESUMO ──
