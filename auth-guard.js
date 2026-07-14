@@ -120,13 +120,20 @@
           '<button type="submit" id="auth-gate-btn" ' +
             'style="width:100%;padding:0.85rem;border:none;border-radius:10px;background:linear-gradient(135deg,' + roseDeep + ',' + roseDeep + 'dd);color:#fff;font-size:0.92rem;font-weight:600;cursor:pointer;font-family:inherit;transition:filter .15s, transform .1s">Entrar</button>' +
         '</form>' +
-        '<div style="text-align:center;margin-top:1.1rem">' +
-          '<button type="button" id="auth-gate-ir-cadastro" style="background:none;border:none;color:' + cores.inkFaded + ';font-size:0.76rem;cursor:pointer;font-family:inherit;text-decoration:underline">Ainda não tem acesso? Solicitar acesso</button>' +
+        '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:1.1rem;gap:0.6rem;flex-wrap:wrap">' +
+          '<button type="button" id="auth-gate-esqueci" style="background:none;border:none;color:' + cores.inkFaded + ';font-size:0.76rem;cursor:pointer;font-family:inherit;text-decoration:underline;padding:0">Esqueci minha senha</button>' +
+          '<button type="button" id="auth-gate-ir-cadastro" style="background:none;border:none;color:' + cores.inkFaded + ';font-size:0.76rem;cursor:pointer;font-family:inherit;text-decoration:underline;padding:0">Solicitar acesso</button>' +
         '</div>' +
       '</div>';
 
     document.getElementById('auth-gate-ir-cadastro').addEventListener('click', function () {
       renderSignupForm(null);
+    });
+
+    document.getElementById('auth-gate-esqueci').addEventListener('click', function () {
+      var emailField = document.getElementById('auth-gate-email');
+      var email = (emailField && emailField.value.trim()) || '';
+      renderRecuperarSenha(email);
     });
 
     document.getElementById('auth-gate-form').addEventListener('submit', function (e) {
@@ -151,6 +158,55 @@
             cardEl.classList.add('ag-shake');
           }
           renderLoginForm(msg);
+        });
+    });
+  }
+
+  function renderRecuperarSenha(emailInicial, mensagem, erro) {
+    clearTimeout(loadingTimer);
+    ativarOverlay();
+    overlay.style.opacity = '1';
+    overlay.innerHTML =
+      '<div class="ag-card" style="width:100%;max-width:360px;background:' + cores.paper + ';border:1px solid ' + cores.linha + ';border-radius:20px;padding:2.4rem 2rem;box-shadow:0 8px 32px rgba(33,28,25,0.13), 0 20px 48px rgba(33,28,25,0.08)">' +
+        '<div class="ag-seal" style="display:flex;justify-content:center;margin-bottom:0.7rem">' +
+          '<svg viewBox="0 0 64 64" width="42" height="42" aria-hidden="true"><circle cx="32" cy="32" r="23" fill="none" stroke="' + roseDeep + '" stroke-width="1.6"/><text x="32" y="33" font-size="19" letter-spacing="1.2" text-anchor="middle" dominant-baseline="central" font-family="Georgia,serif" font-weight="700" fill="' + roseDeep + '">OAB</text></svg>' +
+        '</div>' +
+        '<div style="font-family:MagicalFeather,cursive;font-size:1.8rem;text-align:center;color:' + roseDeep + ';margin-bottom:0.5rem;line-height:1">Recuperar senha</div>' +
+        '<p style="font-size:0.8rem;text-align:center;color:' + cores.inkFaded + ';margin:0 0 1.4rem;line-height:1.5">Digite seu e-mail — enviamos um link pra você criar uma senha nova.</p>' +
+        (erro ? '<div style="background:#fdecea;color:#c0524b;font-size:0.78rem;padding:0.65rem 0.85rem;border-radius:10px;margin-bottom:1rem;line-height:1.4">' + erro + '</div>' : '') +
+        (mensagem ? '<div style="background:#eaf6ec;color:#2f6b3a;font-size:0.78rem;padding:0.65rem 0.85rem;border-radius:10px;margin-bottom:1rem;line-height:1.4">' + mensagem + '</div>' : '') +
+        '<form id="auth-gate-recuperar-form">' +
+          '<input id="auth-gate-recuperar-email" type="email" placeholder="E-mail" autocomplete="username" required value="' + (emailInicial || '').replace(/"/g,'') + '" ' +
+            'style="width:100%;box-sizing:border-box;padding:0.8rem 1rem;border:1.5px solid ' + cores.linha + ';border-radius:10px;font-size:1rem;margin-bottom:1.2rem;font-family:inherit;background:' + cores.paper + ';color:' + cores.ink + ';transition:border-color .2s,box-shadow .2s">' +
+          '<button type="submit" id="auth-gate-recuperar-btn" ' +
+            'style="width:100%;padding:0.85rem;border:none;border-radius:10px;background:linear-gradient(135deg,' + roseDeep + ',' + roseDeep + 'dd);color:#fff;font-size:0.92rem;font-weight:600;cursor:pointer;font-family:inherit;transition:filter .15s, transform .1s">Enviar link de recuperação</button>' +
+        '</form>' +
+        '<div style="text-align:center;margin-top:1.1rem">' +
+          '<button type="button" id="auth-gate-voltar-login" style="background:none;border:none;color:' + cores.inkFaded + ';font-size:0.76rem;cursor:pointer;font-family:inherit;text-decoration:underline">Voltar pro login</button>' +
+        '</div>' +
+      '</div>';
+
+    document.getElementById('auth-gate-voltar-login').addEventListener('click', function () {
+      renderLoginForm(null);
+    });
+
+    document.getElementById('auth-gate-recuperar-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      var email = document.getElementById('auth-gate-recuperar-email').value.trim();
+      var btn = document.getElementById('auth-gate-recuperar-btn');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="ag-spinner"></span>Enviando…';
+      window._fbAuth.sendPasswordResetEmail(email)
+        .then(function () {
+          renderRecuperarSenha(email, 'Link enviado! Confere sua caixa de entrada (e o spam) e clica no link pra criar uma senha nova.');
+        })
+        .catch(function (err) {
+          // Por segurança, o Firebase às vezes não diferencia "não existe"
+          // de outros erros -- trata de forma genérica e amigável mesmo assim
+          var msg = 'Não foi possível enviar o link. Confere se o e-mail está certo.';
+          if (err && err.code === 'auth/invalid-email') msg = 'E-mail inválido.';
+          if (err && err.code === 'auth/too-many-requests') msg = 'Muitas tentativas — aguarde um pouco e tente de novo.';
+          renderRecuperarSenha(email, null, msg);
         });
     });
   }

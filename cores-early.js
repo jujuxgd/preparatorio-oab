@@ -23,14 +23,17 @@
 
     const BASES = { sutil: '#B14A77', couture: '#C8336F', vibrante: '#E01571' };
     const KEY = 'oab_rose_intensity', CUSTOM_KEY = 'oab_rose_custom_hex';
+    const PADRAO_NOVO_USUARIO = '#000000'; // preto — quem nunca configurou nada cai aqui
 
-    const saved = localStorage.getItem(KEY) || 'couture';
+    const saved = localStorage.getItem(KEY);
     let base;
     if (saved === 'custom') {
       const hex = localStorage.getItem(CUSTOM_KEY);
-      base = (hex && /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(hex)) ? hex : BASES.couture;
+      base = (hex && /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(hex)) ? hex : PADRAO_NOVO_USUARIO;
+    } else if (saved && BASES[saved]) {
+      base = BASES[saved];
     } else {
-      base = BASES[saved] || BASES.couture;
+      base = PADRAO_NOVO_USUARIO;
     }
 
     const root = document.documentElement;

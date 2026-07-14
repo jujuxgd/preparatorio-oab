@@ -138,8 +138,14 @@
   }
 
   function load() {
-    let saved = 'couture';
-    try { saved = localStorage.getItem(KEY) || 'couture'; } catch (e) {}
+    let saved = null;
+    try { saved = localStorage.getItem(KEY); } catch (e) {}
+    if (!saved) {
+      // Nunca configurou nada — padrão agora é preto, não mais rosa
+      try { localStorage.setItem(CUSTOM_KEY, '#000000'); } catch (e) {}
+      applyCustom('#000000');
+      return;
+    }
     if (saved === 'custom') {
       let hex = null;
       try { hex = localStorage.getItem(CUSTOM_KEY); } catch (e) {}
