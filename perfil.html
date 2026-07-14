@@ -582,7 +582,7 @@
       <div class="config-card">
         <div class="config-card-label">Sua conta</div>
         <p class="config-hint">
-          Logada como <strong id="perfil-email-logado">—</strong>. Seus dados sincronizam com a
+          <span id="perfil-conta-genero">Logada</span> como <strong id="perfil-email-logado">—</strong>. Seus dados sincronizam com a
           nuvem automaticamente — em outro celular ou computador, entrando com essa mesma conta,
           o progresso aparece lá também.
         </p>
@@ -860,10 +860,19 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    // E-mail logado
+    // Gênero do texto ("Logada"/"Logado", conforme a preferência salva)
+    const generoEl = document.getElementById('perfil-conta-genero');
+    if (generoEl) generoEl.textContent = fmtG('Logada');
+
+    // E-mail logado — via onAuthStateChanged (não um único check aqui: no
+    // momento em que DOMContentLoaded dispara, o Firebase Auth costuma
+    // ainda não ter confirmado a sessão, então currentUser vinha null e o
+    // e-mail nunca aparecia, ficando preso no "—" pra sempre).
     const emailEl = document.getElementById('perfil-email-logado');
-    if (emailEl && window._fbAuth && window._fbAuth.currentUser) {
-      emailEl.textContent = window._fbAuth.currentUser.email || '—';
+    if (emailEl && window._fbAuth) {
+      window._fbAuth.onAuthStateChanged(user => {
+        emailEl.textContent = (user && user.email) || '—';
+      });
     }
 
     // Status de sincronização (última vez que enviou pra nuvem OU

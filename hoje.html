@@ -803,9 +803,12 @@
 
 /* Toast de avanço de dia — topo central: embaixo cobria outras caixas
    de texto da página (ex.: microresumo, formulário de questões) */
+/* Toast "a seguir" — ação de navegar pro próximo dia. Fica embaixo,
+   centralizado, separado do toast de parabéns (canto superior) pra não
+   virarem uma coisa só cheia de informação. */
 .day-toast {
   position: fixed;
-  top: 1.4rem;
+  bottom: 1.4rem;
   left: 50%;
   transform: translateX(-50%) translateY(0);
   background: var(--paper);
@@ -823,7 +826,7 @@
 }
 
 @keyframes toastIn {
-  from { opacity: 0; transform: translateX(-50%) translateY(-30px); }
+  from { opacity: 0; transform: translateX(-50%) translateY(30px); }
   to   { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
 
@@ -832,7 +835,7 @@
 }
 
 @keyframes toastOut {
-  to { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+  to { opacity: 0; transform: translateX(-50%) translateY(20px); }
 }
 
 .toast-icon { font-size: 1.8rem; flex-shrink: 0; }
@@ -848,6 +851,36 @@
   animation: toastTimer 5s linear forwards;
 }
 @keyframes toastTimer { from { width: 100%; } to { width: 0%; } }
+
+/* Toast "parabéns" — só a confirmação, curtinha, canto superior, some
+   sozinha. Não tem botão nem ação — essa parte fica no toast de baixo. */
+.day-toast-parabens {
+  position: fixed;
+  top: 1.4rem;
+  right: 1.4rem;
+  background: linear-gradient(135deg, var(--rose), var(--rose-deep));
+  color: var(--paper);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: 0.8rem 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  z-index: 9000;
+  font-family: 'Fraunces', serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  animation: parabensIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes parabensIn {
+  from { opacity: 0; transform: translateY(-16px) scale(0.95); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.day-toast-parabens.hiding { animation: parabensOut 0.3s ease forwards; }
+@keyframes parabensOut { to { opacity: 0; transform: translateY(-12px) scale(0.96); } }
+@media (max-width: 560px) {
+  .day-toast-parabens { top: 0.8rem; right: 0.8rem; left: 0.8rem; justify-content: center; }
+}
 
 /* Modo foco: usa Focus Dashboard Layout de style.css (classes .focus-overlay / .focus-panel) */
 
@@ -2029,6 +2062,7 @@ function toggleDiaConcluido() {
       setTimeout(() => btn.classList.remove('celebrate-pop'), 500);
     }
     showPetals();
+    _mostrarToastParabens(dia);
     const nextD = getDadosDia(dia + 1);
     if (nextD) {
       _mostrarToastAvanco(dia + 1, nextD);
@@ -2253,7 +2287,24 @@ function _vaToggleDone(btn, doneKey, key, n) {
   }
 }
 
-// ── Toast de avanço elegante ──────────────────
+// ── Toast de parabéns — só a confirmação, canto superior, some sozinha ──
+function _mostrarToastParabens(diaConcluido) {
+  const existing = document.querySelector('.day-toast-parabens');
+  if (existing) existing.remove();
+
+  const toast = document.createElement('div');
+  toast.className = 'day-toast-parabens';
+  toast.innerHTML = `<span>🌸</span><span>Dia ${diaConcluido} concluído!</span>`;
+  document.body.appendChild(toast);
+
+  setTimeout(() => {
+    toast.classList.add('hiding');
+    setTimeout(() => toast.remove(), 300);
+  }, 2600);
+}
+
+// ── Toast "a seguir" — ação de navegar pro próximo dia, embaixo, separada
+// do toast de parabéns (acima) pra não ficarem juntas numa coisa só ──
 function _mostrarToastAvanco(proximoDia, dadosNext) {
   const existing = document.querySelector('.day-toast');
   if (existing) existing.remove();
@@ -2262,10 +2313,10 @@ function _mostrarToastAvanco(proximoDia, dadosNext) {
   const toast = document.createElement('div');
   toast.className = 'day-toast';
   toast.innerHTML = `
-    <div class="toast-icon">🌸</div>
+    <div class="toast-icon">→</div>
     <div class="toast-text">
-      <strong>Dia ${proximoDia - 1} concluído! ✦</strong>
-      <span>A seguir: Dia ${proximoDia} · ${mats}</span>
+      <strong>A seguir</strong>
+      <span>Dia ${proximoDia} · ${mats}</span>
     </div>
     <div style="display:flex;flex-direction:column;gap:0.4rem;flex-shrink:0">
       <button onclick="_irProximoDia(${proximoDia})" style="background:linear-gradient(135deg,var(--rose),var(--rose-deep));color:var(--paper);border:none;border-radius:var(--radius-sm);padding:0.4rem 0.9rem;font-size:0.74rem;font-family:inherit;font-weight:600;cursor:pointer;white-space:nowrap">Ir agora →</button>

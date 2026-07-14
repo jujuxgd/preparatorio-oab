@@ -122,32 +122,53 @@
     const container = document.createElement('div');
     container.innerHTML = html;
     let idx = index;
-    Array.from(container.childNodes).forEach(node => {
-      if (node.nodeType === 1 && node.tagName === 'TABLE') {
-        const grid = Array.from(node.rows || []).map(row =>
-          Array.from(row.cells || []).map(cell => (cell.innerText || '').replace(/\s+/g, ' ').trim())
-        );
-        if (!grid.length || !grid[0].length) return;
-        // Garante uma quebra de linha antes da tabela: sem isso, quando `idx`
-        // cai bem na borda final do parágrafo anterior, quill.getLine(idx)
-        // (usado dentro de _qlInsertTable) resolve pra ESSE parágrafo, e a
-        // tabela acaba inserida ANTES dele em vez de depois — era a causa da
-        // tabela "pular" pro início e do texto ao redor virar uma bagunça.
-        if (idx > 0) {
-          quill.insertText(idx, '\n', Quill.sources.SILENT);
-          idx += 1;
-        }
-        const before = quill.getLength();
-        _qlInsertTable(quill, grid.length, grid[0].length, grid, idx);
-        idx += quill.getLength() - before;
-      } else {
-        const frag = node.nodeType === 1 ? node.outerHTML : node.textContent;
-        if (!frag || !frag.trim()) return;
-        const before = quill.getLength();
-        quill.clipboard.dangerouslyPasteHTML(idx, frag, 'silent');
-        idx += quill.getLength() - before;
+
+    function inserirTabela(node) {
+      const grid = Array.from(node.rows || []).map(row =>
+        Array.from(row.cells || []).map(cell => (cell.innerText || '').replace(/\s+/g, ' ').trim())
+      );
+      if (!grid.length || !grid[0].length) return;
+      // Garante uma quebra de linha antes da tabela: sem isso, quando `idx`
+      // cai bem na borda final do parágrafo anterior, quill.getLine(idx)
+      // (usado dentro de _qlInsertTable) resolve pra ESSE parágrafo, e a
+      // tabela acaba inserida ANTES dele em vez de depois — era a causa da
+      // tabela "pular" pro início e do texto ao redor virar uma bagunça.
+      if (idx > 0) {
+        quill.insertText(idx, '\n', Quill.sources.SILENT);
+        idx += 1;
       }
-    });
+      const before = quill.getLength();
+      _qlInsertTable(quill, grid.length, grid[0].length, grid, idx);
+      idx += quill.getLength() - before;
+    }
+
+    function inserirFragmento(node) {
+      const frag = node.nodeType === 1 ? node.outerHTML : node.textContent;
+      if (!frag || !frag.trim()) return;
+      const before = quill.getLength();
+      quill.clipboard.dangerouslyPasteHTML(idx, frag, 'silent');
+      idx += quill.getLength() - before;
+    }
+
+    // Processa em ordem, "desembrulhando" containers (div, section...) que
+    // têm uma tabela em algum nível dentro deles — HTML colado do
+    // ChatGPT/Claude normalmente vem inteiro dentro de uma <div> só, então
+    // olhar apenas os filhos diretos do nível raiz perdia a tabela (ela
+    // não era filha direta) e deixava o Quill converter tudo pro padrão
+    // dele, que não entende <table> e vira parágrafo solto sem formatação.
+    function processar(nodes) {
+      Array.from(nodes).forEach(node => {
+        if (node.nodeType === 1 && node.tagName === 'TABLE') {
+          inserirTabela(node);
+        } else if (node.nodeType === 1 && node.querySelector && node.querySelector('table')) {
+          processar(node.childNodes);
+        } else {
+          inserirFragmento(node);
+        }
+      });
+    }
+    processar(container.childNodes);
+
     quill.setSelection(idx, 0, Quill.sources.SILENT);
   }
 

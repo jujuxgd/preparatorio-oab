@@ -40,6 +40,7 @@
     'Confiante': 'Confiante', 'confiante': 'confiante',
     'Empolgada': 'Empolgado', 'empolgada': 'empolgado',
     'Estudante': 'Estudante', 'estudante': 'estudante',
+    'Logada': 'Logado', 'logada': 'logado',
   };
   // Troca o final de uma frase que termina numa palavra no feminino
   // (ex: "Você esteve focada" -> "Você esteve focado"), sem precisar
