@@ -608,32 +608,43 @@
 
     document.getElementById('auth-gate-signup-form').addEventListener('submit', function (e) {
       e.preventDefault();
-      var email = document.getElementById('auth-gate-signup-email').value.trim();
-      var senha = document.getElementById('auth-gate-signup-senha').value;
-      var senha2 = document.getElementById('auth-gate-signup-senha2').value;
-      if (senha !== senha2) { fazerCartaoTremer(); renderSignupForm('As senhas não coincidem.'); return; }
-      var btn = document.getElementById('auth-gate-signup-btn');
-      btn.disabled = true;
-      btn.innerHTML = '<span class="ag-spinner"></span>Enviando…';
-      window._fbAuth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
-        .then(function () { return window._fbAuth.createUserWithEmailAndPassword(email, senha); })
-        .then(function (cred) {
-          if (!window._fbDb) return;
-          return window._fbDb.collection('usuarios_autorizados').doc(cred.user.uid).set({
-            email: email, aprovado: false, criado_em: firebase.firestore.FieldValue.serverTimestamp(),
-          });
-        })
-        .catch(function (err) {
-          var msg = 'Não foi possível enviar a solicitação.';
-          if (err && err.code === 'auth/email-already-in-use') msg = 'Esse e-mail já tem uma conta — tenta entrar em vez de solicitar de novo.';
-          else if (err && err.code === 'auth/invalid-email') msg = 'E-mail inválido.';
-          else if (err && err.code === 'auth/weak-password') msg = 'Senha muito fraca — use pelo menos 6 caracteres.';
-          else if (err && err.code === 'permission-denied') msg = 'A conta foi criada, mas o pedido de acesso não pôde ser salvo. Avise a administradora.';
-          else if (err && err.code) msg = 'Erro: ' + err.code;
+      try {
+        var email = document.getElementById('auth-gate-signup-email').value.trim();
+        var senha = document.getElementById('auth-gate-signup-senha').value;
+        var senha2 = document.getElementById('auth-gate-signup-senha2').value;
+        if (senha !== senha2) { fazerCartaoTremer(); renderSignupForm('As senhas não coincidem.'); return; }
+        if (typeof window._fbAuth === 'undefined' || typeof firebase === 'undefined') {
           fazerCartaoTremer();
-          renderSignupForm(msg);
-        });
-      // onAuthStateChanged cuida do que acontece depois (tela de aguardando aprovação)
+          renderSignupForm('O sistema de login não carregou direito. Recarregue a página e tente de novo.');
+          return;
+        }
+        var btn = document.getElementById('auth-gate-signup-btn');
+        btn.disabled = true;
+        btn.innerHTML = '<span class="ag-spinner"></span>Enviando…';
+        window._fbAuth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+          .then(function () { return window._fbAuth.createUserWithEmailAndPassword(email, senha); })
+          .then(function (cred) {
+            if (!window._fbDb) return;
+            return window._fbDb.collection('usuarios_autorizados').doc(cred.user.uid).set({
+              email: email, aprovado: false, criado_em: firebase.firestore.FieldValue.serverTimestamp(),
+            });
+          })
+          .catch(function (err) {
+            var msg = 'Não foi possível enviar a solicitação.';
+            if (err && err.code === 'auth/email-already-in-use') msg = 'Esse e-mail já tem uma conta — tenta entrar em vez de solicitar de novo.';
+            else if (err && err.code === 'auth/invalid-email') msg = 'E-mail inválido.';
+            else if (err && err.code === 'auth/weak-password') msg = 'Senha muito fraca — use pelo menos 6 caracteres.';
+            else if (err && err.code === 'permission-denied') msg = 'A conta foi criada, mas o pedido de acesso não pôde ser salvo (regras do banco de dados). Avise a administradora.';
+            else if (err && err.code) msg = 'Erro: ' + err.code;
+            else if (err && err.message) msg = 'Erro: ' + err.message;
+            fazerCartaoTremer();
+            renderSignupForm(msg);
+          });
+        // onAuthStateChanged cuida do que acontece depois (tela de aguardando aprovação)
+      } catch (errGeral) {
+        fazerCartaoTremer();
+        renderSignupForm('Erro inesperado: ' + (errGeral && errGeral.message ? errGeral.message : errGeral));
+      }
     });
   }
 

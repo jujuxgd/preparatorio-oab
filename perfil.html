@@ -6,7 +6,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
 <script src="firebase-init.js?v=1783862902"></script>
-<script src="auth-guard.js?v=1784068184"></script>
+<script src="auth-guard.js?v=1784132091"></script>
 <script src="cores-early.js?v=1784060144"></script>
 <script src="page-transition.js?v=1783861010"></script>
 <title>Perfil - Preparatório OAB</title>
@@ -941,9 +941,20 @@ document.addEventListener('DOMContentLoaded', () => {
   // ── SOLICITAÇÕES DE ACESSO (só visível/funcional pra administradora —
   // a proteção de verdade é a regra do Firestore, isso aqui é só UI) ──
   const ADMIN_EMAIL = 'juliagabriellems@icloud.com';
-  (function renderSolicitacoesAcesso() {
+  (function renderSolicitacoesAcesso(tentativa) {
+    tentativa = tentativa || 0;
     const wrap = document.getElementById('admin-solicitacoes-wrap');
-    if (!wrap || !window._fbAuth || !window._fbDb) return;
+    if (!wrap) return;
+    if (!window._fbAuth || !window._fbDb) {
+      // Firebase pode ainda não ter terminado de carregar (conexão lenta) --
+      // tenta de novo por alguns segundos antes de desistir de vez, em vez
+      // de falhar silenciosamente e deixar 'Carregando...' preso pra sempre.
+      if (tentativa < 20) { setTimeout(() => renderSolicitacoesAcesso(tentativa + 1), 250); return; }
+      wrap.style.display = 'block';
+      const subErro = document.getElementById('admin-solicitacoes-sub');
+      if (subErro) subErro.textContent = 'Não foi possível carregar (Firebase não respondeu). Recarregue a página.';
+      return;
+    }
 
     // window._fbAuth.currentUser pode ainda estar vazio nesse momento --
     // o app libera a tela antes do Firebase confirmar de verdade quem
