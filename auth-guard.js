@@ -159,18 +159,20 @@
     .ag-card.ag-shake { animation: agShake .45s; }
     @keyframes agShake { 15%,85% { transform: translateX(-1px); } 25%,75% { transform: translateX(3px); } 35%,65% { transform: translateX(-6px); } 45%,55% { transform: translateX(6px); } }
 
-    /* Logo fora do card, discreta — antes ficava dentro do card, empilhada
-       bem em cima do título ("Que bom te ver de novo"), lendo como duas
-       manchetes juntas. Separada e mais apagada, igual à assinatura do
-       painel de atmosfera no desktop, só que centralizada (não tem
-       painel lateral no celular). */
+    /* Logo fora do card, discreta e delicada — antes ficava dentro do
+       card, empilhada bem em cima do título ("Que bom te ver de novo"),
+       lendo como duas manchetes juntas. Separada, mais apagada e com
+       respiro maior até o card, e com o selo OAB do lado esquerdo do
+       nome, igual à logo da barra lateral do resto do site. */
     .ag-card-mark { display: none; }
     @media (max-width: 899px) {
       .ag-card-mark {
-        display: block; text-align: center; font-family: MagicalFeather, cursive;
-        font-size: 1.6rem; color: ${T.ink}; opacity: 0.55; line-height: 1;
-        margin-bottom: 1.1rem; position: relative; z-index: 1;
+        display: flex; align-items: center; justify-content: center; gap: 0.4rem;
+        color: ${T.ink}; opacity: 0.42; line-height: 1;
+        margin-bottom: 2rem; position: relative; z-index: 1;
       }
+      .ag-card-mark .ag-mark-seal { display: block; flex-shrink: 0; }
+      .ag-card-mark span { font-family: MagicalFeather, cursive; font-size: 1.3rem; }
     }
 
     #auth-gate .ag-card h2 { font-family: 'Fraunces', serif; font-size: 1.44rem; font-weight: 500; letter-spacing: -0.005em; text-transform: none; color: ${T.ink}; margin: 0 0 0.3rem; text-align: center; }
@@ -184,7 +186,9 @@
     @media (max-width: 480px) {
       .ag-formside { padding: 1rem; }
       .ag-card { padding: 1.9rem 1.5rem; }
-      .ag-card-mark { font-size: 1.4rem; margin-bottom: 0.9rem; }
+      .ag-card-mark { margin-bottom: 1.6rem; }
+      .ag-card-mark .ag-mark-seal { width: 16px; height: 16px; }
+      .ag-card-mark span { font-size: 1.1rem; }
       #auth-gate .ag-card h2 { font-size: 1.18rem; }
       #auth-gate .ag-card .ag-sub { font-size: 0.8rem; margin-bottom: 1.3rem; }
       /* 16px é o limiar do zoom automático do Safari iOS ao focar um campo
@@ -310,6 +314,7 @@
     eyeOff: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l18 18"/><path d="M10.6 5.2A10.6 10.6 0 0 1 12 5c6.2 0 10 7 10 7a17.6 17.6 0 0 1-3.2 4.1M6.5 6.6C3.7 8.4 2 12 2 12s3.8 7 10 7c1.4 0 2.7-.3 3.8-.8"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>',
     hourglass: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12M6 21h12M7 3c0 5 5 6 5 9s-5 4-5 9M17 3c0 5-5 6-5 9s5 4 5 9"/></svg>',
     gear: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82A1.65 1.65 0 0 0 3 13.09H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>',
+    seal: '<svg class="ag-mark-seal" viewBox="0 0 64 64" width="18" height="18" aria-hidden="true"><circle cx="32" cy="32" r="23" fill="none" stroke="currentColor" stroke-width="1.6"/><text x="32" y="33" font-size="19" letter-spacing="1.2" text-anchor="middle" dominant-baseline="central" font-family="Georgia,serif" font-weight="700" fill="currentColor">OAB</text></svg>',
   };
 
   var FRASES = [
@@ -468,7 +473,7 @@
             '<span class="ag-clock" id="ag-clock"></span>' +
           '</div>' +
         '</div>' +
-        '<div class="ag-formside"><div class="ag-card-mark">Exame da Ordem</div><div class="ag-card">' + cardHtml + '</div></div>' +
+        '<div class="ag-formside"><div class="ag-card-mark">' + ICO.seal + '<span>Exame da Ordem</span></div><div class="ag-card">' + cardHtml + '</div></div>' +
       '</div>';
 
     clearInterval(clockTimer);
