@@ -22,6 +22,12 @@
     firebase.initializeApp(firebaseConfig);
     window._fbAuth = firebase.auth();
     window._fbDb = firebase.firestore();
+    // Cache local (IndexedDB) dos documentos lidos — sem isso, o site
+    // multi-página (recarrega tudo a cada navegação) bate na rede pra
+    // reler o mesmo documento de aprovação em toda página, o que é uma
+    // das causas do atraso ao navegar. synchronizeTabs porque o usuário
+    // pode ter o site aberto em mais de uma aba.
+    window._fbDb.enablePersistence({ synchronizeTabs: true }).catch(function () {});
   } catch (e) {
     console.error('Erro ao inicializar o Firebase:', e);
   }

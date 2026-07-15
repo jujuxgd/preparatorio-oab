@@ -99,7 +99,7 @@
       for (let c = 0; c < cols; c++) {
         const cell = Parchment.create('table-cell');
         const txt  = (cellText && cellText[r] && cellText[r][c]) || '';
-        if (txt) cell.domNode.appendChild(document.createTextNode(txt));
+        if (txt) cell.domNode.innerHTML = txt;
         else cell.appendChild(Parchment.create('break'));
         row.appendChild(cell);
       }
@@ -109,6 +109,37 @@
     quill.scroll.insertBefore(table, line);
     quill.update(Quill.sources.USER);
     if (atIndex == null) quill.setSelection(index, 0, Quill.sources.SILENT);
+  }
+
+  // Extrai o conteúdo de uma célula preservando negrito/itálico/sublinhado/
+  // cor — célula de tabela é um blot simples (sem suporte a formato via
+  // Delta, só DOM), então filtra pra uma allowlist pequena de tags/estilos
+  // em vez de aceitar o HTML colado inteiro (evita script/estilo estranho
+  // vazando pra dentro da tabela).
+  function _sanitizarInlineHtml(node) {
+    if (node.nodeType === 3) {
+      return (node.textContent || '').replace(/\s+/g, ' ').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+    if (node.nodeType !== 1) return '';
+    const tag = node.tagName.toLowerCase();
+    const miolo = Array.from(node.childNodes).map(_sanitizarInlineHtml).join('');
+    if (tag === 'br') return '<br>';
+    if (tag === 'strong' || tag === 'b') return '<strong>' + miolo + '</strong>';
+    if (tag === 'em' || tag === 'i') return '<em>' + miolo + '</em>';
+    if (tag === 'u') return '<u>' + miolo + '</u>';
+    // span/font/div/p etc.: descarta a tag, mas preserva cor/fundo/negrito
+    // do style inline, se tiver.
+    const estilo = node.style;
+    const negrito = estilo && (estilo.fontWeight === 'bold' || Number(estilo.fontWeight) >= 600);
+    const cores = [];
+    if (estilo && estilo.color) cores.push('color:' + estilo.color);
+    if (estilo && estilo.backgroundColor) cores.push('background-color:' + estilo.backgroundColor);
+    let out = cores.length ? '<span style="' + cores.join(';') + '">' + miolo + '</span>' : miolo;
+    if (negrito) out = '<strong>' + out + '</strong>';
+    return out;
+  }
+  function _celulaParaHtml(cell) {
+    return Array.from(cell.childNodes).map(_sanitizarInlineHtml).join('').trim();
   }
 
   // Insere um HTML que pode conter <table> preservando a ORDEM original —
@@ -122,23 +153,58 @@
     const container = document.createElement('div');
     container.innerHTML = html;
     let idx = index;
-    Array.from(container.childNodes).forEach(node => {
-      if (node.nodeType === 1 && node.tagName === 'TABLE') {
-        const grid = Array.from(node.rows || []).map(row =>
-          Array.from(row.cells || []).map(cell => (cell.innerText || '').replace(/\s+/g, ' ').trim())
-        );
-        if (!grid.length || !grid[0].length) return;
-        const before = quill.getLength();
-        _qlInsertTable(quill, grid.length, grid[0].length, grid, idx);
-        idx += quill.getLength() - before;
-      } else {
-        const frag = node.nodeType === 1 ? node.outerHTML : node.textContent;
-        if (!frag || !frag.trim()) return;
-        const before = quill.getLength();
-        quill.clipboard.dangerouslyPasteHTML(idx, frag, 'silent');
-        idx += quill.getLength() - before;
+
+    function inserirTabela(node) {
+      const grid = Array.from(node.rows || []).map(row =>
+        Array.from(row.cells || []).map(cell => {
+          const html = _celulaParaHtml(cell);
+          // <th> costuma vir em negrito só pelo estilo padrão do navegador
+          // (sem font-weight inline pra _sanitizarInlineHtml pegar) — preserva.
+          return cell.tagName === 'TH' && html ? '<strong>' + html + '</strong>' : html;
+        })
+      );
+      if (!grid.length || !grid[0].length) return;
+      // Garante uma quebra de linha antes da tabela: sem isso, quando `idx`
+      // cai bem na borda final do parágrafo anterior, quill.getLine(idx)
+      // (usado dentro de _qlInsertTable) resolve pra ESSE parágrafo, e a
+      // tabela acaba inserida ANTES dele em vez de depois — era a causa da
+      // tabela "pular" pro início e do texto ao redor virar uma bagunça.
+      if (idx > 0) {
+        quill.insertText(idx, '\n', Quill.sources.SILENT);
+        idx += 1;
       }
-    });
+      const before = quill.getLength();
+      _qlInsertTable(quill, grid.length, grid[0].length, grid, idx);
+      idx += quill.getLength() - before;
+    }
+
+    function inserirFragmento(node) {
+      const frag = node.nodeType === 1 ? node.outerHTML : node.textContent;
+      if (!frag || !frag.trim()) return;
+      const before = quill.getLength();
+      quill.clipboard.dangerouslyPasteHTML(idx, frag, 'silent');
+      idx += quill.getLength() - before;
+    }
+
+    // Processa em ordem, "desembrulhando" containers (div, section...) que
+    // têm uma tabela em algum nível dentro deles — HTML colado do
+    // ChatGPT/Claude normalmente vem inteiro dentro de uma <div> só, então
+    // olhar apenas os filhos diretos do nível raiz perdia a tabela (ela
+    // não era filha direta) e deixava o Quill converter tudo pro padrão
+    // dele, que não entende <table> e vira parágrafo solto sem formatação.
+    function processar(nodes) {
+      Array.from(nodes).forEach(node => {
+        if (node.nodeType === 1 && node.tagName === 'TABLE') {
+          inserirTabela(node);
+        } else if (node.nodeType === 1 && node.querySelector && node.querySelector('table')) {
+          processar(node.childNodes);
+        } else {
+          inserirFragmento(node);
+        }
+      });
+    }
+    processar(container.childNodes);
+
     quill.setSelection(idx, 0, Quill.sources.SILENT);
   }
 
@@ -235,7 +301,15 @@ function _editorCarregar(quill, keyPrefix, dia) {
   if (!raw) return;
   let parsed = null;
   try { parsed = JSON.parse(raw); } catch (e) {}
-  if (parsed && parsed.delta) {
+  if (parsed && typeof parsed.html === 'string' && /<table/i.test(parsed.html) && typeof window._inserirConteudoComTabelas === 'function') {
+    // A tabela é um blot customizado sem representação em Delta — ao passar
+    // por quill.getContents(), cada célula vira um op solto e perde o texto
+    // (some por completo). dangerouslyPasteHTML também não serve aqui: o
+    // conversor padrão do Quill não conhece esse blot e transforma a
+    // tabela em parágrafos soltos. Reconstrói pelo HTML salvo usando o
+    // mesmo caminho do paste/"inserir código", que sabe montar os blots.
+    window._inserirConteudoComTabelas(quill, parsed.html, 0);
+  } else if (parsed && parsed.delta) {
     quill.setContents(parsed.delta, 'silent');
   } else if (parsed && typeof parsed.html === 'string') {
     quill.clipboard.dangerouslyPasteHTML(parsed.html, 'silent');
@@ -258,12 +332,12 @@ function criarGerenciadorEditores(diaAtualFn) {
   function iniciarEditor(key, containerId, toolbarId, keyPrefix, labelId) {
     if (typeof Quill === 'undefined' || typeof window._criarEditorRico !== 'function') return null;
     const quill = window._criarEditorRico(containerId, toolbarId);
-    registro[key] = { quill, keyPrefix, labelId };
-    let timer;
+    const reg = { quill, keyPrefix, labelId, timer: null, snapshotAntesEdicao: null };
+    registro[key] = reg;
     quill.on('text-change', (_d, _o, source) => {
       if (source !== 'user') return;
-      clearTimeout(timer);
-      timer = setTimeout(() => _editorSalvar(quill, keyPrefix, diaAtualFn(), labelId), 600);
+      clearTimeout(reg.timer);
+      reg.timer = setTimeout(() => _editorSalvar(quill, keyPrefix, diaAtualFn(), labelId), 600);
     });
     _editorCarregar(quill, keyPrefix, diaAtualFn());
     return quill;
@@ -274,12 +348,36 @@ function criarGerenciadorEditores(diaAtualFn) {
   function entrarModoEdicao(key) {
     const c = card(key);
     if (!c) return;
+    const cfg = configEditor(key);
+    if (cfg) {
+      // Guarda o que estava salvo ANTES de começar a editar — o autosave
+      // (debounce de 600ms no text-change) grava no localStorage enquanto
+      // a pessoa digita, então só reler o localStorage no Cancelar não
+      // basta: precisa desse retrato de antes pra "Cancelar" voltar pro
+      // que realmente estava lá quando a edição começou.
+      try { cfg.snapshotAntesEdicao = localStorage.getItem(cfg.keyPrefix + diaAtualFn()); } catch (e) { cfg.snapshotAntesEdicao = null; }
+    }
     c.querySelector('.rt-view-wrap').style.display = 'none';
     c.querySelector('.rt-edit-wrap').style.display = 'block';
     c.querySelector('.rt-view-actions').style.display = 'none';
     c.querySelector('.rt-edit-actions').style.display = 'flex';
-    const cfg = configEditor(key);
     if (cfg && cfg.quill) setTimeout(() => cfg.quill.focus(), 50);
+  }
+
+  // Descarta o que foi digitado nesta sessão de edição (inclusive o que já
+  // tiver sido autosalvo) e volta pro estado de antes de clicar em Editar.
+  function cancelarEdicao(key) {
+    const cfg = configEditor(key);
+    if (!cfg) return;
+    clearTimeout(cfg.timer);
+    const dia = diaAtualFn();
+    const chave = cfg.keyPrefix + dia;
+    try {
+      if (cfg.snapshotAntesEdicao == null) localStorage.removeItem(chave);
+      else localStorage.setItem(chave, cfg.snapshotAntesEdicao);
+    } catch (e) {}
+    if (cfg.quill) _editorCarregar(cfg.quill, cfg.keyPrefix, dia);
+    atualizarModoVisualizacao(key);
   }
 
   // Mostra a versão somente-leitura (estado vazio ou o HTML salvo) e volta
@@ -358,9 +456,12 @@ function criarGerenciadorEditores(diaAtualFn) {
         atualizarModoVisualizacao(btn.dataset.editor);
       });
     });
+    document.querySelectorAll('.rt-cancel-btn').forEach(btn => {
+      btn.addEventListener('click', () => cancelarEdicao(btn.dataset.editor));
+    });
   }
 
-  return { iniciarEditor, configEditor, entrarModoEdicao, atualizarModoVisualizacao, wireBotoes, card };
+  return { iniciarEditor, configEditor, entrarModoEdicao, cancelarEdicao, atualizarModoVisualizacao, wireBotoes, card };
 }
 
 window.criarGerenciadorEditores = criarGerenciadorEditores;
