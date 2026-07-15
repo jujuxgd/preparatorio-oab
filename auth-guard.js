@@ -145,7 +145,7 @@
     .ag-clock { font-variant-numeric: tabular-nums; font-size: 0.82rem; color: ${T.inkFaint}; white-space: nowrap; letter-spacing: 0.02em; }
 
     /* Painel do formulário */
-    .ag-formside { flex: 1; display: flex; align-items: center; justify-content: center; padding: 1.5rem; position: relative; z-index: 1; overflow-y: auto; }
+    .ag-formside { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1.5rem; position: relative; z-index: 1; overflow-y: auto; }
     @media (min-width: 900px) { .ag-formside { background: ${T.paper}; box-shadow: -1px 0 0 ${T.border}; } }
 
     .ag-card {
@@ -159,8 +159,19 @@
     .ag-card.ag-shake { animation: agShake .45s; }
     @keyframes agShake { 15%,85% { transform: translateX(-1px); } 25%,75% { transform: translateX(3px); } 35%,65% { transform: translateX(-6px); } 45%,55% { transform: translateX(6px); } }
 
+    /* Logo fora do card, discreta — antes ficava dentro do card, empilhada
+       bem em cima do título ("Que bom te ver de novo"), lendo como duas
+       manchetes juntas. Separada e mais apagada, igual à assinatura do
+       painel de atmosfera no desktop, só que centralizada (não tem
+       painel lateral no celular). */
     .ag-card-mark { display: none; }
-    @media (max-width: 899px) { .ag-card-mark { display: block; text-align: center; font-family: MagicalFeather, cursive; font-size: 2.1rem; color: ${T.ink}; opacity: 0.94; margin-bottom: 0.9rem; line-height: 1; } }
+    @media (max-width: 899px) {
+      .ag-card-mark {
+        display: block; text-align: center; font-family: MagicalFeather, cursive;
+        font-size: 1.6rem; color: ${T.ink}; opacity: 0.55; line-height: 1;
+        margin-bottom: 1.1rem; position: relative; z-index: 1;
+      }
+    }
 
     #auth-gate .ag-card h2 { font-family: 'Fraunces', serif; font-size: 1.44rem; font-weight: 500; letter-spacing: -0.005em; text-transform: none; color: ${T.ink}; margin: 0 0 0.3rem; text-align: center; }
     #auth-gate .ag-card .ag-sub { font-size: 0.84rem; color: ${T.inkSoft}; margin: 0 0 1.6rem; line-height: 1.5; text-align: center; }
@@ -173,7 +184,7 @@
     @media (max-width: 480px) {
       .ag-formside { padding: 1rem; }
       .ag-card { padding: 1.9rem 1.5rem; }
-      .ag-card-mark { font-size: 1.7rem; margin-bottom: 0.7rem; }
+      .ag-card-mark { font-size: 1.4rem; margin-bottom: 0.9rem; }
       #auth-gate .ag-card h2 { font-size: 1.18rem; }
       #auth-gate .ag-card .ag-sub { font-size: 0.8rem; margin-bottom: 1.3rem; }
       /* 16px é o limiar do zoom automático do Safari iOS ao focar um campo
@@ -457,7 +468,7 @@
             '<span class="ag-clock" id="ag-clock"></span>' +
           '</div>' +
         '</div>' +
-        '<div class="ag-formside"><div class="ag-card"><div class="ag-card-mark">Exame da Ordem</div>' + cardHtml + '</div></div>' +
+        '<div class="ag-formside"><div class="ag-card-mark">Exame da Ordem</div><div class="ag-card">' + cardHtml + '</div></div>' +
       '</div>';
 
     clearInterval(clockTimer);
