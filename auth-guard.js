@@ -164,18 +164,9 @@
        o de dentro do card — duas saudações antes da pessoa sequer ver o
        formulário. Cortada por inteiro no celular (o desktop mantém a
        assinatura completa no painel lateral, onde ela tem espaço de
-       sobra pra funcionar). O selo OAB vira só um traço discreto colado
-       na mesma linha do título do card — nunca uma segunda manchete. */
+       sobra pra funcionar). */
     #auth-gate .ag-card h2 { font-family: 'Fraunces', serif; font-size: 1.44rem; font-weight: 500; letter-spacing: -0.005em; text-transform: none; color: ${T.ink}; margin: 0 0 0.3rem; text-align: center; }
-    #auth-gate .ag-card h2 svg { display: none; }
     #auth-gate .ag-card .ag-sub { font-size: 0.84rem; color: ${T.inkSoft}; margin: 0 0 1.6rem; line-height: 1.5; text-align: center; }
-
-    @media (max-width: 899px) {
-      #auth-gate .ag-card h2 svg {
-        display: inline-block; width: 15px; height: 15px; margin-right: 0.4rem;
-        vertical-align: -2px; color: ${T.inkFaint}; opacity: 0.75;
-      }
-    }
 
     /* Celular: o card tem o MESMO max-width de 380px do desktop, mas em
        telas estreitas (depois de descontar o padding do .ag-formside) ele
@@ -312,7 +303,6 @@
     eyeOff: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l18 18"/><path d="M10.6 5.2A10.6 10.6 0 0 1 12 5c6.2 0 10 7 10 7a17.6 17.6 0 0 1-3.2 4.1M6.5 6.6C3.7 8.4 2 12 2 12s3.8 7 10 7c1.4 0 2.7-.3 3.8-.8"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>',
     hourglass: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12M6 21h12M7 3c0 5 5 6 5 9s-5 4-5 9M17 3c0 5-5 6-5 9s5 4 5 9"/></svg>',
     gear: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82A1.65 1.65 0 0 0 3 13.09H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>',
-    seal: '<svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="23" fill="none" stroke="currentColor" stroke-width="1.6"/><text x="32" y="33" font-size="19" letter-spacing="1.2" text-anchor="middle" dominant-baseline="central" font-family="Georgia,serif" font-weight="700" fill="currentColor">OAB</text></svg>',
   };
 
   var FRASES = [
@@ -515,7 +505,7 @@
   // ── Tela: login ──
   function renderLoginForm(erro) {
     montarShell(
-      '<h2>' + ICO.seal + 'Que bom te ver de novo</h2>' +
+      '<h2>Que bom te ver de novo</h2>' +
       '<p class="ag-sub">Entre para continuar seus estudos</p>' +
       (erro ? '<div class="ag-alert ag-alert-err" role="alert">' + erro + '</div>' : '') +
       '<form id="auth-gate-form">' +
@@ -561,7 +551,7 @@
   // ── Tela: recuperar senha ──
   function renderRecuperarSenha(emailInicial, mensagem, erro) {
     montarShell(
-      '<h2>' + ICO.seal + 'Recuperar senha</h2>' +
+      '<h2>Recuperar senha</h2>' +
       '<p class="ag-sub">Digite seu e-mail — enviamos um link pra criar uma senha nova.</p>' +
       (erro ? '<div class="ag-alert ag-alert-err" role="alert">' + erro + '</div>' : '') +
       (mensagem ? '<div class="ag-alert ag-alert-ok" role="status">' + mensagem + '</div>' : '') +
@@ -598,7 +588,7 @@
   // ── Tela: solicitar acesso ──
   function renderSignupForm(erro) {
     montarShell(
-      '<h2>' + ICO.seal + 'Solicitar acesso</h2>' +
+      '<h2>Solicitar acesso</h2>' +
       '<p class="ag-sub">Crie uma conta — o acesso fica pendente até ser aprovado.</p>' +
       (erro ? '<div class="ag-alert ag-alert-err" role="alert">' + erro + '</div>' : '') +
       '<form id="auth-gate-signup-form">' +
