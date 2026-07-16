@@ -448,7 +448,21 @@ function aplicarFeedbackAgenda(agenda, tipo, hojeStr) {
   return agenda;
 }
 
-// Conta quantos cards de matéria estão vencidos (usado no badge da sidebar)
+// Um card só existe de fato em Revisar quando há microresumo (REVIEW_CARDS
+// para a matéria, ou texto escrito no editor rico pro dia) — tópicos crus da
+// aula não contam como revisão. Mantém a contagem do badge da sidebar em
+// sincronia com o que revisar.html realmente mostra em "Pendentes".
+function _mrTemConteudo(raw) {
+  if (!raw) return false;
+  let html = raw;
+  try {
+    const parsed = JSON.parse(raw);
+    if (parsed && typeof parsed.html === 'string') html = parsed.html;
+  } catch (e) {}
+  return !!html.replace(/<[^>]*>/g, '').trim();
+}
+
+// Conta quantos cards (matéria + microresumo) estão vencidos (usado no badge da sidebar)
 function contarRevisoesPendentes() {
   try {
     const p = carregarProgresso();
@@ -461,11 +475,18 @@ function contarRevisoesPendentes() {
       const dado = getDadosDia(parseInt(numDia));
       if (!dado) return;
       dado.materias.forEach((mat, mIdx) => {
+        if (typeof REVIEW_CARDS === 'undefined' || !REVIEW_CARDS[`${numDia}_${mIdx}`]) return; // sem microresumo — não conta
         const existia = !!(dData.agenda_mat && dData.agenda_mat[mIdx]);
         const agenda = getAgendaMat(p, numDia, mIdx, dData.data_conclusao);
         if (!existia) alterado = true;
         if (agenda.proxima <= hojeStr) count++;
       });
+      if (_mrTemConteudo(localStorage.getItem('microresumo_dia_' + numDia))) {
+        const existiaMr = !!(dData.agenda_mat && dData.agenda_mat['mr']);
+        const agendaMr = getAgendaMat(p, numDia, 'mr', dData.data_conclusao);
+        if (!existiaMr) alterado = true;
+        if (agendaMr.proxima <= hojeStr) count++;
+      }
     });
     if (alterado) salvarProgresso(p);
     return count;

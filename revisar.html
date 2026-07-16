@@ -569,6 +569,35 @@ function buildMatCardHtml(numDia, mIdx, mat, dado, statusHtml, extraClass, semFe
     </div>`;
 }
 
+// Card do microresumo escrito pelo usuário (hoje.html) — mesma agenda de
+// repetição espaçada e os mesmos 3 botões de feedback dos cards de matéria.
+function buildMrCardHtml(numDia, matNome, mrHtml, statusHtml, extraClass, semFeedback) {
+  const matAttr = (matNome || '').replace(/"/g, '');
+  const feedbackHtml = semFeedback ? '' : `
+      <div class="rev-feedback">
+        <button class="feedback-btn lembrei" onclick="registrarFeedbackMr(this,'lembrei',${numDia})">✓ Lembrei tudo</button>
+        <button class="feedback-btn mais-ou-menos" onclick="registrarFeedbackMr(this,'mais-ou-menos',${numDia})">~ Mais ou menos</button>
+        <button class="feedback-btn esqueci" onclick="registrarFeedbackMr(this,'esqueci',${numDia})">✕ Preciso rever</button>
+      </div>`;
+  return `
+    <div class="revisao-card${extraClass || ''}" style="border-left:4px solid var(--rose)" data-materia="${matAttr}">
+      <div class="rev-head">
+        <div style="flex:1">
+          <div style="display:flex;gap:0.5rem;margin-bottom:0.4rem;align-items:center;flex-wrap:wrap">
+            ${statusHtml}
+            <span style="font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;background:var(--blush);color:var(--rose-deep);padding:0.2rem 0.6rem;border-radius:20px;font-weight:600">✦ Meu Resumo</span>
+            <span style="font-size:0.65rem;background:var(--bg-soft);color:var(--ink-faded);padding:0.2rem 0.5rem;border-radius:20px">Dia ${numDia}</span>
+          </div>
+          <h3 class="rev-title">${matNome.replace(' · ',' <em>·</em> ')}</h3>
+          <div class="rev-meta">Microresumo escrito por você</div>
+        </div>
+        <a href="hoje.html?dia=${numDia}" style="font-size:0.72rem;color:var(--rose-deep);text-decoration:none;white-space:nowrap;align-self:flex-start;margin-top:0.3rem">Ver conteúdo →</a>
+      </div>
+      <div class="mr-render" style="padding:1rem 1.2rem;background:var(--bg-soft);border-radius:var(--radius-sm);margin-bottom:1rem">${mrHtml}</div>
+      ${feedbackHtml}
+    </div>`;
+}
+
 // Microresumo agora é salvo pelo editor rico (hoje.html) como JSON
 // {html, delta}. Aqui só precisamos do HTML pra exibir — com fallback pro
 // formato antigo (texto puro, salvo antes do editor rico existir).
@@ -622,44 +651,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (agendaAlterada) salvarProgresso(p);
 
-  // Mais atrasadas primeiro
-  cards.sort((a,b) => (b.isUrgent - a.isUrgent) || (b.diff - a.diff));
-
-  // Adiciona microresumos do usuário para dias dentro do intervalo de revisão
+  // Adiciona microresumos do usuário — mesma agenda de repetição espaçada
+  // (estágio 1–7) das matérias, usando um pseudo-índice 'mr' próprio.
   Object.entries(p.dias || {}).forEach(([numDia, dData]) => {
     if (!dData.concluido || !dData.data_conclusao) return;
     const mrHtml = _mrExtrairHtml(localStorage.getItem('microresumo_dia_' + numDia));
     if (!mrHtml || !mrHtml.replace(/<[^>]*>/g, '').trim()) return;
-    const concl = new Date(dData.data_conclusao);
-    const diff  = Math.round((hoje - concl) / 864e5);
-    if (diff < 1) return;
-    const jaRevMrHoje = (dData['revisao_mr'] === hojeStr);
-    if (jaRevMrHoje) return;
-    const quando = diff === 1 ? 'há 1 dia' : `há ${diff} dias`;
-    const isUrgent = diff <= 3;
+    const agenda = getAgendaMat(p, numDia, 'mr', dData.data_conclusao);
+    if (agenda.proxima > hojeStr) return; // ainda não venceu — não aparece em Pendentes
+
+    const diffAtraso = Math.round((hoje - new Date(agenda.proxima + 'T12:00:00')) / 864e5);
+    const isUrgent = diffAtraso <= 3;
+    const quando = diffAtraso <= 0 ? 'venceu hoje' : `atrasada ${diffAtraso}d`;
+    const estagio = agenda.estagio || 0;
+    const statusHtml = `
+      <span class="rev-tag">${quando}</span>
+      <span style="font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;background:var(--rose-soft);color:var(--rose-deep);padding:0.2rem 0.6rem;border-radius:20px;font-weight:600">Estágio ${estagio+1}/${REV_STAGES.length} · ${REV_STAGES[estagio]}d</span>`;
     const dado = typeof getDadosDia === 'function' ? getDadosDia(parseInt(numDia)) : null;
     const matNome = dado ? dado.materia : `Dia ${numDia}`;
-    cards.push({ diff, isUrgent, html: `
-      <div class="revisao-card${isUrgent?' urgent':''}" style="border-left:4px solid var(--rose)">
-        <div class="rev-head">
-          <div style="flex:1">
-            <div style="display:flex;gap:0.5rem;margin-bottom:0.4rem;align-items:center;flex-wrap:wrap">
-              <span class="rev-tag">${quando}</span>
-              <span style="font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;background:var(--blush);color:var(--rose-deep);padding:0.2rem 0.6rem;border-radius:20px;font-weight:600">✦ Meu Resumo</span>
-              <span style="font-size:0.65rem;background:var(--bg-soft);color:var(--ink-faded);padding:0.2rem 0.5rem;border-radius:20px">Dia ${numDia}</span>
-            </div>
-            <h3 class="rev-title">${matNome.replace(' · ',' <em>·</em> ')}</h3>
-            <div class="rev-meta">Microresumo escrito por você</div>
-          </div>
-          <a href="hoje.html?dia=${numDia}" style="font-size:0.72rem;color:var(--rose-deep);text-decoration:none;white-space:nowrap;align-self:flex-start;margin-top:0.3rem">Ver conteúdo →</a>
-        </div>
-        <div class="mr-render" style="padding:1rem 1.2rem;background:var(--bg-soft);border-radius:var(--radius-sm);margin-bottom:1rem">${mrHtml}</div>
-        <div class="rev-feedback">
-          <button class="feedback-btn lembrei" onclick="registrarFeedbackMr(this,'lembrei',${numDia})">✓ Revisado</button>
-          <button class="feedback-btn esqueci" onclick="registrarFeedbackMr(this,'esqueci',${numDia})">↻ Rever depois</button>
-        </div>
-      </div>` });
+    cards.push({ diff: diffAtraso, isUrgent, html: buildMrCardHtml(numDia, matNome, mrHtml, statusHtml, isUrgent ? ' urgent' : '') });
   });
+
+  // Mais atrasadas primeiro (matérias e microresumos juntos)
+  cards.sort((a,b) => (b.isUrgent - a.isUrgent) || (b.diff - a.diff));
 
   const container = document.getElementById('revisao-cards');
   const banner = document.getElementById('rev-banner-title');
@@ -782,9 +796,19 @@ function buildArquivo() {
     dado.materias.forEach((mat, mIdx) => {
       if (typeof REVIEW_CARDS === 'undefined' || !REVIEW_CARDS[`${numDia}_${mIdx}`]) return; // sem microresumo — não entra no arquivo
       const agenda = getAgendaMat(p, numDia, mIdx, dData.data_conclusao);
-      todos.push({ numDia, mIdx, mat, dado, agenda });
+      todos.push({ numDia, nome: mat.nome, agenda,
+        render: (statusHtml) => buildMatCardHtml(numDia, mIdx, mat, dado, statusHtml, '', /* semFeedback */ true) });
       if (!materiasMap.has(mat.nome)) materiasMap.set(mat.nome, mat.emoji || '📖');
     });
+
+    const mrHtml = _mrExtrairHtml(localStorage.getItem('microresumo_dia_' + numDia));
+    if (mrHtml && mrHtml.replace(/<[^>]*>/g, '').trim()) {
+      const agenda = getAgendaMat(p, numDia, 'mr', dData.data_conclusao);
+      const matNome = dado.materia;
+      todos.push({ numDia, nome: matNome, agenda,
+        render: (statusHtml) => buildMrCardHtml(numDia, matNome, mrHtml, statusHtml, '', /* semFeedback */ true) });
+      if (!materiasMap.has(matNome)) materiasMap.set(matNome, '📖');
+    }
   });
 
   if (!todos.length) {
@@ -799,14 +823,14 @@ function buildArquivo() {
   // Pills de filtro por matéria
   let pillsHtml = `<button class="rev-filter-pill active" data-mat="" onclick="arquivoFiltrar('')">Todas <span class="count">${todos.length}</span></button>`;
   Array.from(materiasMap.entries()).sort((a,b) => a[0].localeCompare(b[0])).forEach(([nome, emoji]) => {
-    const n = todos.filter(t => t.mat.nome === nome).length;
+    const n = todos.filter(t => t.nome === nome).length;
     const nomeAttr = nome.replace(/'/g, "\\'");
     pillsHtml += `<button class="rev-filter-pill" data-mat="${nome.replace(/"/g,'')}" onclick="arquivoFiltrar('${nomeAttr}')">${emoji} ${nome} <span class="count">${n}</span></button>`;
   });
   if (filtrosWrap) filtrosWrap.innerHTML = pillsHtml;
 
   // Ordena por matéria, depois por dia
-  todos.sort((a,b) => a.mat.nome.localeCompare(b.mat.nome) || (parseInt(a.numDia) - parseInt(b.numDia)));
+  todos.sort((a,b) => a.nome.localeCompare(b.nome) || (parseInt(a.numDia) - parseInt(b.numDia)));
 
   const hojeStr = dataLocalHoje();
   wrap.innerHTML = todos.map(t => {
@@ -816,7 +840,7 @@ function buildArquivo() {
       ? `<span class="rev-tag" style="background:var(--blush);color:var(--rose-deep)">⏰ vencida</span>`
       : `<span class="rev-tag" style="background:var(--bg-soft);color:var(--ink-faded);font-weight:400;text-transform:none;letter-spacing:0">próxima: ${fmtDataCurta(t.agenda.proxima)}</span>`;
     const estagioBadge = `<span class="${dominado?'badge-dominado':''}" style="font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;background:${dominado?'var(--rose-soft)':'var(--bg-soft)'};color:${dominado?'var(--rose-deep)':'var(--ink-faded)'};padding:0.2rem 0.6rem;border-radius:20px;font-weight:600">${dominado?'✓ Dominado':`Estágio ${(t.agenda.estagio||0)+1}/${REV_STAGES.length}`}</span>`;
-    return buildMatCardHtml(t.numDia, t.mIdx, t.mat, t.dado, statusHtml + estagioBadge, '', /* semFeedback */ true);
+    return t.render(statusHtml + estagioBadge);
   }).join('');
 }
 
@@ -1012,8 +1036,14 @@ function registrarFeedbackMr(btn, tipo, numDia) {
   const p = carregarProgresso();
   const key = String(numDia);
   if (!p.dias[key]) p.dias[key] = {};
-  if (tipo === 'lembrei') p.dias[key]['revisao_mr'] = today;
+  const dConcl = p.dias[key].data_conclusao || today;
+  const agenda = getAgendaMat(p, numDia, 'mr', dConcl);
+  aplicarFeedbackAgenda(agenda, tipo, today);
+  if (!p.dias[key].revisoes_mr) p.dias[key].revisoes_mr = [];
+  p.dias[key].revisoes_mr.push({ data: today, ts: new Date().toISOString(), resultado: tipo, proxima: agenda.proxima, estagio: agenda.estagio });
   salvarProgresso(p);
+  _revP = p;
+  atualizarBadgeRevisar();
 }
 </script>
 </body>
