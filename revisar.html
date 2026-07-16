@@ -531,35 +531,17 @@
 <script src="cards.js"></script>
 <script src="cores.js"></script>
 <script>
-// Monta a lista de tópicos de uma matéria, com subcabeçalhos de macrotema
-// quando mat.grupos existir (não altera a lista original de topicos).
-function buildTopicosHtml(mat) {
-  const tp = mat.topicos || [];
-  const boundaries = {};
-  if (mat.grupos && mat.grupos.length) {
-    let acc = 0;
-    mat.grupos.forEach(g => { boundaries[acc] = g.titulo; acc += g.qtd; });
-  }
-  let html = '';
-  tp.forEach((t, i) => {
-    if (boundaries[i] !== undefined) {
-      html += `<li class="rev-subgroup">${boundaries[i]}</li>`;
-    }
-    html += `<li>${t.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</li>`;
-  });
-  return html;
-}
-
 // Constrói o HTML de um card de matéria — reaproveitado pela aba
-// "Pendentes" e pela aba "Arquivo".
+// "Pendentes" e pela aba "Arquivo". Só existe card quando há um
+// microresumo em REVIEW_CARDS; sem ele, não há o que revisar aqui
+// (os tópicos crus da aula não são revisão — retorna null).
 function buildMatCardHtml(numDia, mIdx, mat, dado, statusHtml, extraClass, semFeedback) {
   const cardKey  = `${numDia}_${mIdx}`;
   const cardData = (typeof REVIEW_CARDS !== 'undefined') ? REVIEW_CARDS[cardKey] : null;
-  const titulo   = cardData ? cardData.titulo : `${mat.emoji || '📖'} ${mat.nome}`;
-  const pontosHtml = cardData
-    ? cardData.pontos.map(p => `<li>${p}</li>`).join('')
-    : buildTopicosHtml(mat);
-  const pegadinhaHtml = cardData && cardData.pegadinha
+  if (!cardData) return null;
+  const titulo   = cardData.titulo;
+  const pontosHtml = cardData.pontos.map(p => `<li>${p}</li>`).join('');
+  const pegadinhaHtml = cardData.pegadinha
     ? `<div style="margin-top:0.8rem;padding:0.8rem 1rem;background:linear-gradient(135deg,#fff0d8,#ffe8c0);border-left:3px solid #d4903a;border-radius:var(--radius-sm);font-size:0.82rem;color:#7a4010"><strong style="display:block;font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:#d4903a;margin-bottom:0.3rem">⚠ Pegadinha da Banca</strong>${cardData.pegadinha}</div>`
     : '';
   const matAttr = (mat.nome || '').replace(/"/g, '');
@@ -632,7 +614,9 @@ document.addEventListener('DOMContentLoaded', () => {
         <span class="rev-tag">${quando}</span>
         <span style="font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;background:var(--rose-soft);color:var(--rose-deep);padding:0.2rem 0.6rem;border-radius:20px;font-weight:600">Estágio ${estagio+1}/${REV_STAGES.length} · ${REV_STAGES[estagio]}d</span>`;
 
-      cards.push({ diff: diffAtraso, isUrgent, html: buildMatCardHtml(numDia, mIdx, mat, dado, statusHtml, isUrgent ? ' urgent' : '') });
+      const cardHtml = buildMatCardHtml(numDia, mIdx, mat, dado, statusHtml, isUrgent ? ' urgent' : '');
+      if (!cardHtml) return; // sem microresumo ainda — nada a revisar aqui
+      cards.push({ diff: diffAtraso, isUrgent, html: cardHtml });
     });
   });
 
@@ -796,6 +780,7 @@ function buildArquivo() {
     const dado = typeof getDadosDia === 'function' ? getDadosDia(parseInt(numDia)) : null;
     if (!dado) return;
     dado.materias.forEach((mat, mIdx) => {
+      if (typeof REVIEW_CARDS === 'undefined' || !REVIEW_CARDS[`${numDia}_${mIdx}`]) return; // sem microresumo — não entra no arquivo
       const agenda = getAgendaMat(p, numDia, mIdx, dData.data_conclusao);
       todos.push({ numDia, mIdx, mat, dado, agenda });
       if (!materiasMap.has(mat.nome)) materiasMap.set(mat.nome, mat.emoji || '📖');
