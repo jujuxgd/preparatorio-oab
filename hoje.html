@@ -2327,6 +2327,10 @@ function _vaToggleDone(btn, doneKey, key, n) {
     btn.title = 'Marcar como não vista';
     if (row) row.classList.add('va-row-done');
   }
+  try { localStorage.setItem('oab_local_rev', String(Date.now())); } catch (e) {}
+  if (window._syncOAB && window._syncOAB.notificarAlteracaoLocal) {
+    try { window._syncOAB.notificarAlteracaoLocal(doneKey); } catch (e) {}
+  }
 }
 
 // ── Toast de parabéns — só a confirmação, canto superior, some sozinha ──
@@ -2700,7 +2704,12 @@ function _loadComments(d) {
 }
 
 function _saveComments(d, arr) {
-  localStorage.setItem(`oab_comments_d${d}`, JSON.stringify(arr));
+  const chave = `oab_comments_d${d}`;
+  localStorage.setItem(chave, JSON.stringify(arr));
+  try { localStorage.setItem('oab_local_rev', String(Date.now())); } catch (e) {}
+  if (window._syncOAB && window._syncOAB.notificarAlteracaoLocal) {
+    try { window._syncOAB.notificarAlteracaoLocal(chave); } catch (e) {}
+  }
 }
 
 function renderComments() {

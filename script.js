@@ -348,12 +348,15 @@ document.addEventListener('DOMContentLoaded', function () {
 // inline em caderno-legislativo.html) — não é mais injetado globalmente.
 
 // ============================================
-// NOVAS FUNÇÕES (STREAK, CHECKLIST, MOOD, ERROS)
+// STREAK DE ESTUDOS (dias seguidos)
 // ============================================
+// (Os itens "checklist de tarefas", "mood tracker" e "banco de erros
+// rápido" que existiam aqui foram removidos: nenhuma página tem os
+// elementos .task-check, #mood-selector ou #banco-erros que essas
+// funções procuravam — eram código morto. Mood já tem um sistema
+// próprio e funcional em humor.js.)
 
 document.addEventListener('DOMContentLoaded', () => {
-    
-    // 1. STREAK DE ESTUDOS (Dias seguidos)
     const streakElement = document.getElementById('streak-count');
     let streak = parseInt(localStorage.getItem('ju_oab_streak') || '0');
 
@@ -373,44 +376,16 @@ document.addEventListener('DOMContentLoaded', () => {
         streak++;
         localStorage.setItem('ju_oab_streak', streak);
         localStorage.setItem('ju_oab_streak_date', todayStr);
+        try { localStorage.setItem('oab_local_rev', String(Date.now())); } catch (e) {}
+        if (window._syncOAB && window._syncOAB.notificarAlteracaoLocal) {
+            try {
+                window._syncOAB.notificarAlteracaoLocal('ju_oab_streak');
+                window._syncOAB.notificarAlteracaoLocal('ju_oab_streak_date');
+            } catch (e) {}
+        }
 
         if (streakElement) streakElement.innerText = streak;
         showPetals();
         setTimeout(() => mostrarToast(`Mandou bem, ${nomeUsuario}! Streak: ${streak} dias seguidos!`, '✨'), 300);
     };
-
-    // 2. CHECKLIST DE TAREFAS
-    const checkboxes = document.querySelectorAll('.task-check');
-    
-    checkboxes.forEach(box => {
-        const taskId = box.id;
-        const isChecked = localStorage.getItem(taskId) === 'true';
-        box.checked = isChecked;
-
-        box.addEventListener('change', (e) => {
-            localStorage.setItem(taskId, e.target.checked);
-        });
-    });
-
-    // 3. MOOD TRACKER (Como estou me sentindo hoje?)
-    const moodSelect = document.getElementById('mood-selector'); 
-    if (moodSelect) {
-        const _mdHoje = getCurrentDate();
-        const today = _mdHoje.getFullYear() + '-' + String(_mdHoje.getMonth()+1).padStart(2,'0') + '-' + String(_mdHoje.getDate()).padStart(2,'0');
-        moodSelect.value = localStorage.getItem(`mood_${today}`) || '';
-
-        moodSelect.addEventListener('change', (e) => {
-            localStorage.setItem(`mood_${today}`, e.target.value);
-        });
-    }
-
-    // 4. BANCO DE ERROS RÁPIDO
-    const errorTextArea = document.getElementById('banco-erros');
-    if(errorTextArea) {
-        errorTextArea.value = localStorage.getItem('ju_banco_erros') || '';
-        
-        errorTextArea.addEventListener('input', (e) => {
-            localStorage.setItem('ju_banco_erros', e.target.value);
-        });
-    }
 });

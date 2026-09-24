@@ -1131,7 +1131,14 @@ let _hlPendingText = '';
 
 function _hlKey(id)   { return 'cl_hl_' + id; }
 function _hlLoad(id)  { try { return JSON.parse(localStorage.getItem(_hlKey(id)) || '[]'); } catch { return []; } }
-function _hlSave(id, list) { localStorage.setItem(_hlKey(id), JSON.stringify(list)); }
+function _hlSave(id, list) {
+  const chave = _hlKey(id);
+  localStorage.setItem(chave, JSON.stringify(list));
+  try { localStorage.setItem('oab_local_rev', String(Date.now())); } catch (e) {}
+  if (window._syncOAB && window._syncOAB.notificarAlteracaoLocal) {
+    try { window._syncOAB.notificarAlteracaoLocal(chave); } catch (e) {}
+  }
+}
 
 function _hlMarkInRoot(root, text, colorId) {
   if (!text || text.length < 1) return;

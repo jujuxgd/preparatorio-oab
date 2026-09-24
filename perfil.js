@@ -14,20 +14,29 @@
   function getFoto() {
     try { return localStorage.getItem(FOTO_KEY) || ''; } catch (e) { return ''; }
   }
+  function _notificar(chave) {
+    try { localStorage.setItem('oab_local_rev', String(Date.now())); } catch (e) {}
+    if (window._syncOAB && window._syncOAB.notificarAlteracaoLocal) {
+      try { window._syncOAB.notificarAlteracaoLocal(chave); } catch (e) {}
+    }
+  }
   function setNome(nome) {
     try { localStorage.setItem(NAME_KEY, (nome || '').trim() || DEFAULT_NAME); } catch (e) {}
+    _notificar(NAME_KEY);
   }
   function setFoto(dataUrl) {
     try {
       if (dataUrl) localStorage.setItem(FOTO_KEY, dataUrl);
       else localStorage.removeItem(FOTO_KEY);
     } catch (e) {}
+    _notificar(FOTO_KEY);
   }
   function getGenero() {
     try { return localStorage.getItem(GENERO_KEY) === 'm' ? 'm' : 'f'; } catch (e) { return 'f'; }
   }
   function setGenero(g) {
     try { localStorage.setItem(GENERO_KEY, g === 'm' ? 'm' : 'f'); } catch (e) {}
+    _notificar(GENERO_KEY);
   }
 
   // Formas masculinas equivalentes — usadas só para EXIBIÇÃO. Os dados
@@ -216,7 +225,13 @@
   function aplicarDadosLocalStorage(dados) {
     if (!dados || typeof dados !== 'object') throw new Error('Dados inválidos');
     Object.keys(dados).forEach(k => {
-      try { localStorage.setItem(k, dados[k]); } catch (e) {}
+      try {
+        // null representa uma chave removida no aparelho de origem (ex.:
+        // desmarcar uma videoaula) — setItem(k, null) gravaria a STRING
+        // "null" em vez de refletir a remoção.
+        if (dados[k] === null) localStorage.removeItem(k);
+        else localStorage.setItem(k, dados[k]);
+      } catch (e) {}
     });
   }
   function exportarBackupCompleto() {
