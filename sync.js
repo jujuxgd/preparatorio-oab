@@ -26,11 +26,20 @@
 // aplica quando a nuvem é ESTRITAMENTE mais nova, o que naturalmente
 // ignora o eco da própria escrita (mesma revisão) e evita repetir o
 // loop de recarregamento que já existiu aqui antes.
+// Snapshots com hasPendingWrites (escrita ainda não confirmada pelo
+// servidor) são ignorados, e antes de aplicar um snapshot remoto mais
+// novo o listener espera qualquer push local em andamento (guardado em
+// _envioEmAndamento) terminar e reavalia a comparação — sem isso, um
+// aparelho podia dar um location.reload() com dados da nuvem que ainda
+// não incluíam a própria mudança que esse aparelho acabara de salvar
+// (ex.: dar feedback num flashcard e ele sumir sem entrar no histórico
+// de Estatísticas, porque o reload aconteceu antes do push terminar).
 // ============================================================
 (function () {
   const COLECAO = 'backups';
   let _unsubscribe = null;
   let _aplicando = false;
+  let _envioEmAndamento = null; // Promise do push mais recente ainda não confirmado pelo servidor
 
   function docRef(uid) {
     return window._fbDb.collection(COLECAO).doc(uid);
@@ -51,10 +60,14 @@
       ? { [chave]: localStorage.getItem(chave), oab_local_rev: localStorage.getItem('oab_local_rev') }
       : window._perfilOAB.coletarDadosLocalStorage();
     const payload = { dados, atualizado_em: firebase.firestore.FieldValue.serverTimestamp() };
-    return docRef(uid).set(payload, { merge: true }).then(() => {
+    const escrita = docRef(uid).set(payload, { merge: true }).then(() => {
       try { localStorage.setItem('oab_ultimo_backup', new Date().toISOString()); } catch (e) {}
       return true;
     }).catch(err => { console.error('Erro ao enviar pra nuvem:', err); return false; });
+    // Guardado pra handleSnapshot esperar antes de decidir se a nuvem
+    // está mais nova (ver comentário em handleSnapshot).
+    _envioEmAndamento = escrita;
+    return escrita;
   }
 
   // Overwrite de verdade (sem merge) — só faz sentido quando a intenção
@@ -111,6 +124,9 @@
 
   function handleSnapshot(uid, snap) {
     if (_aplicando) return;
+    // Eco otimista de uma escrita ainda não confirmada pelo servidor
+    // (nossa própria ou não) — espera confirmar antes de decidir algo.
+    if (snap.metadata.hasPendingWrites) return;
     if (!snap.exists) {
       // Primeira vez usando sync nesta conta — envia o que já existe localmente.
       enviarSnapshotCompleto(uid);
@@ -118,10 +134,22 @@
     }
     const data = snap.data();
     if (!data || !data.dados) return;
-    const cloudRev = Number(data.dados.oab_local_rev || 0);
-    if (cloudRev > localRev()) {
-      aplicarSnapshotRemoto(uid, data);
-    }
+    if (Number(data.dados.oab_local_rev || 0) <= localRev()) return;
+    // A nuvem parece mais nova, mas este aparelho pode ter um push
+    // próprio ainda em voo cujo valor não chegou no servidor a tempo de
+    // aparecer neste snapshot. Sem esperar, um reload agora aplicaria
+    // esse `data` desatualizado (sem a mudança local) — ela desapareceria
+    // (ex.: dar feedback num flashcard e ele "sumir" sem aparecer no
+    // histórico). Espera o push em andamento confirmar e busca o
+    // documento de novo (não reaproveita `data`, que pode não ter esse
+    // push ainda) antes de decidir se a nuvem CONTINUA mais nova.
+    Promise.resolve(_envioEmAndamento).then(() => docRef(uid).get()).then(freshSnap => {
+      if (!freshSnap.exists) return;
+      const freshData = freshSnap.data();
+      if (freshData && freshData.dados && Number(freshData.dados.oab_local_rev || 0) > localRev()) {
+        aplicarSnapshotRemoto(uid, freshData);
+      }
+    }).catch(err => console.error('Erro ao reavaliar snapshot remoto:', err));
   }
 
   // Dados pessoais ficam em dezenas de chaves diferentes no localStorage
