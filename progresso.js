@@ -27,10 +27,15 @@ function dataLocalHoje() {
 // Carimba a revisão local e avisa o sync em tempo real (se disponível).
 // Chamada por toda função de gravação deste arquivo e por erros-core.js
 // / simulados.html, pra manter a sincronização entre dispositivos.
-function marcarAlteracaoLocal() {
+// `chave` é a chave do localStorage que mudou (ex.: PROGRESSO_KEY) — o
+// sync usa isso pra mandar só essa chave pra nuvem (merge), em vez do
+// localStorage inteiro, senão um aparelho apaga os dados que só existem
+// no outro (ex.: simulados registrados só no tablet somem quando o
+// notebook salva o progresso por último).
+function marcarAlteracaoLocal(chave) {
   try { localStorage.setItem('oab_local_rev', String(Date.now())); } catch (e) {}
   if (window._syncOAB && window._syncOAB.notificarAlteracaoLocal) {
-    try { window._syncOAB.notificarAlteracaoLocal(); } catch (e) {}
+    try { window._syncOAB.notificarAlteracaoLocal(chave); } catch (e) {}
   }
 }
 
@@ -96,7 +101,7 @@ function carregarProgresso() {
 function salvarProgresso(p) {
   p.atualizado = new Date().toISOString();
   try { localStorage.setItem(PROGRESSO_KEY, JSON.stringify(p)); } catch(e) {}
-  marcarAlteracaoLocal();
+  marcarAlteracaoLocal(PROGRESSO_KEY);
 }
 
 function obterDia(numDia) {

@@ -34,7 +34,7 @@ function erros_save(list) {
   localStorage.setItem(ERROS_KEY, JSON.stringify(list));
   try { localStorage.setItem('oab_local_rev', String(Date.now())); } catch (e) {}
   if (window._syncOAB && window._syncOAB.notificarAlteracaoLocal) {
-    try { window._syncOAB.notificarAlteracaoLocal(); } catch (e) {}
+    try { window._syncOAB.notificarAlteracaoLocal(ERROS_KEY); } catch (e) {}
   }
 }
 

@@ -505,7 +505,7 @@
     <!-- HERO -->
     <div class="stats-hero">
       <div class="stat-big">
-        <div class="label">Horas de estudo</div>
+        <div class="label">Horas previstas</div>
         <div class="num" id="hero-horas">0<small>h</small></div>
         <div class="sub" id="hero-horas-sub">nenhum dia concluído</div>
       </div>
@@ -522,7 +522,7 @@
       <div class="stat-big">
         <div class="label">Progresso geral</div>
         <div class="num" id="hero-progresso">0<small>%</small></div>
-        <div class="sub" id="hero-progresso-sub">0 de 60 dias do plano</div>
+        <div class="sub" id="hero-progresso-sub">0 de 120 dias do plano</div>
       </div>
     </div>
 
@@ -574,7 +574,7 @@
       <div class="chart-card">
         <div class="chart-head">
           <div>
-            <div class="chart-title">Tempo por <em>matéria</em></div>
+            <div class="chart-title">Carga horária por <em>matéria</em></div>
             <div class="chart-sub">Dias concluídos × horas do plano</div>
           </div>
         </div>
@@ -652,7 +652,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('hero-streak').innerHTML    = `${p.streak||0}<small> dias</small>`;
   document.getElementById('hero-streak-sub').textContent = p.streak >= 7 ? `recorde ✨ ${p.streak} dias` : p.streak > 0 ? 'continue assim!' : 'comece a estudar!';
   document.getElementById('hero-progresso').innerHTML = `${stats.pct}<small>%</small>`;
-  document.getElementById('hero-progresso-sub').textContent = `${stats.concluidos} de 60 dias do plano`;
+  document.getElementById('hero-progresso-sub').textContent = `${stats.concluidos} de 120 dias do plano`;
 
   // ── Matéria favorita (maior score: acertos × log(total+1))
   const qTodas = getTodasQuestoes();
@@ -682,7 +682,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <div>
         <div class="eyebrow">Sua matéria com melhor desempenho</div>
         <h3>${(NOMES_MAT[favId]||favId).replace(/ /,' <em>') + '</em>'}</h3>
-        <p>${hFav>0?`Você dedicou <strong>${hFav}h</strong> e acerta`:'Acerta'} <strong>${pct}%</strong> das questões — sua melhor combinação.</p>
+        <p>${hFav>0?`O plano reserva <strong>${hFav}h</strong> pra essa matéria e você acerta`:'Você acerta'} <strong>${pct}%</strong> das questões — sua melhor combinação.</p>
       </div>
       <div class="badge"><div class="pct">${pct}%</div><div class="lbl">acertos</div></div>`;
   } else if (favCard) {
@@ -805,7 +805,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const conquistas = [];
   if (stats.concluidos >= 1) conquistas.push({ icon:'🌸', title:'Primeiro dia concluído', sub:`Dia 1 do plano completado` });
   if (stats.concluidos >= 7) conquistas.push({ icon:'✦', title:'Primeira semana completa', sub:`${stats.concluidos} dias concluídos` });
-  if (stats.concluidos >= 30) conquistas.push({ icon:'🏆', title:'Metade do plano!', sub:'30 dias — você está no caminho' });
+  if (stats.concluidos >= 60) conquistas.push({ icon:'🏆', title:'Metade do plano!', sub:'60 dias — você está no caminho' });
   if (q.total >= 50)  conquistas.push({ icon:'📚', title:'50 questões resolvidas', sub:`Taxa atual: ${q.pct}%` });
   if (q.total >= 100) conquistas.push({ icon:'📖', title:'100 questões resolvidas', sub:`Média de acerto: ${q.pct}%` });
   if (q.total >= 500) conquistas.push({ icon:'🎯', title:'500 questões!', sub:'Dedicação de verdade' });
