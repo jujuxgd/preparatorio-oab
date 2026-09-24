@@ -284,14 +284,28 @@
 
     <hr class="rf-divider">
 
-    <!-- SEÇÃO 2: SUPER RESUMOS TURBO -->
-    <div class="rf-section-title">📋 Super Resumos Turbo</div>
-    <div class="rf-section-sub">Resumos condensados por matéria do método OAB na Medida · para revisão acelerada</div>
-    <div class="rf-grid" id="grid-resumos"></div>
+    <!-- SEÇÃO 2: GABARITAÇO VDE -->
+    <div class="rf-section-title">🎯 Gabaritaço VDE</div>
+    <div class="rf-section-sub">Questões comentadas e gabaritadas por matéria — pra treinar direto nos pontos que mais caem</div>
+    <div class="rf-grid" id="grid-gabaritaco"></div>
 
     <hr class="rf-divider">
 
-    <!-- SEÇÃO 3: MATERIAL ESTRATÉGICO -->
+    <!-- SEÇÃO 3: RESUMOS TURBO (OAB na Medida, módulos numerados) -->
+    <div class="rf-section-title">📋 Resumos Turbo</div>
+    <div class="rf-section-sub">Resumos condensados por matéria do método OAB na Medida · para revisão acelerada</div>
+    <div class="rf-grid" id="grid-resumos-turbo"></div>
+
+    <hr class="rf-divider">
+
+    <!-- SEÇÃO 4: RESUMOS OAB 44 (Resumo condensado + material completo, por matéria) -->
+    <div class="rf-section-title">📚 Resumos OAB 44</div>
+    <div class="rf-section-sub">Do simulado OAB na Medida 44 — resumo condensado ou material completo, por matéria</div>
+    <div class="rf-grid" id="grid-resumos-oab44"></div>
+
+    <hr class="rf-divider">
+
+    <!-- SEÇÃO 5: MATERIAL ESTRATÉGICO -->
     <div class="rf-section-title">🎯 Material Estratégico</div>
     <div class="rf-section-sub">Guias de estudo e revisão geral</div>
     <div class="rf-grid" id="grid-estrategico"></div>
@@ -339,7 +353,22 @@ const DICAS = [
   { nome: '60 Dias de Questões OAB',               emoji: '◎',  id: '15DnRrFQXsc-kqp2aMXrcK_fOoimu6KjC' },
 ];
 
-const RESUMOS = [
+// Gabaritaço VDE — questões comentadas/gabaritadas por matéria
+const GABARITACO = [
+  { nome: 'Constitucional',   emoji: '🏛️', id: '1OxwCkh7ktp86eY4xV-qjeGnUDuXA5JK8' },
+  { nome: 'Civil',            emoji: '📜', id: '18f7snpnvRyROPiqfVyzvbiZvLuUM02pV' },
+  { nome: 'Proc. Civil',      emoji: '⚖️', id: '1HRJef6BbLRuPcvAiMpdmLAqtXK3ODZ87' },
+  { nome: 'Penal',            emoji: '⚔️', id: '1kA6-Dl-Dg8c-SRMB6hqL1_CG-U2vFDJF' },
+  { nome: 'Proc. Penal',      emoji: '📋', id: '13TnIk_nRowEIwYbb1qDcZASV5icUaQZp' },
+  { nome: 'Trabalho',         emoji: '⚙️', id: '1ux1m3wMGUkyV1uiyvea1gWsk6Pg12KEs' },
+  { nome: 'Proc. Trabalho',   emoji: '⚙️', id: '1pDduJ9ujams2xglSyH93idq2toC_5rFK' },
+  { nome: 'Administrativo',   emoji: '🏛️', id: '1Tl8knaHJAdLjQ_3Qv4NuUv10-K1tDDhb' },
+  { nome: 'Tributário',       emoji: '💰', id: '18vkNz1RXGumP-sJjFGW85w5hEHiqzxFv' },
+  { nome: 'Ética',            emoji: '⚖️', id: '1rmCzKZJq7-A7DK1CJUdAqRvon30U3JDz' },
+];
+
+// Resumos Turbo — módulos numerados do método OAB na Medida
+const RESUMOS_TURBO = [
   { nome: 'Ética Profissional',            emoji: '⚖️', id: '1FySQ54e0iuB3UzXnQUsjWZ1w1oWuEs7R', num: '03' },
   { nome: 'Direito Constitucional',        emoji: '🏛️', id: '1LV7dV9HrG6IF4fAV0e6jbR-tYwstnAco', num: '04' },
   { nome: 'Direito Civil',                 emoji: '📜', id: '1kcqBXjCp3SvanIskfXe2H1yJ5xCfPGKZ', num: '05' },
@@ -360,32 +389,39 @@ const RESUMOS = [
   { nome: 'Direito Financeiro',            emoji: '💹', id: '1qs98gzNG1K509DpwpsvAHVvrSGPniotZ', num: '20' },
   { nome: 'Direito Previdenciário',        emoji: '🛡️', id: '1zFM17r_ttHdVqeVix4KGMzmsrmgfP9fI', num: '21' },
   { nome: 'Direito Eleitoral',             emoji: '🗳️', id: '1dv98-QMkcOVTbUv3ckIfyUHq1rmOEQ3P', num: '22' },
-  // OAB na Medida 44
-  { nome: 'OAB 44 · Ética',               emoji: '⚖️', id: '1cu2uSTPFjsJ7y4AgjiB0NvkO1Q1Uej1O', num: '—' },
-  { nome: 'OAB 44 · Constitucional',      emoji: '🏛️', id: '12W4-Ur5elfB7BsYzAebP5e7W62m-8S-O', num: '—' },
-  { nome: 'OAB 44 · Civil',               emoji: '📜', id: '1TRp-UpBZC8DJYiWAzpT_k1oOaUNif_nA', num: '—' },
-  { nome: 'OAB 44 · Proc. Civil',         emoji: '⚖️', id: '1O4UdWdEgreHZAMQ7aVb3N-iRJh_UANMC', num: '—' },
-  { nome: 'OAB 44 · Penal Geral',         emoji: '⚔️', id: '1S4PLQQ8HFKIT0F9xhN_QQLp2ZfT1UgNT', num: '—' },
-  { nome: 'OAB 44 · Penal Especial',      emoji: '⚔️', id: '1b4EGlwFc9TYPFALVJLbPVzD3d9Ztfj5q', num: '—' },
-  { nome: 'OAB 44 · Proc. Penal',         emoji: '📋', id: '1ouZX9ke6eazK3qRiYiRjEtiBYKUj7aa7', num: '—' },
-  { nome: 'OAB 44 · Trabalho',            emoji: '⚙️', id: '18ntHH3JpNGL-YtjJsOqNhcMEStSjHJUI', num: '—' },
-  { nome: 'OAB 44 · Proc. Trabalho',      emoji: '⚙️', id: '1HHllRBZQXLgumCF52kAnZ0bNyF_IOx8o', num: '—' },
-  { nome: 'OAB 44 · Tributário',          emoji: '💰', id: '1R0cC3wrwZKbPn9-sdjzdDfIBaqGWfnhi', num: '—' },
-  { nome: 'OAB 44 · Empresarial',         emoji: '🏢', id: '1Aoxgx_f6Ra_uvvhIdD34b8OwgwvlCTa0', num: '—' },
-  { nome: 'OAB 44 · Consumidor',          emoji: '🛒', id: '1QVGflxxWvGMTdZAecJNwnJP-KKqW5vTW', num: '—' },
-  { nome: 'OAB 44 · Humanos',             emoji: '🌍', id: '1rdUZPbykqXHs8uBTZ3rFUw_Y8A15O2Nb', num: '—' },
-  { nome: 'OAB 44 · Internacional',       emoji: '🌐', id: '1NOQDk0Wxr51K5xuWO7yi0Ng5PXHqoyAM', num: '—' },
-  { nome: 'OAB 44 · Previdenciário',      emoji: '🛡️', id: '1f4MhViTHmXb35AfEZKaoNuIAtzLS0ok3', num: '—' },
-  { nome: 'OAB 44 · Internacional (2)',   emoji: '🌐', id: '1wVw9xEn7SFpnO2V5PF-vJz97peYTolqW', num: '—' },
-  { nome: 'OAB 44 · ECA',                 emoji: '👶', id: '1Tw08KN2K-AG34ac1sXEHftxWhI9-1jQM', num: '—' },
-  { nome: 'OAB 44 · Humanos (2)',         emoji: '🌍', id: '1t69pGi2RUbLgEbfzpwvG8zzW5RYVt6qn', num: '—' },
-  { nome: 'OAB 44 · Trabalho (2)',        emoji: '⚙️', id: '15n2o4eFHaN3lxM_iYf5-mcOrYtWZ-TUw', num: '—' },
-  { nome: 'OAB 44 · Proc. Penal (2)',     emoji: '📋', id: '1kPS8m8z1a3cr6aUXWWlhXJXkjppJuVis', num: '—' },
-  { nome: 'OAB 44 · Tributário (2)',      emoji: '💰', id: '1yEtXNVOzwBTT0xl1m5yBdJcDlYsczZYQ', num: '—' },
-  { nome: 'OAB 44 · Filosofia',           emoji: '📖', id: '1PNZy1G141I6G6gqPA0uNLxIxF6DBUgZH', num: '—' },
-  { nome: 'OAB 44 · Eleitoral',           emoji: '🗳️', id: '1vUwmKZMqWvDL6ha6Zzs4LP-wz7uQamn4', num: '—' },
-  { nome: 'OAB 44 · Financeiro',          emoji: '💹', id: '1BtUD7lonCZtwVPZrOojRQkSZhuAgR9Z1', num: '—' },
 ];
+
+// Resumos OAB 44 — pra cada matéria pode ter um "Resumo" (condensado) e/ou
+// um "Completo" (teoria cheia, com quadros de atenção e tabelas comparativas).
+// Antes isso tava tudo misturado com RESUMOS_TURBO e alguns itens "Completo"
+// apareciam sem aviso nenhum (ex.: ECA, Previdenciário e Filosofia só têm a
+// versão Completa cadastrada, mas apareciam como se fossem o resumo normal).
+const RESUMOS_OAB44 = [
+  { nome: 'Ética',            emoji: '⚖️', id: '1cu2uSTPFjsJ7y4AgjiB0NvkO1Q1Uej1O', tipo: 'Resumo' },
+  { nome: 'Constitucional',   emoji: '🏛️', id: '12W4-Ur5elfB7BsYzAebP5e7W62m-8S-O', tipo: 'Resumo' },
+  { nome: 'Civil',            emoji: '📜', id: '1TRp-UpBZC8DJYiWAzpT_k1oOaUNif_nA', tipo: 'Resumo' },
+  { nome: 'Proc. Civil',      emoji: '⚖️', id: '1O4UdWdEgreHZAMQ7aVb3N-iRJh_UANMC', tipo: 'Resumo' },
+  { nome: 'Penal Geral',      emoji: '⚔️', id: '1S4PLQQ8HFKIT0F9xhN_QQLp2ZfT1UgNT', tipo: 'Resumo' },
+  { nome: 'Penal Especial',   emoji: '⚔️', id: '1b4EGlwFc9TYPFALVJLbPVzD3d9Ztfj5q', tipo: 'Resumo' },
+  { nome: 'Proc. Penal',      emoji: '📋', id: '1ouZX9ke6eazK3qRiYiRjEtiBYKUj7aa7', tipo: 'Resumo' },
+  { nome: 'Proc. Penal',      emoji: '📋', id: '1kPS8m8z1a3cr6aUXWWlhXJXkjppJuVis', tipo: 'Completo' },
+  { nome: 'Trabalho',         emoji: '⚙️', id: '18ntHH3JpNGL-YtjJsOqNhcMEStSjHJUI', tipo: 'Resumo' },
+  { nome: 'Trabalho',         emoji: '⚙️', id: '15n2o4eFHaN3lxM_iYf5-mcOrYtWZ-TUw', tipo: 'Completo' },
+  { nome: 'Proc. Trabalho',   emoji: '⚙️', id: '1HHllRBZQXLgumCF52kAnZ0bNyF_IOx8o', tipo: 'Resumo' },
+  { nome: 'Tributário',       emoji: '💰', id: '1R0cC3wrwZKbPn9-sdjzdDfIBaqGWfnhi', tipo: 'Resumo' },
+  { nome: 'Tributário',       emoji: '💰', id: '1yEtXNVOzwBTT0xl1m5yBdJcDlYsczZYQ', tipo: 'Completo' },
+  { nome: 'Empresarial',      emoji: '🏢', id: '1Aoxgx_f6Ra_uvvhIdD34b8OwgwvlCTa0', tipo: 'Resumo' },
+  { nome: 'Consumidor',       emoji: '🛒', id: '1QVGflxxWvGMTdZAecJNwnJP-KKqW5vTW', tipo: 'Resumo' },
+  { nome: 'Direitos Humanos', emoji: '🌍', id: '1rdUZPbykqXHs8uBTZ3rFUw_Y8A15O2Nb', tipo: 'Resumo' },
+  { nome: 'Direitos Humanos', emoji: '🌍', id: '1t69pGi2RUbLgEbfzpwvG8zzW5RYVt6qn', tipo: 'Completo' },
+  { nome: 'Internacional',    emoji: '🌐', id: '1NOQDk0Wxr51K5xuWO7yi0Ng5PXHqoyAM', tipo: 'Resumo' },
+  { nome: 'Internacional',    emoji: '🌐', id: '1wVw9xEn7SFpnO2V5PF-vJz97peYTolqW', tipo: 'Completo' },
+  { nome: 'Previdenciário',   emoji: '🛡️', id: '1f4MhViTHmXb35AfEZKaoNuIAtzLS0ok3', tipo: 'Completo' },
+  { nome: 'ECA',              emoji: '👶', id: '1Tw08KN2K-AG34ac1sXEHftxWhI9-1jQM', tipo: 'Completo' },
+  { nome: 'Filosofia',        emoji: '📖', id: '1PNZy1G141I6G6gqPA0uNLxIxF6DBUgZH', tipo: 'Completo' },
+  { nome: 'Eleitoral',        emoji: '🗳️', id: '1vUwmKZMqWvDL6ha6Zzs4LP-wz7uQamn4', tipo: 'Resumo' },
+  { nome: 'Financeiro',       emoji: '💹', id: '1BtUD7lonCZtwVPZrOojRQkSZhuAgR9Z1', tipo: 'Resumo' },
+].sort((a, b) => a.nome.localeCompare(b.nome) || (a.tipo === 'Resumo' ? -1 : 1));
 
 const ESTRATEGICO = [
   { nome: '500 Dicas OAB · Revisão Turbo',      emoji: '⚡', id: '1GFNe1pYZNEGIZb8ia-sm-3aU8yShjkyK', tipo: 'Compilação geral' },
@@ -435,8 +471,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const gDicas = document.getElementById('grid-dicas');
   DICAS.forEach(d => gDicas.appendChild(buildCard(d, 'Super Dicas VDE')));
 
-  const gResumos = document.getElementById('grid-resumos');
-  RESUMOS.forEach(r => gResumos.appendChild(buildCard(r, r.num !== '—' ? `Módulo ${r.num}` : 'OAB na Medida 44')));
+  const gGabaritaco = document.getElementById('grid-gabaritaco');
+  GABARITACO.forEach(g => gGabaritaco.appendChild(buildCard(g, 'Gabaritaço VDE')));
+
+  const gResumosTurbo = document.getElementById('grid-resumos-turbo');
+  RESUMOS_TURBO.forEach(r => gResumosTurbo.appendChild(buildCard(r, `Módulo ${r.num}`)));
+
+  const gResumosOab44 = document.getElementById('grid-resumos-oab44');
+  RESUMOS_OAB44.forEach(r => gResumosOab44.appendChild(buildCard(r, `${r.tipo} · OAB 44`)));
 
   const gEstrat = document.getElementById('grid-estrategico');
   ESTRATEGICO.forEach(e => gEstrat.appendChild(buildCard(e)));
