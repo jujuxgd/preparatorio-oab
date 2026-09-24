@@ -2018,28 +2018,30 @@ function _montarBlocoTopicosDoDia(dia) {
   return blocos.join('\n\n');
 }
 
-const PROMPT_RESUMO_DIA_BASE = `A partir de agora, sempre que eu enviar um tema, capítulo ou lista de tópicos, transforme o conteúdo em um Resumo do Dia completo, organizado e visualmente rico, voltado para meus estudos de Direito, OAB e concursos.
+const PROMPT_RESUMO_DIA_BASE = `A partir de agora, sempre que eu enviar um tema, capítulo, matéria ou lista de tópicos, transforme o conteúdo em um Resumo do Dia completo, organizado e VISUALMENTE RICO, voltado para meus estudos de Direito, OAB e concursos.
 OBJETIVO
 O Resumo do Dia não é um microresumo e não é um flashcard.
 Ele deve funcionar como uma mini-apostila digital de estudo e consulta, contendo o conteúdo necessário para eu compreender, revisar e consultar aquele assunto posteriormente.
 O material deve ser:
 
-- completo, quando o assunto exigir;
+- completo na medida necessária;
 - didático;
 - objetivo;
 - juridicamente organizado;
-- focado no que realmente importa para provas;
+- focado em OAB e concursos;
 - fácil de consultar;
-- visualmente agradável;
-- sem infantilizar a explicação, pois já estudo Direito.
+- visualmente rico;
+- profissional;
+- agradável de ler;
+- sem infantilizar a explicação.
 
-Não aumente artificialmente o tamanho do material. Desenvolva cada tópico na medida necessária para que ele fique realmente útil.
+Não aumente artificialmente o tamanho do conteúdo. Desenvolva cada tópico na medida necessária para que ele realmente seja útil.
 TÓPICOS DE ESTUDO
-Os tópicos abaixo são os conteúdos que devem ser desenvolvidos no Resumo do Dia:
+Estes são os tópicos que devem ser desenvolvidos:
 {{TOPICOS_DO_DIA}}
-Desenvolva todos os tópicos fornecidos. Não ignore, agrupe ou substitua tópicos sem necessidade.
+DESENVOLVA TODOS OS TÓPICOS FORNECIDOS. Não ignore nenhum tópico.
 CONTEÚDO
-Sempre que pertinente ao assunto, priorize:
+Sempre que pertinente, aborde:
 
 - conceito e definição;
 - finalidade;
@@ -2048,273 +2050,273 @@ Sempre que pertinente ao assunto, priorize:
 - princípios;
 - classificações;
 - espécies;
-- requisitos e pressupostos;
+- requisitos;
+- pressupostos;
 - elementos;
 - competências;
 - procedimentos e etapas;
-- efeitos e consequências;
+- efeitos;
+- consequências;
 - exceções;
 - diferenças entre institutos;
-- prazos, números e percentuais relevantes;
+- prazos;
+- números e percentuais;
 - dispositivos legais importantes;
-- entendimentos relevantes do STF e STJ;
+- entendimentos do STF e STJ;
 - súmulas;
-- temas de repercussão geral e recursos repetitivos;
-- pegadinhas comuns de OAB e concursos;
+- temas de repercussão geral;
+- recursos repetitivos;
+- pegadinhas de OAB e concursos;
 - pontos que costumam gerar confusão;
-- exemplos práticos quando realmente ajudarem na compreensão.
+- exemplos práticos quando realmente ajudarem.
 
-Quando houver institutos parecidos, deixe as diferenças visualmente muito claras.
-Quando houver exceções importantes, dê destaque especial a elas.
-Quando houver um procedimento ou sequência lógica, prefira uma apresentação visual em etapas.
+Quando houver institutos semelhantes, deixe as diferenças muito claras.
+Quando houver exceções importantes, destaque-as visualmente.
+Quando houver uma sequência ou procedimento, organize em etapas.
+FORMATAÇÃO VISUAL OBRIGATÓRIA
+O resultado deve parecer uma mini-apostila digital moderna e colorida, e não um texto preto em fundo branco.
+ATENÇÃO: AS CORES SÃO OBRIGATÓRIAS
+Não basta mencionar a paleta ou utilizar cores apenas em títulos.
+APLIQUE EFETIVAMENTE as cores no HTML usando \`background-color\`, \`border-left\`, \`border\`, \`color\`, \`<mark>\` e/ou \`<span>\` com estilos inline.
+O documento final deve apresentar diversos destaques visuais em tons pastel distribuídos ao longo do conteúdo.
+NÃO entregue um documento predominantemente branco.
+Utilize a paleta abaixo de maneira recorrente e semântica:
+ROSA
+\`#FCE7F3\`
+Use para conceitos, definições e ideias centrais.
+Exemplo obrigatório de estrutura visual:
+AZUL
+\`#E0F2FE\`
+Use para artigos de lei, dispositivos legais, fundamentos e bases normativas.
+VERDE
+\`#DCFCE7\`
+Use para requisitos, pressupostos, condições e exceções.
+AMARELO
+\`#FEF9C3\`
+Use para pegadinhas, alertas e pontos que podem induzir ao erro.
+LILÁS
+\`#F3E8FF\`
+Use para jurisprudência, STF, STJ, súmulas e temas relevantes.
+LARANJA
+\`#FFEDD5\`
+Use para prazos, números, percentuais e informações quantitativas importantes.
+CINZA
+\`#F3F4F6\`
+Use para observações e informações complementares.
+DISTRIBUIÇÃO DAS CORES
+Não use apenas uma caixa colorida no início do material.
+As cores devem aparecer ao longo de todo o resumo, de acordo com o tipo de informação.
+Um resumo completo deve normalmente conter vários elementos visuais coloridos, sempre que houver conteúdo correspondente.
+Por exemplo:
+
+- conceito importante → rosa;
+- artigo legal → azul;
+- requisito ou exceção → verde;
+- pegadinha → amarelo;
+- jurisprudência → lilás;
+- prazo → laranja.
+
+Não transforme cada frase em uma caixa.
+Use uma combinação de:
+
+- caixas coloridas;
+- pequenos destaques com \`<span>\`;
+- \`<mark>\`;
+- cabeçalhos coloridos;
+- tabelas com cabeçalhos pastel;
+- bordas laterais;
+- blocos de comparação.
+
+O objetivo é criar uma hierarquia visual rica, não poluir a página.
 ORGANIZAÇÃO
-Organize o conteúdo com uma hierarquia clara:
+Use:
 
-- título principal;
-- subtítulos;
-- subseções;
-- parágrafos curtos;
-- listas quando forem realmente úteis;
-- listas numeradas para sequências e procedimentos;
-- tabelas para comparações;
-- caixas de destaque para informações importantes;
-- observações e exemplos quando pertinentes.
+- \`<h1>\` para o título principal;
+- \`<h2>\` para grandes tópicos;
+- \`<h3>\` para subtópicos;
+- \`<h4>\` quando necessário;
+- \`<p>\` para explicações;
+- \`<ul>\` e \`<ol>\` para listas;
+- \`<table>\` para comparações;
+- \`<div>\` para caixas de destaque;
+- \`<strong>\` para palavras-chave;
+- \`<em>\` para observações;
+- \`<mark>\` para pontos críticos.
 
-Não transforme absolutamente tudo em listas.
-Use parágrafos explicativos quando o conteúdo exigir desenvolvimento.
-O resultado deve parecer uma página de material de estudo bem construída, e não uma resposta genérica de chatbot.
-HTML
-O resultado deve ser EXCLUSIVAMENTE HTML, pronto para copiar e colar diretamente no meu editor Rich Text.
-Não use Markdown.
-Não coloque o HTML dentro de bloco de código.
-Não escreva explicações antes ou depois do HTML.
-Use HTML semântico, como:
-\`section\`, \`h1\`, \`h2\`, \`h3\`, \`h4\`, \`p\`, \`strong\`, \`em\`, \`u\`, \`mark\`, \`ul\`, \`ol\`, \`li\`, \`table\`, \`thead\`, \`tbody\`, \`tr\`, \`th\`, \`td\`, \`blockquote\`, \`div\`, \`span\` e \`hr\`.
-Use estilos inline para a formatação visual.
-Não utilize JavaScript, bibliotecas externas ou CSS externo.
-IDENTIDADE VISUAL
-O material deve parecer uma mini-apostila digital moderna, com estética acadêmica, delicada e organizada, inspirada em Notion/Obsidian.
-Use uma paleta pastel semântica:
-
-- Rosa #FCE7F3 → conceitos;
-- Azul #E0F2FE → artigos, fundamentos e dispositivos legais;
-- Verde #DCFCE7 → exceções e requisitos;
-- Amarelo #FEF9C3 → pegadinhas e pontos de atenção;
-- Lilás #F3E8FF → jurisprudência, STF, STJ, súmulas e temas;
-- Laranja #FFEDD5 → prazos, números e percentuais;
-- Cinza #F3F4F6 → informações complementares.
-
-Use as cores de forma equilibrada. Não transforme cada parágrafo em uma caixa colorida.
-A função das cores é criar hierarquia visual e facilitar a revisão, não poluir o material.
-DESTAQUES
-Use \`<strong>\` para:
-
-- conceitos essenciais;
-- palavras-chave;
-- nomes de institutos;
-- artigos importantes;
-- conclusões;
-- informações que precisam ser memorizadas.
-
-Use \`<em>\` para observações e ressalvas breves.
-Use \`<mark>\` para:
-
-- pegadinhas;
-- palavras que alteram o sentido;
-- informações especialmente importantes.
-
-Quando fizer sentido, utilize caixas de destaque com bordas laterais, fundo pastel, espaçamento e cantos arredondados.
-Não abuse de emojis. A hierarquia deve ser criada principalmente por títulos, cores, negrito, tabelas, espaçamento e organização.
-LEGISLAÇÃO
-Quando mencionar dispositivos legais importantes, dê destaque visual a eles, especialmente quando forem essenciais para a compreensão do assunto.
-Pode utilizar uma caixa azul, por exemplo.
-Não invente artigos, súmulas, temas, precedentes ou dispositivos legais.
-Se houver incerteza sobre uma referência jurídica específica, não crie uma referência fictícia.
-JURISPRUDÊNCIA
-Quando houver jurisprudência relevante, utilize uma caixa lilás.
-Explique de forma objetiva:
-
-- qual é o entendimento;
-- qual é a questão discutida;
-- qual é a consequência prática;
-- por que isso importa para a prova.
-
-Não basta apenas citar o número do tema ou súmula.
-PEGADINHAS
-Quando houver possibilidade de confusão, utilize uma caixa amarela.
+Não transforme tudo em lista.
+Utilize parágrafos quando for necessário explicar.
 TABELAS
-Use tabelas quando elas facilitarem comparação, memorização ou visualização de diferenças.
-Não transforme textos que ficariam mais claros em parágrafos ou listas em tabelas desnecessariamente.
-FOCO EM PROVA
-Ao desenvolver cada tópico, pense:
-"Se isso aparecesse em uma questão da OAB ou de concurso, o que eu precisaria saber para acertar?"
-Dê atenção especial a:
+Utilize tabelas quando facilitarem comparação ou memorização.
+Os cabeçalhos das tabelas também devem utilizar fundos pastel.
+Exemplo:
+FOCO EM OAB E CONCURSOS
+Para cada assunto, pense:
+"Se isso aparecesse em uma questão, o que eu precisaria saber para acertar?"
+Destaque especialmente:
 
-- diferenças entre institutos;
+- diferenças;
 - exceções;
 - requisitos;
 - prazos;
 - competências;
 - efeitos;
-- consequências;
 - palavras-chave;
-- artigos importantes;
+- artigos;
 - jurisprudência;
 - situações que induzem ao erro.
 
-FORMATAÇÃO
-Priorize:
+LEGISLAÇÃO E JURISPRUDÊNCIA
+Nunca invente artigos, súmulas, temas ou precedentes.
+Se houver uma referência jurídica relevante e segura, destaque-a visualmente.
+Jurisprudência deve explicar:
 
-- espaçamento confortável;
-- títulos bem diferenciados;
-- parágrafos curtos;
-- listas visualmente organizadas;
-- tabelas legíveis;
-- caixas com cantos arredondados;
-- cores suaves;
-- boa hierarquia;
-- alta legibilidade.
+- entendimento;
+- questão discutida;
+- consequência;
+- importância para prova.
 
-Evite:
+Não apenas cite o número do tema.
+HTML
+O resultado deve ser EXCLUSIVAMENTE HTML.
+Não use Markdown.
+Não coloque o HTML dentro de bloco de código.
+Não escreva explicações antes ou depois.
+Use somente HTML e estilos inline.
+Não utilize JavaScript, CSS externo ou bibliotecas externas.
+O HTML precisa estar pronto para colar diretamente no editor Rich Text.
+RESULTADO ESPERADO
+Quero uma página que visualmente lembre uma mini-apostila digital premium, moderna, acadêmica, organizada e claramente colorida, com:
 
-- blocos gigantes de texto;
-- excesso de cores;
-- excesso de emojis;
-- excesso de caixas;
-- excesso de títulos;
-- repetições;
-- frases artificiais;
-- informalidade excessiva;
-- conteúdo genérico para preencher espaço.
+- cartões pastel;
+- destaques coloridos;
+- títulos hierárquicos;
+- tabelas bonitas;
+- espaçamento;
+- palavras-chave destacadas;
+- diferentes cores para diferentes tipos de informação.
 
-O resultado final deve parecer um material de estudo pronto, e não uma resposta de inteligência artificial.
+Não entregue apenas texto com títulos pretos.
+A formatação colorida faz parte do conteúdo e é obrigatória.
 RETORNE SOMENTE O HTML FINAL.`;
 
 const PROMPT_MICRORESUMO_BASE = `A partir de agora, quando eu enviar um tema ou lista de tópicos, gere um Microresumo em formato de flashcard de revisão espaçada em HTML, pronto para copiar e colar diretamente no editor Rich Text do meu site.
 OBJETIVO
-O Microresumo não é para aprender o conteúdo do zero.
-Considere que eu já estudei aquele assunto anteriormente.
-A finalidade é reativar minha memória rapidamente durante uma revisão espaçada, funcionando como um conjunto de gatilhos de memória para recuperar os principais conceitos de Direito, OAB e concursos.
-O conteúdo deve permitir uma revisão completa em aproximadamente 30 segundos a 2 minutos.
+O Microresumo é para REVISÃO, e não para aprender o conteúdo do zero.
+Considere que eu já estudei o assunto.
+A função é reativar minha memória rapidamente e recuperar os principais conceitos para OAB e concursos.
+A leitura completa deve levar aproximadamente 30 segundos a 2 minutos.
 TÓPICOS DE ESTUDO
-Os tópicos abaixo são os conteúdos que devem ser transformados em Microresumo:
+Estes são os tópicos que devem ser transformados em Microresumo:
 {{TOPICOS_DO_DIA}}
-Inclua todos os tópicos fornecidos, priorizando os pontos mais importantes de cada um.
+Inclua todos os tópicos fornecidos.
 CONTEÚDO
 O Microresumo deve ser extremamente objetivo, mas não superficial.
-Não quero apenas palavras soltas.
-Cada item deve conter uma explicação curta o suficiente para recuperar o conceito.
+Não use apenas palavras soltas.
+Cada item deve possuir uma pequena explicação que permita recuperar o conceito.
 Exemplo:
 ❌ Historicidade
 ✅ Historicidade: direitos fundamentais surgem e evoluem conforme a história.
 Outro exemplo:
 ❌ PCO: inicial, ilimitado...
-✅ PCO: cria uma nova Constituição; é inicial, autônomo, ilimitado juridicamente e incondicionado.
-Pode utilizar:
+✅ PCO: cria nova Constituição; inicial, autônomo, ilimitado juridicamente e incondicionado.
+Pode usar:
 
-- abreviações comuns;
-- símbolos;
-- setas;
-- comparações rápidas;
+- CF;
+- EC;
+- STF;
+- STJ;
+- →;
+- ≠;
+- abreviações;
 - palavras-chave;
-- fórmulas de memorização.
+- comparações rápidas.
 
-Exemplos:
-CF = Constituição Federal
-EC = Emenda Constitucional
-→ = consequência ou relação
-≠ = diferença
-STF / STJ
-PRIORIDADES
 Priorize:
 
 - conceitos;
 - características;
 - classificações;
-- diferenças entre institutos;
-- requisitos;
-- exceções;
-- artigos importantes;
-- jurisprudência relevante;
-- súmulas;
-- temas importantes;
-- pegadinhas;
-- pontos que costumam gerar confusão.
-
-Não faça longas explicações doutrinárias.
-Não inclua exemplos desnecessários.
-Não desenvolva o conteúdo como se fosse uma aula para quem nunca estudou o assunto.
-A ideia é ativar uma memória que já existe, e não ensinar tudo novamente.
-FORMATO
-Organize o Microresumo como um flashcard premium de revisão espaçada.
-Utilize:
-
-- títulos claros;
-- subtítulos quando necessário;
-- bullets curtos;
-- palavras-chave em negrito;
-- explicações de uma ou poucas linhas;
-- tabelas para comparações;
-- caixas de destaque quando realmente ajudarem;
-- espaçamento visual;
-- alta densidade de informação.
-
-Não faça um texto corrido enorme.
-HTML
-O resultado deve ser EXCLUSIVAMENTE HTML, pronto para copiar e colar diretamente no meu editor Rich Text.
-Não use Markdown.
-Não coloque o HTML dentro de bloco de código.
-Não escreva explicações antes ou depois do HTML.
-Utilize HTML semântico, como:
-\`section\`, \`h2\`, \`h3\`, \`ul\`, \`li\`, \`strong\`, \`em\`, \`u\`, \`table\`, \`thead\`, \`tbody\`, \`tr\`, \`th\`, \`td\`, \`mark\`, \`div\`, \`span\` e \`hr\`.
-Utilize estilos inline.
-Não utilize JavaScript, bibliotecas externas ou CSS externo.
-IDENTIDADE VISUAL
-O resultado deve ser bonito, limpo, profissional e moderno, com aparência de um flashcard premium de revisão, inspirado em Notion/Obsidian.
-Utilize uma paleta pastel semântica:
-
-- Rosa → conceitos;
-- Azul → artigos e dispositivos legais;
-- Verde → exceções;
-- Amarelo → pegadinhas e atenção;
-- Lilás → jurisprudência, STF e STJ;
-- Laranja → prazos e números.
-
-Use as cores apenas nos pontos realmente importantes.
-Não colore tudo.
-A prioridade é leitura rápida e alta densidade de informação.
-DESTAQUES
-Use \`<strong>\` para palavras-chave e informações que precisam ser lembradas.
-Use \`<em>\` para observações rápidas.
-Use \`<mark>\` para pegadinhas e informações críticas.
-Quando necessário, utilize caixas de destaque com fundo pastel, borda lateral, padding e cantos arredondados.
-Não exagere nos emojis.
-TABELAS
-Use tabelas principalmente quando houver uma comparação importante entre dois ou mais institutos.
-FOCO NA REVISÃO
-O Microresumo deve responder rapidamente:
-"O que eu preciso lembrar sobre esse assunto para acertar uma questão?"
-Priorize aquilo que pode fazer diferença entre acertar e errar:
-
-- conceitos;
-- requisitos;
-- exceções;
 - diferenças;
-- prazos;
-- competências;
-- efeitos;
+- requisitos;
+- exceções;
 - artigos;
 - jurisprudência;
-- palavras-chave;
+- súmulas;
+- prazos;
 - pegadinhas.
 
-TAMANHO
-O resultado deve ser curto e de alta densidade informativa.
-Não transforme o Microresumo em uma apostila.
-Não repita informações.
-Não acrescente conteúdo genérico apenas para deixar o material maior.
-A leitura completa deve levar aproximadamente 30 segundos a 2 minutos.
-O resultado final deve parecer um flashcard digital premium de revisão espaçada, visualmente organizado e extremamente fácil de escanear.
+Não faça explicações doutrinárias longas.
+FORMATAÇÃO VISUAL OBRIGATÓRIA
+O Microresumo deve parecer um FLASHCARD PREMIUM, COLORIDO E VISUALMENTE RICO.
+NÃO entregue um texto predominantemente branco.
+As cores devem ser efetivamente aplicadas no HTML usando \`background-color\`, \`border-left\`, \`border\`, \`<mark>\` e/ou \`<span>\`.
+Utilize obrigatoriamente a seguinte lógica:
+
+- Rosa \`#FCE7F3\` → conceitos;
+- Azul \`#E0F2FE\` → artigos e dispositivos legais;
+- Verde \`#DCFCE7\` → exceções e requisitos;
+- Amarelo \`#FEF9C3\` → pegadinhas e atenção;
+- Lilás \`#F3E8FF\` → jurisprudência, STF e STJ;
+- Laranja \`#FFEDD5\` → prazos e números.
+
+As cores devem aparecer de forma recorrente ao longo do flashcard, sempre que houver informação correspondente.
+Não basta colorir apenas o título.
+Não basta definir a paleta.
+APLIQUE AS CORES NOS ELEMENTOS HTML.
+EXEMPLOS DE DESTAQUES
+Conceito:
+Artigo:
+Exceção:
+Pegadinha:
+Jurisprudência:
+Prazo:
+Use esses modelos como referência visual e adapte conforme o conteúdo.
+ESTILO
+O resultado deve ser:
+
+- pequeno;
+- objetivo;
+- denso;
+- bonito;
+- profissional;
+- colorido;
+- fácil de escanear;
+- visualmente organizado.
+
+Use:
+
+- títulos;
+- subtítulos;
+- bullets curtos;
+- palavras em negrito;
+- \`<mark>\`;
+- pequenas caixas coloridas;
+- tabelas quando úteis;
+- espaçamento.
+
+Não transforme tudo em caixas enormes.
+O visual deve parecer um flashcard digital premium, e não uma apostila longa.
+HTML
+Retorne EXCLUSIVAMENTE HTML.
+Não use Markdown.
+Não coloque em bloco de código.
+Não escreva explicações antes ou depois.
+Use HTML semântico e estilos inline.
+Não utilize JavaScript, CSS externo ou bibliotecas externas.
+O resultado precisa estar pronto para colar no Rich Text.
+RESULTADO ESPERADO
+Quero um Microresumo que, ao ser colado no editor, já apareça visualmente colorido, com:
+
+- fundos pastel;
+- destaques;
+- cartões;
+- palavras-chave;
+- hierarquia;
+- tabelas quando necessárias;
+- alta densidade de informação.
+
+Não entregue apenas texto preto com títulos.
+A formatação colorida é uma exigência do resultado.
 RETORNE SOMENTE O HTML FINAL.`;
 
 function _montarPromptCompleto(base, dia) {
