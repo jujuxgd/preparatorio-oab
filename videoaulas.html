@@ -327,6 +327,29 @@ function vaToggleSec(k) {
   if (sec) sec.classList.toggle('collapsed');
 }
 
+// Marca/desmarca aula como assistida. Usa a mesma chave 'va_done_<key>_<n>'
+// que a aba Hoje, então o estado fica sincronizado entre as duas páginas.
+function vaToggleDone(btn, k, n) {
+  var doneKey = 'va_done_' + k + '_' + n;
+  var done = !!localStorage.getItem(doneKey);
+  var row = btn.closest('.va-row');
+  if (done) {
+    localStorage.removeItem(doneKey);
+    btn.textContent = '○';
+    btn.style.color = 'var(--ink-faded)';
+    btn.style.borderColor = 'var(--line)';
+    btn.title = 'Marcar como assistida';
+    if (row) row.classList.remove('done-row');
+  } else {
+    localStorage.setItem(doneKey, '1');
+    btn.textContent = '✓';
+    btn.style.color = '#4a9850';
+    btn.style.borderColor = '#4a9850';
+    btn.title = 'Marcar como não vista';
+    if (row) row.classList.add('done-row');
+  }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   if (typeof VIDEOAULAS === 'undefined') return;
 
@@ -362,9 +385,12 @@ document.addEventListener('DOMContentLoaded', function() {
     var rows = d.aulas.map(function(a) {
       var safeTitle = a.titulo.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
       var jsTitle = a.titulo.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
-      return '<div class="va-row" id="var-' + k + '-' + a.n + '" onclick="vaAbrir(\'' + a.url + '\',\'' + jsTitle + '\',\'' + k + '\',' + a.n + ')">' +
+      var doneKey = 'va_done_' + k + '_' + a.n;
+      var done = !!localStorage.getItem(doneKey);
+      return '<div class="va-row' + (done ? ' done-row' : '') + '" id="var-' + k + '-' + a.n + '" onclick="vaAbrir(\'' + a.url + '\',\'' + jsTitle + '\',\'' + k + '\',' + a.n + ')">' +
         '<span class="r-n">' + a.n + '</span>' +
         '<span class="r-titulo">' + safeTitle + '</span>' +
+        '<button class="va-check-btn" title="' + (done ? 'Marcar como não vista' : 'Marcar como assistida') + '" onclick="event.stopPropagation();vaToggleDone(this,\'' + k + '\',' + a.n + ')" style="background:none;border:1.5px solid ' + (done ? '#4a9850' : 'var(--line)') + ';border-radius:50%;width:26px;height:26px;flex-shrink:0;font-size:0.75rem;cursor:pointer;color:' + (done ? '#4a9850' : 'var(--ink-faded)') + ';transition:all 0.18s;display:flex;align-items:center;justify-content:center">' + (done ? '✓' : '○') + '</button>' +
         '<span class="r-play">▶</span>' +
         '</div>';
     }).join('');
