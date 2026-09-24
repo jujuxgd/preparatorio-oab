@@ -785,6 +785,7 @@ function buildArquivo() {
   const wrap = document.getElementById('arquivo-cards');
   const filtrosWrap = document.getElementById('arquivo-filtros');
   if (!wrap) return;
+  const filtroAtivo = filtrosWrap?.querySelector('.rev-filter-pill.active')?.dataset.mat || '';
 
   const todos = [];
   const materiasMap = new Map(); // nome -> emoji
@@ -842,6 +843,8 @@ function buildArquivo() {
     const estagioBadge = `<span class="${dominado?'badge-dominado':''}" style="font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;background:${dominado?'var(--rose-soft)':'var(--bg-soft)'};color:${dominado?'var(--rose-deep)':'var(--ink-faded)'};padding:0.2rem 0.6rem;border-radius:20px;font-weight:600">${dominado?'✓ Dominado':`Estágio ${(t.agenda.estagio||0)+1}/${REV_STAGES.length}`}</span>`;
     return t.render(statusHtml + estagioBadge);
   }).join('');
+
+  if (filtroAtivo) arquivoFiltrar(filtroAtivo);
 }
 
 function arquivoFiltrar(nomeMateria) {
@@ -897,6 +900,7 @@ function buildStats() {
   const wrap = document.getElementById('stats-cards');
   const filtrosWrap = document.getElementById('stats-filtros');
   if (!wrap) return;
+  const filtroAtivo = filtrosWrap?.querySelector('.rev-filter-pill.active')?.dataset.mat || '';
 
   const todos = [];
   const materiasMap = new Map();
@@ -965,6 +969,8 @@ function buildStats() {
         ${histHtml}
       </div>`;
   }).join('');
+
+  if (filtroAtivo) statsFiltrar(filtroAtivo);
 }
 
 function statsFiltrar(nomeMateria) {
@@ -1007,6 +1013,9 @@ function registrarFeedbackMat(btn, tipo, numDia, mIdx) {
   salvarProgresso(p);
   _revP = p;
   atualizarBadgeRevisar();
+  buildAgenda();
+  buildArquivo();
+  buildStats();
 }
 
 // Compatibilidade com referências antigas
@@ -1044,6 +1053,9 @@ function registrarFeedbackMr(btn, tipo, numDia) {
   salvarProgresso(p);
   _revP = p;
   atualizarBadgeRevisar();
+  buildAgenda();
+  buildArquivo();
+  buildStats();
 }
 </script>
 </body>
