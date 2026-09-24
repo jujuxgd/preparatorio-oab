@@ -2145,6 +2145,30 @@ Use:
 
 Não transforme tudo em lista.
 Utilize parágrafos quando for necessário explicar.
+HIERARQUIA HTML OBRIGATÓRIA
+Utilize os elementos HTML de acordo com a hierarquia real do conteúdo:
+
+- \`<h1>\` = título principal do material;
+- \`<h2>\` = cada grande tópico/assunto principal;
+- \`<h3>\` = subtópicos dentro de um tópico principal;
+- \`<h4>\` = subdivisões menores, quando realmente necessárias;
+- \`<p>\` = explicações e desenvolvimento;
+- \`<ul>\`/\`<ol>\` = listas;
+- \`<table>\` = comparações;
+- \`<div>\` = caixas de destaque.
+
+NÃO substitua títulos por \`<p><strong>...</strong></p>\`.
+NÃO use apenas negrito para simular títulos.
+NÃO coloque todos os tópicos no mesmo nível.
+Se eu fornecer, por exemplo, os assuntos "Personalidade Civil", "Incapacidade Civil" e "Emancipação", cada um deles deve virar uma grande seção em \`<h2>\`.
+Se dentro de "Incapacidade Civil" houver "Incapacidade absoluta", "Incapacidade relativa" e "Efeitos", esses devem ser \`<h3>\`.
+Se houver uma subdivisão dentro deles, use \`<h4>\`.
+Esse é apenas um exemplo de estrutura — adapte a hierarquia aos tópicos que eu realmente fornecer.
+A hierarquia visual também é obrigatória: os títulos precisam ser visualmente diferentes entre si. Não basta usar \`<h1>\`, \`<h2>\`, \`<h3>\` e \`<h4>\` se todos acabarem parecendo visualmente iguais — reforce cada nível com estilos inline (tamanho, peso e cor da fonte) para que a diferença fique clara.
+Não substitua a hierarquia por cores. Quero as duas coisas simultaneamente: a estrutura (\`<h1>\`, \`<h2>\`, \`<h3>\`, \`<h4>\`, \`<p>\`, listas, tabelas) e a identidade visual colorida (rosa para conceitos, azul para legislação, verde para requisitos/exceções, amarelo para pegadinhas, lilás para jurisprudência, laranja para prazos/números). As cores devem complementar a estrutura, nunca substituí-la.
+O Resumo do Dia deve parecer uma mini-apostila digital, e não uma lista de informações no mesmo nível.
+❌ Não fazer: colocar todo o conteúdo em \`<p>\` com trechos em \`<strong>\` fingindo ser títulos, com todos os assuntos no mesmo nível.
+✅ Fazer: \`<h1>\` para o material, \`<h2>\` para cada assunto principal, \`<h3>\`/\`<h4>\` para os desdobramentos, com \`<p>\`, listas e tabelas dentro de cada seção.
 TABELAS
 Utilize tabelas quando facilitarem comparação ou memorização.
 Os cabeçalhos das tabelas também devem utilizar fundos pastel.
@@ -2246,6 +2270,26 @@ Priorize:
 - pegadinhas.
 
 Não faça explicações doutrinárias longas.
+HIERARQUIA
+No Microresumo também quero hierarquia — não uma sequência plana de bullets soltos.
+Organize os assuntos em níveis. Utilize:
+
+- \`<h2>\` para cada grande assunto;
+- \`<h3>\` para os subtópicos dentro dele;
+- \`<p>\` ou \`<ul>\`/\`<li>\` curtos para o conteúdo de cada subtópico;
+- \`<table>\` quando houver comparação entre institutos.
+
+NÃO FAZER
+Não:
+
+- usar \`<p><strong>\` como substituto de títulos;
+- colocar todos os assuntos no mesmo nível;
+- transformar o documento inteiro em uma sequência de bullets;
+- remover \`<h2>\`/\`<h3>\` porque o conteúdo é curto;
+- usar somente negrito para criar hierarquia;
+- deixar todos os títulos com o mesmo tamanho e peso visual, mesmo usando tags diferentes.
+
+Reforce a diferença visual entre \`<h2>\` e \`<h3>\` com estilos inline (tamanho e peso de fonte), mesmo em um material curto.
 FORMATAÇÃO VISUAL OBRIGATÓRIA
 O Microresumo deve parecer um FLASHCARD PREMIUM, COLORIDO E VISUALMENTE RICO.
 NÃO entregue um texto predominantemente branco.
