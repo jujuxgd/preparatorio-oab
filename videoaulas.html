@@ -348,6 +348,10 @@ function vaToggleDone(btn, k, n) {
     btn.title = 'Marcar como não vista';
     if (row) row.classList.add('done-row');
   }
+  try { localStorage.setItem('oab_local_rev', String(Date.now())); } catch (e) {}
+  if (window._syncOAB && window._syncOAB.notificarAlteracaoLocal) {
+    try { window._syncOAB.notificarAlteracaoLocal(doneKey); } catch (e) {}
+  }
 }
 
 document.addEventListener('DOMContentLoaded', function() {

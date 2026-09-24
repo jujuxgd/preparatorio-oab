@@ -938,6 +938,12 @@ window.marcarEstudado = function() {
   salvarProgresso(prog);
   localStorage.setItem('ju_oab_streak', String(prog.streak));
   localStorage.setItem('ju_oab_streak_date', hoje);
+  if (window._syncOAB && window._syncOAB.notificarAlteracaoLocal) {
+    try {
+      window._syncOAB.notificarAlteracaoLocal('ju_oab_streak');
+      window._syncOAB.notificarAlteracaoLocal('ju_oab_streak_date');
+    } catch (e) {}
+  }
 
   var btn = document.getElementById('btn-estudei');
   btn.textContent = '✓ Dia ' + dia + ' concluído · Revisão programada para 1, 7, 15 e 30 dias!';

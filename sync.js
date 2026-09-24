@@ -56,6 +56,12 @@
   // (de outro aparelho) que este aparelho não tem localmente.
   function enviarParaNuvem(uid, chave) {
     if (!window._fbDb || !uid || !window._perfilOAB) return Promise.resolve(false);
+    // localStorage.getItem devolve null quando a chave foi removida (ex.:
+    // desmarcar uma videoaula, cancelar uma edição sem conteúdo anterior).
+    // Manda esse null como valor de campo mesmo (Firestore guarda null de
+    // verdade, não apaga o campo) — aplicarDadosLocalStorage sabe converter
+    // esse null de volta num removeItem local no outro aparelho, em vez de
+    // gravar a string "null" (o que localStorage.setItem faria).
     const dados = chave
       ? { [chave]: localStorage.getItem(chave), oab_local_rev: localStorage.getItem('oab_local_rev') }
       : window._perfilOAB.coletarDadosLocalStorage();

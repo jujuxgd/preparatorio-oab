@@ -799,6 +799,10 @@ function toggleCurricTopico(matId, tIdx, rowEl) {
   const saved = JSON.parse(localStorage.getItem(savedKey) || '{}');
   saved[tIdx] = !saved[tIdx];
   localStorage.setItem(savedKey, JSON.stringify(saved));
+  try { localStorage.setItem('oab_local_rev', String(Date.now())); } catch (e) {}
+  if (window._syncOAB && window._syncOAB.notificarAlteracaoLocal) {
+    try { window._syncOAB.notificarAlteracaoLocal(savedKey); } catch (e) {}
+  }
 
   const checked = saved[tIdx];
   rowEl.classList.toggle('checked', checked);

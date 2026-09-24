@@ -42,6 +42,10 @@
 
   function _salvarLog(log) {
     try { localStorage.setItem(LOG_KEY, JSON.stringify(log)); } catch (e) {}
+    try { localStorage.setItem('oab_local_rev', String(Date.now())); } catch (e) {}
+    if (window._syncOAB && window._syncOAB.notificarAlteracaoLocal) {
+      try { window._syncOAB.notificarAlteracaoLocal(LOG_KEY); } catch (e) {}
+    }
   }
 
   // Registra automaticamente ao clicar num humor — sem precisar salvar.
@@ -57,7 +61,10 @@
     const log = getLog();
     log.push(entry);
     _salvarLog(log);
-    try { localStorage.setItem('mood_' + data, label); } catch (e) {} // compat com telas existentes
+    try {
+      localStorage.setItem('mood_' + data, label); // compat com telas existentes
+      if (window._syncOAB && window._syncOAB.notificarAlteracaoLocal) window._syncOAB.notificarAlteracaoLocal('mood_' + data);
+    } catch (e) {}
     return entry;
   }
 
