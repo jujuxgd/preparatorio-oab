@@ -505,7 +505,7 @@
     <!-- HERO -->
     <div class="stats-hero">
       <div class="stat-big">
-        <div class="label">Horas previstas</div>
+        <div class="label">Horas estudadas</div>
         <div class="num" id="hero-horas">0<small>h</small></div>
         <div class="sub" id="hero-horas-sub">nenhum dia concluído</div>
       </div>
@@ -644,9 +644,20 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   const mediaH = stats.concluidos > 0 ? (totalHoras / stats.concluidos).toFixed(1) : 0;
 
+  // ── Tempo real estudado — digitado manualmente na aba Hoje (não vem
+  // do Pomodoro nem de cronômetro nenhum, e é diferente de totalHoras
+  // acima, que é a carga horária SUGERIDA pelo plano, não a real).
+  let minutosReaisTotal = 0;
+  let diasComRegistroReal = 0;
+  Object.keys(p.dias || {}).forEach(numDia => {
+    const min = p.dias[numDia] && p.dias[numDia].minutos_estudados;
+    if (min) { minutosReaisTotal += min; diasComRegistroReal++; }
+  });
+  const mediaRealMin = diasComRegistroReal > 0 ? Math.round(minutosReaisTotal / diasComRegistroReal) : 0;
+
   // ── Hero
-  document.getElementById('hero-horas').innerHTML     = `${totalHoras}<small>h</small>`;
-  document.getElementById('hero-horas-sub').textContent = stats.concluidos > 0 ? `média ${mediaH}h/dia` : 'nenhum dia concluído';
+  document.getElementById('hero-horas').innerHTML     = diasComRegistroReal > 0 ? fmtMinutosParaTexto(minutosReaisTotal) : '0<small>h</small>';
+  document.getElementById('hero-horas-sub').textContent = diasComRegistroReal > 0 ? `média ${fmtMinutosParaTexto(mediaRealMin)}/dia` : 'nenhum tempo registrado ainda';
   document.getElementById('hero-questoes').textContent  = q.total;
   document.getElementById('hero-questoes-sub').innerHTML = q.total > 0 ? `acerto <em>${q.pct}%</em>` : 'sem registros';
   document.getElementById('hero-streak').innerHTML    = `${p.streak||0}<small> dias</small>`;

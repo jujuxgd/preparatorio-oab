@@ -121,6 +121,44 @@ function concluirDia(numDia, nota) {
   return p;
 }
 
+// Tempo real estudado no dia, digitado manualmente pela usuária (NÃO vem
+// do Pomodoro nem de nenhum cronômetro automático — a "carga horária"
+// sugerida pelo plano em plano-vde.js é só uma estimativa do cronograma,
+// não tempo de fato estudado). Aceita "1h30", "1h", "1:30" ou um número
+// puro (tratado como horas, com decimal — "1.5" = 1h30).
+function parseTempoParaMinutos(texto) {
+  if (!texto) return 0;
+  const t = String(texto).trim().toLowerCase().replace(',', '.');
+  if (!t) return 0;
+  let m = t.match(/^(\d+)\s*h\s*(\d{1,2})?\s*(?:min)?$/);
+  if (m) return parseInt(m[1], 10) * 60 + (m[2] ? parseInt(m[2], 10) : 0);
+  m = t.match(/^(\d+):(\d{1,2})$/);
+  if (m) return parseInt(m[1], 10) * 60 + parseInt(m[2], 10);
+  m = t.match(/^(\d+)\s*min$/);
+  if (m) return parseInt(m[1], 10);
+  m = t.match(/^(\d+(\.\d+)?)$/);
+  if (m) return Math.round(parseFloat(m[1]) * 60);
+  return null; // formato não reconhecido
+}
+
+function fmtMinutosParaTexto(minutos) {
+  const min = parseInt(minutos) || 0;
+  if (!min) return '';
+  const h = Math.floor(min / 60);
+  const m = min % 60;
+  if (h && m) return `${h}h${String(m).padStart(2, '0')}`;
+  if (h) return `${h}h`;
+  return `${m}min`;
+}
+
+function salvarTempoEstudado(numDia, minutos) {
+  const p   = carregarProgresso();
+  const key = String(numDia);
+  if (!p.dias[key]) p.dias[key] = {};
+  p.dias[key].minutos_estudados = parseInt(minutos) || 0;
+  salvarProgresso(p);
+}
+
 function atualizarChecklist(numDia, itemId, marcado) {
   const p   = carregarProgresso();
   const key = String(numDia);

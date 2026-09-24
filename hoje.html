@@ -1471,7 +1471,12 @@
         <a href="hoje.html" id="nav-prev">← Dia anterior</a>
         <a href="hoje.html" id="nav-next">Próximo dia →</a>
       </div>
-      <div style="display:flex;gap:0.7rem;align-items:center">
+      <div style="display:flex;gap:0.7rem;align-items:center;flex-wrap:wrap">
+        <div style="display:flex;align-items:center;gap:0.4rem">
+          <label for="tempo-estudado-input" style="font-size:0.72rem;color:var(--ink-faded)">⏱ Tempo estudado hoje</label>
+          <input type="text" id="tempo-estudado-input" placeholder="ex: 1h30" title="Digite manualmente quanto tempo você estudou de verdade — não vem do Pomodoro nem é calculado automaticamente" style="width:80px;padding:0.4rem 0.6rem;border:1px solid var(--line);border-radius:var(--radius-sm);font-size:0.85rem;background:var(--paper);color:var(--ink);font-family:'Inter',sans-serif" onblur="salvarTempoEstudadoHoje()" onkeydown="if(event.key==='Enter'){this.blur();}">
+          <span id="tempo-estudado-msg" style="font-size:0.7rem;color:var(--ink-faded);min-width:70px"></span>
+        </div>
         <button class="btn-estudei" id="btn-estudei" onclick="toggleDiaConcluido()">Estudei Hoje ✦</button>
       </div>
     </div>
@@ -1594,6 +1599,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // Inicializar os editores ricos (Microresumo + Resumo do Dia) e carregar
   // o conteúdo salvo do dia
   _iniciarEditoresRicos(dia);
+
+  _carregarTempoEstudadoHoje(dia);
 
   document.querySelectorAll('[data-study-day]').forEach(el => { el.textContent = dia; });
   const focusDayLabel = document.getElementById('focus-day-label');
@@ -1838,6 +1845,41 @@ function _diaCorrente() {
   const params = new URLSearchParams(window.location.search);
   const raw = params.get('dia') ? parseInt(params.get('dia')) : getStudyDay();
   return raw <= 0 ? 1 : Math.min(raw, 120);
+}
+
+// ── Tempo estudado hoje — digitado manualmente, não vem do Pomodoro ──
+function _carregarTempoEstudadoHoje(dia) {
+  const input = document.getElementById('tempo-estudado-input');
+  if (!input) return;
+  const progDia = obterDia(dia);
+  input.value = fmtMinutosParaTexto(progDia && progDia.minutos_estudados);
+}
+
+function salvarTempoEstudadoHoje() {
+  const input = document.getElementById('tempo-estudado-input');
+  const msg   = document.getElementById('tempo-estudado-msg');
+  if (!input) return;
+  const texto = input.value.trim();
+  if (!texto) {
+    salvarTempoEstudado(_diaCorrente(), 0);
+    if (msg) msg.textContent = '';
+    return;
+  }
+  const minutos = parseTempoParaMinutos(texto);
+  if (minutos === null) {
+    if (msg) {
+      msg.textContent = '⚠ formato inválido';
+      msg.style.color = 'var(--rose-deep)';
+      setTimeout(() => { msg.textContent = ''; msg.style.color = 'var(--ink-faded)'; }, 2500);
+    }
+    return;
+  }
+  salvarTempoEstudado(_diaCorrente(), minutos);
+  input.value = fmtMinutosParaTexto(minutos);
+  if (msg) {
+    msg.textContent = '✓ salvo';
+    setTimeout(() => { msg.textContent = ''; }, 2000);
+  }
 }
 
 // ── Copiar Prompt — monta o bloco de tópicos do dia e os prompts prontos
