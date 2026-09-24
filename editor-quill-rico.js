@@ -288,8 +288,14 @@
 // no outro lugar também.
 function _editorSalvar(quill, keyPrefix, dia, labelId) {
   if (!quill) return;
+  const chave = keyPrefix + dia;
   const payload = JSON.stringify({ html: quill.root.innerHTML, delta: quill.getContents() });
-  localStorage.setItem(keyPrefix + dia, payload);
+  localStorage.setItem(chave, payload);
+  // Sem isso o autosave só chegava no outro aparelho na próxima troca de
+  // aba/fechamento (fallback de emergência do sync.js), e mesmo assim sem
+  // avançar oab_local_rev — o listener em tempo real do outro aparelho
+  // descartava a atualização por achar a nuvem "não mais nova".
+  if (typeof marcarAlteracaoLocal === 'function') marcarAlteracaoLocal(chave);
   const lbl = document.getElementById(labelId);
   if (lbl) { lbl.textContent = 'Salvo'; setTimeout(() => { lbl.textContent = ''; }, 1500); }
 }
@@ -376,6 +382,10 @@ function criarGerenciadorEditores(diaAtualFn) {
       if (cfg.snapshotAntesEdicao == null) localStorage.removeItem(chave);
       else localStorage.setItem(chave, cfg.snapshotAntesEdicao);
     } catch (e) {}
+    // O autosave (debounce de 600ms) pode já ter mandado o rascunho pra
+    // nuvem antes deste cancelamento — sem avisar de novo, outro aparelho
+    // ficaria com o rascunho descartado em vez do estado revertido.
+    if (typeof marcarAlteracaoLocal === 'function') marcarAlteracaoLocal(chave);
     if (cfg.quill) _editorCarregar(cfg.quill, cfg.keyPrefix, dia);
     atualizarModoVisualizacao(key);
   }
