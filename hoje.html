@@ -2018,408 +2018,75 @@ function _montarBlocoTopicosDoDia(dia) {
   return blocos.join('\n\n');
 }
 
-const PROMPT_RESUMO_DIA_BASE = `A partir de agora, sempre que eu enviar um tema, capítulo, matéria ou lista de tópicos, transforme o conteúdo em um **Resumo do Dia completo, organizado e visualmente rico**, voltado para meus estudos de Direito, OAB e concursos.
-
-## OBJETIVO
-
-O Resumo do Dia NÃO deve ser um microresumo ou um flashcard.
-
-Ele deve funcionar como um **material de estudo e consulta**, permitindo que eu revise o assunto sem precisar voltar imediatamente ao livro, PDF ou aula.
-
-Pode ser detalhado e relativamente longo quando o assunto exigir. Não reduza informações importantes apenas para deixar o material curto.
-
-O conteúdo deve ser:
-
-- didático;
-- completo;
-- objetivo;
-- juridicamente organizado;
-- focado no que realmente importa para provas;
-- fácil de consultar posteriormente;
-- visualmente agradável.
-
-Considere que eu já estudo Direito, portanto não preciso de explicações excessivamente infantis, mas preciso que conceitos e relações importantes sejam explicados de forma clara.
-
-## CONTEÚDO
-
-Ao desenvolver o resumo, priorize, quando aplicável:
-
-- conceito e definição;
-- finalidade;
-- fundamentos;
-- características;
-- princípios;
-- classificações;
-- espécies;
-- requisitos;
-- pressupostos;
-- elementos;
-- competências;
-- procedimentos e etapas;
-- efeitos;
-- consequências jurídicas;
-- exceções;
-- diferenças entre institutos semelhantes;
-- prazos e números importantes;
-- artigos de lei relevantes;
-- entendimentos do STF e STJ;
-- súmulas e temas de repercussão geral ou recursos repetitivos relevantes;
-- pegadinhas frequentes de OAB e concursos;
-- pontos que costumam gerar confusão;
-- exemplos práticos quando ajudarem na compreensão.
-
-Não inclua informação apenas para aumentar o tamanho do resumo. Se determinado ponto for irrelevante para estudo ou prova, não dê destaque desnecessário a ele.
-
-Quando houver institutos parecidos, prefira uma tabela comparativa.
-
-Quando houver uma sequência, classificação ou procedimento, organize de maneira visual.
-
-Quando houver uma exceção importante, destaque-a visualmente.
-
-## ORGANIZAÇÃO
-
-Estruture o material hierarquicamente.
-
-Use:
-
-- título principal;
-- subtítulos;
-- subseções;
-- parágrafos curtos;
-- listas;
-- listas numeradas;
-- tabelas comparativas;
-- caixas de destaque;
-- observações;
-- exemplos;
-- alertas de prova.
-
-A estrutura deve permitir uma leitura rápida e também uma consulta posterior.
-
-Não transforme todo o conteúdo em listas. Use parágrafos quando for necessário explicar um conceito.
-
-## HTML
-
-A resposta deve ser entregue **EXCLUSIVAMENTE em HTML**, pronto para copiar e colar diretamente no meu editor Rich Text.
-
-NÃO use Markdown.
-
-NÃO coloque o HTML dentro de bloco de código.
-
-NÃO escreva explicações antes ou depois do HTML.
-
-A resposta deve ser o próprio HTML.
-
-Use HTML semântico e simples, compatível com um editor Rich Text.
-
-Pode utilizar:
-
-- \`<section>\`
-- \`<h1>\`
-- \`<h2>\`
-- \`<h3>\`
-- \`<h4>\`
-- \`<p>\`
-- \`<strong>\`
-- \`<em>\`
-- \`<u>\`
-- \`<mark>\`
-- \`<ul>\`
-- \`<ol>\`
-- \`<li>\`
-- \`<table>\`
-- \`<thead>\`
-- \`<tbody>\`
-- \`<tr>\`
-- \`<th>\`
-- \`<td>\`
-- \`<blockquote>\`
-- \`<div>\`
-- \`<span>\`
-- \`<hr>\`
-
-Sempre que precisar de estilização visual, prefira \`style=""\` diretamente nos elementos, em vez de CSS externo.
-
-Não utilize JavaScript, bibliotecas externas ou elementos que dependam de recursos externos.
-
-## IDENTIDADE VISUAL
-
-O resumo deve ter aparência de uma **mini-apostila digital moderna**, inspirada em Notion/Obsidian, mas com uma identidade visual delicada e acadêmica.
-
-Use cores pastel para facilitar a identificação visual das informações.
-
-Paleta sugerida:
-
-- **Rosa pastel \`#FCE7F3\`** → conceitos e definições importantes
-- **Azul claro \`#E0F2FE\`** → artigos de lei, dispositivos legais e fundamentos normativos
-- **Verde pastel \`#DCFCE7\`** → exceções, requisitos preenchidos ou situações específicas
-- **Amarelo pastel \`#FEF9C3\`** → pegadinhas, atenção e pontos recorrentes em provas
-- **Lilás pastel \`#F3E8FF\`** → jurisprudência, STF, STJ, súmulas e temas
-- **Laranja pastel \`#FFEDD5\`** → prazos, números, percentuais e informações que exigem memorização
-- **Cinza claro \`#F3F4F6\`** → observações e informações complementares
-
-Use as cores de forma equilibrada.
-
-Não transforme cada parágrafo em uma caixa colorida.
-
-O objetivo é criar **hierarquia visual**, não poluição visual.
-
-## DESTAQUES
-
-Use \`<strong>\` para:
-
-- conceitos-chave;
-- palavras essenciais;
-- nomes de institutos;
-- artigos importantes;
-- conclusões que precisam ser lembradas.
-
-Use \`<em>\` para:
-
-- observações breves;
-- ressalvas;
-- complementos.
-
-Use \`<mark>\` para:
-
-- pegadinhas;
-- palavras que mudam o sentido;
-- informações que merecem atenção especial.
-
-Use caixas coloridas com \`<div>\` para informações especialmente relevantes.
-
-Exemplo de caixa de atenção:
-
-<div style="background-color:#FEF9C3; border-left:4px solid #F59E0B; padding:12px 16px; border-radius:8px; margin:12px 0;">
-  <strong>⚠️ Atenção para a prova:</strong>
-  <span>...</span>
-</div>
-
-Não abuse de emojis. A organização visual deve vir principalmente das cores, títulos, negrito, tabelas e espaçamento.
-
-## ARTIGOS DE LEI
-
-Quando houver artigo de lei relevante, destaque-o visualmente.
-
-Exemplo:
-
-<div style="background-color:#E0F2FE; padding:12px 16px; border-radius:8px; margin:12px 0;">
-  <strong>📘 Base legal</strong>
-  <p style="margin:6px 0 0 0;">Art. XX da Constituição Federal: ...</p>
-</div>
-
-Não invente artigos, súmulas, temas ou dispositivos.
-
-Se o conteúdo fornecido não trouxer a informação e houver dúvida sobre a exatidão, não crie uma referência jurídica fictícia.
-
-## JURISPRUDÊNCIA
-
-Quando houver jurisprudência relevante, destaque em bloco próprio.
-
-Exemplo:
-
-<div style="background-color:#F3E8FF; padding:12px 16px; border-radius:8px; margin:12px 0;">
-  <strong>⚖️ Jurisprudência</strong>
-  <p style="margin:6px 0 0 0;">STF/STJ: ...</p>
-</div>
-
-Explique de maneira objetiva:
-
-- qual é o entendimento;
-- qual é a questão discutida;
-- qual é a consequência prática;
-- por que isso importa para a prova.
-
-## PEGADINHAS DE PROVA
-
-Sempre que houver uma distinção ou erro comum, crie um destaque específico.
-
-Exemplo:
-
-<div style="background-color:#FEF9C3; padding:12px 16px; border-radius:8px; margin:12px 0;">
-  <strong>🎯 Pegadinha de prova</strong>
-  <p style="margin:6px 0 0 0;">Não confunda X com Y. Enquanto X ..., Y ...</p>
-</div>
-
-Priorize pegadinhas reais e diferenças juridicamente relevantes.
-
-## TABELAS
-
-Use tabelas sempre que elas realmente facilitarem a comparação ou memorização.
-
-Exemplo de estrutura:
-
-<table style="width:100%; border-collapse:collapse; margin:16px 0;">
+const PROMPT_RESUMO_DIA_BASE = `Você vai transformar os tópicos que eu enviar em um "Resumo do Dia": uma mini-apostila digital em HTML, visualmente rica, para estudar Direito, OAB e concursos. Não é flashcard nem microresumo — pode ser longo e detalhado quando o assunto pedir, mas sem enrolação.
+
+FORMATO OBRIGATÓRIO
+Siga este modelo de estrutura HTML para cada tópico recebido, trocando apenas o conteúdo (mantenha os estilos inline exatamente como estão):
+
+<h2 style="font-family:Georgia,serif; font-size:20px; font-weight:700; color:#1f2937; margin:28px 0 12px; padding-bottom:6px; border-bottom:2px solid #F3E8FF;">Nome do tópico</h2>
+<p style="margin:0 0 12px; line-height:1.6; color:#1f2937;">Parágrafo curto de contexto/introdução do tópico, quando fizer sentido.</p>
+<ul style="margin:0 0 16px; padding-left:20px;">
+  <li style="margin-bottom:10px; line-height:1.6;"><span style="background-color:#FCE7F3; padding:2px 6px; border-radius:4px; font-weight:700;">Nome do conceito:</span> explicação do conceito.</li>
+  <li style="margin-bottom:10px; line-height:1.6;"><span style="background-color:#E0F2FE; padding:2px 6px; border-radius:4px; font-weight:700;">Art. X da lei:</span> o que o artigo diz e por que importa.</li>
+  <li style="margin-bottom:10px; line-height:1.6;"><span style="background-color:#DCFCE7; padding:2px 6px; border-radius:4px; font-weight:700;">Requisito/Exceção:</span> explicação.</li>
+  <li style="margin-bottom:10px; line-height:1.6;"><span style="background-color:#F3E8FF; padding:2px 6px; border-radius:4px; font-weight:700;">Jurisprudência (STF/STJ):</span> entendimento e por que cai em prova.</li>
+  <li style="margin-bottom:10px; line-height:1.6;"><span style="background-color:#FEF9C3; padding:2px 6px; border-radius:4px; font-weight:700;">Pegadinha:</span> armadilha comum de prova.</li>
+  <li style="margin-bottom:10px; line-height:1.6;"><span style="background-color:#FFEDD5; padding:2px 6px; border-radius:4px; font-weight:700;">Prazo/número:</span> informação quantitativa relevante.</li>
+</ul>
+
+Quando dois institutos do mesmo tópico precisarem ser comparados, insira uma tabela (mantendo os estilos) em vez de repetir os itens acima:
+
+<h3 style="font-size:16px; font-weight:700; color:#1f2937; margin:18px 0 8px;">Nome do subtópico comparativo</h3>
+<table style="width:100%; border-collapse:collapse; margin:0 0 18px; font-size:14px;">
   <thead>
     <tr>
-      <th style="padding:10px; border:1px solid #E5E7EB; background-color:#F3E8FF; text-align:left;">Instituto</th>
-      <th style="padding:10px; border:1px solid #E5E7EB; background-color:#F3E8FF; text-align:left;">Características</th>
-      <th style="padding:10px; border:1px solid #E5E7EB; background-color:#F3E8FF; text-align:left;">Exemplo</th>
+      <th style="text-align:left; padding:8px 10px; background-color:#F3F4F6; border:1px solid #E5E7EB;">Critério</th>
+      <th style="text-align:left; padding:8px 10px; background-color:#F3F4F6; border:1px solid #E5E7EB;">Categoria A</th>
+      <th style="text-align:left; padding:8px 10px; background-color:#F3F4F6; border:1px solid #E5E7EB;">Categoria B</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td style="padding:10px; border:1px solid #E5E7EB;">...</td>
-      <td style="padding:10px; border:1px solid #E5E7EB;">...</td>
-      <td style="padding:10px; border:1px solid #E5E7EB;">...</td>
+      <td style="padding:8px 10px; border:1px solid #E5E7EB;">...</td>
+      <td style="padding:8px 10px; border:1px solid #E5E7EB;">...</td>
+      <td style="padding:8px 10px; border:1px solid #E5E7EB;">...</td>
     </tr>
   </tbody>
 </table>
 
-Não use tabelas para conteúdos que ficariam mais claros em texto ou lista.
+REGRAS QUE NÃO PODEM SER QUEBRADAS
+1. Cada tópico recebido = um <h2> próprio. Nunca junte tópicos diferentes sob o mesmo <h2>, e nunca deixe um tópico sem <h2>.
+2. Nunca escreva um bloco inteiro só em <p>. A maior parte do conteúdo de cada tópico vem em <li> com um <span> colorido no início, exatamente como no modelo acima — não apenas negrito.
+3. Use as cores do <span> de acordo com o tipo de informação: rosa #FCE7F3 = conceito, azul #E0F2FE = artigo/lei, verde #DCFCE7 = requisito/exceção, lilás #F3E8FF = jurisprudência, amarelo #FEF9C3 = pegadinha, laranja #FFEDD5 = prazo/número. Se um tópico não tiver determinado tipo de informação, não invente — apenas não use aquela cor nesse tópico.
+4. Um resumo sem nenhuma cor aplicada está ERRADO. Um resumo sem nenhum <h2> está ERRADO.
+5. Desenvolva TODOS os tópicos que eu enviar, sem pular nenhum.
+6. Não invente artigos, súmulas ou jurisprudência que não existam de fato.
 
-## FORMATAÇÃO
+SAÍDA
+Responda SOMENTE com o HTML final, sem Markdown, sem bloco de código, sem texto antes ou depois — o HTML pronto para colar direto no meu editor Rich Text. Só estilo inline, sem JavaScript nem CSS externo.`;
 
-Mantenha:
+const PROMPT_MICRORESUMO_BASE = `Você vai transformar os tópicos que eu enviar em um "Microresumo": um flashcard de revisão espaçada em HTML, curto e denso, pronto para colar em um editor Rich Text. Não é para aprender do zero — é para reativar memória rápida (leitura de 30 segundos a 2 minutos). Considere que eu já estudei o assunto.
 
-- bom espaçamento entre seções;
-- títulos claramente diferenciados;
-- parágrafos curtos;
-- listas visualmente organizadas;
-- tabelas legíveis;
-- caixas com bordas arredondadas;
-- cores suaves;
-- boa hierarquia de informação.
+FORMATO OBRIGATÓRIO
+Siga este modelo de estrutura HTML para cada tópico recebido, trocando apenas o conteúdo (mantenha os estilos inline exatamente como estão):
 
-Evite:
+<h3 style="font-size:15px; font-weight:700; color:#1f2937; margin:16px 0 6px; padding-bottom:4px; border-bottom:1px solid #F3E8FF;">Nome do tópico</h3>
+<p style="margin:0 0 6px; line-height:1.5;"><span style="background-color:#FCE7F3; padding:1px 5px; border-radius:4px; font-weight:700;">Conceito:</span> explicação curta o bastante para lembrar do que se trata.</p>
+<p style="margin:0 0 6px; line-height:1.5;"><span style="background-color:#E0F2FE; padding:1px 5px; border-radius:4px; font-weight:700;">Artigo/regra:</span> referência legal, se houver.</p>
+<p style="margin:0 0 6px; line-height:1.5;"><span style="background-color:#FEF9C3; padding:1px 5px; border-radius:4px; font-weight:700;">Pegadinha:</span> armadilha comum, se houver.</p>
 
-- blocos gigantes de texto;
-- excesso de cores;
-- excesso de emojis;
-- excesso de caixas;
-- títulos em excesso;
-- repetições;
-- frases artificiais;
-- linguagem excessivamente informal;
-- conteúdo genérico que não acrescenta informação.
+Use tabela apenas quando dois institutos do mesmo tópico precisarem ser comparados lado a lado, mantendo os mesmos estilos de cor nos cabeçalhos.
 
-## FOCO EM PROVAS
+REGRAS QUE NÃO PODEM SER QUEBRADAS
+1. Cada tópico recebido = um <h3> próprio — nunca um item de lista solto ou um parágrafo apenas com negrito.
+2. Não escreva "Termo: explicação" dentro de um <p><strong>. O <h3> é reservado para o nome do tópico; o conteúdo dele vem nos <p> com <span> colorido, como no modelo.
+3. Cada linha de conteúdo é um <p> curto com um <span> colorido no início: rosa #FCE7F3 = conceito, azul #E0F2FE = artigo/lei, verde #DCFCE7 = exceção/requisito, lilás #F3E8FF = jurisprudência, amarelo #FEF9C3 = pegadinha, laranja #FFEDD5 = prazo/número. Não invente cor para informação que não existe naquele tópico.
+4. Um Microresumo sem nenhuma cor está ERRADO. Um Microresumo sem nenhum <h3> está ERRADO.
+5. Inclua TODOS os tópicos recebidos, sem pular nenhum.
+6. Não faça explicações doutrinárias longas — se um tópico tiver muito conteúdo, resuma ao essencial para prova.
 
-Sempre que pertinente, pense:
-
-"Se isso aparecesse em uma questão da OAB ou de concurso, o que eu precisaria saber para acertar?"
-
-Dê destaque especial para:
-
-- diferenças;
-- exceções;
-- requisitos;
-- prazos;
-- competências;
-- efeitos;
-- palavras-chave;
-- artigos importantes;
-- jurisprudência consolidada;
-- situações que costumam induzir ao erro.
-
-## REGRA FINAL
-
-O resultado deve parecer uma **página de estudo pronta**, e não uma resposta comum de chatbot.
-
-Quero poder copiar o HTML inteiro, colar diretamente no meu editor Rich Text e encontrar um material já estruturado, formatado e visualmente organizado.
-
-**Retorne exclusivamente o HTML final.**`;
-
-const PROMPT_MICRORESUMO_BASE = `A partir de agora, quando eu enviar um tema ou lista de tópicos, gere um Microresumo em formato de flashcard de revisão espaçada em HTML, pronto para copiar e colar diretamente no editor do meu site.
-
-Objetivo
-O Microresumo não é um resumo para aprender a matéria do zero.
-Considere que eu já estudei o assunto anteriormente.
-A função dele é reativar rapidamente minha memória durante revisões espaçadas, funcionando como um conjunto de gatilhos de memória.
-Quero um material que eu consiga revisar em poucos minutos, lembrando dos principais conceitos cobrados na OAB e concursos.
-Conteúdo
-Seja extremamente objetivo, mas não superficial.
-Não escreva apenas palavras soltas.
-Cada item deve conter uma explicação curta que permita recuperar o conceito.
-Exemplo:
-❌ Historicidade
-✅ Historicidade: direitos fundamentais surgem e evoluem conforme a história.
-❌ PCO: inicial, ilimitado...
-✅ PCO: cria nova Constituição; inicial, autônomo, ilimitado juridicamente e incondicionado.
-Pode utilizar:
-
-abreviações comuns;
-símbolos;
-setas;
-comparações rápidas;
-palavras-chave.
-Exemplo:
-
-CF = Constituição Federal
-EC = Emenda Constitucional
-≠ = diferença
-→ = consequência/relação
-Prioridades
-Sempre destaque o que costuma cair em prova:
-
-conceitos;
-características;
-classificações;
-diferenças entre institutos;
-requisitos;
-exceções;
-artigos importantes;
-jurisprudência relevante;
-pegadinhas.
-Não inclua explicações doutrinárias longas ou exemplos desnecessários.
-Estrutura HTML
-A resposta deve ser somente HTML, sem explicações antes ou depois.
-Não utilize Markdown.
-O HTML deve estar pronto para ser colado em um editor Rich Text.
-Utilize HTML semântico e limpo:
-
-\`<section>\`
-\`<h2>\`
-\`<h3>\`
-\`<ul>\`
-\`<li>\`
-\`<strong>\`
-\`<em>\`
-\`<u>\`
-\`<table>\`
-\`<tr>\`
-\`<th>\`
-\`<td>\`
-\`<mark>\`
-\`<div>\`
-Organize o conteúdo visualmente:
-
-títulos claros;
-subtítulos quando necessário;
-bullets curtos;
-tabelas para comparações;
-espaçamento adequado.
-Estilo visual
-Crie um resumo bonito, limpo e profissional, semelhante a uma página do Notion/Obsidian para estudos.
-Utilize uma paleta pastel suave.
-Cores:
-🌸 Rosa pastel → conceitos principais
-🩵 Azul pastel → artigos e dispositivos legais
-🌿 Verde pastel → exceções
-🌼 Amarelo pastel → pegadinhas de prova
-💜 Lilás pastel → jurisprudência/STF/STJ
-🧡 Laranja pastel → prazos e números importantes
-Use cores apenas para destacar pontos importantes.
-Não deixe todo o texto colorido.
-Priorize legibilidade.
-Formatação
-Utilize:
-
-negrito para palavras-chave;
-itálico para observações rápidas;
-highlight para pontos que merecem atenção;
-tabelas quando houver comparação;
-caixas de destaque quando fizer sentido.
-Resultado esperado
-O resultado deve parecer um flashcard premium de revisão espaçada:
-
-pequeno;
-objetivo;
-visualmente organizado;
-fácil de escanear;
-com alta densidade de informação.
-A leitura completa deve levar aproximadamente 30 segundos a 2 minutos.
-Retorne exclusivamente o HTML.`;
+SAÍDA
+Responda SOMENTE com o HTML final, sem Markdown, sem bloco de código, sem texto antes ou depois. Só estilo inline, sem JavaScript nem CSS externo.`;
 
 function _montarPromptCompleto(base, dia) {
   const blocoTopicos = _montarBlocoTopicosDoDia(dia);
