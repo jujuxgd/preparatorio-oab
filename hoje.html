@@ -2237,12 +2237,14 @@ CONTEÚDO
 O Microresumo deve ser extremamente objetivo, mas não superficial.
 Não use apenas palavras soltas.
 Cada item deve possuir uma pequena explicação que permita recuperar o conceito.
-Exemplo:
+IMPORTANTE: os exemplos abaixo mostram o nível de profundidade do TEXTO, não o formato do título. O nome do tópico (ex.: "Historicidade", "PCO") deve ser o heading (\`<h3>\`) da seção, e a frase de explicação vem no \`<p>\` logo abaixo dele — nunca como "Termo: explicação" dentro de um parágrafo solto.
+Exemplo (conteúdo dentro da seção \`<h3>Historicidade</h3>\`):
 ❌ Historicidade
-✅ Historicidade: direitos fundamentais surgem e evoluem conforme a história.
-Outro exemplo:
+❌ <p><strong>Historicidade:</strong> direitos fundamentais surgem e evoluem conforme a história.</p>
+✅ <h3>Historicidade</h3><p>Direitos fundamentais surgem e evoluem conforme a história.</p>
+Outro exemplo (dentro da seção \`<h3>PCO</h3>\`):
 ❌ PCO: inicial, ilimitado...
-✅ PCO: cria nova Constituição; inicial, autônomo, ilimitado juridicamente e incondicionado.
+✅ <h3>PCO</h3><p>Cria nova Constituição; inicial, autônomo, ilimitado juridicamente e incondicionado.</p>
 Pode usar:
 
 - CF;
@@ -2271,18 +2273,20 @@ Priorize:
 
 Não faça explicações doutrinárias longas.
 HIERARQUIA
-No Microresumo também quero hierarquia — não uma sequência plana de bullets soltos.
+No Microresumo também quero hierarquia — não uma sequência plana de bullets ou parágrafos soltos.
+CADA TÓPICO da lista em TÓPICOS DE ESTUDO deve virar o texto de um heading próprio (no mínimo \`<h3>\`), nunca apenas um termo em negrito dentro de um parágrafo. Se a matéria do dia tiver vários tópicos (ex.: vários princípios, vários institutos), use um \`<h2>\` para o nome da matéria/tema e um \`<h3>\` para cada tópico dela — um heading por tópico, sempre.
 Organize os assuntos em níveis. Utilize:
 
-- \`<h2>\` para cada grande assunto;
-- \`<h3>\` para os subtópicos dentro dele;
-- \`<p>\` ou \`<ul>\`/\`<li>\` curtos para o conteúdo de cada subtópico;
+- \`<h2>\` para cada grande assunto/matéria;
+- \`<h3>\` para cada tópico fornecido dentro dela;
+- \`<p>\` ou \`<ul>\`/\`<li>\` curtos para o conteúdo de cada tópico;
 - \`<table>\` quando houver comparação entre institutos.
 
 NÃO FAZER
 Não:
 
-- usar \`<p><strong>\` como substituto de títulos;
+- usar \`<p><strong>Tópico:</strong> explicação</p>\` como substituto de \`<h3>Tópico</h3><p>explicação</p>\`;
+- colocar todos os tópicos recebidos como itens de uma única lista corrida de parágrafos com termo em negrito seguido de dois-pontos (esse é o erro mais comum — cada tópico precisa do seu próprio heading, não apenas do negrito);
 - colocar todos os assuntos no mesmo nível;
 - transformar o documento inteiro em uma sequência de bullets;
 - remover \`<h2>\`/\`<h3>\` porque o conteúdo é curto;
