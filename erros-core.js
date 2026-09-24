@@ -1,5 +1,5 @@
 // Caderno de Erros — lógica central
-// Usado por: erros.html, hoje.html
+// Usado por: erros.html
 
 const ERROS_KEY = 'oab_erros_v1';
 

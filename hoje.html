@@ -906,57 +906,6 @@
 .va-row-done { opacity: 0.6; }
 .va-row-done .va-check-btn { color: #4a9850 !important; }
 
-/* Registo de questões por matéria */
-.questao-reg {
-  display: grid;
-  grid-template-columns: 1fr auto auto auto;
-  gap: 0.6rem;
-  align-items: center;
-  padding: 0.7rem 0;
-  border-bottom: 1px dotted var(--line);
-}
-
-.questao-reg:last-child { border-bottom: none; }
-
-.questao-reg .mat-label {
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: var(--ink);
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-}
-
-.questao-reg input[type="number"] {
-  width: 64px;
-  text-align: center;
-  padding: 0.4rem 0.5rem;
-  font-size: 1rem;
-  resize: none;
-}
-
-.questao-reg .acc-pill {
-  font-size: 0.75rem;
-  font-weight: 600;
-  padding: 0.2rem 0.6rem;
-  border-radius: 20px;
-  min-width: 48px;
-  text-align: center;
-}
-
-.q-resumo-card {
-  display: flex;
-  gap: 1.5rem;
-  flex-wrap: wrap;
-  padding: 0.8rem 1rem;
-  background: var(--bg-soft);
-  border-radius: var(--radius-sm);
-  font-size: 0.82rem;
-  color: var(--ink-soft);
-}
-
-.q-resumo-card strong { color: var(--rose-deep); font-family:'Fraunces',serif; font-size:1rem; }
-
 /* ── Painéis de matéria ── */
 .subject-panel {
   border: 1px solid var(--line);
@@ -1093,21 +1042,6 @@
   margin-top: 0.15rem;
 }
 .checklist-group-header + .checklist-subgroup-header { margin-top: 0; padding-top: 0.15rem; }
-
-/* ── Botões motivo no form de erro inline ── */
-.qe-motivo {
-  padding: 0.35rem 0.85rem;
-  border: 1px solid var(--line);
-  border-radius: 20px;
-  background: var(--paper);
-  font-size: 0.76rem;
-  color: var(--ink-soft);
-  cursor: pointer;
-  transition: all var(--transition);
-  font-family: 'Inter', sans-serif;
-}
-.qe-motivo:hover { background: var(--blush); color: var(--ink); border-color: var(--rose); }
-.qe-motivo.sel { background: var(--rose-deep); color: var(--paper); border-color: var(--rose-deep); }
 </style>
 </head>
 <body>
@@ -1212,7 +1146,6 @@
       <div class="tab active" data-tab="topicos">📌 Tópicos</div>
       <div class="tab" data-tab="resumodia">📖 Resumo do Dia</div>
       <div class="tab" data-tab="videoaulas">🎬 Videoaulas</div>
-      <div class="tab" data-tab="questoes">📊 Questões</div>
       <div class="tab" data-tab="revisoes">🔄 Revisões</div>
       <div class="tab" data-tab="pdfsemana">📎 PDF da Semana</div>
     </div>
@@ -1405,88 +1338,6 @@
           <div id="va-lista"></div>
         </div>
 
-        <!-- QUESTÕES — REGISTO SIMPLIFICADO -->
-        <div class="tab-content" data-tab="questoes">
-          <div class="content-card" style="padding:1.5rem">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem;flex-wrap:wrap;gap:.5rem">
-              <div>
-                <div style="font-family:'Fraunces',serif;font-size:1.05rem;font-weight:500">Questões de hoje</div>
-                <div style="font-size:.75rem;color:var(--ink-faded);margin-top:.15rem">Registra o total do dia — dados acumulados por matéria nas Estatísticas</div>
-              </div>
-              <a href="https://www.qconcursos.com" target="_blank" rel="noopener" class="btn btn-ghost" style="text-decoration:none;font-size:.75rem">↗ QConcursos</a>
-            </div>
-
-            <!-- Form simples: matéria do dia + total + acertos -->
-            <div id="q-form-simple" style="display:flex;flex-direction:column;gap:.8rem">
-              <div style="display:grid;grid-template-columns:1fr 100px 100px;gap:.6rem;align-items:center;font-size:.78rem;color:var(--ink-faded);padding:0 .2rem">
-                <span>Matéria</span><span style="text-align:center">Total feitas</span><span style="text-align:center">Acertei</span>
-              </div>
-              <div id="q-rows"></div>
-            </div>
-
-            <div style="margin-top:1.2rem;display:flex;gap:.8rem;flex-wrap:wrap;align-items:center">
-              <button class="btn btn-primary" onclick="salvarQuestoesDia()">Salvar</button>
-              <button class="btn" onclick="abrirRegistroErro()" style="font-size:.82rem">✗ Registrar erro</button>
-              <div id="q-save-msg" style="font-size:.78rem;color:var(--ink-faded)"></div>
-            </div>
-
-            <!-- FORM REGISTRO DE ERRO -->
-            <div id="q-erro-form" style="display:none;margin-top:1.2rem;padding:1.4rem;background:var(--bg-soft);border:1px solid var(--line);border-radius:var(--radius);border-left:3px solid var(--rose)">
-              <div style="font-family:'Fraunces',serif;font-size:.95rem;font-weight:500;margin-bottom:1rem;color:var(--ink)">Registrar aprendizado</div>
-
-              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.6rem;margin-bottom:.9rem">
-                <div>
-                  <div style="font-size:.63rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faded);margin-bottom:.3rem;font-weight:500">Matéria</div>
-                  <select id="qe-materia" style="width:100%;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-sm);padding:.5rem .6rem;font-size:1rem;color:var(--ink);font-family:'Inter',sans-serif">
-                    <option value="">Selecione...</option>
-                  </select>
-                </div>
-                <div>
-                  <div style="font-size:.63rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faded);margin-bottom:.3rem;font-weight:500">Tópico</div>
-                  <input id="qe-topico" type="text" placeholder="ex: Capacidade Civil" style="width:100%;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-sm);padding:.5rem .6rem;font-size:1rem;color:var(--ink);font-family:'Inter',sans-serif;box-sizing:border-box">
-                </div>
-                <div>
-                  <div style="font-size:.63rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faded);margin-bottom:.3rem;font-weight:500">Subtópico</div>
-                  <input id="qe-subtopico" type="text" placeholder="ex: Emancipação" style="width:100%;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-sm);padding:.5rem .6rem;font-size:1rem;color:var(--ink);font-family:'Inter',sans-serif;box-sizing:border-box">
-                </div>
-              </div>
-
-              <div style="margin-bottom:.9rem">
-                <div style="font-size:.63rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faded);margin-bottom:.5rem;font-weight:500">Motivo do erro</div>
-                <div style="display:flex;flex-wrap:wrap;gap:.4rem" id="qe-motivos">
-                  <button type="button" class="qe-motivo sel" data-m="nao_sabia">Não sabia</button>
-                  <button type="button" class="qe-motivo" data-m="confusao_conceito">Confundi conceitos</button>
-                  <button type="button" class="qe-motivo" data-m="pegadinha">Pegadinha da banca</button>
-                  <button type="button" class="qe-motivo" data-m="desatencao">Desatenção</button>
-                  <button type="button" class="qe-motivo" data-m="memorizacao">Falha de memorização</button>
-                </div>
-              </div>
-
-              <div style="margin-bottom:.8rem">
-                <div style="font-size:.63rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faded);margin-bottom:.3rem;font-weight:500">O que faltou para acertar *</div>
-                <textarea id="qe-faltou" rows="3" placeholder="O ponto-chave que você não sabia ou confundiu..." style="width:100%;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-sm);padding:.6rem .7rem;font-size:1rem;color:var(--ink);font-family:'Inter',sans-serif;resize:vertical;box-sizing:border-box"></textarea>
-              </div>
-
-              <div style="margin-bottom:1rem">
-                <div style="font-size:.63rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faded);margin-bottom:.3rem;font-weight:500">Explicação (cole do QConcursos)</div>
-                <textarea id="qe-explicacao" rows="3" placeholder="Cole aqui o comentário do gabarito..." style="width:100%;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-sm);padding:.6rem .7rem;font-size:1rem;color:var(--ink);font-family:'Inter',sans-serif;resize:vertical;box-sizing:border-box"></textarea>
-              </div>
-
-              <div style="display:flex;gap:.6rem;align-items:center">
-                <button class="btn btn-primary" style="font-size:.78rem" onclick="salvarErroHoje()">Salvar</button>
-                <button class="btn" style="font-size:.78rem" onclick="fecharRegistroErro()">Cancelar</button>
-                <span id="qe-msg" style="font-size:.74rem;color:var(--ink-faded)"></span>
-              </div>
-            </div>
-
-            <div id="questoes-resumo-dia" style="margin-top:1rem"></div>
-          </div>
-          <div class="content-card" style="padding:1.5rem;margin-top:1rem">
-            <div style="font-family:'Fraunces',serif;font-size:.95rem;font-weight:500;margin-bottom:.8rem">Histórico deste dia</div>
-            <div id="qr-historico-sessao"></div>
-          </div>
-        </div>
-
         <!-- REVISÕES -->
         <div class="tab-content" data-tab="revisoes">
           <div class="content-card" style="padding:1.5rem">
@@ -1632,7 +1483,6 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/quill/1.3.7/quill.min.js"></script>
 <script src="editor-quill-rico.js?v=1784021420"></script>
-<script src="erros-core.js"></script>
 <script src="script.js?v=1784021867"></script>
 <script src="perfil.js?v=1783860863"></script>
 <script src="sync.js?v=1784058237"></script>
@@ -1657,14 +1507,11 @@ document.querySelectorAll('.tab').forEach(tab => {
     tab.classList.add('active');
     document.querySelector(`.tab-content[data-tab="${target}"]`).classList.add('active');
     if (target === 'videoaulas') _buildVideoaulas();
-    if (target === 'questoes')   _buildQForm();
     if (target === 'revisoes')   _buildRevisoesTab();
     if (target === 'pdfsemana')  _buildPdfSemana();
   });
 });
 
-
-// Questões via QConcursos — registo na aba Questões
 
 // ── Painéis de matéria: toggle colapso ───────
 function togglePanel(idx) {
@@ -2501,7 +2348,6 @@ function handleImport(event) {
     .catch(() => alert('Erro ao importar. Verifique o arquivo.'));
 }
 
-// ── Questões diárias ─────────────────────────
 function _diaCorrente() {
   const p = new URLSearchParams(window.location.search).get('dia');
   const r = p ? parseInt(p) : _diaAtualResolvido();
@@ -2538,31 +2384,6 @@ function _buildFlashcards() {
         <span style="font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--rose-deep);font-weight:700;display:block;margin-bottom:.2rem">⚠ Pegadinha da Banca</span>${fc.pegadinha}
       </div>` : ''}
     </div>`).join('');
-}
-
-function _buildQForm() {
-  const dia     = _diaCorrente();
-  const dados   = getDadosDia(dia);
-  const cont    = document.getElementById('q-rows') || document.getElementById('questoes-form-container');
-  if (!cont || !dados) return;
-  const sessoesDia = getQuestaoRegistros({ dia, tipo: 'sessao' });
-  const header  = '';
-  const rows = dados.materias.map(m => {
-    const mid  = typeof getMateriaId==='function' ? getMateriaId(m.nome) : m.nome;
-    const sv   = sessoesDia.find(r => r.materia === mid) || {};
-    const acc  = sv.total > 0 ? Math.round((sv.acertos/sv.total)*100) : null;
-    const col  = acc===null ? 'var(--ink-faded)' : acc>=70 ? '#3a8030' : '#b04030';
-    const bg   = acc===null ? 'var(--bg-soft)' : acc>=70 ? 'rgba(100,180,80,.15)' : 'rgba(200,100,80,.12)';
-    return `<div class="questao-reg" data-mid="${mid}">
-      <div class="mat-label"><span>${m.emoji||'📖'}</span> ${m.nome.replace('Direito ','').replace('Processual ','Proc. ')}</div>
-      <input type="number" min="0" max="999" placeholder="0" value="${sv.total||''}" id="qt-${mid}" oninput="updateAcc('${mid}')" style="width:100%;text-align:center;padding:0.4rem;border-radius:6px;border:1px solid var(--line);font-size:1rem;background:var(--paper);color:var(--ink)">
-      <input type="number" min="0" max="999" placeholder="0" value="${sv.acertos||''}" id="qa-${mid}" oninput="updateAcc('${mid}')" style="width:100%;text-align:center;padding:0.4rem;border-radius:6px;border:1px solid var(--line);font-size:1rem;background:var(--paper);color:var(--ink)">
-      <div class="acc-pill" id="qp-${mid}" style="background:${bg};color:${col}">${acc!==null ? acc+'%' : '—'}</div>
-    </div>`;
-  }).join('');
-  cont.innerHTML = header + rows;
-  _buildQResumo(dia);
-  qrRenderHistorico('sessao');
 }
 
 // ── Revisões — Questões (questoes_registros, tipo:'revisao') ou Teoria
@@ -2719,10 +2540,8 @@ function _buildPdfSemana() {
   stub.style.display = 'none';
 }
 
-// ── CRUD compartilhado de Questões/Revisões (tabs "Questões" e "Revisões") ──
-// 'sessao' reaproveita o formulário por matéria já existente (qt-/qa-/salvarQuestoesDia);
-// 'revisao' tem formulário próprio nos campos rv-*.
-var _qrEditingId = { sessao: null, revisao: null };
+// ── CRUD de revisões de questões (aba "Revisões", tipo 'revisao') ──
+var _qrEditingId = { revisao: null };
 
 function qrCancelar(tipo) {
   _qrEditingId[tipo] = null;
@@ -2740,8 +2559,6 @@ function qrCancelar(tipo) {
 }
 
 function qrSalvar(tipo) {
-  // Usada apenas pela aba Revisões aqui em hoje.html — a aba Questões
-  // usa o formulário por matéria + salvarQuestoesDia().
   const dia = _diaCorrente();
   const materia = document.getElementById('rv-materia').value;
   const total   = parseInt(document.getElementById('rv-total').value) || 0;
@@ -2774,16 +2591,6 @@ function qrEditar(tipo, id) {
   const dia = _diaCorrente();
   const registro = getQuestaoRegistros({ dia, tipo }).find(r => r.id === id);
   if (!registro) return;
-  if (tipo === 'sessao') {
-    // Reaproveita o formulário por matéria da aba Questões
-    const t = document.getElementById(`qt-${registro.materia}`);
-    const a = document.getElementById(`qa-${registro.materia}`);
-    if (t) t.value = registro.total;
-    if (a) a.value = registro.acertos;
-    updateAcc(registro.materia);
-    document.querySelector('.tab[data-tab="questoes"]')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    return;
-  }
   _qrEditingId.revisao = id;
   document.getElementById('rv-materia').value = registro.materia;
   document.getElementById('rv-total').value = registro.total;
@@ -2800,7 +2607,6 @@ function qrExcluir(tipo, id) {
   excluirQuestaoRegistro(id);
   if (_qrEditingId[tipo] === id) qrCancelar(tipo);
   qrRenderHistorico(tipo);
-  if (tipo === 'sessao') _buildQForm();
 }
 
 function qrRenderHistorico(tipo) {
@@ -2840,63 +2646,6 @@ function qrRenderHistorico(tipo) {
   cont.innerHTML = `<div style="overflow-x:auto"><table class="qr-hist-table"><thead><tr>
     <th>Data</th><th>Matéria</th><th>Total</th><th>Acertos</th><th>Taxa</th><th>Tempo</th><th>Obs.</th><th>Ações</th>
     </tr></thead><tbody>${rows}</tbody></table></div>`;
-}
-
-function updateAcc(mid) {
-  const t = parseInt(document.getElementById(`qt-${mid}`)?.value)||0;
-  const a = parseInt(document.getElementById(`qa-${mid}`)?.value)||0;
-  const p = document.getElementById(`qp-${mid}`); if(!p) return;
-  if (t > 0) {
-    const pct = Math.round(Math.min(a,t)/t*100);
-    p.textContent = pct+'%';
-    p.style.background = pct>=70?'rgba(100,180,80,.15)':'rgba(200,100,80,.12)';
-    p.style.color       = pct>=70?'#3a8030':'#b04030';
-  } else { p.textContent='—'; p.style.background='var(--bg-soft)'; p.style.color='var(--ink-faded)'; }
-}
-
-function salvarQuestoesDia() {
-  const dia   = _diaCorrente();
-  const dados = getDadosDia(dia); if (!dados) return;
-  const sessoesDia = getQuestaoRegistros({ dia, tipo: 'sessao' });
-
-  dados.materias.forEach(m => {
-    const mid = typeof getMateriaId==='function' ? getMateriaId(m.nome) : m.nome;
-    const t = parseInt(document.getElementById(`qt-${mid}`)?.value) || 0;
-    const a = Math.min(parseInt(document.getElementById(`qa-${mid}`)?.value) || 0, t);
-    const existente = sessoesDia.find(r => r.materia === mid);
-    if (t > 0) {
-      // Atualiza o registro existente do dia/matéria em vez de duplicar
-      // ao salvar várias vezes (mesmo comportamento idempotente de antes).
-      if (existente) editarQuestaoRegistro(existente.id, { total: t, acertos: a });
-      else adicionarQuestaoRegistro({ materia: mid, total: t, acertos: a, dia, tipo: 'sessao' });
-    } else if (existente) {
-      excluirQuestaoRegistro(existente.id);
-    }
-  });
-
-  _buildQResumo(dia);
-  const btn = document.querySelector('[onclick="salvarQuestoesDia()"]');
-  const msg = document.getElementById('q-save-msg');
-  if (btn) { btn.textContent='✓ Salvo!'; setTimeout(()=>btn.textContent='Salvar',1800); }
-  if (msg) { msg.textContent='✓ Registado com sucesso'; setTimeout(()=>msg.textContent='',2500); }
-  atualizarBadgeRevisar();
-}
-
-function _buildQResumo(dia) {
-  const regs = getQuestaoRegistros({ dia, tipo: 'sessao' });
-  const tot  = regs.reduce((s,r)=>s+r.total,0);
-  const ace  = regs.reduce((s,r)=>s+r.acertos,0);
-  const res  = document.getElementById('questoes-resumo-dia'); if(!res) return;
-  if (tot > 0) {
-    const pct = Math.round((ace/tot)*100);
-    const cor = pct>=70?'#3a8030':pct>=50?'#8a6020':'#b04030';
-    res.innerHTML = `<div class="q-resumo-card" style="margin-top:0.8rem">
-      <div><strong style="color:var(--rose-deep)">${tot}</strong><br><span>questões hoje</span></div>
-      <div><strong style="color:#3a8030">${ace}</strong><br><span>acertos</span></div>
-      <div><strong style="color:${cor}">${pct}%</strong><br><span>aproveitamento</span></div>
-      ${pct>=70?'<div>✦ <span style="color:#3a8030">Bom resultado!</span></div>':pct>=50?'<div>📖 <span>Pode melhorar</span></div>':'<div>⚑ <span style="color:#b04030">Rever conteúdo</span></div>'}
-    </div>`;
-  } else { res.innerHTML=''; }
 }
 
 // ── Micro-resumo tab ─────────────────────────
@@ -3226,73 +2975,6 @@ _pomoUI();
 })();
 
 
-// ── Caderno de Erros — integração na aba Questões ──
-function _qePreencheSelect() {
-  const sel = document.getElementById('qe-materia');
-  if (!sel || sel.options.length > 1) return;
-  if (typeof MATERIAS_ERROS === 'undefined') return;
-  Object.entries(MATERIAS_ERROS).forEach(([k, v]) => {
-    const o = document.createElement('option');
-    o.value = k; o.textContent = v;
-    sel.appendChild(o);
-  });
-}
-
-function abrirRegistroErro() {
-  const form = document.getElementById('q-erro-form');
-  if (!form) return;
-  _qePreencheSelect();
-
-  const dia   = _diaCorrente();
-  const dados = getDadosDia(dia);
-  if (dados && dados.materias && dados.materias.length) {
-    const mat = dados.materias[0];
-    const mid = typeof getMateriaId === 'function' ? getMateriaId(mat.nome) : '';
-    if (mid) document.getElementById('qe-materia').value = mid;
-    const topico = (mat.topicos && mat.topicos.length) ? mat.topicos[0] : (dados.titulo || '');
-    document.getElementById('qe-topico').value = topico;
-  }
-
-  form.style.display = 'block';
-  setTimeout(() => document.getElementById('qe-faltou')?.focus(), 50);
-}
-
-function fecharRegistroErro() {
-  const form = document.getElementById('q-erro-form');
-  if (form) form.style.display = 'none';
-  ['qe-materia','qe-topico','qe-subtopico','qe-faltou','qe-explicacao'].forEach(id => {
-    const el = document.getElementById(id); if (el) el.value = '';
-  });
-  document.querySelectorAll('#qe-motivos .qe-motivo').forEach((b, i) => b.classList.toggle('sel', i === 0));
-  const msg = document.getElementById('qe-msg'); if (msg) msg.textContent = '';
-}
-
-function salvarErroHoje() {
-  if (typeof erros_add !== 'function') return;
-  const materia      = document.getElementById('qe-materia')?.value;
-  const o_que_faltou = document.getElementById('qe-faltou')?.value.trim();
-  const msg = document.getElementById('qe-msg');
-  if (!materia)      { if (msg) msg.textContent = 'Selecione a matéria.'; return; }
-  if (!o_que_faltou) { if (msg) msg.textContent = 'Preencha o que faltou para acertar.'; return; }
-  const motivo = document.querySelector('#qe-motivos .qe-motivo.sel')?.dataset.m || 'nao_sabia';
-  erros_add({
-    materia,
-    topico:     document.getElementById('qe-topico')?.value.trim()     || '',
-    subtopico:  document.getElementById('qe-subtopico')?.value.trim()  || '',
-    motivo,
-    o_que_faltou,
-    explicacao: document.getElementById('qe-explicacao')?.value.trim() || '',
-    dia_estudo: _diaCorrente()
-  });
-  if (msg) msg.textContent = '✓ Registrado no Caderno de Erros!';
-  setTimeout(fecharRegistroErro, 1200);
-}
-
-document.addEventListener('click', e => {
-  if (!e.target.classList.contains('qe-motivo')) return;
-  document.querySelectorAll('#qe-motivos .qe-motivo').forEach(b => b.classList.remove('sel'));
-  e.target.classList.add('sel');
-});
 </script>
 </body>
 </html>
