@@ -711,9 +711,18 @@ function buildAgenda() {
     const dado = (typeof getDadosDia === 'function') ? getDadosDia(parseInt(numDia)) : null;
     if (!dado) return;
     dado.materias.forEach((mat, mIdx) => {
+      // Sem REVIEW_CARDS não existe card nenhum pra dar feedback — mostrar
+      // isso na agenda deixa um item "atrasado" que nunca pode ser resolvido.
+      if (typeof REVIEW_CARDS === 'undefined' || !REVIEW_CARDS[`${numDia}_${mIdx}`]) return;
       const agenda = getAgendaMat(p, numDia, mIdx, dData.data_conclusao);
       items.push({ dateStr: agenda.proxima, numDia, mIdx, mat, estagio: agenda.estagio || 0 });
     });
+
+    const mrHtml = _mrExtrairHtml(localStorage.getItem('microresumo_dia_' + numDia));
+    if (mrHtml && mrHtml.replace(/<[^>]*>/g, '').trim()) {
+      const agenda = getAgendaMat(p, numDia, 'mr', dData.data_conclusao);
+      items.push({ dateStr: agenda.proxima, numDia, mIdx: 'mr', mat: { nome: dado.materia, emoji: '🧠' }, estagio: agenda.estagio || 0 });
+    }
   });
 
   if (!items.length) return;
@@ -910,11 +919,23 @@ function buildStats() {
     const dado = typeof getDadosDia === 'function' ? getDadosDia(parseInt(numDia)) : null;
     if (!dado) return;
     dado.materias.forEach((mat, mIdx) => {
+      // Sem REVIEW_CARDS não existe card nenhum pra dar feedback — mostrar
+      // domínio 0% pra sempre de algo que não pode ser respondido só confunde.
+      if (typeof REVIEW_CARDS === 'undefined' || !REVIEW_CARDS[`${numDia}_${mIdx}`]) return;
       const agenda = getAgendaMat(p, numDia, mIdx, dData.data_conclusao);
       const historico = (dData.revisoes_mat && dData.revisoes_mat[mIdx]) || [];
       todos.push({ numDia, mIdx, mat, dado, agenda, historico });
       if (!materiasMap.has(mat.nome)) materiasMap.set(mat.nome, mat.emoji || '📖');
     });
+
+    const mrHtml = _mrExtrairHtml(localStorage.getItem('microresumo_dia_' + numDia));
+    if (mrHtml && mrHtml.replace(/<[^>]*>/g, '').trim()) {
+      const matMr = { nome: dado.materia, emoji: '🧠' };
+      const agenda = getAgendaMat(p, numDia, 'mr', dData.data_conclusao);
+      const historico = dData.revisoes_mr || [];
+      todos.push({ numDia, mIdx: 'mr', mat: matMr, dado, agenda, historico, microresumo: true });
+      if (!materiasMap.has(matMr.nome)) materiasMap.set(matMr.nome, matMr.emoji);
+    }
   });
 
   if (!todos.length) {
@@ -956,7 +977,7 @@ function buildStats() {
     return `
       <div class="stat-card" data-materia="${matAttr}">
         <div style="display:flex;align-items:center;justify-content:space-between;gap:0.6rem;flex-wrap:wrap;margin-bottom:0.2rem">
-          <h3 class="rev-title" style="font-size:1.05rem">${t.mat.emoji || '📖'} ${t.mat.nome}</h3>
+          <h3 class="rev-title" style="font-size:1.05rem">${t.mat.emoji || '📖'} ${t.mat.nome}${t.microresumo ? ' <span style="font-size:0.62rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-faded)">· Microresumo</span>' : ''}</h3>
           <span style="font-size:0.68rem;background:var(--bg-soft);color:var(--ink-faded);padding:0.2rem 0.5rem;border-radius:20px">Dia ${t.numDia}</span>
         </div>
         <div class="rev-meta" style="margin-bottom:0.2rem">${t.dado.titulo.split(' · ')[0]}</div>
