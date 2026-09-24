@@ -574,8 +574,8 @@
       <div class="chart-card">
         <div class="chart-head">
           <div>
-            <div class="chart-title">Carga horária por <em>matéria</em></div>
-            <div class="chart-sub">Dias concluídos × horas do plano</div>
+            <div class="chart-title">Tempo real por <em>matéria</em></div>
+            <div class="chart-sub">Tempo estudado dividido entre as matérias do dia</div>
           </div>
         </div>
         <ul class="ranking-list" id="ranking-tempo"></ul>
@@ -628,30 +628,28 @@ document.addEventListener('DOMContentLoaded', () => {
   const streakEl = document.getElementById('streak-count');
   if (streakEl) streakEl.textContent = p.streak || 0;
 
-  // ── Horas totais (soma das horas de dias concluídos)
-  let totalHoras = 0;
-  const horasPorMateria = {};
-  Object.keys(p.dias || {}).forEach(numDia => {
-    if (!p.dias[numDia].concluido) return;
-    const dados = getDadosDia(parseInt(numDia));
-    if (!dados) return;
-    dados.materias.forEach(m => {
-      const h = parseFloat(m.horas) || 0;
-      totalHoras += h;
-      if (!horasPorMateria[m.nome]) horasPorMateria[m.nome] = 0;
-      horasPorMateria[m.nome] += h;
-    });
-  });
-  const mediaH = stats.concluidos > 0 ? (totalHoras / stats.concluidos).toFixed(1) : 0;
-
   // ── Tempo real estudado — digitado manualmente na aba Hoje (não vem
-  // do Pomodoro nem de cronômetro nenhum, e é diferente de totalHoras
-  // acima, que é a carga horária SUGERIDA pelo plano, não a real).
+  // do Pomodoro nem de cronômetro nenhum). Quando o dia tem mais de uma
+  // matéria, os minutos do dia são divididos entre elas proporcionalmente
+  // à carga horária que o PLANO sugere pra cada uma naquele dia — o
+  // plano só entra aqui como peso pra repartir o tempo real; o total
+  // somado nunca é maior que o que a usuária realmente digitou.
   let minutosReaisTotal = 0;
   let diasComRegistroReal = 0;
+  const minutosPorMateria = {};
   Object.keys(p.dias || {}).forEach(numDia => {
-    const min = p.dias[numDia] && p.dias[numDia].minutos_estudados;
-    if (min) { minutosReaisTotal += min; diasComRegistroReal++; }
+    const diaData = p.dias[numDia];
+    const minDia = diaData && diaData.minutos_estudados;
+    if (!minDia) return;
+    minutosReaisTotal += minDia;
+    diasComRegistroReal++;
+    const dados = getDadosDia(parseInt(numDia));
+    if (!dados || !dados.materias.length) return;
+    const pesoTotal = dados.materias.reduce((s, m) => s + (parseFloat(m.horas) || 0), 0);
+    dados.materias.forEach(m => {
+      const peso = pesoTotal > 0 ? (parseFloat(m.horas) || 0) / pesoTotal : 1 / dados.materias.length;
+      minutosPorMateria[m.nome] = (minutosPorMateria[m.nome] || 0) + minDia * peso;
+    });
   });
   const mediaRealMin = diasComRegistroReal > 0 ? Math.round(minutosReaisTotal / diasComRegistroReal) : 0;
 
@@ -687,13 +685,13 @@ document.addEventListener('DOMContentLoaded', () => {
   if (favId && favCard) {
     const fd = qTodas[favId];
     const pct = Math.round((fd.acertos/fd.total)*100);
-    const hFav = horasPorMateria[NOMES_MAT[favId]] || 0;
+    const minFav = Math.round(minutosPorMateria[NOMES_MAT[favId]] || 0);
     favCard.innerHTML = `
       <div class="favorita-icon">${EMOJIS_MAT[favId]||'📖'}</div>
       <div>
         <div class="eyebrow">Sua matéria com melhor desempenho</div>
         <h3>${(NOMES_MAT[favId]||favId).replace(/ /,' <em>') + '</em>'}</h3>
-        <p>${hFav>0?`O plano reserva <strong>${hFav}h</strong> pra essa matéria e você acerta`:'Você acerta'} <strong>${pct}%</strong> das questões — sua melhor combinação.</p>
+        <p>${minFav>0?`Você já estudou <strong>${fmtMinutosParaTexto(minFav)}</strong> dessa matéria e acerta`:'Você acerta'} <strong>${pct}%</strong> das questões — sua melhor combinação.</p>
       </div>
       <div class="badge"><div class="pct">${pct}%</div><div class="lbl">acertos</div></div>`;
   } else if (favCard) {
@@ -751,18 +749,18 @@ document.addEventListener('DOMContentLoaded', () => {
   // ── Ranking tempo por matéria
   const rankingTempo = document.getElementById('ranking-tempo');
   if (rankingTempo) {
-    const sorted = Object.entries(horasPorMateria).sort((a,b)=>b[1]-a[1]).slice(0,5);
+    const sorted = Object.entries(minutosPorMateria).sort((a,b)=>b[1]-a[1]).slice(0,5);
     if (sorted.length === 0) {
-      rankingTempo.innerHTML = '<li style="padding:1rem 0;color:var(--ink-faded);font-size:0.85rem;font-style:italic">Nenhum dia concluído ainda.</li>';
+      rankingTempo.innerHTML = '<li style="padding:1rem 0;color:var(--ink-faded);font-size:0.85rem;font-style:italic">Nenhum tempo registrado ainda.</li>';
     } else {
-      const maxH2 = sorted[0][1];
+      const maxMin = sorted[0][1];
       const romanos = ['I','II','III','IV','V'];
-      rankingTempo.innerHTML = sorted.map(([nome,h],i) => `
+      rankingTempo.innerHTML = sorted.map(([nome,min],i) => `
         <li class="rank-item">
           <span class="rank-pos">${romanos[i]}</span>
           <span class="rank-name">${nome}</span>
-          <div class="rank-bar"><div class="rank-fill" style="width:${Math.round((h/maxH2)*100)}%"></div></div>
-          <span class="rank-val">${h}h</span>
+          <div class="rank-bar"><div class="rank-fill" style="width:${Math.round((min/maxMin)*100)}%"></div></div>
+          <span class="rank-val">${fmtMinutosParaTexto(Math.round(min))}</span>
         </li>`).join('');
     }
   }
@@ -803,9 +801,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const mesAtual = hoje.toLocaleDateString('pt-BR', { month:'long', year:'numeric' });
     wrappedCard.innerHTML = `
       <div class="eyebrow">Seu ${mesAtual} · resumido</div>
-      <h3>"${totalHoras > 0 ? 'Determinação <em>em estado puro</em>' : 'Pronta para <em>começar</em>'}"</h3>
+      <h3>"${minutosReaisTotal > 0 ? 'Determinação <em>em estado puro</em>' : 'Pronta para <em>começar</em>'}"</h3>
       <div class="wrapped-stats">
-        <div class="wrapped-stat"><div class="v">${totalHoras}h</div><div class="l">estudadas</div></div>
+        <div class="wrapped-stat"><div class="v">${fmtMinutosParaTexto(minutosReaisTotal) || '0h'}</div><div class="l">estudadas</div></div>
         <div class="wrapped-stat"><div class="v">${q.total}</div><div class="l">questões</div></div>
         <div class="wrapped-stat"><div class="v">${p.streak||0}</div><div class="l">dias seguidos</div></div>
       </div>
