@@ -1232,6 +1232,7 @@
               </h4>
               <div style="display:flex;align-items:center;gap:0.6rem">
                 <span id="mr-saved-label" style="font-size:0.7rem;color:var(--ink-faded);font-style:italic"></span>
+                <button type="button" class="btn btn-ghost" onclick="copiarPromptMicroresumo()" style="font-size:0.68rem;padding:0.3rem 0.7rem;opacity:0.75" title="Monta o prompt do Microresumo com os tópicos de hoje e copia">📋 Copiar prompt</button>
                 <div class="rt-view-actions" data-editor="mr">
                   <button type="button" class="btn btn-ghost rt-edit-btn" data-editor="mr" style="font-size:0.72rem;padding:0.35rem 0.8rem">✏️ Editar</button>
                 </div>
@@ -1311,6 +1312,7 @@
               </h4>
               <div style="display:flex;align-items:center;gap:0.6rem">
                 <span id="rd-saved-label" style="font-size:0.7rem;color:var(--ink-faded);font-style:italic"></span>
+                <button type="button" class="btn btn-ghost" onclick="copiarPromptResumoDia()" style="font-size:0.68rem;padding:0.3rem 0.7rem;opacity:0.75" title="Monta o prompt do Resumo do Dia com os tópicos de hoje e copia">📋 Copiar prompt</button>
                 <div class="rt-view-actions" data-editor="rd">
                   <button type="button" class="btn btn-ghost rt-edit-btn" data-editor="rd" style="font-size:0.72rem;padding:0.35rem 0.8rem">✏️ Editar</button>
                 </div>
@@ -1990,6 +1992,343 @@ function _diaCorrente() {
   const raw = params.get('dia') ? parseInt(params.get('dia')) : getStudyDay();
   return raw <= 0 ? 1 : Math.min(raw, 120);
 }
+
+// ── Copiar Prompt — monta o bloco de tópicos do dia e os prompts prontos
+// pra colar no ChatGPT (Resumo do Dia / Microresumo), sem integração com IA ──
+function _montarBlocoTopicosDoDia(dia) {
+  const dados = (typeof getDadosDia === 'function') ? getDadosDia(dia) : null;
+  const materias = dados && Array.isArray(dados.materias) ? dados.materias : [];
+
+  const blocos = [];
+  materias.forEach(mat => {
+    if (!mat || !Array.isArray(mat.topicos)) return;
+    const vistos = new Set();
+    const topicosUnicos = mat.topicos.filter(t => {
+      if (!t || vistos.has(t)) return false;
+      vistos.add(t);
+      return true;
+    });
+    if (!topicosUnicos.length) return;
+    blocos.push(`Matéria: ${mat.nome}\n\n` + topicosUnicos.map(t => `- ${t}`).join('\n'));
+  });
+
+  if (!blocos.length) {
+    return `Nenhum tópico cadastrado para o Dia ${dia} ainda.`;
+  }
+  return blocos.join('\n\n');
+}
+
+const PROMPT_RESUMO_DIA_BASE = `PROMPT DO RESUMO DO DIA
+A partir de agora, sempre que eu enviar um tema, capítulo ou lista de tópicos, transforme o conteúdo em um Resumo do Dia completo, organizado e visualmente rico, voltado para meus estudos de Direito, OAB e concursos.
+O Resumo do Dia NÃO deve ser um microresumo ou flashcard.
+Ele deve funcionar como um material de estudo e consulta, permitindo que eu revise o assunto sem precisar voltar imediatamente ao livro, PDF ou aula.
+Pode ser detalhado e relativamente longo quando o assunto exigir. Não reduza informações importantes apenas para deixar o material curto.
+O conteúdo deve ser:
+
+- didático;
+- completo;
+- objetivo;
+- juridicamente organizado;
+- focado no que realmente importa para provas;
+- fácil de consultar posteriormente;
+- visualmente agradável.
+
+Considere que eu já estudo Direito, portanto não preciso de explicações excessivamente infantis, mas preciso que conceitos e relações importantes sejam explicados de forma clara.
+CONTEÚDO
+Ao desenvolver o resumo, priorize, quando aplicável:
+
+- conceito e definição;
+- finalidade;
+- fundamentos;
+- características;
+- princípios;
+- classificações;
+- espécies;
+- requisitos;
+- pressupostos;
+- elementos;
+- competências;
+- procedimentos e etapas;
+- efeitos;
+- consequências jurídicas;
+- exceções;
+- diferenças entre institutos semelhantes;
+- prazos e números importantes;
+- artigos de lei relevantes;
+- entendimentos do STF e STJ;
+- súmulas e temas de repercussão geral ou recursos repetitivos relevantes;
+- pegadinhas frequentes de OAB e concursos;
+- pontos que costumam gerar confusão;
+- exemplos práticos quando ajudarem na compreensão.
+
+Não inclua informação apenas para aumentar o tamanho do resumo. Se determinado ponto for irrelevante para estudo ou prova, não dê destaque desnecessário a ele.
+ORGANIZAÇÃO
+Estruture o material hierarquicamente.
+Use:
+
+- título principal;
+- subtítulos;
+- subseções;
+- parágrafos curtos;
+- listas;
+- listas numeradas;
+- tabelas comparativas;
+- caixas de destaque;
+- observações;
+- exemplos;
+- alertas de prova.
+
+A estrutura deve permitir uma leitura rápida e também uma consulta posterior.
+Não transforme todo o conteúdo em listas. Use parágrafos quando for necessário explicar um conceito.
+HTML
+A resposta deve ser entregue EXCLUSIVAMENTE em HTML, pronta para copiar e colar diretamente no meu editor Rich Text.
+NÃO use Markdown.
+NÃO coloque o HTML dentro de bloco de código.
+NÃO escreva explicações antes ou depois do HTML.
+A resposta deve ser o próprio HTML.
+Use HTML semântico e simples, compatível com um editor Rich Text.
+Pode utilizar:
+
+- <section>
+- <h1>
+- <h2>
+- <h3>
+- <h4>
+- <p>
+- <strong>
+- <em>
+- <u>
+- <mark>
+- <ul>
+- <ol>
+- <li>
+- <table>
+- <thead>
+- <tbody>
+- <tr>
+- <th>
+- <td>
+- <blockquote>
+- <div>
+- <span>
+- <hr>
+
+Sempre que precisar de estilização visual, prefira style="" diretamente nos elementos.
+Não utilize JavaScript, bibliotecas externas ou elementos que dependam de recursos externos.
+IDENTIDADE VISUAL
+Use uma identidade visual de mini-apostila digital moderna, acadêmica e delicada.
+Paleta:
+
+- rosa pastel #FCE7F3 → conceitos e definições;
+- azul claro #E0F2FE → artigos de lei e dispositivos legais;
+- verde pastel #DCFCE7 → exceções e requisitos;
+- amarelo pastel #FEF9C3 → pegadinhas e atenção;
+- lilás #F3E8FF → jurisprudência, STF, STJ e súmulas;
+- laranja pastel #FFEDD5 → prazos, números e percentuais;
+- cinza claro #F3F4F6 → informações complementares.
+
+Use as cores com equilíbrio, priorizando hierarquia visual e legibilidade.
+Use <strong> para conceitos-chave.
+Use <mark> para pegadinhas e pontos de atenção.
+Use caixas coloridas para informações especialmente relevantes.
+ARTIGOS E JURISPRUDÊNCIA
+Quando houver artigo de lei relevante, destaque-o visualmente.
+Quando houver jurisprudência relevante, crie um bloco próprio destacando:
+
+- entendimento;
+- questão discutida;
+- consequência prática;
+- importância para a prova.
+
+Não invente artigos, súmulas, temas ou referências jurídicas.
+PEGADINHAS
+Sempre que houver uma distinção ou erro comum, destaque-o visualmente.
+Priorize diferenças como:
+
+- regra × exceção;
+- poderá × deverá;
+- obrigatório × facultativo;
+- competência de X × competência de Y;
+- prazo X × prazo Y.
+
+TABELAS
+Use tabelas quando facilitarem comparação e memorização.
+Não use tabelas para conteúdos que ficariam mais claros em texto ou listas.
+FOCO EM PROVAS
+Sempre pense:
+"Se isso aparecesse em uma questão da OAB ou de concurso, o que eu precisaria saber para acertar?"
+Dê destaque especial para diferenças, exceções, requisitos, prazos, competências, efeitos, palavras-chave, artigos importantes e jurisprudência consolidada.
+REGRA FINAL
+O resultado deve parecer uma página de estudo pronta, e não uma resposta comum de chatbot.
+Quero poder copiar o HTML inteiro, colar diretamente no meu editor Rich Text e encontrar um material já estruturado, formatado e visualmente organizado.
+Retorne exclusivamente o HTML final.
+TÓPICOS DE ESTUDO DO DIA`;
+
+const PROMPT_MICRORESUMO_BASE = `PROMPT DO MICRORESUMO
+A partir de agora, sempre que eu enviar um tema, capítulo ou lista de tópicos, gere um Microresumo em formato de flashcard de revisão espaçada, em HTML, pronto para copiar e colar diretamente no meu editor Rich Text.
+OBJETIVO
+O Microresumo NÃO deve substituir o estudo completo.
+Ele serve para reativar rapidamente uma matéria que eu já estudei, ajudando na memorização e na revisão para OAB e concursos.
+A leitura deve levar aproximadamente 30 segundos a 2 minutos.
+O conteúdo precisa ser curto, mas não pode ser superficial.
+Não quero apenas palavras-chave soltas.
+Cada informação deve trazer uma explicação curta o suficiente para recuperar o significado daquele ponto, sem voltar a ensinar toda a matéria do zero.
+Exemplo do nível de profundidade desejado:
+Historicidade: os direitos fundamentais surgem e evoluem conforme as transformações históricas.
+Universalidade: destinam-se, em regra, a todas as pessoas.
+PCO: cria uma nova Constituição. É inicial, autônomo, ilimitado juridicamente e incondicionado.
+Esse é o nível ideal: conceito + informação essencial + gatilho de memória.
+FOCO
+Priorize:
+
+- conceitos essenciais;
+- características;
+- classificações;
+- requisitos;
+- diferenças entre institutos;
+- exceções;
+- efeitos;
+- princípios;
+- competências;
+- artigos importantes;
+- prazos e números;
+- jurisprudência relevante;
+- súmulas;
+- pegadinhas de prova;
+- palavras-chave que mudam o sentido da questão.
+
+Não inclua explicações longas, histórico desnecessário ou informações secundárias.
+FORMATO
+Organize o Microresumo em pequenos blocos de alta densidade informativa.
+Cada tópico deve funcionar como um gatilho de memória.
+Prefira:
+Conceito: explicação curta.
+Características: característica 1, característica 2, característica 3.
+Diferença: X faz isso, enquanto Y faz aquilo.
+Exceção: situação em que a regra geral não se aplica.
+Use abreviações e símbolos quando ajudarem na velocidade de leitura:
+
+- CF;
+- EC;
+- STF;
+- STJ;
+- →;
+- ≠.
+
+HTML
+A resposta deve ser entregue EXCLUSIVAMENTE em HTML.
+NÃO use Markdown.
+NÃO coloque o HTML dentro de bloco de código.
+NÃO escreva explicações antes ou depois.
+Use HTML simples e compatível com Rich Text.
+Pode utilizar:
+
+- <section>
+- <h2>
+- <h3>
+- <p>
+- <strong>
+- <em>
+- <u>
+- <mark>
+- <ul>
+- <ol>
+- <li>
+- <table>
+- <thead>
+- <tbody>
+- <tr>
+- <th>
+- <td>
+- <div>
+- <span>
+- <hr>
+
+Use style="" diretamente nos elementos quando necessário.
+Não utilize JavaScript, bibliotecas externas ou CSS externo.
+IDENTIDADE VISUAL
+Use aparência limpa, moderna e acadêmica, inspirada em Notion/Obsidian.
+Paleta:
+
+- rosa pastel #FCE7F3 → conceitos;
+- azul claro #E0F2FE → artigos;
+- verde pastel #DCFCE7 → exceções;
+- amarelo pastel #FEF9C3 → pegadinhas;
+- lilás #F3E8FF → jurisprudência;
+- laranja pastel #FFEDD5 → prazos e números;
+- cinza #F3F4F6 → informações complementares.
+
+Use as cores com moderação.
+Não transforme cada informação em uma caixa.
+Use <strong> para palavras-chave e <mark> para pontos de atenção.
+Quando houver institutos que possam ser confundidos, utilize uma tabela curta e objetiva.
+TAMANHO
+O Microresumo deve ser substancialmente menor que o Resumo do Dia.
+Resumo do Dia = estudar e consultar.
+Microresumo = lembrar e revisar.
+A leitura deve levar aproximadamente 30 segundos a 2 minutos.
+Se houver muitos tópicos, selecione dentro deles as informações essenciais para memorização, mas não ignore nenhum tópico completamente.
+REGRA FINAL
+O resultado deve parecer um flashcard de revisão espaçada em formato de página, com alta densidade de informação, explicações curtas e forte hierarquia visual.
+O objetivo é que eu consiga bater o olho e recuperar rapidamente o conteúdo estudado.
+Retorne exclusivamente o HTML final.
+TÓPICOS DE ESTUDO DO DIA`;
+
+function _montarPromptCompleto(base, dia, instrucaoFinal) {
+  const blocoTopicos = _montarBlocoTopicosDoDia(dia);
+  return `${base}\n${blocoTopicos}\n\n${instrucaoFinal}`;
+}
+
+async function _copiarTexto(texto) {
+  try {
+    await navigator.clipboard.writeText(texto);
+    return true;
+  } catch (e) {
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = texto;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      return true;
+    } catch (e2) {
+      return false;
+    }
+  }
+}
+
+function _toastRapido(msg, emoji) {
+  const existing = document.querySelector('.day-toast-parabens');
+  if (existing) existing.remove();
+  const toast = document.createElement('div');
+  toast.className = 'day-toast-parabens';
+  toast.innerHTML = `<span>${emoji}</span><span>${msg}</span>`;
+  document.body.appendChild(toast);
+  setTimeout(() => {
+    toast.classList.add('hiding');
+    setTimeout(() => toast.remove(), 300);
+  }, 2200);
+}
+
+async function copiarPromptResumoDia() {
+  const dia = _diaCorrente();
+  const instrucao = 'Produza o Resumo do Dia considerando TODOS os tópicos listados acima, sem ignorar nenhum deles.';
+  const prompt = _montarPromptCompleto(PROMPT_RESUMO_DIA_BASE, dia, instrucao);
+  const ok = await _copiarTexto(prompt);
+  _toastRapido(ok ? 'Prompt copiado!' : 'Não foi possível copiar', ok ? '📋' : '⚠️');
+}
+
+async function copiarPromptMicroresumo() {
+  const dia = _diaCorrente();
+  const instrucao = 'Produza o Microresumo considerando todos os tópicos listados acima, sem ignorar nenhum deles.';
+  const prompt = _montarPromptCompleto(PROMPT_MICRORESUMO_BASE, dia, instrucao);
+  const ok = await _copiarTexto(prompt);
+  _toastRapido(ok ? 'Prompt copiado!' : 'Não foi possível copiar', ok ? '📋' : '⚠️');
+}
+
 // ── Editores ricos (Quill) — Resumo do Dia + Microresumo ─────
 // Salva {html, delta} em JSON: delta recarrega fiel no editor, html é o
 // que revisar.html usa pra exibir fora do editor.
