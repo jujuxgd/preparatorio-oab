@@ -185,7 +185,7 @@
 .alt:focus-visible { outline: 2px solid var(--rose); outline-offset: -2px; }
 .alt:disabled { cursor: default; }
 .alt .l {
-  flex: none; width: 22px; height: 22px; border-radius: 4px; margin-top: .08rem;
+  flex: none; width: 24px; height: 24px; border-radius: 50%; margin-top: .02rem;
   display: grid; place-items: center; font: 600 .75rem 'Inter', sans-serif;
   background: var(--bg-soft); color: var(--ink-soft); transition: background .15s ease, color .15s ease;
 }
@@ -197,20 +197,39 @@
 .alt.errada .l { background: #C0524B; color: #fff; }
 .alt .m { margin-left: auto; flex: none; font-size: .85rem; padding-left: .5rem; }
 
-/* alternativa descartada com a tesoura */
-.alt-linha { display: flex; align-items: flex-start; border-bottom: 1px solid var(--line-soft); }
+/* ── tesoura: vive na margem, fora da alternativa, ligada à letra
+   por um tracejado (igual ao padrão do QConcursos) ── */
+.alts { padding-left: 44px; }
+.alt-linha { position: relative; display: flex; align-items: flex-start; border-bottom: 1px solid var(--line-soft); }
 .alt-linha .alt { border-bottom: 0; flex: 1; min-width: 0; }
 .tesoura {
-  flex: none; width: 30px; height: 30px; margin: .72rem .1rem 0 0; border: 0; border-radius: 6px;
-  background: none; cursor: pointer; color: var(--ink-ghost, var(--ink-faded));
+  position: absolute; left: -44px; top: .62rem;
+  width: 26px; height: 26px; border-radius: 50%;
+  border: 1px solid var(--line); background: var(--paper);
+  cursor: pointer; color: var(--ink-faded);
   display: grid; place-items: center; opacity: 0;
-  transition: opacity .15s ease, color .15s ease, background .15s ease;
+  transition: opacity .15s ease, color .15s ease, border-color .15s ease, background .15s ease;
 }
-/* a tesoura só aparece ao passar o mouse na alternativa — mas fica
-   visível se já cortou (pra poder desfazer) e ao navegar por teclado */
+/* o tracejado que liga a tesoura à letra */
+.tesoura::after {
+  content: ""; position: absolute; left: calc(100% + 1px); top: 50%;
+  width: 11px; border-top: 1.5px dashed var(--line);
+}
+.tesoura:hover { color: var(--rose-deep); border-color: var(--rose-300); }
+.tesoura:focus-visible { outline: 2px solid var(--rose); outline-offset: 1px; }
+.tesoura svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+
+/* só aparece sob o mouse; fica se já cortou (pra desfazer) e no teclado */
 .alt-linha:hover .tesoura, .tesoura:focus-visible, .alt-linha.cortada .tesoura { opacity: 1; }
-/* em tela de toque não existe hover, então fica sempre visível */
 @media (hover: none) { .tesoura { opacity: 1; } }
+
+/* alternativa descartada */
+.alt-linha.cortada .tesoura { color: var(--rose); border-color: var(--rose-300); background: var(--rose-50); }
+.alt-linha.cortada .tesoura::after { border-top-color: var(--rose-300); }
+.alt-linha.cortada .alt { opacity: .55; }
+.alt-linha.cortada .alt > span:nth-child(2) { text-decoration: line-through; font-style: italic; }
+.alt-linha.cortada .alt .l { background: transparent; border: 1px solid var(--rose-300); color: var(--rose-deep); }
+.alt-linha.cortada .alt:hover { background: none; }
 .tesoura:hover { color: var(--rose-deep); background: var(--bg-soft); }
 .tesoura:focus-visible { outline: 2px solid var(--rose); outline-offset: -2px; }
 .tesoura svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
@@ -277,6 +296,9 @@
   .ctl select { max-width: none; flex: 1; }
   .ctl { flex: 1 1 140px; }
   .q-trilha { margin-left: 0; width: 100%; }
+  .alts { padding-left: 34px; }
+  .tesoura { left: -34px; width: 24px; height: 24px; }
+  .tesoura::after { width: 6px; }
   .res-dir { margin-left: 0; width: 100%; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
