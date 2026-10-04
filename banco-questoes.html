@@ -220,8 +220,10 @@
 .tesoura:focus-visible { outline: 2px solid var(--rose); outline-offset: 1px; }
 .tesoura svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
 
-/* só aparece sob o mouse; fica se já cortou (pra desfazer) e no teclado */
-.alt-linha:hover .tesoura, .tesoura:focus-visible, .alt-linha.cortada .tesoura { opacity: 1; }
+/* só aparece sob o mouse — inclusive na alternativa já cortada, que é
+   como se desfaz o corte. No teclado também, senão some pra quem navega
+   sem mouse. */
+.alt-linha:hover .tesoura, .tesoura:focus-visible { opacity: 1; }
 @media (hover: none) { .tesoura { opacity: 1; } }
 
 /* alternativa descartada */
