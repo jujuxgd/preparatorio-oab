@@ -17,7 +17,7 @@
    Uma família (Inter) na UI; Fraunces só no título da página.
    Escala fixa em rem, densidade alta, rosa só em ação e seleção.
    ══════════════════════════════════════════════════════════ */
-.bq { max-width: 1120px; margin: 0 auto; padding: 2.2rem 2rem 4rem; }
+.bq { max-width: 1120px; margin: 0 auto; padding: 2.2rem 2rem 4rem 3.6rem; }
 .bq-cab { display: flex; align-items: baseline; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.4rem; }
 .bq h1 { font: 500 1.75rem/1.2 'Fraunces', serif; letter-spacing: -.02em; margin: 0; color: var(--ink); }
 .bq h1 em { font-style: italic; color: var(--rose-deep); }
@@ -156,8 +156,9 @@
 
 /* ── questão ── */
 .qs { display: flex; flex-direction: column; gap: .7rem; }
-.q { background: var(--paper); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.q { background: var(--paper); border: 1px solid var(--line); border-radius: 10px; }
 .q-cab {
+  border-radius: 9px 9px 0 0;
   display: flex; flex-wrap: wrap; gap: .5rem; align-items: center;
   padding: .6rem .9rem; background: var(--bg-soft); border-bottom: 1px solid var(--line-soft);
   font-size: .75rem; color: var(--ink-soft);
@@ -199,11 +200,11 @@
 
 /* ── tesoura: vive na margem, fora da alternativa, ligada à letra
    por um tracejado (igual ao padrão do QConcursos) ── */
-.alts { padding-left: 44px; }
+.alts { padding-left: 0; }
 .alt-linha { position: relative; display: flex; align-items: flex-start; border-bottom: 1px solid var(--line-soft); }
 .alt-linha .alt { border-bottom: 0; flex: 1; min-width: 0; }
 .tesoura {
-  position: absolute; left: -44px; top: .62rem;
+  position: absolute; left: -2.55rem; top: .62rem;
   width: 26px; height: 26px; border-radius: 50%;
   border: 1px solid var(--line); background: var(--paper);
   cursor: pointer; color: var(--ink-faded);
@@ -291,14 +292,13 @@
 .vazio .b { margin-top: 1rem; }
 
 @media (max-width: 900px) {
-  .bq { padding: 1.5rem 1rem 5.5rem; }
+  .bq { padding: 1.5rem 1rem 5.5rem 2.4rem; }
   .fp { position: static; }
   .ctl select { max-width: none; flex: 1; }
   .ctl { flex: 1 1 140px; }
   .q-trilha { margin-left: 0; width: 100%; }
-  .alts { padding-left: 34px; }
-  .tesoura { left: -34px; width: 24px; height: 24px; }
-  .tesoura::after { width: 6px; }
+  .tesoura { left: -2.05rem; width: 24px; height: 24px; }
+  .tesoura::after { width: 7px; }
   .res-dir { margin-left: 0; width: 100%; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
