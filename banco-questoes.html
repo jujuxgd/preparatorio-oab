@@ -15,125 +15,159 @@
 .bq { max-width: 1180px; margin: 0 auto; padding: 2.6rem 2.4rem 5rem; }
 .bq h1 { font: 500 2.4rem/1.1 'Fraunces', serif; letter-spacing: -.02em; margin: 0 0 .5rem; }
 .bq h1 em { font-style: italic; color: var(--rose-deep); }
-.bq .lead { color: var(--ink-soft); margin: 0 0 2rem; max-width: 56ch; }
+.bq .lead { color: var(--ink-soft); margin: 0 0 1.8rem; max-width: 56ch; }
 
-/* ── filtros ── */
-.bq-filtros { display: flex; flex-wrap: wrap; gap: .6rem; align-items: center; margin-bottom: 1.2rem; }
-.bq-filtros select {
-  font: 500 .82rem 'Inter', sans-serif; color: var(--ink);
-  background: var(--paper); border: 1px solid var(--line);
-  border-radius: 999px; padding: .55rem 1rem; min-height: 40px; cursor: pointer;
+/* ══ painel de filtros ══ */
+.fp { background: var(--paper); border: 1px solid var(--line-soft); border-radius: var(--radius-lg); padding: 1.5rem 1.6rem; margin-bottom: 1.2rem; }
+.fp-linha { display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-end; }
+.fp-linha + .fp-linha { margin-top: 1.2rem; padding-top: 1.2rem; border-top: 1px solid var(--line-soft); }
+.fp-campo { display: flex; flex-direction: column; gap: .4rem; flex: 1 1 170px; min-width: 0; }
+.fp-campo > label, .fp-rot {
+  font: 600 .6rem 'Inter', sans-serif; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--ink-soft);
 }
-.bq-filtros select:focus-visible { outline: 2px solid var(--rose); outline-offset: 2px; }
-.bq-chip {
+.fp-sel { position: relative; }
+.fp-sel select {
+  appearance: none; -webkit-appearance: none; width: 100%;
+  font: 500 .86rem 'Inter', sans-serif; color: var(--ink);
+  background: var(--bg-soft); border: 1px solid var(--line); border-radius: var(--radius-sm);
+  padding: .7rem 2.2rem .7rem .9rem; min-height: 44px; cursor: pointer;
+  transition: border-color .18s, background .18s;
+}
+.fp-sel select:hover:not(:disabled) { border-color: var(--rose-300); }
+.fp-sel select:disabled { opacity: .5; cursor: not-allowed; background: var(--bg); }
+.fp-sel::after {
+  content: ""; position: absolute; right: .95rem; top: 50%; width: 7px; height: 7px;
+  border-right: 1.6px solid var(--ink-faded); border-bottom: 1.6px solid var(--ink-faded);
+  transform: translateY(-70%) rotate(45deg); pointer-events: none;
+}
+.fp-sel.off::after { opacity: .35; }
+.fp-busca { position: relative; }
+.fp-busca input {
+  width: 100%; font: 400 .9rem 'Inter', sans-serif; color: var(--ink);
+  background: var(--bg-soft); border: 1px solid var(--line); border-radius: var(--radius-sm);
+  padding: .7rem .9rem .7rem 2.4rem; min-height: 44px;
+}
+.fp-busca input::placeholder { color: var(--ink-faded); }
+.fp-busca input:focus { outline: none; border-color: var(--rose-300); background: var(--paper); }
+.fp-busca svg { position: absolute; left: .85rem; top: 50%; transform: translateY(-50%); width: 15px; height: 15px; fill: none; stroke: var(--ink-faded); stroke-width: 1.8; }
+
+.fp-pills { display: flex; flex-wrap: wrap; gap: .4rem; }
+.pill {
   font: 500 .8rem 'Inter', sans-serif; color: var(--ink-soft); cursor: pointer;
   background: var(--paper); border: 1px solid var(--line); border-radius: 999px;
-  padding: .55rem 1rem; min-height: 40px; transition: .2s;
+  padding: .5rem 1rem; min-height: 40px; transition: .18s;
 }
-.bq-chip:hover { border-color: var(--rose-300); }
-.bq-chip.on { background: var(--rose-100); border-color: var(--rose-300); color: var(--rose-700); }
-.bq-limpar { background: none; border: 0; color: var(--ink-soft); font: 500 .8rem 'Inter', sans-serif; cursor: pointer; text-decoration: underline; padding: .5rem; }
+.pill:hover { border-color: var(--rose-300); color: var(--ink); }
+.pill.on { background: var(--rose-100); border-color: var(--rose-300); color: var(--rose-700); font-weight: 600; }
 
-/* ── barra de situação ── */
-.bq-barra {
-  display: flex; flex-wrap: wrap; gap: 1.4rem; align-items: center;
-  padding: .9rem 1.3rem; margin-bottom: 1.4rem;
-  background: var(--paper); border: 1px solid var(--line-soft); border-radius: var(--radius);
-  font-size: .84rem; color: var(--ink-soft);
+.fp-check { display: flex; align-items: center; gap: .5rem; font-size: .84rem; color: var(--ink-soft); cursor: pointer; min-height: 40px; }
+.fp-check input { width: 17px; height: 17px; accent-color: var(--rose); cursor: pointer; }
+
+.fp-rodape { display: flex; flex-wrap: wrap; gap: .7rem; align-items: center; margin-top: 1.2rem; padding-top: 1.2rem; border-top: 1px solid var(--line-soft); }
+.fp-chips { display: flex; flex-wrap: wrap; gap: .4rem; flex: 1; }
+.chip {
+  display: inline-flex; align-items: center; gap: .45rem;
+  font: 500 .76rem 'Inter', sans-serif; color: var(--rose-700);
+  background: var(--rose-50); border: 1px solid var(--rose-300); border-radius: 999px;
+  padding: .35rem .5rem .35rem .8rem;
 }
-.bq-barra b { font-family: 'Fraunces', serif; font-weight: 500; color: var(--ink); font-variant-numeric: tabular-nums; }
-.bq-barra .sep { width: 1px; align-self: stretch; background: var(--line-soft); }
-.bq-nav { margin-left: auto; display: flex; gap: .5rem; align-items: center; }
-.bq-nav button {
-  min-width: 40px; min-height: 40px; padding: .5rem .9rem; border-radius: 999px;
-  background: var(--paper); border: 1px solid var(--line); color: var(--ink);
-  font: 500 .82rem 'Inter', sans-serif; cursor: pointer; transition: .2s;
-}
-.bq-nav button:hover:not(:disabled) { border-color: var(--rose-300); color: var(--rose-deep); }
-.bq-nav button:disabled { opacity: .4; cursor: default; }
+.chip button { background: none; border: 0; cursor: pointer; color: inherit; font-size: .9rem; line-height: 1; padding: .15rem .2rem; opacity: .65; }
+.chip button:hover { opacity: 1; }
+.btn-lim { background: none; border: 0; color: var(--ink-soft); font: 500 .82rem 'Inter', sans-serif; cursor: pointer; text-decoration: underline; padding: .6rem .4rem; min-height: 40px; }
 
-/* ── a questão ── */
-.bq-card { background: var(--paper); border: 1px solid var(--line-soft); border-radius: var(--radius-lg); padding: 2rem 2.2rem; }
-.bq-meta { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; margin-bottom: 1.3rem; }
-.bq-tag {
-  font: 600 .62rem 'Inter', sans-serif; letter-spacing: .14em; text-transform: uppercase;
-  padding: .3rem .7rem; border-radius: 999px; background: var(--bg-soft); color: var(--ink-soft);
-}
-.bq-tag.dis { background: var(--rose-100); color: var(--rose-700); }
-.bq-tag.facil { background: #E1F0DE; color: #3F6B3A; }
-.bq-tag.media { background: #FBF0CC; color: #8A6A14; }
-.bq-tag.dificil { background: #FBE4E1; color: #A33527; }
-[data-theme="dark"] .bq-tag.facil { background: #24331F; color: #A8CBA0; }
-[data-theme="dark"] .bq-tag.media { background: #35301A; color: #D9C07A; }
-[data-theme="dark"] .bq-tag.dificil { background: #3A2320; color: #E0A197; }
-.bq-assunto { font-size: .78rem; color: var(--ink-faded); margin-left: auto; text-align: right; }
+/* ══ barra de resultados ══ */
+.res { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; margin-bottom: 1.1rem; }
+.res-n { font-size: .9rem; color: var(--ink-soft); }
+.res-n b { font-family: 'Fraunces', serif; font-weight: 500; font-size: 1.15rem; color: var(--ink); font-variant-numeric: tabular-nums; }
+.res-dir { margin-left: auto; display: flex; flex-wrap: wrap; gap: .8rem; align-items: center; }
+.res-dir .fp-campo { flex: 0 0 auto; }
+.res-dir .fp-sel select { min-height: 40px; padding: .5rem 2rem .5rem .8rem; font-size: .8rem; }
+.res-dir label { font-size: .58rem; }
 
-.bq-enun { font-size: 1rem; line-height: 1.7; color: var(--ink); margin-bottom: 1.5rem; white-space: pre-line; }
+/* ══ questão ══ */
+.qs { display: flex; flex-direction: column; gap: 1.1rem; }
+.q { background: var(--paper); border: 1px solid var(--line-soft); border-radius: var(--radius-lg); padding: 1.7rem 1.9rem; }
+.q-top { display: flex; flex-wrap: wrap; gap: .45rem; align-items: center; margin-bottom: 1.1rem; }
+.q-num { font: 600 .72rem 'Inter', sans-serif; color: var(--ink-faded); font-variant-numeric: tabular-nums; margin-right: .3rem; }
+.tag { font: 600 .6rem 'Inter', sans-serif; letter-spacing: .13em; text-transform: uppercase; padding: .3rem .65rem; border-radius: 999px; background: var(--bg-soft); color: var(--ink-soft); }
+.tag.dis { background: var(--rose-100); color: var(--rose-700); }
+.tag.facil { background: #E1F0DE; color: #3F6B3A; }
+.tag.media { background: #FBF0CC; color: #8A6A14; }
+.tag.dificil { background: #FBE4E1; color: #A33527; }
+[data-theme="dark"] .tag.facil { background: #24331F; color: #A8CBA0; }
+[data-theme="dark"] .tag.media { background: #35301A; color: #D9C07A; }
+[data-theme="dark"] .tag.dificil { background: #3A2320; color: #E0A197; }
+.q-trilha { font-size: .76rem; color: var(--ink-faded); margin-left: auto; text-align: right; }
+.q-enun { font-size: 1rem; line-height: 1.7; color: var(--ink); margin-bottom: 1.3rem; white-space: pre-line; }
 
-.bq-alts { display: flex; flex-direction: column; gap: .6rem; }
-.bq-alt {
+.alts { display: flex; flex-direction: column; gap: .55rem; }
+.alt {
   display: flex; gap: .9rem; align-items: flex-start; width: 100%; text-align: left;
-  padding: .95rem 1.1rem; border-radius: var(--radius); cursor: pointer;
+  padding: .9rem 1.05rem; border-radius: var(--radius); cursor: pointer;
   background: var(--paper); border: 1px solid var(--line); color: var(--ink);
   font: 400 .93rem/1.6 'Inter', sans-serif; transition: border-color .18s, background .18s;
 }
-.bq-alt:hover:not(:disabled) { border-color: var(--rose-300); }
-.bq-alt:disabled { cursor: default; }
-.bq-alt .letra {
-  flex: none; width: 26px; height: 26px; border-radius: 50%;
-  display: grid; place-items: center; font: 600 .8rem 'Inter', sans-serif;
-  background: var(--bg-soft); color: var(--ink-soft); transition: .18s;
+.alt:hover:not(:disabled) { border-color: var(--rose-300); }
+.alt:disabled { cursor: default; }
+.alt .l { flex: none; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font: 600 .8rem 'Inter', sans-serif; background: var(--bg-soft); color: var(--ink-soft); transition: .18s; }
+.alt.sel { border-color: var(--rose); background: var(--rose-50); }
+.alt.sel .l { background: var(--rose); color: #fff; }
+.alt.certa { border-color: #5E8C6A; background: rgba(94,140,106,.10); }
+.alt.certa .l { background: #5E8C6A; color: #fff; }
+.alt.errada { border-color: #C0524B; background: rgba(192,82,75,.10); }
+.alt.errada .l { background: #C0524B; color: #fff; }
+.alt .m { margin-left: auto; flex: none; }
+
+.q-acoes { display: flex; flex-wrap: wrap; gap: .6rem; align-items: center; margin-top: 1.3rem; }
+.b {
+  padding: .75rem 1.5rem; border-radius: 999px; border: 0; cursor: pointer;
+  font: 600 .84rem 'Inter', sans-serif; min-height: 44px;
+  background: var(--rose-deep); color: #fff; transition: .18s;
 }
-.bq-alt.sel { border-color: var(--rose); background: var(--rose-50); }
-.bq-alt.sel .letra { background: var(--rose); color: #fff; }
-.bq-alt.certa { border-color: #5E8C6A; background: rgba(94,140,106,.10); }
-.bq-alt.certa .letra { background: #5E8C6A; color: #fff; }
-.bq-alt.errada { border-color: #C0524B; background: rgba(192,82,75,.10); }
-.bq-alt.errada .letra { background: #C0524B; color: #fff; }
-.bq-alt .marca { margin-left: auto; font-size: .95rem; flex: none; }
+.b:disabled { opacity: .45; cursor: default; }
+.b:hover:not(:disabled) { transform: translateY(-1px); }
+.b.g { background: none; color: var(--ink-soft); border: 1px solid var(--line); }
+.b.g:hover { border-color: var(--rose-300); color: var(--rose-deep); transform: none; }
+.b.g.on { background: var(--rose-100); border-color: var(--rose-300); color: var(--rose-700); }
 
-.bq-acoes { display: flex; flex-wrap: wrap; gap: .7rem; align-items: center; margin-top: 1.5rem; }
-.bq-btn {
-  padding: .8rem 1.6rem; border-radius: 999px; border: 0; cursor: pointer;
-  font: 600 .86rem 'Inter', sans-serif; min-height: 44px;
-  background: var(--rose-deep); color: #fff; transition: .2s;
+.ver { margin-top: 1.2rem; padding: .9rem 1.1rem; border-radius: var(--radius); font-size: .9rem; }
+.ver.ok { background: rgba(94,140,106,.12); color: #3F6B3A; }
+.ver.nao { background: rgba(192,82,75,.12); color: #A33527; }
+[data-theme="dark"] .ver.ok { color: #A8CBA0; }
+[data-theme="dark"] .ver.nao { color: #E0A197; }
+.expl { margin-top: 1.1rem; padding-top: 1.1rem; border-top: 1px solid var(--line-soft); }
+.expl h4 { font: 600 .62rem 'Inter', sans-serif; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-soft); margin: 0 0 .7rem; }
+.expl pre { font: 400 .89rem/1.75 'Inter', sans-serif; color: var(--ink-soft); white-space: pre-wrap; word-wrap: break-word; margin: 0; }
+.base { margin-top: .9rem; font-size: .79rem; color: var(--ink-faded); }
+.base b { color: var(--ink-soft); font-weight: 600; }
+.nota { margin-top: .9rem; padding: .75rem .9rem; border-radius: var(--radius-sm); background: var(--bg-soft); font-size: .78rem; color: var(--ink-soft); }
+
+/* ══ paginação ══ */
+.pag { display: flex; flex-wrap: wrap; gap: .4rem; align-items: center; justify-content: center; margin-top: 2rem; }
+.pag button {
+  min-width: 42px; min-height: 42px; padding: .5rem .8rem; border-radius: var(--radius-sm);
+  background: var(--paper); border: 1px solid var(--line); color: var(--ink-soft);
+  font: 500 .84rem 'Inter', sans-serif; cursor: pointer; font-variant-numeric: tabular-nums; transition: .18s;
 }
-.bq-btn:disabled { opacity: .45; cursor: default; }
-.bq-btn:hover:not(:disabled) { transform: translateY(-1px); }
-.bq-btn.ghost { background: none; color: var(--ink-soft); border: 1px solid var(--line); }
-.bq-btn.ghost:hover { border-color: var(--rose-300); color: var(--rose-deep); }
-.bq-btn.ghost.on { background: var(--rose-100); border-color: var(--rose-300); color: var(--rose-700); }
+.pag button:hover:not(:disabled):not(.on) { border-color: var(--rose-300); color: var(--ink); }
+.pag button.on { background: var(--rose-deep); border-color: var(--rose-deep); color: #fff; font-weight: 600; }
+.pag button:disabled { opacity: .35; cursor: default; }
+.pag .reticencia { color: var(--ink-faded); padding: 0 .3rem; }
 
-.bq-veredito { margin-top: 1.4rem; padding: 1rem 1.2rem; border-radius: var(--radius); font-size: .92rem; }
-.bq-veredito.ok { background: rgba(94,140,106,.12); color: #3F6B3A; }
-.bq-veredito.nao { background: rgba(192,82,75,.12); color: #A33527; }
-[data-theme="dark"] .bq-veredito.ok { color: #A8CBA0; }
-[data-theme="dark"] .bq-veredito.nao { color: #E0A197; }
-.bq-veredito b { font-weight: 600; }
-
-.bq-expl { margin-top: 1.2rem; padding-top: 1.2rem; border-top: 1px solid var(--line-soft); }
-.bq-expl h4 { font: 600 .64rem 'Inter', sans-serif; letter-spacing: .18em; text-transform: uppercase; color: var(--ink-soft); margin: 0 0 .8rem; }
-.bq-expl pre {
-  font: 400 .9rem/1.75 'Inter', sans-serif; color: var(--ink-soft);
-  white-space: pre-wrap; word-wrap: break-word; margin: 0;
-}
-.bq-base { margin-top: 1rem; font-size: .8rem; color: var(--ink-faded); }
-.bq-base b { color: var(--ink-soft); font-weight: 600; }
-.bq-nota { margin-top: 1rem; padding: .8rem 1rem; border-radius: var(--radius-sm); background: var(--bg-soft); font-size: .8rem; color: var(--ink-soft); }
-
-.bq-vazio { background: var(--paper); border: 1px solid var(--line-soft); border-radius: var(--radius-lg); padding: 2.6rem 2.2rem; }
-.bq-vazio p { margin: 0 0 .6rem; color: var(--ink-soft); }
-.bq-vazio .t { font: 500 1.15rem 'Fraunces', serif; color: var(--ink); }
+.vazio { background: var(--paper); border: 1px solid var(--line-soft); border-radius: var(--radius-lg); padding: 2.6rem 2.2rem; }
+.vazio .t { font: 500 1.15rem 'Fraunces', serif; color: var(--ink); margin: 0 0 .5rem; }
+.vazio p { margin: 0; color: var(--ink-soft); }
 
 @media (max-width: 900px) {
   .bq { padding: 1.8rem 1.2rem 5.5rem; }
   .bq h1 { font-size: 1.9rem; }
-  .bq-card { padding: 1.4rem 1.2rem; }
-  .bq-assunto { margin-left: 0; width: 100%; text-align: left; }
-  .bq-nav { margin-left: 0; width: 100%; }
-  .bq-filtros select, .bq-chip { flex: 1 1 auto; }
+  .fp, .q { padding: 1.3rem 1.1rem; }
+  .fp-campo { flex: 1 1 100%; }
+  .q-trilha { margin-left: 0; width: 100%; text-align: left; }
+  .res-dir { margin-left: 0; width: 100%; }
 }
-@media (prefers-reduced-motion: reduce) { .bq-alt, .bq-btn { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .alt, .b, .pill, .pag button { transition: none; } }
 </style>
 </head>
 <body>
@@ -142,9 +176,10 @@
   <h1>Banco de <em>questões</em></h1>
   <p class="lead">Questões de provas anteriores da OAB, com gabarito e comentário por alternativa. O que você errar pode ir direto para o Caderno de Erros.</p>
 
-  <div class="bq-filtros" id="bq-filtros"></div>
-  <div class="bq-barra" id="bq-barra"></div>
-  <div id="bq-conteudo"></div>
+  <section class="fp" id="fp"></section>
+  <div class="res" id="res"></div>
+  <div class="qs" id="lista"></div>
+  <nav class="pag" id="pag" aria-label="Paginação"></nav>
 </main>
 
 <script src="questoes-banco.js"></script>
@@ -157,255 +192,367 @@
 <script>
 (function () {
   var BANCO = window.BANCO_QUESTOES || [];
-  var K_RESP = 'oab_bq_respostas';
-  var K_FAV  = 'oab_bq_favoritas';
+  var K_RESP = 'oab_bq_respostas', K_FAV = 'oab_bq_favoritas';
+  var DIF = { facil: 'Fácil', media: 'Média', dificil: 'Difícil' };
 
-  function ler(chave, padrao) {
-    try { return JSON.parse(localStorage.getItem(chave)) || padrao; }
-    catch (e) { return padrao; }
-  }
-  function gravar(chave, valor) {
+  function ler(k, p) { try { return JSON.parse(localStorage.getItem(k)) || p; } catch (e) { return p; } }
+  function gravar(k, v) {
     try {
-      localStorage.setItem(chave, JSON.stringify(valor));
+      localStorage.setItem(k, JSON.stringify(v));
       localStorage.setItem('oab_local_rev', String(Date.now()));
-      if (window._syncOAB && window._syncOAB.notificarAlteracaoLocal) {
-        window._syncOAB.notificarAlteracaoLocal(chave);
-      }
+      if (window._syncOAB && window._syncOAB.notificarAlteracaoLocal) window._syncOAB.notificarAlteracaoLocal(k);
     } catch (e) {}
+  }
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+  function semAcento(s) {
+    return String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
   }
 
   var respostas = ler(K_RESP, {});
   var favoritas = ler(K_FAV, []);
-  var filtros = { discipline: '', topic: '', difficulty: '', exam_number: '', favoritas: false, pendentes: false };
-  var indice = 0;
-  var escolha = null;
-  var respondida = false;
-  var verExpl = false;
+  var estado = {};           // por questão, só nesta visita
+  var pagina = 1;
 
-  function filtradas() {
-    return BANCO.filter(function (q) {
-      if (filtros.discipline && q.discipline !== filtros.discipline) return false;
-      if (filtros.topic && q.topic !== filtros.topic) return false;
-      if (filtros.difficulty && q.difficulty !== filtros.difficulty) return false;
-      if (filtros.exam_number && String(q.exam_number) !== filtros.exam_number) return false;
-      if (filtros.favoritas && favoritas.indexOf(q.id) === -1) return false;
-      if (filtros.pendentes && respostas[q.id]) return false;
-      return true;
-    });
+  var F = {
+    busca: '', discipline: '', topic: '', difficulty: '', exam_number: '',
+    situacao: 'todas', semAnuladas: false, ordem: 'exame_desc', porPagina: 10
+  };
+
+  function valores(campo, base) {
+    var v = [];
+    (base || BANCO).forEach(function (q) { if (q[campo] != null && v.indexOf(q[campo]) === -1) v.push(q[campo]); });
+    return v.sort(function (a, b) { return typeof a === 'number' ? b - a : String(a).localeCompare(String(b), 'pt-BR'); });
   }
 
-  function unicos(campo, base) {
-    var vistos = [];
-    (base || BANCO).forEach(function (q) {
-      if (q[campo] != null && vistos.indexOf(q[campo]) === -1) vistos.push(q[campo]);
-    });
-    return vistos.sort();
-  }
-
-  function montarFiltros() {
-    var cx = document.getElementById('bq-filtros');
-    var porDisc = filtros.discipline
-      ? BANCO.filter(function (q) { return q.discipline === filtros.discipline; })
-      : BANCO;
-    var DIF = { facil: 'Fácil', media: 'Média', dificil: 'Difícil' };
-
-    function sel(id, rotulo, campo, opcoes, formata) {
-      var o = opcoes.map(function (v) {
-        var marcado = String(filtros[campo]) === String(v) ? ' selected' : '';
-        return '<option value="' + v + '"' + marcado + '>' + (formata ? formata(v) : v) + '</option>';
-      }).join('');
-      return '<select id="' + id + '" data-campo="' + campo + '" aria-label="' + rotulo + '">' +
-             '<option value="">' + rotulo + '</option>' + o + '</select>';
+  function passa(q) {
+    if (F.discipline && q.discipline !== F.discipline) return false;
+    if (F.topic && q.topic !== F.topic) return false;
+    if (F.difficulty && q.difficulty !== F.difficulty) return false;
+    if (F.exam_number && String(q.exam_number) !== F.exam_number) return false;
+    if (F.semAnuladas && !q.correct_answer) return false;
+    var r = respostas[q.id];
+    if (F.situacao === 'nao' && r) return false;
+    if (F.situacao === 'resolvidas' && !r) return false;
+    if (F.situacao === 'acertei' && !(r && r.ultima_correta)) return false;
+    if (F.situacao === 'errei' && !(r && r.ultima_correta === false)) return false;
+    if (F.situacao === 'favoritas' && favoritas.indexOf(q.id) === -1) return false;
+    if (F.busca) {
+      var alvo = semAcento([q.statement, q.alternative_a, q.alternative_b, q.alternative_c,
+                            q.alternative_d, q.topic, q.subtopic, q.discipline].join(' '));
+      if (alvo.indexOf(semAcento(F.busca)) === -1) return false;
     }
+    return true;
+  }
 
-    cx.innerHTML =
-      sel('f-dis', 'Todas as disciplinas', 'discipline', unicos('discipline')) +
-      sel('f-top', 'Todos os assuntos', 'topic', unicos('topic', porDisc)) +
-      sel('f-dif', 'Qualquer dificuldade', 'difficulty', ['facil', 'media', 'dificil'], function (v) { return DIF[v]; }) +
-      sel('f-exa', 'Todos os exames', 'exam_number', unicos('exam_number'), function (v) { return v + 'º Exame'; }) +
-      '<button class="bq-chip' + (filtros.favoritas ? ' on' : '') + '" id="f-fav" type="button">★ Favoritas</button>' +
-      '<button class="bq-chip' + (filtros.pendentes ? ' on' : '') + '" id="f-pen" type="button">Não respondidas</button>' +
-      '<button class="bq-limpar" id="f-limpar" type="button">Limpar filtros</button>';
-
-    cx.querySelectorAll('select').forEach(function (s) {
-      s.onchange = function () {
-        filtros[s.dataset.campo] = s.value;
-        if (s.dataset.campo === 'discipline') filtros.topic = '';
-        indice = 0; limparEstado(); render();
-      };
+  function ordenar(lista) {
+    var c = lista.slice();
+    if (F.ordem === 'exame_desc') c.sort(function (a, b) { return b.exam_number - a.exam_number || a.question_number - b.question_number; });
+    if (F.ordem === 'exame_asc') c.sort(function (a, b) { return a.exam_number - b.exam_number || a.question_number - b.question_number; });
+    if (F.ordem === 'disciplina') c.sort(function (a, b) {
+      return String(a.discipline).localeCompare(String(b.discipline), 'pt-BR') || a.exam_number - b.exam_number || a.question_number - b.question_number;
     });
-    document.getElementById('f-fav').onclick = function () { filtros.favoritas = !filtros.favoritas; indice = 0; limparEstado(); render(); };
-    document.getElementById('f-pen').onclick = function () { filtros.pendentes = !filtros.pendentes; indice = 0; limparEstado(); render(); };
-    document.getElementById('f-limpar').onclick = function () {
-      filtros = { discipline: '', topic: '', difficulty: '', exam_number: '', favoritas: false, pendentes: false };
-      indice = 0; limparEstado(); render();
+    if (F.ordem === 'dificuldade') {
+      var p = { facil: 1, media: 2, dificil: 3 };
+      c.sort(function (a, b) { return (p[a.difficulty] || 9) - (p[b.difficulty] || 9) || a.exam_number - b.exam_number; });
+    }
+    return c;
+  }
+
+  // ── painel de filtros: montado uma vez, para não perder o foco da busca ──
+  function montarPainel() {
+    function selHtml(id, rotulo, vazio, opcoes, formata, desabilitado) {
+      var o = opcoes.map(function (v) { return '<option value="' + esc(v) + '">' + esc(formata ? formata(v) : v) + '</option>'; }).join('');
+      return '<div class="fp-campo"><label for="' + id + '">' + rotulo + '</label>' +
+             '<div class="fp-sel' + (desabilitado ? ' off' : '') + '"><select id="' + id + '"' + (desabilitado ? ' disabled' : '') + '>' +
+             '<option value="">' + vazio + '</option>' + o + '</select></div></div>';
+    }
+    document.getElementById('fp').innerHTML =
+      '<div class="fp-linha">' +
+        '<div class="fp-campo fp-busca-wrap" style="flex:2 1 260px">' +
+          '<label for="f-busca">Palavra-chave</label>' +
+          '<div class="fp-busca"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>' +
+          '<input id="f-busca" type="search" placeholder="Buscar no enunciado e nas alternativas"></div>' +
+        '</div>' +
+        selHtml('f-dis', 'Disciplina', 'Todas as disciplinas', valores('discipline')) +
+        selHtml('f-top', 'Assunto', 'Escolha uma disciplina', [], null, true) +
+        selHtml('f-exa', 'Exame', 'Todos os exames', valores('exam_number'), function (v) { return v + 'º Exame'; }) +
+        selHtml('f-dif', 'Dificuldade', 'Qualquer', ['facil', 'media', 'dificil'], function (v) { return DIF[v]; }) +
+      '</div>' +
+      '<div class="fp-linha">' +
+        '<div class="fp-campo" style="flex:1 1 100%">' +
+          '<span class="fp-rot">Minhas questões</span>' +
+          '<div class="fp-pills" id="f-sit">' +
+            '<button class="pill on" data-v="todas" type="button">Todas</button>' +
+            '<button class="pill" data-v="nao" type="button">Não respondidas</button>' +
+            '<button class="pill" data-v="resolvidas" type="button">Respondidas</button>' +
+            '<button class="pill" data-v="acertei" type="button">Acertei</button>' +
+            '<button class="pill" data-v="errei" type="button">Errei</button>' +
+            '<button class="pill" data-v="favoritas" type="button">★ Favoritas</button>' +
+          '</div>' +
+        '</div>' +
+        '<label class="fp-check"><input type="checkbox" id="f-anul"> Excluir questões anuladas</label>' +
+      '</div>' +
+      '<div class="fp-rodape"><div class="fp-chips" id="f-chips"></div>' +
+      '<button class="btn-lim" id="f-limpar" type="button">Limpar filtros</button></div>';
+
+    var busca = document.getElementById('f-busca');
+    var t = null;
+    busca.oninput = function () {
+      clearTimeout(t);
+      t = setTimeout(function () { F.busca = busca.value.trim(); pagina = 1; aplicar(); }, 250);
+    };
+    document.getElementById('f-dis').onchange = function () {
+      F.discipline = this.value; F.topic = ''; pagina = 1; sincronizarAssunto(); aplicar();
+    };
+    document.getElementById('f-top').onchange = function () { F.topic = this.value; pagina = 1; aplicar(); };
+    document.getElementById('f-exa').onchange = function () { F.exam_number = this.value; pagina = 1; aplicar(); };
+    document.getElementById('f-dif').onchange = function () { F.difficulty = this.value; pagina = 1; aplicar(); };
+    document.getElementById('f-anul').onchange = function () { F.semAnuladas = this.checked; pagina = 1; aplicar(); };
+    document.getElementById('f-sit').onclick = function (e) {
+      var b = e.target.closest('.pill'); if (!b) return;
+      F.situacao = b.dataset.v; pagina = 1;
+      this.querySelectorAll('.pill').forEach(function (x) { x.classList.toggle('on', x === b); });
+      aplicar();
+    };
+    document.getElementById('f-limpar').onclick = limpar;
+  }
+
+  // o assunto só abre depois que a disciplina é escolhida
+  function sincronizarAssunto() {
+    var sel = document.getElementById('f-top');
+    var box = sel.parentNode;
+    if (!F.discipline) {
+      sel.innerHTML = '<option value="">Escolha uma disciplina</option>';
+      sel.disabled = true; box.classList.add('off');
+      return;
+    }
+    var daDisciplina = BANCO.filter(function (q) { return q.discipline === F.discipline; });
+    var ops = valores('topic', daDisciplina);
+    sel.innerHTML = '<option value="">Todos os assuntos</option>' +
+      ops.map(function (v) { return '<option value="' + esc(v) + '"' + (F.topic === v ? ' selected' : '') + '>' + esc(v) + '</option>'; }).join('');
+    sel.disabled = false; box.classList.remove('off');
+  }
+
+  function limpar() {
+    F.busca = ''; F.discipline = ''; F.topic = ''; F.difficulty = ''; F.exam_number = '';
+    F.situacao = 'todas'; F.semAnuladas = false; pagina = 1;
+    document.getElementById('f-busca').value = '';
+    ['f-dis', 'f-exa', 'f-dif'].forEach(function (id) { document.getElementById(id).value = ''; });
+    document.getElementById('f-anul').checked = false;
+    document.querySelectorAll('#f-sit .pill').forEach(function (x) { x.classList.toggle('on', x.dataset.v === 'todas'); });
+    sincronizarAssunto(); aplicar();
+  }
+
+  function montarChips() {
+    var SIT = { nao: 'Não respondidas', resolvidas: 'Respondidas', acertei: 'Acertei', errei: 'Errei', favoritas: 'Favoritas' };
+    var c = [];
+    if (F.busca) c.push(['busca', '“' + F.busca + '”']);
+    if (F.discipline) c.push(['discipline', F.discipline]);
+    if (F.topic) c.push(['topic', F.topic]);
+    if (F.exam_number) c.push(['exam_number', F.exam_number + 'º Exame']);
+    if (F.difficulty) c.push(['difficulty', DIF[F.difficulty]]);
+    if (F.situacao !== 'todas') c.push(['situacao', SIT[F.situacao]]);
+    if (F.semAnuladas) c.push(['semAnuladas', 'Sem anuladas']);
+    var box = document.getElementById('f-chips');
+    box.innerHTML = c.map(function (x) {
+      return '<span class="chip">' + esc(x[1]) + '<button type="button" data-k="' + x[0] + '" aria-label="Remover filtro">✕</button></span>';
+    }).join('');
+    box.onclick = function (e) {
+      var b = e.target.closest('button[data-k]'); if (!b) return;
+      var k = b.dataset.k;
+      if (k === 'situacao') {
+        F.situacao = 'todas';
+        document.querySelectorAll('#f-sit .pill').forEach(function (x) { x.classList.toggle('on', x.dataset.v === 'todas'); });
+      } else if (k === 'semAnuladas') {
+        F.semAnuladas = false; document.getElementById('f-anul').checked = false;
+      } else if (k === 'busca') {
+        F.busca = ''; document.getElementById('f-busca').value = '';
+      } else {
+        F[k] = '';
+        var mapa = { discipline: 'f-dis', topic: 'f-top', exam_number: 'f-exa', difficulty: 'f-dif' };
+        if (mapa[k]) document.getElementById(mapa[k]).value = '';
+        if (k === 'discipline') { F.topic = ''; sincronizarAssunto(); }
+      }
+      pagina = 1; aplicar();
     };
   }
 
-  function limparEstado() { escolha = null; respondida = false; verExpl = false; }
-
-  function montarBarra(lista) {
+  function montarResultados(total) {
     var feitas = 0, acertos = 0;
-    BANCO.forEach(function (q) {
-      var r = respostas[q.id];
-      if (r) { feitas++; if (r.ultima_correta) acertos++; }
-    });
+    BANCO.forEach(function (q) { var r = respostas[q.id]; if (r) { feitas++; if (r.ultima_correta) acertos++; } });
     var pct = feitas ? Math.round((acertos / feitas) * 100) : null;
-    document.getElementById('bq-barra').innerHTML =
-      '<span><b>' + lista.length + '</b> ' + (lista.length === 1 ? 'questão' : 'questões') + '</span>' +
-      '<span class="sep"></span>' +
-      '<span>respondidas <b>' + feitas + '</b> de ' + BANCO.length + '</span>' +
-      '<span class="sep"></span>' +
-      '<span>acerto <b>' + (pct === null ? '—' : pct + '%') + '</b></span>' +
-      '<span class="bq-nav">' +
-        '<button id="bq-ant" type="button"' + (indice <= 0 ? ' disabled' : '') + '>← Anterior</button>' +
-        '<span style="font-variant-numeric:tabular-nums">' + (lista.length ? indice + 1 : 0) + ' / ' + lista.length + '</span>' +
-        '<button id="bq-prox" type="button"' + (indice >= lista.length - 1 ? ' disabled' : '') + '>Próxima →</button>' +
+    document.getElementById('res').innerHTML =
+      '<span class="res-n">Foram encontradas <b>' + total + '</b> ' + (total === 1 ? 'questão' : 'questões') + '</span>' +
+      '<span class="res-n" style="color:var(--ink-faded)">· você respondeu <b>' + feitas + '</b> de ' + BANCO.length +
+      (pct === null ? '' : ', com <b>' + pct + '%</b> de acerto') + '</span>' +
+      '<span class="res-dir">' +
+        '<div class="fp-campo"><label for="f-ord">Ordenar por</label><div class="fp-sel"><select id="f-ord">' +
+          '<option value="exame_desc">Exame mais recente</option>' +
+          '<option value="exame_asc">Exame mais antigo</option>' +
+          '<option value="disciplina">Disciplina</option>' +
+          '<option value="dificuldade">Dificuldade</option>' +
+        '</select></div></div>' +
+        '<div class="fp-campo"><label for="f-pp">Por página</label><div class="fp-sel"><select id="f-pp">' +
+          [5, 10, 20, 50, 100].map(function (n) { return '<option value="' + n + '">' + n + '</option>'; }).join('') +
+          '<option value="0">Todas</option>' +
+        '</select></div></div>' +
       '</span>';
-    var a = document.getElementById('bq-ant'), p = document.getElementById('bq-prox');
-    if (a) a.onclick = function () { if (indice > 0) { indice--; limparEstado(); render(); } };
-    if (p) p.onclick = function () { if (indice < lista.length - 1) { indice++; limparEstado(); render(); } };
+    var ord = document.getElementById('f-ord'); ord.value = F.ordem;
+    ord.onchange = function () { F.ordem = this.value; pagina = 1; aplicar(); };
+    var pp = document.getElementById('f-pp'); pp.value = String(F.porPagina);
+    pp.onchange = function () { F.porPagina = parseInt(this.value, 10); pagina = 1; aplicar(); };
   }
 
-  function escapar(s) {
-    return String(s == null ? '' : s)
-      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  }
-
-  function render() {
-    montarFiltros();
-    var lista = filtradas();
-    if (indice >= lista.length) indice = Math.max(0, lista.length - 1);
-    montarBarra(lista);
-
-    var alvo = document.getElementById('bq-conteudo');
-    if (!BANCO.length) {
-      alvo.innerHTML = '<div class="bq-vazio"><p class="t">Ainda não há questões cadastradas.</p>' +
-        '<p>O arquivo de questões não foi carregado.</p></div>';
-      return;
-    }
-    if (!lista.length) {
-      alvo.innerHTML = '<div class="bq-vazio"><p class="t">Nenhuma questão com esses filtros.</p>' +
-        '<p>Tente limpar algum filtro para ver mais questões.</p></div>';
-      return;
-    }
-
-    var q = lista[indice];
-    var r = respostas[q.id] || null;
+  function cartao(q, posicao) {
+    var e = estado[q.id] || (estado[q.id] = { escolha: null, respondida: false, expl: false });
+    var r = respostas[q.id];
     var fav = favoritas.indexOf(q.id) !== -1;
-    var DIF = { facil: 'Fácil', media: 'Média', dificil: 'Difícil' };
 
     var alts = ['a', 'b', 'c', 'd'].map(function (L) {
-      var texto = q['alternative_' + L];
-      if (!texto) return '';
-      var letra = L.toUpperCase();
-      var cls = '', marca = '';
-      if (respondida) {
+      var txt = q['alternative_' + L]; if (!txt) return '';
+      var letra = L.toUpperCase(), cls = '', marca = '';
+      if (e.respondida) {
         if (letra === q.correct_answer) { cls = ' certa'; marca = '✓'; }
-        else if (letra === escolha) { cls = ' errada'; marca = '✕'; }
-      } else if (letra === escolha) { cls = ' sel'; }
-      return '<button class="bq-alt' + cls + '" data-letra="' + letra + '"' + (respondida ? ' disabled' : '') + '>' +
-             '<span class="letra">' + letra + '</span><span>' + escapar(texto) + '</span>' +
-             (marca ? '<span class="marca">' + marca + '</span>' : '') + '</button>';
+        else if (letra === e.escolha) { cls = ' errada'; marca = '✕'; }
+      } else if (letra === e.escolha) cls = ' sel';
+      return '<button class="alt' + cls + '" data-l="' + letra + '"' + (e.respondida ? ' disabled' : '') + '>' +
+             '<span class="l">' + letra + '</span><span>' + esc(txt) + '</span>' +
+             (marca ? '<span class="m">' + marca + '</span>' : '') + '</button>';
     }).join('');
 
-    var veredito = '';
-    if (respondida) {
-      if (!q.correct_answer) {
-        veredito = '<div class="bq-veredito nao">Esta questão foi <b>anulada</b> e não tem gabarito.</div>';
-      } else if (escolha === q.correct_answer) {
-        veredito = '<div class="bq-veredito ok">Você acertou. Gabarito: <b>' + q.correct_answer + '</b>.</div>';
-      } else {
-        veredito = '<div class="bq-veredito nao">Você marcou <b>' + escolha + '</b>. O gabarito é <b>' + q.correct_answer + '</b>.</div>';
-      }
+    var ver = '';
+    if (e.respondida) {
+      if (!q.correct_answer) ver = '<div class="ver nao">Esta questão foi <b>anulada</b> e não tem gabarito.</div>';
+      else if (e.escolha === q.correct_answer) ver = '<div class="ver ok">Você acertou. Gabarito: <b>' + q.correct_answer + '</b>.</div>';
+      else ver = '<div class="ver nao">Você marcou <b>' + e.escolha + '</b>. O gabarito é <b>' + q.correct_answer + '</b>.</div>';
     }
+    var expl = (e.respondida && e.expl && q.explanation)
+      ? '<div class="expl"><h4>Comentário</h4><pre>' + esc(q.explanation) + '</pre>' +
+        (q.legal_basis ? '<p class="base"><b>Fundamentação:</b> ' + esc(q.legal_basis) + '</p>' : '') + '</div>' : '';
+    var nota = (e.respondida && q.notes) ? '<div class="nota">Sobre o material de origem: ' + esc(q.notes) + '</div>' : '';
 
-    var expl = '';
-    if (respondida && verExpl && q.explanation) {
-      expl = '<div class="bq-expl"><h4>Comentário</h4><pre>' + escapar(q.explanation) + '</pre>' +
-             (q.legal_basis ? '<p class="bq-base"><b>Fundamentação:</b> ' + escapar(q.legal_basis) + '</p>' : '') +
-             '</div>';
+    var acoes = e.respondida
+      ? (q.explanation ? '<button class="b g' + (e.expl ? ' on' : '') + '" data-a="expl">' + (e.expl ? 'Esconder comentário' : 'Ver comentário') + '</button>' : '') +
+        '<button class="b g" data-a="refazer">Refazer</button>' +
+        '<button class="b g' + (fav ? ' on' : '') + '" data-a="fav">' + (fav ? '★ Favoritada' : '☆ Favoritar') + '</button>' +
+        '<button class="b g" data-a="erro">+ Caderno de Erros</button>'
+      : '<button class="b" data-a="resp"' + (e.escolha ? '' : ' disabled') + '>Responder</button>' +
+        '<button class="b g' + (fav ? ' on' : '') + '" data-a="fav">' + (fav ? '★ Favoritada' : '☆ Favoritar') + '</button>';
+
+    return '<article class="q" data-id="' + q.id + '">' +
+      '<div class="q-top"><span class="q-num">' + posicao + '</span>' +
+        '<span class="tag dis">' + esc(q.discipline) + '</span>' +
+        (q.difficulty ? '<span class="tag ' + q.difficulty + '">' + DIF[q.difficulty] + '</span>' : '') +
+        '<span class="tag">' + q.exam_number + 'º Exame · ' + q.year + ' · Q' + q.question_number + '</span>' +
+        (r ? '<span class="tag">respondida ' + r.vezes + (r.vezes === 1 ? ' vez' : ' vezes') + '</span>' : '') +
+        (q.topic ? '<span class="q-trilha">' + esc(q.topic) + (q.subtopic ? ' › ' + esc(q.subtopic) : '') + '</span>' : '') +
+      '</div>' +
+      '<div class="q-enun">' + esc(q.statement) + '</div>' +
+      '<div class="alts">' + alts + '</div>' + ver + expl + nota +
+      '<div class="q-acoes">' + acoes + '</div></article>';
+  }
+
+  function montarPaginacao(total) {
+    var box = document.getElementById('pag');
+    if (!F.porPagina || total <= F.porPagina) { box.innerHTML = ''; return; }
+    var paginas = Math.ceil(total / F.porPagina);
+    var itens = [];
+    function bt(n, rotulo, extra) {
+      return '<button data-p="' + n + '"' + (extra || '') + '>' + (rotulo || n) + '</button>';
     }
-    var nota = (respondida && q.notes) ? '<div class="bq-nota">Observação sobre o material de origem: ' + escapar(q.notes) + '</div>' : '';
-
-    var acoes = respondida
-      ? (q.explanation ? '<button class="bq-btn ghost' + (verExpl ? ' on' : '') + '" id="bq-expl">' + (verExpl ? 'Esconder comentário' : 'Ver comentário') + '</button>' : '') +
-        '<button class="bq-btn ghost' + (fav ? ' on' : '') + '" id="bq-fav">' + (fav ? '★ Favoritada' : '☆ Favoritar') + '</button>' +
-        '<button class="bq-btn ghost" id="bq-erro">+ Caderno de Erros</button>' +
-        (indice < lista.length - 1 ? '<button class="bq-btn" id="bq-seguir">Próxima questão →</button>' : '')
-      : '<button class="bq-btn" id="bq-resp"' + (escolha ? '' : ' disabled') + '>Responder</button>' +
-        '<button class="bq-btn ghost' + (fav ? ' on' : '') + '" id="bq-fav">' + (fav ? '★ Favoritada' : '☆ Favoritar') + '</button>';
-
-    var vezes = r ? '<span class="bq-tag">respondida ' + r.vezes + (r.vezes === 1 ? ' vez' : ' vezes') + '</span>' : '';
-
-    alvo.innerHTML =
-      '<article class="bq-card">' +
-        '<div class="bq-meta">' +
-          '<span class="bq-tag dis">' + escapar(q.discipline) + '</span>' +
-          (q.difficulty ? '<span class="bq-tag ' + q.difficulty + '">' + DIF[q.difficulty] + '</span>' : '') +
-          '<span class="bq-tag">' + q.exam_number + 'º Exame · ' + q.year + ' · Q' + q.question_number + '</span>' +
-          vezes +
-          (q.topic ? '<span class="bq-assunto">' + escapar(q.topic) + (q.subtopic ? ' › ' + escapar(q.subtopic) : '') + '</span>' : '') +
-        '</div>' +
-        '<div class="bq-enun">' + escapar(q.statement) + '</div>' +
-        '<div class="bq-alts">' + alts + '</div>' +
-        veredito + expl + nota +
-        '<div class="bq-acoes">' + acoes + '</div>' +
-      '</article>';
-
-    alvo.querySelectorAll('.bq-alt').forEach(function (b) {
-      b.onclick = function () { if (!respondida) { escolha = b.dataset.letra; render(); } };
+    itens.push(bt(pagina - 1, '←', pagina === 1 ? ' disabled' : ''));
+    var mostrar = [];
+    for (var i = 1; i <= paginas; i++) {
+      if (i === 1 || i === paginas || Math.abs(i - pagina) <= 1) mostrar.push(i);
+    }
+    var anterior = 0;
+    mostrar.forEach(function (n) {
+      if (anterior && n - anterior > 1) itens.push('<span class="reticencia">…</span>');
+      itens.push(bt(n, null, n === pagina ? ' class="on"' : ''));
+      anterior = n;
     });
-
-    var bResp = document.getElementById('bq-resp');
-    if (bResp) bResp.onclick = function () {
-      respondida = true;
-      var certa = !!q.correct_answer && escolha === q.correct_answer;
-      var atual = respostas[q.id] || { vezes: 0, acertos: 0, erros: 0 };
-      atual.vezes += 1;
-      if (certa) atual.acertos += 1; else atual.erros += 1;
-      atual.ultima_correta = certa;
-      atual.ultima_resposta = escolha;
-      atual.ultima_data = new Date().toISOString();
-      respostas[q.id] = atual;
-      gravar(K_RESP, respostas);
-      verExpl = true;
-      render();
-    };
-
-    var bExpl = document.getElementById('bq-expl');
-    if (bExpl) bExpl.onclick = function () { verExpl = !verExpl; render(); };
-
-    var bFav = document.getElementById('bq-fav');
-    if (bFav) bFav.onclick = function () {
-      var i = favoritas.indexOf(q.id);
-      if (i === -1) favoritas.push(q.id); else favoritas.splice(i, 1);
-      gravar(K_FAV, favoritas);
-      render();
-    };
-
-    var bSeguir = document.getElementById('bq-seguir');
-    if (bSeguir) bSeguir.onclick = function () { indice++; limparEstado(); render(); };
-
-    var bErro = document.getElementById('bq-erro');
-    if (bErro) bErro.onclick = function () {
-      if (typeof erros_add !== 'function') { bErro.textContent = 'Caderno indisponível'; return; }
-      erros_add({
-        materia: q.discipline || '',
-        topico: q.topic || '',
-        subtopico: q.subtopic || '',
-        motivo: 'nao_sabia',
-        o_que_faltou: q.exam_number + 'º Exame, questão ' + q.question_number +
-                      '. Gabarito ' + (q.correct_answer || '—') +
-                      (escolha ? '; marquei ' + escolha : '') + '.',
-        explicacao: q.explanation || ''
-      });
-      bErro.textContent = '✓ Enviada ao caderno';
-      bErro.disabled = true;
+    itens.push(bt(pagina + 1, '→', pagina === paginas ? ' disabled' : ''));
+    box.innerHTML = itens.join('');
+    box.onclick = function (ev) {
+      var b = ev.target.closest('button[data-p]'); if (!b || b.disabled) return;
+      pagina = parseInt(b.dataset.p, 10);
+      aplicar();
+      window.scrollTo({ top: document.getElementById('res').offsetTop - 90, behavior: 'smooth' });
     };
   }
 
-  document.addEventListener('DOMContentLoaded', render);
+  function aplicar() {
+    montarChips();
+    var lista = ordenar(BANCO.filter(passa));
+    montarResultados(lista.length);
+
+    var alvo = document.getElementById('lista');
+    if (!BANCO.length) {
+      alvo.innerHTML = '<div class="vazio"><p class="t">Ainda não há questões cadastradas.</p><p>O arquivo de questões não foi carregado.</p></div>';
+      document.getElementById('pag').innerHTML = ''; return;
+    }
+    if (!lista.length) {
+      alvo.innerHTML = '<div class="vazio"><p class="t">Nenhuma questão com esses filtros.</p><p>Remova algum filtro acima para ver mais questões.</p></div>';
+      document.getElementById('pag').innerHTML = ''; return;
+    }
+
+    var tam = F.porPagina || lista.length;
+    var totalPaginas = Math.ceil(lista.length / tam);
+    if (pagina > totalPaginas) pagina = totalPaginas;
+    var inicio = (pagina - 1) * tam;
+    var fatia = lista.slice(inicio, inicio + tam);
+
+    alvo.innerHTML = fatia.map(function (q, i) { return cartao(q, inicio + i + 1); }).join('');
+    montarPaginacao(lista.length);
+  }
+
+  // ── interação das questões (delegação, sobrevive ao re-render) ──
+  document.addEventListener('click', function (ev) {
+    var art = ev.target.closest('.q'); if (!art) return;
+    var q = BANCO.filter(function (x) { return x.id === art.dataset.id; })[0];
+    if (!q) return;
+    var e = estado[q.id] || (estado[q.id] = { escolha: null, respondida: false, expl: false });
+
+    var alt = ev.target.closest('.alt');
+    if (alt && !e.respondida) { e.escolha = alt.dataset.l; aplicar(); return; }
+
+    var b = ev.target.closest('button[data-a]'); if (!b) return;
+    var acao = b.dataset.a;
+
+    if (acao === 'resp') {
+      e.respondida = true; e.expl = true;
+      var certa = !!q.correct_answer && e.escolha === q.correct_answer;
+      var at = respostas[q.id] || { vezes: 0, acertos: 0, erros: 0 };
+      at.vezes += 1;
+      if (certa) at.acertos += 1; else at.erros += 1;
+      at.ultima_correta = certa; at.ultima_resposta = e.escolha; at.ultima_data = new Date().toISOString();
+      respostas[q.id] = at; gravar(K_RESP, respostas); aplicar();
+    } else if (acao === 'expl') {
+      e.expl = !e.expl; aplicar();
+    } else if (acao === 'refazer') {
+      e.escolha = null; e.respondida = false; e.expl = false; aplicar();
+    } else if (acao === 'fav') {
+      var i = favoritas.indexOf(q.id);
+      if (i === -1) favoritas.push(q.id); else favoritas.splice(i, 1);
+      gravar(K_FAV, favoritas); aplicar();
+    } else if (acao === 'erro') {
+      if (typeof erros_add !== 'function') { b.textContent = 'Caderno indisponível'; return; }
+      erros_add({
+        materia: q.discipline || '', topico: q.topic || '', subtopico: q.subtopic || '',
+        motivo: 'nao_sabia',
+        o_que_faltou: q.exam_number + 'º Exame, questão ' + q.question_number +
+                      '. Gabarito ' + (q.correct_answer || '—') + (e.escolha ? '; marquei ' + e.escolha : '') + '.',
+        explicacao: q.explanation || ''
+      });
+      b.textContent = '✓ Enviada ao caderno'; b.disabled = true;
+    }
+  });
+
+  document.addEventListener('DOMContentLoaded', function () {
+    montarPainel(); sincronizarAssunto(); aplicar();
+  });
 })();
 </script>
 </body>
