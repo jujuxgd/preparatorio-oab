@@ -203,8 +203,14 @@
 .tesoura {
   flex: none; width: 30px; height: 30px; margin: .72rem .1rem 0 0; border: 0; border-radius: 6px;
   background: none; cursor: pointer; color: var(--ink-ghost, var(--ink-faded));
-  display: grid; place-items: center; transition: color .15s ease, background .15s ease;
+  display: grid; place-items: center; opacity: 0;
+  transition: opacity .15s ease, color .15s ease, background .15s ease;
 }
+/* a tesoura só aparece ao passar o mouse na alternativa — mas fica
+   visível se já cortou (pra poder desfazer) e ao navegar por teclado */
+.alt-linha:hover .tesoura, .tesoura:focus-visible, .alt-linha.cortada .tesoura { opacity: 1; }
+/* em tela de toque não existe hover, então fica sempre visível */
+@media (hover: none) { .tesoura { opacity: 1; } }
 .tesoura:hover { color: var(--rose-deep); background: var(--bg-soft); }
 .tesoura:focus-visible { outline: 2px solid var(--rose); outline-offset: -2px; }
 .tesoura svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
@@ -251,6 +257,13 @@
 .pag button.on { background: var(--rose-deep); border-color: var(--rose-deep); color: #fff; font-weight: 500; }
 .pag button:disabled { opacity: .35; cursor: default; }
 .pag .reticencia { color: var(--ink-faded); padding: 0 .2rem; font-size: .8125rem; }
+.pag .pg-nav {
+  min-width: 0; height: 38px; padding: 0 1.1rem; display: inline-flex; align-items: center; gap: .4rem;
+  font-weight: 500; color: var(--ink);
+}
+.pag .pg-nav:hover:not(:disabled) { border-color: var(--rose-300); color: var(--rose-deep); background: var(--paper); }
+.pag .pg-pos { font-size: .8125rem; color: var(--ink-faded); font-variant-numeric: tabular-nums; padding: 0 .9rem; }
+.pag .pg-pos b { color: var(--ink); font-weight: 600; }
 
 /* ── vazio que ensina ── */
 .vazio { background: var(--paper); border: 1px dashed var(--line); border-radius: 10px; padding: 2.4rem 1.6rem; text-align: center; }
@@ -641,6 +654,20 @@
     var box = document.getElementById('pag');
     if (!F.porPagina || total <= F.porPagina) { box.innerHTML = ''; return; }
     var paginas = Math.ceil(total / F.porPagina), itens = [];
+
+    // Uma por página vira navegação de prova: só avançar e voltar.
+    // Numerar 20+ páginas quando cada uma é uma questão é só ruído.
+    if (F.porPagina === 1) {
+      box.innerHTML =
+        '<button class="pg-nav" data-p="' + (pagina - 1) + '"' + (pagina === 1 ? ' disabled' : '') + '>' +
+          '<span aria-hidden="true">←</span> Anterior</button>' +
+        '<span class="pg-pos"><b>' + pagina + '</b> de ' + paginas + '</span>' +
+        '<button class="pg-nav" data-p="' + (pagina + 1) + '"' + (pagina === paginas ? ' disabled' : '') + '>' +
+          'Próxima <span aria-hidden="true">→</span></button>';
+      box.onclick = aoTrocarPagina;
+      return;
+    }
+
     function bt(n, rotulo, extra) { return '<button data-p="' + n + '"' + (extra || '') + '>' + (rotulo || n) + '</button>'; }
     itens.push(bt(pagina - 1, '←', pagina === 1 ? ' disabled' : ''));
     var mostrar = [];
@@ -653,11 +680,13 @@
     });
     itens.push(bt(pagina + 1, '→', pagina === paginas ? ' disabled' : ''));
     box.innerHTML = itens.join('');
-    box.onclick = function (ev) {
-      var b = ev.target.closest('button[data-p]'); if (!b || b.disabled) return;
-      pagina = parseInt(b.dataset.p, 10); aplicar();
-      window.scrollTo({ top: document.getElementById('res').offsetTop - 90, behavior: 'smooth' });
-    };
+    box.onclick = aoTrocarPagina;
+  }
+
+  function aoTrocarPagina(ev) {
+    var b = ev.target.closest('button[data-p]'); if (!b || b.disabled) return;
+    pagina = parseInt(b.dataset.p, 10); aplicar();
+    window.scrollTo({ top: document.getElementById('res').offsetTop - 90, behavior: 'smooth' });
   }
 
   function aplicar() {
