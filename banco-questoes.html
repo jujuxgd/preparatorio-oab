@@ -171,7 +171,7 @@
 .q-trilha { margin-left: auto; color: var(--ink-faded); }
 .q-feita { color: var(--ink-faded); }
 .q-corpo { padding: 1.1rem 1.2rem 1.2rem; }
-.q-enun { font-size: .9375rem; line-height: 1.65; color: var(--ink); margin-bottom: 1rem; white-space: pre-line; max-width: 74ch; }
+.q-enun { font-size: .9375rem; line-height: 1.65; color: var(--ink); margin-bottom: 1rem; white-space: pre-line; }
 
 .alts { border-top: 1px solid var(--line-soft); }
 .alt {
@@ -197,6 +197,23 @@
 .alt.errada .l { background: #C0524B; color: #fff; }
 .alt .m { margin-left: auto; flex: none; font-size: .85rem; padding-left: .5rem; }
 
+/* alternativa descartada com a tesoura */
+.alt-linha { display: flex; align-items: flex-start; border-bottom: 1px solid var(--line-soft); }
+.alt-linha .alt { border-bottom: 0; flex: 1; min-width: 0; }
+.tesoura {
+  flex: none; width: 30px; height: 30px; margin: .72rem .1rem 0 0; border: 0; border-radius: 6px;
+  background: none; cursor: pointer; color: var(--ink-ghost, var(--ink-faded));
+  display: grid; place-items: center; transition: color .15s ease, background .15s ease;
+}
+.tesoura:hover { color: var(--rose-deep); background: var(--bg-soft); }
+.tesoura:focus-visible { outline: 2px solid var(--rose); outline-offset: -2px; }
+.tesoura svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.alt-linha.cortada .tesoura { color: var(--rose); }
+.alt-linha.cortada .alt { opacity: .5; }
+.alt-linha.cortada .alt > span:nth-child(2) { text-decoration: line-through; font-style: italic; }
+.alt-linha.cortada .alt .l { background: transparent; border: 1px solid var(--ink-faded); color: var(--ink-faded); }
+.alt-linha.cortada .alt:hover { background: none; }
+
 .q-acoes { display: flex; flex-wrap: wrap; gap: .4rem; align-items: center; margin-top: 1rem; }
 .b {
   font: 500 .8125rem/1 'Inter', sans-serif; cursor: pointer; height: 36px;
@@ -217,7 +234,7 @@
 [data-theme="dark"] .ver.ok { color: #A8CBA0; } [data-theme="dark"] .ver.nao { color: #E0A197; }
 .expl { margin-top: .9rem; padding-top: .9rem; border-top: 1px solid var(--line-soft); }
 .expl h4 { font: 600 .75rem 'Inter', sans-serif; color: var(--ink); margin: 0 0 .5rem; }
-.expl pre { font: 400 .875rem/1.7 'Inter', sans-serif; color: var(--ink-soft); white-space: pre-wrap; word-wrap: break-word; margin: 0; max-width: 74ch; }
+.expl pre { font: 400 .875rem/1.7 'Inter', sans-serif; color: var(--ink-soft); white-space: pre-wrap; word-wrap: break-word; margin: 0; }
 .base { margin-top: .7rem; font-size: .78rem; color: var(--ink-faded); }
 .base b { color: var(--ink-soft); font-weight: 600; }
 .nota { margin-top: .7rem; padding: .55rem .7rem; border-radius: 6px; background: var(--bg-soft); font-size: .78rem; color: var(--ink-soft); }
@@ -297,7 +314,7 @@
   // filtros de valor múltiplo: cada um guarda uma lista
   var F = {
     busca: '', disciplinas: [], assuntos: [], dificuldades: [], exames: [],
-    situacao: 'todas', semAnuladas: false, ordem: 'exame_desc', porPagina: 10
+    situacao: 'todas', semAnuladas: false, ordem: 'exame_desc', porPagina: 1
   };
 
   function valores(campo, base) {
@@ -548,7 +565,7 @@
         '</select></span>' +
         '<span class="rot">Por página</span>' +
         '<span class="ctl"><select id="f-pp" aria-label="Questões por página">' +
-          [5, 10, 20, 50, 100].map(function (n) { return '<option value="' + n + '">' + n + '</option>'; }).join('') +
+          [1, 5, 10, 20, 50, 100].map(function (n) { return '<option value="' + n + '">' + n + (n === 1 ? ' por página' : '') + '</option>'; }).join('') +
           '<option value="0">Todas</option></select></span>' +
       '</span>';
     var ord = document.getElementById('f-ord'); ord.value = F.ordem;
@@ -558,20 +575,31 @@
   }
 
   function cartao(q, posicao) {
-    var e = estado[q.id] || (estado[q.id] = { escolha: null, respondida: false, expl: false });
+    var e = estado[q.id] || (estado[q.id] = { escolha: null, respondida: false, expl: false, cortadas: [] });
+    if (!e.cortadas) e.cortadas = [];
     var r = respostas[q.id];
     var fav = favoritas.indexOf(q.id) !== -1;
 
+    var TESOURA = '<svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/>' +
+                  '<path d="M20 4 8.12 15.88M14.47 14.48 20 20M8.12 8.12 12 12"/></svg>';
     var alts = ['a', 'b', 'c', 'd'].map(function (L) {
       var txt = q['alternative_' + L]; if (!txt) return '';
       var letra = L.toUpperCase(), cls = '', marca = '';
+      var cortada = e.cortadas.indexOf(letra) !== -1;
       if (e.respondida) {
         if (letra === q.correct_answer) { cls = ' certa'; marca = '✓'; }
         else if (letra === e.escolha) { cls = ' errada'; marca = '✕'; }
       } else if (letra === e.escolha) cls = ' sel';
-      return '<button class="alt' + cls + '" data-l="' + letra + '"' + (e.respondida ? ' disabled' : '') + '>' +
+      // riscar não é responder: a tesoura só elimina a alternativa da análise
+      var travada = e.respondida || cortada;
+      return '<div class="alt-linha' + (cortada ? ' cortada' : '') + '">' +
+             (e.respondida ? '' :
+               '<button class="tesoura" data-corta="' + letra + '" type="button" aria-pressed="' + cortada + '"' +
+               ' title="' + (cortada ? 'Trazer de volta a alternativa ' : 'Descartar a alternativa ') + letra + '"' +
+               ' aria-label="' + (cortada ? 'Trazer de volta a alternativa ' : 'Descartar a alternativa ') + letra + '">' + TESOURA + '</button>') +
+             '<button class="alt' + cls + '" data-l="' + letra + '"' + (travada ? ' disabled' : '') + '>' +
              '<span class="l">' + letra + '</span><span>' + esc(txt) + '</span>' +
-             (marca ? '<span class="m">' + marca + '</span>' : '') + '</button>';
+             (marca ? '<span class="m">' + marca + '</span>' : '') + '</button></div>';
     }).join('');
 
     var ver = '';
@@ -660,8 +688,16 @@
     var q = BANCO.filter(function (x) { return x.id === art.dataset.id; })[0]; if (!q) return;
     var e = estado[q.id] || (estado[q.id] = { escolha: null, respondida: false, expl: false });
 
+    var tes = ev.target.closest('button[data-corta]');
+    if (tes) {
+      if (!e.cortadas) e.cortadas = [];
+      var L = tes.dataset.corta, j = e.cortadas.indexOf(L);
+      if (j === -1) { e.cortadas.push(L); if (e.escolha === L) e.escolha = null; }
+      else e.cortadas.splice(j, 1);
+      aplicar(); return;
+    }
     var alt = ev.target.closest('.alt');
-    if (alt && !e.respondida) { e.escolha = alt.dataset.l; aplicar(); return; }
+    if (alt && !e.respondida && !alt.disabled) { e.escolha = alt.dataset.l; aplicar(); return; }
     var b = ev.target.closest('button[data-a]'); if (!b) return;
 
     if (b.dataset.a === 'resp') {
@@ -673,7 +709,7 @@
       at.ultima_correta = certa; at.ultima_resposta = e.escolha; at.ultima_data = new Date().toISOString();
       respostas[q.id] = at; gravar(K_RESP, respostas); aplicar();
     } else if (b.dataset.a === 'expl') { e.expl = !e.expl; aplicar(); }
-    else if (b.dataset.a === 'refazer') { e.escolha = null; e.respondida = false; e.expl = false; aplicar(); }
+    else if (b.dataset.a === 'refazer') { e.escolha = null; e.respondida = false; e.expl = false; e.cortadas = []; aplicar(); }
     else if (b.dataset.a === 'fav') {
       var i = favoritas.indexOf(q.id);
       if (i === -1) favoritas.push(q.id); else favoritas.splice(i, 1);
