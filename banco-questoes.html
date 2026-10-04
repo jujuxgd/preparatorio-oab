@@ -1,13 +1,412 @@
-<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Banco de Questões</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Banco de Questões</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Inter:opsz,wght@14..32,400..700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css"><script src="cores-early.js"></script>
-<link rel="stylesheet" href="topnav.css"><script src="topnav.js"></script></head>
-<body><main class="hub"><h1>Banco de <em>questões</em></h1>
-<p class="lead">Resolver questões por matéria, conferir o gabarito e mandar os erros direto para o Caderno de Erros.</p>
-<div class="bq-vazio">
-  <p class="bq-t">Ainda não há questões cadastradas.</p>
-  <p class="bq-s">Esta página é a estrutura da funcionalidade. O banco em si ainda será construído — inclusive de onde vêm as questões e como elas são respondidas.</p>
-  <a class="stats-link" href="questoes.html">Enquanto isso, registrar questões no tracker <span aria-hidden="true">&rarr;</span></a>
-</div></main>
-<script src="script.js"></script></body></html>
+<link rel="stylesheet" href="style.css">
+<script src="cores-early.js"></script>
+<link rel="stylesheet" href="topnav.css"><script src="topnav.js"></script>
+<style>
+.bq { max-width: 1180px; margin: 0 auto; padding: 2.6rem 2.4rem 5rem; }
+.bq h1 { font: 500 2.4rem/1.1 'Fraunces', serif; letter-spacing: -.02em; margin: 0 0 .5rem; }
+.bq h1 em { font-style: italic; color: var(--rose-deep); }
+.bq .lead { color: var(--ink-soft); margin: 0 0 2rem; max-width: 56ch; }
+
+/* ── filtros ── */
+.bq-filtros { display: flex; flex-wrap: wrap; gap: .6rem; align-items: center; margin-bottom: 1.2rem; }
+.bq-filtros select {
+  font: 500 .82rem 'Inter', sans-serif; color: var(--ink);
+  background: var(--paper); border: 1px solid var(--line);
+  border-radius: 999px; padding: .55rem 1rem; min-height: 40px; cursor: pointer;
+}
+.bq-filtros select:focus-visible { outline: 2px solid var(--rose); outline-offset: 2px; }
+.bq-chip {
+  font: 500 .8rem 'Inter', sans-serif; color: var(--ink-soft); cursor: pointer;
+  background: var(--paper); border: 1px solid var(--line); border-radius: 999px;
+  padding: .55rem 1rem; min-height: 40px; transition: .2s;
+}
+.bq-chip:hover { border-color: var(--rose-300); }
+.bq-chip.on { background: var(--rose-100); border-color: var(--rose-300); color: var(--rose-700); }
+.bq-limpar { background: none; border: 0; color: var(--ink-soft); font: 500 .8rem 'Inter', sans-serif; cursor: pointer; text-decoration: underline; padding: .5rem; }
+
+/* ── barra de situação ── */
+.bq-barra {
+  display: flex; flex-wrap: wrap; gap: 1.4rem; align-items: center;
+  padding: .9rem 1.3rem; margin-bottom: 1.4rem;
+  background: var(--paper); border: 1px solid var(--line-soft); border-radius: var(--radius);
+  font-size: .84rem; color: var(--ink-soft);
+}
+.bq-barra b { font-family: 'Fraunces', serif; font-weight: 500; color: var(--ink); font-variant-numeric: tabular-nums; }
+.bq-barra .sep { width: 1px; align-self: stretch; background: var(--line-soft); }
+.bq-nav { margin-left: auto; display: flex; gap: .5rem; align-items: center; }
+.bq-nav button {
+  min-width: 40px; min-height: 40px; padding: .5rem .9rem; border-radius: 999px;
+  background: var(--paper); border: 1px solid var(--line); color: var(--ink);
+  font: 500 .82rem 'Inter', sans-serif; cursor: pointer; transition: .2s;
+}
+.bq-nav button:hover:not(:disabled) { border-color: var(--rose-300); color: var(--rose-deep); }
+.bq-nav button:disabled { opacity: .4; cursor: default; }
+
+/* ── a questão ── */
+.bq-card { background: var(--paper); border: 1px solid var(--line-soft); border-radius: var(--radius-lg); padding: 2rem 2.2rem; }
+.bq-meta { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; margin-bottom: 1.3rem; }
+.bq-tag {
+  font: 600 .62rem 'Inter', sans-serif; letter-spacing: .14em; text-transform: uppercase;
+  padding: .3rem .7rem; border-radius: 999px; background: var(--bg-soft); color: var(--ink-soft);
+}
+.bq-tag.dis { background: var(--rose-100); color: var(--rose-700); }
+.bq-tag.facil { background: #E1F0DE; color: #3F6B3A; }
+.bq-tag.media { background: #FBF0CC; color: #8A6A14; }
+.bq-tag.dificil { background: #FBE4E1; color: #A33527; }
+[data-theme="dark"] .bq-tag.facil { background: #24331F; color: #A8CBA0; }
+[data-theme="dark"] .bq-tag.media { background: #35301A; color: #D9C07A; }
+[data-theme="dark"] .bq-tag.dificil { background: #3A2320; color: #E0A197; }
+.bq-assunto { font-size: .78rem; color: var(--ink-faded); margin-left: auto; text-align: right; }
+
+.bq-enun { font-size: 1rem; line-height: 1.7; color: var(--ink); margin-bottom: 1.5rem; white-space: pre-line; }
+
+.bq-alts { display: flex; flex-direction: column; gap: .6rem; }
+.bq-alt {
+  display: flex; gap: .9rem; align-items: flex-start; width: 100%; text-align: left;
+  padding: .95rem 1.1rem; border-radius: var(--radius); cursor: pointer;
+  background: var(--paper); border: 1px solid var(--line); color: var(--ink);
+  font: 400 .93rem/1.6 'Inter', sans-serif; transition: border-color .18s, background .18s;
+}
+.bq-alt:hover:not(:disabled) { border-color: var(--rose-300); }
+.bq-alt:disabled { cursor: default; }
+.bq-alt .letra {
+  flex: none; width: 26px; height: 26px; border-radius: 50%;
+  display: grid; place-items: center; font: 600 .8rem 'Inter', sans-serif;
+  background: var(--bg-soft); color: var(--ink-soft); transition: .18s;
+}
+.bq-alt.sel { border-color: var(--rose); background: var(--rose-50); }
+.bq-alt.sel .letra { background: var(--rose); color: #fff; }
+.bq-alt.certa { border-color: #5E8C6A; background: rgba(94,140,106,.10); }
+.bq-alt.certa .letra { background: #5E8C6A; color: #fff; }
+.bq-alt.errada { border-color: #C0524B; background: rgba(192,82,75,.10); }
+.bq-alt.errada .letra { background: #C0524B; color: #fff; }
+.bq-alt .marca { margin-left: auto; font-size: .95rem; flex: none; }
+
+.bq-acoes { display: flex; flex-wrap: wrap; gap: .7rem; align-items: center; margin-top: 1.5rem; }
+.bq-btn {
+  padding: .8rem 1.6rem; border-radius: 999px; border: 0; cursor: pointer;
+  font: 600 .86rem 'Inter', sans-serif; min-height: 44px;
+  background: var(--rose-deep); color: #fff; transition: .2s;
+}
+.bq-btn:disabled { opacity: .45; cursor: default; }
+.bq-btn:hover:not(:disabled) { transform: translateY(-1px); }
+.bq-btn.ghost { background: none; color: var(--ink-soft); border: 1px solid var(--line); }
+.bq-btn.ghost:hover { border-color: var(--rose-300); color: var(--rose-deep); }
+.bq-btn.ghost.on { background: var(--rose-100); border-color: var(--rose-300); color: var(--rose-700); }
+
+.bq-veredito { margin-top: 1.4rem; padding: 1rem 1.2rem; border-radius: var(--radius); font-size: .92rem; }
+.bq-veredito.ok { background: rgba(94,140,106,.12); color: #3F6B3A; }
+.bq-veredito.nao { background: rgba(192,82,75,.12); color: #A33527; }
+[data-theme="dark"] .bq-veredito.ok { color: #A8CBA0; }
+[data-theme="dark"] .bq-veredito.nao { color: #E0A197; }
+.bq-veredito b { font-weight: 600; }
+
+.bq-expl { margin-top: 1.2rem; padding-top: 1.2rem; border-top: 1px solid var(--line-soft); }
+.bq-expl h4 { font: 600 .64rem 'Inter', sans-serif; letter-spacing: .18em; text-transform: uppercase; color: var(--ink-soft); margin: 0 0 .8rem; }
+.bq-expl pre {
+  font: 400 .9rem/1.75 'Inter', sans-serif; color: var(--ink-soft);
+  white-space: pre-wrap; word-wrap: break-word; margin: 0;
+}
+.bq-base { margin-top: 1rem; font-size: .8rem; color: var(--ink-faded); }
+.bq-base b { color: var(--ink-soft); font-weight: 600; }
+.bq-nota { margin-top: 1rem; padding: .8rem 1rem; border-radius: var(--radius-sm); background: var(--bg-soft); font-size: .8rem; color: var(--ink-soft); }
+
+.bq-vazio { background: var(--paper); border: 1px solid var(--line-soft); border-radius: var(--radius-lg); padding: 2.6rem 2.2rem; }
+.bq-vazio p { margin: 0 0 .6rem; color: var(--ink-soft); }
+.bq-vazio .t { font: 500 1.15rem 'Fraunces', serif; color: var(--ink); }
+
+@media (max-width: 900px) {
+  .bq { padding: 1.8rem 1.2rem 5.5rem; }
+  .bq h1 { font-size: 1.9rem; }
+  .bq-card { padding: 1.4rem 1.2rem; }
+  .bq-assunto { margin-left: 0; width: 100%; text-align: left; }
+  .bq-nav { margin-left: 0; width: 100%; }
+  .bq-filtros select, .bq-chip { flex: 1 1 auto; }
+}
+@media (prefers-reduced-motion: reduce) { .bq-alt, .bq-btn { transition: none; } }
+</style>
+</head>
+<body>
+
+<main class="bq">
+  <h1>Banco de <em>questões</em></h1>
+  <p class="lead">Questões de provas anteriores da OAB, com gabarito e comentário por alternativa. O que você errar pode ir direto para o Caderno de Erros.</p>
+
+  <div class="bq-filtros" id="bq-filtros"></div>
+  <div class="bq-barra" id="bq-barra"></div>
+  <div id="bq-conteudo"></div>
+</main>
+
+<script src="questoes-banco.js"></script>
+<script src="progresso.js"></script>
+<script src="erros-core.js"></script>
+<script src="script.js"></script>
+<script src="perfil.js"></script>
+<script src="sync.js"></script>
+<script src="cores.js"></script>
+<script>
+(function () {
+  var BANCO = window.BANCO_QUESTOES || [];
+  var K_RESP = 'oab_bq_respostas';
+  var K_FAV  = 'oab_bq_favoritas';
+
+  function ler(chave, padrao) {
+    try { return JSON.parse(localStorage.getItem(chave)) || padrao; }
+    catch (e) { return padrao; }
+  }
+  function gravar(chave, valor) {
+    try {
+      localStorage.setItem(chave, JSON.stringify(valor));
+      localStorage.setItem('oab_local_rev', String(Date.now()));
+      if (window._syncOAB && window._syncOAB.notificarAlteracaoLocal) {
+        window._syncOAB.notificarAlteracaoLocal(chave);
+      }
+    } catch (e) {}
+  }
+
+  var respostas = ler(K_RESP, {});
+  var favoritas = ler(K_FAV, []);
+  var filtros = { discipline: '', topic: '', difficulty: '', exam_number: '', favoritas: false, pendentes: false };
+  var indice = 0;
+  var escolha = null;
+  var respondida = false;
+  var verExpl = false;
+
+  function filtradas() {
+    return BANCO.filter(function (q) {
+      if (filtros.discipline && q.discipline !== filtros.discipline) return false;
+      if (filtros.topic && q.topic !== filtros.topic) return false;
+      if (filtros.difficulty && q.difficulty !== filtros.difficulty) return false;
+      if (filtros.exam_number && String(q.exam_number) !== filtros.exam_number) return false;
+      if (filtros.favoritas && favoritas.indexOf(q.id) === -1) return false;
+      if (filtros.pendentes && respostas[q.id]) return false;
+      return true;
+    });
+  }
+
+  function unicos(campo, base) {
+    var vistos = [];
+    (base || BANCO).forEach(function (q) {
+      if (q[campo] != null && vistos.indexOf(q[campo]) === -1) vistos.push(q[campo]);
+    });
+    return vistos.sort();
+  }
+
+  function montarFiltros() {
+    var cx = document.getElementById('bq-filtros');
+    var porDisc = filtros.discipline
+      ? BANCO.filter(function (q) { return q.discipline === filtros.discipline; })
+      : BANCO;
+    var DIF = { facil: 'Fácil', media: 'Média', dificil: 'Difícil' };
+
+    function sel(id, rotulo, campo, opcoes, formata) {
+      var o = opcoes.map(function (v) {
+        var marcado = String(filtros[campo]) === String(v) ? ' selected' : '';
+        return '<option value="' + v + '"' + marcado + '>' + (formata ? formata(v) : v) + '</option>';
+      }).join('');
+      return '<select id="' + id + '" data-campo="' + campo + '" aria-label="' + rotulo + '">' +
+             '<option value="">' + rotulo + '</option>' + o + '</select>';
+    }
+
+    cx.innerHTML =
+      sel('f-dis', 'Todas as disciplinas', 'discipline', unicos('discipline')) +
+      sel('f-top', 'Todos os assuntos', 'topic', unicos('topic', porDisc)) +
+      sel('f-dif', 'Qualquer dificuldade', 'difficulty', ['facil', 'media', 'dificil'], function (v) { return DIF[v]; }) +
+      sel('f-exa', 'Todos os exames', 'exam_number', unicos('exam_number'), function (v) { return v + 'º Exame'; }) +
+      '<button class="bq-chip' + (filtros.favoritas ? ' on' : '') + '" id="f-fav" type="button">★ Favoritas</button>' +
+      '<button class="bq-chip' + (filtros.pendentes ? ' on' : '') + '" id="f-pen" type="button">Não respondidas</button>' +
+      '<button class="bq-limpar" id="f-limpar" type="button">Limpar filtros</button>';
+
+    cx.querySelectorAll('select').forEach(function (s) {
+      s.onchange = function () {
+        filtros[s.dataset.campo] = s.value;
+        if (s.dataset.campo === 'discipline') filtros.topic = '';
+        indice = 0; limparEstado(); render();
+      };
+    });
+    document.getElementById('f-fav').onclick = function () { filtros.favoritas = !filtros.favoritas; indice = 0; limparEstado(); render(); };
+    document.getElementById('f-pen').onclick = function () { filtros.pendentes = !filtros.pendentes; indice = 0; limparEstado(); render(); };
+    document.getElementById('f-limpar').onclick = function () {
+      filtros = { discipline: '', topic: '', difficulty: '', exam_number: '', favoritas: false, pendentes: false };
+      indice = 0; limparEstado(); render();
+    };
+  }
+
+  function limparEstado() { escolha = null; respondida = false; verExpl = false; }
+
+  function montarBarra(lista) {
+    var feitas = 0, acertos = 0;
+    BANCO.forEach(function (q) {
+      var r = respostas[q.id];
+      if (r) { feitas++; if (r.ultima_correta) acertos++; }
+    });
+    var pct = feitas ? Math.round((acertos / feitas) * 100) : null;
+    document.getElementById('bq-barra').innerHTML =
+      '<span><b>' + lista.length + '</b> ' + (lista.length === 1 ? 'questão' : 'questões') + '</span>' +
+      '<span class="sep"></span>' +
+      '<span>respondidas <b>' + feitas + '</b> de ' + BANCO.length + '</span>' +
+      '<span class="sep"></span>' +
+      '<span>acerto <b>' + (pct === null ? '—' : pct + '%') + '</b></span>' +
+      '<span class="bq-nav">' +
+        '<button id="bq-ant" type="button"' + (indice <= 0 ? ' disabled' : '') + '>← Anterior</button>' +
+        '<span style="font-variant-numeric:tabular-nums">' + (lista.length ? indice + 1 : 0) + ' / ' + lista.length + '</span>' +
+        '<button id="bq-prox" type="button"' + (indice >= lista.length - 1 ? ' disabled' : '') + '>Próxima →</button>' +
+      '</span>';
+    var a = document.getElementById('bq-ant'), p = document.getElementById('bq-prox');
+    if (a) a.onclick = function () { if (indice > 0) { indice--; limparEstado(); render(); } };
+    if (p) p.onclick = function () { if (indice < lista.length - 1) { indice++; limparEstado(); render(); } };
+  }
+
+  function escapar(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  function render() {
+    montarFiltros();
+    var lista = filtradas();
+    if (indice >= lista.length) indice = Math.max(0, lista.length - 1);
+    montarBarra(lista);
+
+    var alvo = document.getElementById('bq-conteudo');
+    if (!BANCO.length) {
+      alvo.innerHTML = '<div class="bq-vazio"><p class="t">Ainda não há questões cadastradas.</p>' +
+        '<p>O arquivo de questões não foi carregado.</p></div>';
+      return;
+    }
+    if (!lista.length) {
+      alvo.innerHTML = '<div class="bq-vazio"><p class="t">Nenhuma questão com esses filtros.</p>' +
+        '<p>Tente limpar algum filtro para ver mais questões.</p></div>';
+      return;
+    }
+
+    var q = lista[indice];
+    var r = respostas[q.id] || null;
+    var fav = favoritas.indexOf(q.id) !== -1;
+    var DIF = { facil: 'Fácil', media: 'Média', dificil: 'Difícil' };
+
+    var alts = ['a', 'b', 'c', 'd'].map(function (L) {
+      var texto = q['alternative_' + L];
+      if (!texto) return '';
+      var letra = L.toUpperCase();
+      var cls = '', marca = '';
+      if (respondida) {
+        if (letra === q.correct_answer) { cls = ' certa'; marca = '✓'; }
+        else if (letra === escolha) { cls = ' errada'; marca = '✕'; }
+      } else if (letra === escolha) { cls = ' sel'; }
+      return '<button class="bq-alt' + cls + '" data-letra="' + letra + '"' + (respondida ? ' disabled' : '') + '>' +
+             '<span class="letra">' + letra + '</span><span>' + escapar(texto) + '</span>' +
+             (marca ? '<span class="marca">' + marca + '</span>' : '') + '</button>';
+    }).join('');
+
+    var veredito = '';
+    if (respondida) {
+      if (!q.correct_answer) {
+        veredito = '<div class="bq-veredito nao">Esta questão foi <b>anulada</b> e não tem gabarito.</div>';
+      } else if (escolha === q.correct_answer) {
+        veredito = '<div class="bq-veredito ok">Você acertou. Gabarito: <b>' + q.correct_answer + '</b>.</div>';
+      } else {
+        veredito = '<div class="bq-veredito nao">Você marcou <b>' + escolha + '</b>. O gabarito é <b>' + q.correct_answer + '</b>.</div>';
+      }
+    }
+
+    var expl = '';
+    if (respondida && verExpl && q.explanation) {
+      expl = '<div class="bq-expl"><h4>Comentário</h4><pre>' + escapar(q.explanation) + '</pre>' +
+             (q.legal_basis ? '<p class="bq-base"><b>Fundamentação:</b> ' + escapar(q.legal_basis) + '</p>' : '') +
+             '</div>';
+    }
+    var nota = (respondida && q.notes) ? '<div class="bq-nota">Observação sobre o material de origem: ' + escapar(q.notes) + '</div>' : '';
+
+    var acoes = respondida
+      ? (q.explanation ? '<button class="bq-btn ghost' + (verExpl ? ' on' : '') + '" id="bq-expl">' + (verExpl ? 'Esconder comentário' : 'Ver comentário') + '</button>' : '') +
+        '<button class="bq-btn ghost' + (fav ? ' on' : '') + '" id="bq-fav">' + (fav ? '★ Favoritada' : '☆ Favoritar') + '</button>' +
+        '<button class="bq-btn ghost" id="bq-erro">+ Caderno de Erros</button>' +
+        (indice < lista.length - 1 ? '<button class="bq-btn" id="bq-seguir">Próxima questão →</button>' : '')
+      : '<button class="bq-btn" id="bq-resp"' + (escolha ? '' : ' disabled') + '>Responder</button>' +
+        '<button class="bq-btn ghost' + (fav ? ' on' : '') + '" id="bq-fav">' + (fav ? '★ Favoritada' : '☆ Favoritar') + '</button>';
+
+    var vezes = r ? '<span class="bq-tag">respondida ' + r.vezes + (r.vezes === 1 ? ' vez' : ' vezes') + '</span>' : '';
+
+    alvo.innerHTML =
+      '<article class="bq-card">' +
+        '<div class="bq-meta">' +
+          '<span class="bq-tag dis">' + escapar(q.discipline) + '</span>' +
+          (q.difficulty ? '<span class="bq-tag ' + q.difficulty + '">' + DIF[q.difficulty] + '</span>' : '') +
+          '<span class="bq-tag">' + q.exam_number + 'º Exame · ' + q.year + ' · Q' + q.question_number + '</span>' +
+          vezes +
+          (q.topic ? '<span class="bq-assunto">' + escapar(q.topic) + (q.subtopic ? ' › ' + escapar(q.subtopic) : '') + '</span>' : '') +
+        '</div>' +
+        '<div class="bq-enun">' + escapar(q.statement) + '</div>' +
+        '<div class="bq-alts">' + alts + '</div>' +
+        veredito + expl + nota +
+        '<div class="bq-acoes">' + acoes + '</div>' +
+      '</article>';
+
+    alvo.querySelectorAll('.bq-alt').forEach(function (b) {
+      b.onclick = function () { if (!respondida) { escolha = b.dataset.letra; render(); } };
+    });
+
+    var bResp = document.getElementById('bq-resp');
+    if (bResp) bResp.onclick = function () {
+      respondida = true;
+      var certa = !!q.correct_answer && escolha === q.correct_answer;
+      var atual = respostas[q.id] || { vezes: 0, acertos: 0, erros: 0 };
+      atual.vezes += 1;
+      if (certa) atual.acertos += 1; else atual.erros += 1;
+      atual.ultima_correta = certa;
+      atual.ultima_resposta = escolha;
+      atual.ultima_data = new Date().toISOString();
+      respostas[q.id] = atual;
+      gravar(K_RESP, respostas);
+      verExpl = true;
+      render();
+    };
+
+    var bExpl = document.getElementById('bq-expl');
+    if (bExpl) bExpl.onclick = function () { verExpl = !verExpl; render(); };
+
+    var bFav = document.getElementById('bq-fav');
+    if (bFav) bFav.onclick = function () {
+      var i = favoritas.indexOf(q.id);
+      if (i === -1) favoritas.push(q.id); else favoritas.splice(i, 1);
+      gravar(K_FAV, favoritas);
+      render();
+    };
+
+    var bSeguir = document.getElementById('bq-seguir');
+    if (bSeguir) bSeguir.onclick = function () { indice++; limparEstado(); render(); };
+
+    var bErro = document.getElementById('bq-erro');
+    if (bErro) bErro.onclick = function () {
+      if (typeof erros_add !== 'function') { bErro.textContent = 'Caderno indisponível'; return; }
+      erros_add({
+        materia: q.discipline || '',
+        topico: q.topic || '',
+        subtopico: q.subtopic || '',
+        motivo: 'nao_sabia',
+        o_que_faltou: q.exam_number + 'º Exame, questão ' + q.question_number +
+                      '. Gabarito ' + (q.correct_answer || '—') +
+                      (escolha ? '; marquei ' + escolha : '') + '.',
+        explicacao: q.explanation || ''
+      });
+      bErro.textContent = '✓ Enviada ao caderno';
+      bErro.disabled = true;
+    };
+  }
+
+  document.addEventListener('DOMContentLoaded', render);
+})();
+</script>
+</body>
+</html>
