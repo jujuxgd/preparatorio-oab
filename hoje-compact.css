@@ -1,0 +1,76 @@
+
+/* ── Hoje compacto ── */
+body.hoje main{padding-top:1.2rem!important}
+body.hoje .topbar{margin-bottom:.6rem!important}
+body.hoje .topbar .page-title h1{font-size:1.5rem!important}
+/* hero em uma linha só */
+body.hoje .day-hero{display:flex!important;align-items:center;gap:1.2rem!important;padding:.9rem 1.3rem!important;margin-bottom:1rem!important;border-radius:var(--radius)!important;background:var(--paper)!important;box-shadow:none!important;border:1px solid var(--line-soft)}
+body.hoje .day-number-big{border:0!important;padding:0!important;min-width:56px;text-align:center}
+body.hoje .day-number-big .num{font-size:2.3rem!important;line-height:1}
+body.hoje .day-number-big .month{font-size:.58rem!important;letter-spacing:.14em;margin-top:.2rem}
+body.hoje .day-info{flex:1;min-width:0}
+body.hoje .day-info h2{font-size:1.15rem!important;margin:.35rem 0 .1rem!important;line-height:1.25}
+body.hoje .day-info .meta{display:none}
+body.hoje .day-info .tag{font-size:.6rem!important;padding:.15rem .6rem!important}
+/* pomodoro vira pílula */
+body.hoje .pomodoro{display:flex!important;align-items:center;gap:.7rem;padding:.35rem .5rem .35rem 1rem!important;border-radius:999px!important;background:var(--bg-soft)!important;box-shadow:none!important;border:0!important;min-width:0!important;width:auto!important;margin:0!important;transform:none}
+body.hoje .pomodoro-status,body.hoje .pomodoro-cycles,body.hoje .pomo-btn-sm{display:none!important}
+body.hoje .pomodoro-mode{font-size:.62rem!important;margin:0!important;letter-spacing:.1em}
+body.hoje .pomodoro-time{font-size:1.15rem!important;margin:0!important;font-variant-numeric:tabular-nums}
+body.hoje .pomodoro-controls{margin:0!important;gap:0!important}
+body.hoje .pomo-btn-main{padding:.45rem .9rem!important;font-size:.7rem!important;min-height:36px}
+/* CTA principal no hero */
+body.hoje .day-hero .btn-estudei{padding:.7rem 1.3rem;font-size:.7rem;white-space:nowrap;box-shadow:none;border-radius:999px;min-height:44px}
+/* banners viram uma linha discreta */
+body.hoje main>div[style*="margin-bottom:1rem"]{padding:.5rem 1rem!important;border-radius:var(--radius-sm)!important;font-size:.82rem!important;background:var(--bg-soft)!important;color:var(--ink-soft)!important;margin-bottom:.8rem!important}
+body.hoje main>div[style*="margin-bottom:1rem"] *{font-size:.8rem!important;letter-spacing:0!important;color:inherit!important}
+/* abas finas, só texto + ícone desenhado */
+body.hoje .tabs-bar{background:none!important;border:0!important;border-bottom:1px solid var(--line)!important;border-radius:0!important;padding:0!important;gap:1.6rem!important;box-shadow:none!important;margin-bottom:1rem!important;justify-content:flex-start!important}
+body.hoje .tab{flex:0 0 auto!important;background:none!important;color:var(--ink-faded)!important;box-shadow:none!important;border-radius:0!important;padding:.6rem 0!important;border-bottom:2px solid transparent;margin-bottom:-1px;font-size:.86rem!important;display:flex;align-items:center;gap:.45rem;min-height:44px}
+body.hoje .tab:hover{color:var(--ink)!important}
+body.hoje .tab.active{color:var(--ink)!important;border-bottom-color:var(--rose)!important;font-weight:600}
+body.hoje .tab svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+/* repete o título do dia: some */
+body.hoje #subject-panels>div:first-child:not(.subject-panel):not(.content-card){display:none!important}
+body.hoje #painel-materias{display:none!important}
+body.hoje #painel-diario>h4{display:none}
+body.hoje #painel-diario{padding-bottom:.4rem!important}
+/* painel da matéria mais plano */
+body.hoje .subject-panel{border-radius:var(--radius)!important;box-shadow:none!important;border:1px solid var(--line-soft)!important}
+body.hoje .subject-panel-header{padding:.7rem 1.1rem!important;background:var(--bg-soft)!important;color:var(--ink)!important}
+/* coluna direita: UM card, seções separadas por fio */
+body.hoje .content-layout{gap:1.4rem!important}
+body.hoje .side{background:var(--paper);border:1px solid var(--line-soft);border-radius:var(--radius);padding:.2rem 1.2rem!important;box-shadow:none;gap:0!important}
+body.hoje .side .side-block{background:none!important;border:0!important;box-shadow:none!important;border-radius:0!important;padding:1rem 0!important;margin:0!important}
+body.hoje .side .side-block+.side-block{border-top:1px solid var(--line-soft)!important}
+body.hoje .side-block h4{font-size:.92rem!important;margin-bottom:.6rem!important}
+/* microresumo recolhido */
+.cmp-collapsed>:not(:first-child){display:none!important}
+.cmp-collapsed{padding:.8rem 1.2rem!important;cursor:pointer}
+.cmp-collapsed>:first-child{margin-bottom:0!important}
+.cmp-chev{display:inline-block;margin-left:.5rem;transition:.2s;color:var(--ink-faded)}
+.cmp-collapsed .cmp-chev{transform:rotate(-90deg)}
+/* rodapé enxuto */
+body.hoje .day-footer{padding:.6rem 0 0!important;margin-top:1rem!important;border:0!important;background:none!important}
+body.hoje .day-footer>div:last-child{opacity:.9}
+@media(max-width:900px){
+ body.hoje .day-hero{flex-wrap:wrap}
+ body.hoje .day-hero .btn-estudei{width:100%}
+ body.hoje .tabs-bar{overflow-x:auto;gap:1.2rem!important}
+ body.hoje .tab span.tl{white-space:nowrap}
+}
+
+/* checklist como aba principal */
+.cmp-check{background:var(--paper);border:1px solid var(--line-soft);border-radius:var(--radius);padding:.6rem 1.4rem 1rem}
+.cmp-check .checklist{margin:0}
+.cmp-check .checklist li:not(.checklist-subgroup-header){padding:.7rem 0;font-size:.93rem;min-height:44px;align-items:center}
+.cmp-check .checklist-group-header{margin-top:.6rem}
+/* gráfico de progresso */
+body.hoje .side .cmp-ring{padding:1.3rem 0 1rem;text-align:center}
+.cmp-ring-fig{position:relative;width:132px;height:132px;margin:0 auto .7rem}
+.cmp-ring-fig svg{width:100%;height:100%;transform:rotate(-90deg);fill:none;stroke-width:8;stroke-linecap:round}
+.cmp-r-bg{stroke:var(--line-soft)}.cmp-r-fg{stroke:var(--rose);transition:stroke-dashoffset .6s cubic-bezier(.2,.7,.2,1)}
+.cmp-ring-c{position:absolute;inset:0;display:grid;place-items:center}
+.cmp-ring-c b{font:400 2rem/1 'Fraunces',serif;color:var(--ink);font-variant-numeric:tabular-nums}
+.cmp-ring-t{font-size:.78rem;color:var(--ink-faded)}
+body.hoje .side-block[style*="bg-soft"]>div:last-child{display:none}

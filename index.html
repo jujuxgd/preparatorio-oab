@@ -619,7 +619,7 @@ main { padding: 2rem 2.5rem 2.25rem; }
   margin-bottom: 0.8rem;
 }
 </style>
-</head>
+<link rel="stylesheet" href="topnav.css"><script src="topnav.js"></script><link rel="stylesheet" href="home.css"></head>
 <body>
 
 <div class="aurora-bg" aria-hidden="true">
@@ -1106,7 +1106,7 @@ document.getElementById('apostila-modal-overlay').addEventListener('click', e =>
 });
 </script>
 <script>function resetarTudo(){if(!confirm("Apagar TODO o progresso?\nEsta acao nao pode ser desfeita."))return;var t=localStorage.getItem("theme");localStorage.clear();if(t)localStorage.setItem("theme",t);localStorage.setItem("oab_local_rev",String(Date.now()));var uid=window._syncOAB&&window._syncOAB._uid;if(uid&&window._syncOAB.enviarSnapshotCompleto){window._syncOAB.enviarSnapshotCompleto(uid).then(function(){location.reload();}).catch(function(){location.reload();});}else{location.reload();}}</script>
-</body>
+<script src="home.js"></script></body>
 </html>
 
 
