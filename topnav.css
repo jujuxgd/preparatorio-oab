@@ -177,10 +177,9 @@ main {
   margin: 0 auto;
   padding: 2.6rem var(--gutter) 5rem;
 }
-/* A calha é o respiro lateral; a medida é a largura máxima do texto.
-   Em tela larga quem manda no respiro é a medida (o <main> centraliza),
-   por isso as duas andam juntas — mexer só na calha quase não aparece. */
-:root { --gutter: 6rem; --medida: 1120px; }
+/* A calha é o respiro lateral; a medida é a largura da caixa inteira.
+   O conteúdo útil = medida - 2×calha: 1392 - 2×96 = 1200px de conteúdo. */
+:root { --gutter: 6rem; --medida: 1392px; }
 @media (max-width: 900px) { :root { --gutter: 2.2rem; } main { padding: 1.8rem var(--gutter) 5.5rem; } }
 @media (max-width: 420px) { :root { --gutter: 1.5rem; } }
 
