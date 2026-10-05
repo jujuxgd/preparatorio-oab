@@ -260,12 +260,11 @@
 /* Em telas estreitas, barras demais ficariam ilegíveis espremidas — rola
    horizontalmente em vez de encolher cada barra abaixo do tocável/legível */
 @media (max-width: 640px) {
-  .line-chart {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    justify-content: flex-start;
-  }
-  .line-day { flex: 0 0 32px; }
+  /* As colunas encolhem para caber na largura do cartão. Com largura fixa
+     o gráfico virava uma tira rolável sem barra visível e os últimos dias
+     ficavam cortados fora da tela. */
+  .line-chart { overflow-x: visible; justify-content: space-between; gap: 0.2rem; }
+  .line-day { flex: 1 1 0; min-width: 0; }
 }
 
 /* Distribuição de emoções — lista de barras horizontais coloridas por categoria */
@@ -511,7 +510,7 @@
     <div class="sidebar-footer">
       <div class="profile-card">
         <div class="profile-avatar">
-          <img src="foto-perfil.jpg" alt="Julia" onerror="this.style.display='none'; this.parentElement.innerHTML='J';">
+          <img src="foto-perfil.jpg" alt="Julia" onerror="this.style.display='none'; if (this.parentElement) this.parentElement.textContent='J';">
         </div>
         <div class="profile-info">
           <div class="name">Julia</div>
