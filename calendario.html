@@ -205,7 +205,7 @@ body.overlay-open .aurora-bg {
 
 .calendar-grid {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(7, minmax(0, 1fr));
   gap: 8px;
 }
 
@@ -230,6 +230,7 @@ body.overlay-open .aurora-bg {
   border: 1.5px solid transparent;
   transition: all var(--transition);
   position: relative;
+  min-width: 0;
 }
 
 .day-cell:hover {
@@ -299,12 +300,11 @@ body.overlay-open .aurora-bg {
    roubavam a atenção do que importa numa grade de dias: o que já foi
    feito e onde é hoje. A cor vira um ponto; o nome vira texto comum. */
 .mat-chip {
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
+  display: block;
+  position: relative;
   font-size: 0.62rem;
   font-weight: 500;
-  padding: 0.1rem 0;
+  padding: 0.1rem 0 0.1rem 0.62rem;
   line-height: 1.3;
   color: var(--ink-soft);
   background: none;
@@ -316,7 +316,8 @@ body.overlay-open .aurora-bg {
 }
 .mat-chip::before {
   content: "";
-  flex: none;
+  position: absolute;
+  left: 0; top: .45em;
   width: 6px; height: 6px;
   border-radius: 50%;
   background: var(--ink-ghost, var(--ink-faded));
@@ -403,7 +404,7 @@ body.overlay-open .aurora-bg {
   .day-cell .num { font-size: 0.74rem; }
 }
 </style>
-<link rel="stylesheet" href="topnav.css"><script src="topnav.js"></script></head>
+<link rel="stylesheet" href="topnav.css?v=1791163406"><script src="topnav.js?v=1791163406"></script></head>
 <body>
 
 <div class="aurora-bg" aria-hidden="true">
@@ -596,7 +597,7 @@ const DRIVE_SEMANA = {
           <a href="${driveUrl}" target="_blank" rel="noopener" title="Resumo VDE — Semana ${semana}" style="display:inline-flex;align-items:center;gap:0.25rem;font-size:0.7rem;color:var(--rose-deep);text-decoration:none;padding:0.2rem 0.6rem;border:1px solid var(--rose-soft);border-radius:20px;background:var(--paper);transition:all var(--transition)" onmouseover="this.style.background='var(--blush)'" onmouseout="this.style.background='var(--paper)'">📄 PDF Semana</a>
         </div>
       </div>
-      <div class="calendar-grid" style="grid-template-columns:repeat(6,1fr)">${cells}</div>
+      <div class="calendar-grid" style="grid-template-columns:repeat(6,minmax(0,1fr))">${cells}</div>
     </div>`;
   }
 
