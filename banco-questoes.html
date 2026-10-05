@@ -653,8 +653,16 @@
   // Renderizar cru (pre-wrap) reproduzia essas quebras na tela. Aqui a
   // gente separa em blocos por alternativa e junta o texto de cada um.
   function formatarExplicacao(txt) {
-    var VER = /^([A-D])\)\s*(Correto|Correta|Certo|Certa|Errado|Errada|Incorreto|Incorreta)\b[\s:.-]*/i;
-    var partes = txt.split(/\n(?=[A-D]\)\s*(?:Correto|Correta|Certo|Certa|Errado|Errada|Incorreto|Incorreta)\b)/);
+    // Dois materiais, duas formas de abrir o comentário de cada alternativa:
+    //   "A) Correto. ..."                   (provas XXII a 37º)
+    //   "A alternativa A está correta. ..." (provas 38º a 47º)
+    var JULGA = '(?:Correto|Correta|Certo|Certa|Errado|Errada|Incorreto|Incorreta)';
+    var ABRE = '(?:[A-D]\\)\\s*' + JULGA + '\\b'
+             + '|(?:A\\s+)?(?:alternativa|assertiva|letra)\\s+[A-D]\\s+(?:est[áa]|é)\\s+' + JULGA + '\\b)';
+    var VER = new RegExp('^(?:([A-D])\\)\\s*(' + JULGA + ')'
+            + '|(?:A\\s+)?(?:alternativa|assertiva|letra)\\s+([A-D])\\s+(?:est[áa]|é)\\s+(' + JULGA + '))'
+            + '\\b[\\s:.,-]*', 'i');
+    var partes = txt.split(new RegExp('\\n(?=' + ABRE + ')', 'i'));
     return partes.map(function (bloco) {
       var m = bloco.match(VER);
       var corpo = m ? bloco.slice(m[0].length) : bloco;
@@ -664,10 +672,11 @@
       var paras = corpo.split('\n').filter(Boolean)
                        .map(function (p) { return '<p>' + esc(p) + '</p>'; }).join('');
       if (!m) return '<div class="ex-bloco ex-intro">' + paras + '</div>';
-      var certo = /^(corret|cert)/i.test(m[2]);
+      var letra = m[1] || m[3], veredito = m[2] || m[4];
+      var certo = /^(corret|cert)/i.test(veredito);
       return '<div class="ex-bloco ' + (certo ? 'ex-certo' : 'ex-errado') + '">' +
-             '<span class="ex-l">' + m[1] + '</span>' +
-             '<div class="ex-txt"><span class="ex-v">' + esc(m[2]) + '</span>' + paras + '</div></div>';
+             '<span class="ex-l">' + esc(letra.toUpperCase()) + '</span>' +
+             '<div class="ex-txt"><span class="ex-v">' + esc(veredito) + '</span>' + paras + '</div></div>';
     }).join('');
   }
 
