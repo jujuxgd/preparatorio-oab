@@ -74,3 +74,21 @@ body.hoje .side .cmp-ring{padding:1.3rem 0 1rem;text-align:center}
 .cmp-ring-c b{font:400 2rem/1 'Fraunces',serif;color:var(--ink);font-variant-numeric:tabular-nums}
 .cmp-ring-t{font-size:.78rem;color:var(--ink-faded)}
 body.hoje .side-block[style*="bg-soft"]>div:last-child{display:none}
+
+/* ── nota de fim de semana: rodapé do cabeçalho, não faixa ── */
+body.hoje .nota-fds { text-transform: none; letter-spacing: 0; color: var(--ink-faded); font-weight: 400; }
+
+/* ── emoji não é sistema de ícone: some dos rótulos ── */
+body.hoje .checklist-group-header > span:first-child { display: none; }
+body.hoje .checklist-group-header { gap: 0 !important; }
+
+/* ── anel menor: é dado de apoio, não o assunto da coluna ── */
+body.hoje .cmp-ring { padding: 1rem 0 .8rem !important; }
+.cmp-ring-fig { width: 104px; height: 104px; margin-bottom: .5rem; }
+.cmp-ring-c b { font-size: 1.5rem; }
+.cmp-ring-t { font-size: .74rem; }
+
+/* ── rodapé do dia alinhado ── */
+body.hoje .day-footer { display: flex; flex-wrap: wrap; gap: .8rem 1.2rem; align-items: center; }
+body.hoje .day-nav { display: flex; gap: 1.2rem; flex-wrap: wrap; }
+body.hoje .day-footer > div:last-child { margin-left: auto; }

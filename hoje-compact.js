@@ -30,13 +30,30 @@ document.addEventListener('DOMContentLoaded',function(){
     };
     new MutationObserver(upd).observe(ul,{subtree:true,childList:true,attributes:true,attributeFilter:['class']});upd();
   }
+  // Exportar/Importar já vivem no Perfil, em Backup em arquivo — aqui
+  // eram um segundo lugar pra mesma coisa, no meio do progresso do dia.
+  var bExp=document.querySelector('[onclick*="exportarProgresso"]');
+  if(bExp){var cx=bExp.parentElement; if(cx) cx.remove();}
+
+  // emoji solto no texto do item vira nada; o ícone é o da lista
+  document.querySelectorAll('#daily-checklist li').forEach(function(li){
+    var sp=li.querySelector('span:last-child');
+    if(sp) sp.textContent=sp.textContent.replace(/^\s*[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]\uFE0F?\s*/u,'');
+  });
+
   var hero=document.querySelector('.day-hero'),cta=document.getElementById('btn-estudei');
   if(hero&&cta)hero.appendChild(cta);
   document.querySelectorAll('.rt-card').forEach(function(c){
     if(c.dataset.editor!=='mr')return;
     c.classList.add('cmp-collapsed');
     var h=c.firstElementChild,h4=h&&h.querySelector('h4');
-    if(h4){h4.insertAdjacentHTML('beforeend','<span class="cmp-chev">▾</span>');}
+    if(h4){
+      // emoji não é ícone: tira o 🧠 do rótulo
+      h4.childNodes.forEach(function(n){
+        if(n.nodeType===3) n.nodeValue=n.nodeValue.replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]\uFE0F?\s*/gu,'');
+      });
+      h4.insertAdjacentHTML('beforeend','<span class="cmp-chev">▾</span>');
+    }
     c.addEventListener('click',function(e){
       if(c.classList.contains('cmp-collapsed')){c.classList.remove('cmp-collapsed');return}
       if(h.contains(e.target)&&!e.target.closest('button'))c.classList.add('cmp-collapsed');
