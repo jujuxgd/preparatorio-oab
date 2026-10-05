@@ -17,7 +17,7 @@
    Uma família (Inter) na UI; Fraunces só no título da página.
    Escala fixa em rem, densidade alta, rosa só em ação e seleção.
    ══════════════════════════════════════════════════════════ */
-.bq { max-width: 1120px; margin: 0 auto; padding: 2.2rem 2rem 4rem 3.6rem; }
+
 .bq-cab { display: flex; align-items: baseline; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.4rem; }
 .bq h1 { font: 500 1.75rem/1.2 'Fraunces', serif; letter-spacing: -.02em; margin: 0; color: var(--ink); }
 .bq h1 em { font-style: italic; color: var(--rose-deep); }
@@ -204,7 +204,7 @@
 .alt-linha { position: relative; display: flex; align-items: flex-start; border-bottom: 1px solid var(--line-soft); }
 .alt-linha .alt { border-bottom: 0; flex: 1; min-width: 0; }
 .tesoura {
-  position: absolute; left: -2.55rem; top: .62rem;
+  position: absolute; left: -2.45rem; top: .62rem;
   width: 26px; height: 26px; border-radius: 50%;
   border: 1px solid var(--line); background: var(--paper);
   cursor: pointer; color: var(--ink-faded);
@@ -294,12 +294,11 @@
 .vazio .b { margin-top: 1rem; }
 
 @media (max-width: 900px) {
-  .bq { padding: 1.5rem 1rem 5.5rem 2.4rem; }
   .fp { position: static; }
   .ctl select { max-width: none; flex: 1; }
   .ctl { flex: 1 1 140px; }
   .q-trilha { margin-left: 0; width: 100%; }
-  .tesoura { left: -2.05rem; width: 24px; height: 24px; }
+  .tesoura { left: -1.9rem; width: 23px; height: 23px; }
   .tesoura::after { width: 7px; }
   .res-dir { margin-left: 0; width: 100%; }
 }
