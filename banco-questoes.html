@@ -318,7 +318,9 @@
   .q-trilha { margin-left: 0; width: 100%; }
   .tesoura { left: -1.9rem; width: 23px; height: 23px; }
   .tesoura::after { width: 7px; }
-  .res-dir { margin-left: 0; width: 100%; }
+  .res-dir { margin-left: 0; width: 100%; flex-wrap: wrap; }
+  .ctl { flex: 1 1 120px; min-width: 0; }
+  .ctl select { width: 100%; min-width: 0; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
@@ -422,7 +424,17 @@
       });
       raiz.classList.toggle('aberto', sim);
       bt.setAttribute('aria-expanded', sim ? 'true' : 'false');
-      if (sim) { termo = ''; inp.value = ''; pintar(); setTimeout(function () { inp.focus(); }, 10); }
+      if (sim) {
+        termo = ''; inp.value = ''; pintar();
+        // o painel abre colado à esquerda do botão; se o botão está no fim
+        // da linha ele sai da tela, então é puxado de volta para dentro.
+        pn.style.left = '0px';
+        var caixa = pn.getBoundingClientRect();
+        var folga = 8;
+        var sobra = caixa.right - (document.documentElement.clientWidth - folga);
+        if (sobra > 0) pn.style.left = -Math.min(sobra, Math.max(0, caixa.left - folga)) + 'px';
+        setTimeout(function () { inp.focus(); }, 10);
+      }
     }
     bt.onclick = function (e) { e.stopPropagation(); if (!bt.disabled) abrir(!raiz.classList.contains('aberto')); };
     pn.onclick = function (e) { e.stopPropagation(); };
