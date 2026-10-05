@@ -262,7 +262,23 @@
 [data-theme="dark"] .ver.ok { color: #A8CBA0; } [data-theme="dark"] .ver.nao { color: #E0A197; }
 .expl { margin-top: .9rem; padding-top: .9rem; border-top: 1px solid var(--line-soft); }
 .expl h4 { font: 600 .75rem 'Inter', sans-serif; color: var(--ink); margin: 0 0 .5rem; }
-.expl pre { font: 400 .875rem/1.7 'Inter', sans-serif; color: var(--ink-soft); white-space: pre-wrap; word-wrap: break-word; margin: 0; }
+.ex-bloco { display: flex; gap: .7rem; padding: .7rem 0; border-top: 1px solid var(--line-soft); }
+.ex-bloco:first-child { border-top: 0; padding-top: .2rem; }
+.ex-bloco p { font: 400 .875rem/1.7 'Inter', sans-serif; color: var(--ink-soft); margin: 0 0 .5rem; overflow-wrap: break-word; }
+.ex-bloco p:last-child { margin-bottom: 0; }
+.ex-txt { min-width: 0; flex: 1; }
+.ex-l {
+  flex: none; width: 22px; height: 22px; border-radius: 50%; margin-top: .15rem;
+  display: grid; place-items: center; font: 600 .72rem 'Inter', sans-serif;
+  background: var(--bg-soft); color: var(--ink-faded);
+}
+.ex-v { display: block; font: 600 .72rem 'Inter', sans-serif; letter-spacing: .04em; text-transform: uppercase; margin-bottom: .3rem; color: var(--ink-faded); }
+.ex-certo .ex-l { background: #5E8C6A; color: #fff; }
+.ex-certo .ex-v { color: #3F6B3A; }
+.ex-errado .ex-v { color: var(--ink-faded); }
+[data-theme="dark"] .ex-certo .ex-v { color: #A8CBA0; }
+.ex-intro { padding-left: 0; }
+.ex-intro p { color: var(--ink); }
 .base { margin-top: .7rem; font-size: .78rem; color: var(--ink-faded); }
 .base b { color: var(--ink-soft); font-weight: 600; }
 .nota { margin-top: .7rem; padding: .55rem .7rem; border-radius: 6px; background: var(--bg-soft); font-size: .78rem; color: var(--ink-soft); }
@@ -610,6 +626,28 @@
     pp.onchange = function () { F.porPagina = parseInt(this.value, 10); pagina = 1; aplicar(); };
   }
 
+  // O comentário vem do PDF com quebra de linha no meio das frases.
+  // Renderizar cru (pre-wrap) reproduzia essas quebras na tela. Aqui a
+  // gente separa em blocos por alternativa e junta o texto de cada um.
+  function formatarExplicacao(txt) {
+    var VER = /^([A-D])\)\s*(Correto|Correta|Certo|Certa|Errado|Errada|Incorreto|Incorreta)\b[\s:.-]*/i;
+    var partes = txt.split(/\n(?=[A-D]\)\s*(?:Correto|Correta|Certo|Certa|Errado|Errada|Incorreto|Incorreta)\b)/);
+    return partes.map(function (bloco) {
+      var m = bloco.match(VER);
+      var corpo = m ? bloco.slice(m[0].length) : bloco;
+      corpo = corpo.replace(/\n{2,}/g, '\u0000').replace(/\n/g, ' ')
+                   .replace(/\u0000/g, '\n').replace(/[ \t]{2,}/g, ' ').trim();
+      if (!corpo && !m) return '';
+      var paras = corpo.split('\n').filter(Boolean)
+                       .map(function (p) { return '<p>' + esc(p) + '</p>'; }).join('');
+      if (!m) return '<div class="ex-bloco ex-intro">' + paras + '</div>';
+      var certo = /^(corret|cert)/i.test(m[2]);
+      return '<div class="ex-bloco ' + (certo ? 'ex-certo' : 'ex-errado') + '">' +
+             '<span class="ex-l">' + m[1] + '</span>' +
+             '<div class="ex-txt"><span class="ex-v">' + esc(m[2]) + '</span>' + paras + '</div></div>';
+    }).join('');
+  }
+
   function cartao(q, posicao) {
     var e = estado[q.id] || (estado[q.id] = { escolha: null, respondida: false, expl: false, cortadas: [] });
     if (!e.cortadas) e.cortadas = [];
@@ -645,7 +683,7 @@
       else ver = '<div class="ver nao">Você marcou <b>' + e.escolha + '</b>. O gabarito é <b>' + q.correct_answer + '</b>.</div>';
     }
     var expl = (e.respondida && e.expl && q.explanation)
-      ? '<div class="expl"><h4>Comentário</h4><pre>' + esc(q.explanation) + '</pre>' +
+      ? '<div class="expl"><h4>Comentário</h4>' + formatarExplicacao(q.explanation) +
         (q.legal_basis ? '<p class="base"><b>Fundamentação:</b> ' + esc(q.legal_basis) + '</p>' : '') + '</div>' : '';
     var nota = (e.respondida && q.notes) ? '<div class="nota">Sobre o material de origem: ' + esc(q.notes) + '</div>' : '';
 

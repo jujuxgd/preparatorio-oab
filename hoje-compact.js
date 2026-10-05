@@ -17,46 +17,58 @@ document.addEventListener('DOMContentLoaded',function(){
     if(sp)sp.style.display='none';
     var blk=document.getElementById('checklist-counter');blk=blk&&blk.closest('.side-block');if(blk)blk.style.display='none';
   }
-  var side=document.querySelector('.side');
-  if(side){
-    var R=46,C=2*Math.PI*R,card=document.createElement('div');card.className='cmp-ring';
-    card.innerHTML='<div class="cmp-ring-fig"><svg viewBox="0 0 110 110"><circle cx="55" cy="55" r="'+R+'" class="cmp-r-bg"/><circle id="cmp-arc" cx="55" cy="55" r="'+R+'" class="cmp-r-fg" stroke-dasharray="'+C+'" stroke-dashoffset="'+C+'"/></svg><div class="cmp-ring-c"><b id="cmp-num">0/0</b></div></div><div class="cmp-ring-t">tópicos de hoje estudados</div>';
-    side.insertBefore(card,side.firstChild);
-    var upd=function(){
+  // Progresso dos tópicos: faixa larga acima do checklist, não anel na
+  // lateral. É o número que acompanha a lista, então fica junto dela.
+  var painel=document.querySelector('.tab-content[data-tab=topicos]');
+  if(painel&&ul){
+    var faixa=document.createElement('div');
+    faixa.className='cmp-faixa';
+    faixa.innerHTML=
+      '<div class="cf-topo">'+
+        '<span class="cf-rot">Tópicos de hoje</span>'+
+        '<span class="cf-num"><b id="cf-feitos">0</b> de <span id="cf-total">0</span></span>'+
+        '<span class="cf-plano">Plano <b id="cf-plano">0%</b> <span id="cf-dias"></span></span>'+
+      '</div>'+
+      '<div class="cf-trilho"><span class="cf-barra" id="cf-barra"></span></div>';
+    painel.insertBefore(faixa, painel.firstChild);
+    var atualiza=function(){
       var li=[].slice.call(ul.querySelectorAll('li')).filter(function(x){return !x.classList.contains('checklist-subgroup-header')});
-      var d=li.filter(function(x){return x.classList.contains('done')}).length,t=li.length;
-      document.getElementById('cmp-num').textContent=d+'/'+t;
-      document.getElementById('cmp-arc').style.strokeDashoffset=t?C*(1-d/t):C;
+      var d=li.filter(function(x){return x.classList.contains('done')}).length, t=li.length;
+      document.getElementById('cf-feitos').textContent=d;
+      document.getElementById('cf-total').textContent=t;
+      document.getElementById('cf-barra').style.width=(t?(d/t)*100:0)+'%';
+      var p=document.getElementById('progress-pct-text'), dd=document.getElementById('progress-days-text');
+      if(p) document.getElementById('cf-plano').textContent=p.textContent.trim();
+      if(dd) document.getElementById('cf-dias').textContent='· '+dd.textContent.replace(' concluídos','');
     };
-    new MutationObserver(upd).observe(ul,{subtree:true,childList:true,attributes:true,attributeFilter:['class']});upd();
+    new MutationObserver(atualiza).observe(ul,{subtree:true,childList:true,attributes:true,attributeFilter:['class']});
+    atualiza(); setTimeout(atualiza,400);
   }
-  // Exportar/Importar já vivem no Perfil, em Backup em arquivo — aqui
-  // eram um segundo lugar pra mesma coisa, no meio do progresso do dia.
-  var bExp=document.querySelector('[onclick*="exportarProgresso"]');
-  if(bExp){var cx=bExp.parentElement; if(cx) cx.remove();}
 
-  // emoji solto no texto do item vira nada; o ícone é o da lista
-  document.querySelectorAll('#daily-checklist li').forEach(function(li){
-    var sp=li.querySelector('span:last-child');
-    if(sp) sp.textContent=sp.textContent.replace(/^\s*[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]\uFE0F?\s*/u,'');
-  });
+  // a coluna da direita some: o que restava dela subiu pra faixa
+  var side=document.querySelector('.side');
+  if(side) side.style.display='none';
 
   var hero=document.querySelector('.day-hero'),cta=document.getElementById('btn-estudei');
   if(hero&&cta)hero.appendChild(cta);
-  document.querySelectorAll('.rt-card').forEach(function(c){
-    if(c.dataset.editor!=='mr')return;
-    c.classList.add('cmp-collapsed');
-    var h=c.firstElementChild,h4=h&&h.querySelector('h4');
-    if(h4){
-      // emoji não é ícone: tira o 🧠 do rótulo
-      h4.childNodes.forEach(function(n){
-        if(n.nodeType===3) n.nodeValue=n.nodeValue.replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]\uFE0F?\s*/gu,'');
-      });
-      h4.insertAdjacentHTML('beforeend','<span class="cmp-chev">▾</span>');
-    }
-    c.addEventListener('click',function(e){
-      if(c.classList.contains('cmp-collapsed')){c.classList.remove('cmp-collapsed');return}
-      if(h.contains(e.target)&&!e.target.closest('button'))c.classList.add('cmp-collapsed');
+  // Microresumo e Resumo do Dia tratam da mesma coisa em escalas
+  // diferentes — ficavam em abas separadas, um deles espremido embaixo
+  // do checklist. Agora dividem a aba Resumos, em duas colunas.
+  var mr=document.querySelector('.rt-card[data-editor="mr"]');
+  var rd=document.querySelector('.rt-card[data-editor="rd"]');
+  if(mr){
+    var h4m=mr.querySelector('h4');
+    if(h4m) h4m.childNodes.forEach(function(n){
+      if(n.nodeType===3) n.nodeValue=n.nodeValue.replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]\uFE0F?\s*/gu,'');
     });
-  });
+  }
+  if(mr&&rd&&rd.parentNode){
+    var dupla=document.createElement('div');
+    dupla.className='cmp-dupla';
+    rd.parentNode.insertBefore(dupla, rd);
+    dupla.appendChild(rd);
+    dupla.appendChild(mr);
+  }
+  var tr=document.querySelector('.tab[data-tab=resumodia] .tl');
+  if(tr) tr.textContent='Resumos';
 });

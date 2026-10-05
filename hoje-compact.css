@@ -65,15 +65,28 @@ body.hoje .day-footer>div:last-child{opacity:.9}
 .cmp-check .checklist{margin:0}
 .cmp-check .checklist li:not(.checklist-subgroup-header){padding:.7rem 0;font-size:.93rem;min-height:44px;align-items:center}
 .cmp-check .checklist-group-header{margin-top:.6rem}
-/* gráfico de progresso */
-body.hoje .side .cmp-ring{padding:1.3rem 0 1rem;text-align:center}
-.cmp-ring-fig{position:relative;width:132px;height:132px;margin:0 auto .7rem}
-.cmp-ring-fig svg{width:100%;height:100%;transform:rotate(-90deg);fill:none;stroke-width:8;stroke-linecap:round}
-.cmp-r-bg{stroke:var(--line-soft)}.cmp-r-fg{stroke:var(--rose);transition:stroke-dashoffset .6s cubic-bezier(.2,.7,.2,1)}
-.cmp-ring-c{position:absolute;inset:0;display:grid;place-items:center}
-.cmp-ring-c b{font:400 2rem/1 'Fraunces',serif;color:var(--ink);font-variant-numeric:tabular-nums}
-.cmp-ring-t{font-size:.78rem;color:var(--ink-faded)}
-body.hoje .side-block[style*="bg-soft"]>div:last-child{display:none}
+
+/* ── rodapé do dia alinhado ── */
+body.hoje .day-footer { display: flex; flex-wrap: wrap; gap: .8rem 1.2rem; align-items: center; }
+body.hoje .day-nav { display: flex; gap: 1.2rem; flex-wrap: wrap; }
+body.hoje .day-footer > div:last-child { margin-left: auto; }
+
+/* ── faixa de progresso dos tópicos ── */
+body.hoje .content-layout { grid-template-columns: 1fr !important; }
+.cmp-faixa {
+  background: var(--paper); border: 1px solid var(--line-soft);
+  border-radius: var(--radius); padding: .9rem 1.2rem; margin-bottom: .9rem;
+}
+.cf-topo { display: flex; align-items: baseline; gap: .6rem; flex-wrap: wrap; margin-bottom: .6rem; }
+.cf-rot { font: 600 .68rem 'Inter', sans-serif; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-soft); }
+.cf-num { font-size: .85rem; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+.cf-num b { font-size: 1.05rem; font-weight: 600; color: var(--ink); }
+.cf-plano { margin-left: auto; font-size: .78rem; color: var(--ink-faded); font-variant-numeric: tabular-nums; }
+.cf-plano b { color: var(--ink-soft); font-weight: 600; }
+.cf-trilho { height: 5px; background: var(--line-soft); border-radius: 3px; overflow: hidden; }
+.cf-barra { display: block; height: 100%; width: 0; background: var(--rose); border-radius: 3px; transition: width .4s cubic-bezier(.2,.7,.2,1); }
+@media (max-width: 900px) { .cf-plano { margin-left: 0; width: 100%; } }
+@media (prefers-reduced-motion: reduce) { .cf-barra { transition: none; } }
 
 /* ── nota de fim de semana: rodapé do cabeçalho, não faixa ── */
 body.hoje .nota-fds { text-transform: none; letter-spacing: 0; color: var(--ink-faded); font-weight: 400; }
@@ -82,13 +95,7 @@ body.hoje .nota-fds { text-transform: none; letter-spacing: 0; color: var(--ink-
 body.hoje .checklist-group-header > span:first-child { display: none; }
 body.hoje .checklist-group-header { gap: 0 !important; }
 
-/* ── anel menor: é dado de apoio, não o assunto da coluna ── */
-body.hoje .cmp-ring { padding: 1rem 0 .8rem !important; }
-.cmp-ring-fig { width: 104px; height: 104px; margin-bottom: .5rem; }
-.cmp-ring-c b { font-size: 1.5rem; }
-.cmp-ring-t { font-size: .74rem; }
-
-/* ── rodapé do dia alinhado ── */
-body.hoje .day-footer { display: flex; flex-wrap: wrap; gap: .8rem 1.2rem; align-items: center; }
-body.hoje .day-nav { display: flex; gap: 1.2rem; flex-wrap: wrap; }
-body.hoje .day-footer > div:last-child { margin-left: auto; }
+/* ── Resumo do Dia + Microresumo lado a lado ── */
+.cmp-dupla { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; align-items: start; }
+.cmp-dupla > .rt-card { margin: 0 !important; height: 100%; }
+@media (max-width: 1000px) { .cmp-dupla { grid-template-columns: 1fr; } }

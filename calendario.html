@@ -294,29 +294,43 @@ body.overlay-open .aurora-bg {
   margin-top: auto;
 }
 
+/* A matéria era uma pílula preenchida, uma cor por matéria — seis
+   fundos diferentes por semana faziam o calendário virar mosaico e
+   roubavam a atenção do que importa numa grade de dias: o que já foi
+   feito e onde é hoje. A cor vira um ponto; o nome vira texto comum. */
 .mat-chip {
-  font-size: 0.6rem;
-  font-weight: 600;
-  padding: 0.18rem 0.4rem;
-  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.62rem;
+  font-weight: 500;
+  padding: 0.1rem 0;
   line-height: 1.3;
-  color: var(--ink);
+  color: var(--ink-soft);
+  background: none;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
   cursor: pointer;
-  transition: opacity var(--transition);
+  transition: color var(--transition);
 }
+.mat-chip::before {
+  content: "";
+  flex: none;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--ink-ghost, var(--ink-faded));
+}
+.mat-chip:hover { color: var(--ink); }
 
-.mat-chip:hover { opacity: 0.8; }
+.mat-chip.c-rose::before      { background: var(--rose-300); }
+.mat-chip.c-lavender::before  { background: #9F94C4; }
+.mat-chip.c-champagne::before { background: #C9A24B; }
+.mat-chip.c-sage::before      { background: #8FA98C; }
+.mat-chip.c-white::before     { background: rgba(255,255,255,0.7); }
 
-.mat-chip.c-rose       { background: var(--rose-soft); color: var(--rose-deep); }
-.mat-chip.c-lavender   { background: var(--lavender); color: #6040a0; }
-.mat-chip.c-champagne  { background: var(--champagne); color: #8a5030; }
-.mat-chip.c-sage       { background: var(--sage); color: #506050; }
-.mat-chip.c-white      { background: rgba(255,255,255,0.25); color: rgba(255,255,255,0.95); }
-
-.day-cell.today .mat-chip { background: rgba(255,255,255,0.22); color: rgba(255,255,255,0.95); }
+.day-cell.today .mat-chip { color: rgba(255,255,255,0.92); }
+.day-cell.today .mat-chip::before { background: rgba(255,255,255,0.75); }
 
 .legend {
   display: flex;
@@ -522,7 +536,7 @@ const DRIVE_SEMANA = {
 
   // ── Build grid ──────────────────────────────
   const corClass = { rose:'c-rose', lavender:'c-lavender', champagne:'c-champagne', sage:'c-sage' };
-  const chipNome = n => (n || '').replace('Direito ','').replace('Processual ','Proc. ').replace('Processo ','Proc. ');
+  const chipNome = n => (n || '').replace(/^Direito (d[aeo] )?/,'').replace('Processual ','Proc. ').replace('Processo ','Proc. ');
 
   let html = '';
   for (let semana = 1; semana <= 20; semana++) {
@@ -563,7 +577,7 @@ const DRIVE_SEMANA = {
       cells += `<div class="${cls}" onclick="window.location='dia.html?dia=${d}'" title="Dia ${d}${dados ? ' - '+dados.titulo : ''}${dateStr ? ' (estudado '+dateStr+')' : ''}">
         <div class="num">${d}</div>
         <div class="day-chips">
-          <div class="mat-chip ${isCurr && !done ? '' : cor}">${emoji} ${matLabel}</div>
+          <div class="mat-chip ${cor}">${matLabel}</div>
           ${dateChip}
         </div>
       </div>`;
