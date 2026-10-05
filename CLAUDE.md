@@ -111,8 +111,8 @@ cobrir, já que foram reorganizados para bater com o cronograma oficial.
 
 ## 5.1 Banco de Questões (`questoes-banco.js`)
 
-`window.BANCO_QUESTOES` — 312 questões de 1ª fase, provas XXXI, XXXII, XXXIII e 37º
-(2020–2023), extraídas de *1.280 Questões Comentadas de OAB Anteriores*.
+`window.BANCO_QUESTOES` — 995 questões de 1ª fase, exames XXII a XXX, XXXI, XXXII,
+XXXIII e 37º (2017–2023), extraídas de *1.280 Questões Comentadas de OAB Anteriores*.
 
 21 campos por questão: `id`, `exam`, `exam_number`, `year`, `phase`, `question_number`,
 `discipline`, `topic`, `subtopic`, `difficulty`, `statement`, `alternative_a..d`,
@@ -127,9 +127,15 @@ cobrir, já que foram reorganizados para bater com o cronograma oficial.
 - `difficulty` ∈ `facil` | `media` | `dificil`
 - `notes` registra divergência do material consigo mesmo (prefixo `CONFERIR`) e
   alternativas remontadas
-- 8 questões **anuladas** foram excluídas (não têm gabarito). Um gabarito foi corrigido
-  (XXXI Q28, de B para D) por desalinhamento dos rótulos no material de origem
-- Questões anteriores a 2020 não foram processadas
+- Questões **anuladas** (sem gabarito) ficam fora: 8 em 2020+ e 19 em 2017–2019
+- Um gabarito foi corrigido (XXXI Q28, de B para D) por desalinhamento dos rótulos no
+  material de origem. A varredura do mesmo defeito nos demais exames não achou outro caso
+- Matérias corrigidas onde o cabeçalho não aparece no PDF (XXII Constitucional e
+  Tributário, XXIII Consumidor, XXVI Processo do Trabalho) — registrado em `notes`
+- O exame XXX não tem cabeçalho próprio no PDF: abre com a ficha
+  `Ano: AAAA – Banca: FGV – Órgão: OAB – Exame: XXX`, reconhecida pelo extrator
+- **O outro PDF** (*OAB Como Passar 21ª ed.*) foi avaliado e descartado: 85% das questões
+  são de 2007–2010, 280 usam o formato extinto de 5 alternativas e nenhuma é de 2020+
 
 ## 6. Design System
 
