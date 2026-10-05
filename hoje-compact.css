@@ -95,7 +95,18 @@ body.hoje .nota-fds { text-transform: none; letter-spacing: 0; color: var(--ink-
 body.hoje .checklist-group-header > span:first-child { display: none; }
 body.hoje .checklist-group-header { gap: 0 !important; }
 
-/* ── Resumo do Dia + Microresumo lado a lado ── */
-.cmp-dupla { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; align-items: start; }
-.cmp-dupla > .rt-card { margin: 0 !important; height: 100%; }
-@media (max-width: 1000px) { .cmp-dupla { grid-template-columns: 1fr; } }
+/* ── Resumos empilhados: Microresumo aberto, Resumo do Dia dobrável ── */
+.cmp-pilha { display: flex; flex-direction: column; gap: .8rem; }
+.cmp-pilha > .rt-card { margin: 0 !important; }
+.cmp-seta {
+  flex: none; display: grid; place-items: center;
+  width: 22px; height: 22px; margin-right: .15rem; padding: 0;
+  background: none; border: 0; cursor: pointer; color: var(--ink-faded);
+  transition: transform .18s ease, color .18s ease;
+}
+.cmp-seta:hover { color: var(--ink); }
+.cmp-seta:focus-visible { outline: 2px solid var(--rose); outline-offset: 2px; border-radius: 4px; }
+.cmp-seta svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.cmp-dobra:not(.cmp-collapsed) .cmp-seta { transform: rotate(90deg); }
+.cmp-dobra.cmp-collapsed { cursor: default !important; }
+@media (prefers-reduced-motion: reduce) { .cmp-seta { transition: none; } }

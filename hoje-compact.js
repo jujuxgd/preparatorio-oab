@@ -56,18 +56,45 @@ document.addEventListener('DOMContentLoaded',function(){
   // do checklist. Agora dividem a aba Resumos, em duas colunas.
   var mr=document.querySelector('.rt-card[data-editor="mr"]');
   var rd=document.querySelector('.rt-card[data-editor="rd"]');
-  if(mr){
-    var h4m=mr.querySelector('h4');
-    if(h4m) h4m.childNodes.forEach(function(n){
+  [mr, rd].forEach(function(card){
+    if(!card) return;
+    var h=card.querySelector('h4');
+    if(h) h.childNodes.forEach(function(n){
       if(n.nodeType===3) n.nodeValue=n.nodeValue.replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]\uFE0F?\s*/gu,'');
     });
-  }
+  });
   if(mr&&rd&&rd.parentNode){
-    var dupla=document.createElement('div');
-    dupla.className='cmp-dupla';
-    rd.parentNode.insertBefore(dupla, rd);
-    dupla.appendChild(rd);
-    dupla.appendChild(mr);
+    // Microresumo aberto em cima; o Resumo do Dia, mais longo, fica
+    // embaixo recolhido atrás de um ">" que gira ao abrir — o padrão
+    // de seção dobrável do Notion. Duas colunas espremiam os dois.
+    var pilha=document.createElement('div');
+    pilha.className='cmp-pilha';
+    rd.parentNode.insertBefore(pilha, rd);
+    pilha.appendChild(mr);
+    pilha.appendChild(rd);
+
+    var cab=rd.firstElementChild, h4r=cab&&cab.querySelector('h4');
+    if(h4r){
+      rd.classList.add('cmp-dobra','cmp-collapsed');
+      var seta=document.createElement('button');
+      seta.type='button';
+      seta.className='cmp-seta';
+      seta.setAttribute('aria-expanded','false');
+      seta.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>';
+      h4r.insertBefore(seta, h4r.firstChild);
+
+      var alterna=function(){
+        var abrir=rd.classList.contains('cmp-collapsed');
+        rd.classList.toggle('cmp-collapsed', !abrir);
+        seta.setAttribute('aria-expanded', abrir?'true':'false');
+      };
+      seta.addEventListener('click',function(e){e.stopPropagation();alterna();});
+      h4r.addEventListener('click',function(e){
+        if(e.target.closest('button')&&!e.target.closest('.cmp-seta'))return;
+        alterna();
+      });
+      h4r.style.cursor='pointer';
+    }
   }
   var tr=document.querySelector('.tab[data-tab=resumodia] .tl');
   if(tr) tr.textContent='Resumos';
