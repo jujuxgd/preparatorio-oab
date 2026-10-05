@@ -1,7 +1,7 @@
 
 /* ── Hoje compacto ── */
 body.hoje .topbar{margin-bottom:.6rem!important}
-body.hoje .topbar .page-title h1{font-size:1.5rem!important}
+
 /* hero em uma linha só */
 body.hoje .day-hero{display:flex!important;align-items:center;gap:1.2rem!important;padding:.9rem 1.3rem!important;margin-bottom:1rem!important;border-radius:var(--radius)!important;background:var(--paper)!important;box-shadow:none!important;border:1px solid var(--line-soft)}
 body.hoje .day-number-big{border:0!important;padding:0!important;min-width:56px;text-align:center}
