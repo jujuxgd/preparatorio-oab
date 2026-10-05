@@ -277,12 +277,13 @@
 }
 .tab.active .badge { background: rgba(255,255,255,0.25); color: white; }
 
-/* Com 5 abas, telas estreitas (iPhone etc.) não têm espaço pra caber
-   tudo lado a lado sem espremer — a barra vira uma tira rolável
-   horizontalmente em vez de forçar tudo no mesmo espaço. */
+/* Com 5 abas, telas estreitas não têm espaço pra caber tudo lado a lado.
+   A barra quebra em duas linhas: rolar na horizontal escondia as últimas
+   abas atrás de uma rolagem sem barra visível, e não havia nada na tela
+   dizendo que dava pra arrastar. */
 @media (max-width: 700px) {
-  .tabs-bar { overflow-x: auto; -webkit-overflow-scrolling: touch; flex-wrap: nowrap; }
-  .tab { flex: 0 0 auto; padding: 0.65rem 0.9rem; }
+  .tabs-bar { flex-wrap: wrap; overflow-x: visible; row-gap: 0.3rem; }
+  .tab { flex: 0 1 auto; padding: 0.65rem 0.9rem; }
 }
 
 .tab-content {
@@ -1087,7 +1088,7 @@
     <div class="sidebar-footer">
       <div class="profile-card">
         <div class="profile-avatar">
-          <img src="foto-perfil.jpg" alt="Julia" onerror="this.style.display='none'; this.parentElement.innerHTML='J';">
+          <img src="foto-perfil.jpg" alt="Julia" onerror="this.style.display='none'; if (this.parentElement) this.parentElement.textContent='J';">
         </div>
         <div class="profile-info">
           <div class="name">Julia</div>

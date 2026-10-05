@@ -55,8 +55,14 @@ body.hoje .day-footer>div:last-child{opacity:.9}
 @media(max-width:900px){
  body.hoje .day-hero{flex-wrap:wrap}
  body.hoje .day-hero .btn-estudei{width:100%}
- body.hoje .tabs-bar{overflow-x:auto;gap:1.2rem!important}
+ body.hoje .tabs-bar{flex-wrap:wrap;overflow-x:visible;gap:1rem!important;row-gap:0}
+ body.hoje .tab{font-size:.82rem!important;min-height:40px;gap:.35rem}
  body.hoje .tab span.tl{white-space:nowrap}
+}
+
+@media(max-width:400px){
+ body.hoje .tabs-bar{gap:.85rem!important}
+ body.hoje .tab svg{display:none}
 }
 
 /* checklist como aba principal */
