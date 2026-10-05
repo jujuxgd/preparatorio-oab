@@ -111,8 +111,17 @@ cobrir, já que foram reorganizados para bater com o cronograma oficial.
 
 ## 5.1 Banco de Questões (`questoes-banco.js`)
 
-`window.BANCO_QUESTOES` — 995 questões de 1ª fase, exames XXII a XXX, XXXI, XXXII,
-XXXIII e 37º (2017–2023), extraídas de *1.280 Questões Comentadas de OAB Anteriores*.
+`window.BANCO_QUESTOES` — 1.794 questões de 1ª fase, 23 exames de 2017 a 2026:
+
+| Exames | Fonte |
+|--------|-------|
+| XXII–XXX, XXXI–XXXIII, 37º (2017–2023) | *1.280 Questões Comentadas de OAB Anteriores* |
+| 38º–47º (2023–2026) | Provas comentadas do Estratégia OAB, uma por exame |
+
+O segundo material tem formato próprio (`QUESTÃO NN.`, alternativas `a)` ou `(A)`,
+cabeçalho `Comentários`/`Comentários curtos`, gabarito em `A alternativa correta é a
+letra X` ou nos vereditos `A alternativa X está correta`) e **não traz a matéria de
+cada questão** — ela foi determinada pelo conteúdo.
 
 21 campos por questão: `id`, `exam`, `exam_number`, `year`, `phase`, `question_number`,
 `discipline`, `topic`, `subtopic`, `difficulty`, `statement`, `alternative_a..d`,
@@ -136,6 +145,13 @@ XXXIII e 37º (2017–2023), extraídas de *1.280 Questões Comentadas de OAB An
   `Ano: AAAA – Banca: FGV – Órgão: OAB – Exame: XXX`, reconhecida pelo extrator
 - **O outro PDF** (*OAB Como Passar 21ª ed.*) foi avaliado e descartado: 85% das questões
   são de 2007–2010, 280 usam o formato extinto de 5 alternativas e nenhuma é de 2020+
+- **Direito Eleitoral, Financeiro e Previdenciário** só existem nos exames 38º+ — a OAB
+  passou a cobrá-los em blocos fixos (questões 19–20, 23–24 e 69–70). São 20, 20 e 19
+  questões. A atribuição confere posição do bloco E conteúdo antes de trocar a matéria
+- Quando o material discorda do gabarito da banca, vale o **oficial**, com a divergência
+  em `notes` (164 questões têm ressalva)
+- `banco-questoes.html` → `formatarExplicacao()` entende as duas formas de abrir o
+  comentário de cada alternativa: `A) Correto` e `A alternativa A está correta`
 
 ## 6. Design System
 
