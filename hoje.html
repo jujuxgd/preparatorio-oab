@@ -1574,13 +1574,15 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
       </div>`;
     } else if (!isWeekday(getCurrentDate())) {
-      bannerHtml = `<div style="background:linear-gradient(135deg,var(--sage),#EDEBE3);padding:.9rem 1.2rem;border-radius:var(--radius);margin-bottom:1rem;display:flex;align-items:center;gap:1rem;border:1px solid var(--line)">
-        <span style="font-size:1.6rem">🌿</span>
-        <div>
-          <div style="font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:#211C19;font-weight:700">Fim de Semana Livre</div>
-          <div style="font-size:.9rem;color:#211C19">Descanse — o plano retoma na segunda. Mostrando o conteúdo do último dia útil.</div>
-        </div>
-      </div>`;
+      // Fim de semana não muda o que fazer, só explica por que o dia não
+      // avançou — é nota de rodapé, não faixa. Vai discreta no cabeçalho.
+      const bc = document.querySelector('.topbar .breadcrumb');
+      if (bc && !bc.querySelector('.nota-fds')) {
+        const n = document.createElement('span');
+        n.className = 'nota-fds';
+        n.textContent = ' · fim de semana, mostrando o último dia útil';
+        bc.appendChild(n);
+      }
     }
     if (bannerHtml) {
       const div = document.createElement('div');
@@ -1803,7 +1805,7 @@ document.addEventListener('DOMContentLoaded', () => {
     _atualizarMeta(dia);
 
     // Navegação entre dias — mostra todas as matérias do dia
-    const matLabel = d => d.materias.map(m => m.nome.replace('Direito ','').replace('Processual ','Proc. ')).join(' + ');
+    const matLabel = d => d.materias.map(m => m.nome.replace(/^Direito (d[aeo] )?/, '').replace('Processual ', 'Proc. ')).join(' + ');
     const prev = getDadosDia(dia - 1);
     const next = getDadosDia(dia + 1);
     const navPrev = document.getElementById('nav-prev');
