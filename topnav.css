@@ -173,12 +173,16 @@ html.embed .tn, body.embed .tn { display: none; }
    Banco em 1120 com margem assimétrica, e as páginas antigas sem
    largura máxima nenhuma (esticavam até a borda da janela). */
 main {
-  max-width: 1180px;
+  max-width: var(--medida);
   margin: 0 auto;
   padding: 2.6rem var(--gutter) 5rem;
 }
-:root { --gutter: 5rem; }
-@media (max-width: 900px) { :root { --gutter: 1.6rem; } main { padding: 1.8rem var(--gutter) 5.5rem; } }
+/* A calha é o respiro lateral; a medida é a largura máxima do texto.
+   Em tela larga quem manda no respiro é a medida (o <main> centraliza),
+   por isso as duas andam juntas — mexer só na calha quase não aparece. */
+:root { --gutter: 6rem; --medida: 1120px; }
+@media (max-width: 900px) { :root { --gutter: 2.2rem; } main { padding: 1.8rem var(--gutter) 5.5rem; } }
+@media (max-width: 420px) { :root { --gutter: 1.5rem; } }
 
 /* ═══ Páginas-hub (Estudar / Desempenho / Plano) ═══ */
 .hub h1 { font: 500 1.875rem/1.15 'Fraunces', serif; letter-spacing: -.02em; color: var(--ink); margin: 0 0 .7rem; }
