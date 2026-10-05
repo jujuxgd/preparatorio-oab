@@ -177,11 +177,10 @@ main {
   margin: 0 auto;
   padding: 2.6rem var(--gutter) 5rem;
 }
-:root { --gutter: 4rem; }
+:root { --gutter: 5rem; }
 @media (max-width: 900px) { :root { --gutter: 1.6rem; } main { padding: 1.8rem var(--gutter) 5.5rem; } }
 
 /* ═══ Páginas-hub (Estudar / Desempenho / Plano) ═══ */
-.hub { padding-top: 3.2rem; }
 .hub h1 { font: 500 2.6rem/1.1 'Fraunces', serif; letter-spacing: -.02em; color: var(--ink); margin: 0 0 .7rem; }
 .hub h1 em { font-style: italic; color: var(--rose-deep); }
 .hub p.lead { color: var(--ink-soft); font-size: 1rem; margin: 0 0 2.6rem; max-width: 50ch; }
@@ -201,7 +200,7 @@ main {
 .hub-card .go { margin-top: auto; font: 500 .8rem 'Inter', sans-serif; color: var(--rose-deep); display: flex; align-items: center; gap: .35rem; }
 .hub-card .go span { transition: transform .25s ease; }
 .hub-card:hover .go span { transform: translateX(4px); }
-@media (max-width: 900px) { .hub { padding-top: 2.2rem; } .hub h1 { font-size: 2rem; } }
+@media (max-width: 900px) { .hub h1 { font-size: 2rem; } }
 
 
 /* Banco de Questões — estado vazio */
