@@ -1710,7 +1710,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Extrai nº de questões do checklist original para cada matéria
     function _nQuestoes(checklist, matNome) {
-      const tokens = matNome.replace('Direito ','').replace('Processual ','').toLowerCase().split(' ');
+      const tokens = matNome.replace(/^Direito (d[aeo] )?/,'').replace('Processual ','').toLowerCase().split(' ');
       const found = checklist.find(it =>
         it.texto.startsWith('Resolver') &&
         tokens.some(tk => tk.length > 3 && it.texto.toLowerCase().includes(tk))
@@ -1723,7 +1723,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Header da matéria
       const groupHeader = document.createElement('div');
       groupHeader.className = 'checklist-group-header';
-      groupHeader.innerHTML = `<span>${mat.emoji || '📖'}</span>${mat.nome.replace('Direito ','').replace('Processual ','Proc. ')}`;
+      groupHeader.innerHTML = `<span>${mat.emoji || '📖'}</span>${mat.nome.replace(/^Direito (d[aeo] )?/,'').replace('Processual ','Proc. ')}`;
       ul.appendChild(groupHeader);
 
       // Tópicos — se a matéria tiver "grupos" (macrotemas), insere um
@@ -1763,7 +1763,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const rLi   = document.createElement('li');
       rLi.id = rKey;
       if (rDone) rLi.classList.add('done');
-      const matCurta = mat.nome.replace('Direito ','').replace('Processual ','Proc. ');
+      const matCurta = mat.nome.replace(/^Direito (d[aeo] )?/,'').replace('Processual ','Proc. ');
       rLi.innerHTML = `<span class="check">${rDone ? '✓' : ''}</span><span style="line-height:1.4;font-weight:500">📝 Resolver ${nQ} questões de ${matCurta}</span>`;
       rLi.addEventListener('click', () => {
         rLi.classList.toggle('done');
@@ -1785,7 +1785,7 @@ document.addEventListener('DOMContentLoaded', () => {
       dados.materias.forEach(mat => {
         const badge = document.createElement('span');
         badge.style.cssText = 'display:inline-flex;align-items:center;gap:0.3rem;padding:0.25rem 0.65rem;background:var(--blush);border:1px solid var(--rose-soft);border-radius:20px;font-size:0.75rem;color:var(--rose-deep);font-weight:600';
-        badge.textContent = (mat.emoji || '📖') + ' ' + mat.nome.replace('Direito ','').replace('Processual ','Proc. ');
+        badge.textContent = (mat.emoji || '📖') + ' ' + mat.nome.replace(/^Direito (d[aeo] )?/,'').replace('Processual ','Proc. ');
         painelMats.appendChild(badge);
       });
     }
@@ -2357,7 +2357,7 @@ function _mostrarToastAvanco(proximoDia, dadosNext) {
   const existing = document.querySelector('.day-toast');
   if (existing) existing.remove();
 
-  const mats = dadosNext.materias.map(m => m.nome.replace('Direito ','')).join(' + ');
+  const mats = dadosNext.materias.map(m => m.nome.replace(/^Direito (d[aeo] )?/,'')).join(' + ');
   const toast = document.createElement('div');
   toast.className = 'day-toast';
   toast.innerHTML = `
