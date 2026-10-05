@@ -226,7 +226,22 @@
    como se desfaz o corte. No teclado também, senão some pra quem navega
    sem mouse. */
 .alt-linha:hover .tesoura, .tesoura:focus-visible { opacity: 1; }
-@media (hover: none) { .tesoura { opacity: 1; } }
+/* No toque não há mouse e a tesoura não fica à mostra: descarta-se
+   arrastando a alternativa da direita para a esquerda, e traz-se de volta
+   arrastando para a direita. */
+@media (hover: none) {
+  .tesoura { display: none; }
+  .alt-linha { touch-action: pan-y; }
+  .alt-linha .alt { transition: transform .18s cubic-bezier(.2,.7,.2,1); }
+  .alt-linha.arrastando .alt { transition: none; }
+}
+.dica-corte { display: none; }
+@media (hover: none) {
+  .dica-corte {
+    display: block; font-size: .72rem; color: var(--ink-faded);
+    margin: .5rem 0 0; padding-left: .1rem;
+  }
+}
 
 /* alternativa descartada */
 .alt-linha.cortada .tesoura { color: var(--rose); border-color: var(--rose-300); background: var(--rose-50); }
@@ -682,7 +697,8 @@
              '<button class="alt' + cls + '" data-l="' + letra + '"' + (travada ? ' disabled' : '') + '>' +
              '<span class="l">' + letra + '</span><span>' + esc(txt) + '</span>' +
              (marca ? '<span class="m">' + marca + '</span>' : '') + '</button></div>';
-    }).join('');
+    }).join('') + (e.respondida ? '' :
+      '<p class="dica-corte">Arraste a alternativa para a esquerda para descartá-la.</p>');
 
     var ver = '';
     if (e.respondida) {
@@ -781,17 +797,88 @@
     montarPaginacao(lista.length);
   }
 
-  document.addEventListener('click', function (ev) {
-    var art = ev.target.closest('.q'); if (!art) return;
-    var q = BANCO.filter(function (x) { return x.id === art.dataset.id; })[0]; if (!q) return;
+  function questaoDe(no) {
+    var art = no && no.closest('.q'); if (!art) return null;
+    var q = BANCO.filter(function (x) { return x.id === art.dataset.id; })[0]; if (!q) return null;
     var e = estado[q.id] || (estado[q.id] = { escolha: null, respondida: false, expl: false });
+    if (!e.cortadas) e.cortadas = [];
+    return { q: q, e: e };
+  }
+
+  function alternarCorte(e, letra, cortar) {
+    var j = e.cortadas.indexOf(letra);
+    var jaCortada = j !== -1;
+    if (cortar === jaCortada) return false;
+    if (jaCortada) e.cortadas.splice(j, 1);
+    else { e.cortadas.push(letra); if (e.escolha === letra) e.escolha = null; }
+    return true;
+  }
+
+  // ── no toque, descartar é arrastar a alternativa para a esquerda ──
+  // (e trazer de volta é arrastar para a direita). A tesoura fica só no
+  // mouse; aqui ela não aparece, então o gesto é o único caminho.
+  (function () {
+    var LIMIAR = 46, inicio = null;
+
+    function linhaDe(ev) {
+      var t = ev.target.closest && ev.target.closest('.alt-linha');
+      return (t && !t.closest('.q').querySelector('.ver')) ? t : null;
+    }
+
+    document.addEventListener('touchstart', function (ev) {
+      if (ev.touches.length !== 1) { inicio = null; return; }
+      var linha = linhaDe(ev); if (!linha) return;
+      var ctx = questaoDe(linha); if (!ctx || ctx.e.respondida) return;
+      inicio = { x: ev.touches[0].clientX, y: ev.touches[0].clientY,
+                 linha: linha, alt: linha.querySelector('.alt'),
+                 letra: linha.querySelector('.alt').dataset.l,
+                 cortada: linha.classList.contains('cortada'),
+                 ctx: ctx, horizontal: false };
+    }, { passive: true });
+
+    document.addEventListener('touchmove', function (ev) {
+      if (!inicio) return;
+      var dx = ev.touches[0].clientX - inicio.x;
+      var dy = ev.touches[0].clientY - inicio.y;
+      if (!inicio.horizontal) {
+        if (Math.abs(dy) > Math.abs(dx)) { inicio = null; return; }  // é rolagem
+        if (Math.abs(dx) < 10) return;
+        inicio.horizontal = true;
+        inicio.linha.classList.add('arrastando');
+      }
+      ev.preventDefault();
+      // só puxa para o lado que faz sentido: cortar arrasta para a
+      // esquerda, descortar para a direita.
+      var util = inicio.cortada ? Math.max(0, dx) : Math.min(0, dx);
+      inicio.alt.style.transform = 'translateX(' + (util / 2) + 'px)';
+    }, { passive: false });
+
+    function soltar() {
+      if (!inicio) return;
+      var i = inicio; inicio = null;
+      i.linha.classList.remove('arrastando');
+      i.alt.style.transform = '';
+    }
+
+    document.addEventListener('touchend', function (ev) {
+      if (!inicio) return;
+      var i = inicio, dx = ev.changedTouches[0].clientX - i.x;
+      soltar();
+      if (!i.horizontal) return;
+      var cortar = dx <= -LIMIAR ? true : (dx >= LIMIAR ? false : null);
+      if (cortar !== null && alternarCorte(i.ctx.e, i.letra, cortar)) aplicar();
+    }, { passive: true });
+
+    document.addEventListener('touchcancel', soltar, { passive: true });
+  })();
+
+  document.addEventListener('click', function (ev) {
+    var ctx0 = questaoDe(ev.target); if (!ctx0) return;
+    var q = ctx0.q, e = ctx0.e;
 
     var tes = ev.target.closest('button[data-corta]');
     if (tes) {
-      if (!e.cortadas) e.cortadas = [];
-      var L = tes.dataset.corta, j = e.cortadas.indexOf(L);
-      if (j === -1) { e.cortadas.push(L); if (e.escolha === L) e.escolha = null; }
-      else e.cortadas.splice(j, 1);
+      alternarCorte(e, tes.dataset.corta, !tes.closest('.alt-linha').classList.contains('cortada'));
       aplicar(); return;
     }
     var alt = ev.target.closest('.alt');
