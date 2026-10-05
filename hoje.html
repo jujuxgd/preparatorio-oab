@@ -224,6 +224,10 @@
   gap: 1.5rem;
   align-items: start;
 }
+/* Item de grid tem min-width:auto e não encolhe abaixo do próprio conteúdo:
+   qualquer coisa larga dentro (o player de vídeo, uma tabela) estourava a
+   coluna e vazava para fora da tela. */
+.content-layout > * { min-width: 0; }
 
 @media (max-width: 1100px) {
   .content-layout { grid-template-columns: 1fr; }
@@ -1328,9 +1332,9 @@
         <!-- VIDEOAULAS — player Pandavideo por matéria do dia -->
         <div class="tab-content" data-tab="videoaulas">
           <!-- Player embutido -->
-          <div id="va-player-wrap" style="display:none;margin-bottom:1rem;border-radius:var(--radius);overflow:hidden;box-shadow:0 4px 20px rgba(44,36,32,.12)">
-            <div style="display:flex;align-items:center;justify-content:space-between;padding:.6rem 1rem;background:var(--ink);color:white">
-              <span id="va-player-titulo" style="font-size:.82rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:80%"></span>
+          <div id="va-player-wrap" style="display:none;max-width:100%;margin-bottom:1rem;border-radius:var(--radius);overflow:hidden;box-shadow:0 4px 20px rgba(44,36,32,.12)">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:.5rem;min-width:0;padding:.6rem 1rem;background:var(--ink);color:white">
+              <span id="va-player-titulo" style="font-size:.82rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1 1 auto;min-width:0"></span>
               <button onclick="vaFecharPlayer()" style="background:none;border:none;color:rgba(255,255,255,.7);font-size:1.1rem;cursor:pointer;padding:0 .3rem;line-height:1">✕</button>
             </div>
             <iframe id="va-player-frame" src="" allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture" allowfullscreen style="width:100%;aspect-ratio:16/9;display:block;border:none"></iframe>
