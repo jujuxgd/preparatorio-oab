@@ -153,6 +153,28 @@ cada questão** — ela foi determinada pelo conteúdo.
 - `banco-questoes.html` → `formatarExplicacao()` entende as duas formas de abrir o
   comentário de cada alternativa: `A) Correto` e `A alternativa A está correta`
 
+## 5.2 Simulado (`simulado.html` + `simulado.js`)
+
+Sala de prova. Três telas numa página: escolher, fazer e corrigir.
+
+- **Composição:** prova completa de um exame do banco (23 disponíveis). Outras formas de
+  montagem ficam para quando Julia definir.
+- **Cronômetro:** 5 horas, como a 1ª fase. Conta o tempo em que a prova esteve aberta —
+  sair da aba ou fechar o navegador congela o relógio; voltar retoma dali. O tempo já
+  gasto nunca é devolvido e o tempo fora não é cobrado. Zerou, finaliza sozinho.
+- **Durante a prova não há gabarito nem comentário.** Nenhum verde ou vermelho: só
+  "respondida" e "marcada para revisar". Clicar de novo na mesma alternativa desmarca —
+  em branco é resposta válida.
+- **Estado em `oab_simulado_atual`**, salvo a cada resposta. Recarregar oferece retomar.
+- **Correção:** nota sobre o corte de 40, aproveitamento, tempo, desempenho por matéria
+  (ordenado da pior para a melhor) e as erradas com comentário por alternativa.
+- **Integra em vez de duplicar:** "Registrar em Meus Simulados" grava em
+  `oab_simulados_v1` no formato que `simulados.html` já lê; "Mandar erros para o Caderno"
+  chama `erros_add()` de `erros-core.js`.
+- `simulados.html` continua sendo só o **registro** de simulados feitos em qualquer lugar.
+
+---
+
 ## 6. Design System
 
 ### Paleta de Cores (style.css :root)
