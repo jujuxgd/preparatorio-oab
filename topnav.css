@@ -25,11 +25,11 @@
 
 /* ── Marca ── */
 .tn-brand { display: flex; align-items: center; gap: .7rem; text-decoration: none; flex-shrink: 0; }
-.tn-brand .seal { width: 34px; height: 34px; color: var(--rose); flex-shrink: 0; transition: transform .5s cubic-bezier(.2,.7,.2,1); }
+.tn-brand .seal { width: 38px; height: 38px; color: var(--rose); flex-shrink: 0; transition: transform .5s cubic-bezier(.2,.7,.2,1); }
 .tn-brand:hover .seal { transform: rotate(-7deg); }
 .tn-word {
   font-family: 'MagicalFeather', 'Fraunces', cursive;
-  font-size: 1.4rem; line-height: 1; color: var(--ink);
+  font-size: 1.62rem; line-height: 1; color: var(--ink);
   white-space: nowrap; padding-top: 2px;
 }
 .tn-rule { width: 1px; background: var(--line-soft); margin: 1.6rem 1.9rem; flex-shrink: 0; }
@@ -126,8 +126,9 @@ html.embed .tn, body.embed .tn { display: none; }
 
 /* ── Celular: barra inferior ── */
 @media (max-width: 900px) {
-  .tn { height: 58px; padding: 0 1.1rem; align-items: center; }
-  .tn-word { font-size: 1.2rem; }
+  .tn { height: 60px; padding: 0 1.1rem; align-items: center; }
+  .tn-word { font-size: 1.45rem; }
+  .tn-brand .seal { width: 32px; height: 32px; }
   .tn-rule { display: none; }
   .tn-links {
     position: fixed; inset: auto 0 0 0; z-index: 60;
@@ -138,6 +139,13 @@ html.embed .tn, body.embed .tn { display: none; }
     box-shadow: 0 -1px 20px rgba(33,28,25,.05);
   }
   .tn-ink, .tn-caret, .tn-sub { display: none; }
+  /* backdrop-filter cria bloco de contenção: com ele ligado, as abas
+     de baixo (position:fixed, filhas de .tn) passam a se ancorar na
+     barra de cima em vez da tela, e saltam pro topo ao rolar. */
+  .tn.scrolled {
+    background: var(--paper);
+    -webkit-backdrop-filter: none; backdrop-filter: none;
+  }
   .tn-item { flex: 1; }
   .tn-item > a {
     flex: 1; flex-direction: column; justify-content: center; gap: .22rem;

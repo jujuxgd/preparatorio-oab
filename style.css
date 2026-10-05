@@ -1351,7 +1351,12 @@ body.cl-focus-closing .mobile-menu-btn {
    RESPONSIVO — TELAS ESTREITAS (telemóvel)
 ============================================ */
 @media (max-width: 640px) {
-  html, body { max-width: 100%; overflow-x: hidden; }
+  /* clip, não hidden: overflow-x:hidden na raiz faz o <html> virar o
+     container de rolagem, e aí tudo que é position:fixed ou sticky
+     passa a rolar junto com o conteúdo — era por isso que a barra de
+     cima e as abas de baixo sumiam ao rolar no celular. O clip corta
+     o transbordo horizontal do mesmo jeito, sem criar container. */
+  html, body { max-width: 100%; overflow-x: clip; }
 
   /* Grids de estatística / cartões colapsam */
   .today-stats, .stats-hero, .q-hero, .wrapped-stats, .totais-bar {
