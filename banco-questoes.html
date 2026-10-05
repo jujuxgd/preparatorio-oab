@@ -19,8 +19,10 @@
    ══════════════════════════════════════════════════════════ */
 
 .bq-cab { display: flex; align-items: baseline; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.4rem; }
-.bq h1 { font: 500 1.75rem/1.2 'Fraunces', serif; letter-spacing: -.02em; margin: 0; color: var(--ink); }
+.bq h1 { font: 500 1.875rem/1.15 'Fraunces', serif; letter-spacing: -.02em; margin: 0; color: var(--ink); }
 .bq h1 em { font-style: italic; color: var(--rose-deep); }
+@media (max-width: 900px) { .bq h1 { font-size: 1.7rem; } }
+@media (max-width: 640px) { .bq h1 { font-size: 1.55rem; } }
 .bq .lead { font-size: .875rem; color: var(--ink-faded); margin: 0; }
 
 /* ── barra de filtros: segunda camada, grudada no topo ── */
