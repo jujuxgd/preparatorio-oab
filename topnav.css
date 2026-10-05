@@ -159,8 +159,21 @@ html.embed .tn, body.embed .tn { display: none; }
   .tn-ink, .tn-sub, .tn-brand .seal, .tn-av { transition: none !important; }
 }
 
-/* ═══ Páginas-hub (Estudar / Praticar / Plano) ═══ */
-.hub { max-width: 1180px; margin: 0 auto; padding: 4rem 2.4rem 5rem; }
+
+/* ═══ Medida da página — uma só, pra todas ═══
+   Antes cada página tinha a sua: Início e Perfil em 1180/2.4rem, o
+   Banco em 1120 com margem assimétrica, e as páginas antigas sem
+   largura máxima nenhuma (esticavam até a borda da janela). */
+main {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 2.6rem var(--gutter) 5rem;
+}
+:root { --gutter: 3rem; }
+@media (max-width: 900px) { :root { --gutter: 1.4rem; } main { padding: 1.8rem var(--gutter) 5.5rem; } }
+
+/* ═══ Páginas-hub (Estudar / Desempenho / Plano) ═══ */
+.hub { padding-top: 3.2rem; }
 .hub h1 { font: 500 2.6rem/1.1 'Fraunces', serif; letter-spacing: -.02em; color: var(--ink); margin: 0 0 .7rem; }
 .hub h1 em { font-style: italic; color: var(--rose-deep); }
 .hub p.lead { color: var(--ink-soft); font-size: 1rem; margin: 0 0 2.6rem; max-width: 50ch; }
@@ -180,7 +193,7 @@ html.embed .tn, body.embed .tn { display: none; }
 .hub-card .go { margin-top: auto; font: 500 .8rem 'Inter', sans-serif; color: var(--rose-deep); display: flex; align-items: center; gap: .35rem; }
 .hub-card .go span { transition: transform .25s ease; }
 .hub-card:hover .go span { transform: translateX(4px); }
-@media (max-width: 900px) { .hub { padding: 2.4rem 1.2rem 4rem; } .hub h1 { font-size: 2rem; } }
+@media (max-width: 900px) { .hub { padding-top: 2.2rem; } .hub h1 { font-size: 2rem; } }
 
 
 /* Banco de Questões — estado vazio */
