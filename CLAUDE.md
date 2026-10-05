@@ -109,6 +109,28 @@ cobrir, já que foram reorganizados para bater com o cronograma oficial.
 
 ---
 
+## 5.1 Banco de Questões (`questoes-banco.js`)
+
+`window.BANCO_QUESTOES` — 312 questões de 1ª fase, provas XXXI, XXXII, XXXIII e 37º
+(2020–2023), extraídas de *1.280 Questões Comentadas de OAB Anteriores*.
+
+21 campos por questão: `id`, `exam`, `exam_number`, `year`, `phase`, `question_number`,
+`discipline`, `topic`, `subtopic`, `difficulty`, `statement`, `alternative_a..d`,
+`correct_answer`, `explanation`, `legal_basis`, `duplicate_group`, `source_file`, `notes`.
+
+**Regras:**
+- `correct_answer` e `explanation` vêm literalmente do material — nunca reescritos
+- `legal_basis` é extraído do texto da própria explicação, nunca de memória; sem citação
+  segura fica `null`
+- `topic` é reutilizável (até ~12 por matéria) e alimenta o filtro de Assunto, que só
+  habilita depois de escolher a Disciplina; `subtopic` é livre
+- `difficulty` ∈ `facil` | `media` | `dificil`
+- `notes` registra divergência do material consigo mesmo (prefixo `CONFERIR`) e
+  alternativas remontadas
+- 8 questões **anuladas** foram excluídas (não têm gabarito). Um gabarito foi corrigido
+  (XXXI Q28, de B para D) por desalinhamento dos rótulos no material de origem
+- Questões anteriores a 2020 não foram processadas
+
 ## 6. Design System
 
 ### Paleta de Cores (style.css :root)

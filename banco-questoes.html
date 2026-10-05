@@ -368,7 +368,7 @@
   // filtros de valor múltiplo: cada um guarda uma lista
   var F = {
     busca: '', disciplinas: [], assuntos: [], dificuldades: [], exames: [],
-    situacao: 'todas', semAnuladas: false, ordem: 'exame_desc', porPagina: 1
+    situacao: 'todas', ordem: 'exame_desc', porPagina: 1
   };
 
   function valores(campo, base) {
@@ -465,7 +465,6 @@
     if (F.assuntos.length && F.assuntos.indexOf(q.topic) === -1) return false;
     if (F.dificuldades.length && F.dificuldades.indexOf(q.difficulty) === -1) return false;
     if (F.exames.length && F.exames.indexOf(String(q.exam_number)) === -1) return false;
-    if (F.semAnuladas && !q.correct_answer) return false;
     var r = respostas[q.id];
     if (F.situacao === 'nao' && r) return false;
     if (F.situacao === 'acertei' && !(r && r.ultima_correta)) return false;
@@ -505,8 +504,6 @@
           '<button class="pill" data-v="favoritas" type="button">Favoritas</button>' +
         '</span>' +
         '<span class="fp-sep"></span>' +
-        '<label class="fp-check"><input type="checkbox" id="f-anul"> Sem anuladas</label>' +
-        '<span class="fp-sep"></span>' +
         '<span id="f-chips" style="display:flex;gap:.3rem;flex-wrap:wrap"></span>' +
         '<button class="btn-lim" id="f-limpar" type="button" style="margin-left:auto">Limpar tudo</button>' +
       '</div>';
@@ -531,7 +528,6 @@
 
     var busca = document.getElementById('f-busca'), t = null;
     busca.oninput = function () { clearTimeout(t); t = setTimeout(function () { F.busca = busca.value.trim(); pagina = 1; aplicar(); }, 220); };
-    document.getElementById('f-anul').onchange = function () { F.semAnuladas = this.checked; pagina = 1; aplicar(); };
     document.getElementById('f-sit').onclick = function (e) {
       var b = e.target.closest('.pill'); if (!b) return;
       F.situacao = b.dataset.v; pagina = 1;
@@ -563,9 +559,8 @@
   function limpar() {
     F.busca = ''; F.disciplinas.length = 0; F.assuntos.length = 0;
     F.dificuldades.length = 0; F.exames.length = 0;
-    F.situacao = 'todas'; F.semAnuladas = false; pagina = 1;
+    F.situacao = 'todas'; pagina = 1;
     document.getElementById('f-busca').value = '';
-    document.getElementById('f-anul').checked = false;
     document.querySelectorAll('#f-sit .pill').forEach(function (x) { x.classList.toggle('on', x.dataset.v === 'todas'); });
     ['dis', 'exa', 'dif'].forEach(function (k) { MS[k].atualizar(); });
     sincronizarAssunto(); aplicar();
@@ -580,7 +575,6 @@
     F.exames.forEach(function (v) { c.push(['exames', v, v + 'º Exame']); });
     F.dificuldades.forEach(function (v) { c.push(['dificuldades', v, DIF[v]]); });
     if (F.situacao !== 'todas') c.push(['situacao', null, SIT[F.situacao]]);
-    if (F.semAnuladas) c.push(['semAnuladas', null, 'Sem anuladas']);
     var box = document.getElementById('f-chips');
     box.innerHTML = c.map(function (x) {
       return '<span class="chip">' + esc(x[2]) + '<button type="button" data-k="' + x[0] + '" data-v="' + esc(x[1] == null ? '' : x[1]) + '" aria-label="Remover filtro">✕</button></span>';
@@ -592,7 +586,7 @@
       if (k === 'situacao') {
         F.situacao = 'todas';
         document.querySelectorAll('#f-sit .pill').forEach(function (x) { x.classList.toggle('on', x.dataset.v === 'todas'); });
-      } else if (k === 'semAnuladas') { F.semAnuladas = false; document.getElementById('f-anul').checked = false; }
+      }
       else if (k === 'busca') { F.busca = ''; document.getElementById('f-busca').value = ''; }
       else {
         var i = F[k].indexOf(v); if (i !== -1) F[k].splice(i, 1);
