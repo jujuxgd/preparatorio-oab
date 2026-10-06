@@ -19,6 +19,37 @@
   var CORTE   = 40;                    // acertos mínimos para aprovação
 
   var BANCO = (typeof window.BANCO_QUESTOES !== 'undefined') ? window.BANCO_QUESTOES : [];
+  var VDE   = (typeof window.SIM_VDE_LISTA   !== 'undefined') ? window.SIM_VDE_LISTA   : [];
+
+  // As provas do Método VDE não entram no banco de questões — ficam em
+  // arquivos próprios, carregados só quando a prova é escolhida. O pool é
+  // o banco mais o que já foi carregado nesta visita.
+  var POOL = BANCO.slice();
+
+  function acharQ(id) {
+    for (var i = 0; i < POOL.length; i++) if (POOL[i].id === id) return POOL[i];
+    return null;
+  }
+
+  function carregarVde(slug, pronto) {
+    var pacote = (window.SIM_VDE || {})[slug];
+    if (pacote) { absorver(pacote); pronto(pacote); return; }
+    var sc = document.createElement('script');
+    sc.src = 'data/sim-vde-' + slug + '.js?v=1';
+    sc.onload = function () {
+      var p = (window.SIM_VDE || {})[slug];
+      if (p) absorver(p);
+      pronto(p || null);
+    };
+    sc.onerror = function () { pronto(null); };
+    document.head.appendChild(sc);
+  }
+
+  function absorver(pacote) {
+    (pacote.questoes || []).forEach(function (q) {
+      if (!acharQ(q.id)) POOL.push(q);
+    });
+  }
   var tela  = document.getElementById('tela');
   var S     = null;     // estado da prova em andamento
   var relogio = null;
@@ -61,6 +92,13 @@
 
   // ═══════════════ tela 1: escolher a prova ═══════════════
 
+  // O nome do exame já traz o ordinal quando ele existe ("37º"); os
+  // romanos não levam º. Aqui só se encurta o rótulo.
+  function nomeCurto(nome) {
+    return String(nome).replace(/\s*Exame de Ordem Unificado/, ' Exame')
+                       .replace(/\s+/g, ' ').trim();
+  }
+
   function exames() {
     var m = {};
     BANCO.forEach(function (q) {
@@ -90,7 +128,7 @@
         '</div></div>';
     }
 
-    if (!BANCO.length) {
+    if (!BANCO.length && !VDE.length) {
       html += '<div class="cfg"><div class="vazio"><p class="t">Nenhuma questão carregada</p>' +
               '<p>O arquivo questoes-banco.js não foi encontrado ou está vazio.</p></div></div>';
       tela.innerHTML = html;
@@ -102,34 +140,81 @@
       '<div class="cfg-grade">' +
       lista.map(function (e) {
         return '<button class="prova-bt" data-exame="' + e.num + '" type="button">' +
-               '<b>' + esc(e.nome.replace(' Exame de Ordem Unificado', 'º Exame').replace('ºº', 'º')) + '</b>' +
+               '<b>' + esc(nomeCurto(e.nome)) + '</b>' +
                '<span>' + e.ano + ' · ' + e.n + ' questões</span></button>';
       }).join('') +
       '</div>' +
-      '<div class="cfg-rodape">' +
+      '</div>';
+
+    if (VDE.length) {
+      html += '<div class="cfg-bloco">' +
+        '<h2>Simulados do Método VDE</h2>' +
+        '<p class="cfg-nota">Provas que não caíram em exame nenhum — não entram nas ' +
+        'estatísticas do banco de questões.</p>' +
+        '<div class="cfg-grade">' +
+        VDE.map(function (v) {
+          return '<button class="prova-bt" data-vde="' + esc(v.slug) + '" type="button">' +
+                 '<b>' + esc(v.nome) + '</b>' +
+                 '<span>Método VDE · ' + v.n + ' questões</span></button>';
+        }).join('') +
+        '</div></div>';
+    }
+
+    html += '<div class="cfg-rodape">' +
         '<button class="bt-principal" id="bt-comecar" disabled>Começar prova</button>' +
-        '<span class="aviso" id="aviso-escolha">Escolha um exame acima.</span>' +
+        '<span class="aviso" id="aviso-escolha">Escolha uma prova acima.</span>' +
       '</div>' +
-      '</div></div>';
+      '</div>';
 
     tela.innerHTML = html;
 
-    var escolhido = null;
+    var escolhido = null, escolhidoVde = null;
     tela.querySelectorAll('.prova-bt').forEach(function (b) {
       b.onclick = function () {
         tela.querySelectorAll('.prova-bt').forEach(function (x) { x.classList.remove('on'); });
         b.classList.add('on');
-        escolhido = parseInt(b.dataset.exame, 10);
-        var e = lista.filter(function (x) { return x.num === escolhido; })[0];
         document.getElementById('bt-comecar').disabled = false;
-        document.getElementById('aviso-escolha').textContent =
-          e.n + ' questões · 5 horas · a correção aparece só no final.';
+        if (b.dataset.vde) {
+          escolhido = null;
+          escolhidoVde = b.dataset.vde;
+          var v = VDE.filter(function (x) { return x.slug === escolhidoVde; })[0];
+          document.getElementById('aviso-escolha').textContent =
+            v.n + ' questões · 5 horas · a correção aparece só no final.';
+        } else {
+          escolhidoVde = null;
+          escolhido = parseInt(b.dataset.exame, 10);
+          var e = lista.filter(function (x) { return x.num === escolhido; })[0];
+          document.getElementById('aviso-escolha').textContent =
+            e.n + ' questões · 5 horas · a correção aparece só no final.';
+        }
       };
     });
     var bc = document.getElementById('bt-comecar');
-    if (bc) bc.onclick = function () { if (escolhido) comecar(escolhido); };
+    if (bc) bc.onclick = function () {
+      if (escolhido) { comecar(escolhido); return; }
+      if (!escolhidoVde) return;
+      bc.disabled = true;
+      bc.textContent = 'Carregando a prova…';
+      carregarVde(escolhidoVde, function (pacote) {
+        if (!pacote) {
+          bc.disabled = false;
+          bc.textContent = 'Começar prova';
+          document.getElementById('aviso-escolha').textContent =
+            'Não foi possível carregar esta prova. Tente de novo.';
+          return;
+        }
+        comecarVde(pacote);
+      });
+    };
     var br = document.getElementById('bt-retomar');
-    if (br) br.onclick = function () { S = andamento; S.retomadoEm = Date.now(); salvar(); telaProva(); };
+    if (br) br.onclick = function () {
+      var abrir = function () { S = andamento; S.retomadoEm = Date.now(); salvar(); telaProva(); };
+      if (andamento.fonte === 'vde' && andamento.slug) {
+        br.disabled = true;
+        br.textContent = 'Carregando…';
+        carregarVde(andamento.slug, abrir);
+      } else { abrir(); }
+    };
     var bd = document.getElementById('bt-descartar');
     if (bd) bd.onclick = function () {
       if (confirm('Descartar o simulado em andamento? As respostas serão perdidas.')) {
@@ -146,8 +231,25 @@
                   .sort(function (a, b) { return a.question_number - b.question_number; });
     if (!qs.length) return;
     S = {
-      nome: qs[0].exam.replace(' Exame de Ordem Unificado', 'º Exame').replace('ºº', 'º'),
+      nome: nomeCurto(qs[0].exam),
       exame: numExame,
+      ids: qs.map(function (q) { return q.id; }),
+      respostas: {}, marcadas: {},
+      atual: 0,
+      inicio: Date.now(), gastoAntes: 0, retomadoEm: Date.now(),
+      terminado: false
+    };
+    salvar();
+    telaProva();
+  }
+
+  function comecarVde(pacote) {
+    var qs = (pacote.questoes || []).slice()
+              .sort(function (a, b) { return a.question_number - b.question_number; });
+    if (!qs.length) return;
+    S = {
+      nome: pacote.nome,
+      fonte: 'vde', slug: pacote.slug,
       ids: qs.map(function (q) { return q.id; }),
       respostas: {}, marcadas: {},
       atual: 0,
@@ -161,8 +263,7 @@
   function salvar() { salvarLocal(CHAVE, S); }
 
   function questao(i) {
-    var id = S.ids[i];
-    return BANCO.filter(function (q) { return q.id === id; })[0];
+    return acharQ(S.ids[i]);
   }
 
   // ═══════════════ tela 2: a prova ═══════════════
@@ -308,7 +409,7 @@
   function corrigir() {
     var certas = 0, porMateria = {}, erradas = [];
     S.ids.forEach(function (id, i) {
-      var q = BANCO.filter(function (x) { return x.id === id; })[0];
+      var q = acharQ(id);
       if (!q) return;
       var marcou = S.respostas[id] || null;
       var acertou = marcou === q.correct_answer;
@@ -448,7 +549,9 @@
 
     arr.unshift({
       id: Date.now(),
-      tipo: 'prova_oab',
+      // simulados.html só conhece 'simulado' e 'prova_oab'; um tipo novo
+      // ficaria invisível nos dois filtros.
+      tipo: S.fonte === 'vde' ? 'simulado' : 'prova_oab',
       nome: S.nome,
       data: hoje,
       total: S.ids.length,
