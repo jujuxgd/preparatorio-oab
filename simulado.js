@@ -309,6 +309,26 @@
     }
   }
 
+  var TESOURA = '<svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/>' +
+                '<path d="M20 4 8.12 15.88M14.47 14.48 20 20M8.12 8.12 12 12"/></svg>';
+
+  // Riscar não é responder: a tesoura só tira a alternativa da análise.
+  // Vai junto do resto do estado, então sobrevive a recarregar a página.
+  function alternarCorte(qid, letra, cortar) {
+    if (!S.cortadas) S.cortadas = {};
+    var arr = S.cortadas[qid] || (S.cortadas[qid] = []);
+    var j = arr.indexOf(letra);
+    if (cortar === (j !== -1)) return false;
+    if (j !== -1) arr.splice(j, 1);
+    else {
+      arr.push(letra);
+      if (S.respostas[qid] === letra) delete S.respostas[qid];
+    }
+    if (!arr.length) delete S.cortadas[qid];
+    salvar();
+    return true;
+  }
+
   function pintarQuestao() {
     var q = questao(S.atual);
     if (!q) return;
@@ -319,13 +339,22 @@
       'Questão <b>' + (S.atual + 1) + '</b> de ' + S.ids.length +
       ' · <b>' + Object.keys(S.respostas).length + '</b> respondidas';
 
+    var cortadas = (S.cortadas && S.cortadas[q.id]) || [];
     var alts = ['a', 'b', 'c', 'd'].map(function (L) {
       var txt = q['alternative_' + L];
       if (!txt) return '';
       var letra = L.toUpperCase();
-      return '<button class="alt' + (resp === letra ? ' sel' : '') + '" data-l="' + letra + '" type="button">' +
-             '<span class="l">' + letra + '</span><span>' + esc(txt) + '</span></button>';
-    }).join('');
+      var cortada = cortadas.indexOf(letra) !== -1;
+      var rot = (cortada ? 'Trazer de volta a alternativa ' : 'Descartar a alternativa ') + letra;
+      return '<div class="alt-linha' + (cortada ? ' cortada' : '') + '">' +
+             '<button class="tesoura" data-corta="' + letra + '" type="button"' +
+             ' aria-pressed="' + cortada + '" title="' + rot + '" aria-label="' + rot + '">' +
+             TESOURA + '</button>' +
+             '<button class="alt' + (resp === letra ? ' sel' : '') + '" data-l="' + letra +
+             '" type="button"' + (cortada ? ' disabled' : '') + '>' +
+             '<span class="l">' + letra + '</span><span>' + esc(txt) + '</span></button>' +
+             '</div>';
+    }).join('') + '<p class="dica-corte">Arraste a alternativa para a esquerda para descartá-la.</p>';
 
     document.getElementById('palco').innerHTML =
       '<article class="q">' +
@@ -343,6 +372,14 @@
         '</div>' +
       '</article>';
 
+    document.querySelectorAll('#palco .tesoura').forEach(function (b) {
+      b.onclick = function () {
+        var linha = b.closest('.alt-linha');
+        alternarCorte(q.id, b.dataset.corta, !linha.classList.contains('cortada'));
+        pintarQuestao(); pintarFolha();
+      };
+    });
+
     document.querySelectorAll('#palco .alt').forEach(function (b) {
       b.onclick = function () {
         // clicar na mesma alternativa desmarca: em branco é uma resposta válida
@@ -359,6 +396,61 @@
     if (ant) ant.onclick = function () { if (S.atual > 0) { S.atual--; salvar(); pintarQuestao(); pintarFolha(); window.scrollTo(0, 0); } };
     if (prox) prox.onclick = function () { if (S.atual < S.ids.length - 1) { S.atual++; salvar(); pintarQuestao(); pintarFolha(); window.scrollTo(0, 0); } };
   }
+
+  // No toque não há mouse e a tesoura não aparece: descartar é arrastar a
+  // alternativa da direita para a esquerda, e trazer de volta é arrastar
+  // para a direita. Mesmo gesto do banco de questões.
+  (function () {
+    var LIMIAR = 46, inicio = null;
+
+    function soltar() {
+      if (!inicio) return;
+      var i = inicio; inicio = null;
+      i.linha.classList.remove('arrastando');
+      i.alt.style.transform = '';
+    }
+
+    document.addEventListener('touchstart', function (ev) {
+      if (ev.touches.length !== 1) { inicio = null; return; }
+      if (!S || S.terminado) return;
+      var linha = ev.target.closest && ev.target.closest('#palco .alt-linha');
+      if (!linha) return;
+      var alt = linha.querySelector('.alt');
+      inicio = { x: ev.touches[0].clientX, y: ev.touches[0].clientY,
+                 linha: linha, alt: alt, letra: alt.dataset.l,
+                 cortada: linha.classList.contains('cortada'), horizontal: false };
+    }, { passive: true });
+
+    document.addEventListener('touchmove', function (ev) {
+      if (!inicio) return;
+      var dx = ev.touches[0].clientX - inicio.x;
+      var dy = ev.touches[0].clientY - inicio.y;
+      if (!inicio.horizontal) {
+        if (Math.abs(dy) > Math.abs(dx)) { inicio = null; return; }   // é rolagem
+        if (Math.abs(dx) < 10) return;
+        inicio.horizontal = true;
+        inicio.linha.classList.add('arrastando');
+      }
+      ev.preventDefault();
+      // só puxa para o lado que faz sentido
+      var util = inicio.cortada ? Math.max(0, dx) : Math.min(0, dx);
+      inicio.alt.style.transform = 'translateX(' + (util / 2) + 'px)';
+    }, { passive: false });
+
+    document.addEventListener('touchend', function (ev) {
+      if (!inicio) return;
+      var i = inicio, dx = ev.changedTouches[0].clientX - i.x;
+      soltar();
+      if (!i.horizontal) return;
+      var cortar = dx <= -LIMIAR ? true : (dx >= LIMIAR ? false : null);
+      var q = questao(S.atual);
+      if (cortar !== null && q && alternarCorte(q.id, i.letra, cortar)) {
+        pintarQuestao(); pintarFolha();
+      }
+    }, { passive: true });
+
+    document.addEventListener('touchcancel', soltar, { passive: true });
+  })();
 
   function pintarFolha() {
     var f = document.getElementById('folha');

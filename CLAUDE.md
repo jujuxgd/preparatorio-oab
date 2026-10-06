@@ -210,6 +210,13 @@ Sala de prova. Três telas numa página: escolher, fazer e corrigir.
 - **Durante a prova não há gabarito nem comentário.** Nenhum verde ou vermelho: só
   "respondida" e "marcada para revisar". Clicar de novo na mesma alternativa desmarca —
   em branco é resposta válida.
+- **Descartar alternativa (tesoura):** igual à do banco de questões. No mouse a
+  tesoura só aparece ao passar por cima da linha; no toque ela não existe e o
+  gesto é arrastar a alternativa da direita para a esquerda (voltar, da esquerda
+  para a direita), limiar de 46px. Riscar não é responder: cortar a alternativa
+  escolhida apaga a escolha, e o corte não entra na correção. Fica em
+  `S.cortadas[idDaQuestao] = ['A','C']`, dentro de `oab_simulado_atual`, então
+  sobrevive a recarregar a página.
 - **Estado em `oab_simulado_atual`**, salvo a cada resposta. Recarregar oferece retomar.
 - **Correção:** nota sobre o corte de 40, aproveitamento, tempo, desempenho por matéria
   (ordenado da pior para a melhor) e as erradas com comentário por alternativa.

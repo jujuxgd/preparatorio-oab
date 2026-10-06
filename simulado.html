@@ -123,6 +123,52 @@
 }
 .alt.sel { border-left-color: var(--rose); background: var(--rose-50); }
 .alt.sel .l { background: var(--rose); color: #fff; }
+
+/* ── tesoura: mesma da aba de questões. Vive na margem, fora da
+   alternativa, ligada à letra por um tracejado. ── */
+.alts { padding-left: 2.6rem; }
+.alt-linha { position: relative; display: flex; align-items: flex-start; }
+.alt-linha .alt { flex: 1; min-width: 0; }
+.tesoura {
+  position: absolute; left: -2.3rem; top: .62rem;
+  width: 26px; height: 26px; border-radius: 50%;
+  border: 1px solid var(--line); background: var(--paper);
+  cursor: pointer; color: var(--ink-faded);
+  display: grid; place-items: center; opacity: 0;
+  transition: opacity .15s ease, color .15s ease, border-color .15s ease, background .15s ease;
+}
+.tesoura::after {
+  content: ""; position: absolute; left: calc(100% + 1px); top: 50%;
+  width: 11px; border-top: 1.5px dashed var(--line);
+}
+.tesoura svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.tesoura:hover { color: var(--rose-deep); border-color: var(--rose-300); background: var(--bg-soft); }
+.tesoura:focus-visible { outline: 2px solid var(--rose); outline-offset: 1px; }
+/* só aparece sob o mouse — inclusive na já cortada, que é como se desfaz
+   o corte. No teclado também, senão some para quem navega sem mouse. */
+.alt-linha:hover .tesoura, .tesoura:focus-visible { opacity: 1; }
+
+/* No toque não há mouse: descarta-se arrastando a alternativa da direita
+   para a esquerda, e traz-se de volta arrastando para a direita. */
+@media (hover: none) {
+  .alts { padding-left: 0; }
+  .tesoura { display: none; }
+  .alt-linha { touch-action: pan-y; }
+  .alt-linha .alt { transition: transform .18s cubic-bezier(.2,.7,.2,1); }
+  .alt-linha.arrastando .alt { transition: none; }
+}
+.dica-corte { display: none; }
+@media (hover: none) {
+  .dica-corte { display: block; font-size: .72rem; color: var(--ink-faded); margin: .6rem 0 0; padding: 0 1.2rem; }
+}
+
+/* alternativa descartada */
+.alt-linha.cortada .tesoura { color: var(--rose); border-color: var(--rose-300); background: var(--rose-50); }
+.alt-linha.cortada .tesoura::after { border-top-color: var(--rose-300); }
+.alt-linha.cortada .alt { opacity: .5; }
+.alt-linha.cortada .alt > span:nth-child(2) { text-decoration: line-through; font-style: italic; }
+.alt-linha.cortada .alt .l { background: transparent; border: 1px solid var(--ink-faded); color: var(--ink-faded); }
+.alt-linha.cortada .alt:hover { background: none; }
 .q-pe { display: flex; flex-wrap: wrap; gap: .6rem; align-items: center; padding: .9rem 1.2rem; border-top: 1px solid var(--line-soft); }
 .bt-marcar { background: none; border: 1px solid var(--line); border-radius: 999px; padding: .5rem 1rem; cursor: pointer; font: 500 .8125rem 'Inter', sans-serif; color: var(--ink-soft); min-height: 44px; }
 .bt-marcar.on { border-color: var(--rose); color: var(--rose-deep); background: var(--rose-50); }
@@ -180,6 +226,10 @@
   .navq { width: 100%; margin-left: 0; }
   .navq .bt-secundario { flex: 1; }
   .res-nota { font-size: 2.6rem; }
+  /* a 390px a grade tem 295px: com minmax(150px) duas colunas não cabiam
+     por 13px, e os 26 exames viravam uma lista de 2.000px */
+  .cfg-grade { grid-template-columns: repeat(auto-fill, minmax(128px, 1fr)); }
+  .prova-bt { min-width: 0; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
