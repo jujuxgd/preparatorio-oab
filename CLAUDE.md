@@ -195,6 +195,28 @@ estatística de desempenho por exame.
   'simulado'` — `simulados.html` só conhece `simulado` e `prova_oab`, e um tipo
   novo ficaria invisível nos dois filtros
 
+## 5.1.2 Estatística automática (aba Desempenho)
+
+O que é feito no app alimenta os trackers sozinho — nada de redigitar.
+
+- **Banco de questões → Tracker de questões.** Cada "Responder" soma em
+  `oab_bq_sessoes = { 'AAAA-MM-DD': { civil: { total, acertos } } }`.
+  `getSessoesBanco()` (progresso.js) **deriva** daí registros no formato de
+  `questoes_registros`, com `id: 'bq_<data>_<materia>'` e `origem: 'banco'`,
+  e `getQuestaoRegistros()` junta os dois. São derivados, nunca gravados em
+  `questoes_registros`: assim não há como contar duas vezes nem duplicar ao
+  recarregar. Em `questoes.html` aparecem marcados e sem editar/excluir.
+  Têm `dia: null`, então não poluem os filtros por dia de `hoje.html`/`dia.html`.
+- **Simulado → Meus Simulados.** `telaResultado()` registra sozinho; o botão
+  virou recibo. A `marca` (`app_<prova>_<inícioDaProva>`) impede o segundo
+  registro ao recarregar a correção.
+- Um simulado **não** entra no tracker de questões: cada tracker tem a sua
+  fonte, senão o mesmo esforço contaria duas vezes.
+- `MATERIA_APELIDO` / `materiaApelido()` (progresso.js) traduz o nome por
+  extenso do banco ("Direito Civil") para o apelido do tracker, do Caderno de
+  Erros e do plano ("civil"). É o mapa único — o `APELIDO` que existia dentro
+  do `simulado.js` tinha só 11 das 20 matérias.
+
 ## 5.2 Simulado (`simulado.html` + `simulado.js`)
 
 Sala de prova. Três telas numa página: escolher, fazer e corrigir.

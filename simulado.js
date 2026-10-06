@@ -547,6 +547,7 @@
 
   function telaResultado() {
     var r = corrigir();
+    registrar(r, null);          // entra sozinho em Meus Simulados
     var total = S.ids.length;
     var passou = r.certas >= CORTE;
     var brancos = total - Object.keys(S.respostas).length;
@@ -625,7 +626,10 @@
     tela.querySelectorAll('.rev-cab').forEach(function (c) {
       c.onclick = function () { c.parentElement.classList.toggle('aberta'); };
     });
-    document.getElementById('bt-registrar').onclick = function () { registrar(r, this); };
+    // o registro já foi feito ao finalizar; o botão fica como recibo
+    var btReg = document.getElementById('bt-registrar');
+    if (jaRegistrado()) { btReg.textContent = '✓ Registrado em Meus Simulados'; btReg.disabled = true; }
+    btReg.onclick = function () { registrar(r, this); };
     document.getElementById('bt-erros').onclick = function () { mandarErros(r, this); };
     document.getElementById('bt-novo').onclick = function () {
       try { localStorage.removeItem(CHAVE); } catch (e) {}
@@ -633,7 +637,24 @@
     };
   }
 
+  // A prova termina e já fica registrada em Meus Simulados — não dá pra
+  // depender de lembrar de clicar num botão depois de 5 horas de prova.
+  // A marca é a hora de início da prova, então refazer a correção ou
+  // reabrir a página não cria um segundo registro.
+  function marcaDoSimulado() {
+    return 'app_' + (S.fonte === 'vde' ? S.slug : 'e' + S.exame) + '_' + S.inicio;
+  }
+
+  function jaRegistrado() {
+    var marca = marcaDoSimulado();
+    return lerLocal(SIM_KEY, []).some(function (x) { return x.marca === marca; });
+  }
+
   function registrar(r, bt) {
+    if (jaRegistrado()) {
+      if (bt) { bt.textContent = '✓ Registrado'; bt.disabled = true; }
+      return;
+    }
     var arr = lerLocal(SIM_KEY, []);
     var hoje = (typeof dataLocalHoje === 'function') ? dataLocalHoje()
              : new Date().toISOString().slice(0, 10);
@@ -644,6 +665,7 @@
 
     arr.unshift({
       id: Date.now(),
+      marca: marcaDoSimulado(),
       // simulados.html só conhece 'simulado' e 'prova_oab'; um tipo novo
       // ficaria invisível nos dois filtros.
       tipo: S.fonte === 'vde' ? 'simulado' : 'prova_oab',
@@ -657,27 +679,23 @@
       criado: new Date().toISOString()
     });
     salvarLocal(SIM_KEY, arr);
-    bt.textContent = '✓ Registrado';
-    bt.disabled = true;
+    if (bt) { bt.textContent = '✓ Registrado'; bt.disabled = true; }
   }
 
-  // o Caderno de Erros usa apelidos curtos de matéria; o banco usa o
-  // nome por extenso. Sem correspondência, vai o nome como está.
-  var APELIDO = {
-    'Ética Profissional': 'etica', 'Direito Constitucional': 'constitucional',
-    'Direito Civil': 'civil', 'Direito Processual Civil': 'proc_civil',
-    'Direito Penal': 'penal', 'Direito Processual Penal': 'proc_penal',
-    'Direito do Trabalho': 'trabalho', 'Direito Processual do Trabalho': 'proc_trabalho',
-    'Direito Tributário': 'tributario', 'Direito Administrativo': 'administrativo',
-    'Direito Empresarial': 'empresarial'
-  };
+  // o Caderno de Erros usa apelidos curtos de matéria; o banco usa o nome
+  // por extenso. O mapa completo vive no progresso.js — o que estava aqui
+  // tinha só 11 das 20 matérias, e as outras 9 iam para o Caderno com o
+  // nome por extenso, sem casar com nada.
+  function apelido(nome) {
+    return (typeof materiaApelido === 'function') ? materiaApelido(nome) : nome;
+  }
 
   function mandarErros(r, bt) {
     if (typeof erros_add !== 'function') { bt.textContent = 'Caderno indisponível'; return; }
     var n = 0;
     r.erradas.forEach(function (e) {
       erros_add({
-        materia: APELIDO[e.q.discipline] || e.q.discipline,
+        materia: apelido(e.q.discipline),
         topico: e.q.topic,
         subtopico: e.q.subtopic,
         motivo: e.marcou ? 'nao_sabia' : 'desatencao',

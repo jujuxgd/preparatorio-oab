@@ -414,15 +414,19 @@ function renderHistorico() {
     const pct  = Math.round((r.acertos/r.total)*100);
     const cor  = pctColor(pct);
     const tipoTag = r.tipo === 'revisao' ? ' <span style="font-size:.68rem;color:var(--ink-faded)">↻ revisão</span>' : '';
+    // o que veio do banco de questões é contado sozinho: não se edita
+    // nem se apaga aqui, senão a conta divergiria do que foi respondido
+    const auto = r.origem === 'banco';
+    const origemTag = auto ? ' <span style="font-size:.68rem;color:var(--ink-faded)">· banco de questões</span>' : '';
     return `<tr>
-      <td>${r.data}${tipoTag}</td>
+      <td>${r.data}${tipoTag}${origemTag}</td>
       <td>${info.emoji} ${info.nome}</td>
       <td>${r.total}</td>
       <td>${r.acertos}</td>
       <td style="font-weight:600;color:${cor}">${pct}%</td>
-      <td style="white-space:nowrap">
+      <td style="white-space:nowrap">${auto ? '<span style="font-size:.7rem;color:var(--ink-faded)">automático</span>' : `
         <button class="btn btn-ghost" style="font-size:.7rem;padding:.25rem .5rem" onclick="editarQuestao('${r.id}')" title="Editar">✎</button>
-        <button class="btn btn-ghost" style="font-size:.7rem;padding:.25rem .5rem;color:var(--error,#c0524b)" onclick="excluirQuestao('${r.id}')" title="Excluir">✕</button>
+        <button class="btn btn-ghost" style="font-size:.7rem;padding:.25rem .5rem;color:var(--error,#c0524b)" onclick="excluirQuestao('${r.id}')" title="Excluir">✕</button>`}
       </td>
     </tr>`;
   }).join('');

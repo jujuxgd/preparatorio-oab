@@ -285,9 +285,82 @@ function excluirQuestaoRegistro(id) {
   salvarProgresso(p);
 }
 
+// ── Matérias: o banco de questões e os simulados falam o nome por extenso
+// ("Direito Civil"); o tracker, o Caderno de Erros e o plano falam o apelido
+// curto ("civil"). Esta é a tradução, num lugar só. ──
+const MATERIA_APELIDO = {
+  'Ética Profissional': 'etica',
+  'Filosofia do Direito': 'filosofia',
+  'Direito Constitucional': 'constitucional',
+  'Direitos Humanos': 'dh',
+  'Direito Internacional': 'internacional',
+  'Direito Tributário': 'tributario',
+  'Direito Administrativo': 'administrativo',
+  'Direito Ambiental': 'ambiental',
+  'Direito Civil': 'civil',
+  'ECA': 'eca',
+  'Direito do Consumidor': 'cdc',
+  'Direito Empresarial': 'empresarial',
+  'Direito Processual Civil': 'proc_civil',
+  'Direito Penal': 'penal',
+  'Direito Processual Penal': 'proc_penal',
+  'Direito do Trabalho': 'trabalho',
+  'Direito Processual do Trabalho': 'proc_trabalho',
+  'Direito Eleitoral': 'eleitoral',
+  'Direito Financeiro': 'financeiro',
+  'Direito Previdenciário': 'previdenciario'
+};
+function materiaApelido(nome) { return MATERIA_APELIDO[nome] || nome; }
+
+// ── Questões respondidas no banco (banco-questoes.html) ──
+// O banco guarda o acumulado por questão, que não diz em que dia cada
+// tentativa aconteceu. Este contador por dia+matéria é o que o tracker
+// precisa, e é só isso: um número que sobe a cada resposta.
+//   oab_bq_sessoes = { 'AAAA-MM-DD': { civil: { total, acertos } } }
+const BANCO_SESSOES_KEY = 'oab_bq_sessoes';
+
+function _lerSessoesBanco() {
+  try { return JSON.parse(localStorage.getItem(BANCO_SESSOES_KEY)) || {}; }
+  catch (e) { return {}; }
+}
+
+function registrarQuestaoDoBanco(disciplina, acertou) {
+  if (!disciplina) return;
+  const mapa = _lerSessoesBanco();
+  const hoje = dataLocalHoje();
+  const mat = materiaApelido(disciplina);
+  if (!mapa[hoje]) mapa[hoje] = {};
+  if (!mapa[hoje][mat]) mapa[hoje][mat] = { total: 0, acertos: 0 };
+  mapa[hoje][mat].total += 1;
+  if (acertou) mapa[hoje][mat].acertos += 1;
+  try { localStorage.setItem(BANCO_SESSOES_KEY, JSON.stringify(mapa)); } catch (e) {}
+  marcarAlteracaoLocal(BANCO_SESSOES_KEY);
+}
+
+// Vira registro no mesmo formato de questoes_registros, com origem 'banco'.
+// São derivados do contador, não gravados em questoes_registros: assim não
+// há risco de contar duas vezes nem de duplicar quando a página recarrega.
+function getSessoesBanco() {
+  const mapa = _lerSessoesBanco();
+  const out = [];
+  Object.keys(mapa).forEach(data => {
+    Object.keys(mapa[data]).forEach(mat => {
+      const d = mapa[data][mat];
+      if (!d || !d.total) return;
+      out.push({
+        id: 'bq_' + data + '_' + mat,
+        data, dia: null, materia: mat,
+        total: d.total, acertos: d.acertos,
+        tempo: null, observacoes: '', tipo: 'sessao', origem: 'banco'
+      });
+    });
+  });
+  return out;
+}
+
 function getQuestaoRegistros(filtro) {
   const p = carregarProgresso();
-  let regs = p.questoes_registros || [];
+  let regs = (p.questoes_registros || []).concat(getSessoesBanco());
   if (filtro) {
     if (filtro.dia != null)    regs = regs.filter(r => r.dia === parseInt(filtro.dia));
     if (filtro.tipo)           regs = regs.filter(r => r.tipo === filtro.tipo);

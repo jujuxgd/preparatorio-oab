@@ -901,7 +901,12 @@
       at.vezes += 1;
       if (certa) at.acertos += 1; else at.erros += 1;
       at.ultima_correta = certa; at.ultima_resposta = e.escolha; at.ultima_data = new Date().toISOString();
-      respostas[q.id] = at; gravar(K_RESP, respostas); aplicar();
+      respostas[q.id] = at; gravar(K_RESP, respostas);
+      // alimenta o tracker de questões da aba Desempenho
+      if (typeof registrarQuestaoDoBanco === 'function') {
+        registrarQuestaoDoBanco(q.discipline, certa);
+      }
+      aplicar();
     } else if (b.dataset.a === 'expl') { e.expl = !e.expl; aplicar(); }
     else if (b.dataset.a === 'refazer') { e.escolha = null; e.respondida = false; e.expl = false; e.cortadas = []; aplicar(); }
     else if (b.dataset.a === 'fav') {
