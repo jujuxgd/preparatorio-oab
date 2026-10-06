@@ -111,12 +111,21 @@ cobrir, já que foram reorganizados para bater com o cronograma oficial.
 
 ## 5.1 Banco de Questões (`questoes-banco.js`)
 
-`window.BANCO_QUESTOES` — 1.794 questões de 1ª fase, 23 exames de 2017 a 2026:
+`window.BANCO_QUESTOES` — 2.029 questões de 1ª fase, 26 exames de 2017 a 2026:
 
 | Exames | Fonte |
 |--------|-------|
 | XXII–XXX, XXXI–XXXIII, 37º (2017–2023) | *1.280 Questões Comentadas de OAB Anteriores* |
+| XXXIV–XXXVI (2022) | Gabaritos comentados do Método VDE (pasta de simulados) |
 | 38º–47º (2023–2026) | Provas comentadas do Estratégia OAB, uma por exame |
+
+Os exames XXXIV, XXXV e XXXVI tapavam o único buraco do banco (ia de 33 direto
+para 37). Vieram da pasta de simulados do VDE, que traz 9 provas reais da FGV
+com gabarito comentado — as outras 6 já estavam no banco e não foram
+reimportadas. O gabarito do VDE traz cabeçalho de matéria e um campo `TEMA:`,
+que virou `subtopic`; o `topic` foi mapeado para o vocabulário já existente
+(4 tópicos novos: Funções essenciais à Justiça, Arbitragem, Crimes contra a paz
+pública, Órgãos nacionais de proteção dos direitos humanos).
 
 O segundo material tem formato próprio (`QUESTÃO NN.`, alternativas `a)` ou `(A)`,
 cabeçalho `Comentários`/`Comentários curtos`, gabarito em `A alternativa correta é a
@@ -136,7 +145,9 @@ cada questão** — ela foi determinada pelo conteúdo.
 - `difficulty` ∈ `facil` | `media` | `dificil`
 - `notes` registra divergência do material consigo mesmo (prefixo `CONFERIR`) e
   alternativas remontadas
-- Questões **anuladas** (sem gabarito) ficam fora: 8 em 2020+ e 19 em 2017–2019
+- Questões **anuladas** ficam fora: 8 em 2020+, 19 em 2017–2019 e 5 nos exames
+  XXXIV–XXXVI (34 q63; 35 q50 e q59; 36 q50 e q51 — o material dá letra, mas a
+  banca anulou; a q50 do 36 traz duas letras)
 - Um gabarito foi corrigido (XXXI Q28, de B para D) por desalinhamento dos rótulos no
   material de origem. A varredura do mesmo defeito nos demais exames não achou outro caso
 - Matérias corrigidas onde o cabeçalho não aparece no PDF (XXII Constitucional e
@@ -153,12 +164,46 @@ cada questão** — ela foi determinada pelo conteúdo.
 - `banco-questoes.html` → `formatarExplicacao()` entende as duas formas de abrir o
   comentário de cada alternativa: `A) Correto` e `A alternativa A está correta`
 
+## 5.1.1 Simulados do Método VDE (`data/sim-vde-*.js`)
+
+A pasta de simulados do VDE tem 14 provas. **9 são provas reais da FGV** (OAB 33
+a 41) com gabarito comentado — essas não são simulado, são exame anterior, e o
+banco de questões é o lugar delas. **5 trazem questão inédita**: os Inéditos 1–4
+e o Nocaute 44, 400 questões que não caíram em exame nenhum.
+
+Essas 400 ficam **fora do `questoes-banco.js` de propósito** — o banco se
+apresenta como provas anteriores da OAB, e misturar simulado ali sujaria a
+estatística de desempenho por exame.
+
+- `data/sim-vde-lista.js` → `window.SIM_VDE_LISTA` — só slug, nome e total.
+  É o único que carrega junto com a página.
+- `data/sim-vde-<slug>.js` → `window.SIM_VDE[slug]` — a prova inteira, carregada
+  por `<script>` quando a prova é escolhida (e de novo ao retomar uma em
+  andamento). ~230–275 KB cada.
+- Campos por questão: `id` (`vde_<slug>_NN`), `origem`, `simulado`,
+  `question_number`, `discipline`, `topic`, `statement`, `alternative_a..d`,
+  `correct_answer`, `explanation`, `source_file`, `notes`.
+
+**Regras:**
+- `statement`, alternativas, `correct_answer` e `explanation` vêm literais do
+  material — nunca reescritos
+- `discipline` e `topic` vêm do cabeçalho de matéria e do `TEMA:` do gabarito
+- `notes` registra defeito do próprio material (o Inédito 4 rotula a questão 3
+  como "02."; o Inédito 3 não traz o cabeçalho de Direito Tributário) e trecho
+  em que as colunas do PDF se intercalaram
+- Um simulado feito aqui se registra em `oab_simulados_v1` com `tipo:
+  'simulado'` — `simulados.html` só conhece `simulado` e `prova_oab`, e um tipo
+  novo ficaria invisível nos dois filtros
+
 ## 5.2 Simulado (`simulado.html` + `simulado.js`)
 
 Sala de prova. Três telas numa página: escolher, fazer e corrigir.
 
-- **Composição:** prova completa de um exame do banco (23 disponíveis). Outras formas de
-  montagem ficam para quando Julia definir.
+- **Composição:** prova completa de um exame do banco (26 disponíveis) ou um dos
+  5 simulados do Método VDE (§5.1.1). Outras formas de montagem ficam para
+  quando Julia definir.
+- **Pool de questões:** o motor procura a questão em `BANCO` mais os simulados
+  VDE já carregados nesta visita — nunca só no banco.
 - **Cronômetro:** 5 horas, como a 1ª fase. Conta o tempo em que a prova esteve aberta —
   sair da aba ou fechar o navegador congela o relógio; voltar retoma dali. O tempo já
   gasto nunca é devolvido e o tempo fora não é cobrado. Zerou, finaliza sozinho.
