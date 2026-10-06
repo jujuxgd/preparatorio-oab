@@ -218,9 +218,10 @@
 .vazio p { margin: 0; font-size: .875rem; color: var(--ink-soft); }
 
 @media (max-width: 900px) {
-  /* a barra superior do site tem 58px no celular e também é sticky:
-     grudar em 0 esconderia o cronômetro atrás dela. */
-  .barra { top: 58px; }
+  /* No celular a barra ocupava ~380px e descia junto com a leitura.
+     Aqui ela rola embora com o resto; o relógio e o Finalizar ficam no
+     topo da questão, a um movimento de volta. */
+  .barra { position: static; }
   .barra-dir { margin-left: 0; width: 100%; }
   .barra-dir .bt-principal, .barra-dir .bt-secundario { flex: 1; }
   .navq { width: 100%; margin-left: 0; }

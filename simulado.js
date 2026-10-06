@@ -269,6 +269,9 @@
   // ═══════════════ tela 2: a prova ═══════════════
 
   function telaProva() {
+    // o botão de começar fica no pé de uma lista longa: sem isto a prova
+    // abria já rolada, no meio da questão 1
+    window.scrollTo(0, 0);
     tela.innerHTML =
       '<div class="barra">' +
         '<div><span class="cron-rot">Tempo restante</span><span class="cron" id="cron">--:--:--</span></div>' +

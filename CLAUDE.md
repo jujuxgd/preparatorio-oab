@@ -218,6 +218,9 @@ Sala de prova. Três telas numa página: escolher, fazer e corrigir.
   `S.cortadas[idDaQuestao] = ['A','C']`, dentro de `oab_simulado_atual`, então
   sobrevive a recarregar a página.
 - **Estado em `oab_simulado_atual`**, salvo a cada resposta. Recarregar oferece retomar.
+- **A barra do cronômetro é sticky só no desktop.** No celular ela ocupava ~380px e
+  descia junto com a leitura — lá ela rola embora (`position: static`). Trocar de
+  questão volta ao topo, então o relógio e o Finalizar reaparecem a cada questão.
 - **Correção:** nota sobre o corte de 40, aproveitamento, tempo, desempenho por matéria
   (ordenado da pior para a melhor) e as erradas com comentário por alternativa.
 - **Integra em vez de duplicar:** "Registrar em Meus Simulados" grava em
