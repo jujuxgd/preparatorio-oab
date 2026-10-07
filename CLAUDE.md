@@ -81,16 +81,21 @@ conteúdo novo do VDE em ordem (pulando os dias sem conteúdo), documentado em c
 
 ---
 
-## 4. Status do Plano de Flashcards
+## 4. Flashcards = microresumos (fluxo real)
+
+Os flashcards NÃO vêm de `plano-vde.js`. Julia escreve o microresumo do dia na aba Hoje
+(prompt de IA → editor, salvo em `microresumo_dia_N`) e `revisar.html` o transforma em cartão
+de revisão. `flashcards[]` em `plano-vde.js` está vazio e **não precisa ser populado** —
+é legado do plano antigo (idem o `REVIEW_CARDS` de `cards.js`, preenchido em runtime).
+
+### (Legado) Status do plano de flashcards antigo
 
 | Dias    | Flashcards | Tópicos |
 |---------|------------|---------|
 | 1–72    | ❌ Vazio (pendente) | ✅ Reorganizado fielmente ao cronograma VDE (2026-07-12) |
 | 73–120  | ❌ Vazio (pendente) | ✅ Ciclo de revisão espaçada próprio (sem referência VDE) |
 
-**Próxima sessão:** popular `flashcards[]` (Q&A) dia a dia a partir dos PDFs semanais do VDE — os
-tópicos de cada dia (`materias[].topicos[]`) já servem de roteiro exato do que cada flashcard deve
-cobrir, já que foram reorganizados para bater com o cronograma oficial.
+**Obsoleto:** a ideia de popular `flashcards[]` a partir dos PDFs foi abandonada em favor dos microresumos.
 
 ---
 

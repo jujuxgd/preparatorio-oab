@@ -2424,38 +2424,6 @@ function _diaCorrente() {
   return r <= 0 ? 1 : Math.min(r, 120);
 }
 
-// ── Flashcards do dia — revisão ativa ─────────
-function _buildFlashcards() {
-  const dia  = _diaCorrente();
-  const cont = document.getElementById('flashcards-container');
-  if (!cont) return;
-  const dados = getDadosDia(dia);
-  if (!dados || !dados.flashcards || !dados.flashcards.length) {
-    cont.innerHTML = `<div class="content-card" style="padding:1.4rem;text-align:center">
-      <div style="font-size:1.6rem;margin-bottom:.5rem">🃏</div>
-      <div style="font-size:.88rem;color:var(--ink-faded);font-style:italic">Sem flashcards para o Dia ${dia}.<br>Consulte o material físico e volte.</div>
-    </div>`;
-    // Atualiza badge
-    const badge = document.getElementById('fc-badge');
-    if (badge) { badge.textContent = '0'; badge.style.display = 'none'; }
-    return;
-  }
-  const cards = dados.flashcards;
-  const badge = document.getElementById('fc-badge');
-  if (badge) { badge.textContent = cards.length; badge.style.display = ''; }
-  cont.innerHTML = cards.map((fc, i) => `
-    <div class="content-card" style="margin-bottom:.8rem;padding:1.4rem 1.6rem">
-      <div style="font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:var(--rose-deep);font-weight:700;margin-bottom:.55rem">
-        Flashcard ${i+1} / ${cards.length}${fc.caiu ? ' · <span style="color:var(--ink-faded);font-weight:500">📌 '+fc.caiu+'</span>' : ''}
-      </div>
-      <div style="font-family:'Fraunces',serif;font-size:1.05rem;font-weight:500;color:var(--ink);margin-bottom:.9rem;line-height:1.4">${fc.frente}</div>
-      <div style="padding:.9rem 1rem;background:var(--bg-soft);border-radius:var(--radius-sm);border-left:3px solid var(--rose);font-size:.88rem;color:var(--ink);line-height:1.65;${fc.pegadinha ? 'margin-bottom:.55rem' : ''}">${fc.verso}</div>
-      ${fc.pegadinha ? `<div style="padding:.7rem 1rem;background:linear-gradient(135deg,var(--blush),var(--rose-soft));border-radius:var(--radius-sm);font-size:.82rem;color:var(--ink);line-height:1.5">
-        <span style="font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--rose-deep);font-weight:700;display:block;margin-bottom:.2rem">⚠ Pegadinha da Banca</span>${fc.pegadinha}
-      </div>` : ''}
-    </div>`).join('');
-}
-
 // ── Revisões — Questões (questoes_registros, tipo:'revisao') ou Teoria
 // (teoria_registros, sem taxa de acerto) ──
 var _rvTipoWired = false;
