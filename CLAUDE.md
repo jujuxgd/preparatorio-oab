@@ -215,7 +215,9 @@ A lista de arquivos (97) está embutida em `window.BIBLIOTECA_REVISAO` (`{id, g,
 públicos; os PDFs trazem marca d'água com dados de terceiros — não commitar o texto dos PDFs.
 Para adicionar material novo, acrescente linhas em `revisao-biblioteca.js`.
 Estado em `oab_revisao_status_v1` (`{id: {s:'lendo'|'feito', d}}`); data da 2ª fase em
-`oab_segunda_fase_data`.
+`oab_segunda_fase_data`. Layout escolhido por Julia (2026-10): Revisões = estante de cards
+por matéria (cores `--mat-*`, anel de progresso, círculos R1/R2/R3); Trabalhista = trilha
+numerada com as revisões como paradas; Peças = agrupadas por tipo (`GRUPOS_PECA`).
 
 ---
 
