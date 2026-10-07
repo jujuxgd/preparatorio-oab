@@ -37,7 +37,6 @@
 .rv-chip.feito::before{content:"✓ "}
 .rv-chip.lendo::before{content:"… "}
 .rv-vazio{text-align:center;padding:2.5rem 1.5rem;color:var(--ink-soft);font-size:.9rem;line-height:1.6}
-.rv-import{width:100%;min-height:130px;border:1px solid var(--line);border-radius:var(--radius-sm);padding:.7rem;font:.78rem monospace;background:var(--paper);color:var(--ink);margin:.8rem 0}
 .rv-box{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:1.4rem;margin-bottom:1.2rem}
 .rv-continuar{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;background:var(--rose-soft);border-radius:var(--radius);padding:.8rem 1.1rem;margin-bottom:1.2rem;font-size:.86rem}
 .rv-continuar span{flex:1;min-width:160px}
@@ -108,21 +107,8 @@
         <div class="breadcrumb">Revisões em tabelas · Trabalhista · Peças</div>
         <h1>Biblioteca de <em>revisão</em></h1>
       </div>
-      <div class="topbar-actions">
-        <button class="btn" onclick="abrirImport()">Gerenciar biblioteca</button>
-      </div>
     </div>
 
-    <div id="rv-import-box" class="rv-box" style="display:none">
-      <strong>Importar biblioteca</strong>
-      <p style="font-size:.82rem;color:var(--ink-soft);margin-top:.4rem;line-height:1.5">Cole aqui o conteúdo do arquivo <code>biblioteca-revisao.local.json</code>. Ele fica só na sua conta (sincronizado entre seus aparelhos) e não vai para o código do site.</p>
-      <textarea id="rv-import-txt" class="rv-import" placeholder='[{"id":"...","g":"rev","a":"Civil","b":1}, ...]'></textarea>
-      <div style="display:flex;gap:.6rem;align-items:center;flex-wrap:wrap">
-        <button class="btn btn-primary" onclick="importar()">Importar</button>
-        <button class="btn" onclick="document.getElementById('rv-import-box').style.display='none'">Fechar</button>
-        <span id="rv-import-msg" style="font-size:.78rem;color:var(--ink-faded)"></span>
-      </div>
-    </div>
 
     <div id="rv-continuar"></div>
     <div class="rv-tabs" id="rv-tabs">
@@ -146,13 +132,13 @@
   <iframe id="rv-ov-frame" title="Material de revisão" allow="autoplay"></iframe>
 </div>
 
+<script src="revisao-biblioteca.js"></script>
 <script src="progresso.js?v=1783859287"></script>
 <script src="script.js?v=1784021867"></script>
 <script src="perfil.js?v=1783860863"></script>
 <script src="sync.js?v=1784058237"></script>
 <script src="cores.js"></script>
 <script>
-const LIB_KEY = 'oab_revisao_lib_v1';
 const ST_KEY = 'oab_revisao_status_v1';
 const ULT_KEY = 'oab_revisao_ultimo_v1';
 const FASE2_KEY = 'oab_segunda_fase_data';
@@ -174,7 +160,7 @@ function gravar(chave, valor) {
 function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function hoje() { return typeof dataLocalHoje === 'function' ? dataLocalHoje() : new Date().toISOString().slice(0,10); }
 
-const biblioteca = () => ler(LIB_KEY, []);
+const biblioteca = () => window.BIBLIOTECA_REVISAO || [];
 const status = () => ler(ST_KEY, {});
 const estado = id => (status()[id] || {}).s || '';
 
@@ -258,7 +244,7 @@ function render() {
   document.querySelectorAll('.rv-tab').forEach(t => t.classList.toggle('on', t.dataset.tab === aba));
   renderContinuar(lib);
   if (!lib.length) {
-    box.innerHTML = '<div class="rv-vazio">Sua biblioteca ainda está vazia.<br>Use <strong>Gerenciar biblioteca</strong> e cole o arquivo <code>biblioteca-revisao.local.json</code>.</div>';
+    box.innerHTML = '<div class="rv-vazio">Nenhum material cadastrado.</div>';
     return;
   }
   box.innerHTML = aba === 'rev' ? renderRev(lib) : aba === 'trab' ? renderTrab(lib) : renderPeca(lib);
@@ -331,24 +317,7 @@ document.getElementById('rv-tabs').addEventListener('click', e => {
   if (t) { aba = t.dataset.tab; render(); }
 });
 
-function abrirImport() {
-  document.getElementById('rv-import-box').style.display = 'block';
-  document.getElementById('rv-import-txt').focus();
-}
-function importar() {
-  const msg = document.getElementById('rv-import-msg');
-  let dados;
-  try { dados = JSON.parse(document.getElementById('rv-import-txt').value); } catch (e) { msg.textContent = 'Isso não parece um JSON válido.'; return; }
-  const ok = Array.isArray(dados) && dados.length && dados.every(i => i && typeof i.id === 'string' && /^[\w-]{10,}$/.test(i.id) && ['rev','trab','peca'].includes(i.g) && i.a != null && i.b != null);
-  if (!ok) { msg.textContent = 'Formato inesperado — use o arquivo gerado para você.'; return; }
-  gravar(LIB_KEY, dados.map(i => ({ id: i.id, g: i.g, a: i.a, b: i.b, n: i.n })));
-  document.getElementById('rv-import-txt').value = '';
-  document.getElementById('rv-import-box').style.display = 'none';
-  render();
-}
-
 render();
-if (!biblioteca().length) abrirImport();
 </script>
 </body>
 </html>
