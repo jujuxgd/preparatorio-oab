@@ -42,12 +42,47 @@
 .rv-continuar span{flex:1;min-width:160px}
 .rv-data{display:flex;align-items:center;gap:.6rem;font-size:.8rem;color:var(--ink-soft);flex-wrap:wrap}
 .rv-data input{border:1px solid var(--line);border-radius:var(--radius-sm);padding:.3rem .5rem;font:inherit;background:var(--paper);color:var(--ink)}
-.rv-ov{position:fixed;inset:0;z-index:400;background:rgba(44,36,32,.55);display:none;flex-direction:column}
+.rv-ov{position:fixed;inset:0;z-index:400;display:none;align-items:center;justify-content:center;padding:24px}
 .rv-ov.open{display:flex}
-.rv-ov-top{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;background:var(--paper);padding:.6rem 1rem;border-bottom:1px solid var(--line)}
-.rv-ov-top h3{flex:1;min-width:140px;font:500 .92rem Inter,sans-serif;color:var(--ink);margin:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.rv-ov iframe{flex:1;width:100%;border:0;background:#fff}
-.rv-ov-top .btn{font-size:.76rem;padding:.4rem .8rem;text-decoration:none}
+.rv-ov-fundo{position:absolute;inset:0;background:rgba(44,36,32,.28);-webkit-backdrop-filter:blur(14px) saturate(115%);backdrop-filter:blur(14px) saturate(115%);animation:rvFade .22s ease-out}
+.rv-ov-painel{position:relative;display:flex;flex-direction:column;width:min(1100px,100%);height:100%;max-height:920px;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);overflow:hidden;animation:rvSobe .28s cubic-bezier(.2,.8,.2,1)}
+.rv-ov-cab{display:flex;align-items:center;gap:1rem;padding:.9rem 1rem .9rem 1.4rem;border-bottom:1px solid var(--line)}
+.rv-ov-tit{flex:1;min-width:0}
+.rv-ov-eyebrow{font:500 .64rem Inter,sans-serif;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-faded);margin-bottom:.3rem}
+.rv-ov-tit h3{font-family:'Fraunces',serif;font-weight:500;font-size:1.25rem;color:var(--ink);margin:0;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rv-ov-acoes{display:flex;align-items:center;gap:.35rem;flex:none}
+.rv-ic{width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;border-radius:50%;border:1px solid var(--line);background:var(--paper);color:var(--ink-soft);cursor:pointer;text-decoration:none;font:500 .95rem Inter,sans-serif;transition:background .15s,border-color .15s,color .15s}
+.rv-ic:hover{background:var(--rose-soft);border-color:var(--rose);color:var(--rose-deep)}
+.rv-ic:disabled{opacity:.35;cursor:default;background:var(--paper);border-color:var(--line);color:var(--ink-soft)}
+.rv-ic svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.rv-ov-pos{font-size:.72rem;color:var(--ink-faded);min-width:3.6rem;text-align:center}
+.rv-ov-corpo{position:relative;flex:1;background:var(--bg)}
+.rv-ov-corpo iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:transparent;opacity:0;transition:opacity .25s}
+.rv-ov-corpo.pronto iframe{opacity:1}
+.rv-ov-carregando{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.8rem;color:var(--ink-faded);font-size:.82rem}
+.rv-ov-corpo.pronto .rv-ov-carregando{display:none}
+.rv-spin{width:28px;height:28px;border-radius:50%;border:2.5px solid var(--rose-soft);border-top-color:var(--rose);animation:rvGira .8s linear infinite}
+.rv-ov-rod{display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;padding:.75rem 1.4rem;border-top:1px solid var(--line)}
+.rv-seg{display:inline-flex;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px}
+.rv-seg button{border:0;background:transparent;border-radius:999px;padding:.38rem .9rem;font:500 .76rem Inter,sans-serif;color:var(--ink-soft);cursor:pointer;transition:background .15s,color .15s}
+.rv-seg button.on[data-s=""]{background:var(--paper);color:var(--ink);box-shadow:var(--shadow-sm)}
+.rv-seg button.on[data-s="lendo"]{background:var(--champagne);color:var(--ink)}
+.rv-seg button.on[data-s="feito"]{background:var(--sage);color:var(--ink)}
+.rv-ov-rod .rv-link{margin-left:auto;font-size:.78rem;color:var(--ink-soft);text-decoration:none;font-weight:500}
+.rv-ov-rod .rv-link:hover{color:var(--ink);text-decoration:underline}
+@keyframes rvFade{from{opacity:0}to{opacity:1}}
+@keyframes rvSobe{from{opacity:0;transform:translateY(14px) scale(.985)}to{opacity:1;transform:none}}
+@keyframes rvGira{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.rv-ov-fundo,.rv-ov-painel{animation:none}.rv-spin{animation-duration:2s}}
+@media (max-width:700px){
+  .rv-ov{padding:0}
+  .rv-ov-painel{border-radius:0;border:0;max-height:none}
+  .rv-ov-cab{padding:.7rem .7rem .7rem 1rem;gap:.6rem}
+  .rv-ov-tit h3{font-size:1.02rem}
+  .rv-ov-pos{display:none}
+  .rv-ov-rod{padding:.6rem 1rem calc(.6rem + env(safe-area-inset-bottom))}
+  .rv-ov-rod .rv-link{margin-left:0}
+}
 </style>
 
 <link rel="stylesheet" href="topnav.css?v=1791163406"><script src="topnav.js?v=1791163406"></script></head>
@@ -120,16 +155,33 @@
   </main>
 </div>
 
-<div class="rv-ov" id="rv-ov" role="dialog" aria-modal="true">
-  <div class="rv-ov-top">
-    <h3 id="rv-ov-titulo"></h3>
-    <button class="btn" id="rv-ov-lendo"></button>
-    <button class="btn btn-primary" id="rv-ov-feito"></button>
-    <a class="btn" id="rv-ov-erro" href="erros.html">+ Erro</a>
-    <a class="btn" id="rv-ov-drive" target="_blank" rel="noopener">↗ Drive</a>
-    <button class="btn" onclick="fecharVisualizador()">Fechar</button>
+<div class="rv-ov" id="rv-ov" role="dialog" aria-modal="true" aria-labelledby="rv-ov-titulo">
+  <div class="rv-ov-fundo" data-fechar></div>
+  <div class="rv-ov-painel">
+    <div class="rv-ov-cab">
+      <div class="rv-ov-tit">
+        <div class="rv-ov-eyebrow" id="rv-ov-eyebrow"></div>
+        <h3 id="rv-ov-titulo"></h3>
+      </div>
+      <div class="rv-ov-acoes">
+        <button class="rv-ic" id="rv-ov-ant" title="Anterior (←)" aria-label="Anterior"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
+        <span class="rv-ov-pos" id="rv-ov-pos"></span>
+        <button class="rv-ic" id="rv-ov-prox" title="Próximo (→)" aria-label="Próximo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
+        <a class="rv-ic" id="rv-ov-drive" target="_blank" rel="noopener" title="Abrir no Drive" aria-label="Abrir no Drive"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></a>
+        <button class="rv-ic" data-fechar title="Fechar (Esc)" aria-label="Fechar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+      </div>
+    </div>
+    <div class="rv-ov-corpo" id="rv-ov-corpo">
+      <div class="rv-ov-carregando"><div class="rv-spin"></div>Carregando PDF…</div>
+      <iframe id="rv-ov-frame" title="Material de revisão" allow="autoplay"></iframe>
+    </div>
+    <div class="rv-ov-rod">
+      <div class="rv-seg" id="rv-ov-seg" role="group" aria-label="Status">
+        <button data-s="">Não iniciado</button><button data-s="lendo">Lendo</button><button data-s="feito">Feito</button>
+      </div>
+      <a class="rv-link" id="rv-ov-erro" href="erros.html">+ Anotar um erro</a>
+    </div>
   </div>
-  <iframe id="rv-ov-frame" title="Material de revisão" allow="autoplay"></iframe>
 </div>
 
 <script src="revisao-biblioteca.js"></script>
@@ -266,30 +318,68 @@ function definirEstado(id, s) {
   gravar(ST_KEY, st);
 }
 
+function cabecalho(i) {
+  if (i.g === 'rev') return ['Revisão ' + i.b + ' · em tabelas', i.a];
+  if (i.g === 'trab') return [i.b === 'revisao' ? 'Trabalhista · 2ª fase' : 'Trabalhista · Tema ' + i.a + ' · ' + ROTULO[i.b], i.n];
+  return ['Peça · ' + ROTULO[i.b], i.a];
+}
+
+function ordemDaAba() {
+  return [...document.querySelectorAll('#rv-conteudo [data-abrir]')].map(b => b.dataset.abrir);
+}
+
 function abrirVisualizador(id) {
   const i = achar(id);
   if (!i) return;
+  if (aba !== i.g) { aba = i.g; render(); }
+  const jaAberto = !!itemAberto;
   itemAberto = i;
   gravar(ULT_KEY, id);
-  document.getElementById('rv-ov-titulo').textContent = rotuloItem(i);
+  const [eyebrow, titulo] = cabecalho(i);
+  document.getElementById('rv-ov-eyebrow').textContent = eyebrow;
+  document.getElementById('rv-ov-titulo').textContent = titulo;
+  const corpo = document.getElementById('rv-ov-corpo');
+  corpo.classList.remove('pronto');
   document.getElementById('rv-ov-frame').src = 'https://drive.google.com/file/d/' + encodeURIComponent(id) + '/preview';
   document.getElementById('rv-ov-drive').href = 'https://drive.google.com/file/d/' + encodeURIComponent(id) + '/view';
   const materia = i.g === 'rev' ? CHAVE_ERROS[i.a] : (i.g === 'trab' ? 'trabalho' : '');
   document.getElementById('rv-ov-erro').href = 'erros.html?novo=1' + (materia ? '&materia=' + materia : '');
+  if (estado(id) === '') definirEstado(id, 'lendo');
   atualizarBotoesEstado();
-  document.getElementById('rv-ov').classList.add('open');
-  document.body.style.overflow = 'hidden';
-  if (estado(id) === '') { definirEstado(id, 'lendo'); atualizarBotoesEstado(); }
+  atualizarNavegacao();
+  if (!jaAberto) {
+    document.getElementById('rv-ov').classList.add('open');
+    document.body.style.overflow = 'hidden';
+    document.querySelector('#rv-ov [data-fechar].rv-ic').focus({ preventScroll: true });
+  }
+}
+
+function atualizarNavegacao() {
+  const ordem = ordemDaAba();
+  const pos = ordem.indexOf(itemAberto.id);
+  document.getElementById('rv-ov-ant').disabled = pos <= 0;
+  document.getElementById('rv-ov-prox').disabled = pos < 0 || pos >= ordem.length - 1;
+  document.getElementById('rv-ov-pos').textContent = pos >= 0 ? (pos + 1) + ' de ' + ordem.length : '';
+}
+
+function navegar(passo) {
+  if (!itemAberto) return;
+  const ordem = ordemDaAba();
+  const prox = ordem[ordem.indexOf(itemAberto.id) + passo];
+  if (prox) abrirVisualizador(prox);
 }
 
 function atualizarBotoesEstado() {
   if (!itemAberto) return;
   const s = estado(itemAberto.id);
-  document.getElementById('rv-ov-lendo').textContent = s === 'lendo' ? 'Lendo…' : 'Marcar como lendo';
-  document.getElementById('rv-ov-feito').textContent = s === 'feito' ? '✓ Concluído' : 'Marcar como feito';
+  document.querySelectorAll('#rv-ov-seg button').forEach(b => {
+    b.classList.toggle('on', b.dataset.s === s);
+    b.setAttribute('aria-pressed', b.dataset.s === s ? 'true' : 'false');
+  });
 }
 
 function fecharVisualizador() {
+  if (!itemAberto) return;
   document.getElementById('rv-ov').classList.remove('open');
   document.getElementById('rv-ov-frame').src = 'about:blank';
   document.body.style.overflow = '';
@@ -297,17 +387,25 @@ function fecharVisualizador() {
   render();
 }
 
-document.getElementById('rv-ov-lendo').addEventListener('click', () => {
-  if (!itemAberto) return;
-  definirEstado(itemAberto.id, estado(itemAberto.id) === 'lendo' ? '' : 'lendo');
-  atualizarBotoesEstado();
+document.getElementById('rv-ov-frame').addEventListener('load', e => {
+  if (e.target.src && e.target.src !== 'about:blank') document.getElementById('rv-ov-corpo').classList.add('pronto');
 });
-document.getElementById('rv-ov-feito').addEventListener('click', () => {
-  if (!itemAberto) return;
-  definirEstado(itemAberto.id, estado(itemAberto.id) === 'feito' ? '' : 'feito');
+document.getElementById('rv-ov-seg').addEventListener('click', e => {
+  const b = e.target.closest('button');
+  if (!b || !itemAberto) return;
+  definirEstado(itemAberto.id, b.dataset.s);
   atualizarBotoesEstado();
+  render();
 });
-document.addEventListener('keydown', e => { if (e.key === 'Escape' && itemAberto) fecharVisualizador(); });
+document.getElementById('rv-ov-ant').addEventListener('click', () => navegar(-1));
+document.getElementById('rv-ov-prox').addEventListener('click', () => navegar(1));
+document.getElementById('rv-ov').addEventListener('click', e => { if (e.target.closest('[data-fechar]')) fecharVisualizador(); });
+document.addEventListener('keydown', e => {
+  if (!itemAberto) return;
+  if (e.key === 'Escape') fecharVisualizador();
+  else if (e.key === 'ArrowLeft') navegar(-1);
+  else if (e.key === 'ArrowRight') navegar(1);
+});
 document.addEventListener('click', e => {
   const b = e.target.closest('[data-abrir]');
   if (b) abrirVisualizador(b.dataset.abrir);
