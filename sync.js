@@ -55,6 +55,45 @@
     return out;
   }
 
+  // ── Estado visível da sincronização ──
+  // Só aparece quando há o que avisar (enviando, sem conexão, falha ou
+  // dados perto do limite de 1 MB do documento); some sozinho ao confirmar.
+  const LIMITE_AVISO_BYTES = 800 * 1024;
+  let _status = 'ok';
+  let _pill = null;
+  let _timerOculta = null;
+  function tamanhoLocal() {
+    try { return new Blob([JSON.stringify(filtrarSincronizaveis(window._perfilOAB.coletarDadosLocalStorage()))]).size; }
+    catch (e) { return 0; }
+  }
+  function definirStatus(novo) {
+    _status = novo;
+    window._syncOAB && (window._syncOAB.status = novo);
+    try { document.dispatchEvent(new CustomEvent('oab-sync-status', { detail: novo })); } catch (e) {}
+    const TEXTOS = {
+      enviando: 'Sincronizando…',
+      offline: 'Sem conexão — salvo neste aparelho',
+      erro: 'Falha ao sincronizar — tentando de novo',
+      limite: 'Dados perto do limite da nuvem — exporte um backup',
+      ok: 'Sincronizado ✓'
+    };
+    if (!document.body) return;
+    if (!_pill) {
+      _pill = document.createElement('div');
+      _pill.setAttribute('role', 'status');
+      _pill.style.cssText = 'position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:9999;' +
+        'background:var(--paper,#fff);color:var(--ink,#2c2420);border:1px solid var(--line,#e8e0da);' +
+        'border-radius:999px;padding:.4rem .9rem;font:500 .75rem Inter,sans-serif;' +
+        'box-shadow:0 2px 10px rgba(44,36,32,.12);display:none;max-width:90vw;text-align:center';
+      document.body.appendChild(_pill);
+    }
+    clearTimeout(_timerOculta);
+    if (novo === 'enviando') { _pill.style.display = 'none'; return; }
+    _pill.textContent = TEXTOS[novo] || '';
+    _pill.style.display = 'block';
+    if (novo === 'ok') _timerOculta = setTimeout(() => { _pill.style.display = 'none'; }, 1800);
+  }
+
   function docRef(uid) {
     return window._fbDb.collection(COLECAO).doc(uid);
   }
@@ -88,14 +127,29 @@
       : filtrarSincronizaveis(window._perfilOAB.coletarDadosLocalStorage());
     if (!chave) dados.oab_local_rev = String(Math.max(localRev(), _revNuvem));
     const payload = { dados, atualizado_em: firebase.firestore.FieldValue.serverTimestamp() };
+    if (navigator.onLine === false) { definirStatus('offline'); }
     const escrita = docRef(uid).set(payload, { merge: true }).then(() => {
       try { localStorage.setItem('oab_ultimo_backup', new Date().toISOString()); } catch (e) {}
+      definirStatus(tamanhoLocal() > LIMITE_AVISO_BYTES ? 'limite' : 'ok');
       return true;
-    }).catch(err => { console.error('Erro ao enviar pra nuvem:', err); return false; });
+    }).catch(err => {
+      console.error('Erro ao enviar pra nuvem:', err);
+      definirStatus(navigator.onLine === false ? 'offline' : 'erro');
+      _agendarNovaTentativa(uid);
+      return false;
+    });
     // Guardado pra handleSnapshot esperar antes de decidir se a nuvem
     // está mais nova (ver comentário em handleSnapshot).
     _envioEmAndamento = escrita;
     return escrita;
+  }
+
+  // Reenvia o localStorage (só se houver algo mais novo que a nuvem)
+  // quando a conexão volta ou depois de uma falha.
+  let _tentando = null;
+  function _agendarNovaTentativa(uid) {
+    if (_tentando) return;
+    _tentando = setTimeout(() => { _tentando = null; enviarParaNuvem(uid); }, 15000);
   }
 
   // Overwrite de verdade (sem merge) — só faz sentido quando a intenção
@@ -229,6 +283,8 @@
 
     // Envia pra nuvem silenciosamente ao trocar de aba/sair da página,
     // como rede de segurança além do push logo após cada gravação.
+    window.addEventListener('online', () => enviarParaNuvem(uid));
+    window.addEventListener('offline', () => definirStatus('offline'));
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'hidden') enviarParaNuvem(uid);
     });

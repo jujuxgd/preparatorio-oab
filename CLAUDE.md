@@ -16,7 +16,7 @@ Teoria densa é estudada por fora (PDFs VDE, livros) — o app não exibe teoria
 - **Dia da prova:** 10 jan 2027 · OAB 48
 
 **Arquitetura frontend:** HTML estático + JS vanilla + CSS custom properties  
-**Backend opcional:** Flask + SQLite em `backend/` (progresso, erros)
+**Dados:** `localStorage` como fonte principal, sincronizado por conta no Firestore (`sync.js`, `firebase-init.js`). Não há backend próprio (a pasta `backend/` Flask foi removida)
 
 ### Lógica de calendário (script.js)
 - `STUDY_START = new Date(2026, 6, 10)` — 10 de julho de 2026
@@ -41,7 +41,7 @@ Os seguintes arquivos foram **deletados** na simplificação arquitetural de 10/
 - `tools/` — scripts Python de extração de PDF
 - `backend/routes/resumos.py`, `highlights.py`, `comments.py` — rotas descontinuadas
 
-**Regra:** Não recriar nenhum desses arquivos sem pedido explícito.
+**Nota (2026-10):** os cadernos `cl-*.js` e `caderno-legislativo.html` voltaram ao projeto e estão em uso (seção 9). Os demais itens da lista continuam removidos — não recriar sem pedido explícito.
 
 ---
 
@@ -174,6 +174,18 @@ Sala de prova. Três telas numa página: escolher, fazer e corrigir.
 - `simulados.html` continua sendo só o **registro** de simulados feitos em qualquer lugar.
 
 ---
+
+## 5.2.1 Sincronização (`sync.js`)
+
+Um documento por usuário em `backups/{uid}`; push por chave com merge. Regras:
+- Chaves só do aparelho (`SO_LOCAIS`: tema, `simulatedDate`, `oab_current_day`, login etc.)
+  nunca vão à nuvem nem são aplicadas vindas dela.
+- O envio de segurança (trocar de aba/fechar) só roda se `oab_local_rev` local > nuvem e
+  nunca faz a revisão da nuvem retroceder.
+- Todo código que grava no `localStorage` deve carimbar `oab_local_rev` e chamar
+  `_syncOAB.notificarAlteracaoLocal(chave)`.
+- Aviso discreto (pílula) só quando há falha, falta de conexão ou dados > 800 KB
+  (limite do documento é 1 MB).
 
 ## 5.3 Revisão espaçada do Caderno de Erros (`erros-core.js`)
 
@@ -320,7 +332,6 @@ Não implementar a migração sem confirmação.
 - **Não adicionar funcionalidades não pedidas** — zero scope creep
 - **Não usar flip-cards** em nenhuma hipótese — usar micro-resumos visíveis
 - **Quill.js 1.3.7** via cdnjs se editor rich text for necessário (com `matchVisual: false`)
-- **Backend Flask** em `backend/` — não criar rotas sem pedido explícito
 - Semanas validadas são **conteúdo estável** — não alterar sem motivo factual
 - Ao extrair novos dias: lançar 2 agentes em paralelo (um por matéria) para PDFs grandes (>50KB)
 
