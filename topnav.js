@@ -142,3 +142,24 @@
     onScroll();
   });
 })();
+
+// App instalável e offline: manifesto, ícones e service worker em todas as páginas.
+(function () {
+  var h = document.head;
+  function tag(nome, attrs) {
+    if (h.querySelector(nome + '[' + Object.keys(attrs)[0] + '="' + attrs[Object.keys(attrs)[0]] + '"]')) return;
+    var el = document.createElement(nome);
+    Object.keys(attrs).forEach(function (k) { el.setAttribute(k, attrs[k]); });
+    h.appendChild(el);
+  }
+  tag('link', { rel: 'manifest', href: 'manifest.webmanifest' });
+  tag('link', { rel: 'apple-touch-icon', href: 'apple-touch-icon.png' });
+  tag('meta', { name: 'theme-color', content: '#FAF8F5' });
+  tag('meta', { name: 'apple-mobile-web-app-capable', content: 'yes' });
+  tag('meta', { name: 'mobile-web-app-capable', content: 'yes' });
+  tag('meta', { name: 'apple-mobile-web-app-title', content: 'OAB' });
+  tag('meta', { name: 'apple-mobile-web-app-status-bar-style', content: 'default' });
+  if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+    window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js').catch(function () {}); });
+  }
+})();

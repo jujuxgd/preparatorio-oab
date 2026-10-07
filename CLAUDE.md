@@ -212,6 +212,15 @@ para o nome do banco), `pesosRecentes(banco, 41)` (média de questões por disci
 - **Aba Hoje:** card "Questões do dia" com as disciplinas do dia (não resolvidas / refazer
   erradas) e a matéria extra da semana.
 
+## 5.2.3 App instalável e offline (`manifest.webmanifest` + `sw.js`)
+
+`topnav.js` injeta manifesto, ícones (`icon-192.png`, `icon-512.png`, `apple-touch-icon.png`)
+e registra `sw.js` em todas as páginas. O service worker é **rede primeiro** (com 4s de
+espera antes de usar a cópia) e guarda as páginas e scripts do site e o SDK do Firebase;
+banco e cadernos legislativos entram no cache na primeira abertura online. Login/Firestore
+(googleapis), Drive e YouTube nunca passam pelo cache. Página nova: acrescentar em
+`ESSENCIAIS` no `sw.js` (o cache em uso também pega sozinho na primeira visita).
+
 ## 5.3 Revisão espaçada do Caderno de Erros (`erros-core.js`)
 
 Cada erro tem `proxima_revisao`, `nivel`, `acertos_seguidos` e, quando veio do banco ou
@@ -238,6 +247,10 @@ Estado em `oab_revisao_status_v1` (`{id: {s:'lendo'|'feito', d}}`); data da 2ª 
 `oab_segunda_fase_data`. Layout escolhido por Julia (2026-10): Revisões = estante de cards
 por matéria (cores `--mat-*`, anel de progresso, círculos R1/R2/R3); Trabalhista = trilha
 numerada com as revisões como paradas; Peças = agrupadas por tipo (`GRUPOS_PECA`).
+**Aba Treinos (2ª fase):** registro de peça treinada em `oab_pecas_treino_v1`
+(`{id, data, peca, tempo(min), nota(0–5)|null, crit:{peca,partes,fundamentos,pedidos,fechamento:
+'ok'|'parcial'|'faltou'}, obs}`), com cronômetro (`oab_pecas_cron`, só do aparelho), resumo
+(tempo médio, nota média, critério que mais falha, contagem por peça) e histórico.
 
 ---
 
