@@ -16,7 +16,7 @@ Teoria densa é estudada por fora (PDFs VDE, livros) — o app não exibe teoria
 - **Dia da prova:** 10 jan 2027 · OAB 48
 
 **Arquitetura frontend:** HTML estático + JS vanilla + CSS custom properties  
-**Backend opcional:** Flask + SQLite em `backend/` (progresso, erros)
+**Dados:** `localStorage` como fonte principal, sincronizado por conta no Firestore (`sync.js`, `firebase-init.js`). Não há backend próprio (a pasta `backend/` Flask foi removida)
 
 ### Lógica de calendário (script.js)
 - `STUDY_START = new Date(2026, 6, 10)` — 10 de julho de 2026
@@ -41,7 +41,7 @@ Os seguintes arquivos foram **deletados** na simplificação arquitetural de 10/
 - `tools/` — scripts Python de extração de PDF
 - `backend/routes/resumos.py`, `highlights.py`, `comments.py` — rotas descontinuadas
 
-**Regra:** Não recriar nenhum desses arquivos sem pedido explícito.
+**Nota (2026-10):** os cadernos `cl-*.js` e `caderno-legislativo.html` voltaram ao projeto e estão em uso (seção 9). Os demais itens da lista continuam removidos — não recriar sem pedido explícito.
 
 ---
 
@@ -81,16 +81,21 @@ conteúdo novo do VDE em ordem (pulando os dias sem conteúdo), documentado em c
 
 ---
 
-## 4. Status do Plano de Flashcards
+## 4. Flashcards = microresumos (fluxo real)
+
+Os flashcards NÃO vêm de `plano-vde.js`. Julia escreve o microresumo do dia na aba Hoje
+(prompt de IA → editor, salvo em `microresumo_dia_N`) e `revisar.html` o transforma em cartão
+de revisão. `flashcards[]` em `plano-vde.js` está vazio e **não precisa ser populado** —
+é legado do plano antigo (idem o `REVIEW_CARDS` de `cards.js`, preenchido em runtime).
+
+### (Legado) Status do plano de flashcards antigo
 
 | Dias    | Flashcards | Tópicos |
 |---------|------------|---------|
 | 1–72    | ❌ Vazio (pendente) | ✅ Reorganizado fielmente ao cronograma VDE (2026-07-12) |
 | 73–120  | ❌ Vazio (pendente) | ✅ Ciclo de revisão espaçada próprio (sem referência VDE) |
 
-**Próxima sessão:** popular `flashcards[]` (Q&A) dia a dia a partir dos PDFs semanais do VDE — os
-tópicos de cada dia (`materias[].topicos[]`) já servem de roteiro exato do que cada flashcard deve
-cobrir, já que foram reorganizados para bater com o cronograma oficial.
+**Obsoleto:** a ideia de popular `flashcards[]` a partir dos PDFs foi abandonada em favor dos microresumos.
 
 ---
 
@@ -172,6 +177,44 @@ Sala de prova. Três telas numa página: escolher, fazer e corrigir.
   `oab_simulados_v1` no formato que `simulados.html` já lê; "Mandar erros para o Caderno"
   chama `erros_add()` de `erros-core.js`.
 - `simulados.html` continua sendo só o **registro** de simulados feitos em qualquer lugar.
+
+---
+
+## 5.2.1 Sincronização (`sync.js`)
+
+Um documento por usuário em `backups/{uid}`; push por chave com merge. Regras:
+- Chaves só do aparelho (`SO_LOCAIS`: tema, `simulatedDate`, `oab_current_day`, login etc.)
+  nunca vão à nuvem nem são aplicadas vindas dela.
+- O envio de segurança (trocar de aba/fechar) só roda se `oab_local_rev` local > nuvem e
+  nunca faz a revisão da nuvem retroceder.
+- Todo código que grava no `localStorage` deve carimbar `oab_local_rev` e chamar
+  `_syncOAB.notificarAlteracaoLocal(chave)`.
+- Aviso discreto (pílula) só quando há falha, falta de conexão ou dados > 800 KB
+  (limite do documento é 1 MB).
+
+## 5.3 Revisão espaçada do Caderno de Erros (`erros-core.js`)
+
+Cada erro tem `proxima_revisao`, `nivel`, `acertos_seguidos` e, quando veio do banco ou
+do Simulado, `questao_id` (a questão é refeita a partir de `BANCO_QUESTOES`, carregado
+sob demanda em `erros.html`). Escada de intervalos 1→3→7→14→30 dias (cortada para caber
+antes de 09/01/2027); errar volta ao nível 0; 5 acertos seguidos = `dominada`. Fila de
+no máximo 15 por dia, mais atrasados primeiro. Erros sem `proxima_revisao` (antigos)
+vencem no primeiro dia. Cartões sem `questao_id` aparecem como "mostrar resposta →
+lembrei / não lembrei". `hoje.html` mostra o aviso do dia; a revisão em si é em `erros.html`.
+`erros_add` com `questao_id` já pendente reinicia o nível em vez de duplicar.
+
+---
+
+## 5.4 Biblioteca de revisão (`revisao.html`)
+
+Visualizador dos PDFs de revisão do VDE (Revisões 1–3 em tabelas), da trilha de Trabalho
+(2ª fase) e das peças — todos no Drive de Julia, abertos por `drive.google.com/file/d/ID/preview`.
+**O repositório é público e os arquivos têm link aberto: nunca commitar IDs de arquivos do
+Drive nem texto dos PDFs** (os PDFs trazem marca d'água com dados de terceiros). A lista de
+arquivos entra pela tela "Gerenciar biblioteca" (JSON colado) e fica em `oab_revisao_lib_v1`
+(sincroniza com a conta). O arquivo-fonte local é `biblioteca-revisao.local.json`
+(ignorado pelo Git via `*.local.json`). Estado em `oab_revisao_status_v1`
+(`{id: {s:'lendo'|'feito', d}}`); data da 2ª fase em `oab_segunda_fase_data`.
 
 ---
 
@@ -307,7 +350,6 @@ Não implementar a migração sem confirmação.
 - **Não adicionar funcionalidades não pedidas** — zero scope creep
 - **Não usar flip-cards** em nenhuma hipótese — usar micro-resumos visíveis
 - **Quill.js 1.3.7** via cdnjs se editor rich text for necessário (com `matchVisual: false`)
-- **Backend Flask** em `backend/` — não criar rotas sem pedido explícito
 - Semanas validadas são **conteúdo estável** — não alterar sem motivo factual
 - Ao extrair novos dias: lançar 2 agentes em paralelo (um por matéria) para PDFs grandes (>50KB)
 
