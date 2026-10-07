@@ -162,8 +162,13 @@ cada questão** — ela foi determinada pelo conteúdo.
 
 Sala de prova. Três telas numa página: escolher, fazer e corrigir.
 
-- **Composição:** prova completa de um exame do banco (23 disponíveis). Outras formas de
-  montagem ficam para quando Julia definir.
+- **Composição:** prova completa de um exame do banco (23 disponíveis) ou **treino rápido**
+  de 20 questões em 1 hora (corte proporcional 10): "Como na prova" reparte as vagas pelo peso
+  de cada matéria nas provas 41º+; "Minhas matérias fracas" usa só as 5 matérias com mais
+  pontos a ganhar (mesmo cálculo do painel Rumo aos 40). Prioriza questões nunca resolvidas
+  (no modo fracas, as que errou). Estado guarda `duracao`, `corte` e `treino`.
+- **Ao finalizar**, cada questão entra em `oab_bq_respostas` (mesmo formato do Banco; em
+  branco conta como erro) — é a fonte única de acerto por questão.
 - **Cronômetro:** 5 horas, como a 1ª fase. Conta o tempo em que a prova esteve aberta —
   sair da aba ou fechar o navegador congela o relógio; voltar retoma dali. O tempo já
   gasto nunca é devolvido e o tempo fora não é cobrado. Zerou, finaliza sozinho.
@@ -191,6 +196,21 @@ Um documento por usuário em `backups/{uid}`; push por chave com merge. Regras:
   `_syncOAB.notificarAlteracaoLocal(chave)`.
 - Aviso discreto (pílula) só quando há falha, falta de conexão ou dados > 800 KB
   (limite do documento é 1 MB).
+
+## 5.2.2 Rumo aos 40 (`rumo40.html`) e regras comuns (`estudo-core.js`)
+
+`window.ESTUDO`: `disciplinaDoBanco(nomeDoPlano)` (tira "Revisão · "/"Reta Final · " e mapeia
+para o nome do banco), `pesosRecentes(banco, 41)` (média de questões por disciplina nos exames
+41º+, soma 80), `statsPorDisciplina` (lê `oab_bq_respostas`; vale a última resposta),
+`acertoEstimado` = (acertos+2)/(respondidas+4), `extraDaSemana()` e `linkBanco(disc, situacao)`.
+- **Painel:** nota provável = Σ peso × acerto estimado; "pontos mais baratos" = peso ×
+  (75% − acerto estimado). Registros só do Tracker não entram (não dizem quais questões).
+- **Matérias fora do plano** (`EXTRAS`): Filosofia, Direitos Humanos, Internacional,
+  Ambiental e Financeiro — não aparecem nos 120 dias e valem 10 questões por prova. Uma por
+  semana em rodízio a partir de 05/10/2026; aparece no painel e na aba Hoje.
+- **Banco aceita filtro pela URL:** `banco-questoes.html?disciplina=...&situacao=nao|errei|acertei|favoritas`.
+- **Aba Hoje:** card "Questões do dia" com as disciplinas do dia (não resolvidas / refazer
+  erradas) e a matéria extra da semana.
 
 ## 5.3 Revisão espaçada do Caderno de Erros (`erros-core.js`)
 

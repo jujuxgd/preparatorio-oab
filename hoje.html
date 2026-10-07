@@ -1151,6 +1151,12 @@
       <a href="erros.html" class="btn btn-primary" style="text-decoration:none;font-size:.8rem">Revisar agora</a>
     </div>
 
+    <div id="qd-hoje" style="display:none;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:.95rem 1.2rem;margin-bottom:1.2rem">
+      <div style="display:flex;align-items:baseline;gap:.6rem;flex-wrap:wrap;margin-bottom:.65rem"><strong style="font-size:.9rem;color:var(--ink)">Questões do dia</strong><span style="color:var(--ink-faded);font-size:.76rem">pratique no banco o que você estudou hoje</span></div>
+      <div id="qd-acoes" style="display:flex;gap:.5rem;flex-wrap:wrap"></div>
+      <div id="qd-extra" style="margin-top:.75rem;padding-top:.7rem;border-top:1px solid var(--line);font-size:.8rem;color:var(--ink-soft);display:flex;align-items:center;gap:.6rem;flex-wrap:wrap"></div>
+    </div>
+
     <!-- TABS -->
     <div class="tabs-bar">
       <div class="tab active" data-tab="topicos">📌 Tópicos</div>
@@ -1504,6 +1510,32 @@
 <script src="progresso.js?v=1783859287"></script>
 <script src="plano-vde.js"></script>
 <script src="erros-core.js"></script>
+<script src="estudo-core.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  try {
+    var dia = typeof _diaCorrente === 'function' ? _diaCorrente() : getStudyDay();
+    var dados = typeof getDadosDia === 'function' ? getDadosDia(dia) : null;
+    var discs = [];
+    ((dados && dados.materias) || []).forEach(function (m) {
+      var d = ESTUDO.disciplinaDoBanco(m.nome);
+      if (d && discs.indexOf(d) === -1) discs.push(d);
+    });
+    var curto = function (d) { return d.replace(/^Direito (Processual )?(do |da )?/, function (x, p) { return p ? 'Proc. ' : ''; }); };
+    document.getElementById('qd-acoes').innerHTML = discs.length
+      ? discs.map(function (d) {
+          return '<a class="btn btn-primary" style="text-decoration:none;font-size:.8rem" href="' + ESTUDO.linkBanco(d, 'nao') + '">' + curto(d) + ' · não resolvidas →</a>' +
+                 '<a class="btn" style="text-decoration:none;font-size:.8rem" href="' + ESTUDO.linkBanco(d, 'errei') + '">refazer as que errei</a>';
+        }).join('')
+      : '<span style="font-size:.8rem;color:var(--ink-faded)">Hoje não tem matéria nova — aproveite a matéria extra abaixo.</span>';
+    var extra = ESTUDO.extraDaSemana();
+    document.getElementById('qd-extra').innerHTML =
+      '<span style="flex:1;min-width:180px">Matéria extra da semana: <strong style="color:var(--ink)">' + extra + '</strong> · fora do plano, cai 2× por prova</span>' +
+      '<a class="btn" style="text-decoration:none;font-size:.78rem" href="' + ESTUDO.linkBanco(extra, 'nao') + '">Resolver →</a>';
+    document.getElementById('qd-hoje').style.display = 'block';
+  } catch (e) {}
+});
+</script>
 <script>
 (function(){
   try {

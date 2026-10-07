@@ -17,6 +17,8 @@
   var SIM_KEY = 'oab_simulados_v1';
   var DURACAO = 5 * 60 * 60 * 1000;   // 5 horas, como na 1ª fase
   var CORTE   = 40;                    // acertos mínimos para aprovação
+  var TREINO_N  = 20;                  // treino rápido: 20 questões em 1 hora,
+  var TREINO_MS = 60 * 60 * 1000;      // o mesmo ritmo das 80 em 5 horas (3,75 min cada)
 
   var BANCO = (typeof window.BANCO_QUESTOES !== 'undefined') ? window.BANCO_QUESTOES : [];
   var tela  = document.getElementById('tela');
@@ -49,11 +51,15 @@
     return (h < 10 ? '0' : '') + h + ':' + (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
   }
 
+  function duracao(est) { return (est && est.duracao) || DURACAO; }
+  // treino de 20 questões: corte proporcional ao da prova (metade)
+  function corte() { return (S && S.corte) || CORTE; }
+
   // ── tempo restante: derivado do relógio, nunca acumulado ──
   function restante() {
     if (!S) return 0;
     var gasto = S.gastoAntes + (S.retomadoEm ? Date.now() - S.retomadoEm : 0);
-    return DURACAO - gasto;
+    return duracao(S) - gasto;
   }
   function tempoGasto() {
     return S.gastoAntes + (S.retomadoEm ? Date.now() - S.retomadoEm : 0);
@@ -75,11 +81,11 @@
     var lista = exames();
     var andamento = lerLocal(CHAVE, null);
     var html = '<h1>Fazer um <em>simulado</em></h1>' +
-      '<p class="lead">Uma prova inteira, com as 5 horas da 1ª fase e sem gabarito até o final. ' +
-      'A correção vem depois, matéria por matéria.</p>';
+      '<p class="lead">Um treino rápido de 20 questões ou uma prova inteira com as 5 horas da 1ª fase — ' +
+      'sem gabarito até o final. A correção vem depois, matéria por matéria.</p>';
 
     if (andamento && !andamento.terminado) {
-      var faltam = DURACAO - andamento.gastoAntes;
+      var faltam = duracao(andamento) - andamento.gastoAntes;
       var respondidas = Object.keys(andamento.respostas || {}).length;
       html += '<div class="cfg"><div class="retomar">' +
         '<p>Você tem um simulado em andamento — <b>' + esc(andamento.nome) + '</b>, ' +
@@ -96,6 +102,20 @@
       tela.innerHTML = html;
       return;
     }
+
+    html += '<div class="cfg"><div class="cfg-bloco">' +
+      '<h2>Treino rápido · ' + TREINO_N + ' questões em 1 hora</h2>' +
+      '<div class="cfg-grade">' +
+        '<button class="prova-bt" data-treino="proporcional" type="button"><b>Como na prova</b>' +
+          '<span>matérias na mesma proporção das provas recentes</span></button>' +
+        '<button class="prova-bt" data-treino="fracas" type="button"><b>Minhas matérias fracas</b>' +
+          '<span>as 5 matérias que mais rendem pontos, pelo seu acerto no banco</span></button>' +
+      '</div>' +
+      '<div class="cfg-rodape">' +
+        '<button class="bt-principal" id="bt-treino" disabled>Começar treino</button>' +
+        '<span class="aviso" id="aviso-treino">Escolha um tipo de treino.</span>' +
+      '</div>' +
+      '</div></div>';
 
     html += '<div class="cfg"><div class="cfg-bloco">' +
       '<h2>Prova completa de um exame</h2>' +
@@ -115,9 +135,23 @@
     tela.innerHTML = html;
 
     var escolhido = null;
-    tela.querySelectorAll('.prova-bt').forEach(function (b) {
+    var treino = null;
+    tela.querySelectorAll('[data-treino]').forEach(function (b) {
       b.onclick = function () {
-        tela.querySelectorAll('.prova-bt').forEach(function (x) { x.classList.remove('on'); });
+        tela.querySelectorAll('[data-treino]').forEach(function (x) { x.classList.remove('on'); });
+        b.classList.add('on');
+        treino = b.dataset.treino;
+        document.getElementById('bt-treino').disabled = false;
+        document.getElementById('aviso-treino').textContent = TREINO_N + ' questões · 1 hora · corte proporcional de ' +
+          Math.ceil(TREINO_N / 2) + ' · prioriza questões que você ainda não resolveu.';
+      };
+    });
+    var btt = document.getElementById('bt-treino');
+    if (btt) btt.onclick = function () { if (treino) comecarTreino(treino); };
+
+    tela.querySelectorAll('[data-exame]').forEach(function (b) {
+      b.onclick = function () {
+        tela.querySelectorAll('[data-exame]').forEach(function (x) { x.classList.remove('on'); });
         b.classList.add('on');
         escolhido = parseInt(b.dataset.exame, 10);
         var e = lista.filter(function (x) { return x.num === escolhido; })[0];
@@ -156,6 +190,97 @@
     };
     salvar();
     telaProva();
+  }
+
+  // Divide n vagas pelos pesos (maiores restos), sem passar do que existe.
+  function repartir(pesos, n, disponiveis) {
+    var ds = Object.keys(pesos).filter(function (d) { return pesos[d] > 0 && disponiveis[d] > 0; });
+    var soma = ds.reduce(function (a, d) { return a + pesos[d]; }, 0) || 1;
+    var vagas = {}, restos = [], usadas = 0;
+    ds.forEach(function (d) {
+      var exato = pesos[d] / soma * n;
+      vagas[d] = Math.min(Math.floor(exato), disponiveis[d]);
+      usadas += vagas[d];
+      restos.push({ d: d, r: exato - Math.floor(exato) });
+    });
+    restos.sort(function (a, b) { return b.r - a.r; });
+    for (var i = 0; usadas < n && i < restos.length * 3; i++) {
+      var d = restos[i % restos.length].d;
+      if (vagas[d] < disponiveis[d]) { vagas[d]++; usadas++; }
+    }
+    return vagas;
+  }
+
+  function embaralhar(a) {
+    for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; }
+    return a;
+  }
+
+  function comecarTreino(modo) {
+    var E = window.ESTUDO;
+    var resp = E.lerRespostas();
+    var pesos = E.pesosRecentes(BANCO, 41);
+    if (modo === 'fracas') {
+      // mesmo critério do painel Rumo aos 40: pontos a ganhar até 75%; só as 5 que mais rendem
+      var st = E.statsPorDisciplina(BANCO, resp);
+      Object.keys(pesos).forEach(function (d) { pesos[d] = pesos[d] * Math.max(0, 0.75 - E.acertoEstimado(st[d])); });
+      var top5 = Object.keys(pesos).sort(function (a, b) { return pesos[b] - pesos[a]; }).slice(0, 5);
+      Object.keys(pesos).forEach(function (d) { if (top5.indexOf(d) === -1) pesos[d] = 0; });
+    }
+    var porDisc = {};
+    BANCO.forEach(function (q) { (porDisc[q.discipline] = porDisc[q.discipline] || []).push(q); });
+    var disp = {};
+    Object.keys(porDisc).forEach(function (d) { disp[d] = porDisc[d].length; });
+    var vagas = repartir(pesos, TREINO_N, disp);
+    var escolhidas = [];
+    Object.keys(vagas).forEach(function (d) {
+      // primeiro as nunca resolvidas; no treino das fracas, depois as que errou
+      var nunca = [], erradas = [], resto = [];
+      porDisc[d].forEach(function (q) {
+        var r = resp[q.id];
+        if (!r || !r.vezes) nunca.push(q); else if (r.ultima_correta === false) erradas.push(q); else resto.push(q);
+      });
+      var fila = modo === 'fracas'
+        ? embaralhar(erradas).concat(embaralhar(nunca), embaralhar(resto))
+        : embaralhar(nunca).concat(embaralhar(erradas), embaralhar(resto));
+      escolhidas = escolhidas.concat(fila.slice(0, vagas[d]));
+    });
+    if (!escolhidas.length) return;
+    escolhidas.sort(function (a, b) { return a.question_number - b.question_number; });
+    S = {
+      nome: 'Treino rápido · ' + (modo === 'fracas' ? 'matérias fracas' : 'como na prova'),
+      treino: modo,
+      duracao: TREINO_MS,
+      corte: Math.ceil(escolhidas.length / 2),
+      ids: escolhidas.map(function (q) { return q.id; }),
+      respostas: {}, marcadas: {},
+      atual: 0,
+      inicio: Date.now(), gastoAntes: 0, retomadoEm: Date.now(),
+      terminado: false
+    };
+    salvar();
+    telaProva();
+  }
+
+  // Cada questão feita no simulado entra no histórico do banco (oab_bq_respostas),
+  // que é de onde o painel Rumo aos 40 tira o acerto por matéria. Em branco conta como erro.
+  function gravarNoHistorico() {
+    if (S.historicoGravado) return;
+    var hist = lerLocal('oab_bq_respostas', {});
+    var agora = new Date().toISOString();
+    S.ids.forEach(function (id) {
+      var q = BANCO.filter(function (x) { return x.id === id; })[0];
+      if (!q) return;
+      var marcou = S.respostas[id] || null;
+      var certa = marcou === q.correct_answer;
+      var at = hist[id] || { vezes: 0, acertos: 0, erros: 0 };
+      at.vezes += 1;
+      if (certa) at.acertos += 1; else at.erros += 1;
+      at.ultima_correta = certa; at.ultima_resposta = marcou; at.ultima_data = agora;
+      hist[id] = at;
+    });
+    salvarLocal('oab_bq_respostas', hist);
+    S.historicoGravado = true;
   }
 
   function salvar() { salvarLocal(CHAVE, S); }
@@ -295,10 +420,11 @@
   function finalizar(porTempo) {
     if (relogio) clearInterval(relogio);
     S.terminado = true;
-    S.gastoAntes = Math.min(tempoGasto(), DURACAO);
+    S.gastoAntes = Math.min(tempoGasto(), duracao(S));
     S.retomadoEm = null;
     S.porTempo = !!porTempo;
     S.fimEm = Date.now();
+    gravarNoHistorico();
     salvar();
     telaResultado();
   }
@@ -352,7 +478,7 @@
   function telaResultado() {
     var r = corrigir();
     var total = S.ids.length;
-    var passou = r.certas >= CORTE;
+    var passou = r.certas >= corte();
     var brancos = total - Object.keys(S.respostas).length;
 
     var mats = Object.keys(r.porMateria).sort(function (a, b) {
@@ -371,7 +497,7 @@
         '<div class="res-selo ' + (passou ? 'passou' : 'nao') + '">' +
           (passou ? 'Acima do corte' : 'Abaixo do corte') + '</div>' +
         '<div class="res-linha">' +
-          'Corte da 1ª fase: <b>' + CORTE + ' acertos</b> · ' +
+          (S.treino ? 'Corte proporcional: <b>' + corte() + ' de ' + total + '</b> · ' : 'Corte da 1ª fase: <b>' + CORTE + ' acertos</b> · ') +
           'Aproveitamento: <b>' + Math.round(r.certas / total * 100) + '%</b> · ' +
           'Tempo: <b>' + hhmmss(S.gastoAntes) + '</b>' +
           (brancos ? ' · <b>' + brancos + '</b> em branco' : '') +
@@ -448,7 +574,7 @@
 
     arr.unshift({
       id: Date.now(),
-      tipo: 'prova_oab',
+      tipo: S.treino ? 'simulado' : 'prova_oab',
       nome: S.nome,
       data: hoje,
       total: S.ids.length,
