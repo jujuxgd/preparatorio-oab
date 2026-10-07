@@ -19,29 +19,96 @@
 <link rel="stylesheet" href="style.css?v=1784043341">
 
 <style>
-.rv-tabs{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.4rem}
-.rv-tab{background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:.5rem 1.1rem;font:500 .84rem Inter,sans-serif;color:var(--ink-soft);cursor:pointer}
-.rv-tab.on{background:var(--rose-soft);border-color:var(--rose);color:var(--rose-deep)}
-.rv-cabeca{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:1.1rem}
-.rv-prog{font-size:.8rem;color:var(--ink-soft)}
-.rv-bar{height:5px;background:var(--rose-soft);border-radius:5px;overflow:hidden;width:180px;margin-top:.35rem}
-.rv-bar i{display:block;height:100%;background:var(--rose)}
-.rv-linha{display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:.8rem 1rem;margin-bottom:.6rem;box-shadow:var(--shadow-sm)}
-.rv-nome{flex:1;min-width:150px;font-size:.9rem;color:var(--ink);font-weight:500}
-.rv-nome small{display:block;font-weight:400;color:var(--ink-faded);font-size:.72rem}
-.rv-chips{display:flex;gap:.4rem;flex-wrap:wrap}
-.rv-chip{border:1px solid var(--line);background:var(--bg);color:var(--ink-soft);border-radius:999px;padding:.38rem .85rem;font:500 .76rem Inter,sans-serif;cursor:pointer}
-.rv-chip:hover{border-color:var(--rose)}
+.rv-tabs{display:inline-flex;gap:2px;background:var(--bg-soft,var(--bg));border:1px solid var(--line);border-radius:999px;padding:3px;margin-bottom:1.4rem;max-width:100%;overflow-x:auto}
+.rv-tab{border:0;background:transparent;border-radius:999px;padding:.5rem 1.05rem;font:500 .82rem Inter,sans-serif;color:var(--ink-soft);cursor:pointer;white-space:nowrap;transition:background .15s,color .15s}
+.rv-tab.on{background:var(--paper);color:var(--ink);box-shadow:var(--shadow-sm)}
+.rv-resumo{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:1.2rem}
+.rv-resumo-num{font-size:.82rem;color:var(--ink-soft)}
+.rv-resumo-num b{font-family:'Fraunces',serif;font-weight:500;font-size:1.6rem;color:var(--ink);margin-right:.25rem;letter-spacing:-.02em}
+.rv-bar{height:6px;background:var(--line);border-radius:6px;overflow:hidden;width:min(280px,100%);margin-top:.5rem}
+.rv-bar i{display:block;height:100%;background:var(--rose);border-radius:6px;transition:width .4s}
+.rv-vazio{text-align:center;padding:2.5rem 1.5rem;color:var(--ink-soft);font-size:.9rem;line-height:1.6}
+
+.rv-continuar{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;background:var(--paper);border:1px solid var(--line);border-left:4px solid var(--rose);border-radius:var(--radius);padding:.9rem 1.2rem;margin-bottom:1.3rem;box-shadow:var(--shadow-sm)}
+.rv-continuar>div{flex:1;min-width:170px}
+.rv-eb{font:500 .62rem Inter,sans-serif;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-faded);margin-bottom:.25rem}
+.rv-continuar small{display:block;font-size:.74rem;color:var(--ink-faded);margin-top:.15rem}
+.rv-continuar strong{font-family:'Fraunces',serif;font-weight:500;font-size:1.05rem;color:var(--ink)}
+
+.rv-estante{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.9rem}
+.rv-card{position:relative;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:1rem 1.05rem 1.05rem;box-shadow:var(--shadow-sm);overflow:hidden;transition:transform .18s,box-shadow .18s}
+.rv-card::before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:var(--cd)}
+.rv-card:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+.rv-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:.6rem;margin-bottom:.9rem}
+.rv-card h4{font-family:'Fraunces',serif;font-weight:500;font-size:1.08rem;line-height:1.2;color:var(--ink);margin:0}
+.rv-anel{flex:none;position:relative;width:42px;height:42px}
+.rv-anel svg{width:42px;height:42px;transform:rotate(-90deg)}
+.rv-anel circle{fill:none;stroke-width:3.5}
+.rv-anel .t{stroke:var(--c)}
+.rv-anel .p{stroke:var(--cd);stroke-linecap:round;transition:stroke-dasharray .4s}
+.rv-anel span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:600 .66rem Inter,sans-serif;color:var(--ink-soft)}
+.rv-dots{display:flex;gap:.5rem}
+.rv-dot{width:40px;height:40px;border-radius:50%;border:1.5px solid var(--line);background:var(--paper);color:var(--ink-soft);font:600 .8rem Inter,sans-serif;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .15s,border-color .15s,background .15s}
+.rv-dot:hover{transform:scale(1.08);border-color:var(--cd)}
+.rv-dot.lendo{border-color:var(--cd);background:linear-gradient(90deg,var(--c) 50%,var(--paper) 50%);color:var(--ink)}
+.rv-dot.feito{border-color:var(--cd);background:var(--cd);color:var(--paper)}
+.rv-dot.falta{border-style:dashed;opacity:.45;cursor:default}
+.rv-dot.falta:hover{transform:none;border-color:var(--line)}
+.rv-card-legenda{margin-top:.7rem;font-size:.72rem;color:var(--ink-faded)}
+
+.rv-fase2{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:1rem 1.2rem;margin-bottom:1.4rem;box-shadow:var(--shadow-sm)}
+.rv-fase2 label{display:flex;align-items:center;gap:.6rem;font:400 .8rem Inter,sans-serif;letter-spacing:0;text-transform:none;color:var(--ink-soft);flex-wrap:wrap;margin-bottom:0}
+.rv-fase2 input{border:1px solid var(--line);border-radius:var(--radius-sm);padding:.35rem .55rem;font:inherit;background:var(--bg);color:var(--ink)}
+.rv-fase2-dias{text-align:right}
+.rv-fase2-dias b{font-family:'Fraunces',serif;font-weight:500;font-size:1.7rem;color:var(--ink);line-height:1}
+.rv-fase2-dias small{display:block;font-size:.72rem;color:var(--ink-faded)}
+
+.rv-trilha{position:relative;padding-left:0;--c:var(--mat-trab);--cd:var(--mat-trab-deep)}
+.rv-no{position:relative;display:flex;gap:1rem;padding-bottom:1.1rem}
+.rv-no::before{content:"";position:absolute;left:15px;top:34px;bottom:-2px;width:2px;background:var(--line)}
+.rv-no.feito::before{background:var(--cd)}
+.rv-no:last-child::before{display:none}
+.rv-marca{flex:none;width:32px;height:32px;border-radius:50%;border:2px solid var(--line);background:var(--paper);display:flex;align-items:center;justify-content:center;font:600 .74rem Inter,sans-serif;color:var(--ink-faded);position:relative;z-index:1}
+.rv-no.lendo .rv-marca{border-color:var(--cd);background:linear-gradient(90deg,var(--c) 50%,var(--paper) 50%);color:var(--ink)}
+.rv-no.feito .rv-marca{border-color:var(--cd);background:var(--cd);color:var(--paper)}
+.rv-no.atual .rv-marca{box-shadow:0 0 0 5px var(--c)}
+.rv-no.parada .rv-marca{width:22px;height:22px;margin:5px;border-radius:5px;transform:rotate(45deg);font-size:0}
+.rv-no-corpo{flex:1;min-width:0;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:.8rem 1rem;box-shadow:var(--shadow-sm)}
+.rv-no.parada .rv-no-corpo{background:transparent;border-style:dashed;box-shadow:none;display:flex;align-items:center;justify-content:space-between;gap:.8rem;flex-wrap:wrap;padding:.6rem 1rem}
+.rv-no-eb{font:500 .62rem Inter,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faded);margin-bottom:.2rem}
+.rv-no-eb em{font-style:normal;color:var(--cd);margin-left:.4rem}
+.rv-no-tit{font-family:'Fraunces',serif;font-weight:500;font-size:1.02rem;color:var(--ink);margin-bottom:.6rem}
+.rv-no.parada .rv-no-tit{margin:0;font-style:italic;font-size:.95rem}
+
+.rv-chips{display:flex;gap:.4rem;flex-wrap:wrap;align-items:center}
+.rv-chip{border:1px solid var(--line);background:var(--bg);color:var(--ink-soft);border-radius:999px;padding:.36rem .82rem;font:500 .75rem Inter,sans-serif;cursor:pointer;transition:border-color .15s,background .15s}
+.rv-chip:hover{border-color:var(--ink-faded)}
 .rv-chip.lendo{background:var(--champagne);border-color:var(--gold);color:var(--ink)}
 .rv-chip.feito{background:var(--sage);border-color:#8fb08a;color:var(--ink)}
 .rv-chip.feito::before{content:"✓ "}
-.rv-chip.lendo::before{content:"… "}
-.rv-vazio{text-align:center;padding:2.5rem 1.5rem;color:var(--ink-soft);font-size:.9rem;line-height:1.6}
-.rv-box{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:1.4rem;margin-bottom:1.2rem}
-.rv-continuar{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;background:var(--rose-soft);border-radius:var(--radius);padding:.8rem 1.1rem;margin-bottom:1.2rem;font-size:.86rem}
-.rv-continuar span{flex:1;min-width:160px}
-.rv-data{display:flex;align-items:center;gap:.6rem;font-size:.8rem;color:var(--ink-soft);flex-wrap:wrap}
-.rv-data input{border:1px solid var(--line);border-radius:var(--radius-sm);padding:.3rem .5rem;font:inherit;background:var(--paper);color:var(--ink)}
+.rv-seta{color:var(--ink-ghost,var(--ink-faded));font-size:.8rem}
+
+.rv-grupos{display:grid;gap:1rem}
+.rv-grupo{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow-sm);overflow:hidden}
+.rv-grupo-cab{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;padding:.9rem 1.2rem;border-bottom:1px solid var(--line)}
+.rv-grupo-cab h4{font-family:'Fraunces',serif;font-weight:500;font-size:1.08rem;color:var(--ink);margin:0}
+.rv-grupo-cab span{font-size:.74rem;color:var(--ink-faded)}
+.rv-peca{display:flex;align-items:center;justify-content:space-between;gap:.6rem 1rem;flex-wrap:wrap;padding:.7rem 1.2rem;border-bottom:1px solid var(--line-soft,var(--line))}
+.rv-peca:last-child{border-bottom:0}
+.rv-peca-nome{font-size:.88rem;color:var(--ink);min-width:160px;flex:1}
+.rv-peca.feito .rv-peca-nome::after{content:" ✓";color:var(--success,#5E8C6A)}
+@media (max-width:700px){
+  .rv-estante{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:.7rem}
+  .rv-card{padding:.9rem .85rem}
+  .rv-card h4{font-size:.98rem}
+  .rv-dot{width:36px;height:36px}
+  .rv-dots{gap:.35rem}
+  .rv-peca{padding:.7rem 1rem}
+  .rv-tabs{display:flex;width:100%}
+  .rv-tab{flex:1;padding:.5rem .4rem;font-size:.8rem}
+  .rv-longo{display:none}
+  .rv-fase2-dias{text-align:left}
+}
 .rv-ov{position:fixed;inset:0;z-index:400;display:none;align-items:center;justify-content:center;padding:24px}
 .rv-ov.open{display:flex}
 .rv-ov-fundo{position:absolute;inset:0;background:rgba(44,36,32,.28);-webkit-backdrop-filter:blur(14px) saturate(115%);backdrop-filter:blur(14px) saturate(115%);animation:rvFade .22s ease-out}
@@ -147,8 +214,8 @@
 
     <div id="rv-continuar"></div>
     <div class="rv-tabs" id="rv-tabs">
-      <button class="rv-tab on" data-tab="rev">Revisões 1 · 2 · 3</button>
-      <button class="rv-tab" data-tab="trab">Trabalhista · 2ª fase</button>
+      <button class="rv-tab on" data-tab="rev">Revisões<span class="rv-longo"> 1 · 2 · 3</span></button>
+      <button class="rv-tab" data-tab="trab">Trabalhista<span class="rv-longo"> · 2ª fase</span></button>
       <button class="rv-tab" data-tab="peca">Peças</button>
     </div>
     <div id="rv-conteudo"></div>
@@ -218,20 +285,30 @@ const estado = id => (status()[id] || {}).s || '';
 
 function achar(id) { return biblioteca().find(i => i.id === id); }
 
-function rotuloItem(i) {
-  if (i.g === 'rev') return 'Revisão ' + i.b + ' · ' + i.a;
-  if (i.g === 'trab') return (i.b === 'revisao' ? i.n : ROTULO[i.b] + ' · ' + i.n);
-  return ROTULO[i.b] + ' · ' + i.a;
-}
+const COR = {'Ética':'etica','Constitucional':'const','Civil':'civil','Processo Civil':'civil','Penal':'penal','Processo Penal':'penal','Trabalho':'trab','Processo do Trabalho':'trab','Tributário':'tribut','Administrativo':'trab','Empresarial':'etica'};
+const GRUPOS_PECA = [
+  ['Controle de constitucionalidade', ['Ação Direta de Inconstitucionalidade','Ação Direta de Inconstitucionalidade por Omissão','Ação Declaratória de Constitucionalidade','Arguição de Descumprimento de Preceito Fundamental','Representação de Inconstitucionalidade (ADI estadual)','Reclamação']],
+  ['Remédios constitucionais', ['Habeas Corpus','Habeas Data','Mandado de Segurança','Mandado de Injunção','Ação Popular']],
+  ['Ações e defesa', ['Ação Civil Pública','Ação de Procedimento Comum','Ação de Impugnação de Mandato Eletivo','Contestação, Reconvenção e Parecer Jurídico']],
+  ['Recursos', ['Apelação','Agravos','Embargos de Declaração','Contrarrazões e Recurso Adesivo','Recurso Especial','Recurso Extraordinário','Recurso Ordinário Constitucional (ROC)','Recurso Ordinário']]
+];
+const PASSO_CURTO = {teoria:'Teoria', pratica:'Praticar', oficina:'Oficina', material:'Material', resumo:'Resumo VDE', caderno:'Caderno Legislativo'};
 
 function chip(i, texto) {
   return '<button class="rv-chip ' + estado(i.id) + '" data-abrir="' + esc(i.id) + '">' + esc(texto) + '</button>';
 }
 
-function progresso(lista) {
+function estadoGrupo(itens) {
+  const e = itens.map(i => estado(i.id));
+  if (e.length && e.every(s => s === 'feito')) return 'feito';
+  return e.some(s => s) ? 'lendo' : '';
+}
+
+function resumo(lista, nome) {
   const feitos = lista.filter(i => estado(i.id) === 'feito').length;
   const pct = lista.length ? Math.round(feitos / lista.length * 100) : 0;
-  return '<div class="rv-prog">' + feitos + ' de ' + lista.length + ' concluídos<div class="rv-bar"><i style="width:' + pct + '%"></i></div></div>';
+  return '<div class="rv-resumo-num"><b>' + feitos + '</b>de ' + lista.length + ' ' + nome + ' concluídos' +
+    '<div class="rv-bar"><i style="width:' + pct + '%"></i></div></div>';
 }
 
 function agrupar(lista, campo) {
@@ -240,54 +317,94 @@ function agrupar(lista, campo) {
   return m;
 }
 
+function anel(feitos, total) {
+  const C = 2 * Math.PI * 17;
+  const p = total ? feitos / total : 0;
+  return '<div class="rv-anel" aria-label="' + feitos + ' de ' + total + '"><svg viewBox="0 0 42 42"><circle class="t" cx="21" cy="21" r="17"/>' +
+    '<circle class="p" cx="21" cy="21" r="17" stroke-dasharray="' + (p * C).toFixed(1) + ' ' + C.toFixed(1) + '"/></svg><span>' + feitos + '/' + total + '</span></div>';
+}
+
 function renderRev(lib) {
   const lista = lib.filter(i => i.g === 'rev');
   const por = agrupar(lista, 'a');
-  let h = '<div class="rv-cabeca">' + progresso(lista) + '</div>';
+  let h = '<div class="rv-resumo">' + resumo(lista, 'arquivos') + '</div><div class="rv-estante">';
   ORDEM_MATERIAS.filter(m => por.has(m)).forEach(m => {
-    const itens = por.get(m).sort((x, y) => x.b - y.b);
-    h += '<div class="rv-linha"><div class="rv-nome">' + esc(m) + '</div><div class="rv-chips">' +
-      itens.map(i => chip(i, 'R' + i.b)).join('') + '</div></div>';
+    const itens = por.get(m);
+    const cor = COR[m] || 'const';
+    const feitos = itens.filter(i => estado(i.id) === 'feito').length;
+    const proximo = [1, 2, 3].map(r => itens.find(i => +i.b === r)).find(i => i && estado(i.id) !== 'feito');
+    const dots = [1, 2, 3].map(r => {
+      const i = itens.find(x => +x.b === r);
+      if (!i) return '<span class="rv-dot falta" title="Revisão ' + r + ' não está na pasta">' + r + '</span>';
+      const s = estado(i.id);
+      return '<button class="rv-dot ' + s + '" data-abrir="' + esc(i.id) + '" title="Revisão ' + r + (s === 'feito' ? ' · feita' : s === 'lendo' ? ' · lendo' : '') + '">' + (s === 'feito' ? '✓' : r) + '</button>';
+    }).join('');
+    const legenda = !proximo ? 'Tudo revisado ✓' : (estado(proximo.id) === 'lendo' ? 'Lendo a Revisão ' + proximo.b : 'Próxima: Revisão ' + proximo.b);
+    h += '<div class="rv-card" style="--c:var(--mat-' + cor + ');--cd:var(--mat-' + cor + '-deep)">' +
+      '<div class="rv-card-top"><h4>' + esc(m) + '</h4>' + anel(feitos, itens.length) + '</div>' +
+      '<div class="rv-dots">' + dots + '</div><div class="rv-card-legenda">' + legenda + '</div></div>';
   });
-  return h;
+  return h + '</div>';
 }
 
 function renderTrab(lib) {
   const lista = lib.filter(i => i.g === 'trab');
   const por = agrupar(lista, 'a');
   const alvo = localStorage.getItem(FASE2_KEY) || '';
-  let faltam = '';
+  let dias = '';
   if (alvo) {
     const [y, m, d] = alvo.split('-').map(Number);
     const base = typeof getCurrentDate === 'function' ? getCurrentDate() : new Date();
-    const dias = Math.ceil((new Date(y, m - 1, d) - new Date(base.getFullYear(), base.getMonth(), base.getDate())) / 86400000);
-    faltam = dias >= 0 ? ' · faltam <strong>' + dias + '</strong> dias' : ' · data já passou';
+    const n = Math.ceil((new Date(y, m - 1, d) - new Date(base.getFullYear(), base.getMonth(), base.getDate())) / 86400000);
+    dias = n >= 0 ? '<b>' + n + '</b><small>' + (n === 1 ? 'dia' : 'dias') + ' até a 2ª fase</small>' : '<small>a data já passou</small>';
+  } else {
+    dias = '<small>defina a data para ver<br>a contagem regressiva</small>';
   }
-  let h = '<div class="rv-cabeca">' + progresso(lista) +
-    '<div class="rv-data">Data da 2ª fase <input type="date" id="rv-fase2" value="' + esc(alvo) + '">' + faltam + '</div></div>';
-  [...por.keys()].sort((a, b) => a - b).forEach(n => {
-    const itens = por.get(n);
-    const nome = itens[0].n;
-    const ehRev = itens.every(i => i.b === 'revisao');
-    const ordem = ['material', 'resumo', 'caderno', 'revisao'];
-    itens.sort((x, y) => ordem.indexOf(x.b) - ordem.indexOf(y.b));
-    h += '<div class="rv-linha"><div class="rv-nome">' + (ehRev ? '' : '<small>Tema ' + n + '</small>') + esc(nome) + '</div><div class="rv-chips">' +
-      itens.map(i => chip(i, ehRev ? 'Abrir' : ROTULO[i.b])).join('') + '</div></div>';
+  let h = '<div class="rv-fase2"><div>' + resumo(lista, 'materiais') +
+    '<label style="margin-top:.8rem">Data da 2ª fase <input type="date" id="rv-fase2" value="' + esc(alvo) + '"></label></div>' +
+    '<div class="rv-fase2-dias">' + dias + '</div></div><div class="rv-trilha">';
+  const temas = [...por.keys()].sort((a, b) => a - b);
+  const atual = temas.find(n => estadoGrupo(por.get(n)) !== 'feito');
+  const ordem = ['material', 'resumo', 'caderno', 'revisao'];
+  temas.forEach(n => {
+    const itens = por.get(n).sort((x, y) => ordem.indexOf(x.b) - ordem.indexOf(y.b));
+    const eg = estadoGrupo(itens);
+    const parada = itens.every(i => i.b === 'revisao');
+    const cls = 'rv-no ' + eg + (parada ? ' parada' : '') + (n === atual ? ' atual' : '');
+    if (parada) {
+      h += '<div class="' + cls + '"><div class="rv-marca"></div><div class="rv-no-corpo"><div class="rv-no-tit">' + esc(itens[0].n) + '</div>' +
+        '<div class="rv-chips">' + itens.map(i => chip(i, estado(i.id) === 'feito' ? 'Revisada' : 'Abrir revisão')).join('') + '</div></div></div>';
+    } else {
+      h += '<div class="' + cls + '"><div class="rv-marca">' + (eg === 'feito' ? '✓' : n) + '</div><div class="rv-no-corpo">' +
+        '<div class="rv-no-eb">Tema ' + n + (n === atual ? '<em>· você está aqui</em>' : '') + '</div>' +
+        '<div class="rv-no-tit">' + esc(itens[0].n) + '</div>' +
+        '<div class="rv-chips">' + itens.map(i => chip(i, PASSO_CURTO[i.b] || ROTULO[i.b])).join('') + '</div></div></div>';
+    }
   });
-  return h;
+  return h + '</div>';
 }
 
 function renderPeca(lib) {
   const lista = lib.filter(i => i.g === 'peca');
   const por = agrupar(lista, 'a');
-  let h = '<div class="rv-cabeca">' + progresso(lista) + '</div>';
-  [...por.keys()].sort((a, b) => a.localeCompare(b, 'pt-BR')).forEach(nome => {
-    const ordem = COLUNAS.peca;
-    const itens = por.get(nome).sort((x, y) => ordem.indexOf(x.b) - ordem.indexOf(y.b));
-    h += '<div class="rv-linha"><div class="rv-nome">' + esc(nome) + '</div><div class="rv-chips">' +
-      itens.map(i => chip(i, ROTULO[i.b])).join('') + '</div></div>';
+  const usados = new Set();
+  const grupos = GRUPOS_PECA.map(([titulo, nomes]) => [titulo, nomes.filter(n => por.has(n))]);
+  grupos.forEach(([, nomes]) => nomes.forEach(n => usados.add(n)));
+  const outras = [...por.keys()].filter(n => !usados.has(n)).sort((a, b) => a.localeCompare(b, 'pt-BR'));
+  if (outras.length) grupos.push(['Outras', outras]);
+  const ordem = COLUNAS.peca;
+  let h = '<div class="rv-resumo">' + resumo(lista, 'materiais') + '</div><div class="rv-grupos">';
+  grupos.filter(([, nomes]) => nomes.length).forEach(([titulo, nomes]) => {
+    const feitas = nomes.filter(n => estadoGrupo(por.get(n)) === 'feito').length;
+    h += '<div class="rv-grupo"><div class="rv-grupo-cab"><h4>' + esc(titulo) + '</h4><span>' + feitas + ' de ' + nomes.length + ' peças</span></div>';
+    nomes.forEach(n => {
+      const itens = por.get(n).sort((x, y) => ordem.indexOf(x.b) - ordem.indexOf(y.b));
+      h += '<div class="rv-peca ' + estadoGrupo(itens) + '"><div class="rv-peca-nome">' + esc(n) + '</div><div class="rv-chips">' +
+        itens.map(i => chip(i, PASSO_CURTO[i.b])).join('<span class="rv-seta" aria-hidden="true">›</span>') + '</div></div>';
+    });
+    h += '</div>';
   });
-  return h;
+  return h + '</div>';
 }
 
 function render() {
@@ -307,9 +424,10 @@ function render() {
 function renderContinuar(lib) {
   const el = document.getElementById('rv-continuar');
   const i = lib.find(x => x.id === localStorage.getItem(ULT_KEY));
-  el.innerHTML = i && estado(i.id) !== 'feito'
-    ? '<div class="rv-continuar"><span>Continuar de onde parou: <strong>' + esc(rotuloItem(i)) + '</strong></span><button class="btn btn-primary" data-abrir="' + esc(i.id) + '">Abrir</button></div>'
-    : '';
+  if (!i || estado(i.id) === 'feito') { el.innerHTML = ''; return; }
+  const [eyebrow, titulo] = cabecalho(i);
+  el.innerHTML = '<div class="rv-continuar"><div><div class="rv-eb">Continuar de onde parou</div><strong>' + esc(titulo) + '</strong><small>' + esc(eyebrow) + '</small></div>' +
+    '<button class="btn btn-primary" data-abrir="' + esc(i.id) + '">Continuar →</button></div>';
 }
 
 function definirEstado(id, s) {
