@@ -205,16 +205,17 @@ lembrei / não lembrei". `hoje.html` mostra o aviso do dia; a revisão em si é 
 
 ---
 
-## 5.4 Biblioteca de revisão (`revisao.html`)
+## 5.4 Biblioteca de revisão (`revisao.html` + `revisao-biblioteca.js`)
 
 Visualizador dos PDFs de revisão do VDE (Revisões 1–3 em tabelas), da trilha de Trabalho
 (2ª fase) e das peças — todos no Drive de Julia, abertos por `drive.google.com/file/d/ID/preview`.
-**O repositório é público e os arquivos têm link aberto: nunca commitar IDs de arquivos do
-Drive nem texto dos PDFs** (os PDFs trazem marca d'água com dados de terceiros). A lista de
-arquivos entra pela tela "Gerenciar biblioteca" (JSON colado) e fica em `oab_revisao_lib_v1`
-(sincroniza com a conta). O arquivo-fonte local é `biblioteca-revisao.local.json`
-(ignorado pelo Git via `*.local.json`). Estado em `oab_revisao_status_v1`
-(`{id: {s:'lendo'|'feito', d}}`); data da 2ª fase em `oab_segunda_fase_data`.
+A lista de arquivos (97) está embutida em `window.BIBLIOTECA_REVISAO` (`{id, g, a, b, n?}`:
+`g` = rev|trab|peca; `a` = matéria/tema/peça; `b` = rodada/tipo). Não há importação manual.
+**Atenção:** o repositório é público e os arquivos têm link aberto, então esses IDs ficam
+públicos; os PDFs trazem marca d'água com dados de terceiros — não commitar o texto dos PDFs.
+Para adicionar material novo, acrescente linhas em `revisao-biblioteca.js`.
+Estado em `oab_revisao_status_v1` (`{id: {s:'lendo'|'feito', d}}`); data da 2ª fase em
+`oab_segunda_fase_data`.
 
 ---
 
