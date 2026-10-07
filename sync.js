@@ -47,7 +47,8 @@
   // aparelho não podem mudar o outro).
   const SO_LOCAIS = ['theme', 'simulatedDate', 'oab_current_day', 'oab_current_day_date',
     'oab_auth_ok', 'oab_approved_uid', 'oab_uid_ativo', 'oab_ultimo_backup',
-    'oab_rose_intensity', 'oab_rose_custom_hex', 'oab_accent_color', 'oab_sidebar_collapsed'];
+    'oab_rose_intensity', 'oab_rose_custom_hex', 'oab_accent_color', 'oab_sidebar_collapsed',
+    'oab_pecas_cron'];
   function soLocal(k) { return SO_LOCAIS.indexOf(k) >= 0; }
   function filtrarSincronizaveis(dados) {
     const out = {};
