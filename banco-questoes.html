@@ -921,8 +921,19 @@
     }
   });
 
+  // Hoje e o painel Rumo aos 40 abrem o banco já filtrado: ?disciplina=...&situacao=nao|errei
+  function filtrosDaUrl() {
+    var p = new URLSearchParams(location.search);
+    var d = p.get('disciplina'), s = p.get('situacao');
+    if (d && valores('discipline').indexOf(d) !== -1) { F.disciplinas.push(d); MS.dis.atualizar(); }
+    if (s && ['nao', 'acertei', 'errei', 'favoritas'].indexOf(s) !== -1) {
+      F.situacao = s;
+      document.querySelectorAll('#f-sit .pill').forEach(function (x) { x.classList.toggle('on', x.dataset.v === s); });
+    }
+  }
+
   document.addEventListener('DOMContentLoaded', function () {
-    montarPainel(); sincronizarAssunto(); aplicar();
+    montarPainel(); filtrosDaUrl(); sincronizarAssunto(); aplicar();
   });
 })();
 </script>
