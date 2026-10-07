@@ -1,0 +1,354 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="firebase-init.js?v=1783862902"></script>
+<script src="auth-guard.js?v=1784132091"></script>
+<script src="cores-early.js?v=1784060144"></script>
+<script src="page-transition.js?v=1783861010"></script>
+<title>Revisão · OAB</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Inter:opsz,wght@14..32,400..700&family=Caveat:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css?v=1784043341">
+
+<style>
+.rv-tabs{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.4rem}
+.rv-tab{background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:.5rem 1.1rem;font:500 .84rem Inter,sans-serif;color:var(--ink-soft);cursor:pointer}
+.rv-tab.on{background:var(--rose-soft);border-color:var(--rose);color:var(--rose-deep)}
+.rv-cabeca{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:1.1rem}
+.rv-prog{font-size:.8rem;color:var(--ink-soft)}
+.rv-bar{height:5px;background:var(--rose-soft);border-radius:5px;overflow:hidden;width:180px;margin-top:.35rem}
+.rv-bar i{display:block;height:100%;background:var(--rose)}
+.rv-linha{display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:.8rem 1rem;margin-bottom:.6rem;box-shadow:var(--shadow-sm)}
+.rv-nome{flex:1;min-width:150px;font-size:.9rem;color:var(--ink);font-weight:500}
+.rv-nome small{display:block;font-weight:400;color:var(--ink-faded);font-size:.72rem}
+.rv-chips{display:flex;gap:.4rem;flex-wrap:wrap}
+.rv-chip{border:1px solid var(--line);background:var(--bg);color:var(--ink-soft);border-radius:999px;padding:.38rem .85rem;font:500 .76rem Inter,sans-serif;cursor:pointer}
+.rv-chip:hover{border-color:var(--rose)}
+.rv-chip.lendo{background:var(--champagne);border-color:var(--gold);color:var(--ink)}
+.rv-chip.feito{background:var(--sage);border-color:#8fb08a;color:var(--ink)}
+.rv-chip.feito::before{content:"✓ "}
+.rv-chip.lendo::before{content:"… "}
+.rv-vazio{text-align:center;padding:2.5rem 1.5rem;color:var(--ink-soft);font-size:.9rem;line-height:1.6}
+.rv-import{width:100%;min-height:130px;border:1px solid var(--line);border-radius:var(--radius-sm);padding:.7rem;font:.78rem monospace;background:var(--paper);color:var(--ink);margin:.8rem 0}
+.rv-box{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:1.4rem;margin-bottom:1.2rem}
+.rv-continuar{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;background:var(--rose-soft);border-radius:var(--radius);padding:.8rem 1.1rem;margin-bottom:1.2rem;font-size:.86rem}
+.rv-continuar span{flex:1;min-width:160px}
+.rv-data{display:flex;align-items:center;gap:.6rem;font-size:.8rem;color:var(--ink-soft);flex-wrap:wrap}
+.rv-data input{border:1px solid var(--line);border-radius:var(--radius-sm);padding:.3rem .5rem;font:inherit;background:var(--paper);color:var(--ink)}
+.rv-ov{position:fixed;inset:0;z-index:400;background:rgba(44,36,32,.55);display:none;flex-direction:column}
+.rv-ov.open{display:flex}
+.rv-ov-top{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;background:var(--paper);padding:.6rem 1rem;border-bottom:1px solid var(--line)}
+.rv-ov-top h3{flex:1;min-width:140px;font:500 .92rem Inter,sans-serif;color:var(--ink);margin:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rv-ov iframe{flex:1;width:100%;border:0;background:#fff}
+.rv-ov-top .btn{font-size:.76rem;padding:.4rem .8rem;text-decoration:none}
+</style>
+
+<link rel="stylesheet" href="topnav.css?v=1791163406"><script src="topnav.js?v=1791163406"></script></head>
+<body>
+
+<div class="aurora-bg" aria-hidden="true">
+  <div class="aurora-blob ab1"></div>
+  <div class="aurora-blob ab2"></div>
+  <div class="aurora-blob ab3"></div>
+  <div class="aurora-blob ab4"></div>
+</div>
+
+<button class="mobile-menu-btn" onclick="toggleSidebar()" title="Menu">☰</button>
+<button class="sidebar-toggle-btn" onclick="toggleSidebarCollapse()" title="Esconder menu">‹</button>
+
+<div class="app">
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="mark"><svg class="seal" viewBox="0 0 64 64" width="26" height="26" aria-hidden="true"><circle cx="32" cy="32" r="23" fill="none" stroke="currentColor" stroke-width="1.6"/><text x="32" y="33" font-size="19" letter-spacing="1.2" text-anchor="middle" dominant-baseline="central" font-family="Georgia,serif" font-weight="700" fill="currentColor">OAB</text></svg></div>
+      <h1>Exame da Ordem</h1>
+      <div class="subtitle">Preparatório OAB · 1ª Fase</div>
+    </div>
+    <div class="nav-section-label">Principal</div>
+    <a href="index.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg></span><span>Início</span></a>
+    <a href="hoje.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"/></svg></span><span>Hoje</span></a>
+    <a href="calendario.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span><span>Calendário</span></a>
+    <a href="revisar.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg></span><span>Revisar</span></a>
+    <div class="nav-section-label">Estudo</div>
+    <a href="videoaulas.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg></span><span>Videoaulas</span></a>
+    <a href="materias.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg></span><span>Matérias</span></a>
+    <a href="questoes.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></span><span>Questões</span></a>
+    <a href="erros.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.4 2.6a1 1 0 0 1 3 3l-9 9a2 2 0 0 1-.85.5l-2.9.85a.5.5 0 0 1-.62-.62l.85-2.9a2 2 0 0 1 .5-.85z"/></svg></span><span>Caderno de Erros</span></a>
+    <a href="caderno-legislativo.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg></span><span>Caderno Legislativo</span></a>
+    <div class="nav-section-label">Análise</div>
+    <a href="estatisticas.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M7 16v-3"/><path d="M12 16V8"/><path d="M17 16v-5"/></svg></span><span>Estatísticas</span></a>
+    <a href="simulados.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M9 12l2 2 4-4"/></svg></span><span>Simulados</span></a>
+    <div class="nav-section-label">Extra</div>
+    <a href="reta-final.html" class="nav-link"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><path d="M4 22V4"/></svg></span><span>Reta Final</span></a>
+    <div class="sidebar-footer">
+      <div class="profile-card">
+        <div class="profile-avatar">
+          <img src="foto-perfil.jpg" alt="Julia" onerror="this.style.display='none'; if (this.parentElement) this.parentElement.textContent='J';">
+        </div>
+        <div class="profile-info"><div class="name">Julia</div><div class="meta">Estudante de Direito</div></div>
+      </div>
+      <button class="theme-toggle" onclick="toggleTheme()">
+        <span class="theme-label">Modo escuro</span>
+        <span class="toggle-track"><span class="toggle-thumb"></span></span>
+      </button>
+    </div>
+  </aside>
+
+
+  <main>
+    <div class="topbar">
+      <div class="page-title">
+        <div class="breadcrumb">Revisões em tabelas · Trabalhista · Peças</div>
+        <h1>Biblioteca de <em>revisão</em></h1>
+      </div>
+      <div class="topbar-actions">
+        <button class="btn" onclick="abrirImport()">Gerenciar biblioteca</button>
+      </div>
+    </div>
+
+    <div id="rv-import-box" class="rv-box" style="display:none">
+      <strong>Importar biblioteca</strong>
+      <p style="font-size:.82rem;color:var(--ink-soft);margin-top:.4rem;line-height:1.5">Cole aqui o conteúdo do arquivo <code>biblioteca-revisao.local.json</code>. Ele fica só na sua conta (sincronizado entre seus aparelhos) e não vai para o código do site.</p>
+      <textarea id="rv-import-txt" class="rv-import" placeholder='[{"id":"...","g":"rev","a":"Civil","b":1}, ...]'></textarea>
+      <div style="display:flex;gap:.6rem;align-items:center;flex-wrap:wrap">
+        <button class="btn btn-primary" onclick="importar()">Importar</button>
+        <button class="btn" onclick="document.getElementById('rv-import-box').style.display='none'">Fechar</button>
+        <span id="rv-import-msg" style="font-size:.78rem;color:var(--ink-faded)"></span>
+      </div>
+    </div>
+
+    <div id="rv-continuar"></div>
+    <div class="rv-tabs" id="rv-tabs">
+      <button class="rv-tab on" data-tab="rev">Revisões 1 · 2 · 3</button>
+      <button class="rv-tab" data-tab="trab">Trabalhista · 2ª fase</button>
+      <button class="rv-tab" data-tab="peca">Peças</button>
+    </div>
+    <div id="rv-conteudo"></div>
+  </main>
+</div>
+
+<div class="rv-ov" id="rv-ov" role="dialog" aria-modal="true">
+  <div class="rv-ov-top">
+    <h3 id="rv-ov-titulo"></h3>
+    <button class="btn" id="rv-ov-lendo"></button>
+    <button class="btn btn-primary" id="rv-ov-feito"></button>
+    <a class="btn" id="rv-ov-erro" href="erros.html">+ Erro</a>
+    <a class="btn" id="rv-ov-drive" target="_blank" rel="noopener">↗ Drive</a>
+    <button class="btn" onclick="fecharVisualizador()">Fechar</button>
+  </div>
+  <iframe id="rv-ov-frame" title="Material de revisão" allow="autoplay"></iframe>
+</div>
+
+<script src="progresso.js?v=1783859287"></script>
+<script src="script.js?v=1784021867"></script>
+<script src="perfil.js?v=1783860863"></script>
+<script src="sync.js?v=1784058237"></script>
+<script src="cores.js"></script>
+<script>
+const LIB_KEY = 'oab_revisao_lib_v1';
+const ST_KEY = 'oab_revisao_status_v1';
+const ULT_KEY = 'oab_revisao_ultimo_v1';
+const FASE2_KEY = 'oab_segunda_fase_data';
+
+const ORDEM_MATERIAS = ['Ética','Constitucional','Civil','Processo Civil','Penal','Processo Penal','Trabalho','Processo do Trabalho','Tributário','Administrativo','Empresarial'];
+const CHAVE_ERROS = {'Ética':'etica','Constitucional':'constitucional','Civil':'civil','Processo Civil':'proc_civil','Penal':'penal','Processo Penal':'proc_penal','Trabalho':'trabalho','Processo do Trabalho':'proc_trabalho','Tributário':'tributario','Administrativo':'administrativo','Empresarial':'empresarial'};
+const ROTULO = {1:'Revisão 1',2:'Revisão 2',3:'Revisão 3',resumo:'Resumo VDE',caderno:'Caderno Legislativo',material:'Material',revisao:'Revisão',teoria:'Teoria',pratica:'Hora de praticar',oficina:'Oficina de peça'};
+const COLUNAS = {rev:[1,2,3], trab:['material','resumo','caderno'], peca:['teoria','pratica','oficina']};
+
+let aba = 'rev';
+let itemAberto = null;
+
+function ler(chave, padrao) { try { const v = JSON.parse(localStorage.getItem(chave)); return v == null ? padrao : v; } catch (e) { return padrao; } }
+function gravar(chave, valor) {
+  const txt = typeof valor === 'string' ? valor : JSON.stringify(valor);
+  try { localStorage.setItem(chave, txt); } catch (e) { return; }
+  if (typeof marcarAlteracaoLocal === 'function') marcarAlteracaoLocal(chave);
+}
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function hoje() { return typeof dataLocalHoje === 'function' ? dataLocalHoje() : new Date().toISOString().slice(0,10); }
+
+const biblioteca = () => ler(LIB_KEY, []);
+const status = () => ler(ST_KEY, {});
+const estado = id => (status()[id] || {}).s || '';
+
+function achar(id) { return biblioteca().find(i => i.id === id); }
+
+function rotuloItem(i) {
+  if (i.g === 'rev') return 'Revisão ' + i.b + ' · ' + i.a;
+  if (i.g === 'trab') return (i.b === 'revisao' ? i.n : ROTULO[i.b] + ' · ' + i.n);
+  return ROTULO[i.b] + ' · ' + i.a;
+}
+
+function chip(i, texto) {
+  return '<button class="rv-chip ' + estado(i.id) + '" data-abrir="' + esc(i.id) + '">' + esc(texto) + '</button>';
+}
+
+function progresso(lista) {
+  const feitos = lista.filter(i => estado(i.id) === 'feito').length;
+  const pct = lista.length ? Math.round(feitos / lista.length * 100) : 0;
+  return '<div class="rv-prog">' + feitos + ' de ' + lista.length + ' concluídos<div class="rv-bar"><i style="width:' + pct + '%"></i></div></div>';
+}
+
+function agrupar(lista, campo) {
+  const m = new Map();
+  lista.forEach(i => { if (!m.has(i[campo])) m.set(i[campo], []); m.get(i[campo]).push(i); });
+  return m;
+}
+
+function renderRev(lib) {
+  const lista = lib.filter(i => i.g === 'rev');
+  const por = agrupar(lista, 'a');
+  let h = '<div class="rv-cabeca">' + progresso(lista) + '</div>';
+  ORDEM_MATERIAS.filter(m => por.has(m)).forEach(m => {
+    const itens = por.get(m).sort((x, y) => x.b - y.b);
+    h += '<div class="rv-linha"><div class="rv-nome">' + esc(m) + '</div><div class="rv-chips">' +
+      itens.map(i => chip(i, 'R' + i.b)).join('') + '</div></div>';
+  });
+  return h;
+}
+
+function renderTrab(lib) {
+  const lista = lib.filter(i => i.g === 'trab');
+  const por = agrupar(lista, 'a');
+  const alvo = localStorage.getItem(FASE2_KEY) || '';
+  let faltam = '';
+  if (alvo) {
+    const [y, m, d] = alvo.split('-').map(Number);
+    const base = typeof getCurrentDate === 'function' ? getCurrentDate() : new Date();
+    const dias = Math.ceil((new Date(y, m - 1, d) - new Date(base.getFullYear(), base.getMonth(), base.getDate())) / 86400000);
+    faltam = dias >= 0 ? ' · faltam <strong>' + dias + '</strong> dias' : ' · data já passou';
+  }
+  let h = '<div class="rv-cabeca">' + progresso(lista) +
+    '<div class="rv-data">Data da 2ª fase <input type="date" id="rv-fase2" value="' + esc(alvo) + '">' + faltam + '</div></div>';
+  [...por.keys()].sort((a, b) => a - b).forEach(n => {
+    const itens = por.get(n);
+    const nome = itens[0].n;
+    const ehRev = itens.every(i => i.b === 'revisao');
+    const ordem = ['material', 'resumo', 'caderno', 'revisao'];
+    itens.sort((x, y) => ordem.indexOf(x.b) - ordem.indexOf(y.b));
+    h += '<div class="rv-linha"><div class="rv-nome">' + (ehRev ? '' : '<small>Tema ' + n + '</small>') + esc(nome) + '</div><div class="rv-chips">' +
+      itens.map(i => chip(i, ehRev ? 'Abrir' : ROTULO[i.b])).join('') + '</div></div>';
+  });
+  return h;
+}
+
+function renderPeca(lib) {
+  const lista = lib.filter(i => i.g === 'peca');
+  const por = agrupar(lista, 'a');
+  let h = '<div class="rv-cabeca">' + progresso(lista) + '</div>';
+  [...por.keys()].sort((a, b) => a.localeCompare(b, 'pt-BR')).forEach(nome => {
+    const ordem = COLUNAS.peca;
+    const itens = por.get(nome).sort((x, y) => ordem.indexOf(x.b) - ordem.indexOf(y.b));
+    h += '<div class="rv-linha"><div class="rv-nome">' + esc(nome) + '</div><div class="rv-chips">' +
+      itens.map(i => chip(i, ROTULO[i.b])).join('') + '</div></div>';
+  });
+  return h;
+}
+
+function render() {
+  const lib = biblioteca();
+  const box = document.getElementById('rv-conteudo');
+  document.querySelectorAll('.rv-tab').forEach(t => t.classList.toggle('on', t.dataset.tab === aba));
+  renderContinuar(lib);
+  if (!lib.length) {
+    box.innerHTML = '<div class="rv-vazio">Sua biblioteca ainda está vazia.<br>Use <strong>Gerenciar biblioteca</strong> e cole o arquivo <code>biblioteca-revisao.local.json</code>.</div>';
+    return;
+  }
+  box.innerHTML = aba === 'rev' ? renderRev(lib) : aba === 'trab' ? renderTrab(lib) : renderPeca(lib);
+  const f2 = document.getElementById('rv-fase2');
+  if (f2) f2.addEventListener('change', () => { gravar(FASE2_KEY, f2.value); render(); });
+}
+
+function renderContinuar(lib) {
+  const el = document.getElementById('rv-continuar');
+  const i = lib.find(x => x.id === localStorage.getItem(ULT_KEY));
+  el.innerHTML = i && estado(i.id) !== 'feito'
+    ? '<div class="rv-continuar"><span>Continuar de onde parou: <strong>' + esc(rotuloItem(i)) + '</strong></span><button class="btn btn-primary" data-abrir="' + esc(i.id) + '">Abrir</button></div>'
+    : '';
+}
+
+function definirEstado(id, s) {
+  const st = status();
+  if (s) st[id] = { s: s, d: hoje() }; else delete st[id];
+  gravar(ST_KEY, st);
+}
+
+function abrirVisualizador(id) {
+  const i = achar(id);
+  if (!i) return;
+  itemAberto = i;
+  gravar(ULT_KEY, id);
+  document.getElementById('rv-ov-titulo').textContent = rotuloItem(i);
+  document.getElementById('rv-ov-frame').src = 'https://drive.google.com/file/d/' + encodeURIComponent(id) + '/preview';
+  document.getElementById('rv-ov-drive').href = 'https://drive.google.com/file/d/' + encodeURIComponent(id) + '/view';
+  const materia = i.g === 'rev' ? CHAVE_ERROS[i.a] : (i.g === 'trab' ? 'trabalho' : '');
+  document.getElementById('rv-ov-erro').href = 'erros.html?novo=1' + (materia ? '&materia=' + materia : '');
+  atualizarBotoesEstado();
+  document.getElementById('rv-ov').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  if (estado(id) === '') { definirEstado(id, 'lendo'); atualizarBotoesEstado(); }
+}
+
+function atualizarBotoesEstado() {
+  if (!itemAberto) return;
+  const s = estado(itemAberto.id);
+  document.getElementById('rv-ov-lendo').textContent = s === 'lendo' ? 'Lendo…' : 'Marcar como lendo';
+  document.getElementById('rv-ov-feito').textContent = s === 'feito' ? '✓ Concluído' : 'Marcar como feito';
+}
+
+function fecharVisualizador() {
+  document.getElementById('rv-ov').classList.remove('open');
+  document.getElementById('rv-ov-frame').src = 'about:blank';
+  document.body.style.overflow = '';
+  itemAberto = null;
+  render();
+}
+
+document.getElementById('rv-ov-lendo').addEventListener('click', () => {
+  if (!itemAberto) return;
+  definirEstado(itemAberto.id, estado(itemAberto.id) === 'lendo' ? '' : 'lendo');
+  atualizarBotoesEstado();
+});
+document.getElementById('rv-ov-feito').addEventListener('click', () => {
+  if (!itemAberto) return;
+  definirEstado(itemAberto.id, estado(itemAberto.id) === 'feito' ? '' : 'feito');
+  atualizarBotoesEstado();
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && itemAberto) fecharVisualizador(); });
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-abrir]');
+  if (b) abrirVisualizador(b.dataset.abrir);
+});
+document.getElementById('rv-tabs').addEventListener('click', e => {
+  const t = e.target.closest('.rv-tab');
+  if (t) { aba = t.dataset.tab; render(); }
+});
+
+function abrirImport() {
+  document.getElementById('rv-import-box').style.display = 'block';
+  document.getElementById('rv-import-txt').focus();
+}
+function importar() {
+  const msg = document.getElementById('rv-import-msg');
+  let dados;
+  try { dados = JSON.parse(document.getElementById('rv-import-txt').value); } catch (e) { msg.textContent = 'Isso não parece um JSON válido.'; return; }
+  const ok = Array.isArray(dados) && dados.length && dados.every(i => i && typeof i.id === 'string' && /^[\w-]{10,}$/.test(i.id) && ['rev','trab','peca'].includes(i.g) && i.a != null && i.b != null);
+  if (!ok) { msg.textContent = 'Formato inesperado — use o arquivo gerado para você.'; return; }
+  gravar(LIB_KEY, dados.map(i => ({ id: i.id, g: i.g, a: i.a, b: i.b, n: i.n })));
+  document.getElementById('rv-import-txt').value = '';
+  document.getElementById('rv-import-box').style.display = 'none';
+  render();
+}
+
+render();
+if (!biblioteca().length) abrirImport();
+</script>
+</body>
+</html>

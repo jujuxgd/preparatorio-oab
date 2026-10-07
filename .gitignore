@@ -13,3 +13,6 @@ __pycache__/
 *pdf_content*.txt
 *_pdf_extract.txt
 *AppDataLocalTemp*
+
+# IDs de arquivos do Drive (repositório é público)
+*.local.json
