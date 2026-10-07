@@ -175,6 +175,19 @@ Sala de prova. Três telas numa página: escolher, fazer e corrigir.
 
 ---
 
+## 5.3 Revisão espaçada do Caderno de Erros (`erros-core.js`)
+
+Cada erro tem `proxima_revisao`, `nivel`, `acertos_seguidos` e, quando veio do banco ou
+do Simulado, `questao_id` (a questão é refeita a partir de `BANCO_QUESTOES`, carregado
+sob demanda em `erros.html`). Escada de intervalos 1→3→7→14→30 dias (cortada para caber
+antes de 09/01/2027); errar volta ao nível 0; 5 acertos seguidos = `dominada`. Fila de
+no máximo 15 por dia, mais atrasados primeiro. Erros sem `proxima_revisao` (antigos)
+vencem no primeiro dia. Cartões sem `questao_id` aparecem como "mostrar resposta →
+lembrei / não lembrei". `hoje.html` mostra o aviso do dia; a revisão em si é em `erros.html`.
+`erros_add` com `questao_id` já pendente reinicia o nível em vez de duplicar.
+
+---
+
 ## 6. Design System
 
 ### Paleta de Cores (style.css :root)

@@ -487,7 +487,8 @@
           ? ('Marquei ' + e.marcou + ', o gabarito é ' + e.q.correct_answer + '.')
           : 'Deixei em branco.',
         explicacao: (e.q.legal_basis || '') ||
-                    (e.q.explanation || '').slice(0, 300)
+                    (e.q.explanation || '').slice(0, 300),
+        questao_id: e.q.id
       });
       n++;
     });

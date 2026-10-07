@@ -914,7 +914,8 @@
         materia: q.discipline || '', topico: q.topic || '', subtopico: q.subtopic || '', motivo: 'nao_sabia',
         o_que_faltou: q.exam_number + 'º Exame, questão ' + q.question_number + '. Gabarito ' +
                       (q.correct_answer || '—') + (e.escolha ? '; marquei ' + e.escolha : '') + '.',
-        explicacao: q.explanation || ''
+        explicacao: q.explanation || '',
+        questao_id: q.id
       });
       b.textContent = '✓ Enviada ao caderno'; b.disabled = true;
     }

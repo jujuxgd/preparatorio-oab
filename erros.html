@@ -54,6 +54,28 @@
   margin-top: 0.4rem;
 }
 
+
+/* ── Revisão espaçada ── */
+.rev-banner{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;background:var(--paper);border:1px solid var(--line);border-left:4px solid var(--rose);border-radius:var(--radius);padding:1rem 1.3rem;margin-bottom:1.5rem;box-shadow:var(--shadow-sm)}
+.rev-banner .txt{flex:1;min-width:200px;font-size:.88rem;color:var(--ink)}
+.rev-banner .txt small{display:block;color:var(--ink-faded);font-size:.75rem;margin-top:.15rem}
+.rev-overlay{position:fixed;inset:0;background:rgba(44,36,32,.45);z-index:300;display:none;align-items:flex-start;justify-content:center;overflow-y:auto;padding:1.5rem 1rem}
+.rev-overlay.open{display:flex}
+.rev-box{background:var(--paper);border-radius:var(--radius-lg);max-width:720px;width:100%;padding:1.5rem;box-shadow:var(--shadow-sm)}
+.rev-top{display:flex;justify-content:space-between;align-items:center;font-size:.75rem;color:var(--ink-faded);margin-bottom:1rem}
+.rev-bar{height:4px;background:var(--rose-soft);border-radius:4px;margin-bottom:1.2rem;overflow:hidden}
+.rev-bar i{display:block;height:100%;background:var(--rose);transition:width .3s}
+.rev-meta{font-size:.72rem;color:var(--rose-deep);font-weight:600;margin-bottom:.6rem}
+.rev-enun{font-size:.95rem;line-height:1.6;color:var(--ink);margin-bottom:1rem;white-space:pre-wrap}
+.rev-alt{display:flex;gap:.7rem;width:100%;text-align:left;background:var(--paper);border:1px solid var(--line);border-left:4px solid var(--line);border-radius:var(--radius-sm);padding:.7rem .9rem;margin-bottom:.5rem;font:inherit;font-size:.88rem;color:var(--ink);cursor:pointer}
+.rev-alt .l{font-weight:700;color:var(--rose-deep)}
+.rev-alt:disabled{cursor:default}
+.rev-alt.certa{border-left-color:#5E8C6A;background:rgba(94,140,106,.08)}
+.rev-alt.errada{border-left-color:#C0524B;background:rgba(192,82,75,.08)}
+.rev-feed{margin-top:1rem;font-size:.85rem;line-height:1.55;color:var(--ink-soft)}
+.rev-feed b.ok{color:#5E8C6A}.rev-feed b.no{color:#C0524B}
+.rev-acoes{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1.2rem}
+
 /* ── Filter bar ── */
 .filter-bar {
   display: flex;
@@ -404,6 +426,7 @@
     <div class="error-stats" id="erros-stats"></div>
 
     <!-- FILTROS -->
+    <div id="rev-banner"></div>
     <div class="filter-bar" id="filter-bar">
       <span class="label">Filtrar</span>
       <span class="chip active" data-filter="todas">Todas</span>
@@ -422,6 +445,7 @@
 </div>
 
 <script src="erros-core.js"></script>
+<div class="rev-overlay" id="rev-overlay"><div class="rev-box" id="rev-box"></div></div>
 <script src="plano-vde.js"></script>
 <script src="cards.js"></script>
 <script src="progresso.js?v=1783859287"></script>
@@ -640,6 +664,7 @@ function renderCard(e) {
       ${subtopico}
       ${faltou}
       ${explicacao}
+      ${!isDominada && e.proxima_revisao ? `<div style="font-size:.72rem;color:var(--ink-faded);margin:.4rem 0">Próxima revisão: ${erros_fmt_data(e.proxima_revisao)}${e.acertos_seguidos ? ' · ' + e.acertos_seguidos + '/' + ERROS_ACERTOS_PARA_DOMINAR + ' acertos seguidos' : ''}</div>` : ''}
       <div class="error-actions">${acoes}</div>
     </div>`;
 }
@@ -662,9 +687,116 @@ document.querySelectorAll('#filter-bar .chip').forEach(c => {
   });
 });
 
+
+// ── Revisão espaçada: modo "Revisar agora" ──
+let _revFila = [], _revIdx = 0, _revAcertos = 0, _revBanco = null;
+
+function renderBannerRevisao() {
+  const el = document.getElementById('rev-banner');
+  const n = erros_total_devidas();
+  const hoje = Math.min(n, ERROS_LIMITE_DIARIO);
+  if (!erros_get().some(e => e.status !== 'dominada')) { el.innerHTML = ''; return; }
+  el.innerHTML = n > 0
+    ? `<div class="rev-banner"><div class="txt"><strong>${hoje} ${hoje === 1 ? 'erro' : 'erros'} para revisar hoje</strong>
+         <small>${n > hoje ? (n - hoje) + ' ficam para amanhã · ' : ''}acertando, o erro volta em 1, 3, 7, 14 e 30 dias</small></div>
+         <button class="btn btn-primary" onclick="iniciarRevisao()">Revisar agora</button></div>`
+    : `<div class="rev-banner"><div class="txt"><strong>Revisão do dia em dia ✓</strong>
+         <small>Nenhum erro vence hoje.</small></div></div>`;
+}
+
+function _revCarregarBanco() {
+  if (window.BANCO_QUESTOES) return Promise.resolve(window.BANCO_QUESTOES);
+  return new Promise(res => {
+    const s = document.createElement('script');
+    s.src = 'questoes-banco.js';
+    s.onload = () => res(window.BANCO_QUESTOES || []);
+    s.onerror = () => res([]);
+    document.head.appendChild(s);
+  });
+}
+
+async function iniciarRevisao() {
+  _revFila = erros_devidas();
+  if (!_revFila.length) return;
+  _revIdx = 0; _revAcertos = 0;
+  document.getElementById('rev-overlay').classList.add('open');
+  document.getElementById('rev-box').innerHTML = '<p>Carregando…</p>';
+  if (_revFila.some(e => e.questao_id) && !_revBanco) {
+    const todas = await _revCarregarBanco();
+    _revBanco = {};
+    todas.forEach(q => { _revBanco[q.id] = q; });
+  }
+  _revMostrar();
+}
+
+function fecharRevisao() {
+  document.getElementById('rev-overlay').classList.remove('open');
+  renderAll();
+}
+
+function _revCabecalho(e) {
+  const pct = Math.round((_revIdx / _revFila.length) * 100);
+  return `<div class="rev-top"><span>${_revIdx + 1} de ${_revFila.length}</span>
+      <button class="btn" style="font-size:.72rem;padding:.25rem .7rem" onclick="fecharRevisao()">Sair</button></div>
+    <div class="rev-bar"><i style="width:${pct}%"></i></div>
+    <div class="rev-meta">${escHtml(MATERIAS_ERROS[e.materia] || e.materia || '')}${e.topico ? ' · ' + escHtml(e.topico) : ''}</div>`;
+}
+
+function _revMostrar() {
+  const box = document.getElementById('rev-box');
+  if (_revIdx >= _revFila.length) {
+    box.innerHTML = `<h3 style="font-family:'Fraunces',serif;color:var(--rose-deep);margin-bottom:.6rem">Revisão concluída</h3>
+      <p style="font-size:.9rem;color:var(--ink-soft)">${_revAcertos} de ${_revFila.length} lembrados.</p>
+      <div class="rev-acoes"><button class="btn btn-primary" onclick="fecharRevisao()">Fechar</button></div>`;
+    return;
+  }
+  const e = _revFila[_revIdx];
+  const q = e.questao_id && _revBanco ? _revBanco[e.questao_id] : null;
+  if (q) {
+    const alts = ['a', 'b', 'c', 'd'].map(k =>
+      `<button class="rev-alt" data-l="${k.toUpperCase()}"><span class="l">${k.toUpperCase()}</span><span>${escHtml(q['alternative_' + k] || '')}</span></button>`).join('');
+    box.innerHTML = _revCabecalho(e) +
+      `<div class="rev-enun">${escHtml(q.statement)}</div><div id="rev-alts">${alts}</div><div id="rev-fim"></div>`;
+    box.querySelectorAll('.rev-alt').forEach(b => b.addEventListener('click', () => _revResponder(e, q, b.dataset.l)));
+  } else {
+    box.innerHTML = _revCabecalho(e) +
+      `<div class="rev-enun"><strong>${escHtml(e.subtopico || e.topico || 'Lembra do que faltou aqui?')}</strong></div>
+       <div id="rev-fim"><div class="rev-acoes"><button class="btn btn-primary" id="rev-mostrar">Mostrar resposta</button></div></div>`;
+    document.getElementById('rev-mostrar').addEventListener('click', () => {
+      document.getElementById('rev-fim').innerHTML =
+        (e.o_que_faltou ? `<div class="error-tip"><div class="lbl">O que faltou para acertar</div>${escHtml(e.o_que_faltou)}</div>` : '') +
+        (e.explicacao ? `<div class="error-tip"><div class="lbl">Explicação</div>${escHtml(e.explicacao)}</div>` : '') +
+        `<div class="rev-acoes"><button class="btn btn-primary" data-r="1">Lembrei</button><button class="btn" data-r="0">Não lembrei</button></div>`;
+      document.querySelectorAll('#rev-fim [data-r]').forEach(b => b.addEventListener('click', () => _revAvancar(e, b.dataset.r === '1')));
+    });
+  }
+}
+
+function _revResponder(e, q, letra) {
+  const certa = String(q.correct_answer).toUpperCase();
+  const acertou = letra === certa;
+  document.querySelectorAll('#rev-alts .rev-alt').forEach(b => {
+    b.disabled = true;
+    if (b.dataset.l === certa) b.classList.add('certa');
+    else if (b.dataset.l === letra) b.classList.add('errada');
+  });
+  document.getElementById('rev-fim').innerHTML =
+    `<div class="rev-feed"><b class="${acertou ? 'ok' : 'no'}">${acertou ? 'Acertou!' : 'Errou — gabarito ' + certa + '.'}</b><br>${escHtml(q.explanation || '')}</div>
+     <div class="rev-acoes"><button class="btn btn-primary" id="rev-prox">${_revIdx + 1 >= _revFila.length ? 'Concluir' : 'Próxima'}</button></div>`;
+  document.getElementById('rev-prox').addEventListener('click', () => _revAvancar(e, acertou));
+}
+
+function _revAvancar(e, acertou) {
+  erros_registrar_revisao(e.id, acertou);
+  if (acertou) _revAcertos++;
+  _revIdx++;
+  _revMostrar();
+}
+
 function renderAll() {
   renderStats();
   renderLista();
+  renderBannerRevisao();
 }
 
 renderAll();

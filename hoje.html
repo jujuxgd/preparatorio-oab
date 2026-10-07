@@ -1146,6 +1146,11 @@
       </div>
     </div>
 
+    <div id="rev-hoje" style="display:none;align-items:center;gap:1rem;flex-wrap:wrap;background:var(--paper);border:1px solid var(--line);border-left:4px solid var(--rose);border-radius:var(--radius);padding:.9rem 1.2rem;margin-bottom:1.2rem">
+      <div style="flex:1;min-width:180px;font-size:.88rem;color:var(--ink)"><strong id="rev-hoje-n"></strong> <span style="color:var(--ink-faded);font-size:.78rem">· revisão espaçada do Caderno de Erros</span></div>
+      <a href="erros.html" class="btn btn-primary" style="text-decoration:none;font-size:.8rem">Revisar agora</a>
+    </div>
+
     <!-- TABS -->
     <div class="tabs-bar">
       <div class="tab active" data-tab="topicos">📌 Tópicos</div>
@@ -1498,6 +1503,18 @@
 <script src="sync.js?v=1784058237"></script>
 <script src="progresso.js?v=1783859287"></script>
 <script src="plano-vde.js"></script>
+<script src="erros-core.js"></script>
+<script>
+(function(){
+  try {
+    var n = Math.min(erros_total_devidas(), ERROS_LIMITE_DIARIO);
+    if (n > 0) {
+      document.getElementById('rev-hoje-n').textContent = n + (n === 1 ? ' erro para revisar hoje' : ' erros para revisar hoje');
+      document.getElementById('rev-hoje').style.display = 'flex';
+    }
+  } catch (e) {}
+})();
+</script>
 <script src="cards.js"></script>
 <script src="cores.js"></script>
 <script src="videoaulas.js"></script>
