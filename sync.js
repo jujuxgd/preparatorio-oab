@@ -40,6 +40,20 @@
   let _unsubscribe = null;
   let _aplicando = false;
   let _envioEmAndamento = null; // Promise do push mais recente ainda não confirmado pelo servidor
+  let _revNuvem = 0; // maior oab_local_rev já visto na nuvem
+
+  // Preferências/estado de ESTE aparelho: nunca vão pra nuvem nem são
+  // aplicadas vindas dela (uma data simulada ou o "dia de hoje" de um
+  // aparelho não podem mudar o outro).
+  const SO_LOCAIS = ['theme', 'simulatedDate', 'oab_current_day', 'oab_current_day_date',
+    'oab_auth_ok', 'oab_approved_uid', 'oab_uid_ativo', 'oab_ultimo_backup',
+    'oab_rose_intensity', 'oab_rose_custom_hex', 'oab_accent_color', 'oab_sidebar_collapsed'];
+  function soLocal(k) { return SO_LOCAIS.indexOf(k) >= 0; }
+  function filtrarSincronizaveis(dados) {
+    const out = {};
+    Object.keys(dados).forEach(k => { if (!soLocal(k)) out[k] = dados[k]; });
+    return out;
+  }
 
   function docRef(uid) {
     return window._fbDb.collection(COLECAO).doc(uid);
@@ -56,6 +70,13 @@
   // (de outro aparelho) que este aparelho não tem localmente.
   function enviarParaNuvem(uid, chave) {
     if (!window._fbDb || !uid || !window._perfilOAB) return Promise.resolve(false);
+    if (chave && soLocal(chave)) return Promise.resolve(false);
+    // Rede de segurança (sem chave): só envia se este aparelho tem algo
+    // mais novo que a nuvem. Sem isso, um aparelho que ficou offline
+    // mandava o localStorage velho com oab_local_rev menor e fazia a
+    // revisão da nuvem RETROCEDER — o outro aparelho ficava ignorando
+    // mudanças e os dois divergiam sem perceber.
+    if (!chave && localRev() <= _revNuvem) return Promise.resolve(false);
     // localStorage.getItem devolve null quando a chave foi removida (ex.:
     // desmarcar uma videoaula, cancelar uma edição sem conteúdo anterior).
     // Manda esse null como valor de campo mesmo (Firestore guarda null de
@@ -64,7 +85,8 @@
     // gravar a string "null" (o que localStorage.setItem faria).
     const dados = chave
       ? { [chave]: localStorage.getItem(chave), oab_local_rev: localStorage.getItem('oab_local_rev') }
-      : window._perfilOAB.coletarDadosLocalStorage();
+      : filtrarSincronizaveis(window._perfilOAB.coletarDadosLocalStorage());
+    if (!chave) dados.oab_local_rev = String(Math.max(localRev(), _revNuvem));
     const payload = { dados, atualizado_em: firebase.firestore.FieldValue.serverTimestamp() };
     const escrita = docRef(uid).set(payload, { merge: true }).then(() => {
       try { localStorage.setItem('oab_ultimo_backup', new Date().toISOString()); } catch (e) {}
@@ -83,7 +105,7 @@
   // na nuvem.
   function enviarSnapshotCompleto(uid) {
     if (!window._fbDb || !uid || !window._perfilOAB) return Promise.resolve(false);
-    const dados = window._perfilOAB.coletarDadosLocalStorage();
+    const dados = filtrarSincronizaveis(window._perfilOAB.coletarDadosLocalStorage());
     return docRef(uid).set({
       dados,
       atualizado_em: firebase.firestore.FieldValue.serverTimestamp(),
@@ -101,7 +123,7 @@
       if (!snap.exists) return null;
       const data = snap.data();
       if (data && data.dados) {
-        window._perfilOAB.aplicarDadosLocalStorage(data.dados);
+        window._perfilOAB.aplicarDadosLocalStorage(filtrarSincronizaveis(data.dados));
         return data;
       }
       return null;
@@ -124,7 +146,7 @@
       return;
     }
     _aplicando = true;
-    window._perfilOAB.aplicarDadosLocalStorage(data.dados);
+    window._perfilOAB.aplicarDadosLocalStorage(filtrarSincronizaveis(data.dados));
     location.reload();
   }
 
@@ -140,6 +162,7 @@
     }
     const data = snap.data();
     if (!data || !data.dados) return;
+    _revNuvem = Math.max(_revNuvem, Number(data.dados.oab_local_rev || 0));
     if (Number(data.dados.oab_local_rev || 0) <= localRev()) return;
     // A nuvem parece mais nova, mas este aparelho pode ter um push
     // próprio ainda em voo cujo valor não chegou no servidor a tempo de

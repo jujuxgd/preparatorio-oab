@@ -2819,6 +2819,10 @@ function _pomoSaveSession() {
   const key   = `pomo_sessions_${today}`;
   const prev  = parseInt(localStorage.getItem(key) || '0');
   localStorage.setItem(key, String(prev + 1));
+  try { localStorage.setItem('oab_local_rev', String(Date.now())); } catch (e) {}
+  if (window._syncOAB && window._syncOAB.notificarAlteracaoLocal) {
+    try { window._syncOAB.notificarAlteracaoLocal(key); } catch (e) {}
+  }
   // Actualiza o status do Pomodoro para mostrar total do dia
   const statusEl = document.getElementById('pomo-status');
   if (statusEl) statusEl.textContent = `ciclo ${POMO.cycle} de 4 · ${prev+1} hoje`;
