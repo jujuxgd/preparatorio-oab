@@ -33,7 +33,7 @@
   }
 
   // Um arquivo de flashcards por matéria; carregados sob demanda.
-  var ARQUIVOS = ['fc-etica.js'];
+  var ARQUIVOS = ['fc-etica.js', 'fc-constitucional.js'];
   var _carga = null;
   function carregarCartoes() {
     if (_carga) return _carga;
