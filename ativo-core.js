@@ -1,5 +1,5 @@
 // Revisão ativa (a partir de 12/10/2026): flashcards das Revisões VDE com "sei"/"errei".
-// Usado por: sessao.html, hoje.html
+// Usado por: sessao-core.js (hoje.html, revisar.html, calendario.html, painel-erros.html)
 //
 // Regra de cada cartão (estado em oab_fc_estado_v1):
 //   errei → volta em 1 dia e entra no Caderno de Erros; acertando, 7 e depois 15 dias;
@@ -104,7 +104,9 @@
       if (est[c.id] || disciplinas.indexOf(c.d) < 0) return false;
       cont[c.d] = (cont[c.d] || 0) + 1;
       return cont[c.d] <= max;
-    });
+    }).map(function (c, i) { return [disciplinas.indexOf(c.d), i, c]; })
+      .sort(function (a, b) { return a[0] - b[0] || a[1] - b[1]; })
+      .map(function (x) { return x[2]; });
   }
 
   function resumo() {
