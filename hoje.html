@@ -1146,6 +1146,12 @@
       </div>
     </div>
 
+    <a id="ativo-hoje" href="sessao.html" style="display:none;text-decoration:none;color:inherit;background:linear-gradient(135deg,var(--blush),var(--rose-soft) 60%,var(--lavender));border:1px solid var(--line);border-radius:var(--radius);padding:1rem 1.2rem;margin-bottom:1.2rem;box-shadow:var(--shadow-sm)">
+      <div style="font:600 .62rem Inter,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faded);margin-bottom:.3rem">Revisão ativa · sessão do dia</div>
+      <div id="ativo-hoje-txt" style="font-size:.9rem;color:var(--ink);line-height:1.5"></div>
+      <div style="margin-top:.6rem"><span class="btn btn-primary" style="font-size:.8rem">Abrir a sessão →</span></div>
+    </a>
+
     <div id="rev-hoje" style="display:none;align-items:center;gap:1rem;flex-wrap:wrap;background:var(--paper);border:1px solid var(--line);border-left:4px solid var(--rose);border-radius:var(--radius);padding:.9rem 1.2rem;margin-bottom:1.2rem">
       <div style="flex:1;min-width:180px;font-size:.88rem;color:var(--ink)"><strong id="rev-hoje-n"></strong> <span style="color:var(--ink-faded);font-size:.78rem">· revisão espaçada do Caderno de Erros</span></div>
       <a href="erros.html" class="btn btn-primary" style="text-decoration:none;font-size:.8rem">Revisar agora</a>
@@ -1511,6 +1517,35 @@
 <script src="plano-vde.js"></script>
 <script src="erros-core.js"></script>
 <script src="estudo-core.js"></script>
+<script src="calendario-ativo.js"></script>
+<script src="ativo-core.js"></script>
+<script>
+// Cartão da revisão ativa (a partir de 12/10/2026): tópicos do dia e flashcards vencidos.
+(function () {
+  function montar() {
+    if (!window.CAL_ATIVO || !window.ATIVO) return;
+    var hoje = ATIVO.hoje(), dias = CAL_ATIVO.dias;
+    var dia = ATIVO.diaDoCalendario(hoje) || (hoje < dias[0].d ? dias[0] : null);
+    if (!dia) return;
+    var C = CAL_ATIVO.curto, txt;
+    if (dia.top) txt = dia.top.map(function (t) { return '<b>' + C[t.d] + '</b> · ' + t.s; }).join('<br>');
+    else if (dia.tipo === 'simulado') txt = '<b>Simulado completo</b> · ' + dia.sim.exame + 'º Exame';
+    else if (dia.tipo === 'revisao') txt = 'Revisão: caderno de erros, flashcards e Ética' + (dia.sim ? ' · simulado ' + dia.sim.modo : '');
+    else if (dia.tipo === 'leve') txt = 'Dia leve: flashcards vencidos e 10 questões de Ética';
+    else if (dia.tipo === 'vespera') txt = 'Véspera: só flashcards leves. Nada novo.';
+    else txt = '<b>Dia da prova</b> · 13h às 18h';
+    if (dia.d !== hoje) txt = 'Começa em ' + dia.d.split('-').reverse().slice(0, 2).join('/') + ':<br>' + txt;
+    var el = document.getElementById('ativo-hoje');
+    document.getElementById('ativo-hoje-txt').innerHTML = txt;
+    el.style.display = 'block';
+    ATIVO.carregarCartoes().then(function () {
+      var n = ATIVO.vencidos().length;
+      if (n) document.getElementById('ativo-hoje-txt').insertAdjacentHTML('beforeend', '<br><span style="color:var(--rose-deep);font-size:.8rem">' + n + (n === 1 ? ' flashcard vencido' : ' flashcards vencidos') + '</span>');
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', montar); else montar();
+})();
+</script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
   try {

@@ -32,6 +32,21 @@
     } catch (e) {}
   }
 
+  // Um arquivo de flashcards por matéria; carregados sob demanda.
+  var ARQUIVOS = [];
+  var _carga = null;
+  function carregarCartoes() {
+    if (_carga) return _carga;
+    _carga = Promise.all(ARQUIVOS.map(function (arq) {
+      return new Promise(function (ok) {
+        var s = document.createElement('script');
+        s.src = arq; s.onload = ok; s.onerror = ok;
+        document.head.appendChild(s);
+      });
+    })).then(cartoes);
+    return _carga;
+  }
+
   function cartoes() { return window.FC_VDE || []; }
   function porId(id) { return cartoes().filter(function (c) { return c.id === id; })[0] || null; }
   function estados() { return ler(K_FC, {}); }
@@ -122,6 +137,12 @@
     return out;
   }
 
+  function diaDoCalendario(data) {
+    var cal = window.CAL_ATIVO; if (!cal) return null;
+    var d = data || hoje();
+    return cal.dias.filter(function (x) { return x.d === d; })[0] || null;
+  }
+
   function questoesPorTopico() {
     var n = parseInt(localStorage.getItem(K_QPT), 10);
     return n > 0 ? n : 10;
@@ -129,9 +150,10 @@
   function definirQuestoesPorTopico(n) { gravar(K_QPT, n); }
 
   window.ATIVO = {
-    ESCADA: ESCADA, hoje: hoje, somaDias: somaDias,
-    cartoes: cartoes, porId: porId, estados: estados, responder: responder,
+    ESCADA: ESCADA, ARQUIVOS: ARQUIVOS, hoje: hoje, somaDias: somaDias,
+    carregarCartoes: carregarCartoes, cartoes: cartoes, porId: porId, estados: estados, responder: responder,
     vencidos: vencidos, novos: novos, resumo: resumo, painelErros: painelErros,
-    questoesPorTopico: questoesPorTopico, definirQuestoesPorTopico: definirQuestoesPorTopico
+    questoesPorTopico: questoesPorTopico, definirQuestoesPorTopico: definirQuestoesPorTopico,
+    diaDoCalendario: diaDoCalendario
   };
 })();
