@@ -466,7 +466,8 @@
   function mostrarVerso() {
     var c = FILA[idx];
     document.getElementById('fc-verso').innerHTML = '<div class="fc-verso">' + esc(c.v) +
-      '<div class="base"><b>Base:</b> ' + (c.b ? esc(c.b) : 'não citada na revisão') + (c.c ? '<span class="fc-tag">conferir</span>' : '') + '</div>' +
+      '<div class="base"><b>Base:</b> ' + (c.b ? esc(c.b) : 'não citada na revisão') + (c.c || !c.b ? '<span class="fc-tag">conferir</span>' : '') +
+      (c.n ? '<div class="base">' + esc(c.n) + '</div>' : '') + '</div>' +
       (c.p ? '<div class="fc-peg"><b>Pegadinha:</b> ' + esc(c.p) + '</div>' : '') + '</div>' +
       '<div class="fc-bts"><button class="btn sei" data-fc="sei">Sei</button><button class="btn errei" data-fc="errei">Errei</button></div>';
   }
