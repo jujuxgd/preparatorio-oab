@@ -33,7 +33,7 @@
   }
 
   // Um arquivo de flashcards por matéria; carregados sob demanda.
-  var ARQUIVOS = ['fc-etica.js', 'fc-constitucional.js', 'fc-civil.js', 'fc-proc-civil.js', 'fc-penal.js', 'fc-proc-penal.js', 'fc-trabalho.js', 'fc-proc-trabalho.js', 'fc-administrativo.js', 'fc-tributario.js'];
+  var ARQUIVOS = ['fc-etica.js', 'fc-constitucional.js', 'fc-civil.js', 'fc-proc-civil.js', 'fc-penal.js', 'fc-proc-penal.js', 'fc-trabalho.js', 'fc-proc-trabalho.js', 'fc-administrativo.js', 'fc-tributario.js', 'fc-empresarial.js'];
   var _carga = null;
   function carregarCartoes() {
     if (_carga) return _carga;
