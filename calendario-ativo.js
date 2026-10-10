@@ -61,10 +61,11 @@ window.CAL_ATIVO = {
 ],
 "k": [
 1,
-7
+16
 ],
 "g": [
-"oab_000830"
+"oab_000830",
+"oab_000754"
 ]
 }
 ]
@@ -763,6 +764,54 @@ window.CAL_ATIVO = {
 "tipo": "estudo",
 "top": [
 {
+"d": "Direito do Trabalho",
+"s": "Duração do trabalho: jornada, intervalos e férias",
+"n": 53,
+"q": [
+"Jornada de trabalho",
+"Férias"
+]
+},
+{
+"d": "Direito Tributário",
+"s": "Tema no PDF do dia (semana 8)",
+"n": 54,
+"q": [
+"*"
+]
+}
+]
+},
+{
+"d": "2026-11-08",
+"f": 1,
+"tipo": "simulado",
+"sim": {
+"exame": 44,
+"modo": "completo"
+}
+},
+{
+"d": "2026-11-09",
+"f": 1,
+"tipo": "estudo",
+"top": [
+{
+"d": "Ética Profissional",
+"s": "Incompatibilidades e impedimentos",
+"n": 55,
+"q": [
+"Incompatibilidades e impedimentos"
+],
+"k": [
+33,
+43
+],
+"g": [
+"oab_001157"
+]
+},
+{
 "d": "Direito Processual do Trabalho",
 "s": "Provas",
 "n": 57,
@@ -793,16 +842,7 @@ window.CAL_ATIVO = {
 ]
 },
 {
-"d": "2026-11-08",
-"f": 1,
-"tipo": "simulado",
-"sim": {
-"exame": 44,
-"modo": "completo"
-}
-},
-{
-"d": "2026-11-09",
+"d": "2026-11-10",
 "f": 1,
 "tipo": "estudo",
 "top": [
@@ -823,7 +863,7 @@ window.CAL_ATIVO = {
 ]
 },
 {
-"d": "2026-11-10",
+"d": "2026-11-11",
 "f": 1,
 "tipo": "estudo",
 "top": [
@@ -845,7 +885,7 @@ window.CAL_ATIVO = {
 ]
 },
 {
-"d": "2026-11-11",
+"d": "2026-11-12",
 "f": 1,
 "tipo": "estudo",
 "top": [
@@ -867,7 +907,7 @@ window.CAL_ATIVO = {
 ]
 },
 {
-"d": "2026-11-12",
+"d": "2026-11-13",
 "f": 1,
 "tipo": "estudo",
 "top": [
@@ -887,7 +927,7 @@ window.CAL_ATIVO = {
 ]
 },
 {
-"d": "2026-11-13",
+"d": "2026-11-14",
 "f": 1,
 "tipo": "estudo",
 "top": [
@@ -912,7 +952,16 @@ window.CAL_ATIVO = {
 ]
 },
 {
-"d": "2026-11-14",
+"d": "2026-11-15",
+"f": 1,
+"tipo": "simulado",
+"sim": {
+"exame": 43,
+"modo": "completo"
+}
+},
+{
+"d": "2026-11-16",
 "f": 1,
 "tipo": "estudo",
 "top": [
@@ -935,16 +984,7 @@ window.CAL_ATIVO = {
 ]
 },
 {
-"d": "2026-11-15",
-"f": 1,
-"tipo": "simulado",
-"sim": {
-"exame": 43,
-"modo": "completo"
-}
-},
-{
-"d": "2026-11-16",
+"d": "2026-11-17",
 "f": 1,
 "tipo": "estudo",
 "top": [
@@ -959,7 +999,7 @@ window.CAL_ATIVO = {
 ]
 },
 {
-"d": "2026-11-17",
+"d": "2026-11-18",
 "f": 1,
 "tipo": "estudo",
 "top": [
@@ -985,7 +1025,7 @@ window.CAL_ATIVO = {
 ]
 },
 {
-"d": "2026-11-18",
+"d": "2026-11-19",
 "f": 1,
 "tipo": "estudo",
 "top": [
@@ -1016,7 +1056,7 @@ window.CAL_ATIVO = {
 ]
 },
 {
-"d": "2026-11-19",
+"d": "2026-11-20",
 "f": 1,
 "tipo": "estudo",
 "top": [
@@ -1038,7 +1078,7 @@ window.CAL_ATIVO = {
 ]
 },
 {
-"d": "2026-11-20",
+"d": "2026-11-21",
 "f": 1,
 "tipo": "estudo",
 "top": [
@@ -1073,7 +1113,16 @@ window.CAL_ATIVO = {
 ]
 },
 {
-"d": "2026-11-21",
+"d": "2026-11-22",
+"f": 1,
+"tipo": "simulado",
+"sim": {
+"exame": 42,
+"modo": "completo"
+}
+},
+{
+"d": "2026-11-23",
 "f": 1,
 "tipo": "estudo",
 "top": [
@@ -1089,16 +1138,7 @@ window.CAL_ATIVO = {
 ]
 },
 {
-"d": "2026-11-22",
-"f": 1,
-"tipo": "simulado",
-"sim": {
-"exame": 42,
-"modo": "completo"
-}
-},
-{
-"d": "2026-11-23",
+"d": "2026-11-24",
 "f": 1,
 "tipo": "estudo",
 "top": [
@@ -1137,7 +1177,7 @@ window.CAL_ATIVO = {
 ]
 },
 {
-"d": "2026-11-24",
+"d": "2026-11-25",
 "f": 1,
 "tipo": "estudo",
 "top": [
@@ -1157,7 +1197,7 @@ window.CAL_ATIVO = {
 ]
 },
 {
-"d": "2026-11-25",
+"d": "2026-11-26",
 "f": 1,
 "tipo": "estudo",
 "top": [
@@ -1188,7 +1228,7 @@ window.CAL_ATIVO = {
 ]
 },
 {
-"d": "2026-11-26",
+"d": "2026-11-27",
 "f": 1,
 "tipo": "estudo",
 "top": [
@@ -1226,7 +1266,7 @@ window.CAL_ATIVO = {
 ]
 },
 {
-"d": "2026-11-27",
+"d": "2026-11-28",
 "f": 1,
 "tipo": "estudo",
 "top": [
@@ -1251,7 +1291,16 @@ window.CAL_ATIVO = {
 ]
 },
 {
-"d": "2026-11-28",
+"d": "2026-11-29",
+"f": 1,
+"tipo": "simulado",
+"sim": {
+"exame": 41,
+"modo": "completo"
+}
+},
+{
+"d": "2026-11-30",
 "f": 1,
 "tipo": "estudo",
 "top": [
@@ -1291,16 +1340,7 @@ window.CAL_ATIVO = {
 ]
 },
 {
-"d": "2026-11-29",
-"f": 1,
-"tipo": "simulado",
-"sim": {
-"exame": 41,
-"modo": "completo"
-}
-},
-{
-"d": "2026-11-30",
+"d": "2026-12-01",
 "f": 1,
 "tipo": "estudo",
 "top": [
@@ -1331,7 +1371,7 @@ window.CAL_ATIVO = {
 ]
 },
 {
-"d": "2026-12-01",
+"d": "2026-12-02",
 "f": 1,
 "tipo": "estudo",
 "top": [
@@ -1354,7 +1394,7 @@ window.CAL_ATIVO = {
 ]
 },
 {
-"d": "2026-12-02",
+"d": "2026-12-03",
 "f": 1,
 "tipo": "estudo",
 "top": [
@@ -1377,7 +1417,7 @@ window.CAL_ATIVO = {
 ]
 },
 {
-"d": "2026-12-03",
+"d": "2026-12-04",
 "f": 1,
 "tipo": "estudo",
 "top": [
@@ -1419,7 +1459,7 @@ window.CAL_ATIVO = {
 ]
 },
 {
-"d": "2026-12-04",
+"d": "2026-12-05",
 "f": 1,
 "tipo": "estudo",
 "top": [
@@ -1441,7 +1481,16 @@ window.CAL_ATIVO = {
 ]
 },
 {
-"d": "2026-12-05",
+"d": "2026-12-06",
+"f": 1,
+"tipo": "simulado",
+"sim": {
+"exame": 40,
+"modo": "completo"
+}
+},
+{
+"d": "2026-12-07",
 "f": 1,
 "tipo": "estudo",
 "top": [
@@ -1458,7 +1507,14 @@ window.CAL_ATIVO = {
 46,
 53
 ]
+}
+]
 },
+{
+"d": "2026-12-08",
+"f": 1,
+"tipo": "estudo",
+"top": [
 {
 "d": "Direito Penal",
 "s": "Crimes contra a fé pública e a Administração Pública",
@@ -1474,23 +1530,7 @@ window.CAL_ATIVO = {
 "g": [
 "oab_000130"
 ]
-}
-]
 },
-{
-"d": "2026-12-06",
-"f": 1,
-"tipo": "simulado",
-"sim": {
-"exame": 40,
-"modo": "completo"
-}
-},
-{
-"d": "2026-12-07",
-"f": 1,
-"tipo": "estudo",
-"top": [
 {
 "d": "Direito Administrativo",
 "s": "Responsabilidade civil do Estado",
@@ -1509,7 +1549,7 @@ window.CAL_ATIVO = {
 {
 "d": "ECA",
 "s": "Tutela jurisdicional da criança e do adolescente",
-"n": 109,
+"n": 108,
 "q": [
 "Procedimentos e recursos no ECA",
 "Crimes e infrações administrativas no ECA"
@@ -1518,7 +1558,7 @@ window.CAL_ATIVO = {
 ]
 },
 {
-"d": "2026-12-08",
+"d": "2026-12-09",
 "f": 1,
 "tipo": "estudo",
 "top": [
@@ -1540,7 +1580,7 @@ window.CAL_ATIVO = {
 ]
 },
 {
-"d": "2026-12-09",
+"d": "2026-12-10",
 "f": 1,
 "tipo": "estudo",
 "top": [
@@ -1580,7 +1620,7 @@ window.CAL_ATIVO = {
 ]
 },
 {
-"d": "2026-12-10",
+"d": "2026-12-11",
 "f": 1,
 "tipo": "estudo",
 "top": [
@@ -1605,7 +1645,7 @@ window.CAL_ATIVO = {
 ]
 },
 {
-"d": "2026-12-11",
+"d": "2026-12-12",
 "f": 1,
 "tipo": "estudo",
 "top": [
@@ -1655,7 +1695,16 @@ window.CAL_ATIVO = {
 ]
 },
 {
-"d": "2026-12-12",
+"d": "2026-12-13",
+"f": 1,
+"tipo": "simulado",
+"sim": {
+"exame": 39,
+"modo": "completo"
+}
+},
+{
+"d": "2026-12-14",
 "f": 1,
 "tipo": "estudo",
 "top": [
@@ -1697,16 +1746,7 @@ window.CAL_ATIVO = {
 ]
 },
 {
-"d": "2026-12-13",
-"f": 1,
-"tipo": "simulado",
-"sim": {
-"exame": 39,
-"modo": "completo"
-}
-},
-{
-"d": "2026-12-14",
+"d": "2026-12-15",
 "f": 1,
 "tipo": "estudo",
 "top": [
@@ -1725,7 +1765,7 @@ window.CAL_ATIVO = {
 ]
 },
 {
-"d": "2026-12-15",
+"d": "2026-12-16",
 "f": 1,
 "tipo": "estudo",
 "top": [
@@ -1750,7 +1790,7 @@ window.CAL_ATIVO = {
 ]
 },
 {
-"d": "2026-12-16",
+"d": "2026-12-17",
 "f": 1,
 "tipo": "estudo",
 "top": [
@@ -1784,7 +1824,7 @@ window.CAL_ATIVO = {
 ]
 },
 {
-"d": "2026-12-17",
+"d": "2026-12-18",
 "f": 1,
 "tipo": "estudo",
 "top": [
@@ -1804,14 +1844,7 @@ window.CAL_ATIVO = {
 "oab_001218",
 "oab_000594"
 ]
-}
-]
 },
-{
-"d": "2026-12-18",
-"f": 1,
-"tipo": "estudo",
-"top": [
 {
 "d": "Direito Administrativo",
 "s": "Serviços públicos, PPP e consórcios",

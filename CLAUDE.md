@@ -263,11 +263,12 @@ O plano de 120 dias (`plano-vde.js`, `hoje.html`, `dia.html`) continua no ar e c
 salvo; a sessão nova é a rotina do dia e aparece como cartão no topo do Hoje.
 
 - **`calendario-ativo.js`** → `CAL_ATIVO.dias[]`, 12/10/2026 → 10/01/2027. **Fase 1 (até 20/12, refeita em
-  10/10/2026 a pedido de Julia):** seg–sáb = os **PDFs do dia do VDE** em ordem (87 PDFs em 60 dias; 27 dias
+  10/10/2026 a pedido de Julia):** seg–sáb = os **PDFs do dia do VDE** em ordem (89 PDFs em 60 dias; 29 dias
   juntam os dois PDFs mais curtos vizinhos, de matérias diferentes); domingo = simulado completo (47º → 38º).
   Cada tópico: `n` = DIA do VDE (arquivo "Dia n - Matéria.pdf"), `d`, `s` = tema, `q` = tópicos do banco,
-  `k`/`g` herdados do Gabaritaço quando o tópico do banco coincide. Falta a semana 14 do VDE (Julia não tem) e a
-  semana 08 (escaneada; Julia divide à mão) — ao chegar, inserir os dias e regenerar só as datas futuras.
+  `k`/`g` herdados do Gabaritaço quando o tópico do banco coincide. Sem a semana 14 do VDE (Julia não tem); da
+  semana 08 (escaneada) entram os dias 53–55 que Julia dividiu. Em 10/10/2026 faltavam no Drive os PDFs dos
+  dias 27–32, 36–41, 57, 71 e 78 (a aba Conteúdo avisa).
   Fase 2 (21/12–08/01): revisão diária (caderno, flashcards, 20 questões de Ética), simulado parcial nos dias
   úteis e completo em 26/12 e 02/01; 24–25/12 e 31/12–01/01 leves; 09/01 só flashcards. Gerado por script fora
   do repo (tabela de dias com tema e tópicos do banco): para mudar, edite os dados direto mantendo o formato.

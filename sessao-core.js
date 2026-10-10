@@ -131,7 +131,7 @@
     DIA.top.forEach(function (t) {
       if (t.n == null) return;
       var x = ns.filter(function (y) { return y.n === t.n; })[0];
-      if (!x) ns.push(x = { n: t.n, id: (window.VDE_DIAS || {})[t.n] || null, temas: [] });
+      if (!x) ns.push(x = { n: t.n, ids: [].concat((window.VDE_DIAS || {})[t.n] || []), temas: [] });
       x.temas.push(curto(t.d) + ': ' + t.s);
     });
     return ns;
@@ -141,8 +141,10 @@
     if (!ps.length) return '<div class="ss-bloco"><p class="ss-vazio" style="margin:0">Hoje não tem PDF novo: ' + esc(resumoDoDia()) + '.</p></div>';
     return ps.map(function (p) {
       return '<div class="ss-bloco"><h3><span class="n">Dia ' + p.n + ' do VDE</span>' + esc(p.temas.join(' · ')) + '</h3>' +
-        (p.id ? '<div class="ss-acoes" style="margin-bottom:.7rem"><a class="btn" href="https://drive.google.com/file/d/' + p.id + '/view" target="_blank" rel="noopener">Abrir no Drive ↗</a></div>' +
-          '<iframe class="vde-pdf" src="https://drive.google.com/file/d/' + p.id + '/preview" title="PDF do dia ' + p.n + '" allow="autoplay"></iframe>'
+        (p.ids.length ? p.ids.map(function (id, i) {
+          return '<div class="ss-acoes" style="margin:' + (i ? '1rem' : '0') + ' 0 .7rem"><a class="btn" href="https://drive.google.com/file/d/' + id + '/view" target="_blank" rel="noopener">Abrir no Drive' + (p.ids.length > 1 ? ' (parte ' + (i + 1) + ')' : '') + ' ↗</a></div>' +
+            '<iframe class="vde-pdf" src="https://drive.google.com/file/d/' + id + '/preview" title="PDF do dia ' + p.n + '" allow="autoplay"></iframe>';
+        }).join('')
           : '<p class="ss-vazio">O PDF "Dia ' + p.n + '" ainda não está na pasta do Drive. Quando subir, ele aparece aqui.</p>') + '</div>';
     }).join('');
   }
