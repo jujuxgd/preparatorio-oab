@@ -9,7 +9,7 @@
 <script src="auth-guard.js?v=1784132091"></script>
 <script src="cores-early.js?v=1784060144"></script>
 <script src="page-transition.js?v=1783861010"></script>
-<title>Calendário · OAB</title>
+<title>Painel de erros · OAB</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,9 +22,8 @@
 <div class="aurora-bg" aria-hidden="true"><div class="aurora-blob ab1"></div><div class="aurora-blob ab2"></div><div class="aurora-blob ab3"></div><div class="aurora-blob ab4"></div></div>
 <div class="app">
   <main>
-    <div class="topbar"><div class="page-title"><div class="breadcrumb">Revisitar + praticar · 12 out → 10 jan</div><h1>Calendário até a <em>prova</em></h1></div></div>
-    <div class="ss-bloco"><p style="margin:0">Fase 1 (até 20/12): dois tópicos de matérias diferentes por dia e simulado completo aos domingos. Fase 2 (21/12–09/01): revisão diária, com dias leves no Natal e no Ano-Novo. Toque num dia para abrir a sessão dele na aba Hoje. ✓ = dia marcado como estudado.</p></div>
-    <div id="cal"></div>
+    <div class="topbar"><div class="page-title"><div class="breadcrumb">Desempenho · flashcards e caderno de erros</div><h1>Painel de <em>erros</em></h1></div></div>
+    <div id="pn"><p class="ss-vazio">Carregando…</p></div>
   </main>
 </div>
 <script src="script.js?v=1784021867"></script>
@@ -40,8 +39,7 @@
 <script src="sessao-core.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-  document.getElementById('cal').innerHTML = SESSAO.htmlCalendario();
-  var h = document.querySelector('.cal-dia.hoje'); if (h) h.scrollIntoView({ block: 'center' });
+  ATIVO.carregarCartoes().then(function () { document.getElementById('pn').innerHTML = SESSAO.htmlPainel(); });
 });
 </script>
 </body>
