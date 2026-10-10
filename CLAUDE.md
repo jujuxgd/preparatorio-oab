@@ -262,15 +262,18 @@ Pedido de Julia (10/10/2026): parar a teoria extensa e só revisitar + praticar 
 O plano de 120 dias (`plano-vde.js`, `hoje.html`, `dia.html`) continua no ar e com o progresso
 salvo; a sessão nova é a rotina do dia e aparece como cartão no topo do Hoje.
 
-- **`calendario-ativo.js`** → `CAL_ATIVO.dias[]`, 12/10/2026 → 10/01/2027. Fase 1 (até 20/12):
-  seg–sáb com 2 tópicos de matérias diferentes (nunca a mesma matéria em dias seguidos), domingo
-  simulado completo (47º → 38º). Tópicos = seções do **Gabaritaço VDE** (`k` = faixa de DICAS,
-  `q` = tópicos do banco, `g` = questões "Como já caiu" localizadas no banco). Nº de tópicos por
-  matéria proporcional ao peso (provas 41º+): Ética 16, peso 6 → 12, peso 5 → 9, Empresarial 8
-  (sem Gabaritaço: temas das Revisões VDE). Fase 2 (21/12–08/01): revisão diária (caderno,
-  flashcards, 20 questões de Ética), simulado parcial nos dias úteis e completo em 26/12 e 02/01;
-  24–25/12 e 31/12–01/01 leves; 09/01 só flashcards. Gerado por script fora do repo: para mudar,
-  edite os dados direto ou regenere mantendo o formato.
+- **`calendario-ativo.js`** → `CAL_ATIVO.dias[]`, 12/10/2026 → 10/01/2027. **Fase 1 (até 20/12, refeita em
+  10/10/2026 a pedido de Julia):** seg–sáb = os **PDFs do dia do VDE** em ordem (87 PDFs em 60 dias; 27 dias
+  juntam os dois PDFs mais curtos vizinhos, de matérias diferentes); domingo = simulado completo (47º → 38º).
+  Cada tópico: `n` = DIA do VDE (arquivo "Dia n - Matéria.pdf"), `d`, `s` = tema, `q` = tópicos do banco,
+  `k`/`g` herdados do Gabaritaço quando o tópico do banco coincide. Falta a semana 14 do VDE (Julia não tem) e a
+  semana 08 (escaneada; Julia divide à mão) — ao chegar, inserir os dias e regenerar só as datas futuras.
+  Fase 2 (21/12–08/01): revisão diária (caderno, flashcards, 20 questões de Ética), simulado parcial nos dias
+  úteis e completo em 26/12 e 02/01; 24–25/12 e 31/12–01/01 leves; 09/01 só flashcards. Gerado por script fora
+  do repo (tabela de dias com tema e tópicos do banco): para mudar, edite os dados direto mantendo o formato.
+- **`vde-dias.js`** → `VDE_DIAS {n: idDoDrive}` dos PDFs do dia (pasta "Dividido" no Drive de Julia). Dia novo
+  no Drive: acrescentar a linha. Aba **Conteúdo** do Hoje abre o PDF pelo preview do Drive. Os PDFs têm marca
+  d'água com dados de terceiros: só IDs e temas entram no repo, nunca texto.
 - **`fc-*.js`** (11 arquivos, 631 cartões) → `window.FC_VDE`, das **Revisões 1–3 do VDE**
   (`revisao-biblioteca.js`). Campos: `id, d` (disciplina do banco), `r` (revisão), `t` (tema),
   `f` frente, `v` verso curto, `b` dispositivo **só se citado na revisão** (sem `b` = "conferir"),
@@ -332,7 +335,8 @@ salvo; a sessão nova é a rotina do dia e aparece como cartão no topo do Hoje.
 
 Dia da revisão ativa (seção 5.5), por data. Hero com data, tópicos do dia, Pomodoro e "Estudei Hoje"
 (marca o dia no calendário e conta no streak). Abas:
-1. **Flashcards** (principal) — vencidos primeiro, depois novos das matérias do dia
+0. **Conteúdo** (padrão nos dias com PDF) — PDF(s) do dia do VDE
+1. **Flashcards** — vencidos primeiro, depois novos do tema de cada PDF (`t` do cartão × tema/tópicos do dia)
 2. **Questões** — blocos por tópico do Gabaritaço, simulado do dia e matéria extra da semana
 3. **Checklist** — pontos do dia do `CAL_ATIVO`, com link para as DICAS do Gabaritaço
 4. **Videoaulas** — aulas das matérias do dia (`videoaulas.js`), destacando as do tópico

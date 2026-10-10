@@ -21,7 +21,7 @@
   };
   var ETICA = 'Ética Profissional';
   var TIPO = {
-    estudo: 'Questões nos tópicos do dia', simulado: 'Simulado completo', revisao: 'Revisão',
+    estudo: 'Conteúdo do dia', simulado: 'Simulado completo', revisao: 'Revisão',
     leve: 'Dia leve', vespera: 'Véspera · só flashcards leves', prova: 'Dia da prova'
   };
 
@@ -95,12 +95,56 @@
   }
 
   // ── fila de flashcards do dia ──
+  var STOP = ['de','da','do','das','dos','e','em','no','na','nos','nas','com','para','por','sem','ao','aos','os','as','um','uma','geral','direito','sobre','entre','pela','pelo'];
+  function tokens(s) {
+    return String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9\s]/g, ' ')
+      .split(/\s+/).filter(function (w) { return w.length >= 4 && STOP.indexOf(w) < 0; })
+      .map(function (w) { return w.slice(0, 6); });
+  }
+  // Flashcards novos do tema de cada PDF do dia; sem cartão do tema, os primeiros da matéria.
+  function novosDoDia() {
+    if (!DIA.top) return ATIVO.novos(disciplinasDoDia());
+    var est = ATIVO.estados(), out = [], vistos = {};
+    DIA.top.forEach(function (t) {
+      var alvo = tokens(t.s + ' ' + (t.q || []).join(' '));
+      var cand = ATIVO.cartoes().filter(function (c) { return c.d === t.d && !est[c.id] && !vistos[c.id]; });
+      var doTema = cand.filter(function (c) {
+        var tk = tokens(c.t);
+        return tk.some(function (w) { return alvo.indexOf(w) >= 0; });
+      });
+      (doTema.length ? doTema.slice(0, 15) : cand.slice(0, 5)).forEach(function (c) { vistos[c.id] = 1; out.push(c); });
+    });
+    return out;
+  }
   function fila() {
     var venc = ATIVO.vencidos(DATA);
     if (!DIA) return { venc: venc, novos: [] };
     if (DIA.tipo === 'vespera') return { venc: venc.slice(0, 30), novos: [] };
     if (DIA.tipo === 'leve' || DIA.tipo === 'prova') return { venc: venc, novos: [] };
-    return { venc: venc, novos: ATIVO.novos(disciplinasDoDia()) };
+    return { venc: venc, novos: novosDoDia() };
+  }
+
+  // ── PDFs do dia do VDE ──
+  function pdfsDoDia() {
+    if (!DIA || !DIA.top) return [];
+    var ns = [];
+    DIA.top.forEach(function (t) {
+      if (t.n == null) return;
+      var x = ns.filter(function (y) { return y.n === t.n; })[0];
+      if (!x) ns.push(x = { n: t.n, id: (window.VDE_DIAS || {})[t.n] || null, temas: [] });
+      x.temas.push(curto(t.d) + ': ' + t.s);
+    });
+    return ns;
+  }
+  function htmlConteudo() {
+    var ps = pdfsDoDia();
+    if (!ps.length) return '<div class="ss-bloco"><p class="ss-vazio" style="margin:0">Hoje não tem PDF novo: ' + esc(resumoDoDia()) + '.</p></div>';
+    return ps.map(function (p) {
+      return '<div class="ss-bloco"><h3><span class="n">Dia ' + p.n + ' do VDE</span>' + esc(p.temas.join(' · ')) + '</h3>' +
+        (p.id ? '<div class="ss-acoes" style="margin-bottom:.7rem"><a class="btn" href="https://drive.google.com/file/d/' + p.id + '/view" target="_blank" rel="noopener">Abrir no Drive ↗</a></div>' +
+          '<iframe class="vde-pdf" src="https://drive.google.com/file/d/' + p.id + '/preview" title="PDF do dia ' + p.n + '" allow="autoplay"></iframe>'
+          : '<p class="ss-vazio">O PDF "Dia ' + p.n + '" ainda não está na pasta do Drive. Quando subir, ele aparece aqui.</p>') + '</div>';
+    }).join('');
   }
 
   // ── checklist do dia ──
@@ -116,11 +160,12 @@
     if (!DIA) return [];
     var it = [], f = fila(), n = f.venc.length + f.novos.length;
     if (DIA.tipo === 'prova') return [{ id: 'prova', t: 'Prova da 1ª fase · 13h às 18h', s: 'Documento com foto, caneta preta de material transparente. Nada novo hoje.' }];
+    pdfsDoDia().forEach(function (p) { it.push({ id: 'p' + p.n, t: 'Ler o PDF do Dia ' + p.n + ' do VDE', s: esc(p.temas.join(' · ')) + ' · aba Conteúdo', aba: 'conteudo' }); });
     it.push({ id: 'fc', t: 'Flashcards do dia', s: n ? f.venc.length + ' vencidos + ' + f.novos.length + ' novos · aba Flashcards' : 'Nada vence hoje', aba: 'flashcards' });
     if (DIA.top) DIA.top.forEach(function (t, i) {
       var l = linkTopico(t);
       it.push({ id: 't' + i, t: curto(t.d) + ' · ' + t.s, aba: 'questoes',
-        s: (l ? 'Releia no <a href="' + l.href + '" target="_blank" rel="noopener">' + esc(l.txt) + ' ↗</a> e resolva ' : 'Resolva ') + ATIVO.questoesPorTopico() + ' questões na aba Questões' });
+        s: 'Resolva ' + ATIVO.questoesPorTopico() + ' questões na aba Questões' + (l ? ' · dicas no <a href="' + l.href + '" target="_blank" rel="noopener">' + esc(l.txt) + ' ↗</a>' : '') });
     });
     if (DIA.tipo === 'revisao' || DIA.tipo === 'leve') it.push({ id: 'etica', t: 'Reforço em Ética', s: (DIA.tipo === 'leve' ? 10 : 20) + ' questões, erradas primeiro · aba Questões', aba: 'questoes' });
     if (DIA.f === 2 && DIA.tipo !== 'vespera') it.push({ id: 'cad', t: 'Caderno de erros do dia', s: '<a href="erros.html">Abrir o caderno →</a>' });
@@ -249,7 +294,7 @@
     var usadas = {}, n = ATIVO.questoesPorTopico(), h = '';
     if (DIA.top) {
       h += '<div class="ss-bloco"><h3>Questões dos tópicos do dia</h3>' +
-        '<p>Tópicos do Gabaritaço VDE. Errou, a questão vai para o Caderno de Erros e volta em 1, 7 e 15 dias.</p>' +
+        '<p>Do tema dos PDFs do dia, primeiro as que caíram no Gabaritaço. Errou, a questão vai para o Caderno de Erros e volta em 1, 7 e 15 dias.</p>' +
         DIA.top.map(function (t, i) {
           var l = linkTopico(t);
           return blocoQuestoes('t' + i, t.s, l ? '<a href="' + l.href + '" target="_blank" rel="noopener">' + esc(l.txt) + ' ↗</a>' : '', t.d, t.q, t.g, n, /^Reforço/.test(t.s), usadas);
@@ -330,7 +375,7 @@
         sem = chave;
         h += '<div class="cal-sem"><h4>Semana de ' + seg.getDate() + ' ' + MESES[seg.getMonth()] + (x.f === 2 ? ' · Fase 2' : x.f === 1 ? ' · Fase 1' : '') + '</h4>';
       }
-      var desc = x.top ? x.top.map(function (t) { return '<b>' + esc(curto(t.d)) + '</b> · ' + esc(t.s) + (t.k ? ' <span class="tp">(DICAS ' + t.k[0] + '–' + t.k[1] + ')</span>' : t.rev ? ' <span class="tp">(Revisão ' + t.rev + ')</span>' : ''); }).join('<br>')
+      var desc = x.top ? x.top.map(function (t) { return '<b>' + esc(curto(t.d)) + '</b> · ' + esc(t.s) + (t.n != null ? ' <span class="tp">(Dia ' + t.n + ' VDE)</span>' : ''); }).join('<br>')
         : x.tipo === 'simulado' ? '<b>Simulado completo</b> · ' + esc(nomeExame(x.sim.exame))
         : x.tipo === 'revisao' ? 'Revisão: caderno + flashcards (foco ' + x.foco.map(curto).join(' e ') + ') + Ética' + (x.sim ? ' · simulado ' + (x.sim.modo === 'completo' ? 'completo (' + esc(nomeExame(x.sim.exame)) + ')' : 'parcial') : '')
         : x.tipo === 'leve' ? 'Leve: flashcards vencidos + 10 questões de Ética'
@@ -397,7 +442,7 @@
     esc: esc, curto: curto, dataLonga: dataLonga, partes: partes, MESES: MESES,
     indice: indice, vizinho: vizinho, resumoDoDia: resumoDoDia, disciplinasDoDia: disciplinasDoDia,
     fila: fila, montarFlashcards: montarFlashcards, montarQuestoes: montarQuestoes, carregarBanco: carregarBanco,
-    itensChecklist: itensChecklist, htmlChecklist: htmlChecklist, progressoChecklist: progressoChecklist, marcar: marcar,
+    itensChecklist: itensChecklist, htmlChecklist: htmlChecklist, htmlConteudo: htmlConteudo, pdfsDoDia: pdfsDoDia, progressoChecklist: progressoChecklist, marcar: marcar,
     feito: function () { return !!checks().feito; }, marcarFeito: marcarFeito,
     htmlCalendario: htmlCalendario, htmlPainel: htmlPainel, linkRevisao: linkRevisao
   };
