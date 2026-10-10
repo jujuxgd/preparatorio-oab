@@ -1,6 +1,6 @@
 # CLAUDE.md — Preparatório OAB 48 · Revisão Ativa
 > Diretrizes permanentes do projeto. Leia antes de qualquer sessão de desenvolvimento.
-> Atualizado: 2026-07-12
+> Atualizado: 2026-10-10
 
 ---
 
@@ -82,6 +82,9 @@ conteúdo novo do VDE em ordem (pulando os dias sem conteúdo), documentado em c
 ---
 
 ## 4. Flashcards = microresumos (fluxo real)
+
+> Desde 10/2026 há também os flashcards das Revisões VDE da revisão ativa (seção 5.5),
+> independentes dos microresumos e de `plano-vde.js`.
 
 Os flashcards NÃO vêm de `plano-vde.js`. Julia escreve o microresumo do dia na aba Hoje
 (prompt de IA → editor, salvo em `microresumo_dia_N`) e `revisar.html` o transforma em cartão
@@ -225,8 +228,9 @@ banco e cadernos legislativos entram no cache na primeira abertura online. Login
 
 Cada erro tem `proxima_revisao`, `nivel`, `acertos_seguidos` e, quando veio do banco ou
 do Simulado, `questao_id` (a questão é refeita a partir de `BANCO_QUESTOES`, carregado
-sob demanda em `erros.html`). Escada de intervalos 1→3→7→14→30 dias (cortada para caber
-antes de 09/01/2027); errar volta ao nível 0; 5 acertos seguidos = `dominada`. Fila de
+sob demanda em `erros.html`). Escada de intervalos 1→7→15 dias (desde 10/2026; cortada para
+caber antes de 09/01/2027); errar volta ao nível 0; 3 acertos seguidos = `dominada`. Erros com
+`flashcard_id` (vindos da sessão do dia) ficam fora desta fila — são revisados na sessão. Fila de
 no máximo 15 por dia, mais atrasados primeiro. Erros sem `proxima_revisao` (antigos)
 vencem no primeiro dia. Cartões sem `questao_id` aparecem como "mostrar resposta →
 lembrei / não lembrei". `hoje.html` mostra o aviso do dia; a revisão em si é em `erros.html`.
@@ -251,6 +255,36 @@ numerada com as revisões como paradas; Peças = agrupadas por tipo (`GRUPOS_PEC
 (`{id, data, peca, tempo(min), nota(0–5)|null, crit:{peca,partes,fundamentos,pedidos,fechamento:
 'ok'|'parcial'|'faltou'}, obs}`), com cronômetro (`oab_pecas_cron`, só do aparelho), resumo
 (tempo médio, nota média, critério que mais falha, contagem por peça) e histórico.
+
+## 5.5 Revisão ativa a partir de 12/10/2026 (`sessao.html`)
+
+Pedido de Julia (10/10/2026): parar a teoria extensa e só revisitar + praticar até a prova.
+O plano de 120 dias (`plano-vde.js`, `hoje.html`, `dia.html`) continua no ar e com o progresso
+salvo; a sessão nova é a rotina do dia e aparece como cartão no topo do Hoje.
+
+- **`calendario-ativo.js`** → `CAL_ATIVO.dias[]`, 12/10/2026 → 10/01/2027. Fase 1 (até 20/12):
+  seg–sáb com 2 tópicos de matérias diferentes (nunca a mesma matéria em dias seguidos), domingo
+  simulado completo (47º → 38º). Tópicos = seções do **Gabaritaço VDE** (`k` = faixa de DICAS,
+  `q` = tópicos do banco, `g` = questões "Como já caiu" localizadas no banco). Nº de tópicos por
+  matéria proporcional ao peso (provas 41º+): Ética 16, peso 6 → 12, peso 5 → 9, Empresarial 8
+  (sem Gabaritaço: temas das Revisões VDE). Fase 2 (21/12–08/01): revisão diária (caderno,
+  flashcards, 20 questões de Ética), simulado parcial nos dias úteis e completo em 26/12 e 02/01;
+  24–25/12 e 31/12–01/01 leves; 09/01 só flashcards. Gerado por script fora do repo: para mudar,
+  edite os dados direto ou regenere mantendo o formato.
+- **`fc-*.js`** (11 arquivos, 631 cartões) → `window.FC_VDE`, das **Revisões 1–3 do VDE**
+  (`revisao-biblioteca.js`). Campos: `id, d` (disciplina do banco), `r` (revisão), `t` (tema),
+  `f` frente, `v` verso curto, `b` dispositivo **só se citado na revisão** (sem `b` = "conferir"),
+  `p` pegadinha, `c`/`n` = divergência da revisão com a lei, anotada no cartão. Texto reescrito,
+  nunca copiado; nada da marca d'água dos PDFs entra no repo. Carregados sob demanda pela lista
+  `ARQUIVOS` em `ativo-core.js` (cartão novo: acrescentar o arquivo lá e em `ESSENCIAIS` do `sw.js`).
+- **`ativo-core.js`** → `window.ATIVO`. Estado em `oab_fc_estado_v1` (`{id: {n, prox, fora, h, erros}}`).
+  Errei → 1 dia e entra no Caderno de Erros (`flashcard_id`); acertando, 7 e 15 dias. Sei em cartão
+  novo → 15 dias; sei no degrau de 15 → sai da rotação. Novos: até 10 por matéria do dia.
+- **`sessao.html`**: flashcards (vencidos primeiro; frente → "mostrar resposta" → sei/errei, sem
+  virar o cartão) → questões por tópico (respostas em `oab_bq_respostas`; errou ou "foi chute" →
+  caderno) → caderno vencido → simulado (`simulado.html?exame=N` ou `?treino=fracas`). Abas
+  Calendário e Painel de erros. Questões sorteadas do dia em `oab_ativo_dia` (só do aparelho);
+  quantidade por tópico em `oab_ativo_questoes_por_topico` (padrão 10).
 
 ---
 
