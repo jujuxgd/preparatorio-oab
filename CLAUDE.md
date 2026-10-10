@@ -83,8 +83,8 @@ conteúdo novo do VDE em ordem (pulando os dias sem conteúdo), documentado em c
 
 ## 4. Flashcards = microresumos (fluxo real)
 
-> Desde 10/2026 há também os flashcards das Revisões VDE da revisão ativa (seção 5.5),
-> independentes dos microresumos e de `plano-vde.js`.
+> **Desde 10/2026 os flashcards das Revisões VDE (seção 5.5) substituíram os microresumos:** o editor
+> saiu da aba Hoje e `revisar.html` passou a ser a página desses flashcards. O texto abaixo é histórico.
 
 Os flashcards NÃO vêm de `plano-vde.js`. Julia escreve o microresumo do dia na aba Hoje
 (prompt de IA → editor, salvo em `microresumo_dia_N`) e `revisar.html` o transforma em cartão
@@ -256,7 +256,7 @@ numerada com as revisões como paradas; Peças = agrupadas por tipo (`GRUPOS_PEC
 'ok'|'parcial'|'faltou'}, obs}`), com cronômetro (`oab_pecas_cron`, só do aparelho), resumo
 (tempo médio, nota média, critério que mais falha, contagem por peça) e histórico.
 
-## 5.5 Revisão ativa a partir de 12/10/2026 (`sessao.html`)
+## 5.5 Revisão ativa a partir de 12/10/2026 (`hoje.html` + `sessao-core.js`)
 
 Pedido de Julia (10/10/2026): parar a teoria extensa e só revisitar + praticar até a prova.
 O plano de 120 dias (`plano-vde.js`, `hoje.html`, `dia.html`) continua no ar e com o progresso
@@ -280,12 +280,20 @@ salvo; a sessão nova é a rotina do dia e aparece como cartão no topo do Hoje.
 - **`ativo-core.js`** → `window.ATIVO`. Estado em `oab_fc_estado_v1` (`{id: {n, prox, fora, h, erros}}`).
   Errei → 1 dia e entra no Caderno de Erros (`flashcard_id`); acertando, 7 e 15 dias. Sei em cartão
   novo → 15 dias; sei no degrau de 15 → sai da rotação. Novos: até 10 por matéria do dia.
-- **`sessao.html`**: flashcards (vencidos primeiro; frente → "mostrar resposta" → sei/errei, sem
-  virar o cartão) → questões por tópico (respostas em `oab_bq_respostas`; errou ou "foi chute" →
-  caderno) → caderno vencido → simulado (`simulado.html?exame=N` ou `?treino=fracas`). Abas
-  Calendário e Painel de erros. Questões sorteadas do dia em `oab_ativo_dia` (só do aparelho);
-  quantidade por tópico em `oab_ativo_questoes_por_topico` (padrão 10).
-
+- **Planos mesclados (10/10/2026):** não há escolha de plano. A aba Hoje, o Calendário e o Revisar seguem
+  `CAL_ATIVO`; o plano de 120 dias (`plano-vde.js`) fica só como dado legado (Início, Matérias, `dia.html`,
+  PDFs da semana na Reta Final).
+- **`sessao-core.js`** → `window.SESSAO`: dia por `?data=AAAA-MM-DD` (padrão hoje, preso ao intervalo do
+  calendário), fila de flashcards, player inline `montarFlashcards(el, cartões)` (frente → "mostrar
+  resposta" → sei/errei, sem virar o cartão), questões por tópico (banco carregado sob demanda; respostas em
+  `oab_bq_respostas`; errou ou "foi chute" → caderno), checklist do dia, calendário e painel de erros.
+  Checklist e "Estudei hoje" em `oab_ativo_check_v1` (`{data: {fc, t0, t1, etica, cad, sim, feito}}`);
+  flashcards concluídos e bloco de questões todo respondido marcam o item sozinhos. Estilos em `sessao.css`.
+  Questões sorteadas do dia em `oab_ativo_dia` (só do aparelho); quantidade por tópico em
+  `oab_ativo_questoes_por_topico` (padrão 10).
+- **Páginas:** `hoje.html` (abas Flashcards · Questões · Checklist · Videoaulas), `calendario.html`
+  (calendário novo; cada dia abre `hoje.html?data=`), `revisar.html` (flashcards por matéria ou vencidos),
+  `painel-erros.html` (menu Desempenho). `sessao.html` só redireciona para essas páginas.
 ---
 
 ## 6. Design System
@@ -322,16 +330,15 @@ salvo; a sessão nova é a rotina do dia e aparece como cartão no topo do Hoje.
 
 ## 7. Padrão da Aba Hoje (`hoje.html`)
 
-A aba Hoje mostra o dia de estudo atual com:
-1. **Day Hero** — gradiente blush→rose-soft→lavender, número do dia em Playfair Display
-2. **Matéria(s) do dia** — card com progresso e checklist
-3. **Flashcards de revisão** — micro-resumos com bullet points e pegadinha (NÃO flip-cards)
-4. **Ações rápidas** — marcar dia como concluído, ir para dia completo
+Dia da revisão ativa (seção 5.5), por data. Hero com data, tópicos do dia, Pomodoro e "Estudei Hoje"
+(marca o dia no calendário e conta no streak). Abas:
+1. **Flashcards** (principal) — vencidos primeiro, depois novos das matérias do dia
+2. **Questões** — blocos por tópico do Gabaritaço, simulado do dia e matéria extra da semana
+3. **Checklist** — pontos do dia do `CAL_ATIVO`, com link para as DICAS do Gabaritaço
+4. **Videoaulas** — aulas das matérias do dia (`videoaulas.js`), destacando as do tópico
 
-**Regras:**
-- Aba "Anotações" foi **removida definitivamente** (Quill.js não está mais no hoje.html)
-- Conteúdo aparece visível de imediato (sem flip/reveal)
-- Progresso dos dias vem de `getDadosDia()` + localStorage
+**Removidos (10/2026):** Microresumo, Resumo do Dia (editores Quill), aba Revisões e aba PDF da Semana
+(os PDFs foram para a Reta Final). Não usar flip-cards; conteúdo visível sem virar o cartão.
 
 ---
 
