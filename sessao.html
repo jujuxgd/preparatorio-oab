@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Hoje · OAB</title>
+<script>
+(function () {
+  var p = new URLSearchParams(location.search), aba = p.get('aba'), d = p.get('data');
+  location.replace(aba === 'calendario' ? 'calendario.html' : aba === 'painel' ? 'painel-erros.html' : 'hoje.html' + (d ? '?data=' + encodeURIComponent(d) : ''));
+})();
+</script>
+</head>
+<body></body>
+</html>

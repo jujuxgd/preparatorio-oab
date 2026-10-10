@@ -1,6 +1,6 @@
 # CLAUDE.md — Preparatório OAB 48 · Revisão Ativa
 > Diretrizes permanentes do projeto. Leia antes de qualquer sessão de desenvolvimento.
-> Atualizado: 2026-07-12
+> Atualizado: 2026-10-10
 
 ---
 
@@ -82,6 +82,9 @@ conteúdo novo do VDE em ordem (pulando os dias sem conteúdo), documentado em c
 ---
 
 ## 4. Flashcards = microresumos (fluxo real)
+
+> **Desde 10/2026 os flashcards das Revisões VDE (seção 5.5) substituíram os microresumos:** o editor
+> saiu da aba Hoje e `revisar.html` passou a ser a página desses flashcards. O texto abaixo é histórico.
 
 Os flashcards NÃO vêm de `plano-vde.js`. Julia escreve o microresumo do dia na aba Hoje
 (prompt de IA → editor, salvo em `microresumo_dia_N`) e `revisar.html` o transforma em cartão
@@ -225,8 +228,9 @@ banco e cadernos legislativos entram no cache na primeira abertura online. Login
 
 Cada erro tem `proxima_revisao`, `nivel`, `acertos_seguidos` e, quando veio do banco ou
 do Simulado, `questao_id` (a questão é refeita a partir de `BANCO_QUESTOES`, carregado
-sob demanda em `erros.html`). Escada de intervalos 1→3→7→14→30 dias (cortada para caber
-antes de 09/01/2027); errar volta ao nível 0; 5 acertos seguidos = `dominada`. Fila de
+sob demanda em `erros.html`). Escada de intervalos 1→7→15 dias (desde 10/2026; cortada para
+caber antes de 09/01/2027); errar volta ao nível 0; 3 acertos seguidos = `dominada`. Erros com
+`flashcard_id` (vindos da sessão do dia) ficam fora desta fila — são revisados na sessão. Fila de
 no máximo 15 por dia, mais atrasados primeiro. Erros sem `proxima_revisao` (antigos)
 vencem no primeiro dia. Cartões sem `questao_id` aparecem como "mostrar resposta →
 lembrei / não lembrei". `hoje.html` mostra o aviso do dia; a revisão em si é em `erros.html`.
@@ -252,6 +256,48 @@ numerada com as revisões como paradas; Peças = agrupadas por tipo (`GRUPOS_PEC
 'ok'|'parcial'|'faltou'}, obs}`), com cronômetro (`oab_pecas_cron`, só do aparelho), resumo
 (tempo médio, nota média, critério que mais falha, contagem por peça) e histórico.
 
+## 5.5 Revisão ativa a partir de 12/10/2026 (`hoje.html` + `sessao-core.js`)
+
+Pedido de Julia (10/10/2026): parar a teoria extensa e só revisitar + praticar até a prova.
+O plano de 120 dias (`plano-vde.js`, `hoje.html`, `dia.html`) continua no ar e com o progresso
+salvo; a sessão nova é a rotina do dia e aparece como cartão no topo do Hoje.
+
+- **`calendario-ativo.js`** → `CAL_ATIVO.dias[]`, 12/10/2026 → 10/01/2027. **Fase 1 (até 20/12, refeita em
+  10/10/2026 a pedido de Julia):** seg–sáb = os **PDFs do dia do VDE** em ordem (89 PDFs em 60 dias; 29 dias
+  juntam os dois PDFs mais curtos vizinhos, de matérias diferentes); domingo = simulado completo (47º → 38º).
+  Cada tópico: `n` = DIA do VDE (arquivo "Dia n - Matéria.pdf"), `d`, `s` = tema, `q` = tópicos do banco,
+  `k`/`g` herdados do Gabaritaço quando o tópico do banco coincide. Sem a semana 14 do VDE (Julia não tem); da
+  semana 08 (escaneada) entram os dias 53–55 que Julia dividiu. Todos os dias do calendário têm PDF no Drive
+  (a aba Conteúdo avisa se faltar algum). PyMuPDF lê os cabeçalhos "DIA N" melhor que pypdf.
+  Fase 2 (21/12–08/01): revisão diária (caderno, flashcards, 20 questões de Ética), simulado parcial nos dias
+  úteis e completo em 26/12 e 02/01; 24–25/12 e 31/12–01/01 leves; 09/01 só flashcards. Gerado por script fora
+  do repo (tabela de dias com tema e tópicos do banco): para mudar, edite os dados direto mantendo o formato.
+- **`vde-dias.js`** → `VDE_DIAS {n: idDoDrive}` dos PDFs do dia (pasta "Dividido" no Drive de Julia). Dia novo
+  no Drive: acrescentar a linha. Aba **Conteúdo** do Hoje abre o PDF pelo preview do Drive. Os PDFs têm marca
+  d'água com dados de terceiros: só IDs e temas entram no repo, nunca texto.
+- **`fc-*.js`** (11 arquivos, 631 cartões) → `window.FC_VDE`, das **Revisões 1–3 do VDE**
+  (`revisao-biblioteca.js`). Campos: `id, d` (disciplina do banco), `r` (revisão), `t` (tema),
+  `f` frente, `v` verso curto, `b` dispositivo **só se citado na revisão** (sem `b` = "conferir"),
+  `p` pegadinha, `c`/`n` = divergência da revisão com a lei, anotada no cartão. Texto reescrito,
+  nunca copiado; nada da marca d'água dos PDFs entra no repo. Carregados sob demanda pela lista
+  `ARQUIVOS` em `ativo-core.js` (cartão novo: acrescentar o arquivo lá e em `ESSENCIAIS` do `sw.js`).
+- **`ativo-core.js`** → `window.ATIVO`. Estado em `oab_fc_estado_v1` (`{id: {n, prox, fora, h, erros}}`).
+  Errei → 1 dia e entra no Caderno de Erros (`flashcard_id`); acertando, 7 e 15 dias. Sei em cartão
+  novo → 15 dias; sei no degrau de 15 → sai da rotação. Novos: até 10 por matéria do dia.
+- **Planos mesclados (10/10/2026):** não há escolha de plano. A aba Hoje, o Calendário e o Revisar seguem
+  `CAL_ATIVO`; o plano de 120 dias (`plano-vde.js`) fica só como dado legado (Início, Matérias, `dia.html`,
+  PDFs da semana na Reta Final).
+- **`sessao-core.js`** → `window.SESSAO`: dia por `?data=AAAA-MM-DD` (padrão hoje, preso ao intervalo do
+  calendário), fila de flashcards, player inline `montarFlashcards(el, cartões)` (frente → "mostrar
+  resposta" → sei/errei, sem virar o cartão), questões por tópico (banco carregado sob demanda; respostas em
+  `oab_bq_respostas`; errou ou "foi chute" → caderno), checklist do dia, calendário e painel de erros.
+  Checklist e "Estudei hoje" em `oab_ativo_check_v1` (`{data: {fc, t0, t1, etica, cad, sim, feito}}`);
+  flashcards concluídos e bloco de questões todo respondido marcam o item sozinhos. Estilos em `sessao.css`.
+  Questões sorteadas do dia em `oab_ativo_dia` (só do aparelho); quantidade por tópico em
+  `oab_ativo_questoes_por_topico` (padrão 10).
+- **Páginas:** `hoje.html` (abas Flashcards · Questões · Checklist · Videoaulas), `calendario.html`
+  (calendário novo; cada dia abre `hoje.html?data=`), `revisar.html` (flashcards por matéria ou vencidos),
+  `painel-erros.html` (menu Desempenho). `sessao.html` só redireciona para essas páginas.
 ---
 
 ## 6. Design System
@@ -288,16 +334,16 @@ numerada com as revisões como paradas; Peças = agrupadas por tipo (`GRUPOS_PEC
 
 ## 7. Padrão da Aba Hoje (`hoje.html`)
 
-A aba Hoje mostra o dia de estudo atual com:
-1. **Day Hero** — gradiente blush→rose-soft→lavender, número do dia em Playfair Display
-2. **Matéria(s) do dia** — card com progresso e checklist
-3. **Flashcards de revisão** — micro-resumos com bullet points e pegadinha (NÃO flip-cards)
-4. **Ações rápidas** — marcar dia como concluído, ir para dia completo
+Dia da revisão ativa (seção 5.5), por data. Hero com data, tópicos do dia, Pomodoro e "Estudei Hoje"
+(marca o dia no calendário e conta no streak). Abas:
+0. **Conteúdo** (padrão nos dias com PDF) — PDF(s) do dia do VDE
+1. **Flashcards** — vencidos primeiro, depois novos do tema de cada PDF (`t` do cartão × tema/tópicos do dia)
+2. **Questões** — blocos por tópico do Gabaritaço, simulado do dia e matéria extra da semana
+3. **Checklist** — pontos do dia do `CAL_ATIVO`, com link para as DICAS do Gabaritaço
+4. **Videoaulas** — aulas das matérias do dia (`videoaulas.js`), destacando as do tópico
 
-**Regras:**
-- Aba "Anotações" foi **removida definitivamente** (Quill.js não está mais no hoje.html)
-- Conteúdo aparece visível de imediato (sem flip/reveal)
-- Progresso dos dias vem de `getDadosDia()` + localStorage
+**Removidos (10/2026):** Microresumo, Resumo do Dia (editores Quill), aba Revisões e aba PDF da Semana
+(os PDFs foram para a Reta Final). Não usar flip-cards; conteúdo visível sem virar o cartão.
 
 ---
 

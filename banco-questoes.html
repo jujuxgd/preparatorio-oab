@@ -380,7 +380,7 @@
 
   var respostas = ler(K_RESP, {});
   var favoritas = ler(K_FAV, []);
-  var estado = {}, pagina = 1;
+  var estado = {}, pagina = 1, fixas = {}, sitFixas = null;
 
   // filtros de valor múltiplo: cada um guarda uma lista
   var F = {
@@ -492,11 +492,11 @@
     if (F.assuntos.length && F.assuntos.indexOf(q.topic) === -1) return false;
     if (F.dificuldades.length && F.dificuldades.indexOf(q.difficulty) === -1) return false;
     if (F.exames.length && F.exames.indexOf(String(q.exam_number)) === -1) return false;
-    var r = respostas[q.id];
-    if (F.situacao === 'nao' && r) return false;
-    if (F.situacao === 'acertei' && !(r && r.ultima_correta)) return false;
-    if (F.situacao === 'errei' && !(r && r.ultima_correta === false)) return false;
-    if (F.situacao === 'favoritas' && favoritas.indexOf(q.id) === -1) return false;
+    var r = respostas[q.id], fica = fixas[q.id] === F.situacao;
+    if (!fica && F.situacao === 'nao' && r) return false;
+    if (!fica && F.situacao === 'acertei' && !(r && r.ultima_correta)) return false;
+    if (!fica && F.situacao === 'errei' && !(r && r.ultima_correta === false)) return false;
+    if (!fica && F.situacao === 'favoritas' && favoritas.indexOf(q.id) === -1) return false;
     if (F.busca) {
       var alvo = sa([q.statement, q.alternative_a, q.alternative_b, q.alternative_c,
                      q.alternative_d, q.topic, q.subtopic, q.discipline].join(' '));
@@ -784,6 +784,7 @@
   }
 
   function aplicar() {
+    if (sitFixas !== F.situacao) { fixas = {}; sitFixas = F.situacao; }
     montarChips();
     var lista = ordenar(BANCO.filter(passa));
     montarResultados(lista.length);
@@ -901,6 +902,7 @@
       at.vezes += 1;
       if (certa) at.acertos += 1; else at.erros += 1;
       at.ultima_correta = certa; at.ultima_resposta = e.escolha; at.ultima_data = new Date().toISOString();
+      fixas[q.id] = F.situacao;
       respostas[q.id] = at; gravar(K_RESP, respostas); aplicar();
     } else if (b.dataset.a === 'expl') { e.expl = !e.expl; aplicar(); }
     else if (b.dataset.a === 'refazer') { e.escolha = null; e.respondida = false; e.expl = false; e.cortadas = []; aplicar(); }

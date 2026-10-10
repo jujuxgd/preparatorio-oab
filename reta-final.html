@@ -269,13 +269,19 @@
 
     <div class="rf-hero">
       <h2>Material de <em>Reta Final</em></h2>
-      <p>Super dicas e resumos turbo para consolidar o conteúdo nos dias finais antes do exame. Use como complemento estratégico — nunca misture com os PDFs de Teoria da aba Hoje.</p>
+      <p>Super dicas e resumos turbo para consolidar o conteúdo nos dias finais antes do exame. Use como complemento estratégico.</p>
     </div>
 
     <div class="rf-warning">
       <span class="icon">⚠</span>
       <span><strong>Atenção:</strong> Este material é <em>exclusivamente de revisão e complementação</em>. Ele não substitui o estudo regular dos PDFs VDE. O conteúdo de lei seca deve sempre ser consultado no Caderno Legislativo.</span>
     </div>
+
+    <div class="rf-section-title">📎 PDFs da Semana · VDE</div>
+    <div class="rf-section-sub">Os resumos semanais do cronograma de 120 dias, para consultar quando um tópico pedir teoria</div>
+    <div class="rf-grid" id="grid-semanas"></div>
+
+    <hr class="rf-divider">
 
     <!-- SEÇÃO 1: SUPER DICAS -->
     <div class="rf-section-title">⚡ Super Dicas por Matéria</div>
@@ -468,6 +474,17 @@ function buildCard(item, tipo) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  const gSem = document.getElementById('grid-semanas');
+  const sem = [];
+  (typeof PLANO_VDE !== 'undefined' ? PLANO_VDE : []).forEach(d => {
+    if (!d.pdf_id) return;
+    let x = sem.find(y => y.id === d.pdf_id);
+    if (!x) sem.push(x = { id: d.pdf_id, s: [], m: [] });
+    if (x.s.indexOf(d.semana) === -1) x.s.push(d.semana);
+    d.materias.forEach(m => { const n = m.nome.replace(/^Direito (do |da )?/, ''); if (x.m.indexOf(n) === -1) x.m.push(n); });
+  });
+  sem.forEach(x => gSem.appendChild(buildCard({ id: x.id, emoji: '📎', nome: 'Semana ' + x.s.join('–') }, x.m.join(', '))));
+
   const gDicas = document.getElementById('grid-dicas');
   DICAS.forEach(d => gDicas.appendChild(buildCard(d, 'Super Dicas VDE')));
 

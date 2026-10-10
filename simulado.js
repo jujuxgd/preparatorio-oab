@@ -171,6 +171,12 @@
         telaEscolher();
       }
     };
+
+    // A sessão do dia abre com a prova ou o treino já escolhido: ?exame=47 ou ?treino=fracas
+    var url = new URLSearchParams(location.search);
+    var pre = url.get('exame') ? tela.querySelector('[data-exame="' + url.get('exame') + '"]')
+            : url.get('treino') ? tela.querySelector('[data-treino="' + url.get('treino') + '"]') : null;
+    if (pre) { pre.click(); pre.scrollIntoView({ block: 'center' }); }
   }
 
   // ═══════════════ começar ═══════════════
