@@ -40,11 +40,12 @@ function erros_save(list) {
 
 // ── Revisão espaçada ─────────────────────────────────────────
 // Cada acerto sobe um degrau da escada (dias até a próxima revisão);
-// errar volta pro começo. Perto da prova o intervalo é cortado pra
+// errar volta pro começo; acertar no último degrau (15 dias) tira o erro
+// da rotação. Perto da prova o intervalo é cortado pra
 // caber antes de 10/01/2027. Erros sem `proxima_revisao` (anteriores a
 // esta função) contam como devidos hoje.
-const ERROS_ESCADA = [1, 3, 7, 14, 30];
-const ERROS_ACERTOS_PARA_DOMINAR = 5;
+const ERROS_ESCADA = [1, 7, 15];
+const ERROS_ACERTOS_PARA_DOMINAR = 3;
 const ERROS_LIMITE_DIARIO = 15;
 const ERROS_DIA_PROVA = '2027-01-09';
 
@@ -64,7 +65,7 @@ function erros_devidas(limite) {
   const hoje = dataLocalHoje();
   const max = limite == null ? ERROS_LIMITE_DIARIO : limite;
   return erros_get()
-    .filter(e => e.status !== 'dominada' && (e.proxima_revisao || '0000-00-00') <= hoje)
+    .filter(e => e.status !== 'dominada' && !e.flashcard_id && (e.proxima_revisao || '0000-00-00') <= hoje)
     .sort((a, b) => (a.proxima_revisao || '0000-00-00').localeCompare(b.proxima_revisao || '0000-00-00'))
     .slice(0, max);
 }
@@ -99,8 +100,9 @@ function erros_registrar_revisao(id, acertou) {
 
 function erros_add(dados) {
   const list = erros_get();
-  if (dados.questao_id) {
-    const j = list.findIndex(e => e.questao_id === dados.questao_id && e.status !== 'dominada');
+  if (dados.questao_id || dados.flashcard_id) {
+    const j = list.findIndex(e => e.status !== 'dominada' &&
+      (dados.questao_id ? e.questao_id === dados.questao_id : e.flashcard_id === dados.flashcard_id));
     if (j >= 0) {
       list[j] = { ...list[j], nivel: 0, acertos_seguidos: 0, proxima_revisao: _erros_soma_dias(dataLocalHoje(), 1) };
       erros_save(list);
@@ -118,6 +120,7 @@ function erros_add(dados) {
     explicacao:   dados.explicacao   || '',
     dia_estudo:   dados.dia_estudo   || null,
     questao_id:   dados.questao_id   || null,
+    flashcard_id: dados.flashcard_id || null,
     nivel: 0,
     acertos_seguidos: 0,
     proxima_revisao: _erros_soma_dias(dataLocalHoje(), 1),
