@@ -53,7 +53,7 @@
     const theme = localStorage.getItem('theme') || 'light';
     root.setAttribute('data-theme', theme);
     const isDark = theme === 'dark';
-    const c0 = hexToRgb(base), escura = (0.2126 * c0.r + 0.7152 * c0.g + 0.0722 * c0.b) / 255 < 0.3;
+    const c0 = hexToRgb(base), escura = Math.max(c0.r, c0.g, c0.b) < 102; // preto/cinza-escuro: no escuro, o destaque vira tom claro
     const aliases = isDark ? (escura ? {
       '--rose':      lighten(base, 0.65),
       '--rose-deep': lighten(base, 0.8),
