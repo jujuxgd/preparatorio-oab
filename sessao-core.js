@@ -206,7 +206,7 @@
 
   function montarConteudo(el) {
     el.innerHTML = htmlConteudo();
-    if (window.LEITOR) el.querySelectorAll('.lp-host').forEach(function (h) { LEITOR.montar(h, h.dataset.arq); });
+    if (window.LEITOR) el.querySelectorAll('.lp-host').forEach(function (h) { LEITOR.montar(h, h.dataset.arq, { caixa: true }); });
   }
 
   // ── checklist do dia ──
@@ -477,7 +477,7 @@
     var rf = t.closest('[data-rev-feita]');
     if (rf) { marcarRevisao(rf.dataset.revFeita, rf.dataset.revD); rf.outerHTML = '<span class="ss-vazio">Revisão marcada como feita ✓</span>'; return; }
     var ag = t.closest('[data-abrir-gab]');
-    if (ag && window.LEITOR) { var hg = ag.closest('.gab-host'); LEITOR.montar(hg, hg.dataset.arq, { de: +hg.dataset.de, ate: +hg.dataset.ate }); return; }
+    if (ag && window.LEITOR) { var hg = ag.closest('.gab-host'); LEITOR.montar(hg, hg.dataset.arq, { de: +hg.dataset.de, ate: +hg.dataset.ate, caixa: true }); return; }
     var ad = t.closest('[data-adiantar]'), dz = t.closest('[data-desfazer]');
     if ((ad || dz) && window.PLANO) {
       if (ad) PLANO.adiantar(+ad.dataset.adiantar); else PLANO.desfazer(+dz.dataset.desfazer);

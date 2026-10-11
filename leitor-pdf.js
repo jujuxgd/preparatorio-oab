@@ -144,6 +144,7 @@
       '<button type="button" class="lp-b" data-a="zoom-">−</button><button type="button" class="lp-b" data-a="zoom+">+</button>' +
       '<a class="lp-b" href="https://drive.google.com/file/d/' + this.arq + '/view" target="_blank" rel="noopener">Drive ↗</a></span></div>' +
       '<div class="lp-corpo"><div class="lp-paginas"></div><aside class="lp-lista"></aside></div>';
+    if (this.opts.caixa) { raiz.classList.add('lp-caixa'); this.opts.rolagem = raiz.querySelector('.lp-corpo'); }
     this.zoom = 1;
     raiz.querySelector('.lp-topo').addEventListener('click', function (e) {
       var b = e.target.closest('[data-a]'); if (!b) return;
@@ -176,7 +177,7 @@
     this.paginas = [];
     var obs = new IntersectionObserver(function (es) {
       es.forEach(function (e) { if (e.isIntersecting) { obs.unobserve(e.target); self.desenharPagina(+e.target.dataset.p); } });
-    }, { rootMargin: '600px 0px' });
+    }, { root: this.opts.rolagem || null, rootMargin: '600px 0px' });
     var feitas = [], de = this.de || 1, ate = this.ate || doc.numPages;
     for (var i = de; i <= ate; i++) feitas.push(doc.getPage(i));
     Promise.all(feitas).then(function (pgs) {

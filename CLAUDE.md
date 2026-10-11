@@ -290,7 +290,7 @@ salvo; a sessão nova é a rotina do dia e aparece como cartão no topo do Hoje.
 - **`leitor-pdf.js`/`.css`** → `window.LEITOR.montar(el, idDrive)`: PDF.js 3.11.174 (cdnjs) lendo o arquivo pela API
   do Drive (`?alt=media&key=` — chave só com Google Drive API e referenciadores `*.vercel.app`); sem acesso, cai no
   preview do Drive. Grifos por seleção (4 cores), "grifar área" (arrastar, para escaneados), anotação por grifo e
-  lista lateral. `oab_grifos_v1 {"idArquivo|idGrifo": {p, r:[[x,y,w,h] 0–1], c, t, n, u, x?}}`, mesclado por `u`.
+  lista lateral. Opção `caixa: true` (usada no Hoje) prende as páginas numa caixa de até 78vh com rolagem própria. `oab_grifos_v1 {"idArquivo|idGrifo": {p, r:[[x,y,w,h] 0–1], c, t, n, u, x?}}`, mesclado por `u`.
 - **`vde-dias.js`** → `VDE_DIAS {n: idDoDrive}` dos PDFs do dia (pasta "Dividido" no Drive de Julia). Dia novo
   no Drive: acrescentar a linha. Aba **Conteúdo** do Hoje abre o PDF pelo preview do Drive. Os PDFs têm marca
   d'água com dados de terceiros: só IDs e temas entram no repo, nunca texto.
