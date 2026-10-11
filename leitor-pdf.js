@@ -146,12 +146,12 @@
       '<div class="lp-corpo"><div class="lp-paginas"></div><aside class="lp-lista"></aside></div>';
     if (this.opts.caixa) { raiz.classList.add('lp-caixa'); this.opts.rolagem = raiz.querySelector('.lp-corpo'); }
     // zoom fica salvo no aparelho (no celular costuma ser maior que no computador)
-    var zoomSalvo = parseFloat(localStorage.getItem('oab_lp_zoom'));
-    this.zoom = zoomSalvo >= 0.6 && zoomSalvo <= 3 ? zoomSalvo : 1;
+    var zoomSalvo = parseFloat(localStorage.getItem('oab_lp_zoom2'));
+    this.zoom = zoomSalvo >= 0.6 && zoomSalvo <= 3 ? zoomSalvo : (window.innerWidth <= 640 ? 1.6 : 1);
     function mostrarZoom() { raiz.querySelector('.lp-zoom').textContent = Math.round(self.zoom * 100) + '%'; }
     function mudarZoom(z) {
       self.zoom = Math.round(Math.min(3, Math.max(0.6, z)) * 100) / 100;
-      try { localStorage.setItem('oab_lp_zoom', String(self.zoom)); } catch (e) {}
+      try { localStorage.setItem('oab_lp_zoom2', String(self.zoom)); } catch (e) {}
       mostrarZoom(); self.renderizar();
     }
     mostrarZoom();
@@ -215,7 +215,7 @@
   Leitor.prototype.desenharPagina = function (n) {
     var info = this.paginas[n]; if (!info || info.feita) return;
     info.feita = true;
-    var dpr = Math.min(window.devicePixelRatio || 1, 2), c = info.el.querySelector('canvas');
+    var dpr = Math.min(window.devicePixelRatio || 1, 3), c = info.el.querySelector('canvas');
     c.width = Math.floor(info.vp.width * dpr); c.height = Math.floor(info.vp.height * dpr);
     c.style.width = Math.floor(info.vp.width) + 'px'; c.style.height = Math.floor(info.vp.height) + 'px';
     info.pg.render({ canvasContext: c.getContext('2d'), viewport: info.vp, transform: dpr !== 1 ? [dpr, 0, 0, dpr, 0, 0] : null });
