@@ -308,6 +308,8 @@
 <script src="plano-vde.js"></script>
 <script src="cards.js"></script>
 <script src="cores.js"></script>
+<script src="calendario-ativo.js"></script>
+<script src="plano-dinamico.js"></script>
 <script>
 const MATERIAS_CATALOG = [
   { id:"etica",          nome:"Ética Profissional",           emoji:"⚖️", questoes_prova:8,  pct_prova:10   },
@@ -661,6 +663,79 @@ const TOPICOS_CURRICULO = {
 
 let currentFilter = 'todas';
 
+// ── Progresso pelo calendário dinâmico: cada matéria = os PDFs do dia do VDE dela ──
+const NOME_BANCO = {
+  etica:'Ética Profissional', constitucional:'Direito Constitucional', civil:'Direito Civil',
+  proc_civil:'Direito Processual Civil', penal:'Direito Penal', proc_penal:'Direito Processual Penal',
+  trabalho:'Direito do Trabalho', proc_trabalho:'Direito Processual do Trabalho', tributario:'Direito Tributário',
+  administrativo:'Direito Administrativo', empresarial:'Direito Empresarial', dh:'Direitos Humanos',
+  internacional:'Direito Internacional', ambiental:'Direito Ambiental', eca:'ECA', cdc:'Direito do Consumidor',
+  filosofia:'Filosofia do Direito', financeiro:'Direito Financeiro', eleitoral:'Direito Eleitoral', previdenciario:'Direito Previdenciário'
+};
+const K_CHECK = 'oab_ativo_check_v1';
+function lerJSON(k, p) { try { return JSON.parse(localStorage.getItem(k)) || p; } catch (e) { return p; } }
+function unidadesDoPlano() {
+  // um item por PDF e matéria (o mesmo PDF do VDE pode trazer duas matérias); "estudado" vale pelo PDF
+  const cal = window.CAL_ATIVO, ck = lerJSON(K_CHECK, {}), por = {}, ok = {}, lista = [];
+  if (!cal) return lista;
+  cal.dias.forEach(x => {
+    if (x.f !== 1 || !x.top) return;
+    x.top.forEach(t => {
+      if (t.n == null) return;
+      const k = t.n + '|' + t.d;
+      let u = por[k];
+      if (!u) { u = por[k] = { n: t.n, d: t.d, data: x.d, temas: [] }; lista.push(u); }
+      if (u.temas.indexOf(t.s) < 0) u.temas.push(t.s);
+    });
+  });
+  Object.keys(ck).forEach(data => {
+    const c = ck[data], x = cal.dias.find(y => y.d === data);
+    Object.keys(c).forEach(k => { const m = /^p(\d+)$/.exec(k); if (m && c[k]) ok[m[1]] = true; });
+    if (c.feito && x && x.top) x.top.forEach(t => { if (t.n != null) ok[t.n] = true; });
+  });
+  lista.forEach(u => { u.ok = !!ok[u.n]; });
+  return lista;
+}
+let UNIDADES = unidadesDoPlano();
+function progPlano(matId) {
+  const us = UNIDADES.filter(u => u.d === NOME_BANCO[matId]);
+  const feitos = us.filter(u => u.ok).length;
+  return { total: us.length, feitos, pct: us.length ? Math.round(feitos / us.length * 100) : 0, unidades: us };
+}
+// Questões: sessões do Tracker + questões do banco/Hoje/simulados (oab_bq_respostas), por disciplina
+let Q_BANCO = null;
+function questoesBanco() {
+  if (Q_BANCO) return Q_BANCO;
+  const resp = lerJSON('oab_bq_respostas', {}), ids = Object.keys(resp), out = { _total: { total: ids.length, acertos: 0 } };
+  ids.forEach(id => { if (resp[id].ultima_correta) out._total.acertos++; });
+  if (window.BANCO_QUESTOES) {
+    const disc = {}; BANCO_QUESTOES.forEach(q => { disc[q.id] = q.discipline; });
+    ids.forEach(id => { const d = disc[id]; if (!d) return; const o = out[d] || (out[d] = { total: 0, acertos: 0 }); o.total++; if (resp[id].ultima_correta) o.acertos++; });
+    Q_BANCO = out;
+  }
+  return out;
+}
+function questoesMat(matId) {
+  const t = getQuestoesPorMateria(matId), b = questoesBanco()[NOME_BANCO[matId]] || { total: 0, acertos: 0 };
+  return { total: t.total + b.total, acertos: t.acertos + b.acertos };
+}
+function totaisQuestoes() {
+  const t = getTotaisQuestoes(), b = questoesBanco()._total;
+  const total = t.total + b.total, acertos = t.acertos + b.acertos;
+  return { total, acertos, pct: total ? Math.round(acertos / total * 100) : 0 };
+}
+function togglePdf(n, data, el) {
+  const ck = lerJSON(K_CHECK, {}), d = ck[data] || (ck[data] = {}), novo = !d['p' + n];
+  if (novo) d['p' + n] = 1; else delete d['p' + n];
+  localStorage.setItem(K_CHECK, JSON.stringify(ck));
+  try { localStorage.setItem('oab_local_rev', String(Date.now())); } catch (e) {}
+  if (window._syncOAB && window._syncOAB.notificarAlteracaoLocal) { try { window._syncOAB.notificarAlteracaoLocal(K_CHECK); } catch (e) {} }
+  UNIDADES = unidadesDoPlano();
+  const card = el.closest('.mat-card'), aberto = card && card.classList.contains('open');
+  buildTotais(); renderGrid();
+  if (aberto) document.getElementById(card.id).classList.add('open');
+}
+
 function setFilter(filter, el) {
   currentFilter = filter;
   document.querySelectorAll('.fchip').forEach(c => c.classList.remove('active'));
@@ -669,10 +744,10 @@ function setFilter(filter, el) {
 }
 
 function buildTotais() {
-  const totaisQ  = getTotaisQuestoes();
+  const totaisQ  = totaisQuestoes();
   let topTotal = 0, topFeitos = 0;
   MATERIAS_CATALOG.forEach(m => {
-    const p = getProgressoMateria(m.id);
+    const p = progPlano(m.id);
     topTotal  += p.total;
     topFeitos += p.feitos;
   });
@@ -681,7 +756,7 @@ function buildTotais() {
   document.getElementById('totais-bar').innerHTML = `
     <div class="totais-item">
       <div class="totais-num">${topPct}%</div>
-      <div class="totais-label">Tópicos estudados</div>
+      <div class="totais-label">PDFs do VDE estudados</div>
     </div>
     <div class="totais-item">
       <div class="totais-num">${totaisQ.total}</div>
@@ -698,8 +773,8 @@ function renderGrid() {
   let html = '';
 
   MATERIAS_CATALOG.forEach(mat => {
-    const prog   = getProgressoMateria(mat.id);
-    const qStats = getQuestoesPorMateria(mat.id);
+    const prog   = progPlano(mat.id);
+    const qStats = questoesMat(mat.id);
     const qPct   = qStats.total > 0 ? Math.round((qStats.acertos/qStats.total)*100) : null;
     const pct    = prog.pct;
 
@@ -708,20 +783,17 @@ function renderGrid() {
 
     // Corpo dos dias/tópicos
     let diasHtml = '';
-    prog.dias.forEach(({ dia, topicos, mIdx, feitos }) => {
-      const isDiaConcluido = obterDia(dia).concluido;
+    prog.unidades.forEach(u => {
+      const [ano, mes, dd] = u.data.split('-');
       diasHtml += `<div class="dia-bloco">
         <div class="dia-label">
-          <span class="dia-badge ${isDiaConcluido?'done':''}">Dia ${dia}</span>
-          <span>${feitos}/${topicos.length} tópico${topicos.length!==1?'s':''}</span>
+          <span class="dia-badge ${u.ok?'done':''}">Dia ${u.n} do VDE</span>
+          <a href="hoje.html?data=${u.data}" style="color:inherit">${dd}/${mes}</a>
         </div>
-        ${topicos.map((top, tIdx) => {
-          const checked = isTopicoEstudado(dia, mIdx, tIdx);
-          return `<div class="topico-item ${checked?'checked':''}" onclick="toggleTopico(${dia},${mIdx},${tIdx},this)">
-            <span class="topico-check"></span>
-            <span>${top}</span>
-          </div>`;
-        }).join('')}
+        <div class="topico-item ${u.ok?'checked':''}" onclick="togglePdf(${u.n},'${u.data}',this)">
+          <span class="topico-check"></span>
+          <span>${u.temas.join('; ')}</span>
+        </div>
       </div>`;
     });
 
@@ -760,7 +832,7 @@ function renderGrid() {
         <span class="mat-emoji">${mat.emoji}</span>
         <div class="mat-info">
           <div class="mat-nome">${mat.nome}</div>
-          <div class="mat-sub" id="matsub-${mat.id}">${prog.total > 0 ? prog.feitos+'/'+prog.total+' tópicos' : (TOPICOS_CURRICULO[mat.id]||[]).length + ' tópicos no plano'}${qStats.total>0?' · '+qStats.total+' questões':''}</div>
+          <div class="mat-sub" id="matsub-${mat.id}">${prog.total > 0 ? prog.feitos+'/'+prog.total+(prog.total===1?' PDF':' PDFs') : (TOPICOS_CURRICULO[mat.id]||[]).length + ' tópicos para estudar por fora'}${qStats.total>0?' · '+qStats.total+' questões':''}</div>
         </div>
         <div class="mat-stats">
           <div class="mat-pct" id="matpct-${mat.id}">${pct}%</div>
@@ -881,10 +953,10 @@ function registrarQuestoesMat(matId) {
   }
 
   // Atualiza o sub-header do card sem re-renderizar tudo
-  const qStats = getQuestoesPorMateria(matId);
-  const prog   = getProgressoMateria(matId);
+  const qStats = questoesMat(matId);
+  const prog   = progPlano(matId);
   const subEl  = document.getElementById(`matsub-${matId}`);
-  if (subEl) subEl.textContent = `${prog.feitos}/${prog.total} tópicos · ${qStats.total} questões`;
+  if (subEl && prog.total) subEl.textContent = `${prog.feitos}/${prog.total} ${prog.total === 1 ? 'PDF' : 'PDFs'} · ${qStats.total} questões`;
 
   buildTotais();
 }
@@ -892,6 +964,13 @@ function registrarQuestoesMat(matId) {
 document.addEventListener('DOMContentLoaded', () => {
   buildTotais();
   renderGrid();
+  // questões do banco por matéria: o banco é grande, carrega depois e redesenha
+  if (Object.keys(lerJSON('oab_bq_respostas', {})).length && !window.BANCO_QUESTOES) {
+    const sc = document.createElement('script');
+    sc.src = 'questoes-banco.js';
+    sc.onload = () => { Q_BANCO = null; const abertos = [...document.querySelectorAll('.mat-card.open')].map(c => c.id); buildTotais(); renderGrid(); abertos.forEach(id => { const c = document.getElementById(id); if (c) c.classList.add('open'); }); };
+    document.head.appendChild(sc);
+  }
 });
 </script>
 </body>

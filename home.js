@@ -5,8 +5,9 @@ document.addEventListener('DOMContentLoaded', function () {
   if (!main || !document.querySelector('.today-card')) return;
   document.body.classList.add('home');
 
-  var INICIO = new Date(2026, 6, 10);
+  var INICIO = new Date(2026, 9, 12);
   var PROVA = new Date(2027, 0, 10);
+  var CAL = window.CAL_ATIVO, S = window.SESSAO;
 
   // ── a citação sai do hero e vira uma linha sob a saudação ──
   var quote = document.getElementById('hero-quote');
@@ -14,22 +15,23 @@ document.addEventListener('DOMContentLoaded', function () {
   if (quote && titulo) { quote.classList.add('home-quote'); titulo.appendChild(quote); }
 
   // ── linha do tempo até a prova ──
-  var hoje = new Date(); hoje.setHours(0, 0, 0, 0);
+  var hoje = typeof getCurrentDate === 'function' ? getCurrentDate() : new Date(); hoje.setHours(0, 0, 0, 0);
   var total = PROVA - INICIO;
   var pct = Math.max(0, Math.min(100, ((hoje - INICIO) / total) * 100));
   var dias = Math.max(0, Math.round((PROVA - hoje) / 86400000));
-  var diaEstudo = (typeof getStudyDay === 'function') ? getStudyDay() : 1;
-  var revPct = ((new Date(2027, 0, 4) - INICIO) / total) * 100;
+  var diaEstudo = S ? S.indice() + 1 : 1;
+  var totalDias = CAL ? CAL.dias.length : 91;
+  var revPct = ((new Date(2026, 11, 21) - INICIO) / total) * 100;
 
   var tl = document.createElement('section');
   tl.className = 'tl';
   tl.innerHTML =
     '<div class="tl-head">' +
-    '<div class="tl-now">Dia <b>' + Math.max(1, diaEstudo) + '</b> de 120</div>' +
+    '<div class="tl-now">Dia <b>' + Math.max(1, diaEstudo) + '</b> de ' + totalDias + '</div>' +
     '<div class="tl-left">' + dias + ' dias para a prova</div>' +
     '</div>' +
     '<div class="tl-track"><span class="tl-tick" style="left:' + revPct + '%"></span><span class="tl-fill"></span><span class="tl-dot"></span></div>' +
-    '<div class="tl-marks"><span>10 jul · início do plano</span><span>10 jan · OAB 48</span></div>';
+    '<div class="tl-marks"><span>12 out · início da revisão ativa</span><span>10 jan · OAB 48</span></div>';
   var topbar = main.querySelector('.topbar');
   (topbar && topbar.parentNode === main) ? main.insertBefore(tl, topbar.nextSibling)
     : main.insertBefore(tl, main.firstChild);
@@ -37,16 +39,6 @@ document.addEventListener('DOMContentLoaded', function () {
     tl.querySelector('.tl-fill').style.width = pct + '%';
     tl.querySelector('.tl-dot').style.left = pct + '%';
   });
-
-  // o título do dia vem do plano, não da lista de tópicos emendada
-  function arrumaTitulo() {
-    var h3 = document.getElementById('today-title');
-    if (!h3 || typeof getDadosDia !== 'function') return;
-    var d = getDadosDia(Math.max(1, diaEstudo));
-    if (d && d.titulo) h3.textContent = d.titulo;
-  }
-  setTimeout(arrumaTitulo, 150);
-  setTimeout(arrumaTitulo, 700);
 
   // ── bloco de hoje: envolve o lado esquerdo e põe o anel à direita ──
   var card = document.querySelector('.today-card');
@@ -69,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function () {
     '<circle class="home-ring-bg" cx="65" cy="65" r="' + R + '"/>' +
     '<circle class="home-ring-fg" id="home-arc" cx="65" cy="65" r="' + R + '" stroke-dasharray="' + C + '" stroke-dashoffset="' + C + '"/>' +
     '</svg><div class="home-ring-c"><b id="home-pct">0%</b></div></div>' +
-    '<div class="home-ring-t" id="home-ring-t">0 de 120 dias</div>';
+    '<div class="home-ring-t" id="home-ring-t">0 de ' + totalDias + ' dias</div>';
   card.appendChild(ring);
 
   // o anel segue os textos que o progresso.js já preenche

@@ -157,12 +157,14 @@ document.addEventListener('DOMContentLoaded', () => {
     atualizarBadgeRevisar();
     // Streak global: atualiza qualquer .streak-pill .count na página
     try {
-      if (typeof carregarProgresso === 'function') {
-        const _p = carregarProgresso();
-        document.querySelectorAll('.streak-pill .count').forEach(el => {
-          el.textContent = _p.streak || 0;
-        });
-      }
+      // dias seguidos marcados em "Estudei hoje" (oab_ativo_check_v1); hoje conta se já marcou
+      const ck = JSON.parse(localStorage.getItem('oab_ativo_check_v1') || '{}');
+      const iso = d => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+      const ok = d => !!(ck[iso(d)] && ck[iso(d)].feito);
+      const d = getCurrentDate(); let seq = 0;
+      if (!ok(d)) d.setDate(d.getDate() - 1);
+      while (ok(d)) { seq++; d.setDate(d.getDate() - 1); }
+      document.querySelectorAll('.streak-pill .count').forEach(el => { el.textContent = seq; });
     } catch(e) {}
   }, 0);
 });
