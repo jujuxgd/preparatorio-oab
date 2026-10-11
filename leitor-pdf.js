@@ -316,6 +316,12 @@
 
   window.LEITOR = {
     montar: function (el, arq, opts) { var v = new Leitor(el, arq, opts); v.iniciar(); return v; },
-    grifosDe: grifosDe, CORES: CORES
+    grifosDe: grifosDe, CORES: CORES,
+    listarPasta: function (pasta) {
+      var q = encodeURIComponent("'" + pasta + "' in parents and trashed=false and mimeType='application/pdf'");
+      return fetch('https://www.googleapis.com/drive/v3/files?q=' + q + '&fields=files(id,name)&pageSize=1000&key=' + CHAVE)
+        .then(function (r) { if (!r.ok) throw new Error('drive ' + r.status); return r.json(); })
+        .then(function (j) { return j.files || []; });
+    }
   };
 })();

@@ -1191,6 +1191,10 @@
     }
   }
   document.querySelectorAll('.tab').forEach(function (t) { t.addEventListener('click', function () { abrir(t.dataset.tab); }); });
+  S.sincPasta(function (ns) {
+    var meus = S.pdfsDoDia().some(function (p) { return ns.indexOf(p.n) >= 0; });
+    if (meus && feitas.conteudo) S.montarConteudo(document.getElementById('ct-area'));
+  });
 
   function cabecalho() {
     var p = S.partes(S.DATA);

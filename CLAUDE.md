@@ -291,8 +291,9 @@ salvo; a sessão nova é a rotina do dia e aparece como cartão no topo do Hoje.
   do Drive (`?alt=media&key=` — chave só com Google Drive API e referenciadores `*.vercel.app`); sem acesso, cai no
   preview do Drive. Grifos por seleção (4 cores), "grifar área" (arrastar, para escaneados), anotação por grifo e
   lista lateral. Opção `caixa: true` (usada no Hoje) prende as páginas numa caixa de até 78vh com rolagem própria. `oab_grifos_v1 {"idArquivo|idGrifo": {p, r:[[x,y,w,h] 0–1], c, t, n, u, x?}}`, mesclado por `u`.
-- **`vde-dias.js`** → `VDE_DIAS {n: idDoDrive}` dos PDFs do dia (pasta "Dividido" no Drive de Julia). Dia novo
-  no Drive: acrescentar a linha. Aba **Conteúdo** do Hoje abre o PDF pelo preview do Drive. Os PDFs têm marca
+- **`vde-dias.js`** → `VDE_DIAS {n: idDoDrive}` dos PDFs do dia (pasta "Dividido" = `VDE_PASTA` no Drive de Julia). Desde
+  11/10/2026 a pasta é listada pela API do Drive a cada 6 h (`LEITOR.listarPasta`, cache só do aparelho em `oab_vde_pasta`):
+  dia que falta ou arquivo que sumiu da pasta é trocado pelo "Dia N - ….pdf" de lá, sem editar o arquivo. Aba **Conteúdo** do Hoje abre o PDF pelo preview do Drive. Os PDFs têm marca
   d'água com dados de terceiros: só IDs e temas entram no repo, nunca texto.
 - **`gabaritaco.js`** → `GABARITACO {disciplina: {id, paginas, dica:[página onde começa cada DICA]}}`, lido dos 10 PDFs
   com PyMuPDF. O Conteúdo do Hoje mostra, sob demanda ("Abrir o trecho"), o Gabaritaço do tema no leitor com grifos,
