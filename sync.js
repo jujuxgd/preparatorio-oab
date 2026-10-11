@@ -76,7 +76,8 @@
     oab_bq_respostas: function (a, b) {
       return String((b && b.ultima_data) || '') > String((a && a.ultima_data) || '') ? b : a;
     },
-    oab_ativo_check_v1: function (a, b) { return Object.assign({}, a, b); }
+    oab_ativo_check_v1: function (a, b) { return Object.assign({}, a, b); },
+    oab_grifos_v1: function (a, b) { return ((b && b.u) || 0) > ((a && a.u) || 0) ? b : a; }
   };
   function mesclar(chave, local, nuvem) {
     const A = jsonOu(local, {}), B = jsonOu(nuvem, {}), f = MESCLAR[chave], out = {};

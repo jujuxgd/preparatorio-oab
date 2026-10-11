@@ -1047,7 +1047,7 @@
 }
 .checklist-group-header + .checklist-subgroup-header { margin-top: 0; padding-top: 0.15rem; }
 </style>
-<link rel="stylesheet" href="topnav.css?v=1791163406"><script src="topnav.js?v=1791163406"></script><link rel="stylesheet" href="hoje-compact.css?v=1791163406"><link rel="stylesheet" href="sessao.css"></head>
+<link rel="stylesheet" href="topnav.css?v=1791163406"><script src="topnav.js?v=1791163406"></script><link rel="stylesheet" href="hoje-compact.css?v=1791163406"><link rel="stylesheet" href="sessao.css"><link rel="stylesheet" href="leitor-pdf.css"></head>
 <body>
 
 <div class="aurora-bg" aria-hidden="true">
@@ -1165,6 +1165,7 @@
 <script src="videoaulas.js"></script>
 <script src="calendario-ativo.js"></script>
 <script src="vde-dias.js"></script>
+<script src="leitor-pdf.js"></script>
 <script src="ativo-core.js"></script>
 <script src="sessao-core.js"></script>
 <script>
@@ -1182,7 +1183,7 @@
     var u = new URL(location.href); u.searchParams.set('aba', a); history.replaceState(null, '', u);
     if (!feitas[a]) {
       feitas[a] = 1;
-      if (a === 'conteudo') document.getElementById('ct-area').innerHTML = S.htmlConteudo();
+      if (a === 'conteudo') S.montarConteudo(document.getElementById('ct-area'));
       if (a === 'questoes') S.montarQuestoes(document.getElementById('q-area'));
       if (a === 'videoaulas') montarVideoaulas();
     }

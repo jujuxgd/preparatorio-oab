@@ -142,11 +142,17 @@
     return ps.map(function (p) {
       return '<div class="ss-bloco"><h3><span class="n">Dia ' + p.n + ' do VDE</span>' + esc(p.temas.join(' · ')) + '</h3>' +
         (p.ids.length ? p.ids.map(function (id, i) {
-          return '<div class="ss-acoes" style="margin:' + (i ? '1rem' : '0') + ' 0 .7rem"><a class="btn" href="https://drive.google.com/file/d/' + id + '/view" target="_blank" rel="noopener">Abrir no Drive' + (p.ids.length > 1 ? ' (parte ' + (i + 1) + ')' : '') + ' ↗</a></div>' +
-            '<iframe class="vde-pdf" src="https://drive.google.com/file/d/' + id + '/preview" title="PDF do dia ' + p.n + '" allow="autoplay"></iframe>';
+          return (p.ids.length > 1 ? '<div class="lp-parte">Parte ' + (i + 1) + '</div>' : '') +
+            (window.LEITOR ? '<div class="lp-host" data-arq="' + id + '"></div>'
+              : '<iframe class="vde-pdf" src="https://drive.google.com/file/d/' + id + '/preview" title="PDF do dia ' + p.n + '" allow="autoplay"></iframe>');
         }).join('')
           : '<p class="ss-vazio">O PDF "Dia ' + p.n + '" ainda não está na pasta do Drive. Quando subir, ele aparece aqui.</p>') + '</div>';
     }).join('');
+  }
+
+  function montarConteudo(el) {
+    el.innerHTML = htmlConteudo();
+    if (window.LEITOR) el.querySelectorAll('.lp-host').forEach(function (h) { LEITOR.montar(h, h.dataset.arq); });
   }
 
   // ── checklist do dia ──
@@ -444,7 +450,7 @@
     esc: esc, curto: curto, dataLonga: dataLonga, partes: partes, MESES: MESES,
     indice: indice, vizinho: vizinho, resumoDoDia: resumoDoDia, disciplinasDoDia: disciplinasDoDia,
     fila: fila, montarFlashcards: montarFlashcards, montarQuestoes: montarQuestoes, carregarBanco: carregarBanco,
-    itensChecklist: itensChecklist, htmlChecklist: htmlChecklist, htmlConteudo: htmlConteudo, pdfsDoDia: pdfsDoDia, progressoChecklist: progressoChecklist, marcar: marcar,
+    itensChecklist: itensChecklist, htmlChecklist: htmlChecklist, htmlConteudo: htmlConteudo, montarConteudo: montarConteudo, pdfsDoDia: pdfsDoDia, progressoChecklist: progressoChecklist, marcar: marcar,
     feito: function () { return !!checks().feito; }, marcarFeito: marcarFeito,
     htmlCalendario: htmlCalendario, htmlPainel: htmlPainel, linkRevisao: linkRevisao
   };
