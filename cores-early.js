@@ -53,12 +53,18 @@
     const theme = localStorage.getItem('theme') || 'light';
     root.setAttribute('data-theme', theme);
     const isDark = theme === 'dark';
-    const aliases = isDark ? {
+    const c0 = hexToRgb(base), escura = (0.2126 * c0.r + 0.7152 * c0.g + 0.0722 * c0.b) / 255 < 0.3;
+    const aliases = isDark ? (escura ? {
+      '--rose':      lighten(base, 0.65),
+      '--rose-deep': lighten(base, 0.8),
+      '--rose-soft': lighten(base, 0.14),
+      '--blush':     lighten(base, 0.08),
+    } : {
       '--rose':      lighten(base, 0.32),
       '--rose-deep': lighten(base, 0.20),
       '--rose-soft': darken(base, 0.75),
       '--blush':     darken(base, 0.82),
-    } : {
+    }) : {
       '--rose':      lighten(base, 0.18),
       '--rose-deep': base,
       '--rose-soft': lighten(base, 0.88),

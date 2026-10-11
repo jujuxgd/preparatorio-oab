@@ -76,12 +76,18 @@
   function applyAliases(base) {
     const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
     const root = document.documentElement;
-    const set = isDark ? {
+    const c0 = hexToRgb(base), escura = (0.2126 * c0.r + 0.7152 * c0.g + 0.0722 * c0.b) / 255 < 0.3;
+    const set = isDark ? (escura ? {
+      '--rose':      lighten(base, 0.65),
+      '--rose-deep': lighten(base, 0.8),
+      '--rose-soft': lighten(base, 0.14),
+      '--blush':     lighten(base, 0.08),
+    } : {
       '--rose':      lighten(base, 0.32),
       '--rose-deep': lighten(base, 0.20),
       '--rose-soft': darken(base, 0.75),
       '--blush':     darken(base, 0.82),
-    } : {
+    }) : {
       '--rose':      lighten(base, 0.18),
       '--rose-deep': base,
       '--rose-soft': lighten(base, 0.88),
