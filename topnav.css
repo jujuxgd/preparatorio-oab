@@ -186,6 +186,7 @@ main {
 /* ═══ Páginas-hub (Estudar / Desempenho / Plano) ═══ */
 .hub h1 { font: 500 1.875rem/1.15 'Fraunces', serif; letter-spacing: -.02em; color: var(--ink); margin: 0 0 .7rem; }
 .hub h1 em { font-style: italic; color: var(--rose-deep); }
+.hub .topbar { margin-bottom: .5rem; }
 .hub p.lead { color: var(--ink-soft); font-size: 1rem; margin: 0 0 2.6rem; max-width: 50ch; }
 .hub-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(255px, 1fr)); gap: 1.1rem; }
 .hub-card {

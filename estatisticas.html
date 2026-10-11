@@ -302,8 +302,10 @@
 
 /* FAVORITA HIGHLIGHT */
 .favorita-card {
-  background: linear-gradient(135deg, var(--champagne) 0%, var(--blush) 100%);
-  padding: 1.8rem 2rem;
+  background: var(--paper);
+  border: 1px solid var(--line-soft);
+  border-left: 4px solid var(--rose);
+  padding: 1.6rem 2rem;
   border-radius: var(--radius);
   margin-bottom: 1.5rem;
   display: grid;
@@ -325,8 +327,7 @@
   font-size: 0.7rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #211C19;
-  opacity: 0.65;
+  color: var(--ink-faded);
   margin-bottom: 0.4rem;
 }
 
@@ -342,13 +343,12 @@
 
 .favorita-card p {
   font-size: 0.85rem;
-  color: #211C19;
-  opacity: 0.78;
+  color: var(--ink-soft);
   max-width: 480px;
 }
 
 .favorita-card .badge {
-  background: var(--paper);
+  background: var(--bg-soft);
   padding: 1rem 1.5rem;
   border-radius: var(--radius);
   text-align: center;
@@ -496,7 +496,7 @@
   <main>
     <div class="topbar">
       <div class="page-title">
-        <div class="breadcrumb">Dados · <span data-month-year>—</span></div>
+        <div class="breadcrumb">Perfil · <span data-month-year>—</span></div>
         <h1>Seu <em>caminho</em> em números</h1>
       </div>
       <div class="topbar-actions"></div>

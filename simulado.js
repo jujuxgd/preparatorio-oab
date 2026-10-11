@@ -12,6 +12,7 @@
    ══════════════════════════════════════════════════════════ */
 (function () {
   'use strict';
+  function mesAno() { var d = typeof getCurrentDate === 'function' ? getCurrentDate() : new Date(); return ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'][d.getMonth()] + ' ' + d.getFullYear(); }
 
   var CHAVE   = 'oab_simulado_atual';
   var SIM_KEY = 'oab_simulados_v1';
@@ -80,7 +81,7 @@
   function telaEscolher() {
     var lista = exames();
     var andamento = lerLocal(CHAVE, null);
-    var html = '<div class="topbar"><div class="page-title"><div class="breadcrumb">Treino · Sala de prova</div><h1>Fazer um <em>simulado</em></h1></div></div>' +
+    var html = '<div class="topbar"><div class="page-title"><div class="breadcrumb">Treino · ' + mesAno() + '</div><h1>Fazer um <em>simulado</em></h1></div></div>' +
       '<p class="lead">Um treino rápido de 20 questões ou uma prova inteira com as 5 horas da 1ª fase — ' +
       'sem gabarito até o final. A correção vem depois, matéria por matéria.</p>';
 
@@ -494,7 +495,7 @@
     });
 
     var html =
-      '<div class="topbar"><div class="page-title"><div class="breadcrumb">Treino · Correção</div><h1>Resultado do <em>simulado</em></h1></div></div>' +
+      '<div class="topbar"><div class="page-title"><div class="breadcrumb">Treino · ' + mesAno() + '</div><h1>Resultado do <em>simulado</em></h1></div></div>' +
       '<p class="lead">' + esc(S.nome) + ' · ' + total + ' questões' +
         (S.porTempo ? ' · o tempo acabou antes de você finalizar' : '') + '</p>' +
 
