@@ -575,7 +575,7 @@
         <div class="chart-head">
           <div>
             <div class="chart-title">Tempo real por <em>matéria</em></div>
-            <div class="chart-sub">Tempo estudado dividido entre as matérias do dia</div>
+            <div class="chart-sub">Sessões de foco do Pomodoro, divididas entre as matérias do dia</div>
           </div>
         </div>
         <ul class="ranking-list" id="ranking-tempo"></ul>
@@ -620,7 +620,7 @@
 <script src="calendario-ativo.js"></script>
 <script src="plano-dinamico.js"></script>
 <script>
-document.addEventListener('DOMContentLoaded', () => {
+function montarEstatisticas() {
   const p      = carregarProgresso();
   const stats  = calcularStats();
   const hoje   = getCurrentDate();
@@ -648,34 +648,34 @@ document.addEventListener('DOMContentLoaded', () => {
   const streakEl = document.getElementById('streak-count');
   if (streakEl) streakEl.textContent = p.streak || 0;
 
-  // ── Tempo real estudado — digitado manualmente na aba Hoje (não vem
-  // do Pomodoro nem de cronômetro nenhum). Quando o dia tem mais de uma
-  // matéria, os minutos do dia são divididos entre elas proporcionalmente
-  // à carga horária que o PLANO sugere pra cada uma naquele dia — o
-  // plano só entra aqui como peso pra repartir o tempo real; o total
-  // somado nunca é maior que o que a usuária realmente digitou.
+  // ── Tempo estudado = sessões de foco do Pomodoro da aba Hoje (25 min cada, pomo_sessions_AAAA-MM-DD).
+  // Num dia com mais de uma matéria no calendário, os minutos são divididos igualmente entre elas.
   let minutosReaisTotal = 0;
   let diasComRegistroReal = 0;
   const minutosPorMateria = {};
-  Object.keys(p.dias || {}).forEach(numDia => {
-    const diaData = p.dias[numDia];
-    const minDia = diaData && diaData.minutos_estudados;
-    if (!minDia) return;
+  const CURTO = { 'Ética Profissional':'Ética Profissional','Direito Constitucional':'Constitucional','Direito Civil':'Direito Civil',
+    'Direito Processual Civil':'Processo Civil','Direito Penal':'Direito Penal','Direito Processual Penal':'Processo Penal',
+    'Direito do Trabalho':'Direito do Trabalho','Direito Processual do Trabalho':'Proc. Trabalho','Direito Tributário':'Tributário',
+    'Direito Administrativo':'Administrativo','Direito Empresarial':'Empresarial','Direito do Consumidor':'Consumidor',
+    'Direito Eleitoral':'Eleitoral','Direito Previdenciário':'Previdenciário' };
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i), m = /^pomo_sessions_(\d{4}-\d{2}-\d{2})$/.exec(k || '');
+    if (!m) continue;
+    const minDia = (parseInt(localStorage.getItem(k)) || 0) * 25;
+    if (!minDia) continue;
     minutosReaisTotal += minDia;
     diasComRegistroReal++;
-    const dados = getDadosDia(parseInt(numDia));
-    if (!dados || !dados.materias.length) return;
-    const pesoTotal = dados.materias.reduce((s, m) => s + (parseFloat(m.horas) || 0), 0);
-    dados.materias.forEach(m => {
-      const peso = pesoTotal > 0 ? (parseFloat(m.horas) || 0) / pesoTotal : 1 / dados.materias.length;
-      minutosPorMateria[m.nome] = (minutosPorMateria[m.nome] || 0) + minDia * peso;
-    });
-  });
+    const x = CAL ? CAL.dias.find(y => y.d === m[1]) : null;
+    const discs = x && x.top ? x.top.map(t => t.d).filter((d, j, arr) => arr.indexOf(d) === j)
+      : x && x.foco ? x.foco : [];
+    if (!discs.length) continue;
+    discs.forEach(d => { const nome = CURTO[d] || d; minutosPorMateria[nome] = (minutosPorMateria[nome] || 0) + minDia / discs.length; });
+  }
   const mediaRealMin = diasComRegistroReal > 0 ? Math.round(minutosReaisTotal / diasComRegistroReal) : 0;
 
   // ── Hero
   document.getElementById('hero-horas').innerHTML     = diasComRegistroReal > 0 ? fmtMinutosParaTexto(minutosReaisTotal) : '0<small>h</small>';
-  document.getElementById('hero-horas-sub').textContent = diasComRegistroReal > 0 ? `média ${fmtMinutosParaTexto(mediaRealMin)}/dia` : 'nenhum tempo registrado ainda';
+  document.getElementById('hero-horas-sub').textContent = diasComRegistroReal > 0 ? `média ${fmtMinutosParaTexto(mediaRealMin)}/dia` : 'use o Pomodoro da aba Hoje para registrar';
   document.getElementById('hero-questoes').textContent  = q.total;
   document.getElementById('hero-questoes-sub').innerHTML = q.total > 0 ? `acerto <em>${q.pct}%</em>` : 'sem registros';
   document.getElementById('hero-streak').innerHTML    = `${p.streak||0}<small> ${(p.streak||0) === 1 ? 'dia' : 'dias'}</small>`;
@@ -684,7 +684,23 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('hero-progresso-sub').textContent = `${stats.concluidos} de ${totalDiasPlano} dias do plano`;
 
   // ── Matéria favorita (maior score: acertos × log(total+1))
+  // Tracker + banco (Hoje, Banco e Simulados), por matéria
   const qTodas = getTodasQuestoes();
+  const ID_DISC = { 'Ética Profissional':'etica','Direito Constitucional':'constitucional','Direito Civil':'civil',
+    'Direito Processual Civil':'proc_civil','Direito Penal':'penal','Direito Processual Penal':'proc_penal',
+    'Direito do Trabalho':'trabalho','Direito Processual do Trabalho':'proc_trabalho','Direito Tributário':'tributario',
+    'Direito Administrativo':'administrativo','Direito Empresarial':'empresarial','Direitos Humanos':'dh',
+    'Direito Internacional':'internacional','Direito Ambiental':'ambiental','ECA':'eca','Direito do Consumidor':'cdc',
+    'Filosofia do Direito':'filosofia','Direito Financeiro':'financeiro','Direito Eleitoral':'eleitoral','Direito Previdenciário':'previdenciario' };
+  if (window.BANCO_QUESTOES) {
+    let r = {}; try { r = JSON.parse(localStorage.getItem('oab_bq_respostas')) || {}; } catch (e) {}
+    const disc = {}; BANCO_QUESTOES.forEach(x => { disc[x.id] = x.discipline; });
+    Object.keys(r).forEach(id => {
+      const mid = ID_DISC[disc[id]]; if (!mid) return;
+      const o = qTodas[mid] || (qTodas[mid] = { total: 0, acertos: 0 });
+      o.total++; if (r[id].ultima_correta) o.acertos++;
+    });
+  }
   const NOMES_MAT = { etica:'Ética Profissional',constitucional:'Constitucional',civil:'Direito Civil',
     proc_civil:'Processo Civil',penal:'Direito Penal',proc_penal:'Processo Penal',trabalho:'Direito do Trabalho',
     proc_trabalho:'Proc. Trabalho',tributario:'Tributário',administrativo:'Administrativo',empresarial:'Empresarial',
@@ -855,6 +871,14 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>`).join('');
     }
   }
+}
+document.addEventListener('DOMContentLoaded', () => {
+  let temBanco = false; try { temBanco = Object.keys(JSON.parse(localStorage.getItem('oab_bq_respostas')) || {}).length > 0; } catch (e) {}
+  if (!temBanco || window.BANCO_QUESTOES) { montarEstatisticas(); return; }
+  const sc = document.createElement('script');
+  sc.src = 'questoes-banco.js';
+  sc.onload = sc.onerror = montarEstatisticas;
+  document.head.appendChild(sc);
 });
 </script>
 </body>
