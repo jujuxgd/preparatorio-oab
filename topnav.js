@@ -25,17 +25,15 @@
   };
 
   var SUB = {
-    'estudar.html': [['revisar.html', 'Revisar flashcards', 'rev'], ['revisao.html', 'Biblioteca de revisão', 'leg'], ['banco-questoes.html', 'Banco de Questões', 'banco'], ['simulado.html', 'Fazer Simulado', 'simf'], ['videoaulas.html', 'Videoaulas', 'vid'], ['caderno-legislativo.html', 'Caderno Legislativo', 'leg']],
-    'desempenho.html': [['rumo40.html', 'Rumo aos 40', 'pra'], ['questoes.html', 'Tracker de questões', 'q'], ['simulados.html', 'Simulados', 'sim'], ['erros.html', 'Caderno de Erros', 'err'], ['painel-erros.html', 'Painel de erros', 'pra']],
-    'plano.html': [['materias.html', 'Matérias', 'mat'], ['reta-final.html', 'Reta Final', 'fl']]
+    'estudar.html': [['revisar.html', 'Flashcards', 'rev'], ['revisao.html', 'Biblioteca de revisão', 'leg'], ['videoaulas.html', 'Videoaulas', 'vid'], ['caderno-legislativo.html', 'Caderno Legislativo', 'leg'], ['reta-final.html', 'Materiais extras', 'fl']],
+    'treino.html': [['rumo40.html', 'Rumo aos 40', 'pra'], ['banco-questoes.html', 'Banco de Questões', 'banco'], ['simulado.html', 'Fazer Simulado', 'simf'], ['simulados.html', 'Meus simulados', 'sim'], ['erros.html', 'Caderno de Erros', 'err'], ['questoes.html', 'Tracker de questões', 'q']]
   };
   var NAV = [
     ['index.html', 'Início', 'ini', ['index.html', '']],
     ['hoje.html', 'Hoje', 'hoje', ['hoje.html', 'dia.html', 'sessao.html']],
     ['calendario.html', 'Calendário', 'cal', ['calendario.html']],
-    ['estudar.html', 'Estudar', 'est', ['estudar.html', 'revisar.html', 'revisao.html', 'banco-questoes.html', 'simulado.html', 'videoaulas.html', 'caderno-legislativo.html']],
-    ['desempenho.html', 'Desempenho', 'pra', ['desempenho.html', 'rumo40.html', 'questoes.html', 'simulados.html', 'erros.html', 'painel-erros.html']],
-    ['plano.html', 'Plano', 'pla', ['plano.html', 'materias.html', 'reta-final.html']]
+    ['estudar.html', 'Estudar', 'est', ['estudar.html', 'revisar.html', 'revisao.html', 'videoaulas.html', 'caderno-legislativo.html', 'reta-final.html', 'materias.html', 'plano.html']],
+    ['treino.html', 'Treino', 'pra', ['treino.html', 'rumo40.html', 'banco-questoes.html', 'simulado.html', 'simulados.html', 'erros.html', 'painel-erros.html', 'questoes.html', 'desempenho.html', 'estatisticas.html']]
   ];
 
   function diasAteProva() {

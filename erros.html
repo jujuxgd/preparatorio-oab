@@ -312,7 +312,7 @@
   .form-row { grid-template-columns: 1fr; }
 }
 </style>
-<link rel="stylesheet" href="topnav.css?v=1791163406"><script src="topnav.js?v=1791163406"></script></head>
+<link rel="stylesheet" href="sessao.css"><link rel="stylesheet" href="topnav.css?v=1791163406"><script src="topnav.js?v=1791163406"></script></head>
 <body>
 
 <div class="aurora-bg" aria-hidden="true">
@@ -425,6 +425,11 @@
     <!-- STATS -->
     <div class="error-stats" id="erros-stats"></div>
 
+    <details class="pn-details" id="painel">
+      <summary>Onde você mais erra <span>por matéria e tema · flashcards + caderno</span></summary>
+      <div id="pn"><p class="ss-vazio">Carregando…</p></div>
+    </details>
+
     <!-- FILTROS -->
     <div id="rev-banner"></div>
     <div class="filter-bar" id="filter-bar">
@@ -453,6 +458,20 @@
 <script src="perfil.js?v=1783860863"></script>
 <script src="sync.js?v=1784058237"></script>
 <script src="cores.js"></script>
+<script src="estudo-core.js"></script>
+<script src="revisao-biblioteca.js"></script>
+<script src="calendario-ativo.js"></script>
+<script src="plano-dinamico.js"></script>
+<script src="ativo-core.js"></script>
+<script src="sessao-core.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var d = document.getElementById('painel');
+  if (location.hash === '#painel') d.open = true;
+  function montar() { ATIVO.carregarCartoes().then(function () { document.getElementById('pn').innerHTML = SESSAO.htmlPainel(); }); }
+  if (d.open) montar(); else d.addEventListener('toggle', function f() { if (d.open) { montar(); d.removeEventListener('toggle', f); } });
+});
+</script>
 <script>
 // ── Filtro ativo
 let filtroAtivo = 'todas';

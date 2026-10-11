@@ -37,6 +37,7 @@
 <script src="erros-core.js"></script>
 <script src="revisao-biblioteca.js"></script>
 <script src="calendario-ativo.js"></script>
+<script src="plano-dinamico.js"></script>
 <script src="ativo-core.js"></script>
 <script src="sessao-core.js"></script>
 <script>
@@ -52,8 +53,10 @@
         var meus = cart.filter(function (c) { return c.d === d; }), vistos = meus.filter(function (c) { return est[c.id]; }).length;
         return '<button data-m="' + S.esc(d) + '"' + (sel === d ? ' class="on"' : '') + '>' + S.esc(S.curto(d)) + ' · ' + vistos + '/' + meus.length + '</button>';
       }).join('');
+    var rev = new URLSearchParams(location.search).get('rev');
     var fila = sel === 'vencidos' ? venc
-      : venc.filter(function (c) { return c.d === sel; }).concat(ATIVO.novos([sel], 20));
+      : venc.filter(function (c) { return c.d === sel; }).concat(ATIVO.novos([sel], rev ? 999 : 20));
+    if (rev && sel !== 'vencidos') fila = fila.filter(function (c) { return String(c.r) === rev; });
     S.montarFlashcards(document.getElementById('rv-area'), fila, {
       vazio: sel === 'vencidos' ? 'Nenhum flashcard vencido. Escolha uma matéria acima para ver cartões novos.' : 'Você já viu todos os cartões desta matéria e nenhum vence hoje.'
     });
@@ -61,7 +64,7 @@
   document.getElementById('rv-filtros').addEventListener('click', function (ev) {
     var b = ev.target.closest('button[data-m]'); if (!b) return;
     sel = b.dataset.m;
-    var u = new URL(location.href); if (sel === 'vencidos') u.searchParams.delete('materia'); else u.searchParams.set('materia', sel); history.replaceState(null, '', u);
+    var u = new URL(location.href); u.searchParams.delete('rev'); if (sel === 'vencidos') u.searchParams.delete('materia'); else u.searchParams.set('materia', sel); history.replaceState(null, '', u);
     montar();
   });
   document.addEventListener('DOMContentLoaded', function () { ATIVO.carregarCartoes().then(montar); });

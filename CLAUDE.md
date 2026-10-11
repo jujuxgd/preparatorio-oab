@@ -193,8 +193,13 @@ Sala de prova. Três telas numa página: escolher, fazer e corrigir.
 Um documento por usuário em `backups/{uid}`; push por chave com merge. Regras:
 - Chaves só do aparelho (`SO_LOCAIS`: tema, `simulatedDate`, `oab_current_day`, login etc.)
   nunca vão à nuvem nem são aplicadas vindas dela.
-- O envio de segurança (trocar de aba/fechar) só roda se `oab_local_rev` local > nuvem e
-  nunca faz a revisão da nuvem retroceder.
+- **Por chave (desde 11/10/2026):** cada chave gravada leva o horário em que mudou (`oab_sync_t`
+  local, só do aparelho; campo `t` do documento na nuvem). Ao receber a nuvem vale a chave mais nova,
+  uma a uma; `oab_fc_estado_v1`, `oab_bq_respostas` e `oab_ativo_check_v1` são **mesclados item a item**
+  (`MESCLAR`). Antes valia o documento do aparelho com `oab_local_rev` maior — uma gravação no PC antes de
+  ler a nuvem fazia ele ignorar e depois sobrescrever os flashcards feitos no celular.
+- O envio de segurança (trocar de aba/fechar) só manda as chaves com horário local mais novo que o da
+  nuvem, e só depois do primeiro snapshot. Chaves antigas sem horário seguem a regra da revisão.
 - Todo código que grava no `localStorage` deve carimbar `oab_local_rev` e chamar
   `_syncOAB.notificarAlteracaoLocal(chave)`.
 - Aviso discreto (pílula) só quando há falha, falta de conexão ou dados > 800 KB
@@ -247,6 +252,10 @@ A lista de arquivos (97) está embutida em `window.BIBLIOTECA_REVISAO` (`{id, g,
 **Atenção:** o repositório é público e os arquivos têm link aberto, então esses IDs ficam
 públicos; os PDFs trazem marca d'água com dados de terceiros — não commitar o texto dos PDFs.
 Para adicionar material novo, acrescente linhas em `revisao-biblioteca.js`.
+**Desde 11/10/2026:** o visualizador usa o leitor com grifos (`leitor-pdf.js`, rolagem dentro do painel), o
+rodapé tem "Flashcards desta revisão" (`revisar.html?materia=…&rev=N`) e cada card de matéria mostra flashcards
+vistos e nº de grifos. Nos dias `revisao` do calendário (fase 2 e revisões extras), o Conteúdo do Hoje abre a
+próxima Revisão ainda não feita (1→2→3) de cada matéria em foco, com "Marcar como feita" (grava aqui e no checklist).
 Estado em `oab_revisao_status_v1` (`{id: {s:'lendo'|'feito', d}}`); data da 2ª fase em
 `oab_segunda_fase_data`. Layout escolhido por Julia (2026-10): Revisões = estante de cards
 por matéria (cores `--mat-*`, anel de progresso, círculos R1/R2/R3); Trabalhista = trilha
@@ -272,9 +281,21 @@ salvo; a sessão nova é a rotina do dia e aparece como cartão no topo do Hoje.
   Fase 2 (21/12–08/01): revisão diária (caderno, flashcards, 20 questões de Ética), simulado parcial nos dias
   úteis e completo em 26/12 e 02/01; 24–25/12 e 31/12–01/01 leves; 09/01 só flashcards. Gerado por script fora
   do repo (tabela de dias com tema e tópicos do banco): para mudar, edite os dados direto mantendo o formato.
+- **`plano-dinamico.js`** (carregar logo depois de `calendario-ativo.js`) → `window.PLANO`. A fase 1 vira uma fila de
+  PDFs (`n`); "Adiantar" no Conteúdo do Hoje grava `oab_adiantado_v1 {n: data}`. Dias até hoje mantêm o previsto
+  (menos o adiantado) + o adiantado; dias depois de hoje recebem o resto da fila nas mesmas vagas (1 ou 2 PDFs);
+  dia de estudo que sobra vira `revisao` com `extra: true` (foco = matérias vistas 7 dias antes). Reescreve
+  `CAL_ATIVO.dias` em memória, então Hoje, Calendário e Revisar enxergam o plano já reorganizado.
+- **`leitor-pdf.js`/`.css`** → `window.LEITOR.montar(el, idDrive)`: PDF.js 3.11.174 (cdnjs) lendo o arquivo pela API
+  do Drive (`?alt=media&key=` — chave só com Google Drive API e referenciadores `*.vercel.app`); sem acesso, cai no
+  preview do Drive. Grifos por seleção (4 cores), "grifar área" (arrastar, para escaneados), anotação por grifo e
+  lista lateral. `oab_grifos_v1 {"idArquivo|idGrifo": {p, r:[[x,y,w,h] 0–1], c, t, n, u, x?}}`, mesclado por `u`.
 - **`vde-dias.js`** → `VDE_DIAS {n: idDoDrive}` dos PDFs do dia (pasta "Dividido" no Drive de Julia). Dia novo
   no Drive: acrescentar a linha. Aba **Conteúdo** do Hoje abre o PDF pelo preview do Drive. Os PDFs têm marca
   d'água com dados de terceiros: só IDs e temas entram no repo, nunca texto.
+- **`gabaritaco.js`** → `GABARITACO {disciplina: {id, paginas, dica:[página onde começa cada DICA]}}`, lido dos 10 PDFs
+  com PyMuPDF. O Conteúdo do Hoje mostra, sob demanda ("Abrir o trecho"), o Gabaritaço do tema no leitor com grifos,
+  só nas páginas das DICAS `k` do tópico. Os PDFs (6–12 MB) ficam no Cache Storage do navegador (`oab-pdfs-v1`).
 - **`fc-*.js`** (11 arquivos, 631 cartões) → `window.FC_VDE`, das **Revisões 1–3 do VDE**
   (`revisao-biblioteca.js`). Campos: `id, d` (disciplina do banco), `r` (revisão), `t` (tema),
   `f` frente, `v` verso curto, `b` dispositivo **só se citado na revisão** (sem `b` = "conferir"),
@@ -295,9 +316,13 @@ salvo; a sessão nova é a rotina do dia e aparece como cartão no topo do Hoje.
   flashcards concluídos e bloco de questões todo respondido marcam o item sozinhos. Estilos em `sessao.css`.
   Questões sorteadas do dia em `oab_ativo_dia` (só do aparelho); quantidade por tópico em
   `oab_ativo_questoes_por_topico` (padrão 10).
-- **Páginas:** `hoje.html` (abas Flashcards · Questões · Checklist · Videoaulas), `calendario.html`
-  (calendário novo; cada dia abre `hoje.html?data=`), `revisar.html` (flashcards por matéria ou vencidos),
-  `painel-erros.html` (menu Desempenho). `sessao.html` só redireciona para essas páginas.
+- **Páginas:** `hoje.html` (abas Conteúdo · Flashcards · Questões · Checklist · Videoaulas), `calendario.html`
+  (calendário novo; cada dia abre `hoje.html?data=`), `revisar.html` (flashcards por matéria ou vencidos).
+  `sessao.html` só redireciona.
+- **Menu (11/10/2026):** Início · Hoje · Calendário · **Estudar** (Flashcards, Biblioteca de revisão, Videoaulas,
+  Caderno legislativo, Materiais extras = `reta-final.html`) · **Treino** (`treino.html`: Rumo aos 40 em destaque,
+  Banco, Simulado, Meus simulados, Caderno de erros, Tracker). O Painel de erros vive dentro de `erros.html`
+  (bloco "Onde você mais erra", `#painel`). `desempenho.html`, `plano.html` e `painel-erros.html` só redirecionam.
 ---
 
 ## 6. Design System

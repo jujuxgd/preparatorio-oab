@@ -48,8 +48,43 @@
   const SO_LOCAIS = ['theme', 'simulatedDate', 'oab_current_day', 'oab_current_day_date',
     'oab_auth_ok', 'oab_approved_uid', 'oab_uid_ativo', 'oab_ultimo_backup',
     'oab_rose_intensity', 'oab_rose_custom_hex', 'oab_accent_color', 'oab_sidebar_collapsed',
-    'oab_pecas_cron', 'oab_ativo_dia'];
+    'oab_pecas_cron', 'oab_ativo_dia', 'oab_sync_t'];
   function soLocal(k) { return SO_LOCAIS.indexOf(k) >= 0; }
+
+  // ── Hora da última alteração de cada chave ──
+  // Cada chave gravada carrega o horário em que mudou (local em oab_sync_t,
+  // na nuvem no campo `t` do documento). Ao receber a nuvem, vale a chave
+  // mais nova, uma a uma; antes, valia o documento inteiro do aparelho com a
+  // revisão maior — uma gravação qualquer no PC fazia ele ignorar (e depois
+  // sobrescrever) os flashcards feitos no celular.
+  const K_T = 'oab_sync_t';
+  let _tNuvem = {};
+  let _nuvemLida = false; // só depois do 1º snapshot dá para saber o que a nuvem já tem
+  function tLocal() { try { return JSON.parse(localStorage.getItem(K_T)) || {}; } catch (e) { return {}; } }
+  function gravarTLocal(t) { try { localStorage.setItem(K_T, JSON.stringify(t)); } catch (e) {} }
+  function carimbar(chave, ts) { const t = tLocal(); t[chave] = ts || Date.now(); gravarTLocal(t); return t[chave]; }
+
+  // Chaves que são mapas de itens independentes: em vez de um lado vencer o
+  // outro, junta item por item (o cartão/questão respondido por último vence).
+  function jsonOu(v, padrao) { try { return v == null ? padrao : (JSON.parse(v) || padrao); } catch (e) { return padrao; } }
+  const MESCLAR = {
+    oab_fc_estado_v1: function (a, b) {
+      const h = x => (x && x.h) || [];
+      const ult = x => { const l = h(x); return l.length ? l[l.length - 1][0] : ''; };
+      return (h(b).length > h(a).length || (h(b).length === h(a).length && ult(b) > ult(a))) ? b : a;
+    },
+    oab_bq_respostas: function (a, b) {
+      return String((b && b.ultima_data) || '') > String((a && a.ultima_data) || '') ? b : a;
+    },
+    oab_ativo_check_v1: function (a, b) { return Object.assign({}, a, b); },
+    oab_grifos_v1: function (a, b) { return ((b && b.u) || 0) > ((a && a.u) || 0) ? b : a; }
+  };
+  function mesclar(chave, local, nuvem) {
+    const A = jsonOu(local, {}), B = jsonOu(nuvem, {}), f = MESCLAR[chave], out = {};
+    Object.keys(A).forEach(k => { out[k] = A[k]; });
+    Object.keys(B).forEach(k => { out[k] = (k in A) ? f(A[k], B[k]) : B[k]; });
+    return JSON.stringify(out);
+  }
   function filtrarSincronizaveis(dados) {
     const out = {};
     Object.keys(dados).forEach(k => { if (!soLocal(k)) out[k] = dados[k]; });
@@ -123,11 +158,25 @@
     // verdade, não apaga o campo) — aplicarDadosLocalStorage sabe converter
     // esse null de volta num removeItem local no outro aparelho, em vez de
     // gravar a string "null" (o que localStorage.setItem faria).
-    const dados = chave
-      ? { [chave]: localStorage.getItem(chave), oab_local_rev: localStorage.getItem('oab_local_rev') }
-      : filtrarSincronizaveis(window._perfilOAB.coletarDadosLocalStorage());
-    if (!chave) dados.oab_local_rev = String(Math.max(localRev(), _revNuvem));
-    const payload = { dados, atualizado_em: firebase.firestore.FieldValue.serverTimestamp() };
+    const tl = tLocal();
+    let dados, t = {};
+    if (chave) {
+      dados = { [chave]: localStorage.getItem(chave), oab_local_rev: localStorage.getItem('oab_local_rev') };
+      t[chave] = tl[chave] || carimbar(chave);
+    } else {
+      // Rede de segurança: só as chaves que mudaram aqui depois da última
+      // versão vista na nuvem — nunca o localStorage inteiro por cima.
+      if (!_nuvemLida) return Promise.resolve(false);
+      dados = {};
+      const todos = filtrarSincronizaveis(window._perfilOAB.coletarDadosLocalStorage());
+      Object.keys(todos).forEach(k => {
+        if ((tl[k] || 0) > (_tNuvem[k] || 0)) { dados[k] = todos[k]; t[k] = tl[k]; }
+      });
+      if (!Object.keys(dados).length) return Promise.resolve(false);
+      dados.oab_local_rev = String(Math.max(localRev(), _revNuvem));
+    }
+    Object.keys(t).forEach(k => { _tNuvem[k] = Math.max(_tNuvem[k] || 0, t[k]); });
+    const payload = { dados, t, atualizado_em: firebase.firestore.FieldValue.serverTimestamp() };
     if (navigator.onLine === false) { definirStatus('offline'); }
     const escrita = docRef(uid).set(payload, { merge: true }).then(() => {
       try { localStorage.setItem('oab_ultimo_backup', new Date().toISOString()); } catch (e) {}
@@ -194,15 +243,55 @@
     return tag === 'INPUT' || tag === 'TEXTAREA' || el.isContentEditable;
   }
 
+  // Compara a nuvem com este aparelho chave a chave. Devolve as chaves que
+  // precisam ser gravadas aqui e as que este aparelho precisa reenviar.
+  function reconciliar(data) {
+    const dados = filtrarSincronizaveis(data.dados || {}), tn = data.t || {}, tl = tLocal();
+    const revNuvem = Number((data.dados || {}).oab_local_rev || 0);
+    const aplicar = {}, reenviar = [];
+    Object.keys(dados).forEach(k => {
+      if (k === 'oab_local_rev') return;
+      const vn = dados[k], vl = localStorage.getItem(k);
+      if (vn === vl) return;
+      if (MESCLAR[k] && vn != null && vl != null) {
+        const m = mesclar(k, vl, vn);
+        if (m !== vl) aplicar[k] = m;
+        if (m !== vn) reenviar.push(k);
+        return;
+      }
+      if (tn[k] || tl[k]) {
+        if ((tn[k] || 0) > (tl[k] || 0)) aplicar[k] = vn;
+        return;
+      }
+      // Chave antiga, sem horário dos dois lados: vale a regra de antes.
+      if (vl == null || revNuvem > localRev()) aplicar[k] = vn;
+    });
+    return { aplicar, reenviar, tn };
+  }
+
   function aplicarSnapshotRemoto(uid, data, tentativa) {
     if (_aplicando) return;
     if (aguardandoDigitacao() && (tentativa || 0) < 20) {
       setTimeout(() => aplicarSnapshotRemoto(uid, data, (tentativa || 0) + 1), 1000);
       return;
     }
-    _aplicando = true;
-    window._perfilOAB.aplicarDadosLocalStorage(filtrarSincronizaveis(data.dados));
-    location.reload();
+    const r = reconciliar(data);
+    const chaves = Object.keys(r.aplicar);
+    if (chaves.length) {
+      const tl = tLocal();
+      chaves.forEach(k => {
+        try { if (r.aplicar[k] === null) localStorage.removeItem(k); else localStorage.setItem(k, r.aplicar[k]); } catch (e) {}
+        tl[k] = Math.max(tl[k] || 0, r.tn[k] || 0);
+      });
+      gravarTLocal(tl);
+      const revNuvem = Number((data.dados || {}).oab_local_rev || 0);
+      if (revNuvem > localRev()) try { localStorage.setItem('oab_local_rev', String(revNuvem)); } catch (e) {}
+    }
+    const envios = r.reenviar.map(k => { carimbar(k); return enviarParaNuvem(uid, k); });
+    if (chaves.length) {
+      _aplicando = true;
+      Promise.all(envios).then(() => location.reload(), () => location.reload());
+    }
   }
 
   function handleSnapshot(uid, snap) {
@@ -218,21 +307,14 @@
     const data = snap.data();
     if (!data || !data.dados) return;
     _revNuvem = Math.max(_revNuvem, Number(data.dados.oab_local_rev || 0));
-    if (Number(data.dados.oab_local_rev || 0) <= localRev()) return;
-    // A nuvem parece mais nova, mas este aparelho pode ter um push
-    // próprio ainda em voo cujo valor não chegou no servidor a tempo de
-    // aparecer neste snapshot. Sem esperar, um reload agora aplicaria
-    // esse `data` desatualizado (sem a mudança local) — ela desapareceria
-    // (ex.: dar feedback num flashcard e ele "sumir" sem aparecer no
-    // histórico). Espera o push em andamento confirmar e busca o
-    // documento de novo (não reaproveita `data`, que pode não ter esse
-    // push ainda) antes de decidir se a nuvem CONTINUA mais nova.
+    Object.keys(data.t || {}).forEach(k => { _tNuvem[k] = Math.max(_tNuvem[k] || 0, data.t[k]); });
+    _nuvemLida = true;
+    // Um push deste aparelho ainda em voo pode não estar neste snapshot:
+    // espera ele confirmar e relê o documento antes de comparar.
     Promise.resolve(_envioEmAndamento).then(() => docRef(uid).get()).then(freshSnap => {
       if (!freshSnap.exists) return;
       const freshData = freshSnap.data();
-      if (freshData && freshData.dados && Number(freshData.dados.oab_local_rev || 0) > localRev()) {
-        aplicarSnapshotRemoto(uid, freshData);
-      }
+      if (freshData && freshData.dados) aplicarSnapshotRemoto(uid, freshData);
     }).catch(err => console.error('Erro ao reavaliar snapshot remoto:', err));
   }
 
@@ -296,6 +378,7 @@
   // _saveSims, etc.) logo depois de carimbar oab_local_rev, pra propagar
   // a mudança rápido em vez de esperar o usuário trocar de aba.
   function notificarAlteracaoLocal(chave) {
+    if (!soLocal(chave)) carimbar(chave);
     const uid = window._syncOAB._uid;
     if (!uid) return;
     enviarParaNuvem(uid, chave);
