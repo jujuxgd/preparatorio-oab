@@ -80,7 +80,7 @@
   function telaEscolher() {
     var lista = exames();
     var andamento = lerLocal(CHAVE, null);
-    var html = '<h1>Fazer um <em>simulado</em></h1>' +
+    var html = '<div class="topbar"><div class="page-title"><div class="breadcrumb">Treino · Sala de prova</div><h1>Fazer um <em>simulado</em></h1></div></div>' +
       '<p class="lead">Um treino rápido de 20 questões ou uma prova inteira com as 5 horas da 1ª fase — ' +
       'sem gabarito até o final. A correção vem depois, matéria por matéria.</p>';
 
@@ -494,7 +494,7 @@
     });
 
     var html =
-      '<h1>Resultado do <em>simulado</em></h1>' +
+      '<div class="topbar"><div class="page-title"><div class="breadcrumb">Treino · Correção</div><h1>Resultado do <em>simulado</em></h1></div></div>' +
       '<p class="lead">' + esc(S.nome) + ' · ' + total + ' questões' +
         (S.porTempo ? ' · o tempo acabou antes de você finalizar' : '') + '</p>' +
 
