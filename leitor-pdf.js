@@ -141,16 +141,25 @@
     raiz.classList.add('lp');
     raiz.innerHTML = '<div class="lp-topo"><span class="lp-info">Carregando o PDF…</span>' +
       '<span class="lp-acoes"><button type="button" class="lp-b" data-a="area" title="Para páginas escaneadas: arraste um retângulo para grifar">▭ Grifar área</button>' +
-      '<button type="button" class="lp-b" data-a="zoom-">−</button><button type="button" class="lp-b" data-a="zoom+">+</button>' +
+      '<button type="button" class="lp-b" data-a="zoom-" aria-label="Diminuir">−</button><span class="lp-zoom"></span><button type="button" class="lp-b" data-a="zoom+" aria-label="Aumentar">+</button>' +
       '<a class="lp-b" href="https://drive.google.com/file/d/' + this.arq + '/view" target="_blank" rel="noopener">Drive ↗</a></span></div>' +
       '<div class="lp-corpo"><div class="lp-paginas"></div><aside class="lp-lista"></aside></div>';
     if (this.opts.caixa) { raiz.classList.add('lp-caixa'); this.opts.rolagem = raiz.querySelector('.lp-corpo'); }
-    this.zoom = 1;
+    // zoom fica salvo no aparelho (no celular costuma ser maior que no computador)
+    var zoomSalvo = parseFloat(localStorage.getItem('oab_lp_zoom'));
+    this.zoom = zoomSalvo >= 0.6 && zoomSalvo <= 3 ? zoomSalvo : 1;
+    function mostrarZoom() { raiz.querySelector('.lp-zoom').textContent = Math.round(self.zoom * 100) + '%'; }
+    function mudarZoom(z) {
+      self.zoom = Math.round(Math.min(3, Math.max(0.6, z)) * 100) / 100;
+      try { localStorage.setItem('oab_lp_zoom', String(self.zoom)); } catch (e) {}
+      mostrarZoom(); self.renderizar();
+    }
+    mostrarZoom();
     raiz.querySelector('.lp-topo').addEventListener('click', function (e) {
       var b = e.target.closest('[data-a]'); if (!b) return;
       if (b.dataset.a === 'area') { self.area = !self.area; b.classList.toggle('on', self.area); raiz.classList.toggle('modo-area', self.area); }
-      if (b.dataset.a === 'zoom+') { self.zoom = Math.min(2.2, self.zoom + 0.15); self.renderizar(); }
-      if (b.dataset.a === 'zoom-') { self.zoom = Math.max(0.6, self.zoom - 0.15); self.renderizar(); }
+      if (b.dataset.a === 'zoom+') mudarZoom(self.zoom + 0.25);
+      if (b.dataset.a === 'zoom-') mudarZoom(self.zoom - 0.25);
     });
     this.lista();
     return Promise.all([carregarLib(), baixar(this.arq)]).then(function (r) {
@@ -175,12 +184,16 @@
     this._largura = this.largura();
     alvo.innerHTML = '';
     this.paginas = [];
-    var obs = new IntersectionObserver(function (es) {
+    // vários cliques seguidos no zoom: só a última renderização vale
+    var vez = this._vez = (this._vez || 0) + 1;
+    if (this._obs) this._obs.disconnect();
+    var obs = this._obs = new IntersectionObserver(function (es) {
       es.forEach(function (e) { if (e.isIntersecting) { obs.unobserve(e.target); self.desenharPagina(+e.target.dataset.p); } });
     }, { root: this.opts.rolagem || null, rootMargin: '600px 0px' });
     var feitas = [], de = this.de || 1, ate = this.ate || doc.numPages;
     for (var i = de; i <= ate; i++) feitas.push(doc.getPage(i));
     Promise.all(feitas).then(function (pgs) {
+      if (vez !== self._vez) return;
       pgs.forEach(function (pg, j) {
         var i = j + de - 1;
         var base = pg.getViewport({ scale: 1 });
