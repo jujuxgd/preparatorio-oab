@@ -213,3 +213,5 @@ main {
 .bq-s { font-size: .9rem; line-height: 1.6; color: var(--ink-soft); margin: 0 0 1.6rem; max-width: 52ch; }
 .stats-link { display: inline-flex; align-items: center; gap: .5rem; min-height: 44px; padding: .85rem 1.5rem; border-radius: 999px; background: var(--paper); border: 1px solid var(--line); font: 500 .86rem 'Inter', sans-serif; color: var(--ink); text-decoration: none; transition: border-color .2s ease, transform .2s ease; }
 .stats-link:hover { border-color: var(--rose-300); transform: translateY(-1px); }
+.hub-card.hub-destaque { grid-column: 1 / -1; background: linear-gradient(135deg, var(--blush, #f7ece8), var(--rose-soft) 60%, var(--lavender, #e2dff0)); }
+.hub-card.hub-destaque h3 { font-size: 1.6rem; }

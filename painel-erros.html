@@ -2,46 +2,8 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
-<script src="firebase-init.js?v=1783862902"></script>
-<script src="auth-guard.js?v=1784132091"></script>
-<script src="cores-early.js?v=1784060144"></script>
-<script src="page-transition.js?v=1783861010"></script>
-<title>Painel de erros · OAB</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Inter:opsz,wght@14..32,400..700&family=Caveat:wght@400;500&display=swap" rel="stylesheet">
-<link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="style.css?v=1784043341">
-<link rel="stylesheet" href="sessao.css"><link rel="stylesheet" href="topnav.css?v=1791163406"><script src="topnav.js?v=1791163406"></script></head>
-<body>
-<div class="aurora-bg" aria-hidden="true"><div class="aurora-blob ab1"></div><div class="aurora-blob ab2"></div><div class="aurora-blob ab3"></div><div class="aurora-blob ab4"></div></div>
-<div class="app">
-  <main>
-    <div class="topbar"><div class="page-title"><div class="breadcrumb">Desempenho · flashcards e caderno de erros</div><h1>Painel de <em>erros</em></h1></div></div>
-    <div id="pn"><p class="ss-vazio">Carregando…</p></div>
-  </main>
-</div>
-<script src="script.js?v=1784021867"></script>
-<script src="perfil.js?v=1783860863"></script>
-<script src="sync.js?v=1784058237"></script>
-<script src="progresso.js?v=1783859287"></script>
-<script src="cores.js"></script>
-<script src="estudo-core.js"></script>
-<script src="erros-core.js"></script>
-<script src="revisao-biblioteca.js"></script>
-<script src="calendario-ativo.js"></script>
-<script src="plano-dinamico.js"></script>
-<script src="ativo-core.js"></script>
-<script src="sessao-core.js"></script>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-  ATIVO.carregarCartoes().then(function () { document.getElementById('pn').innerHTML = SESSAO.htmlPainel(); });
-});
-</script>
-</body>
+<title>OAB</title>
+<script>location.replace('erros.html#painel' + location.hash);</script>
+</head>
+<body></body>
 </html>

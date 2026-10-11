@@ -312,9 +312,13 @@ salvo; a sessão nova é a rotina do dia e aparece como cartão no topo do Hoje.
   flashcards concluídos e bloco de questões todo respondido marcam o item sozinhos. Estilos em `sessao.css`.
   Questões sorteadas do dia em `oab_ativo_dia` (só do aparelho); quantidade por tópico em
   `oab_ativo_questoes_por_topico` (padrão 10).
-- **Páginas:** `hoje.html` (abas Flashcards · Questões · Checklist · Videoaulas), `calendario.html`
-  (calendário novo; cada dia abre `hoje.html?data=`), `revisar.html` (flashcards por matéria ou vencidos),
-  `painel-erros.html` (menu Desempenho). `sessao.html` só redireciona para essas páginas.
+- **Páginas:** `hoje.html` (abas Conteúdo · Flashcards · Questões · Checklist · Videoaulas), `calendario.html`
+  (calendário novo; cada dia abre `hoje.html?data=`), `revisar.html` (flashcards por matéria ou vencidos).
+  `sessao.html` só redireciona.
+- **Menu (11/10/2026):** Início · Hoje · Calendário · **Estudar** (Flashcards, Biblioteca de revisão, Videoaulas,
+  Caderno legislativo, Materiais extras = `reta-final.html`) · **Treino** (`treino.html`: Rumo aos 40 em destaque,
+  Banco, Simulado, Meus simulados, Caderno de erros, Tracker). O Painel de erros vive dentro de `erros.html`
+  (bloco "Onde você mais erra", `#painel`). `desempenho.html`, `plano.html` e `painel-erros.html` só redirecionam.
 ---
 
 ## 6. Design System
