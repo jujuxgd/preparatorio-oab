@@ -84,7 +84,7 @@
     x = x || DIA; if (!x) return '';
     if (x.top) return x.top.map(function (t) { return curto(t.d) + ' (' + t.s + ')'; }).join(' e ');
     if (x.tipo === 'simulado') return 'Simulado completo · ' + nomeExame(x.sim.exame);
-    if (x.tipo === 'revisao') return 'Revisão com foco em ' + x.foco.map(curto).join(' e ') + ' + Ética';
+    if (x.tipo === 'revisao') return (x.extra ? 'Revisão extra (você adiantou): ' : 'Revisão com foco em ') + x.foco.map(curto).join(' e ') + (x.extra ? '' : ' + Ética');
     if (x.tipo === 'leve') return 'Flashcards vencidos e 10 questões de Ética';
     if (x.tipo === 'vespera') return 'Só flashcards leves. Nada novo.';
     return '1ª fase · 13h às 18h';
@@ -136,9 +136,24 @@
     });
     return ns;
   }
+  function dm(iso) { var p = partes(iso); return p.d + '/' + String(p.m).padStart(2, '0'); }
+  function htmlAdiantar() {
+    if (!window.PLANO || DATA !== HOJE) return '';
+    var h = '', feitos = PLANO.adiantadosHoje(), prox = PLANO.proximo();
+    if (feitos.length) h += '<div class="adi-feitos">' + feitos.map(function (u) {
+      return '<span>Adiantado: Dia ' + u.n + ' · ' + esc(u.tops.map(function (t) { return curto(t.d); }).join(' + ')) +
+        ' <button type="button" data-desfazer="' + u.n + '">desfazer</button></span>';
+    }).join('') + '</div>';
+    if (prox) h += '<div class="adi"><div><div class="adi-eb">Terminou? Adiante o próximo</div>' +
+      '<b>Dia ' + prox.n + ' do VDE · ' + esc(prox.tops.map(function (t) { return curto(t.d) + ': ' + t.s; }).join(' · ')) + '</b>' +
+      '<small>Previsto para ' + dm(prox.d) + '. O calendário anda para frente e os dias que sobrarem viram revisão extra.</small></div>' +
+      '<button type="button" class="btn btn-primary" data-adiantar="' + prox.n + '">Adiantar</button></div>';
+    else if (!feitos.length) h += '';
+    return h;
+  }
   function htmlConteudo() {
     var ps = pdfsDoDia();
-    if (!ps.length) return '<div class="ss-bloco"><p class="ss-vazio" style="margin:0">Hoje não tem PDF novo: ' + esc(resumoDoDia()) + '.</p></div>';
+    if (!ps.length) return '<div class="ss-bloco"><p class="ss-vazio" style="margin:0">Hoje não tem PDF novo: ' + esc(resumoDoDia()) + '.</p></div>' + htmlAdiantar();
     return ps.map(function (p) {
       return '<div class="ss-bloco"><h3><span class="n">Dia ' + p.n + ' do VDE</span>' + esc(p.temas.join(' · ')) + '</h3>' +
         (p.ids.length ? p.ids.map(function (id, i) {
@@ -147,7 +162,7 @@
               : '<iframe class="vde-pdf" src="https://drive.google.com/file/d/' + id + '/preview" title="PDF do dia ' + p.n + '" allow="autoplay"></iframe>');
         }).join('')
           : '<p class="ss-vazio">O PDF "Dia ' + p.n + '" ainda não está na pasta do Drive. Quando subir, ele aparece aqui.</p>') + '</div>';
-    }).join('');
+    }).join('') + htmlAdiantar();
   }
 
   function montarConteudo(el) {
@@ -419,6 +434,13 @@
   // ── cliques de questões e checklist (valem em qualquer página) ──
   document.addEventListener('click', function (ev) {
     var t = ev.target;
+    var ad = t.closest('[data-adiantar]'), dz = t.closest('[data-desfazer]');
+    if ((ad || dz) && window.PLANO) {
+      if (ad) PLANO.adiantar(+ad.dataset.adiantar); else PLANO.desfazer(+dz.dataset.desfazer);
+      var u = new URL(location.href); u.searchParams.set('aba', 'conteudo'); u.searchParams.delete('data');
+      setTimeout(function () { location.href = u.toString(); }, 250);
+      return;
+    }
     var li = t.closest('.ck-lista li[data-ck]');
     if (li && !t.closest('a')) { marcar(li.dataset.ck, !li.classList.contains('done')); return; }
     var alt = t.closest('.ss-alt');

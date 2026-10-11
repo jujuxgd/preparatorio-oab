@@ -277,6 +277,15 @@ salvo; a sessão nova é a rotina do dia e aparece como cartão no topo do Hoje.
   Fase 2 (21/12–08/01): revisão diária (caderno, flashcards, 20 questões de Ética), simulado parcial nos dias
   úteis e completo em 26/12 e 02/01; 24–25/12 e 31/12–01/01 leves; 09/01 só flashcards. Gerado por script fora
   do repo (tabela de dias com tema e tópicos do banco): para mudar, edite os dados direto mantendo o formato.
+- **`plano-dinamico.js`** (carregar logo depois de `calendario-ativo.js`) → `window.PLANO`. A fase 1 vira uma fila de
+  PDFs (`n`); "Adiantar" no Conteúdo do Hoje grava `oab_adiantado_v1 {n: data}`. Dias até hoje mantêm o previsto
+  (menos o adiantado) + o adiantado; dias depois de hoje recebem o resto da fila nas mesmas vagas (1 ou 2 PDFs);
+  dia de estudo que sobra vira `revisao` com `extra: true` (foco = matérias vistas 7 dias antes). Reescreve
+  `CAL_ATIVO.dias` em memória, então Hoje, Calendário e Revisar enxergam o plano já reorganizado.
+- **`leitor-pdf.js`/`.css`** → `window.LEITOR.montar(el, idDrive)`: PDF.js 3.11.174 (cdnjs) lendo o arquivo pela API
+  do Drive (`?alt=media&key=` — chave só com Google Drive API e referenciadores `*.vercel.app`); sem acesso, cai no
+  preview do Drive. Grifos por seleção (4 cores), "grifar área" (arrastar, para escaneados), anotação por grifo e
+  lista lateral. `oab_grifos_v1 {"idArquivo|idGrifo": {p, r:[[x,y,w,h] 0–1], c, t, n, u, x?}}`, mesclado por `u`.
 - **`vde-dias.js`** → `VDE_DIAS {n: idDoDrive}` dos PDFs do dia (pasta "Dividido" no Drive de Julia). Dia novo
   no Drive: acrescentar a linha. Aba **Conteúdo** do Hoje abre o PDF pelo preview do Drive. Os PDFs têm marca
   d'água com dados de terceiros: só IDs e temas entram no repo, nunca texto.
