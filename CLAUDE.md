@@ -321,8 +321,7 @@ salvo; a sessão nova é a rotina do dia e aparece como cartão no topo do Hoje.
 - **Páginas:** `hoje.html` (abas Conteúdo · Flashcards · Questões · Checklist · Videoaulas), `calendario.html`
   (redesenho 11/10/2026, classes `.ca-*`: fita com um traço por dia colorido por matéria e agulha em hoje,
   semana inteira com os temas — clicar abre `hoje.html?data=` —, meses com pontos por matéria e painel do dia), `revisar.html` (flashcards por matéria ou vencidos).
-  `sessao.html` só redireciona. `index.html` (Início, refeito em 11/10/2026) também segue `CAL_ATIVO`: tema de hoje, flashcards
-  vencidos, erros do dia, questões, PDFs do VDE estudados (item `p<n>` do checklist ou dia marcado) e os 3 próximos dias.
+  `sessao.html` só redireciona.
 - **Menu (11/10/2026):** Início · Hoje · Calendário · **Estudar** (Flashcards, Biblioteca de revisão, Videoaulas,
   Caderno legislativo, Materiais extras = `reta-final.html`) · **Treino** (`treino.html`: Rumo aos 40 em destaque,
   Banco, Simulado, Meus simulados, Caderno de erros, Tracker). O Painel de erros vive dentro de `erros.html`
