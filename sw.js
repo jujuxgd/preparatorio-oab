@@ -53,7 +53,7 @@ self.addEventListener('fetch', function (e) {
     var resolvido = false;
     function entrega(r) { if (!resolvido && r) { resolvido = true; resolve(r); } }
     // páginas e arquivos do site sempre revalidam com o servidor (sem pegar cópia velha do navegador)
-    var rede = fetch(req, mesmaOrigem ? { cache: 'no-cache' } : undefined).then(function (r) {
+    var rede = (mesmaOrigem ? fetch(req.mode === 'navigate' ? req.url : req, { cache: 'no-cache', credentials: 'same-origin' }) : fetch(req)).then(function (r) {
       if (r && (r.ok || r.type === 'opaque')) {
         var copia = r.clone();
         caches.open(VERSAO).then(function (c) { c.put(req, copia); });
