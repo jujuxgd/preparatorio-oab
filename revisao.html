@@ -177,12 +177,14 @@
 .rv-q-nome{font-family:'Fraunces',serif;font-size:1.05rem;color:var(--ink);line-height:1.2;display:flex;align-items:center;gap:.55rem;min-width:0}
 .rv-q-nome::before{content:"";flex:none;width:4px;height:1.4em;border-radius:2px;background:var(--cd)}
 .rv-q-nome small{font:400 .72rem Inter,sans-serif;color:var(--ink-faded)}
-.rv-q-c{height:40px;border-radius:8px;border:1px solid var(--line);background:var(--paper);font:500 .74rem Inter,sans-serif;color:var(--ink-faded);cursor:pointer;padding:0;transition:background .15s,border-color .15s}
+.rv-q-c{justify-self:center;width:38px;height:38px;border-radius:50%;border:1.5px solid var(--line);background:var(--paper);font:600 .8rem Inter,sans-serif;color:var(--ink-faded);cursor:pointer;padding:0;display:inline-flex;align-items:center;justify-content:center;transition:background .15s,border-color .15s,transform .15s}
+.rv-q-c:hover{transform:scale(1.06)}
 .rv-q-c:hover{border-color:var(--cd);color:var(--ink)}
 .rv-q-c.lendo{background:linear-gradient(90deg,var(--c) 50%,var(--paper) 50%);border-color:var(--cd);color:var(--ink)}
 .rv-q-c.feito{background:var(--cd);border-color:var(--cd);color:var(--paper);font-size:.9rem}
-.rv-q-c.prox{border:1.5px solid var(--cd);box-shadow:0 0 0 3px var(--c)}
-.rv-q-c.falta{border-style:dashed;background:none;cursor:default;opacity:.5}
+.rv-q-c.prox{border-color:var(--cd);color:var(--cd);box-shadow:0 0 0 4px var(--c)}
+.rv-q-c.falta{border-style:dashed;background:none;cursor:default;opacity:.45}
+.rv-q-c.falta:hover{transform:none}
 .rv-q-c:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
 .rv-q-fc{font-size:.78rem;color:var(--ink-soft);line-height:1.35}
 .rv-q-fc a{color:var(--rose-deep);text-decoration:none;font-weight:500}
@@ -193,8 +195,7 @@
   .rv-q-cab{display:none}
   .rv-q-lin{grid-template-columns:repeat(3,minmax(0,1fr));padding:.75rem 0}
   .rv-q-nome,.rv-q-fc{grid-column:1/-1}
-  .rv-q-c .curto{display:inline}
-  .rv-q-c .longo{display:none}
+  .rv-q-lin{grid-template-columns:repeat(3,auto);justify-content:start;column-gap:1rem}
 }
 </style>
 
@@ -377,11 +378,11 @@ function renderRev(lib) {
     const g = window.LEITOR ? itens.reduce((n, i) => n + LEITOR.grifosDe(i.id).length, 0) : 0;
     const cels = [1, 2, 3].map(r => {
       const i = itens.find(x => +x.b === r);
-      if (!i) return '<span class="rv-q-c falta" title="A Revisão ' + r + ' não está na pasta" style="display:flex;align-items:center;justify-content:center">sem PDF</span>';
+      if (!i) return '<span class="rv-q-c falta" title="A Revisão ' + r + ' não está na pasta">–</span>';
       const s = estado(i.id);
       const txt = s === 'feito' ? 'feita' : s === 'lendo' ? 'lendo' : 'não lida';
       return '<button class="rv-q-c ' + s + (i.id === proxId ? ' prox' : '') + '" data-abrir="' + esc(i.id) + '" aria-label="' + esc(m) + ', Revisão ' + r + ': ' + txt + '">' +
-        '<span class="longo">' + (s === 'feito' ? '✓' : s === 'lendo' ? 'lendo' : '') + '</span><span class="curto">R' + r + (s === 'feito' ? ' ✓' : s === 'lendo' ? ' lendo' : '') + '</span></button>';
+        (s === 'feito' ? '✓' : r) + '</button>';
     }).join('');
     let fc = '';
     const disc = DISC_REV[m];
@@ -675,7 +676,6 @@ function abrirVisualizador(id) {
   document.getElementById('rv-ov-drive').href = 'https://drive.google.com/file/d/' + encodeURIComponent(id) + '/view';
   const materia = i.g === 'rev' ? CHAVE_ERROS[i.a] : (i.g === 'trab' ? 'trabalho' : '');
   document.getElementById('rv-ov-erro').href = 'erros.html?novo=1' + (materia ? '&materia=' + materia : '');
-  if (estado(id) === '') definirEstado(id, 'lendo');
   atualizarBotoesEstado();
   atualizarNavegacao();
   if (!jaAberto) {
