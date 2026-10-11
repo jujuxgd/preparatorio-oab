@@ -125,6 +125,36 @@
   }
 
   // ── PDFs do dia do VDE ──
+  // A pasta do Drive manda: dia que falta em VDE_DIAS ou arquivo que sumiu da pasta é trocado pelo que está lá.
+  var K_PASTA = 'oab_vde_pasta';
+  function mesclarPasta(fs) {
+    var V = window.VDE_DIAS = window.VDE_DIAS || {}, existe = {}, porN = {}, mudou = [];
+    fs.forEach(function (f) {
+      existe[f.id] = 1;
+      var m = /^Dia\s+(\d+)\s*-/i.exec(f.name || '');
+      if (m) (porN[+m[1]] = porN[+m[1]] || []).push(f);
+    });
+    Object.keys(porN).forEach(function (n) {
+      var atual = [].concat(V[n] || []);
+      if (atual.length && atual.every(function (id) { return existe[id]; })) return;
+      var ids = porN[n].sort(function (a, b) { return a.name.localeCompare(b.name); }).map(function (f) { return f.id; });
+      V[n] = ids.length === 1 ? ids[0] : ids;
+      mudou.push(+n);
+    });
+    return mudou;
+  }
+  var cachePasta = ler(K_PASTA, null);
+  if (window.VDE_PASTA && cachePasta && cachePasta.f) mesclarPasta(cachePasta.f);
+  function sincPasta(aoMudar) {
+    if (!window.VDE_PASTA || !window.LEITOR || !LEITOR.listarPasta) return;
+    if (cachePasta && Date.now() - cachePasta.t < 6 * 36e5) return;
+    LEITOR.listarPasta(window.VDE_PASTA).then(function (fs) {
+      cachePasta = { t: Date.now(), f: fs.map(function (f) { return { id: f.id, name: f.name }; }) };
+      try { localStorage.setItem(K_PASTA, JSON.stringify(cachePasta)); } catch (e) {}
+      var m = mesclarPasta(fs);
+      if (m.length && aoMudar) aoMudar(m);
+    }).catch(function () {});
+  }
   function pdfsDoDia() {
     if (!DIA || !DIA.top) return [];
     var ns = [];
@@ -206,7 +236,7 @@
 
   function montarConteudo(el) {
     el.innerHTML = htmlConteudo();
-    if (window.LEITOR) el.querySelectorAll('.lp-host').forEach(function (h) { LEITOR.montar(h, h.dataset.arq); });
+    if (window.LEITOR) el.querySelectorAll('.lp-host').forEach(function (h) { LEITOR.montar(h, h.dataset.arq, { caixa: true }); });
   }
 
   // ── checklist do dia ──
@@ -477,7 +507,7 @@
     var rf = t.closest('[data-rev-feita]');
     if (rf) { marcarRevisao(rf.dataset.revFeita, rf.dataset.revD); rf.outerHTML = '<span class="ss-vazio">Revisão marcada como feita ✓</span>'; return; }
     var ag = t.closest('[data-abrir-gab]');
-    if (ag && window.LEITOR) { var hg = ag.closest('.gab-host'); LEITOR.montar(hg, hg.dataset.arq, { de: +hg.dataset.de, ate: +hg.dataset.ate }); return; }
+    if (ag && window.LEITOR) { var hg = ag.closest('.gab-host'); LEITOR.montar(hg, hg.dataset.arq, { de: +hg.dataset.de, ate: +hg.dataset.ate, caixa: true }); return; }
     var ad = t.closest('[data-adiantar]'), dz = t.closest('[data-desfazer]');
     if ((ad || dz) && window.PLANO) {
       if (ad) PLANO.adiantar(+ad.dataset.adiantar); else PLANO.desfazer(+dz.dataset.desfazer);
@@ -515,7 +545,7 @@
     DATA: DATA, HOJE: HOJE, DIA: DIA, TIPO: TIPO, ETICA: ETICA,
     esc: esc, curto: curto, dataLonga: dataLonga, partes: partes, MESES: MESES,
     indice: indice, vizinho: vizinho, resumoDoDia: resumoDoDia, disciplinasDoDia: disciplinasDoDia,
-    fila: fila, montarFlashcards: montarFlashcards, montarQuestoes: montarQuestoes, carregarBanco: carregarBanco,
+    sincPasta: sincPasta, fila: fila, montarFlashcards: montarFlashcards, montarQuestoes: montarQuestoes, carregarBanco: carregarBanco,
     itensChecklist: itensChecklist, htmlChecklist: htmlChecklist, htmlConteudo: htmlConteudo, montarConteudo: montarConteudo, revisoesDoDia: revisoesDoDia, pdfsDoDia: pdfsDoDia, progressoChecklist: progressoChecklist, marcar: marcar,
     feito: function () { return !!checks().feito; }, marcarFeito: marcarFeito,
     htmlCalendario: htmlCalendario, htmlPainel: htmlPainel, linkRevisao: linkRevisao

@@ -31,30 +31,12 @@
 
 .rv-continuar{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;background:var(--paper);border:1px solid var(--line);border-left:4px solid var(--rose);border-radius:var(--radius);padding:.9rem 1.2rem;margin-bottom:1.3rem;box-shadow:var(--shadow-sm)}
 .rv-continuar>div{flex:1;min-width:170px}
-.rv-eb{font:500 .62rem Inter,sans-serif;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-faded);margin-bottom:.25rem}
+.rv-cont-l{font-size:.76rem;color:var(--ink-faded);margin-bottom:.15rem}
+.rv-sub{margin:.45rem 0 0;font-size:.92rem;color:var(--ink-soft);line-height:1.5;max-width:62ch}
+.rv-sub b{font-weight:600;color:var(--ink)}
 .rv-continuar small{display:block;font-size:.74rem;color:var(--ink-faded);margin-top:.15rem}
 .rv-continuar strong{font-family:'Fraunces',serif;font-weight:500;font-size:1.05rem;color:var(--ink)}
 
-.rv-estante{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.9rem}
-.rv-card{position:relative;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:1rem 1.05rem 1.05rem;box-shadow:var(--shadow-sm);overflow:hidden;transition:transform .18s,box-shadow .18s}
-.rv-card::before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:var(--cd)}
-.rv-card:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
-.rv-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:.6rem;margin-bottom:.9rem}
-.rv-card h4{font-family:'Fraunces',serif;font-weight:500;font-size:1.08rem;line-height:1.2;color:var(--ink);margin:0}
-.rv-anel{flex:none;position:relative;width:42px;height:42px}
-.rv-anel svg{width:42px;height:42px;transform:rotate(-90deg)}
-.rv-anel circle{fill:none;stroke-width:3.5}
-.rv-anel .t{stroke:var(--c)}
-.rv-anel .p{stroke:var(--cd);stroke-linecap:round;transition:stroke-dasharray .4s}
-.rv-anel span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:600 .66rem Inter,sans-serif;color:var(--ink-soft)}
-.rv-dots{display:flex;gap:.5rem}
-.rv-dot{width:40px;height:40px;border-radius:50%;border:1.5px solid var(--line);background:var(--paper);color:var(--ink-soft);font:600 .8rem Inter,sans-serif;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .15s,border-color .15s,background .15s}
-.rv-dot:hover{transform:scale(1.08);border-color:var(--cd)}
-.rv-dot.lendo{border-color:var(--cd);background:linear-gradient(90deg,var(--c) 50%,var(--paper) 50%);color:var(--ink)}
-.rv-dot.feito{border-color:var(--cd);background:var(--cd);color:var(--paper)}
-.rv-dot.falta{border-style:dashed;opacity:.45;cursor:default}
-.rv-dot.falta:hover{transform:none;border-color:var(--line)}
-.rv-card-legenda{margin-top:.7rem;font-size:.72rem;color:var(--ink-faded)}
 
 .rv-fase2{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:1rem 1.2rem;margin-bottom:1.4rem;box-shadow:var(--shadow-sm)}
 .rv-fase2 label{display:flex;align-items:center;gap:.6rem;font:400 .8rem Inter,sans-serif;letter-spacing:0;text-transform:none;color:var(--ink-soft);flex-wrap:wrap;margin-bottom:0}
@@ -75,7 +57,7 @@
 .rv-no.parada .rv-marca{width:22px;height:22px;margin:5px;border-radius:5px;transform:rotate(45deg);font-size:0}
 .rv-no-corpo{flex:1;min-width:0;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:.8rem 1rem;box-shadow:var(--shadow-sm)}
 .rv-no.parada .rv-no-corpo{background:transparent;border-style:dashed;box-shadow:none;display:flex;align-items:center;justify-content:space-between;gap:.8rem;flex-wrap:wrap;padding:.6rem 1rem}
-.rv-no-eb{font:500 .62rem Inter,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faded);margin-bottom:.2rem}
+.rv-no-eb{font-size:.74rem;color:var(--ink-faded);margin-bottom:.2rem}
 .rv-no-eb em{font-style:normal;color:var(--cd);margin-left:.4rem}
 .rv-no-tit{font-family:'Fraunces',serif;font-weight:500;font-size:1.02rem;color:var(--ink);margin-bottom:.6rem}
 .rv-no.parada .rv-no-tit{margin:0;font-style:italic;font-size:.95rem}
@@ -103,7 +85,7 @@
 .rv-tr-sec{margin:1.6rem 0 .8rem}
 .rv-tr-linha{display:flex;gap:1rem;flex-wrap:wrap;align-items:flex-end;margin-bottom:1rem}
 .rv-tr-campo{display:flex;flex-direction:column;gap:.35rem;flex:1;min-width:150px}
-.rv-tr-campo>span{font:500 .62rem Inter,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faded)}
+.rv-tr-campo>span{font-size:.76rem;color:var(--ink-faded)}
 .rv-tr-campo input,.rv-tr-campo textarea{border:1px solid var(--line);border-radius:var(--radius-sm);padding:.55rem .7rem;font:400 .88rem Inter,sans-serif;background:var(--bg);color:var(--ink);width:100%;box-sizing:border-box}
 .rv-tr-campo textarea{min-height:70px;resize:vertical}
 .rv-cron{display:flex;align-items:center;gap:.6rem;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:.3rem .35rem .3rem 1rem}
@@ -134,11 +116,6 @@
 .rv-tr-del{border:0;background:none;color:var(--ink-faded);font-size:.74rem;cursor:pointer;padding:0}
 .rv-tr-del:hover{color:var(--ink);text-decoration:underline}
 @media (max-width:700px){
-  .rv-estante{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:.7rem}
-  .rv-card{padding:.9rem .85rem}
-  .rv-card h4{font-size:.98rem}
-  .rv-dot{width:36px;height:36px}
-  .rv-dots{gap:.35rem}
   .rv-peca{padding:.7rem 1rem}
   .rv-tabs{display:flex;width:100%}
   .rv-tab{flex:1;padding:.5rem .4rem;font-size:.8rem}
@@ -151,7 +128,7 @@
 .rv-ov-painel{position:relative;display:flex;flex-direction:column;width:min(1100px,100%);height:100%;max-height:920px;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);overflow:hidden;animation:rvSobe .28s cubic-bezier(.2,.8,.2,1)}
 .rv-ov-cab{display:flex;align-items:center;gap:1rem;padding:.9rem 1rem .9rem 1.4rem;border-bottom:1px solid var(--line)}
 .rv-ov-tit{flex:1;min-width:0}
-.rv-ov-eyebrow{font:500 .64rem Inter,sans-serif;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-faded);margin-bottom:.3rem}
+.rv-ov-eyebrow{font-size:.76rem;color:var(--ink-faded);margin-bottom:.2rem}
 .rv-ov-tit h3{font-family:'Fraunces',serif;font-weight:500;font-size:1.25rem;color:var(--ink);margin:0;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .rv-ov-acoes{display:flex;align-items:center;gap:.35rem;flex:none}
 .rv-ic{width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;border-radius:50%;border:1px solid var(--line);background:var(--paper);color:var(--ink-soft);cursor:pointer;text-decoration:none;font:500 .95rem Inter,sans-serif;transition:background .15s,border-color .15s,color .15s}
@@ -189,6 +166,35 @@
   .rv-ov-pos{display:none}
   .rv-ov-rod{padding:.6rem 1rem calc(.6rem + env(safe-area-inset-bottom))}
   .rv-ov-rod .rv-link{margin-left:0}
+}
+
+.rv-quadro{max-width:860px;background:var(--paper);border:1px solid var(--line-soft,var(--line));border-radius:var(--radius-lg);padding:.4rem 1.2rem .6rem}
+.rv-q-cab,.rv-q-lin{display:grid;grid-template-columns:minmax(0,1fr) repeat(3,minmax(64px,92px)) minmax(120px,150px);gap:.45rem;align-items:center}
+.rv-q-cab{padding:.7rem 0 .5rem;font-size:.74rem;color:var(--ink-faded)}
+.rv-q-cab span{text-align:center}
+.rv-q-cab span:first-child,.rv-q-cab span:last-child{text-align:left}
+.rv-q-lin{padding:.5rem 0;border-top:1px solid var(--line-soft,var(--line))}
+.rv-q-nome{font-family:'Fraunces',serif;font-size:1.05rem;color:var(--ink);line-height:1.2;display:flex;align-items:center;gap:.55rem;min-width:0}
+.rv-q-nome::before{content:"";flex:none;width:4px;height:1.4em;border-radius:2px;background:var(--cd)}
+.rv-q-nome small{font:400 .72rem Inter,sans-serif;color:var(--ink-faded)}
+.rv-q-c{height:40px;border-radius:8px;border:1px solid var(--line);background:var(--paper);font:500 .74rem Inter,sans-serif;color:var(--ink-faded);cursor:pointer;padding:0;transition:background .15s,border-color .15s}
+.rv-q-c:hover{border-color:var(--cd);color:var(--ink)}
+.rv-q-c.lendo{background:linear-gradient(90deg,var(--c) 50%,var(--paper) 50%);border-color:var(--cd);color:var(--ink)}
+.rv-q-c.feito{background:var(--cd);border-color:var(--cd);color:var(--paper);font-size:.9rem}
+.rv-q-c.prox{border:1.5px solid var(--cd);box-shadow:0 0 0 3px var(--c)}
+.rv-q-c.falta{border-style:dashed;background:none;cursor:default;opacity:.5}
+.rv-q-c:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.rv-q-fc{font-size:.78rem;color:var(--ink-soft);line-height:1.35}
+.rv-q-fc a{color:var(--rose-deep);text-decoration:none;font-weight:500}
+.rv-q-fc a:hover{text-decoration:underline}
+.rv-q-c .curto{display:none}
+@media (max-width:700px){
+  .rv-quadro{padding:.2rem .85rem .5rem}
+  .rv-q-cab{display:none}
+  .rv-q-lin{grid-template-columns:repeat(3,minmax(0,1fr));padding:.75rem 0}
+  .rv-q-nome,.rv-q-fc{grid-column:1/-1}
+  .rv-q-c .curto{display:inline}
+  .rv-q-c .longo{display:none}
 }
 </style>
 
@@ -246,16 +252,16 @@
   <main>
     <div class="topbar">
       <div class="page-title">
-        <div class="breadcrumb">Revisões em tabelas · Trabalhista · Peças</div>
-        <h1>Biblioteca de <em>revisão</em></h1>
+        <h1>Biblioteca de revisão</h1>
+        <p class="rv-sub" id="rv-sub"></p>
       </div>
     </div>
 
 
     <div id="rv-continuar"></div>
     <div class="rv-tabs" id="rv-tabs">
-      <button class="rv-tab on" data-tab="rev">Revisões<span class="rv-longo"> 1 · 2 · 3</span></button>
-      <button class="rv-tab" data-tab="trab">Trabalhista<span class="rv-longo"> · 2ª fase</span></button>
+      <button class="rv-tab on" data-tab="rev">Revisões</button>
+      <button class="rv-tab" data-tab="trab">Trabalhista<span class="rv-longo"> (2ª fase)</span></button>
       <button class="rv-tab" data-tab="peca">Peças</button>
       <button class="rv-tab" data-tab="treino">Treinos</button>
     </div>
@@ -360,45 +366,32 @@ function agrupar(lista, campo) {
   return m;
 }
 
-function anel(feitos, total) {
-  const C = 2 * Math.PI * 17;
-  const p = total ? feitos / total : 0;
-  return '<div class="rv-anel" aria-label="' + feitos + ' de ' + total + '"><svg viewBox="0 0 42 42"><circle class="t" cx="21" cy="21" r="17"/>' +
-    '<circle class="p" cx="21" cy="21" r="17" stroke-dasharray="' + (p * C).toFixed(1) + ' ' + C.toFixed(1) + '"/></svg><span>' + feitos + '/' + total + '</span></div>';
-}
-
-function extrasCard(m, itens) {
-  const disc = DISC_REV[m], partes = [];
-  if (disc && window.ATIVO && ATIVO.cartoes().length) {
-    const est = ATIVO.estados(), cs = ATIVO.cartoes().filter(c => c.d === disc);
-    partes.push('Flashcards ' + cs.filter(c => est[c.id]).length + '/' + cs.length + ' · <a href="revisar.html?materia=' + encodeURIComponent(disc) + '">treinar</a>');
-  }
-  if (window.LEITOR) {
-    const g = itens.reduce((n, i) => n + LEITOR.grifosDe(i.id).length, 0);
-    if (g) partes.push(g + (g === 1 ? ' grifo' : ' grifos'));
-  }
-  return partes.length ? '<div class="rv-fc">' + partes.join(' · ') + '</div>' : '';
-}
-
 function renderRev(lib) {
   const lista = lib.filter(i => i.g === 'rev');
   const por = agrupar(lista, 'a');
-  let h = '<div class="rv-resumo">' + resumo(lista, 'arquivos') + '</div><div class="rv-estante">';
+  const proxId = (proximaRevisao(lib) || {}).id;
+  let h = '<div class="rv-quadro"><div class="rv-q-cab"><span>Matéria</span><span>Revisão 1</span><span>Revisão 2</span><span>Revisão 3</span><span>Flashcards</span></div>';
   ORDEM_MATERIAS.filter(m => por.has(m)).forEach(m => {
     const itens = por.get(m);
     const cor = COR[m] || 'const';
-    const feitos = itens.filter(i => estado(i.id) === 'feito').length;
-    const proximo = [1, 2, 3].map(r => itens.find(i => +i.b === r)).find(i => i && estado(i.id) !== 'feito');
-    const dots = [1, 2, 3].map(r => {
+    const g = window.LEITOR ? itens.reduce((n, i) => n + LEITOR.grifosDe(i.id).length, 0) : 0;
+    const cels = [1, 2, 3].map(r => {
       const i = itens.find(x => +x.b === r);
-      if (!i) return '<span class="rv-dot falta" title="Revisão ' + r + ' não está na pasta">' + r + '</span>';
+      if (!i) return '<span class="rv-q-c falta" title="A Revisão ' + r + ' não está na pasta" style="display:flex;align-items:center;justify-content:center">sem PDF</span>';
       const s = estado(i.id);
-      return '<button class="rv-dot ' + s + '" data-abrir="' + esc(i.id) + '" title="Revisão ' + r + (s === 'feito' ? ' · feita' : s === 'lendo' ? ' · lendo' : '') + '">' + (s === 'feito' ? '✓' : r) + '</button>';
+      const txt = s === 'feito' ? 'feita' : s === 'lendo' ? 'lendo' : 'não lida';
+      return '<button class="rv-q-c ' + s + (i.id === proxId ? ' prox' : '') + '" data-abrir="' + esc(i.id) + '" aria-label="' + esc(m) + ', Revisão ' + r + ': ' + txt + '">' +
+        '<span class="longo">' + (s === 'feito' ? '✓' : s === 'lendo' ? 'lendo' : '') + '</span><span class="curto">R' + r + (s === 'feito' ? ' ✓' : s === 'lendo' ? ' lendo' : '') + '</span></button>';
     }).join('');
-    const legenda = !proximo ? 'Tudo revisado ✓' : (estado(proximo.id) === 'lendo' ? 'Lendo a Revisão ' + proximo.b : 'Próxima: Revisão ' + proximo.b);
-    h += '<div class="rv-card" style="--c:var(--mat-' + cor + ');--cd:var(--mat-' + cor + '-deep)">' +
-      '<div class="rv-card-top"><h4>' + esc(m) + '</h4>' + anel(feitos, itens.length) + '</div>' +
-      '<div class="rv-dots">' + dots + '</div><div class="rv-card-legenda">' + legenda + '</div>' + extrasCard(m, itens) + '</div>';
+    let fc = '';
+    const disc = DISC_REV[m];
+    if (disc && window.ATIVO && ATIVO.cartoes().length) {
+      const est = ATIVO.estados(), cs = ATIVO.cartoes().filter(c => c.d === disc);
+      fc = cs.filter(c => est[c.id]).length + ' de ' + cs.length + ' vistos. <a href="revisar.html?materia=' + encodeURIComponent(disc) + '">Treinar</a>';
+    }
+    h += '<div class="rv-q-lin" style="--c:var(--mat-' + cor + ');--cd:var(--mat-' + cor + '-deep)">' +
+      '<div class="rv-q-nome">' + esc(m) + (g ? '<small>' + g + (g === 1 ? ' grifo' : ' grifos') + '</small>' : '') + '</div>' + cels +
+      '<div class="rv-q-fc">' + fc + '</div></div>';
   });
   return h + '</div>';
 }
@@ -432,7 +425,7 @@ function renderTrab(lib) {
         '<div class="rv-chips">' + itens.map(i => chip(i, estado(i.id) === 'feito' ? 'Revisada' : 'Abrir revisão')).join('') + '</div></div></div>';
     } else {
       h += '<div class="' + cls + '"><div class="rv-marca">' + (eg === 'feito' ? '✓' : n) + '</div><div class="rv-no-corpo">' +
-        '<div class="rv-no-eb">Tema ' + n + (n === atual ? '<em>· você está aqui</em>' : '') + '</div>' +
+        '<div class="rv-no-eb">Tema ' + n + (n === atual ? '<em>você está aqui</em>' : '') + '</div>' +
         '<div class="rv-no-tit">' + esc(itens[0].n) + '</div>' +
         '<div class="rv-chips">' + itens.map(i => chip(i, PASSO_CURTO[i.b] || ROTULO[i.b])).join('') + '</div></div></div>';
     }
@@ -593,6 +586,7 @@ function render() {
   const box = document.getElementById('rv-conteudo');
   document.querySelectorAll('.rv-tab').forEach(t => t.classList.toggle('on', t.dataset.tab === aba));
   renderContinuar(lib);
+  subtitulo(lib);
   if (!lib.length) {
     box.innerHTML = '<div class="rv-vazio">Nenhum material cadastrado.</div>';
     return;
@@ -603,13 +597,27 @@ function render() {
   if (f2) f2.addEventListener('change', () => { gravar(FASE2_KEY, f2.value); render(); });
 }
 
+function proximaRevisao(lib) {
+  const revs = lib.filter(i => i.g === 'rev');
+  let prox = null;
+  [1, 2, 3].some(r => (prox = ORDEM_MATERIAS.map(m => revs.find(i => i.a === m && +i.b === r)).find(i => i && estado(i.id) !== 'feito')));
+  return prox;
+}
+
+function subtitulo(lib) {
+  const el = document.getElementById('rv-sub'); if (!el) return;
+  const revs = lib.filter(i => i.g === 'rev'), feitas = revs.filter(i => estado(i.id) === 'feito').length;
+  const prox = proximaRevisao(lib);
+  el.innerHTML = '<b>' + feitas + ' de ' + revs.length + '</b> revisões lidas.' + (prox ? ' Próxima: ' + esc(prox.a) + ', Revisão ' + esc(prox.b) + '.' : ' Todas lidas.');
+}
+
 function renderContinuar(lib) {
   const el = document.getElementById('rv-continuar');
   const i = lib.find(x => x.id === localStorage.getItem(ULT_KEY));
   if (!i || estado(i.id) === 'feito') { el.innerHTML = ''; return; }
   const [eyebrow, titulo] = cabecalho(i);
-  el.innerHTML = '<div class="rv-continuar"><div><div class="rv-eb">Continuar de onde parou</div><strong>' + esc(titulo) + '</strong><small>' + esc(eyebrow) + '</small></div>' +
-    '<button class="btn btn-primary" data-abrir="' + esc(i.id) + '">Continuar →</button></div>';
+  el.innerHTML = '<div class="rv-continuar"><div><div class="rv-cont-l">Continuar de onde parou</div><strong>' + esc(titulo) + '</strong><small>' + esc(eyebrow) + '</small></div>' +
+    '<button class="btn btn-primary" data-abrir="' + esc(i.id) + '">Continuar</button></div>';
 }
 
 function definirEstado(id, s) {
@@ -636,13 +644,13 @@ function atualizarFc(i) {
   const fc = document.getElementById('rv-ov-fc');
   const info = i && i.g === 'rev' ? cartoesDaRevisao(i) : null;
   fc.style.display = info && info.total ? '' : 'none';
-  if (info && info.total) { fc.href = 'revisar.html?materia=' + encodeURIComponent(info.disc) + '&rev=' + i.b; fc.textContent = 'Flashcards desta revisão · ' + info.vistos + '/' + info.total + ' vistos'; }
+  if (info && info.total) { fc.href = 'revisar.html?materia=' + encodeURIComponent(info.disc) + '&rev=' + i.b; fc.textContent = 'Flashcards desta revisão (' + info.vistos + ' de ' + info.total + ' vistos)'; }
 }
 
 function cabecalho(i) {
-  if (i.g === 'rev') return ['Revisão ' + i.b + ' · em tabelas', i.a];
-  if (i.g === 'trab') return [i.b === 'revisao' ? 'Trabalhista · 2ª fase' : 'Trabalhista · Tema ' + i.a + ' · ' + ROTULO[i.b], i.n];
-  return ['Peça · ' + ROTULO[i.b], i.a];
+  if (i.g === 'rev') return ['Revisão ' + i.b + ' em tabelas', i.a];
+  if (i.g === 'trab') return [i.b === 'revisao' ? 'Trabalhista, 2ª fase' : 'Trabalhista, tema ' + i.a + ', ' + ROTULO[i.b], i.n];
+  return ['Peça, ' + ROTULO[i.b], i.a];
 }
 
 function ordemDaAba() {

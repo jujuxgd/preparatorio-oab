@@ -257,8 +257,9 @@ rodapé tem "Flashcards desta revisão" (`revisar.html?materia=…&rev=N`) e cad
 vistos e nº de grifos. Nos dias `revisao` do calendário (fase 2 e revisões extras), o Conteúdo do Hoje abre a
 próxima Revisão ainda não feita (1→2→3) de cada matéria em foco, com "Marcar como feita" (grava aqui e no checklist).
 Estado em `oab_revisao_status_v1` (`{id: {s:'lendo'|'feito', d}}`); data da 2ª fase em
-`oab_segunda_fase_data`. Layout escolhido por Julia (2026-10): Revisões = estante de cards
-por matéria (cores `--mat-*`, anel de progresso, círculos R1/R2/R3); Trabalhista = trilha
+`oab_segunda_fase_data`. Layout escolhido por Julia (2026-10): Revisões = quadro matéria ×
+Revisão 1/2/3 (redesenho 11/10/2026: célula vazia = não lida, meio preenchida = lendo, cheia na cor `--mat-*-deep`
+= feita; só a próxima da fila tem contorno; última coluna = flashcards vistos e "Treinar"); Trabalhista = trilha
 numerada com as revisões como paradas; Peças = agrupadas por tipo (`GRUPOS_PECA`).
 **Aba Treinos (2ª fase):** registro de peça treinada em `oab_pecas_treino_v1`
 (`{id, data, peca, tempo(min), nota(0–5)|null, crit:{peca,partes,fundamentos,pedidos,fechamento:
@@ -289,9 +290,10 @@ salvo; a sessão nova é a rotina do dia e aparece como cartão no topo do Hoje.
 - **`leitor-pdf.js`/`.css`** → `window.LEITOR.montar(el, idDrive)`: PDF.js 3.11.174 (cdnjs) lendo o arquivo pela API
   do Drive (`?alt=media&key=` — chave só com Google Drive API e referenciadores `*.vercel.app`); sem acesso, cai no
   preview do Drive. Grifos por seleção (4 cores), "grifar área" (arrastar, para escaneados), anotação por grifo e
-  lista lateral. `oab_grifos_v1 {"idArquivo|idGrifo": {p, r:[[x,y,w,h] 0–1], c, t, n, u, x?}}`, mesclado por `u`.
-- **`vde-dias.js`** → `VDE_DIAS {n: idDoDrive}` dos PDFs do dia (pasta "Dividido" no Drive de Julia). Dia novo
-  no Drive: acrescentar a linha. Aba **Conteúdo** do Hoje abre o PDF pelo preview do Drive. Os PDFs têm marca
+  lista lateral. Opção `caixa: true` (usada no Hoje) prende as páginas numa caixa de até 78vh com rolagem própria. `oab_grifos_v1 {"idArquivo|idGrifo": {p, r:[[x,y,w,h] 0–1], c, t, n, u, x?}}`, mesclado por `u`.
+- **`vde-dias.js`** → `VDE_DIAS {n: idDoDrive}` dos PDFs do dia (pasta "Dividido" = `VDE_PASTA` no Drive de Julia). Desde
+  11/10/2026 a pasta é listada pela API do Drive a cada 6 h (`LEITOR.listarPasta`, cache só do aparelho em `oab_vde_pasta`):
+  dia que falta ou arquivo que sumiu da pasta é trocado pelo "Dia N - ….pdf" de lá, sem editar o arquivo. Aba **Conteúdo** do Hoje abre o PDF pelo preview do Drive. Os PDFs têm marca
   d'água com dados de terceiros: só IDs e temas entram no repo, nunca texto.
 - **`gabaritaco.js`** → `GABARITACO {disciplina: {id, paginas, dica:[página onde começa cada DICA]}}`, lido dos 10 PDFs
   com PyMuPDF. O Conteúdo do Hoje mostra, sob demanda ("Abrir o trecho"), o Gabaritaço do tema no leitor com grifos,
@@ -317,7 +319,8 @@ salvo; a sessão nova é a rotina do dia e aparece como cartão no topo do Hoje.
   Questões sorteadas do dia em `oab_ativo_dia` (só do aparelho); quantidade por tópico em
   `oab_ativo_questoes_por_topico` (padrão 10).
 - **Páginas:** `hoje.html` (abas Conteúdo · Flashcards · Questões · Checklist · Videoaulas), `calendario.html`
-  (calendário novo; cada dia abre `hoje.html?data=`), `revisar.html` (flashcards por matéria ou vencidos).
+  (redesenho 11/10/2026, classes `.ca-*`: fita com um traço por dia colorido por matéria e agulha em hoje,
+  semana inteira com os temas — clicar abre `hoje.html?data=` —, meses com pontos por matéria e painel do dia), `revisar.html` (flashcards por matéria ou vencidos).
   `sessao.html` só redireciona.
 - **Menu (11/10/2026):** Início · Hoje · Calendário · **Estudar** (Flashcards, Biblioteca de revisão, Videoaulas,
   Caderno legislativo, Materiais extras = `reta-final.html`) · **Treino** (`treino.html`: Rumo aos 40 em destaque,

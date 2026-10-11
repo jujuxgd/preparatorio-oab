@@ -265,7 +265,7 @@
 
 .tab.active {
   background: linear-gradient(135deg, var(--rose) 0%, var(--rose-deep) 100%);
-  color: white;
+  color: var(--paper);
   font-weight: 600;
   box-shadow: 0 2px 8px rgba(44, 36, 32, 0.12);
 }
@@ -1191,6 +1191,10 @@
     }
   }
   document.querySelectorAll('.tab').forEach(function (t) { t.addEventListener('click', function () { abrir(t.dataset.tab); }); });
+  S.sincPasta(function (ns) {
+    var meus = S.pdfsDoDia().some(function (p) { return ns.indexOf(p.n) >= 0; });
+    if (meus && feitas.conteudo) S.montarConteudo(document.getElementById('ct-area'));
+  });
 
   function cabecalho() {
     var p = S.partes(S.DATA);

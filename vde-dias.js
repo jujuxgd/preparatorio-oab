@@ -1,6 +1,8 @@
 // PDFs do dia do VDE no Drive de Julia (pasta "Dividido"), pela numeração DIA do VDE.
-// Arquivo "Dia N - Matéria.pdf" → acrescente aqui o ID do Drive ao subir um dia novo.
+// Arquivo "Dia N - Matéria.pdf". Dia novo na pasta entra sozinho (sessao-core.js lista VDE_PASTA a cada 6 h);
+// esta lista é o ponto de partida e vale sempre que o arquivo dela ainda existir na pasta.
 // Lista = mais de um arquivo para o mesmo dia (Dia 109 e 139 do Drive são o fim dos dias 108 e 138).
+window.VDE_PASTA = '1OhonRdSPPAExSzfq6mCGJRwmo_AvfQbR';
 window.VDE_DIAS = {
   1: '1qdjPSUZTvLTKo3fxbQ4XpHf9QOqq6wC_',
   2: '1Ih9V3JuZ4PM289sBuumrN01F6P1umY7Z',

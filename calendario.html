@@ -22,62 +22,115 @@
 <div class="aurora-bg" aria-hidden="true"><div class="aurora-blob ab1"></div><div class="aurora-blob ab2"></div><div class="aurora-blob ab3"></div><div class="aurora-blob ab4"></div></div>
 <div class="app">
   <main>
-    <div class="topbar"><div class="page-title"><div class="breadcrumb">Revisitar + praticar · 12 out → 10 jan</div><h1>Calendário até a <em>prova</em></h1></div></div>
     <style>
-    .cv-top{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.8rem;margin-bottom:1.1rem}
-    .cv-stat{background:var(--paper);border:1px solid var(--line-soft);border-radius:var(--radius);padding:.85rem 1rem}
-    .cv-stat b{display:block;font-family:'Fraunces',serif;font-weight:500;font-size:1.6rem;color:var(--ink);line-height:1.1}
-    .cv-stat span{font-size:.72rem;color:var(--ink-faded)}
-    .cv-trilho{position:relative;height:6px;border-radius:6px;background:var(--line-soft);margin:.2rem 0 1.4rem;overflow:hidden}
-    .cv-trilho i{position:absolute;inset:0 auto 0 0;background:linear-gradient(90deg,var(--rose),var(--rose-deep));border-radius:6px}
-    .cv-fases{display:flex;justify-content:space-between;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-faded);margin-bottom:.35rem}
-    .cv-wrap{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:1.4rem;align-items:start}
-    .cv-mes{background:var(--paper);border:1px solid var(--line-soft);border-radius:var(--radius-lg);padding:1rem 1.1rem 1.1rem;margin-bottom:1.1rem;box-shadow:var(--shadow-sm)}
-    .cv-mes h3{font-family:'Fraunces',serif;font-weight:500;font-size:1.25rem;margin:0 0 .7rem;color:var(--ink)}
-    .cv-mes h3 small{font:500 .7rem Inter,sans-serif;color:var(--ink-faded);margin-left:.5rem;letter-spacing:.04em}
-    .cv-grade{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
-    .cv-sem{font:600 .6rem Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faded);text-align:center;padding-bottom:.2rem}
-    .cv-d{position:relative;min-height:84px;border-radius:10px;background:var(--bg-soft);border:1px solid transparent;padding:.4rem .4rem .35rem;cursor:pointer;display:flex;flex-direction:column;gap:3px;text-align:left;font:inherit;color:inherit;transition:border-color .15s,transform .15s}
-    .cv-d:hover{border-color:var(--rose)}
-    .cv-d.vazio{background:none;cursor:default;border:0;min-height:0}
-    .cv-d .n{font:600 .78rem Inter,sans-serif;color:var(--ink-soft);display:flex;justify-content:space-between;align-items:center}
-    .cv-d .ok{width:15px;height:15px;border-radius:50%;background:#5E8C6A;color:#fff;font-size:.58rem;display:grid;place-items:center}
-    .cv-d.passado{opacity:.55}
-    .cv-d.hoje{background:var(--paper);border-color:var(--rose);box-shadow:0 0 0 3px var(--rose-soft)}
-    .cv-d.sel{border-color:var(--ink);background:var(--paper)}
-    .cv-p{display:block;font:600 .6rem Inter,sans-serif;border-radius:5px;padding:.14rem .3rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:var(--c,var(--rose-soft));color:var(--cd,var(--ink))}
-    .cv-t{font:600 .6rem Inter,sans-serif;color:var(--ink-soft);border:1px dashed var(--line);border-radius:5px;padding:.14rem .3rem;text-align:center}
-    .cv-t.sim{border-style:solid;border-color:var(--ink);color:var(--ink)}
-    .cv-t.prova{background:var(--ink);color:var(--paper);border-color:var(--ink)}
-    .cv-side{position:sticky;top:90px}
-    .cv-card{background:var(--paper);border:1px solid var(--line-soft);border-radius:var(--radius-lg);padding:1.2rem 1.2rem 1.1rem;box-shadow:var(--shadow-sm)}
-    .cv-card .eb{font:600 .62rem Inter,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faded)}
-    .cv-card h4{font-family:'Fraunces',serif;font-weight:500;font-size:1.3rem;margin:.25rem 0 .8rem;color:var(--ink)}
-    .cv-item{border-left:3px solid var(--cd,var(--rose));padding:.15rem 0 .15rem .7rem;margin-bottom:.7rem}
-    .cv-item b{display:block;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--cd,var(--rose-deep))}
-    .cv-item span{font-size:.88rem;color:var(--ink);line-height:1.4}
-    .cv-item small{display:block;font-size:.72rem;color:var(--ink-faded);margin-top:.15rem}
-    .cv-card .btn{width:100%;text-align:center;text-decoration:none;margin-top:.4rem}
-    .cv-leg{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:1rem}
-    .cv-leg .cv-p{display:inline-block;font-size:.62rem;padding:.2rem .5rem}
-    @media (max-width:980px){.cv-wrap{grid-template-columns:1fr}.cv-side{position:static;order:-1}.cv-top{grid-template-columns:repeat(2,minmax(0,1fr))}}
-    @media (max-width:600px){
-      .cv-fases span:nth-child(2){display:none}
-      .cv-mes{padding:.8rem .6rem}
-      .cv-grade{gap:3px}
-      .cv-d{min-height:52px;padding:.3rem;gap:2px}
-      .cv-d .n{font-size:.7rem}
-      .cv-p,.cv-t{font-size:0;padding:0;height:5px;border-radius:3px;border-width:0}
-      .cv-t{background:var(--line)}
-      .cv-t.sim,.cv-t.prova{background:var(--ink)}
+    .ca{--fita-h:56px}
+    .ca-cab{margin:.4rem 0 1.6rem}
+    .ca-cab h1{font-family:'Fraunces',serif;font-weight:400;font-size:clamp(2rem,4.4vw,3.1rem);line-height:1.02;letter-spacing:-.01em;margin:0;color:var(--ink)}
+    .ca-cab p{margin:.5rem 0 0;color:var(--ink-soft);font-size:.95rem;max-width:60ch;line-height:1.5}
+    .ca-cab p b{font-weight:600;color:var(--rose-deep)}
+
+    /* fita: o plano inteiro num olhar */
+    .ca-fita{position:relative;margin:0 0 2.2rem;padding:1.1rem 1.1rem .7rem;background:var(--paper);border:1px solid var(--line-soft);border-radius:var(--radius-lg)}
+    .ca-barras{display:flex;align-items:flex-end;gap:2px;height:var(--fita-h)}
+    .ca-bar{flex:1;min-width:2px;height:62%;border:0;padding:0;cursor:pointer;border-radius:2px;background:var(--line);display:flex;flex-direction:column;overflow:hidden;transition:height .2s}
+    .ca-bar i{flex:1;display:block}
+    .ca-bar.sim{height:88%;background:var(--ink)}
+    .ca-bar.rev{height:40%;background:repeating-linear-gradient(135deg,var(--rose-soft) 0 3px,var(--paper) 3px 6px);outline:1px solid var(--rose-soft)}
+    .ca-bar.leve{height:26%;background:var(--line-soft)}
+    .ca-bar.prova{height:100%;background:var(--rose-deep)}
+    .ca-bar.fut{opacity:.72}
+    .ca-bar.sel{height:100%;opacity:1;box-shadow:0 0 0 2px var(--paper),0 0 0 3.5px var(--ink)}
+    .ca-bar:hover{height:100%;opacity:1}
+    .ca-bar:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+    .ca-agulha{position:absolute;width:2px;background:var(--rose-deep);border-radius:2px;pointer-events:none}
+    .ca-agulha::after{content:'hoje';position:absolute;top:-1.2rem;left:50%;transform:translateX(-50%);font:600 .66rem Inter,sans-serif;color:var(--rose-deep)}
+    .ca-marcos{display:flex;justify-content:space-between;margin-top:.55rem;font-size:.74rem;color:var(--ink-faded)}
+    .ca-leg{display:flex;flex-wrap:wrap;gap:.3rem .9rem;margin-top:.8rem;font-size:.74rem;color:var(--ink-soft)}
+    .ca-leg span{display:inline-flex;align-items:center;gap:.35rem}
+    .ca-leg i{width:10px;height:10px;border-radius:3px;display:inline-block;background:var(--c)}
+
+    .ca-wrap{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:2rem;align-items:start}
+    .ca-h2{font-family:'Fraunces',serif;font-weight:400;font-size:1.45rem;color:var(--ink);margin:0 0 .9rem}
+    .ca-h2 small{font:400 .82rem Inter,sans-serif;color:var(--ink-faded);margin-left:.6rem}
+
+    /* esta semana */
+    .ca-semana{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:.55rem;margin-bottom:2.4rem}
+    .ca-dia{border:0;font:inherit;text-align:left;cursor:pointer;background:var(--paper);border-radius:var(--radius);padding:.75rem .7rem .8rem;min-height:170px;display:flex;flex-direction:column;gap:.45rem;box-shadow:inset 0 0 0 1px var(--line-soft);color:var(--ink)}
+    .ca-dia:hover{box-shadow:inset 0 0 0 1.5px var(--rose)}
+    .ca-dia.hoje{box-shadow:inset 0 0 0 2px var(--rose-deep)}
+    .ca-dia.sel{box-shadow:inset 0 0 0 2px var(--ink)}
+    .ca-dia.passado{color:var(--ink-soft)}
+    .ca-dn{display:flex;align-items:baseline;justify-content:space-between}
+    .ca-dn b{font-family:'Fraunces',serif;font-weight:400;font-size:1.9rem;line-height:1}
+    .ca-dn span{font-size:.74rem;color:var(--ink-faded)}
+    .ca-tema{font-size:.76rem;line-height:1.35;border-left:3px solid var(--cd,var(--line));padding-left:.45rem}
+    .ca-tema strong{display:block;font-weight:600;font-size:.72rem;color:var(--cd,var(--ink-soft))}
+    .ca-tipo{font-size:.78rem;color:var(--ink-soft);line-height:1.4}
+    .ca-ok{margin-top:auto;font-size:.7rem;color:#4F7A5C}
+
+    /* meses */
+    .ca-meses{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1.4rem}
+    .ca-mes h3{font-family:'Fraunces',serif;font-weight:400;font-size:1.1rem;margin:0 0 .5rem;color:var(--ink)}
+    .ca-grade{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+    .ca-sem{font-size:.64rem;color:var(--ink-faded);text-align:center;padding-bottom:.15rem}
+    .ca-c{aspect-ratio:1;border:0;padding:0;font:500 .72rem Inter,sans-serif;color:var(--ink-soft);background:var(--bg-soft);border-radius:6px;cursor:pointer;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+    .ca-c.vazio{background:none;cursor:default}
+    .ca-c .pts{display:flex;gap:2px}
+    .ca-c .pts i{width:5px;height:5px;border-radius:50%;background:var(--c)}
+    .ca-c.prova{background:var(--rose-deep);color:#fff}
+    .ca-c.feito{background:var(--paper);box-shadow:inset 0 0 0 1.5px #6E9B79}
+    .ca-c.hoje{box-shadow:inset 0 0 0 2px var(--rose-deep)}
+    .ca-c.sel{box-shadow:inset 0 0 0 2px var(--ink)}
+    .ca-c.passado:not(.feito){opacity:.5}
+    .ca-c:focus-visible,.ca-dia:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+
+    /* painel do dia */
+    .ca-side{position:sticky;top:90px}
+    .ca-det{background:var(--paper);border-radius:var(--radius-lg);padding:1.3rem 1.3rem 1.2rem;box-shadow:inset 0 0 0 1px var(--line-soft)}
+    .ca-det .data{font-family:'Fraunces',serif;font-size:1.5rem;line-height:1.15;color:var(--ink);margin:0 0 .2rem}
+    .ca-det .fase{font-size:.8rem;color:var(--ink-faded);margin:0 0 1rem}
+    .ca-it{border-left:3px solid var(--cd,var(--rose));padding:.1rem 0 .1rem .75rem;margin-bottom:.85rem}
+    .ca-it strong{display:block;font-size:.78rem;color:var(--cd,var(--rose-deep))}
+    .ca-it span{display:block;font-size:.92rem;line-height:1.4;color:var(--ink)}
+    .ca-it small{display:block;font-size:.74rem;color:var(--ink-faded);margin-top:.15rem}
+    .ca-det .btn{display:block;text-align:center;text-decoration:none;margin-top:.6rem}
+    .ca-adi{font-size:.76rem;color:var(--rose-deep);margin:-.4rem 0 .9rem}
+
+    @media (max-width:1020px){.ca-wrap{grid-template-columns:1fr}.ca-side{position:static;order:-1}}
+    @media (max-width:760px){
+      .ca-semana{grid-template-columns:1fr;gap:.45rem}
+      .ca-dia{min-height:0;flex-direction:row;flex-wrap:wrap;align-items:flex-start;gap:.4rem .8rem;padding:.7rem .8rem}
+      .ca-dn{flex-direction:column;align-items:flex-start;min-width:46px}
+      .ca-dia>div:not(.ca-dn){flex:1;min-width:0}
+      .ca-ok{margin-top:0}
+        .ca{--fita-h:44px}
+      .ca-fita{padding:.9rem .7rem .6rem}
+      .ca-barras{gap:1px}
     }
+    @media (prefers-reduced-motion:reduce){.ca-bar{transition:none}}
     </style>
-    <div class="cv-fases"><span>12 out · início</span><span>21 dez · revisão final</span><span>10 jan · prova</span></div>
-    <div class="cv-trilho"><i id="cv-bar"></i></div>
-    <div class="cv-top" id="cv-top"></div>
-    <div class="cv-wrap">
-      <div id="cal"></div>
-      <aside class="cv-side"><div class="cv-card" id="cv-det"></div></aside>
+    <div class="ca">
+      <header class="ca-cab">
+        <h1>Até a prova</h1>
+        <p id="ca-sub"></p>
+      </header>
+
+      <section class="ca-fita" aria-label="O plano inteiro, um traço por dia">
+        <div class="ca-barras" id="ca-barras"></div>
+        <div class="ca-agulha" id="ca-agulha" hidden></div>
+        <div class="ca-marcos"><span>12 out</span><span>21 dez, revisão final</span><span>10 jan, prova</span></div>
+        <div class="ca-leg" id="ca-leg"></div>
+      </section>
+
+      <h2 class="ca-h2" id="ca-sem-tit">Esta semana</h2>
+      <div class="ca-semana" id="ca-semana"></div>
+      <div class="ca-wrap">
+        <div>
+          <h2 class="ca-h2">Mês a mês</h2>
+          <div class="ca-meses" id="ca-meses"></div>
+        </div>
+        <aside class="ca-side"><div class="ca-det" id="ca-det" aria-live="polite"></div></aside>
+      </div>
     </div>
   </main>
 </div>
@@ -97,94 +150,132 @@
 (function () {
   var S = SESSAO, CAL = CAL_ATIVO, esc = S.esc;
   var MESES_L = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+  var SEM = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb'];
   var COR = {
-    'Direito Constitucional': 'const', 'Direito Civil': 'civil', 'Direito Processual Civil': 'civil',
-    'Direito Penal': 'penal', 'Direito Processual Penal': 'penal', 'Direito do Trabalho': 'trab',
-    'Direito Processual do Trabalho': 'trab', 'Direito Tributário': 'tribut', 'Direito Empresarial': 'tribut',
-    'Ética Profissional': 'etica', 'Direito Administrativo': 'const', 'ECA': 'etica', 'Direito do Consumidor': 'civil',
-    'Direito Previdenciário': 'trab', 'Direito Eleitoral': 'const'
+    'Direito Constitucional': 'const', 'Direito Administrativo': 'const', 'Direito Eleitoral': 'const',
+    'Direito Civil': 'civil', 'Direito Processual Civil': 'civil', 'Direito do Consumidor': 'civil',
+    'Direito Penal': 'penal', 'Direito Processual Penal': 'penal',
+    'Direito do Trabalho': 'trab', 'Direito Processual do Trabalho': 'trab', 'Direito Previdenciário': 'trab',
+    'Direito Tributário': 'tribut', 'Direito Empresarial': 'tribut',
+    'Ética Profissional': 'etica', 'ECA': 'etica'
   };
-  function cor(d) { var c = COR[d]; return c ? ' style="--c:var(--mat-' + c + ');--cd:var(--mat-' + c + '-deep)"' : ''; }
+  function vars(d) { var c = COR[d]; return c ? '--c:var(--mat-' + c + '-deep);--cd:var(--mat-' + c + '-deep)' : ''; }
   function feitos() { try { return JSON.parse(localStorage.getItem('oab_ativo_check_v1')) || {}; } catch (e) { return {}; } }
   var POR = {}; CAL.dias.forEach(function (x) { POR[x.d] = x; });
-  var sel = POR[S.HOJE] ? S.HOJE : CAL.dias[0].d;
-
-  function chips(x) {
-    if (x.top) return x.top.map(function (t) { return '<span class="cv-p"' + cor(t.d) + '>' + esc(S.curto(t.d)) + '</span>'; }).join('');
-    if (x.tipo === 'simulado') return '<span class="cv-t sim">Simulado</span>';
-    if (x.tipo === 'prova') return '<span class="cv-t prova">Prova</span>';
-    if (x.tipo === 'vespera') return '<span class="cv-t">Véspera</span>';
-    if (x.tipo === 'leve') return '<span class="cv-t">Leve</span>';
-    return (x.foco || []).map(function (d) { return '<span class="cv-p"' + cor(d) + '>' + esc(S.curto(d)) + '</span>'; }).join('') + (x.sim ? '<span class="cv-t">Simulado</span>' : '');
+  var HOJE = S.HOJE, sel = POR[HOJE] ? HOJE : CAL.dias[0].d;
+  function dt(iso) { return new Date(iso + 'T12:00:00'); }
+  function dm(iso) { var p = S.partes(iso); return p.d + '/' + String(p.m).padStart(2, '0'); }
+  function temas(x) {
+    if (!x.top) return [];
+    var vist = {}, out = [];
+    x.top.forEach(function (t) { var k = t.d + t.s; if (!vist[k]) { vist[k] = 1; out.push(t); } });
+    return out;
+  }
+  function tipoTxt(x) {
+    if (x.tipo === 'simulado') return 'Simulado completo, ' + x.sim.exame + 'º Exame';
+    if (x.tipo === 'prova') return 'Prova da 1ª fase, 13h às 18h';
+    if (x.tipo === 'vespera') return 'Véspera: só flashcards leves';
+    if (x.tipo === 'leve') return 'Dia leve: flashcards e 10 questões de Ética';
+    if (x.tipo === 'revisao') return (x.extra ? 'Revisão extra de ' : 'Revisão de ') + x.foco.map(S.curto).join(' e ') + (x.sim ? (x.sim.modo === 'completo' ? ', com simulado completo' : ', com simulado de 20 questões') : '');
+    return '';
   }
 
-  function grade() {
-    var f = feitos(), meses = [], h = '';
-    CAL.dias.forEach(function (x) { var k = x.d.slice(0, 7); if (meses.indexOf(k) < 0) meses.push(k); });
-    meses.forEach(function (k) {
-      var a = +k.slice(0, 4), m = +k.slice(5, 7), ini = new Date(a, m - 1, 1), ult = new Date(a, m, 0).getDate();
-      var dias = CAL.dias.filter(function (x) { return x.d.slice(0, 7) === k; });
-      var est = dias.filter(function (x) { return x.top; }).length;
-      h += '<section class="cv-mes"><h3>' + MESES_L[m - 1] + '<small>' + a + (est ? ' · ' + est + ' dias de conteúdo' : '') + '</small></h3><div class="cv-grade">' +
-        ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'].map(function (w) { return '<div class="cv-sem">' + w + '</div>'; }).join('');
-      var cel = [];
-      for (var i = 0; i < (ini.getDay() + 6) % 7; i++) cel.push(null);
-      for (var d = 1; d <= ult; d++) cel.push(k + '-' + String(d).padStart(2, '0'));
-      while (cel.length % 7) cel.push(null);
-      for (var w = 0; w < cel.length; w += 7) {
-        var semana = cel.slice(w, w + 7);
-        if (!semana.some(function (iso) { return iso && POR[iso]; })) continue;
-        semana.forEach(function (iso) {
-          var x = iso && POR[iso];
-          if (!x) { h += '<div class="cv-d vazio"></div>'; return; }
-          var cls = 'cv-d' + (iso === S.HOJE ? ' hoje' : iso < S.HOJE ? ' passado' : '') + (iso === sel ? ' sel' : '');
-          h += '<button type="button" class="' + cls + '" data-d="' + iso + '"><span class="n">' + (+iso.slice(8)) +
-            (f[iso] && f[iso].feito ? '<span class="ok" title="Estudado">✓</span>' : '') + '</span>' + chips(x) + '</button>';
-        });
+  function cabecalho() {
+    var f = feitos(), faltam = Math.max(0, Math.round((dt('2027-01-10') - dt(HOJE)) / 864e5));
+    var est = CAL.dias.filter(function (x) { return f[x.d] && f[x.d].feito; }).length;
+    var pdfs = 0; CAL.dias.forEach(function (x) { if (x.d >= HOJE && x.top) pdfs += temas(x).length; });
+    var fim = window.PLANO ? PLANO.fimDoConteudo() : null;
+    document.getElementById('ca-sub').innerHTML = '<b>' + faltam + (faltam === 1 ? ' dia' : ' dias') + '</b> até 10 de janeiro. ' + (HOJE < CAL.dias[0].d ? 'Começa segunda, 12 de outubro. ' : '') +
+      pdfs + ' temas pela frente' + (fim ? ', o último em ' + dm(fim) : '') + '. ' +
+      (est ? est + (est === 1 ? ' dia marcado como estudado.' : ' dias marcados como estudados.') : '');
+  }
+
+  function fita() {
+    var f = feitos();
+    document.getElementById('ca-barras').innerHTML = CAL.dias.map(function (x) {
+      var cls = 'ca-bar' + (x.d > HOJE ? ' fut' : '') + (x.d === sel ? ' sel' : ''), dentro = '';
+      if (x.top && !x.extra) dentro = temas(x).map(function (t) { return '<i style="background:var(--mat-' + (COR[t.d] || 'const') + '-deep)"></i>'; }).join('');
+      else if (x.tipo === 'simulado') cls += ' sim';
+      else if (x.tipo === 'prova') cls += ' prova';
+      else if (x.tipo === 'leve' || x.tipo === 'vespera') cls += ' leve';
+      else cls += ' rev';
+      if (x.top && x.tipo === 'simulado') cls += ' sim';
+      var rot = S.dataLonga(x.d) + ': ' + (x.top ? temas(x).map(function (t) { return S.curto(t.d); }).join(' e ') : tipoTxt(x)) + (f[x.d] && f[x.d].feito ? ' (estudado)' : '');
+      return '<button type="button" class="' + cls + '" data-d="' + x.d + '" title="' + esc(rot) + '" aria-label="' + esc(rot) + '">' + dentro + '</button>';
+    }).join('');
+    var ag = document.getElementById('ca-agulha'), b = document.querySelector('.ca-bar[data-d="' + HOJE + '"]');
+    var br = document.getElementById('ca-barras');
+    if (b) { ag.hidden = false; ag.style.left = (b.offsetLeft + b.offsetWidth / 2 - 1) + 'px'; ag.style.top = (br.offsetTop - 6) + 'px'; ag.style.height = (br.offsetHeight + 10) + 'px'; } else ag.hidden = true;
+    var usadas = [];
+    CAL.dias.forEach(function (x) { temas(x).forEach(function (t) { var c = COR[t.d]; if (c && usadas.indexOf(c) < 0) usadas.push(c); }); });
+    var NOMES = { const: 'Constitucional, Administrativo', civil: 'Civil, Proc. Civil, Consumidor', penal: 'Penal, Proc. Penal', trab: 'Trabalho, Proc. Trabalho', tribut: 'Tributário, Empresarial', etica: 'Ética, ECA' };
+    document.getElementById('ca-leg').innerHTML = Object.keys(NOMES).map(function (c) { return '<span style="--c:var(--mat-' + c + '-deep)"><i></i>' + NOMES[c] + '</span>'; }).join('') +
+      '<span style="--c:var(--ink)"><i></i>Simulado</span><span><i style="background:repeating-linear-gradient(135deg,var(--rose-soft) 0 2px,var(--paper) 2px 4px);outline:1px solid var(--rose-soft)"></i>Revisão</span>';
+  }
+
+  function semana() {
+    var f = feitos(), base = dt(sel), seg = new Date(base); seg.setDate(base.getDate() - ((base.getDay() + 6) % 7));
+    var dias = [];
+    for (var i = 0; i < 7; i++) { var d = new Date(seg); d.setDate(seg.getDate() + i); dias.push(S.partes ? (d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0')) : ''); }
+    var naSemana = dias.indexOf(HOJE) >= 0;
+    document.getElementById('ca-sem-tit').innerHTML = (naSemana ? 'Esta semana' : 'Semana de ' + dm(dias[0])) + '<small>' + dm(dias[0]) + ' a ' + dm(dias[6]) + '</small>';
+    document.getElementById('ca-semana').innerHTML = dias.map(function (iso) {
+      var x = POR[iso], p = dt(iso);
+      if (!x) return '<div class="ca-dia passado" style="cursor:default;box-shadow:none;background:none"><div class="ca-dn"><b>' + p.getDate() + '</b><span>' + SEM[p.getDay()] + '</span></div></div>';
+      var cls = 'ca-dia' + (iso === HOJE ? ' hoje' : iso < HOJE ? ' passado' : '') + (iso === sel ? ' sel' : '');
+      var corpo = x.top ? temas(x).map(function (t) { return '<div class="ca-tema" style="' + vars(t.d) + '"><strong>' + esc(S.curto(t.d)) + '</strong>' + esc(t.s) + '</div>'; }).join('') +
+        (x.tipo === 'simulado' ? '<div class="ca-tipo">' + esc(tipoTxt(x)) + '</div>' : '')
+        : '<div class="ca-tipo">' + esc(tipoTxt(x)) + '</div>';
+      return '<button type="button" class="' + cls + '" data-d="' + iso + '"><div class="ca-dn"><b>' + p.getDate() + '</b><span>' + SEM[p.getDay()] + (iso === HOJE ? ', hoje' : '') + '</span></div>' +
+        '<div>' + corpo + '</div>' + (f[iso] && f[iso].feito ? '<div class="ca-ok">Estudado ✓</div>' : '') + '</button>';
+    }).join('');
+  }
+
+  function meses() {
+    var f = feitos(), chaves = [];
+    CAL.dias.forEach(function (x) { var k = x.d.slice(0, 7); if (chaves.indexOf(k) < 0) chaves.push(k); });
+    document.getElementById('ca-meses').innerHTML = chaves.map(function (k) {
+      var a = +k.slice(0, 4), m = +k.slice(5, 7), ini = new Date(a, m - 1, 1), ult = new Date(a, m, 0).getDate(), h = '';
+      for (var i = 0; i < (ini.getDay() + 6) % 7; i++) h += '<span class="ca-c vazio"></span>';
+      for (var d = 1; d <= ult; d++) {
+        var iso = k + '-' + String(d).padStart(2, '0'), x = POR[iso];
+        if (!x) { h += '<span class="ca-c vazio" style="color:var(--line)">' + d + '</span>'; continue; }
+        var cls = 'ca-c' + (x.tipo === 'simulado' && !x.top ? ' sim' : '') + (x.tipo === 'prova' ? ' prova' : '') + (f[iso] && f[iso].feito ? ' feito' : '') +
+          (iso === HOJE ? ' hoje' : iso < HOJE ? ' passado' : '') + (iso === sel ? ' sel' : '');
+        var pts = x.top ? temas(x).slice(0, 3).map(function (t) { return '<i style="--c:var(--mat-' + (COR[t.d] || 'const') + '-deep)"></i>'; }).join('') : '';
+        if (x.tipo === 'simulado' || (x.sim && x.sim.modo === 'completo')) pts += '<i style="--c:var(--ink)"></i>';
+        pts = pts ? '<span class="pts">' + pts + '</span>' : '';
+        h += '<button type="button" class="' + cls + '" data-d="' + iso + '" aria-label="' + esc(S.dataLonga(iso)) + '">' + d + pts + '</button>';
       }
-      h += '</div></section>';
-    });
-    document.getElementById('cal').innerHTML = h;
+      return '<div class="ca-mes"><h3>' + MESES_L[m - 1] + '</h3><div class="ca-grade">' +
+        ['S', 'T', 'Q', 'Q', 'S', 'S', 'D'].map(function (w) { return '<span class="ca-sem">' + w + '</span>'; }).join('') + h + '</div></div>';
+    }).join('');
   }
 
   function detalhe() {
-    var x = POR[sel], p = S.partes(sel), h;
+    var x = POR[sel], f = feitos();
     var tit = S.dataLonga(sel).replace(/^./, function (c) { return c.toUpperCase(); });
-    var fase = x.f === 1 ? 'Fase 1 · conteúdo' : x.f === 2 ? 'Fase 2 · revisão final' : 'Prova';
-    h = '<div class="eb">' + fase + (sel === S.HOJE ? ' · hoje' : '') + '</div><h4>' + esc(tit) + '</h4>';
-    if (x.top) h += x.top.map(function (t) {
-      return '<div class="cv-item"' + cor(t.d) + '><b>' + esc(S.curto(t.d)) + '</b><span>' + esc(t.s) + '</span>' +
-        (t.n != null ? '<small>PDF do Dia ' + t.n + ' do VDE</small>' : '') + '</div>';
+    var fase = x.f === 1 ? 'Fase de conteúdo' : x.f === 2 ? 'Revisão final' : 'Dia da prova';
+    var h = '<p class="data">' + esc(tit) + '</p><p class="fase">' + fase + (sel === HOJE ? ', hoje' : '') + (f[sel] && f[sel].feito ? ', estudado ✓' : '') + '</p>';
+    if (x.adiantado) h += '<p class="ca-adi">Você adiantou conteúdo para este dia.</p>';
+    if (x.top) h += temas(x).map(function (t) {
+      return '<div class="ca-it" style="' + vars(t.d) + '"><strong>' + esc(S.curto(t.d)) + '</strong><span>' + esc(t.s) + '</span>' +
+        (t.n != null ? '<small>PDF do Dia ' + t.n + ' do VDE' + (t.k ? ', DICAS ' + t.k[0] + ' a ' + t.k[1] + ' do Gabaritaço' : '') + '</small>' : '') + '</div>';
     }).join('');
-    else h += '<div class="cv-item"><span>' + esc(S.resumoDoDia(x)) + '</span></div>';
-    if (x.sim && x.tipo !== 'simulado') h += '<div class="cv-item"><b>Simulado</b><span>' + (x.sim.modo === 'completo' ? 'Completo · ' + x.sim.exame + 'º Exame' : 'Parcial · 20 questões') + '</span></div>';
+    if (!x.top || x.tipo === 'simulado') h += '<div class="ca-it"><span>' + esc(tipoTxt(x)) + '</span></div>';
     h += '<a class="btn btn-primary" href="hoje.html?data=' + sel + '">Abrir este dia</a>';
-    h += '<div class="cv-leg">' + ['Direito Constitucional', 'Direito Civil', 'Direito Penal', 'Direito do Trabalho', 'Direito Tributário', 'Ética Profissional'].map(function (d) {
-      return '<span class="cv-p"' + cor(d) + '>' + esc(S.curto(d)) + '</span>';
-    }).join('') + '</div>';
-    document.getElementById('cv-det').innerHTML = h;
+    document.getElementById('ca-det').innerHTML = h;
   }
 
-  function topo() {
-    var f = feitos(), tot = CAL.dias.length, idx = S.indice(S.HOJE), passados = CAL.dias.filter(function (x) { return x.d <= S.HOJE; }).length;
-    var est = CAL.dias.filter(function (x) { return f[x.d] && f[x.d].feito; }).length;
-    var pdfs = CAL.dias.filter(function (x) { return x.d >= S.HOJE && x.top; }).reduce(function (n, x) { return n + x.top.length; }, 0);
-    var sims = CAL.dias.filter(function (x) { return x.d >= S.HOJE && x.sim && x.sim.modo === 'completo'; }).length;
-    document.getElementById('cv-top').innerHTML =
-      '<div class="cv-stat"><b>' + (idx >= 0 ? idx + 1 : 0) + '<small style="font-size:.9rem;color:var(--ink-faded)"> / ' + tot + '</small></b><span>dia do calendário</span></div>' +
-      '<div class="cv-stat"><b>' + est + '</b><span>dias marcados como estudados</span></div>' +
-      '<div class="cv-stat"><b>' + pdfs + '</b><span>tópicos de conteúdo pela frente</span></div>' +
-      '<div class="cv-stat"><b>' + sims + '</b><span>simulados completos pela frente</span></div>';
-    document.getElementById('cv-bar').style.width = Math.max(1, passados / tot * 100) + '%';
-  }
-
+  function tudo() { fita(); semana(); meses(); detalhe(); }
   document.addEventListener('click', function (ev) {
-    var b = ev.target.closest('.cv-d[data-d]'); if (!b) return;
-    if (b.dataset.d === sel) { location.href = 'hoje.html?data=' + sel; return; }
-    sel = b.dataset.d; grade(); detalhe();
-    if (window.innerWidth <= 980) document.getElementById('cv-det').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    var b = ev.target.closest('[data-d]'); if (!b || !POR[b.dataset.d]) return;
+    if (b.classList.contains('ca-dia')) { location.href = 'hoje.html?data=' + b.dataset.d; return; }
+    sel = b.dataset.d; tudo();
+    if (window.innerWidth <= 1020) document.getElementById('ca-det').scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
-  document.addEventListener('DOMContentLoaded', function () { topo(); grade(); detalhe(); });
+  var rz; window.addEventListener('resize', function () { clearTimeout(rz); rz = setTimeout(fita, 150); });
+  document.addEventListener('DOMContentLoaded', function () { cabecalho(); tudo(); });
 })();
 </script>
 </body>
