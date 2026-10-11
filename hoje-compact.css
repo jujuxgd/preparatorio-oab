@@ -60,8 +60,9 @@ body.hoje .day-footer>div:last-child{opacity:.9}
  body.hoje .tab span.tl{white-space:nowrap}
 }
 
-@media(max-width:400px){
- body.hoje .tabs-bar{gap:.85rem!important}
+@media(max-width:480px){
+ body.hoje .tabs-bar{gap:.45rem!important;justify-content:space-between!important}
+ body.hoje .tab{font-size:.72rem!important;letter-spacing:0!important;padding-left:0!important;padding-right:0!important}
  body.hoje .tab svg{display:none}
 }
 

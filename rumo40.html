@@ -159,11 +159,11 @@
     var notaR = Math.round(nota);
     var acima = notaR >= 40;
 
-    var h = '<div class="r40-hero"><div><div class="r40-eb">Nota provável hoje</div><div class="r40-nota">' + notaR + '<small> / ' + Math.round(totalProva) + '</small></div></div>' +
-      '<div><span class="r40-selo ' + (acima ? 'ok' : 'nao') + '">' + (acima ? 'Acima do corte por ' + (notaR - 40) : 'Faltam ' + (40 - notaR) + ' para o corte') + '</span>' +
-      '<div class="r40-regua"><i style="width:' + Math.min(100, nota / totalProva * 100) + '%"></i><b style="left:' + (40 / totalProva * 100) + '%"></b></div>' +
+    var h = '<div class="r40-hero"><div><div class="r40-eb">Nota provável hoje</div><div class="r40-nota">' + (respondidas ? notaR : '—') + '<small> / ' + Math.round(totalProva) + '</small></div></div>' +
+      '<div><span class="r40-selo ' + (!respondidas ? '' : acima ? 'ok' : 'nao') + '">' + (!respondidas ? 'Ainda sem dados' : notaR === 40 ? 'Exatamente no corte' : acima ? 'Acima do corte por ' + (notaR - 40) + (notaR - 40 === 1 ? ' ponto' : ' pontos') : 'Falta' + (40 - notaR === 1 ? ' 1 ponto' : 'm ' + (40 - notaR) + ' pontos') + ' para o corte') + '</span>' +
+      '<div class="r40-regua"><i style="width:' + (respondidas ? Math.min(100, nota / totalProva * 100) : 0) + '%"></i><b style="left:' + (40 / totalProva * 100) + '%"></b></div>' +
       '<div class="r40-regua-leg"><span>0</span><span>corte 40</span><span>' + Math.round(totalProva) + '</span></div>' +
-      '<p style="margin-top:.7rem">Baseada em <b>' + respondidas + '</b> questões respondidas e no peso de cada matéria nas provas mais recentes (41º ao 47º exame).' +
+      '<p style="margin-top:.7rem">' + (!respondidas ? 'Resolva questões no Banco, no Hoje ou num Simulado para ver sua nota provável. ' : '') + 'Baseada em <b>' + respondidas + '</b> ' + (respondidas === 1 ? 'questão respondida' : 'questões respondidas') + ' e no peso de cada matéria nas provas mais recentes (41º ao 47º exame).' +
       (semDados ? ' ' + semDados + ' matérias ainda têm menos de 5 respostas, então contam perto de 50% até você resolver mais.' : '') + '</p></div></div>';
 
     var top = linhas.filter(function (l) { return l.ganho >= 0.25; }).sort(function (a, b) { return b.ganho - a.ganho; }).slice(0, 3);

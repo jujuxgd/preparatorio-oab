@@ -658,7 +658,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('hero-horas-sub').textContent = diasComRegistroReal > 0 ? `média ${fmtMinutosParaTexto(mediaRealMin)}/dia` : 'nenhum tempo registrado ainda';
   document.getElementById('hero-questoes').textContent  = q.total;
   document.getElementById('hero-questoes-sub').innerHTML = q.total > 0 ? `acerto <em>${q.pct}%</em>` : 'sem registros';
-  document.getElementById('hero-streak').innerHTML    = `${p.streak||0}<small> dias</small>`;
+  document.getElementById('hero-streak').innerHTML    = `${p.streak||0}<small> ${(p.streak||0) === 1 ? 'dia' : 'dias'}</small>`;
   document.getElementById('hero-streak-sub').textContent = p.streak >= 7 ? `recorde ✨ ${p.streak} dias` : p.streak > 0 ? 'continue assim!' : 'comece a estudar!';
   document.getElementById('hero-progresso').innerHTML = `${stats.pct}<small>%</small>`;
   document.getElementById('hero-progresso-sub').textContent = `${stats.concluidos} de 120 dias do plano`;
@@ -700,7 +700,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <div>
         <div class="eyebrow">Melhor matéria</div>
         <h3>Ainda <em>sem dados</em></h3>
-        <p>Registre questões registradas para identificar sua matéria com melhor desempenho.</p>
+        <p>Registre questões para identificar sua matéria com melhor desempenho.</p>
       </div>`;
   }
 
