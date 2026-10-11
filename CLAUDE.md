@@ -290,7 +290,8 @@ salvo; a sessão nova é a rotina do dia e aparece como cartão no topo do Hoje.
 - **`leitor-pdf.js`/`.css`** → `window.LEITOR.montar(el, idDrive)`: PDF.js 3.11.174 (cdnjs) lendo o arquivo pela API
   do Drive (`?alt=media&key=` — chave só com Google Drive API e referenciadores `*.vercel.app`); sem acesso, cai no
   preview do Drive. Grifos por seleção (4 cores), "grifar área" (arrastar, para escaneados), anotação por grifo e
-  lista lateral. Opção `caixa: true` (usada no Hoje) prende as páginas numa caixa de até 78vh com rolagem própria. `oab_grifos_v1 {"idArquivo|idGrifo": {p, r:[[x,y,w,h] 0–1], c, t, n, u, x?}}`, mesclado por `u`.
+  lista lateral. Usado em **todo PDF do site** (Hoje, Biblioteca, Materiais extras, Apostila do Início, `dia.html`); em
+  modais, o contêiner com classe `.lp-rola` é passado como `rolagem`. Opção `caixa: true` (usada no Hoje) prende as páginas numa caixa de até 78vh com rolagem própria. `oab_grifos_v1 {"idArquivo|idGrifo": {p, r:[[x,y,w,h] 0–1], c, t, n, u, x?}}`, mesclado por `u`.
 - **`vde-dias.js`** → `VDE_DIAS {n: idDoDrive}` dos PDFs do dia (pasta "Dividido" = `VDE_PASTA` no Drive de Julia). Desde
   11/10/2026 a pasta é listada pela API do Drive a cada 6 h (`LEITOR.listarPasta`, cache só do aparelho em `oab_vde_pasta`):
   dia que falta ou arquivo que sumiu da pasta é trocado pelo "Dia N - ….pdf" de lá, sem editar o arquivo. Aba **Conteúdo** do Hoje abre o PDF pelo preview do Drive. Os PDFs têm marca

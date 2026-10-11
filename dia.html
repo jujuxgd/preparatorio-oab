@@ -164,7 +164,7 @@
 .sum-sigla{font-size:.7rem;font-weight:600;color:var(--rose-deep);margin-bottom:.3rem}
 .sum-body{font-family:'Fraunces',serif;font-size:.87rem;font-style:italic;line-height:1.5;color:var(--ink)}
 </style>
-<link rel="stylesheet" href="topnav.css?v=1791163406"><script src="topnav.js?v=1791163406"></script></head>
+<link rel="stylesheet" href="leitor-pdf.css"><link rel="stylesheet" href="topnav.css?v=1791163406"><script src="topnav.js?v=1791163406"></script></head>
 <body>
 <button class="mobile-menu-btn" onclick="toggleSidebar()" title="Menu">☰</button>
 <button class="sidebar-toggle-btn" onclick="toggleSidebarCollapse()" title="Esconder menu">‹</button>
@@ -509,7 +509,7 @@
               <span class="pdf-embed-title" id="pdf-embed-title">PDF da semana</span>
               <a id="pdf-embed-drive-link" href="#" target="_blank" rel="noopener" class="btn btn-ghost" style="font-size:.75rem;text-decoration:none">↗ Abrir no Drive</a>
             </div>
-            <iframe class="pdf-embed-iframe" id="pdf-embed-iframe" src="" title="PDF da semana" allow="autoplay"></iframe>
+            <div id="pdf-embed-leitor" style="padding:1rem 1.2rem"></div>
           </div>
           <div class="dia-stub" id="pdf-embed-stub" style="display:none">
             <div class="s-em">📎</div>
@@ -557,6 +557,7 @@
 <script src="plano-vde.js"></script>
 <script src="cards.js"></script>
 <script src="cores.js"></script>
+<script src="leitor-pdf.js"></script>
 <script>
 function switchTab(name, el) {
   document.querySelectorAll('.dia-tab').forEach(function(t){ t.classList.remove('active'); });
@@ -916,7 +917,9 @@ document.addEventListener('DOMContentLoaded', function() {
   if (pdfId) {
     document.getElementById('pdf-embed-title').textContent = 'PDF · Semana ' + (dados.semana || '');
     document.getElementById('pdf-embed-drive-link').href = 'https://drive.google.com/file/d/' + pdfId + '/view';
-    document.getElementById('pdf-embed-iframe').src = 'https://drive.google.com/file/d/' + pdfId + '/preview';
+    var lpBox = document.getElementById('pdf-embed-leitor');
+    if (window.LEITOR) LEITOR.montar(lpBox, pdfId, { caixa: true });
+    else lpBox.innerHTML = '<iframe class="pdf-embed-iframe" src="https://drive.google.com/file/d/' + pdfId + '/preview" title="PDF da semana" allow="autoplay"></iframe>';
     pdfWrap.style.display = 'block';
   } else {
     pdfStub.style.display = 'block';
