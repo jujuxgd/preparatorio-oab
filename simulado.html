@@ -20,32 +20,33 @@
 .sm { max-width: var(--medida); margin: 0 auto; }
 .sm h1 { font: 500 1.875rem/1.15 'Fraunces', serif; letter-spacing: -.02em; color: var(--ink); margin: 0; }
 .sm h1 em { font-style: italic; color: var(--rose-deep); }
+.sm .topbar { margin-bottom: .5rem; }
 .sm .lead { font-size: .9375rem; line-height: 1.6; color: var(--ink-soft); margin: .4rem 0 0; max-width: 62ch; }
 
 /* ── escolha ── */
 .cfg { margin-top: 1.8rem; display: grid; gap: 1rem; }
-.cfg-bloco { background: var(--paper); border: 1px solid var(--line); border-radius: 12px; padding: 1.3rem 1.4rem; }
+.cfg-bloco { background: var(--paper); border: 1px solid var(--line-soft); border-radius: var(--radius-lg); padding: 1.4rem 1.5rem; }
 .cfg-bloco h2 { font: 600 .6875rem/1 'Inter', sans-serif; letter-spacing: .18em; text-transform: uppercase; color: var(--ink-faded); margin: 0 0 .9rem; }
 .cfg-grade { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: .5rem; }
 .prova-bt {
   display: flex; flex-direction: column; gap: .15rem; text-align: left;
   padding: .7rem .85rem; border-radius: 9px; cursor: pointer;
-  background: var(--bg-soft); border: 1px solid var(--line-soft); color: var(--ink);
+  background: var(--paper); border: 1px solid var(--line); color: var(--ink);
   font: 400 .875rem 'Inter', sans-serif; transition: border-color .15s ease, background .15s ease;
 }
-.prova-bt:hover { border-color: var(--rose-300); background: var(--paper); }
+.prova-bt:hover { border-color: var(--rose-300); }
 .prova-bt.on { border-color: var(--rose); background: var(--rose-50); }
 .prova-bt b { font-weight: 600; }
 .prova-bt span { font-size: .75rem; color: var(--ink-faded); }
 .cfg-rodape { display: flex; flex-wrap: wrap; gap: .8rem; align-items: center; margin-top: 1.2rem; }
 .bt-principal {
   padding: .8rem 1.6rem; border-radius: 999px; border: 0; cursor: pointer;
-  background: var(--ink); color: var(--paper);
-  font: 600 .8125rem 'Inter', sans-serif; letter-spacing: .04em; text-transform: uppercase;
+  background: var(--rose-600); color: #fff;
+  font: 600 .875rem 'Inter', sans-serif;
   transition: transform .18s ease, opacity .18s ease; min-height: 44px;
 }
 .bt-principal:hover { transform: translateY(-1px); }
-.bt-principal:disabled { opacity: .4; cursor: not-allowed; transform: none; }
+.bt-principal:disabled { background: var(--bg-soft); color: var(--ink-faded); cursor: not-allowed; transform: none; }
 .bt-secundario {
   padding: .7rem 1.2rem; border-radius: 999px; cursor: pointer;
   background: var(--paper); border: 1px solid var(--line); color: var(--ink);
