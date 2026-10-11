@@ -535,7 +535,7 @@
         <div class="chart-head">
           <div>
             <div class="chart-title">Dias estudados · <em>últimos 14 dias</em></div>
-            <div class="chart-sub" id="chart-sub-evol">barras = horas previstas por dia concluído</div>
+            <div class="chart-sub" id="chart-sub-evol">barra cheia = dia marcado como estudado; meia = checklist começado</div>
           </div>
         </div>
         <div class="line-chart" id="line-chart"></div>
@@ -617,12 +617,32 @@
 <script src="plano-vde.js"></script>
 <script src="cards.js"></script>
 <script src="cores.js"></script>
+<script src="calendario-ativo.js"></script>
+<script src="plano-dinamico.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
   const p      = carregarProgresso();
   const stats  = calcularStats();
-  const q      = getTotaisQuestoes();
   const hoje   = getCurrentDate();
+
+  // ── Calendário dinâmico: dias marcados em "Estudei hoje" e checklist do dia
+  const CK = (() => { try { return JSON.parse(localStorage.getItem('oab_ativo_check_v1')) || {}; } catch (e) { return {}; } })();
+  const isoDe = d => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  const feito = iso => !!(CK[iso] && CK[iso].feito);
+  p.streak = 0;
+  { const d = new Date(hoje); if (!feito(isoDe(d))) d.setDate(d.getDate() - 1); while (feito(isoDe(d))) { p.streak++; d.setDate(d.getDate() - 1); } }
+  const CAL = window.CAL_ATIVO;
+  if (CAL) { stats.concluidos = CAL.dias.filter(x => feito(x.d)).length; stats.pct = Math.round(stats.concluidos / CAL.dias.length * 100); }
+  const totalDiasPlano = CAL ? CAL.dias.length : 120;
+
+  // ── Questões: Tracker + banco (Hoje, Banco e Simulados gravam em oab_bq_respostas)
+  const q = (() => {
+    const t = getTotaisQuestoes();
+    let r = {}; try { r = JSON.parse(localStorage.getItem('oab_bq_respostas')) || {}; } catch (e) {}
+    const ids = Object.keys(r), ok = ids.filter(k => r[k].ultima_correta).length;
+    const total = t.total + ids.length, acertos = t.acertos + ok;
+    return { total, acertos, pct: total ? Math.round(acertos / total * 100) : 0 };
+  })();
 
   // ── Streak
   const streakEl = document.getElementById('streak-count');
@@ -661,7 +681,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('hero-streak').innerHTML    = `${p.streak||0}<small> ${(p.streak||0) === 1 ? 'dia' : 'dias'}</small>`;
   document.getElementById('hero-streak-sub').textContent = p.streak >= 7 ? `recorde ✨ ${p.streak} dias` : p.streak > 0 ? 'continue assim!' : 'comece a estudar!';
   document.getElementById('hero-progresso').innerHTML = `${stats.pct}<small>%</small>`;
-  document.getElementById('hero-progresso-sub').textContent = `${stats.concluidos} de 120 dias do plano`;
+  document.getElementById('hero-progresso-sub').textContent = `${stats.concluidos} de ${totalDiasPlano} dias do plano`;
 
   // ── Matéria favorita (maior score: acertos × log(total+1))
   const qTodas = getTodasQuestoes();
@@ -714,14 +734,11 @@ document.addEventListener('DOMContentLoaded', () => {
       d.setDate(d.getDate() - i);
       const ds = dataLocalDe(d);
       const dayLabel = d.getDate();
-      const entry = Object.entries(p.dias || {}).find(([,dd]) => dd.data_conclusao === ds);
-      let horas = 0;
-      if (entry) {
-        const dados = getDadosDia(parseInt(entry[0]));
-        if (dados) horas = dados.materias.reduce((s,m) => s + (parseFloat(m.horas)||0), 0);
-      }
+      const c = CK[ds] || {};
+      const itens = Object.keys(c).filter(k => k !== 'feito' && c[k]).length;
+      const horas = c.feito ? maxH : itens ? maxH / 2 : 0;
       const pct = horas > 0 ? Math.min(100, Math.round((horas / maxH) * 100)) : 0;
-      html += `<div class="line-day" title="${ds}: ${horas>0?horas+'h':'não estudado'}">
+      html += `<div class="line-day" title="${ds}: ${c.feito ? 'dia estudado' : itens ? itens + (itens === 1 ? ' item' : ' itens') + ' do checklist' : 'não estudado'}">
         ${horas > 0 ? `<div class="line-bar" style="height:${pct}%"></div>` : `<div style="width:60%;height:4px;background:var(--line-soft);border-radius:2px;margin-bottom:1px"></div>`}
         <div class="lbl">${dayLabel}</div>
       </div>`;
@@ -736,7 +753,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (q.total > 0) {
     if (donutPct) donutPct.textContent = q.pct + '%';
     if (donutCircle) donutCircle.style.background = `conic-gradient(var(--rose-deep) 0% ${q.pct}%, var(--bg-soft) ${q.pct}% 100%)`;
-    if (donutSub) donutSub.textContent = `${q.total} questão${q.total!==1?'es':''} resolvida${q.total!==1?'s':''}`;
+    if (donutSub) donutSub.textContent = `${q.total} ${q.total!==1?'questões resolvidas':'questão resolvida'}`;
   } else {
     if (donutPct) donutPct.textContent = '—';
     if (donutSub) donutSub.textContent = 'nenhuma questão registrada';
