@@ -319,8 +319,9 @@ salvo; a sessão nova é a rotina do dia e aparece como cartão no topo do Hoje.
   Questões sorteadas do dia em `oab_ativo_dia` (só do aparelho); quantidade por tópico em
   `oab_ativo_questoes_por_topico` (padrão 10).
 - **Páginas:** `hoje.html` (abas Conteúdo · Flashcards · Questões · Checklist · Videoaulas), `calendario.html`
-  (escolha de Julia, 11/10/2026: **mês grande**, um por vez com ‹ › e "Hoje"; cada dia mostra matéria + tema com a cor
-  `--mat-*-deep`, Simulado/Revisão/Leve/Prova como etiqueta; semanas inteiras fora do plano não aparecem; clicar abre o
+  (escolha de Julia, 11/10/2026: **mês grande**, um por vez com ‹ › e "Hoje"; grade num cartão só (linhas finas entre semanas),
+  número do dia em Fraunces, etiquetas pastel só com a matéria (`--mat-*` + `--mat-*-deep`; tema completo fica no painel),
+  hoje num círculo `--rose`, Simulado/Revisão/Leve/Prova como etiqueta, sem legenda; semanas inteiras fora do plano não aparecem; clicar abre o
   painel do dia ao lado com "Abrir este dia"; no celular os dias viram pontos coloridos), `revisar.html` (flashcards por matéria ou vencidos).
   `sessao.html` só redireciona.
 - **Menu (11/10/2026):** Início · Hoje · Calendário · **Estudar** (Flashcards, Biblioteca de revisão, Videoaulas,
