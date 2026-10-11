@@ -6,8 +6,9 @@
 .lp-b:hover{border-color:var(--rose)}
 .lp-b.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 .lp-corpo{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:1rem;align-items:start}
-.lp-paginas{display:flex;flex-direction:column;align-items:center;gap:12px;min-width:0}
-.lp-pag{position:relative;background:#fff;box-shadow:0 1px 4px rgba(44,36,32,.12);border-radius:4px;overflow:hidden;max-width:100%}
+.lp-paginas{display:flex;flex-direction:column;align-items:flex-start;gap:12px;min-width:0;overflow-x:auto}
+.lp-pag{position:relative;flex-shrink:0;margin:0 auto;background:#fff;box-shadow:0 1px 4px rgba(44,36,32,.12);border-radius:4px;overflow:hidden}
+.lp-zoom{display:inline-flex;align-items:center;min-width:3.2em;justify-content:center;font:500 .72rem Inter,sans-serif;color:var(--ink-faded);font-variant-numeric:tabular-nums}
 .lp-pag canvas{display:block}
 .lp-num{position:absolute;right:8px;bottom:6px;font:500 .62rem Inter,sans-serif;color:#a8988c;z-index:4;pointer-events:none}
 .lp-grifos{position:absolute;inset:0;z-index:1;pointer-events:none}
@@ -46,6 +47,12 @@
 .lp-pop-acoes .btn{font-size:.74rem;padding:.35rem .8rem}
 .lp-caixa .lp-corpo{max-height:min(78vh,1000px);overflow:auto;overscroll-behavior:contain;border-radius:var(--radius);background:var(--bg-soft,var(--bg));padding:12px}
 .lp-caixa .lp-lista{top:0;max-height:calc(min(78vh,1000px) - 24px)}
+@media (max-width:640px){
+  .lp.lp-caixa .lp-corpo{padding:0;background:none;border-radius:0}
+  .lp-rola{padding:.4rem .3rem}
+  .lp-b{padding:.5rem .8rem;font-size:.8rem}
+  .ss-bloco:has(.lp-caixa){margin-left:calc(6px - var(--gutter,1.5rem));margin-right:calc(6px - var(--gutter,1.5rem));padding-left:.5rem;padding-right:.5rem}
+}
 @media (max-width:900px){
   .lp-corpo{grid-template-columns:1fr}
   .lp-caixa .lp-corpo{max-height:72vh;padding:8px}
