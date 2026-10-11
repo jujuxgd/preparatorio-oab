@@ -326,6 +326,14 @@ salvo; a sessão nova é a rotina do dia e aparece como cartão no topo do Hoje.
   Caderno legislativo, Materiais extras = `reta-final.html`) · **Treino** (`treino.html`: Rumo aos 40 em destaque,
   Banco, Simulado, Meus simulados, Caderno de erros, Tracker). O Painel de erros vive dentro de `erros.html`
   (bloco "Onde você mais erra", `#painel`). `desempenho.html`, `plano.html` e `painel-erros.html` só redirecionam.
+- **Início, Matérias, Estatísticas e Perfil (11/10/2026):** Julia prefere o **visual antigo** do Início — não redesenhar
+  páginas sem perguntar antes. Início, Matérias e Estatísticas mantêm o visual, mas os números vêm do `CAL_ATIVO`
+  (dia N de 91, dias marcados em "Estudei hoje", PDFs do VDE estudados = item `p<n>` do checklist ou dia marcado,
+  questões = `oab_bq_respostas` + Tracker). O Início ganhou os blocos Para revisar hoje, Próximos dias e Conteúdo do VDE.
+  O streak global (`script.js`, `.streak-pill .count`) conta os dias seguidos com `feito` em `oab_ativo_check_v1`.
+  Perfil é enxuto (cartão, humor, configurações); `perfil-ui.js` esconde Resumo, Conquistas, Insights e gráficos.
+- **Fluxo de entrega:** Julia pede merge a cada item terminado (PR + merge na `main` para aparecer no Vercel).
+
 ---
 
 ## 6. Design System
