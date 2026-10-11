@@ -193,8 +193,13 @@ Sala de prova. Três telas numa página: escolher, fazer e corrigir.
 Um documento por usuário em `backups/{uid}`; push por chave com merge. Regras:
 - Chaves só do aparelho (`SO_LOCAIS`: tema, `simulatedDate`, `oab_current_day`, login etc.)
   nunca vão à nuvem nem são aplicadas vindas dela.
-- O envio de segurança (trocar de aba/fechar) só roda se `oab_local_rev` local > nuvem e
-  nunca faz a revisão da nuvem retroceder.
+- **Por chave (desde 11/10/2026):** cada chave gravada leva o horário em que mudou (`oab_sync_t`
+  local, só do aparelho; campo `t` do documento na nuvem). Ao receber a nuvem vale a chave mais nova,
+  uma a uma; `oab_fc_estado_v1`, `oab_bq_respostas` e `oab_ativo_check_v1` são **mesclados item a item**
+  (`MESCLAR`). Antes valia o documento do aparelho com `oab_local_rev` maior — uma gravação no PC antes de
+  ler a nuvem fazia ele ignorar e depois sobrescrever os flashcards feitos no celular.
+- O envio de segurança (trocar de aba/fechar) só manda as chaves com horário local mais novo que o da
+  nuvem, e só depois do primeiro snapshot. Chaves antigas sem horário seguem a regra da revisão.
 - Todo código que grava no `localStorage` deve carimbar `oab_local_rev` e chamar
   `_syncOAB.notificarAlteracaoLocal(chave)`.
 - Aviso discreto (pílula) só quando há falha, falta de conexão ou dados > 800 KB
