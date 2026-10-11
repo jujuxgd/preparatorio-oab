@@ -1127,7 +1127,7 @@ const HL_COLORS = [
   { id: 'pink',   label: 'Rosa',    bg: '#fce7f3' },
   { id: 'purple', label: 'Roxo',    bg: '#ede9fe' },
 ];
-let _hlPendingText = '';
+let _hlPendingText = null;
 
 function _hlKey(id)   { return 'cl_hl_' + id; }
 function _hlLoad(id)  { try { return JSON.parse(localStorage.getItem(_hlKey(id)) || '[]'); } catch { return []; } }
@@ -1140,70 +1140,82 @@ function _hlSave(id, list) {
   }
 }
 
-function _hlMarkInRoot(root, text, colorId) {
-  if (!text || text.length < 1) return;
-  const lq = text.toLowerCase();
+// O texto da matéria é tratado como uma sequência só (todos os nós de texto do root em ordem),
+// para que um grifo possa atravessar o número do artigo, negritos e grifos anteriores.
+// Cada grifo guarda o texto e qual ocorrência dele foi selecionada (k); grifos antigos sem k
+// continuam marcando todas as ocorrências, como antes.
+function _hlIndice(root) {
   const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
-  const nodes = [];
-  let n;
-  while ((n = walker.nextNode())) {
-    if (n.parentElement && n.parentElement.tagName === 'MARK') continue;
-    nodes.push(n);
-  }
-  nodes.forEach(node => {
-    const txt = node.textContent;
-    const lower = txt.toLowerCase();
-    if (!lower.includes(lq)) return;
-    const parts = [];
-    let offset = 0, idx;
-    while ((idx = lower.indexOf(lq, offset)) !== -1) {
-      if (idx > offset) parts.push(document.createTextNode(txt.slice(offset, idx)));
-      const mark = document.createElement('mark');
-      mark.className = 'cl-user-hl';
-      mark.dataset.color = colorId;
-      mark.dataset.hltext = text;
-      mark.textContent = txt.slice(idx, idx + text.length);
-      mark.title = 'Clique para remover grifo';
-      mark.addEventListener('click', e => { e.stopPropagation(); _hlRemoveOne(text, colorId); });
-      parts.push(mark);
-      offset = idx + text.length;
-    }
-    if (parts.length) {
-      if (offset < txt.length) parts.push(document.createTextNode(txt.slice(offset)));
-      node.replaceWith(...parts);
-    }
+  const nos = []; let total = '', n;
+  while ((n = walker.nextNode())) { nos.push({ no: n, ini: total.length }); total += n.nodeValue; }
+  return { nos, total };
+}
+function _hlOcorrencias(total, text) {
+  const out = [], lt = total.toLowerCase(), lq = text.toLowerCase();
+  let i = lt.indexOf(lq);
+  while (i !== -1) { out.push(i); i = lt.indexOf(lq, i + lq.length); }
+  return out;
+}
+function _hlEnvolver(idx, ini, fim, colorId, hlid, text) {
+  idx.nos.forEach(({ no, ini: a }) => {
+    const b = a + no.nodeValue.length;
+    if (b <= ini || a >= fim || !no.parentNode) return;
+    let alvo = no;
+    const s = Math.max(ini, a) - a, e = Math.min(fim, b) - a;
+    if (e < alvo.nodeValue.length) alvo.splitText(e);
+    if (s > 0) alvo = alvo.splitText(s);
+    if (!alvo.nodeValue.trim()) return;
+    const mark = document.createElement('mark');
+    mark.className = 'cl-user-hl';
+    mark.dataset.color = colorId; mark.dataset.hlid = hlid; mark.dataset.hltext = text;
+    mark.title = 'Clique para remover grifo';
+    alvo.parentNode.insertBefore(mark, alvo);
+    mark.appendChild(alvo);
   });
+}
+function _hlMarkInRoot(root, h) {
+  if (!h || !h.text) return;
+  const idx = _hlIndice(root), oc = _hlOcorrencias(idx.total, h.text);
+  if (!oc.length) return;
+  const alvos = typeof h.k === 'number' ? [oc[h.k] !== undefined ? oc[h.k] : oc[0]] : oc;
+  // de trás para frente: dividir um nó não muda as posições dos anteriores
+  alvos.slice().reverse().forEach(ini => _hlEnvolver(_hlIndice(root), ini, ini + h.text.length, h.colorId, h.id || h.text, h.text));
 }
 
 function _hlRestoreToRoot(root, matId) {
-  _hlLoad(matId).forEach(({ text, colorId }) => _hlMarkInRoot(root, text, colorId));
+  _hlLoad(matId).forEach(h => _hlMarkInRoot(root, h));
 }
 
-// Marca sempre nos dois roots (corpo normal + painel de foco), para que o
-// grifo apareça imediatamente em qualquer um dos dois, independentemente
-// de qual estava visível quando foi criado.
-function _hlAdd(text, colorId) {
+function _hlAdd(sel, colorId) {
   const list = _hlLoad(activeId);
-  if (!list.find(h => h.text === text && h.colorId === colorId)) {
-    list.push({ text, colorId });
-    _hlSave(activeId, list);
-  }
+  const h = { id: Date.now().toString(36) + Math.random().toString(36).slice(2, 5), text: sel.text, k: sel.k, colorId };
+  list.push(h);
+  _hlSave(activeId, list);
   [document.getElementById('cl-body'), document.getElementById('cl-focus-body')].forEach(root => {
-    if (root) _hlMarkInRoot(root, text, colorId);
+    if (!root) return;
+    _hlMarkInRoot(root, root === sel.root ? h : { id: h.id, text: h.text, k: 0, colorId });
   });
 }
 
-function _hlRemoveOne(text, colorId) {
+function _hlRemoveOne(hlid) {
   [document.getElementById('cl-body'), document.getElementById('cl-focus-body')].forEach(root => {
     if (!root) return;
     root.querySelectorAll('mark.cl-user-hl').forEach(m => {
-      if (m.dataset.color === colorId && m.dataset.hltext === text)
-        m.replaceWith(document.createTextNode(m.textContent));
+      if (m.dataset.hlid === hlid) m.replaceWith(...m.childNodes);
     });
     root.normalize();
   });
-  _hlSave(activeId, _hlLoad(activeId).filter(h => !(h.text === text && h.colorId === colorId)));
+  _hlSave(activeId, _hlLoad(activeId).filter(h => (h.id || h.text) !== hlid));
 }
+
+document.addEventListener('click', e => {
+  const m = e.target.closest && e.target.closest('mark.cl-user-hl');
+  if (!m) return;
+  const s = window.getSelection();
+  if (s && !s.isCollapsed) return;
+  e.stopPropagation();
+  _hlRemoveOne(m.dataset.hlid);
+}, true);
 
 function _hlBuildToolbar() {
   if (document.getElementById('cl-hl-toolbar')) return;
@@ -1216,7 +1228,7 @@ function _hlBuildToolbar() {
     btn.title = c.label;
     btn.addEventListener('mousedown', e => {
       e.preventDefault(); e.stopPropagation();
-      if (_hlPendingText) { _hlAdd(_hlPendingText, c.id); _hlPendingText = ''; }
+      if (_hlPendingText) { _hlAdd(_hlPendingText, c.id); _hlPendingText = null; }
       tb.classList.remove('visible');
       window.getSelection()?.removeAllRanges();
     });
@@ -1225,22 +1237,51 @@ function _hlBuildToolbar() {
   const sep = document.createElement('div'); sep.className = 'cl-hl-vsep'; tb.appendChild(sep);
   const er = document.createElement('button');
   er.className = 'cl-hl-erase'; er.title = 'Cancelar'; er.textContent = '✕';
-  er.addEventListener('mousedown', e => { e.preventDefault(); tb.classList.remove('visible'); _hlPendingText = ''; });
+  er.addEventListener('mousedown', e => { e.preventDefault(); tb.classList.remove('visible'); _hlPendingText = null; });
   tb.appendChild(er);
   document.body.appendChild(tb);
+}
+
+function _hlSelecao() {
+  const sel = window.getSelection();
+  if (!sel || sel.isCollapsed || !sel.rangeCount) return null;
+  const range = sel.getRangeAt(0);
+  const root = [document.getElementById('cl-body'), document.getElementById('cl-focus-body')]
+    .find(r => r && r.contains(range.commonAncestorContainer));
+  if (!root) return null;
+  const idx = _hlIndice(root);
+  function pos(no, off) {
+    if (no.nodeType !== 3) {
+      const filho = no.childNodes[off];
+      const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT); let t, ult = null;
+      while ((t = w.nextNode())) {
+        if (filho && (filho === t || filho.contains(t) || (filho.compareDocumentPosition(t) & Node.DOCUMENT_POSITION_FOLLOWING))) return idx.nos.find(x => x.no === t).ini;
+        ult = t;
+      }
+      return ult ? idx.nos.find(x => x.no === ult).ini + ult.nodeValue.length : 0;
+    }
+    const x = idx.nos.find(y => y.no === no);
+    return x ? x.ini + off : -1;
+  }
+  let ini = pos(range.startContainer, range.startOffset), fim = pos(range.endContainer, range.endOffset);
+  if (ini < 0 || fim <= ini) return null;
+  while (ini < fim && /\s/.test(idx.total[ini])) ini++;
+  while (fim > ini && /\s/.test(idx.total[fim - 1])) fim--;
+  const text = idx.total.slice(ini, fim);
+  if (text.length < 2 || text.length > 600) return null;
+  const k = _hlOcorrencias(idx.total, text).filter(o => o < ini).length;
+  return { text, k, root };
 }
 
 function _hlOnMouseUp(e) {
   const tb = document.getElementById('cl-hl-toolbar');
   if (!tb || tb.contains(e.target)) return;
   setTimeout(() => {
-    const sel = window.getSelection();
-    if (!sel || sel.isCollapsed) { tb.classList.remove('visible'); return; }
-    const text = sel.toString().trim();
-    if (text.length < 2 || text.length > 400) { tb.classList.remove('visible'); return; }
-    _hlPendingText = text;
+    const info = _hlSelecao();
+    if (!info) { tb.classList.remove('visible'); return; }
+    _hlPendingText = info;
     // position: fixed → coordenadas são relativas ao viewport (sem scrollY)
-    const rect = sel.getRangeAt(0).getBoundingClientRect();
+    const rect = window.getSelection().getRangeAt(0).getBoundingClientRect();
     let left = rect.left + rect.width / 2 - 80;
     let top  = rect.top - 44;
     left = Math.max(8, Math.min(left, window.innerWidth - 172));
@@ -1253,7 +1294,7 @@ function _hlOnMouseUp(e) {
 
 document.addEventListener('click', e => {
   const tb = document.getElementById('cl-hl-toolbar');
-  if (tb && !tb.contains(e.target)) { tb.classList.remove('visible'); _hlPendingText = ''; }
+  if (tb && !tb.contains(e.target) && !(window.getSelection() && !window.getSelection().isCollapsed)) { tb.classList.remove('visible'); _hlPendingText = null; }
 });
 
 // ── Init ──────────────────────────────────────
