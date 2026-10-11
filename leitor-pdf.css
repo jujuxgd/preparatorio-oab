@@ -51,7 +51,7 @@
   .lp.lp-caixa .lp-corpo{padding:0;background:none;border-radius:0}
   .lp-rola{padding:.4rem .3rem}
   .lp-b{padding:.5rem .8rem;font-size:.8rem}
-  .ss-bloco:has(.lp-caixa){margin-left:calc(6px - var(--gutter,1.5rem));margin-right:calc(6px - var(--gutter,1.5rem));padding-left:.5rem;padding-right:.5rem}
+  .ss-bloco:has(.lp){margin-left:calc(2px - var(--gutter,1.5rem));margin-right:calc(2px - var(--gutter,1.5rem));padding-left:.25rem;padding-right:.25rem}
 }
 @media (max-width:900px){
   .lp-corpo{grid-template-columns:1fr}

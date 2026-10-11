@@ -144,14 +144,13 @@
       '<button type="button" class="lp-b" data-a="zoom-" aria-label="Diminuir">−</button><span class="lp-zoom"></span><button type="button" class="lp-b" data-a="zoom+" aria-label="Aumentar">+</button>' +
       '<a class="lp-b" href="https://drive.google.com/file/d/' + this.arq + '/view" target="_blank" rel="noopener">Drive ↗</a></span></div>' +
       '<div class="lp-corpo"><div class="lp-paginas"></div><aside class="lp-lista"></aside></div>';
-    if (this.opts.caixa) { raiz.classList.add('lp-caixa'); this.opts.rolagem = raiz.querySelector('.lp-corpo'); }
-    // zoom fica salvo no aparelho (no celular costuma ser maior que no computador)
-    var zoomSalvo = parseFloat(localStorage.getItem('oab_lp_zoom2'));
-    this.zoom = zoomSalvo >= 0.6 && zoomSalvo <= 3 ? zoomSalvo : (window.innerWidth <= 640 ? 1.6 : 1);
+    if (this.opts.caixa && window.innerWidth > 640) { raiz.classList.add('lp-caixa'); this.opts.rolagem = raiz.querySelector('.lp-corpo'); }
+    var zoomSalvo = parseFloat(localStorage.getItem('oab_lp_zoom3'));
+    this.zoom = zoomSalvo >= 0.6 && zoomSalvo <= 3 ? zoomSalvo : 1;
     function mostrarZoom() { raiz.querySelector('.lp-zoom').textContent = Math.round(self.zoom * 100) + '%'; }
     function mudarZoom(z) {
       self.zoom = Math.round(Math.min(3, Math.max(0.6, z)) * 100) / 100;
-      try { localStorage.setItem('oab_lp_zoom2', String(self.zoom)); } catch (e) {}
+      try { localStorage.setItem('oab_lp_zoom3', String(self.zoom)); } catch (e) {}
       mostrarZoom(); self.renderizar();
     }
     mostrarZoom();
