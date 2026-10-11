@@ -616,6 +616,28 @@ main { padding: 2rem 2.5rem 2.25rem; }
   color: var(--ink-soft);
   margin-bottom: 0.8rem;
 }
+/* blocos vindos do Início novo: revisões do dia, próximos dias e PDFs do VDE */
+.in-fatos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.9rem;margin-bottom:2rem}
+.in-fato{display:flex;align-items:baseline;justify-content:space-between;gap:.8rem;background:var(--paper);border:1px solid var(--line-soft);border-radius:var(--radius-lg);padding:1.1rem 1.3rem;text-decoration:none;color:var(--ink)}
+.in-fato:hover{border-color:var(--rose)}
+.in-fato span{font-size:.88rem;color:var(--ink-soft);line-height:1.35}
+.in-fato small{display:block;font-size:.74rem;color:var(--ink-faded)}
+.in-fato b{font-family:'Fraunces',serif;font-weight:400;font-size:1.8rem;line-height:1;color:var(--ink)}
+.in-prox{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.9rem;margin-bottom:2rem}
+.in-dia{display:block;background:var(--paper);border:1px solid var(--line-soft);border-radius:var(--radius-lg);padding:1rem 1.2rem;text-decoration:none;color:var(--ink)}
+.in-dia:hover{border-color:var(--rose)}
+.in-dia em{display:block;font-style:normal;font-size:.78rem;color:var(--ink-faded);margin-bottom:.4rem}
+.in-dia p{margin:0;font-size:.85rem;color:var(--ink-soft);line-height:1.4}
+.in-tema{border-left:3px solid var(--cd,var(--rose));padding-left:.6rem;margin-top:.35rem}
+.in-tema span{display:block;font-size:.72rem;font-weight:600;color:var(--cd,var(--rose-deep))}
+.in-tema strong{display:block;font-weight:400;font-size:.86rem;line-height:1.35;color:var(--ink)}
+.in-prog{background:var(--paper);border:1px solid var(--line-soft);border-radius:var(--radius-lg);padding:1.2rem 1.4rem;margin-bottom:2rem}
+.in-prog p{margin:0 0 .7rem;font-size:.9rem;color:var(--ink-soft);line-height:1.5}
+.in-prog p b{color:var(--ink);font-weight:600}
+.in-barra{display:flex;gap:2px;height:14px}
+.in-barra i{flex:1;border-radius:2px;background:var(--line)}
+.in-barra i.ok{background:var(--cd)}
+@media (max-width:900px){ .in-fatos,.in-prox{grid-template-columns:1fr} }
 </style>
 <link rel="stylesheet" href="topnav.css?v=1791163406"><script src="topnav.js?v=1791163406"></script><link rel="stylesheet" href="home.css?v=1791163406"></head>
 <body>
@@ -808,6 +830,18 @@ main { padding: 2rem 2.5rem 2.25rem; }
 
       </div>
     </div><!-- /bento-grid foco de hoje -->
+
+    <div class="section-label">Para revisar hoje</div>
+    <div class="in-fatos" id="in-fatos"></div>
+
+    <div class="section-label">Próximos dias</div>
+    <div class="in-prox" id="in-prox"></div>
+
+    <div class="section-label">Conteúdo do VDE</div>
+    <section class="in-prog">
+      <p id="in-prog-txt"></p>
+      <div class="in-barra" id="in-barra" role="img"></div>
+    </section>
 
     <div class="section-label">Seu progresso</div>
     <div class="bento-grid progress-row">
@@ -1081,6 +1115,49 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       revisaoContainer.innerHTML = `<div style="font-size:0.82rem;color:var(--ink-faded);font-style:italic;padding:0.5rem 0">Nenhum dia concluído ainda.</div>`;
     }
+  }
+
+  // Blocos do Início novo
+  const COR = {
+    'Direito Constitucional': 'const', 'Direito Administrativo': 'const', 'Direito Eleitoral': 'const',
+    'Direito Civil': 'civil', 'Direito Processual Civil': 'civil', 'Direito do Consumidor': 'civil',
+    'Direito Penal': 'penal', 'Direito Processual Penal': 'penal',
+    'Direito do Trabalho': 'trab', 'Direito Processual do Trabalho': 'trab', 'Direito Previdenciário': 'trab',
+    'Direito Tributário': 'tribut', 'Direito Empresarial': 'tribut',
+    'Ética Profissional': 'etica', 'ECA': 'etica'
+  };
+  const cor = d => '--cd:var(--mat-' + (COR[d] || 'const') + '-deep)';
+  const esc = S ? S.esc : (x => x);
+  const fato = (href, n, txt, sub) => `<a class="in-fato" href="${href}"><span>${txt}${sub ? '<small>' + sub + '</small>' : ''}</span><b>${n}</b></a>`;
+  const errosHoje = typeof erros_total_devidas === 'function' ? erros_total_devidas() : 0;
+  const fatos = venc => {
+    const el = document.getElementById('in-fatos'); if (!el) return;
+    el.innerHTML = fato('revisar.html', venc == null ? '…' : venc, 'Flashcards para revisar', 'vencidos hoje') +
+      fato('erros.html', errosHoje, 'Erros para refazer', 'Caderno de erros') +
+      fato('hoje.html?aba=checklist', S ? S.progressoChecklist().feitos + '/' + S.progressoChecklist().total : '—', 'Checklist de hoje', S && S.feito() ? 'dia marcado como estudado ✓' : 'itens feitos');
+  };
+  fatos(null);
+  if (window.ATIVO) ATIVO.carregarCartoes().then(() => fatos(ATIVO.vencidos().length));
+
+  const prox = document.getElementById('in-prox');
+  if (prox && CAL) {
+    const i = CAL.dias.indexOf(DIA);
+    prox.innerHTML = CAL.dias.slice(i + 1, i + 4).map(x => {
+      const dl = S.dataLonga(x.d);
+      return `<a class="in-dia" href="hoje.html?data=${x.d}"><em>${esc(dl.charAt(0).toUpperCase() + dl.slice(1))}</em>` +
+        (x.top && x.tipo !== 'simulado' ? temasDe(x).map(t => `<div class="in-tema" style="${cor(t.d)}"><span>${esc(curto(t.d))}</span><strong>${esc(t.s)}</strong></div>`).join('') : `<p>${esc(tipoTxt(x))}</p>`) + '</a>';
+    }).join('');
+  }
+
+  const ulist = Object.keys(unidades).sort((a, b) => a - b).map(n => unidades[n]);
+  const okN = ulist.filter(u => u.ok).length;
+  const fim = window.PLANO ? PLANO.fimDoConteudo() : null;
+  const progTxt = document.getElementById('in-prog-txt');
+  if (progTxt) progTxt.innerHTML = `<b>${okN} de ${ulist.length}</b> PDFs do dia estudados.` + (fim ? ` O último está previsto para ${fim.slice(8, 10)}/${fim.slice(5, 7)}; depois vem a revisão final até a prova.` : '');
+  const barra = document.getElementById('in-barra');
+  if (barra) {
+    barra.setAttribute('aria-label', `${okN} de ${ulist.length} PDFs estudados`);
+    barra.innerHTML = ulist.map(u => `<i class="${u.ok ? 'ok' : ''}" style="${cor(u.d)}"></i>`).join('');
   }
 
   // Mood tracker
