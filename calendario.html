@@ -23,69 +23,42 @@
 <div class="app">
   <main>
     <style>
-    .ca{--fita-h:56px}
     .ca-sub{margin:.5rem 0 0;color:var(--ink-soft);font-size:.95rem;max-width:60ch;line-height:1.5}
     .ca-sub b{font-weight:600;color:var(--rose-deep)}
-
-    /* fita: o plano inteiro num olhar */
-    .ca-fita{position:relative;margin:0 0 2.2rem;padding:1.1rem 1.1rem .7rem;background:var(--paper);border:1px solid var(--line-soft);border-radius:var(--radius-lg)}
-    .ca-barras{display:flex;align-items:flex-end;gap:2px;height:var(--fita-h)}
-    .ca-bar{flex:1;min-width:2px;height:62%;border:0;padding:0;cursor:pointer;border-radius:2px;background:var(--line);display:flex;flex-direction:column;overflow:hidden;transition:height .2s}
-    .ca-bar i{flex:1;display:block}
-    .ca-bar.sim{height:88%;background:var(--ink)}
-    .ca-bar.rev{height:40%;background:repeating-linear-gradient(135deg,var(--rose-soft) 0 3px,var(--paper) 3px 6px);outline:1px solid var(--rose-soft)}
-    .ca-bar.leve{height:26%;background:var(--line-soft)}
-    .ca-bar.prova{height:100%;background:var(--rose-deep)}
-    .ca-bar.fut{opacity:.72}
-    .ca-bar.sel{height:100%;opacity:1;box-shadow:0 0 0 2px var(--paper),0 0 0 3.5px var(--ink)}
-    .ca-bar:hover{height:100%;opacity:1}
-    .ca-bar:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
-    .ca-agulha{position:absolute;width:2px;background:var(--rose-deep);border-radius:2px;pointer-events:none}
-    .ca-agulha::after{content:'hoje';position:absolute;top:-1.2rem;left:50%;transform:translateX(-50%);font:600 .66rem Inter,sans-serif;color:var(--rose-deep)}
-    .ca-marcos{display:flex;justify-content:space-between;margin-top:.55rem;font-size:.74rem;color:var(--ink-faded)}
-    .ca-leg{display:flex;flex-wrap:wrap;gap:.3rem .9rem;margin-top:.8rem;font-size:.74rem;color:var(--ink-soft)}
+    .ca-wrap{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:1.4rem;align-items:start;margin-top:1.4rem}
+    .ca-mesbox{background:var(--paper);border:1px solid var(--line-soft);border-radius:var(--radius-lg);padding:1.3rem 1.4rem 1.1rem}
+    .ca-mesnav{display:flex;align-items:center;gap:.6rem;margin-bottom:1rem}
+    .ca-mesnav h2{font-family:'Fraunces',serif;font-weight:500;font-size:1.35rem;margin:0;color:var(--ink);min-width:9.5em;text-align:center}
+    .ca-mesnav button{border:1px solid var(--line);background:var(--paper);color:var(--ink-soft);border-radius:999px;height:34px;min-width:34px;padding:0 .8rem;font:500 .82rem Inter,sans-serif;cursor:pointer}
+    .ca-mesnav button:hover:not(:disabled){border-color:var(--rose);color:var(--ink)}
+    .ca-mesnav button:disabled{opacity:.35;cursor:default}
+    .ca-mesnav .ca-hojebtn{margin-left:auto}
+    .ca-grade{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+    .ca-sem{font:600 .64rem Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faded);text-align:center;padding-bottom:.2rem}
+    .ca-c{min-height:104px;border:1px solid var(--line-soft);background:var(--paper);border-radius:12px;padding:.45rem .5rem .5rem;text-align:left;font:inherit;color:var(--ink);cursor:pointer;display:flex;flex-direction:column;gap:.3rem;overflow:hidden;transition:border-color .15s,box-shadow .15s}
+    .ca-c:hover{border-color:var(--rose)}
+    .ca-c:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+    .ca-c.vazio{background:none;border-color:transparent;cursor:default}
+    .ca-c.fora{background:none;border-color:transparent;cursor:default;opacity:.35;min-height:0}
+    .ca-n{display:flex;align-items:center;justify-content:space-between;font:600 .8rem Inter,sans-serif;color:var(--ink-soft)}
+    .ca-n .ok{font-size:.7rem;color:#4F7A5C}
+    .ca-c.hoje{border:1.5px solid var(--rose-deep);box-shadow:0 0 0 3px var(--rose-soft)}
+    .ca-c.hoje .ca-n b{background:var(--rose-deep);color:var(--paper);border-radius:999px;padding:0 .45rem}
+    .ca-c.sel{border:1.5px solid var(--ink)}
+    .ca-c.passado:not(.feito){opacity:.6}
+    .ca-t{border-left:3px solid var(--cd,var(--line));padding-left:.35rem;font-size:.7rem;line-height:1.25;color:var(--ink-soft);min-width:0}
+    .ca-t .tx{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+    .ca-t strong{display:block;font-size:.66rem;font-weight:600;color:var(--cd,var(--ink-soft));white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .ca-tag{align-self:flex-start;font:600 .62rem Inter,sans-serif;letter-spacing:.06em;text-transform:uppercase;border-radius:999px;padding:.18rem .5rem;background:var(--rose-soft);color:var(--rose-deep)}
+    .ca-tag.sim{background:var(--ink);color:var(--paper)}
+    .ca-tag.prova{background:var(--rose-deep);color:var(--paper)}
+    .ca-tag.leve{background:var(--bg-soft,var(--bg));color:var(--ink-faded)}
+    .ca-leg{display:flex;flex-wrap:wrap;gap:.3rem 1rem;margin-top:1rem;font-size:.74rem;color:var(--ink-soft)}
     .ca-leg span{display:inline-flex;align-items:center;gap:.35rem}
     .ca-leg i{width:10px;height:10px;border-radius:3px;display:inline-block;background:var(--c)}
-
-    .ca-wrap{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:2rem;align-items:start}
-    .ca-h2{font-family:'Fraunces',serif;font-weight:400;font-size:1.45rem;color:var(--ink);margin:0 0 .9rem}
-    .ca-h2 small{font:400 .82rem Inter,sans-serif;color:var(--ink-faded);margin-left:.6rem}
-
-    /* esta semana */
-    .ca-semana{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:.55rem;margin-bottom:2.4rem}
-    .ca-dia{border:0;font:inherit;text-align:left;cursor:pointer;background:var(--paper);border-radius:var(--radius);padding:.75rem .7rem .8rem;min-height:170px;display:flex;flex-direction:column;gap:.45rem;box-shadow:inset 0 0 0 1px var(--line-soft);color:var(--ink)}
-    .ca-dia:hover{box-shadow:inset 0 0 0 1.5px var(--rose)}
-    .ca-dia.hoje{box-shadow:inset 0 0 0 2px var(--rose-deep)}
-    .ca-dia.sel{box-shadow:inset 0 0 0 2px var(--ink)}
-    .ca-dia.passado{color:var(--ink-soft)}
-    .ca-dn{display:flex;align-items:baseline;justify-content:space-between}
-    .ca-dn b{font-family:'Fraunces',serif;font-weight:400;font-size:1.9rem;line-height:1}
-    .ca-dn span{font-size:.74rem;color:var(--ink-faded)}
-    .ca-tema{font-size:.76rem;line-height:1.35;border-left:3px solid var(--cd,var(--line));padding-left:.45rem}
-    .ca-tema strong{display:block;font-weight:600;font-size:.72rem;color:var(--cd,var(--ink-soft))}
-    .ca-tipo{font-size:.78rem;color:var(--ink-soft);line-height:1.4}
-    .ca-ok{margin-top:auto;font-size:.7rem;color:#4F7A5C}
-
-    /* meses */
-    .ca-meses{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1.4rem}
-    .ca-mes h3{font-family:'Fraunces',serif;font-weight:400;font-size:1.1rem;margin:0 0 .5rem;color:var(--ink)}
-    .ca-grade{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
-    .ca-sem{font-size:.64rem;color:var(--ink-faded);text-align:center;padding-bottom:.15rem}
-    .ca-c{aspect-ratio:1;border:0;padding:0;font:500 .72rem Inter,sans-serif;color:var(--ink-soft);background:var(--bg-soft);border-radius:6px;cursor:pointer;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
-    .ca-c.vazio{background:none;cursor:default}
-    .ca-c .pts{display:flex;gap:2px}
-    .ca-c .pts i{width:5px;height:5px;border-radius:50%;background:var(--c)}
-    .ca-c.prova{background:var(--rose-deep);color:#fff}
-    .ca-c.feito{background:var(--paper);box-shadow:inset 0 0 0 1.5px #6E9B79}
-    .ca-c.hoje{box-shadow:inset 0 0 0 2px var(--rose-deep)}
-    .ca-c.sel{box-shadow:inset 0 0 0 2px var(--ink)}
-    .ca-c.passado:not(.feito){opacity:.5}
-    .ca-c:focus-visible,.ca-dia:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
-
-    /* painel do dia */
     .ca-side{position:sticky;top:90px}
-    .ca-det{background:var(--paper);border-radius:var(--radius-lg);padding:1.3rem 1.3rem 1.2rem;box-shadow:inset 0 0 0 1px var(--line-soft)}
-    .ca-det .data{font-family:'Fraunces',serif;font-size:1.5rem;line-height:1.15;color:var(--ink);margin:0 0 .2rem}
+    .ca-det{background:var(--paper);border-radius:var(--radius-lg);padding:1.3rem 1.3rem 1.2rem;border:1px solid var(--line-soft)}
+    .ca-det .data{font-family:'Fraunces',serif;font-size:1.4rem;line-height:1.15;color:var(--ink);margin:0 0 .2rem}
     .ca-det .fase{font-size:.8rem;color:var(--ink-faded);margin:0 0 1rem}
     .ca-it{border-left:3px solid var(--cd,var(--rose));padding:.1rem 0 .1rem .75rem;margin-bottom:.85rem}
     .ca-it strong{display:block;font-size:.78rem;color:var(--cd,var(--rose-deep))}
@@ -93,19 +66,18 @@
     .ca-it small{display:block;font-size:.74rem;color:var(--ink-faded);margin-top:.15rem}
     .ca-det .btn{display:block;text-align:center;text-decoration:none;margin-top:.6rem}
     .ca-adi{font-size:.76rem;color:var(--rose-deep);margin:-.4rem 0 .9rem}
-
-    @media (max-width:1020px){.ca-wrap{grid-template-columns:1fr}.ca-side{position:static;order:-1}}
-    @media (max-width:760px){
-      .ca-semana{grid-template-columns:1fr;gap:.45rem}
-      .ca-dia{min-height:0;flex-direction:row;flex-wrap:wrap;align-items:flex-start;gap:.4rem .8rem;padding:.7rem .8rem}
-      .ca-dn{flex-direction:column;align-items:flex-start;min-width:46px}
-      .ca-dia>div:not(.ca-dn){flex:1;min-width:0}
-      .ca-ok{margin-top:0}
-        .ca{--fita-h:44px}
-      .ca-fita{padding:.9rem .7rem .6rem}
-      .ca-barras{gap:1px}
+    @media (max-width:1020px){.ca-wrap{grid-template-columns:1fr}.ca-side{position:static}}
+    @media (max-width:640px){
+      .ca-mesbox{padding:1rem .7rem}
+      .ca-grade{gap:4px}
+      .ca-c{min-height:54px;padding:.3rem;align-items:center}
+      .ca-n{justify-content:center}
+      .ca-n .ok{display:none}
+      .ca-t{border:0;padding:0;width:8px;height:8px;border-radius:50%;background:var(--cd);font-size:0}
+      .ca-t strong,.ca-t .tx{display:none}
+      .ca-tag{font-size:0;padding:0;width:8px;height:8px;align-self:center}
+      .ca-mesnav h2{font-size:1.1rem;min-width:0;flex:1}
     }
-    @media (prefers-reduced-motion:reduce){.ca-bar{transition:none}}
     </style>
     <div class="ca">
       <div class="topbar">
@@ -116,20 +88,17 @@
         </div>
       </div>
 
-      <section class="ca-fita" aria-label="O plano inteiro, um traço por dia">
-        <div class="ca-barras" id="ca-barras"></div>
-        <div class="ca-agulha" id="ca-agulha" hidden></div>
-        <div class="ca-marcos"><span>12 out</span><span>21 dez, revisão final</span><span>10 jan, prova</span></div>
-        <div class="ca-leg" id="ca-leg"></div>
-      </section>
-
-      <h2 class="ca-h2" id="ca-sem-tit">Esta semana</h2>
-      <div class="ca-semana" id="ca-semana"></div>
       <div class="ca-wrap">
-        <div>
-          <h2 class="ca-h2">Mês a mês</h2>
-          <div class="ca-meses" id="ca-meses"></div>
-        </div>
+        <section class="ca-mesbox" aria-label="Calendário do mês">
+          <div class="ca-mesnav">
+            <button type="button" id="ca-ant" aria-label="Mês anterior">‹</button>
+            <h2 id="ca-mestit"></h2>
+            <button type="button" id="ca-prox" aria-label="Próximo mês">›</button>
+            <button type="button" class="ca-hojebtn" id="ca-hojebtn">Hoje</button>
+          </div>
+          <div class="ca-grade" id="ca-grade"></div>
+          <div class="ca-leg" id="ca-leg"></div>
+        </section>
         <aside class="ca-side"><div class="ca-det" id="ca-det" aria-live="polite"></div></aside>
       </div>
     </div>
@@ -191,66 +160,41 @@
       (est ? est + (est === 1 ? ' dia marcado como estudado.' : ' dias marcados como estudados.') : '');
   }
 
-  function fita() {
-    var f = feitos();
-    document.getElementById('ca-barras').innerHTML = CAL.dias.map(function (x) {
-      var cls = 'ca-bar' + (x.d > HOJE ? ' fut' : '') + (x.d === sel ? ' sel' : ''), dentro = '';
-      if (x.top && !x.extra) dentro = temas(x).map(function (t) { return '<i style="background:var(--mat-' + (COR[t.d] || 'const') + '-deep)"></i>'; }).join('');
-      else if (x.tipo === 'simulado') cls += ' sim';
-      else if (x.tipo === 'prova') cls += ' prova';
-      else if (x.tipo === 'leve' || x.tipo === 'vespera') cls += ' leve';
-      else cls += ' rev';
-      if (x.top && x.tipo === 'simulado') cls += ' sim';
-      var rot = S.dataLonga(x.d) + ': ' + (x.top ? temas(x).map(function (t) { return S.curto(t.d); }).join(' e ') : tipoTxt(x)) + (f[x.d] && f[x.d].feito ? ' (estudado)' : '');
-      return '<button type="button" class="' + cls + '" data-d="' + x.d + '" title="' + esc(rot) + '" aria-label="' + esc(rot) + '">' + dentro + '</button>';
-    }).join('');
-    var ag = document.getElementById('ca-agulha'), b = document.querySelector('.ca-bar[data-d="' + HOJE + '"]');
-    var br = document.getElementById('ca-barras');
-    if (b) { ag.hidden = false; ag.style.left = (b.offsetLeft + b.offsetWidth / 2 - 1) + 'px'; ag.style.top = (br.offsetTop - 6) + 'px'; ag.style.height = (br.offsetHeight + 10) + 'px'; } else ag.hidden = true;
-    var usadas = [];
-    CAL.dias.forEach(function (x) { temas(x).forEach(function (t) { var c = COR[t.d]; if (c && usadas.indexOf(c) < 0) usadas.push(c); }); });
+  var MESES_CAL = []; CAL.dias.forEach(function (x) { var k = x.d.slice(0, 7); if (MESES_CAL.indexOf(k) < 0) MESES_CAL.push(k); });
+  var mesAt = sel.slice(0, 7);
+  function legenda() {
     var NOMES = { const: 'Constitucional, Administrativo', civil: 'Civil, Proc. Civil, Consumidor', penal: 'Penal, Proc. Penal', trab: 'Trabalho, Proc. Trabalho', tribut: 'Tributário, Empresarial', etica: 'Ética, ECA' };
     document.getElementById('ca-leg').innerHTML = Object.keys(NOMES).map(function (c) { return '<span style="--c:var(--mat-' + c + '-deep)"><i></i>' + NOMES[c] + '</span>'; }).join('') +
-      '<span style="--c:var(--ink)"><i></i>Simulado</span><span><i style="background:repeating-linear-gradient(135deg,var(--rose-soft) 0 2px,var(--paper) 2px 4px);outline:1px solid var(--rose-soft)"></i>Revisão</span>';
+      '<span style="--c:var(--ink)"><i></i>Simulado</span><span style="--c:var(--rose-soft)"><i></i>Revisão</span>';
   }
-
-  function semana() {
-    var f = feitos(), base = dt(sel), seg = new Date(base); seg.setDate(base.getDate() - ((base.getDay() + 6) % 7));
-    var dias = [];
-    for (var i = 0; i < 7; i++) { var d = new Date(seg); d.setDate(seg.getDate() + i); dias.push(S.partes ? (d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0')) : ''); }
-    var naSemana = dias.indexOf(HOJE) >= 0;
-    document.getElementById('ca-sem-tit').innerHTML = (naSemana ? 'Esta semana' : 'Semana de ' + dm(dias[0])) + '<small>' + dm(dias[0]) + ' a ' + dm(dias[6]) + '</small>';
-    document.getElementById('ca-semana').innerHTML = dias.map(function (iso) {
-      var x = POR[iso], p = dt(iso);
-      if (!x) return '<div class="ca-dia passado" style="cursor:default;box-shadow:none;background:none"><div class="ca-dn"><b>' + p.getDate() + '</b><span>' + SEM[p.getDay()] + '</span></div></div>';
-      var cls = 'ca-dia' + (iso === HOJE ? ' hoje' : iso < HOJE ? ' passado' : '') + (iso === sel ? ' sel' : '');
-      var corpo = x.top ? temas(x).map(function (t) { return '<div class="ca-tema" style="' + vars(t.d) + '"><strong>' + esc(S.curto(t.d)) + '</strong>' + esc(t.s) + '</div>'; }).join('') +
-        (x.tipo === 'simulado' ? '<div class="ca-tipo">' + esc(tipoTxt(x)) + '</div>' : '')
-        : '<div class="ca-tipo">' + esc(tipoTxt(x)) + '</div>';
-      return '<button type="button" class="' + cls + '" data-d="' + iso + '"><div class="ca-dn"><b>' + p.getDate() + '</b><span>' + SEM[p.getDay()] + (iso === HOJE ? ', hoje' : '') + '</span></div>' +
-        '<div>' + corpo + '</div>' + (f[iso] && f[iso].feito ? '<div class="ca-ok">Estudado ✓</div>' : '') + '</button>';
-    }).join('');
-  }
-
-  function meses() {
-    var f = feitos(), chaves = [];
-    CAL.dias.forEach(function (x) { var k = x.d.slice(0, 7); if (chaves.indexOf(k) < 0) chaves.push(k); });
-    document.getElementById('ca-meses').innerHTML = chaves.map(function (k) {
-      var a = +k.slice(0, 4), m = +k.slice(5, 7), ini = new Date(a, m - 1, 1), ult = new Date(a, m, 0).getDate(), h = '';
-      for (var i = 0; i < (ini.getDay() + 6) % 7; i++) h += '<span class="ca-c vazio"></span>';
-      for (var d = 1; d <= ult; d++) {
-        var iso = k + '-' + String(d).padStart(2, '0'), x = POR[iso];
-        if (!x) { h += '<span class="ca-c vazio" style="color:var(--line)">' + d + '</span>'; continue; }
-        var cls = 'ca-c' + (x.tipo === 'simulado' && !x.top ? ' sim' : '') + (x.tipo === 'prova' ? ' prova' : '') + (f[iso] && f[iso].feito ? ' feito' : '') +
-          (iso === HOJE ? ' hoje' : iso < HOJE ? ' passado' : '') + (iso === sel ? ' sel' : '');
-        var pts = x.top ? temas(x).slice(0, 3).map(function (t) { return '<i style="--c:var(--mat-' + (COR[t.d] || 'const') + '-deep)"></i>'; }).join('') : '';
-        if (x.tipo === 'simulado' || (x.sim && x.sim.modo === 'completo')) pts += '<i style="--c:var(--ink)"></i>';
-        pts = pts ? '<span class="pts">' + pts + '</span>' : '';
-        h += '<button type="button" class="' + cls + '" data-d="' + iso + '" aria-label="' + esc(S.dataLonga(iso)) + '">' + d + pts + '</button>';
-      }
-      return '<div class="ca-mes"><h3>' + MESES_L[m - 1] + '</h3><div class="ca-grade">' +
-        ['S', 'T', 'Q', 'Q', 'S', 'S', 'D'].map(function (w) { return '<span class="ca-sem">' + w + '</span>'; }).join('') + h + '</div></div>';
-    }).join('');
+  function mes() {
+    var f = feitos(), k = mesAt, m = +k.slice(5), y = +k.slice(0, 4);
+    var ini = new Date(y, m - 1, 1), ult = new Date(y, m, 0).getDate(), h = '';
+    ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'].forEach(function (w) { h += '<span class="ca-sem">' + w + '</span>'; });
+    // semanas inteiras fora do plano (antes de 12/10, depois de 10/01) não aparecem
+    var dPlano = []; for (var j = 1; j <= ult; j++) if (POR[k + '-' + String(j).padStart(2, '0')]) dPlano.push(j);
+    var dow = function (j) { return (new Date(y, m - 1, j).getDay() + 6) % 7; };
+    var d0 = Math.max(1, dPlano[0] - dow(dPlano[0])), dN = Math.min(ult, dPlano[dPlano.length - 1] + 6 - dow(dPlano[dPlano.length - 1]));
+    for (var i = 0; i < dow(d0); i++) h += '<span class="ca-c vazio"></span>';
+    for (var d = d0; d <= dN; d++) {
+      var iso = k + '-' + String(d).padStart(2, '0'), x = POR[iso];
+      if (!x) { h += '<span class="ca-c fora"><span class="ca-n"><b>' + d + '</b></span></span>'; continue; }
+      var ok = f[iso] && f[iso].feito;
+      var cls = 'ca-c' + (iso === HOJE ? ' hoje' : iso < HOJE ? ' passado' : '') + (iso === sel ? ' sel' : '') + (ok ? ' feito' : '');
+      var corpo = '';
+      if (x.tipo === 'prova') corpo = '<span class="ca-tag prova">Prova</span>';
+      else if (x.top && x.tipo !== 'simulado') corpo = temas(x).slice(0, 2).map(function (t) { return '<span class="ca-t" style="' + vars(t.d) + '"><strong>' + esc(S.curto(t.d)) + '</strong><span class="tx">' + esc(t.s) + '</span></span>'; }).join('');
+      else if (x.tipo === 'simulado') corpo = '<span class="ca-tag sim">Simulado</span>';
+      else if (x.tipo === 'revisao') corpo = '<span class="ca-tag">Revisão</span>';
+      else corpo = '<span class="ca-tag leve">' + (x.tipo === 'vespera' ? 'Véspera' : 'Leve') + '</span>';
+      h += '<button type="button" class="' + cls + '" data-d="' + iso + '" aria-label="' + esc(S.dataLonga(iso) + ': ' + (x.top ? temas(x).map(function (t) { return S.curto(t.d) + ', ' + t.s; }).join('; ') : tipoTxt(x))) + '">' +
+        '<span class="ca-n"><b>' + d + '</b>' + (ok ? '<span class="ok">✓</span>' : '') + '</span>' + corpo + '</button>';
+    }
+    document.getElementById('ca-grade').innerHTML = h;
+    document.getElementById('ca-mestit').textContent = MESES_L[m - 1] + ' ' + y;
+    var i2 = MESES_CAL.indexOf(k);
+    document.getElementById('ca-ant').disabled = i2 <= 0;
+    document.getElementById('ca-prox').disabled = i2 >= MESES_CAL.length - 1;
   }
 
   function detalhe() {
@@ -268,15 +212,20 @@
     document.getElementById('ca-det').innerHTML = h;
   }
 
-  function tudo() { fita(); semana(); meses(); detalhe(); }
+  function tudo() { mes(); detalhe(); }
   document.addEventListener('click', function (ev) {
-    var b = ev.target.closest('[data-d]'); if (!b || !POR[b.dataset.d]) return;
-    if (b.classList.contains('ca-dia')) { location.href = 'hoje.html?data=' + b.dataset.d; return; }
-    sel = b.dataset.d; tudo();
-    if (window.innerWidth <= 1020) document.getElementById('ca-det').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    var b = ev.target.closest('[data-d]');
+    if (b && POR[b.dataset.d]) {
+      sel = b.dataset.d; tudo();
+      if (window.innerWidth <= 1020) document.getElementById('ca-det').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      return;
+    }
+    var i = MESES_CAL.indexOf(mesAt);
+    if (ev.target.closest('#ca-ant') && i > 0) { mesAt = MESES_CAL[i - 1]; mes(); }
+    else if (ev.target.closest('#ca-prox') && i < MESES_CAL.length - 1) { mesAt = MESES_CAL[i + 1]; mes(); }
+    else if (ev.target.closest('#ca-hojebtn')) { sel = POR[HOJE] ? HOJE : CAL.dias[0].d; mesAt = sel.slice(0, 7); tudo(); }
   });
-  var rz; window.addEventListener('resize', function () { clearTimeout(rz); rz = setTimeout(fita, 150); });
-  document.addEventListener('DOMContentLoaded', function () { cabecalho(); tudo(); });
+  document.addEventListener('DOMContentLoaded', function () { cabecalho(); legenda(); tudo(); });
 })();
 </script>
 </body>
