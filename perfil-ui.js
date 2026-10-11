@@ -65,18 +65,18 @@ document.addEventListener('DOMContentLoaded', function () {
     if (blocoCfg) main.appendChild(blocoCfg);
   }
 
-  // ── Estatísticas completas: iframe que se ajusta ao conteúdo ──
-  var wrap = document.querySelector('.perfil-stats');
-  if (wrap) {
-    var velho = wrap.querySelector('h2');
-    if (velho) velho.remove();
-    var rot = document.createElement('div');
-    rot.className = 'section-label';
-    rot.textContent = 'Estatísticas completas';
-    main.appendChild(rot);
-    main.appendChild(wrap);
-
-    wrap.innerHTML = '<a class="stats-link" href="estatisticas.html">Ver estatísticas completas <span aria-hidden="true">&rarr;</span></a>' +
-      '<p class="stats-nota">Ranking por matéria, taxa de acerto por tema e o retrospecto do plano.</p>';
+  // ── Perfil enxuto: os números de estudo ficam nas Estatísticas ──
+  ['resumo', 'conquistas', 'insights', 'progresso de estudo', 'gráficos de humor'].forEach(function (t) {
+    var r = rotuloDe(t); if (!r) return;
+    var el = r.nextElementSibling;
+    while (el && !el.classList.contains('section-label')) { var prox = el.nextElementSibling; el.style.display = 'none'; el = prox; }
+    r.style.display = 'none';
+  });
+  var stats = document.querySelector('.perfil-stats');
+  if (stats) stats.remove();
+  var jornada = document.getElementById('perfil-jornada');
+  if (jornada) {
+    var ver = function () { jornada.innerHTML = '<a href="estatisticas.html" style="color:var(--rose-deep);font-weight:500">Ver suas estatísticas de estudo</a>'; };
+    ver(); setTimeout(ver, 300); setTimeout(ver, 900);
   }
 });
