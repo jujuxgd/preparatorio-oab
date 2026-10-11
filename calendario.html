@@ -24,10 +24,8 @@
   <main>
     <style>
     .ca{--fita-h:56px}
-    .ca-cab{margin:.4rem 0 1.6rem}
-    .ca-cab h1{font-family:'Fraunces',serif;font-weight:400;font-size:clamp(2rem,4.4vw,3.1rem);line-height:1.02;letter-spacing:-.01em;margin:0;color:var(--ink)}
-    .ca-cab p{margin:.5rem 0 0;color:var(--ink-soft);font-size:.95rem;max-width:60ch;line-height:1.5}
-    .ca-cab p b{font-weight:600;color:var(--rose-deep)}
+    .ca-sub{margin:.5rem 0 0;color:var(--ink-soft);font-size:.95rem;max-width:60ch;line-height:1.5}
+    .ca-sub b{font-weight:600;color:var(--rose-deep)}
 
     /* fita: o plano inteiro num olhar */
     .ca-fita{position:relative;margin:0 0 2.2rem;padding:1.1rem 1.1rem .7rem;background:var(--paper);border:1px solid var(--line-soft);border-radius:var(--radius-lg)}
@@ -110,10 +108,12 @@
     @media (prefers-reduced-motion:reduce){.ca-bar{transition:none}}
     </style>
     <div class="ca">
-      <header class="ca-cab">
-        <h1>Até a prova</h1>
-        <p id="ca-sub"></p>
-      </header>
+      <div class="topbar">
+        <div class="page-title">
+          <h1>Até a prova</h1>
+          <p id="ca-sub" class="ca-sub"></p>
+        </div>
+      </div>
 
       <section class="ca-fita" aria-label="O plano inteiro, um traço por dia">
         <div class="ca-barras" id="ca-barras"></div>
