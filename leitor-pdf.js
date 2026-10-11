@@ -55,10 +55,19 @@
     return _lib;
   }
   var _cache = {};
+  // PDFs baixados ficam guardados no navegador (Cache Storage): abrir de novo não gasta internet.
   function baixar(arq) {
-    if (!_cache[arq]) _cache[arq] = fetch('https://www.googleapis.com/drive/v3/files/' + arq + '?alt=media&key=' + CHAVE)
-      .then(function (r) { if (!r.ok) throw new Error('drive ' + r.status); return r.arrayBuffer(); })
-      .catch(function (e) { delete _cache[arq]; throw e; });
+    if (_cache[arq]) return _cache[arq];
+    var chave = location.origin + '/__pdf/' + arq, cx = null;
+    var abrir = window.caches ? caches.open('oab-pdfs-v1').then(function (c) { cx = c; return c.match(chave); }).catch(function () { return null; }) : Promise.resolve(null);
+    _cache[arq] = abrir.then(function (r) {
+      if (r) return r.arrayBuffer();
+      return fetch('https://www.googleapis.com/drive/v3/files/' + arq + '?alt=media&key=' + CHAVE).then(function (r2) {
+        if (!r2.ok) throw new Error('drive ' + r2.status);
+        if (cx) cx.put(chave, r2.clone()).catch(function () {});
+        return r2.arrayBuffer();
+      });
+    }).catch(function (e) { delete _cache[arq]; throw e; });
     return _cache[arq];
   }
 
@@ -123,6 +132,10 @@
     this.raiz = raiz; this.arq = arq; this.opts = opts || {}; this.paginas = []; this.area = false;
     VIEWERS.push(this);
   }
+  Leitor.prototype.meus = function () {
+    var de = this.opts.de || 1, ate = this.opts.ate || 1e9;
+    return grifosDe(this.arq).filter(function (g) { return g.p >= de && g.p <= ate; });
+  };
   Leitor.prototype.iniciar = function () {
     var self = this, raiz = this.raiz;
     raiz.classList.add('lp');
@@ -143,7 +156,8 @@
       return r[0].getDocument({ data: new Uint8Array(r[1].slice(0)) }).promise;
     }).then(function (doc) {
       self.doc = doc;
-      raiz.querySelector('.lp-info').textContent = doc.numPages + (doc.numPages === 1 ? ' página' : ' páginas') + ' · selecione um trecho para grifar';
+      self.de = Math.max(1, self.opts.de || 1); self.ate = Math.min(doc.numPages, self.opts.ate || doc.numPages);
+      raiz.querySelector('.lp-info').textContent = (self.opts.de ? 'Páginas ' + self.de + '–' + self.ate + ' de ' + doc.numPages : doc.numPages + (doc.numPages === 1 ? ' página' : ' páginas')) + ' · selecione um trecho para grifar';
       self.renderizar();
       var rz; window.addEventListener('resize', function () { clearTimeout(rz); rz = setTimeout(function () { if (Math.abs(self._largura - self.largura()) > 40) self.renderizar(); }, 300); });
     }).catch(function (e) {
@@ -163,10 +177,11 @@
     var obs = new IntersectionObserver(function (es) {
       es.forEach(function (e) { if (e.isIntersecting) { obs.unobserve(e.target); self.desenharPagina(+e.target.dataset.p); } });
     }, { rootMargin: '600px 0px' });
-    var feitas = [];
-    for (var i = 1; i <= doc.numPages; i++) feitas.push(doc.getPage(i));
+    var feitas = [], de = this.de || 1, ate = this.ate || doc.numPages;
+    for (var i = de; i <= ate; i++) feitas.push(doc.getPage(i));
     Promise.all(feitas).then(function (pgs) {
-      pgs.forEach(function (pg, i) {
+      pgs.forEach(function (pg, j) {
+        var i = j + de - 1;
         var base = pg.getViewport({ scale: 1 });
         var escala = Math.min(self._largura, 900) / base.width * self.zoom;
         var vp = pg.getViewport({ scale: escala });
@@ -196,7 +211,7 @@
     });
   };
   Leitor.prototype.redesenhar = function () {
-    var self = this, gs = grifosDe(this.arq);
+    var self = this, gs = this.meus();
     this.paginas.forEach(function (info, n) {
       if (!info) return;
       info.el.querySelector('.lp-grifos').innerHTML = gs.filter(function (g) { return g.p === n; }).map(function (g) {
@@ -209,7 +224,7 @@
     this.lista();
   };
   Leitor.prototype.lista = function () {
-    var gs = grifosDe(this.arq), el = this.raiz.querySelector('.lp-lista'); if (!el) return;
+    var gs = this.meus(), el = this.raiz.querySelector('.lp-lista'); if (!el) return;
     el.innerHTML = '<div class="lp-lt">Meus grifos <b>' + gs.length + '</b></div>' + (gs.length ? gs.map(function (g) {
       return '<button type="button" class="lp-it" data-ir="' + g.id + '"><span class="lp-cor" style="background:' + cor(g.c) + '"></span>' +
         '<span><small>p. ' + g.p + '</small>' + esc(g.t || 'Área grifada') + (g.n ? '<em>' + esc(g.n) + '</em>' : '') + '</span></button>';

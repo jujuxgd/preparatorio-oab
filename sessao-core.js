@@ -162,7 +162,18 @@
               : '<iframe class="vde-pdf" src="https://drive.google.com/file/d/' + id + '/preview" title="PDF do dia ' + p.n + '" allow="autoplay"></iframe>');
         }).join('')
           : '<p class="ss-vazio">O PDF "Dia ' + p.n + '" ainda não está na pasta do Drive. Quando subir, ele aparece aqui.</p>') + '</div>';
-    }).join('') + htmlAdiantar();
+    }).join('') + htmlGabaritaco() + htmlAdiantar();
+  }
+  // Trecho do Gabaritaço de cada tema do dia (só as páginas das DICAS), aberto sob demanda.
+  function htmlGabaritaco() {
+    var G = window.GABARITACO; if (!G || !DIA || !DIA.top) return '';
+    return DIA.top.filter(function (t) { return t.k && G[t.d]; }).map(function (t) {
+      var g = G[t.d], de = g.dica[t.k[0] - 1] || 1, ate = g.dica[t.k[1]] || g.paginas;
+      return '<div class="ss-bloco gab-bloco"><h3><span class="n">Gabaritaço · DICAS ' + t.k[0] + '–' + t.k[1] + '</span>' + esc(curto(t.d) + ': ' + t.s) + '</h3>' +
+        '<div class="gab-host" data-arq="' + g.id + '" data-de="' + de + '" data-ate="' + ate + '">' +
+        '<p class="ss-vazio" style="margin:0 0 .6rem">Questões que já caíram sobre o tema, com as dicas do VDE (páginas ' + de + '–' + ate + ').</p>' +
+        '<button type="button" class="btn" data-abrir-gab="1">Abrir o trecho do Gabaritaço</button></div></div>';
+    }).join('');
   }
 
   function montarConteudo(el) {
@@ -434,6 +445,8 @@
   // ── cliques de questões e checklist (valem em qualquer página) ──
   document.addEventListener('click', function (ev) {
     var t = ev.target;
+    var ag = t.closest('[data-abrir-gab]');
+    if (ag && window.LEITOR) { var hg = ag.closest('.gab-host'); LEITOR.montar(hg, hg.dataset.arq, { de: +hg.dataset.de, ate: +hg.dataset.ate }); return; }
     var ad = t.closest('[data-adiantar]'), dz = t.closest('[data-desfazer]');
     if ((ad || dz) && window.PLANO) {
       if (ad) PLANO.adiantar(+ad.dataset.adiantar); else PLANO.desfazer(+dz.dataset.desfazer);
