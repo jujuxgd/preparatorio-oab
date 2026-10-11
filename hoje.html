@@ -1175,7 +1175,7 @@
   var S = SESSAO, DIA = S.DIA, esc = S.esc;
   var ABAS = ['conteudo', 'flashcards', 'questoes', 'checklist', 'videoaulas'];
   var aba = new URLSearchParams(location.search).get('aba');
-  if (ABAS.indexOf(aba) < 0) aba = S.pdfsDoDia().length ? 'conteudo' : 'flashcards';
+  if (ABAS.indexOf(aba) < 0) aba = S.pdfsDoDia().length || S.revisoesDoDia().length ? 'conteudo' : 'flashcards';
   var feitas = {};
 
   function abrir(a) {

@@ -252,6 +252,10 @@ A lista de arquivos (97) está embutida em `window.BIBLIOTECA_REVISAO` (`{id, g,
 **Atenção:** o repositório é público e os arquivos têm link aberto, então esses IDs ficam
 públicos; os PDFs trazem marca d'água com dados de terceiros — não commitar o texto dos PDFs.
 Para adicionar material novo, acrescente linhas em `revisao-biblioteca.js`.
+**Desde 11/10/2026:** o visualizador usa o leitor com grifos (`leitor-pdf.js`, rolagem dentro do painel), o
+rodapé tem "Flashcards desta revisão" (`revisar.html?materia=…&rev=N`) e cada card de matéria mostra flashcards
+vistos e nº de grifos. Nos dias `revisao` do calendário (fase 2 e revisões extras), o Conteúdo do Hoje abre a
+próxima Revisão ainda não feita (1→2→3) de cada matéria em foco, com "Marcar como feita" (grava aqui e no checklist).
 Estado em `oab_revisao_status_v1` (`{id: {s:'lendo'|'feito', d}}`); data da 2ª fase em
 `oab_segunda_fase_data`. Layout escolhido por Julia (2026-10): Revisões = estante de cards
 por matéria (cores `--mat-*`, anel de progresso, círculos R1/R2/R3); Trabalhista = trilha

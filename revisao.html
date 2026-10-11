@@ -159,7 +159,11 @@
 .rv-ic:disabled{opacity:.35;cursor:default;background:var(--paper);border-color:var(--line);color:var(--ink-soft)}
 .rv-ic svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .rv-ov-pos{font-size:.72rem;color:var(--ink-faded);min-width:3.6rem;text-align:center}
-.rv-ov-corpo{position:relative;flex:1;background:var(--bg)}
+.rv-ov-corpo{position:relative;flex:1;background:var(--bg);min-height:0}
+.rv-ov-leitor{position:absolute;inset:0;overflow:auto;padding:1rem 1.2rem}
+.rv-ov-leitor .lp-lista{top:0;max-height:calc(100% - 10px)}
+.rv-fc{font-size:.72rem;color:var(--ink-faded);margin-top:.35rem}
+.rv-fc a{color:var(--rose-deep)}
 .rv-ov-corpo iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:transparent;opacity:0;transition:opacity .25s}
 .rv-ov-corpo.pronto iframe{opacity:1}
 .rv-ov-carregando{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.8rem;color:var(--ink-faded);font-size:.82rem}
@@ -188,7 +192,7 @@
 }
 </style>
 
-<link rel="stylesheet" href="topnav.css?v=1791163406"><script src="topnav.js?v=1791163406"></script></head>
+<link rel="stylesheet" href="sessao.css"><link rel="stylesheet" href="leitor-pdf.css"><link rel="stylesheet" href="topnav.css?v=1791163406"><script src="topnav.js?v=1791163406"></script></head>
 <body>
 
 <div class="aurora-bg" aria-hidden="true">
@@ -276,19 +280,21 @@
       </div>
     </div>
     <div class="rv-ov-corpo" id="rv-ov-corpo">
-      <div class="rv-ov-carregando"><div class="rv-spin"></div>Carregando PDF…</div>
-      <iframe id="rv-ov-frame" title="Material de revisão" allow="autoplay"></iframe>
+      <div id="rv-ov-leitor" class="rv-ov-leitor"></div>
     </div>
     <div class="rv-ov-rod">
       <div class="rv-seg" id="rv-ov-seg" role="group" aria-label="Status">
         <button data-s="">Não iniciado</button><button data-s="lendo">Lendo</button><button data-s="feito">Feito</button>
       </div>
+      <a class="rv-link" id="rv-ov-fc" href="revisar.html">Flashcards desta revisão</a>
       <a class="rv-link" id="rv-ov-erro" href="erros.html">+ Anotar um erro</a>
     </div>
   </div>
 </div>
 
 <script src="revisao-biblioteca.js"></script>
+<script src="leitor-pdf.js"></script>
+<script src="ativo-core.js"></script>
 <script src="progresso.js?v=1783859287"></script>
 <script src="script.js?v=1784021867"></script>
 <script src="perfil.js?v=1783860863"></script>
@@ -361,6 +367,19 @@ function anel(feitos, total) {
     '<circle class="p" cx="21" cy="21" r="17" stroke-dasharray="' + (p * C).toFixed(1) + ' ' + C.toFixed(1) + '"/></svg><span>' + feitos + '/' + total + '</span></div>';
 }
 
+function extrasCard(m, itens) {
+  const disc = DISC_REV[m], partes = [];
+  if (disc && window.ATIVO && ATIVO.cartoes().length) {
+    const est = ATIVO.estados(), cs = ATIVO.cartoes().filter(c => c.d === disc);
+    partes.push('Flashcards ' + cs.filter(c => est[c.id]).length + '/' + cs.length + ' · <a href="revisar.html?materia=' + encodeURIComponent(disc) + '">treinar</a>');
+  }
+  if (window.LEITOR) {
+    const g = itens.reduce((n, i) => n + LEITOR.grifosDe(i.id).length, 0);
+    if (g) partes.push(g + (g === 1 ? ' grifo' : ' grifos'));
+  }
+  return partes.length ? '<div class="rv-fc">' + partes.join(' · ') + '</div>' : '';
+}
+
 function renderRev(lib) {
   const lista = lib.filter(i => i.g === 'rev');
   const por = agrupar(lista, 'a');
@@ -379,7 +398,7 @@ function renderRev(lib) {
     const legenda = !proximo ? 'Tudo revisado ✓' : (estado(proximo.id) === 'lendo' ? 'Lendo a Revisão ' + proximo.b : 'Próxima: Revisão ' + proximo.b);
     h += '<div class="rv-card" style="--c:var(--mat-' + cor + ');--cd:var(--mat-' + cor + '-deep)">' +
       '<div class="rv-card-top"><h4>' + esc(m) + '</h4>' + anel(feitos, itens.length) + '</div>' +
-      '<div class="rv-dots">' + dots + '</div><div class="rv-card-legenda">' + legenda + '</div></div>';
+      '<div class="rv-dots">' + dots + '</div><div class="rv-card-legenda">' + legenda + '</div>' + extrasCard(m, itens) + '</div>';
   });
   return h + '</div>';
 }
@@ -599,6 +618,27 @@ function definirEstado(id, s) {
   gravar(ST_KEY, st);
 }
 
+const DISC_REV = {
+  'Ética': 'Ética Profissional', 'Constitucional': 'Direito Constitucional', 'Civil': 'Direito Civil',
+  'Processo Civil': 'Direito Processual Civil', 'Penal': 'Direito Penal', 'Processo Penal': 'Direito Processual Penal',
+  'Trabalho': 'Direito do Trabalho', 'Processo do Trabalho': 'Direito Processual do Trabalho',
+  'Administrativo': 'Direito Administrativo', 'Tributário': 'Direito Tributário', 'Empresarial': 'Direito Empresarial'
+};
+function cartoesDaRevisao(i) {
+  const disc = DISC_REV[i.a];
+  if (!disc || !window.ATIVO) return null;
+  const est = ATIVO.estados();
+  const cs = ATIVO.cartoes().filter(c => c.d === disc && String(c.r) === String(i.b));
+  return { disc, total: cs.length, vistos: cs.filter(c => est[c.id]).length, errados: cs.filter(c => est[c.id] && est[c.id].erros).length };
+}
+
+function atualizarFc(i) {
+  const fc = document.getElementById('rv-ov-fc');
+  const info = i && i.g === 'rev' ? cartoesDaRevisao(i) : null;
+  fc.style.display = info && info.total ? '' : 'none';
+  if (info && info.total) { fc.href = 'revisar.html?materia=' + encodeURIComponent(info.disc) + '&rev=' + i.b; fc.textContent = 'Flashcards desta revisão · ' + info.vistos + '/' + info.total + ' vistos'; }
+}
+
 function cabecalho(i) {
   if (i.g === 'rev') return ['Revisão ' + i.b + ' · em tabelas', i.a];
   if (i.g === 'trab') return [i.b === 'revisao' ? 'Trabalhista · 2ª fase' : 'Trabalhista · Tema ' + i.a + ' · ' + ROTULO[i.b], i.n];
@@ -619,9 +659,11 @@ function abrirVisualizador(id) {
   const [eyebrow, titulo] = cabecalho(i);
   document.getElementById('rv-ov-eyebrow').textContent = eyebrow;
   document.getElementById('rv-ov-titulo').textContent = titulo;
-  const corpo = document.getElementById('rv-ov-corpo');
-  corpo.classList.remove('pronto');
-  document.getElementById('rv-ov-frame').src = 'https://drive.google.com/file/d/' + encodeURIComponent(id) + '/preview';
+  const leitor = document.getElementById('rv-ov-leitor');
+  leitor.scrollTop = 0;
+  if (window.LEITOR) LEITOR.montar(leitor, id, { rolagem: leitor });
+  else leitor.innerHTML = '<iframe class="vde-pdf" style="height:100%" src="https://drive.google.com/file/d/' + encodeURIComponent(id) + '/preview"></iframe>';
+  atualizarFc(i);
   document.getElementById('rv-ov-drive').href = 'https://drive.google.com/file/d/' + encodeURIComponent(id) + '/view';
   const materia = i.g === 'rev' ? CHAVE_ERROS[i.a] : (i.g === 'trab' ? 'trabalho' : '');
   document.getElementById('rv-ov-erro').href = 'erros.html?novo=1' + (materia ? '&materia=' + materia : '');
@@ -662,15 +704,12 @@ function atualizarBotoesEstado() {
 function fecharVisualizador() {
   if (!itemAberto) return;
   document.getElementById('rv-ov').classList.remove('open');
-  document.getElementById('rv-ov-frame').src = 'about:blank';
+  document.getElementById('rv-ov-leitor').innerHTML = '';
   document.body.style.overflow = '';
   itemAberto = null;
   render();
 }
 
-document.getElementById('rv-ov-frame').addEventListener('load', e => {
-  if (e.target.src && e.target.src !== 'about:blank') document.getElementById('rv-ov-corpo').classList.add('pronto');
-});
 document.getElementById('rv-ov-seg').addEventListener('click', e => {
   const b = e.target.closest('button');
   if (!b || !itemAberto) return;
@@ -697,6 +736,7 @@ document.getElementById('rv-tabs').addEventListener('click', e => {
 });
 
 render();
+if (window.ATIVO) ATIVO.carregarCartoes().then(() => { atualizarFc(itemAberto); render(); });
 </script>
 </body>
 </html>

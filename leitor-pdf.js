@@ -233,8 +233,14 @@
   Leitor.prototype.irPara = function (id) {
     var g = grifosDe(this.arq).filter(function (x) { return x.id === id; })[0]; if (!g) return;
     var info = this.paginas[g.p]; if (!info) return;
-    var y = info.el.getBoundingClientRect().top + window.scrollY + g.r[0][1] * info.el.offsetHeight - 120;
-    window.scrollTo({ top: y, behavior: 'smooth' });
+    var cx = this.opts.rolagem;
+    if (cx) {
+      var y2 = info.el.getBoundingClientRect().top - cx.getBoundingClientRect().top + cx.scrollTop + g.r[0][1] * info.el.offsetHeight - 80;
+      cx.scrollTo({ top: y2, behavior: 'smooth' });
+    } else {
+      var y = info.el.getBoundingClientRect().top + window.scrollY + g.r[0][1] * info.el.offsetHeight - 120;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
     var el = info.el.querySelector('[data-g="' + id + '"]');
     if (el) { el.classList.add('pisca'); setTimeout(function () { el.classList.remove('pisca'); }, 1400); }
   };

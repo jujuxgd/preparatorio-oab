@@ -136,6 +136,30 @@
     });
     return ns;
   }
+  // Dias de revisão: a próxima Revisão VDE (1→2→3) ainda não feita de cada matéria em foco.
+  var K_REVST = 'oab_revisao_status_v1';
+  function revisoesDoDia() {
+    if (!DIA || DIA.tipo !== 'revisao' || !DIA.foco) return [];
+    var st = ler(K_REVST, {}), lib = window.BIBLIOTECA_REVISAO || [];
+    return DIA.foco.map(function (d) {
+      var its = lib.filter(function (x) { return x.g === 'rev' && x.a === NOME_REV[d]; }).sort(function (a, b) { return +a.b - +b.b; });
+      if (!its.length) return null;
+      var it = its.filter(function (x) { return !(st[x.id] && st[x.id].s === 'feito'); })[0] || its[its.length - 1];
+      return { d: d, r: it.b, id: it.id, feita: !!(st[it.id] && st[it.id].s === 'feito') };
+    }).filter(Boolean);
+  }
+  function marcarRevisao(id, d) {
+    var st = ler(K_REVST, {}); st[id] = { s: 'feito', d: HOJE }; gravar(K_REVST, st);
+    marcar('rv-' + d, true);
+  }
+  function htmlRevisoes() {
+    return revisoesDoDia().map(function (r) {
+      return '<div class="ss-bloco"><h3><span class="n">Revisão ' + r.r + ' do VDE</span>' + esc(curto(r.d)) + '</h3>' +
+        (window.LEITOR ? '<div class="lp-host" data-arq="' + r.id + '"></div>' : '<iframe class="vde-pdf" src="' + drive(r.id) + '"></iframe>') +
+        '<div class="ss-acoes" style="margin-top:.8rem">' + (r.feita ? '<span class="ss-vazio">Revisão marcada como feita ✓</span>'
+          : '<button type="button" class="btn btn-primary" data-rev-feita="' + r.id + '" data-rev-d="' + esc(r.d) + '">Marcar como feita</button>') + '</div></div>';
+    }).join('');
+  }
   function dm(iso) { var p = partes(iso); return p.d + '/' + String(p.m).padStart(2, '0'); }
   function htmlAdiantar() {
     if (!window.PLANO || DATA !== HOJE) return '';
@@ -153,7 +177,11 @@
   }
   function htmlConteudo() {
     var ps = pdfsDoDia();
-    if (!ps.length) return '<div class="ss-bloco"><p class="ss-vazio" style="margin:0">Hoje não tem PDF novo: ' + esc(resumoDoDia()) + '.</p></div>' + htmlAdiantar();
+    if (!ps.length) {
+      var rv = htmlRevisoes();
+      return (rv ? '<div class="ss-bloco"><p style="margin:0">' + esc(resumoDoDia()) + '. Releia a Revisão do VDE de cada matéria em foco e grife o que ainda escapa.</p></div>' + rv
+        : '<div class="ss-bloco"><p class="ss-vazio" style="margin:0">Hoje não tem PDF novo: ' + esc(resumoDoDia()) + '.</p></div>') + htmlAdiantar();
+    }
     return ps.map(function (p) {
       return '<div class="ss-bloco"><h3><span class="n">Dia ' + p.n + ' do VDE</span>' + esc(p.temas.join(' · ')) + '</h3>' +
         (p.ids.length ? p.ids.map(function (id, i) {
@@ -194,6 +222,7 @@
     if (!DIA) return [];
     var it = [], f = fila(), n = f.venc.length + f.novos.length;
     if (DIA.tipo === 'prova') return [{ id: 'prova', t: 'Prova da 1ª fase · 13h às 18h', s: 'Documento com foto, caneta preta de material transparente. Nada novo hoje.' }];
+    revisoesDoDia().forEach(function (r) { it.push({ id: 'rv-' + r.d, t: 'Revisão ' + r.r + ' do VDE · ' + curto(r.d), s: 'Ler e grifar na aba Conteúdo', aba: 'conteudo' }); });
     pdfsDoDia().forEach(function (p) { it.push({ id: 'p' + p.n, t: 'Ler o PDF do Dia ' + p.n + ' do VDE', s: esc(p.temas.join(' · ')) + ' · aba Conteúdo', aba: 'conteudo' }); });
     it.push({ id: 'fc', t: 'Flashcards do dia', s: n ? f.venc.length + ' vencidos + ' + f.novos.length + ' novos · aba Flashcards' : 'Nada vence hoje', aba: 'flashcards' });
     if (DIA.top) DIA.top.forEach(function (t, i) {
@@ -445,6 +474,8 @@
   // ── cliques de questões e checklist (valem em qualquer página) ──
   document.addEventListener('click', function (ev) {
     var t = ev.target;
+    var rf = t.closest('[data-rev-feita]');
+    if (rf) { marcarRevisao(rf.dataset.revFeita, rf.dataset.revD); rf.outerHTML = '<span class="ss-vazio">Revisão marcada como feita ✓</span>'; return; }
     var ag = t.closest('[data-abrir-gab]');
     if (ag && window.LEITOR) { var hg = ag.closest('.gab-host'); LEITOR.montar(hg, hg.dataset.arq, { de: +hg.dataset.de, ate: +hg.dataset.ate }); return; }
     var ad = t.closest('[data-adiantar]'), dz = t.closest('[data-desfazer]');
@@ -485,7 +516,7 @@
     esc: esc, curto: curto, dataLonga: dataLonga, partes: partes, MESES: MESES,
     indice: indice, vizinho: vizinho, resumoDoDia: resumoDoDia, disciplinasDoDia: disciplinasDoDia,
     fila: fila, montarFlashcards: montarFlashcards, montarQuestoes: montarQuestoes, carregarBanco: carregarBanco,
-    itensChecklist: itensChecklist, htmlChecklist: htmlChecklist, htmlConteudo: htmlConteudo, montarConteudo: montarConteudo, pdfsDoDia: pdfsDoDia, progressoChecklist: progressoChecklist, marcar: marcar,
+    itensChecklist: itensChecklist, htmlChecklist: htmlChecklist, htmlConteudo: htmlConteudo, montarConteudo: montarConteudo, revisoesDoDia: revisoesDoDia, pdfsDoDia: pdfsDoDia, progressoChecklist: progressoChecklist, marcar: marcar,
     feito: function () { return !!checks().feito; }, marcarFeito: marcarFeito,
     htmlCalendario: htmlCalendario, htmlPainel: htmlPainel, linkRevisao: linkRevisao
   };
