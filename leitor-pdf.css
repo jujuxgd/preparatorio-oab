@@ -5,15 +5,19 @@
 .lp-b{font:500 .74rem Inter,sans-serif;padding:.35rem .7rem;border-radius:999px;border:1px solid var(--line);background:var(--paper);color:var(--ink-soft);cursor:pointer;text-decoration:none;line-height:1.2}
 .lp-b:hover{border-color:var(--rose)}
 .lp-b.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
-.lp-corpo{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:1rem;align-items:start}
+.lp-corpo{display:grid;grid-template-columns:minmax(0,1fr);gap:1rem;align-items:start}
+.lp-com-lista .lp-corpo{grid-template-columns:minmax(0,1fr) 250px}
+.lp:not(.lp-com-lista) .lp-lista{display:none}
+.lp-ng{font-weight:600}
 .lp-paginas{display:flex;flex-direction:column;align-items:flex-start;gap:12px;min-width:0;overflow-x:auto}
-.lp-pag{position:relative;flex-shrink:0;margin:0 auto;background:#fff;box-shadow:0 1px 4px rgba(44,36,32,.12);border-radius:4px;overflow:hidden}
+.lp-moldura{position:relative;flex-shrink:0;margin:0 auto;background:#fff;box-shadow:0 1px 4px rgba(44,36,32,.12);border-radius:4px;overflow:hidden}
+.lp-pag{position:relative}
 .lp-zoom{display:inline-flex;align-items:center;min-width:3.2em;justify-content:center;font:500 .72rem Inter,sans-serif;color:var(--ink-faded);font-variant-numeric:tabular-nums}
 .lp-pag canvas{display:block}
 .lp-num{position:absolute;right:8px;bottom:6px;font:500 .62rem Inter,sans-serif;color:#a8988c;z-index:4;pointer-events:none}
 .lp-grifos{position:absolute;inset:0;z-index:1;pointer-events:none}
 .lp-g{position:absolute;border-radius:2px;mix-blend-mode:multiply}
-[data-theme="dark"] .lp-pag{background:#1f1b19}
+[data-theme="dark"] .lp-moldura{background:#1f1b19}
 [data-theme="dark"] .lp-pag canvas{filter:invert(.88) hue-rotate(180deg)}
 [data-theme="dark"] .lp-g{mix-blend-mode:screen;opacity:.55}
 .lp-g.pisca{outline:2px solid var(--rose-deep);outline-offset:2px}
@@ -57,7 +61,7 @@
   .ss-bloco:has(.lp){margin-left:calc(2px - var(--gutter,1.5rem));margin-right:calc(2px - var(--gutter,1.5rem));padding-left:.25rem;padding-right:.25rem}
 }
 @media (max-width:900px){
-  .lp-corpo{grid-template-columns:1fr}
+  .lp-corpo,.lp-com-lista .lp-corpo{grid-template-columns:1fr}
   .lp-caixa .lp-corpo{max-height:72vh;padding:8px}
   .lp-lista{position:static;max-height:none;order:-1}
   .lp-pop{width:min(280px,90%)}
