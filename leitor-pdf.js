@@ -143,9 +143,10 @@
       '<span class="lp-acoes"><button type="button" class="lp-b" data-a="area" title="Para páginas escaneadas: arraste um retângulo para grifar">▭ Grifar área</button>' +
       '<button type="button" class="lp-b" data-a="lista" title="Mostrar ou esconder a lista de grifos">✎ Grifos <b class="lp-ng">0</b></button>' +
       '<button type="button" class="lp-b" data-a="zoom-" aria-label="Diminuir">−</button><span class="lp-zoom"></span><button type="button" class="lp-b" data-a="zoom+" aria-label="Aumentar">+</button>' +
+      '<button type="button" class="lp-b" data-a="cheia">⛶ Tela cheia</button>' +
       '<a class="lp-b" href="https://drive.google.com/file/d/' + this.arq + '/view" target="_blank" rel="noopener">Drive ↗</a></span></div>' +
       '<div class="lp-corpo"><div class="lp-paginas"></div><aside class="lp-lista"></aside></div>';
-    if (this.opts.caixa && window.innerWidth > 640) { raiz.classList.add('lp-caixa'); this.opts.rolagem = raiz.querySelector('.lp-corpo'); }
+    if (this.opts.caixa) { raiz.classList.add('lp-caixa'); this.opts.rolagem = raiz.querySelector('.lp-corpo'); }
     var zoomSalvo = parseFloat(localStorage.getItem('oab_lp_zoom3'));
     this.zoom = zoomSalvo >= 0.6 && zoomSalvo <= 3 ? zoomSalvo : 1;
     function mostrarZoom() { raiz.querySelector('.lp-zoom').textContent = Math.round(self.zoom * 100) + '%'; }
@@ -158,6 +159,7 @@
     raiz.querySelector('.lp-topo').addEventListener('click', function (e) {
       var b = e.target.closest('[data-a]'); if (!b) return;
       if (b.dataset.a === 'area') { self.area = !self.area; b.classList.toggle('on', self.area); raiz.classList.toggle('modo-area', self.area); }
+      if (b.dataset.a === 'cheia') self.telaCheia(!raiz.classList.contains('lp-cheia'));
       if (b.dataset.a === 'lista') { b.classList.toggle('on', raiz.classList.toggle('lp-com-lista')); if (Math.abs(self._largura - self.largura()) > 40) self.renderizar(); }
       if (b.dataset.a === 'zoom+') mudarZoom(self.zoom + 0.25);
       if (b.dataset.a === 'zoom-') mudarZoom(self.zoom - 0.25);
@@ -203,6 +205,28 @@
       if (rs.length) self.corte = Math.min(0.12, Math.min.apply(null, rs));
     }).catch(function () { self.corte = 0; });
   };
+  Leitor.prototype.paginaAtual = function () {
+    var topo = this.opts.rolagem ? this.opts.rolagem.getBoundingClientRect().top : 0, atual = this.de || 1;
+    this.paginas.forEach(function (info, n) { if (info && info.el.getBoundingClientRect().top <= topo + 80) atual = n; });
+    return atual;
+  };
+  Leitor.prototype.telaCheia = function (on) {
+    var self = this, raiz = this.raiz, corpo = raiz.querySelector('.lp-corpo'), n = this.paginaAtual();
+    if (on) { this._rolagemAntes = this.opts.rolagem; this.opts.rolagem = corpo; } else this.opts.rolagem = this._rolagemAntes;
+    raiz.classList.toggle('lp-cheia', on);
+    document.documentElement.classList.toggle('lp-travada', on);
+    raiz.querySelector('[data-a="cheia"]').textContent = on ? '✕ Fechar' : '⛶ Tela cheia';
+    if (on && !this._esc) {
+      this._esc = function (e) { if (e.key === 'Escape' && raiz.classList.contains('lp-cheia')) self.telaCheia(false); };
+      document.addEventListener('keydown', this._esc);
+    }
+    var r = this.renderizar();
+    if (r) r.then(function () {
+      var info = self.paginas[n]; if (!info) return;
+      if (self.opts.rolagem) self.opts.rolagem.scrollTop += info.el.getBoundingClientRect().top - self.opts.rolagem.getBoundingClientRect().top - 8;
+      else if (!on) window.scrollTo(0, info.el.getBoundingClientRect().top + window.scrollY - 90);
+    });
+  };
   Leitor.prototype.largura = function () { return this.raiz.querySelector('.lp-paginas').clientWidth - 2; };
   Leitor.prototype.renderizar = function () {
     var self = this, doc = this.doc, alvo = this.raiz.querySelector('.lp-paginas');
@@ -218,7 +242,7 @@
     }, { root: this.opts.rolagem || null, rootMargin: '600px 0px' });
     var feitas = [], de = this.de || 1, ate = this.ate || doc.numPages;
     for (var i = de; i <= ate; i++) feitas.push(doc.getPage(i));
-    Promise.all(feitas).then(function (pgs) {
+    return Promise.all(feitas).then(function (pgs) {
       if (vez !== self._vez) return;
       pgs.forEach(function (pg, j) {
         var i = j + de - 1;

@@ -38,7 +38,7 @@
 .lp-it em{display:block;font-style:normal;color:var(--rose-deep);margin-top:.15rem}
 .lp-cor{flex:0 0 10px;height:10px;border-radius:50%;margin-top:.35rem}
 .lp-vazio{font-size:.76rem;color:var(--ink-faded);margin:0;line-height:1.5}
-.lp-barra{position:fixed;z-index:9000;display:none;align-items:center;gap:6px;background:var(--ink);padding:6px 8px;border-radius:999px;box-shadow:0 4px 16px rgba(44,36,32,.25)}
+.lp-barra{position:fixed;z-index:300001;display:none;align-items:center;gap:6px;background:var(--ink);padding:6px 8px;border-radius:999px;box-shadow:0 4px 16px rgba(44,36,32,.25)}
 .lp-barra.on{display:flex}
 .lp-barra button{width:24px;height:24px;border-radius:50%;border:2px solid rgba(255,255,255,.85);cursor:pointer;padding:0}
 .lp-barra .lp-bnota{background:none;border-color:transparent;color:#fff;font-size:.9rem}
@@ -62,10 +62,17 @@
 }
 @media (max-width:900px){
   .lp-corpo,.lp-com-lista .lp-corpo{grid-template-columns:1fr}
-  .lp-caixa .lp-corpo{max-height:72vh;padding:8px}
+  .lp-caixa .lp-corpo{max-height:72vh;max-height:72svh;padding:8px}
   .lp-lista{position:static;max-height:none;order:-1}
   .lp-pop{width:min(280px,90%)}
 }
+.lp.lp-cheia{position:fixed;inset:0;z-index:300000;margin:0;background:var(--bg);display:flex;flex-direction:column;padding-top:env(safe-area-inset-top)}
+.lp.lp-cheia .lp-topo{flex-shrink:0;padding:.5rem .7rem;margin:0}
+.lp.lp-cheia .lp-corpo{flex:1;min-height:0;max-height:none;overflow:auto;overscroll-behavior:contain;padding:8px 8px calc(8px + env(safe-area-inset-bottom));border-radius:0}
+.lp.lp-cheia .lp-lista{top:0;max-height:none}
+html.lp-travada,html.lp-travada body{overflow:hidden}
+.lp.lp-cheia .lp-info,.lp.lp-cheia a.lp-b{display:none}
+@media (max-width:640px){.lp.lp-cheia .lp-topo{padding:.4rem .4rem}.lp.lp-cheia .lp-acoes{gap:4px}.lp.lp-cheia .lp-b{padding:.45rem .55rem}}
 .lp-rola{position:relative;flex:1;min-height:0;overflow:auto;padding:1rem 1.2rem;overscroll-behavior:contain}
 .lp-rola .lp-lista{top:0;max-height:calc(100% - 10px)}
 .lp-parte{font:600 .66rem Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faded);margin:1rem 0 .4rem}
