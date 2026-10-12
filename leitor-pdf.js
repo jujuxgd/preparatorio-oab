@@ -141,6 +141,7 @@
     raiz.classList.add('lp');
     raiz.innerHTML = '<div class="lp-topo"><span class="lp-info">Carregando o PDF…</span>' +
       '<span class="lp-acoes"><button type="button" class="lp-b" data-a="area" title="Para páginas escaneadas: arraste um retângulo para grifar">▭ Grifar área</button>' +
+      '<button type="button" class="lp-b" data-a="lista" title="Mostrar ou esconder a lista de grifos">✎ Grifos <b class="lp-ng">0</b></button>' +
       '<button type="button" class="lp-b" data-a="zoom-" aria-label="Diminuir">−</button><span class="lp-zoom"></span><button type="button" class="lp-b" data-a="zoom+" aria-label="Aumentar">+</button>' +
       '<a class="lp-b" href="https://drive.google.com/file/d/' + this.arq + '/view" target="_blank" rel="noopener">Drive ↗</a></span></div>' +
       '<div class="lp-corpo"><div class="lp-paginas"></div><aside class="lp-lista"></aside></div>';
@@ -157,6 +158,7 @@
     raiz.querySelector('.lp-topo').addEventListener('click', function (e) {
       var b = e.target.closest('[data-a]'); if (!b) return;
       if (b.dataset.a === 'area') { self.area = !self.area; b.classList.toggle('on', self.area); raiz.classList.toggle('modo-area', self.area); }
+      if (b.dataset.a === 'lista') { b.classList.toggle('on', raiz.classList.toggle('lp-com-lista')); if (Math.abs(self._largura - self.largura()) > 40) self.renderizar(); }
       if (b.dataset.a === 'zoom+') mudarZoom(self.zoom + 0.25);
       if (b.dataset.a === 'zoom-') mudarZoom(self.zoom - 0.25);
     });
@@ -167,7 +169,8 @@
       self.doc = doc;
       self.de = Math.max(1, self.opts.de || 1); self.ate = Math.min(doc.numPages, self.opts.ate || doc.numPages);
       raiz.querySelector('.lp-info').textContent = (self.opts.de ? 'Páginas ' + self.de + '–' + self.ate + ' de ' + doc.numPages : doc.numPages + (doc.numPages === 1 ? ' página' : ' páginas')) + ' · selecione um trecho para grifar';
-      self.renderizar();
+      return self.medirMargem().then(function () { self.renderizar(); });
+    }).then(function () {
       var rz; window.addEventListener('resize', function () { clearTimeout(rz); rz = setTimeout(function () { if (Math.abs(self._largura - self.largura()) > 40) self.renderizar(); }, 300); });
     }).catch(function (e) {
       console.warn('Leitor PDF: usando o preview do Drive', e);
@@ -175,6 +178,30 @@
       raiz.innerHTML = '<p class="ss-vazio" style="margin:0 0 .5rem">Não deu para abrir o leitor com grifos agora — mostrando o PDF pelo Drive.</p>' +
         '<iframe class="vde-pdf" src="https://drive.google.com/file/d/' + self.arq + '/preview" allow="autoplay"></iframe>';
     });
+  };
+  // margem branca dos lados (pelo texto das primeiras páginas): cortada para a página ganhar largura
+  Leitor.prototype.medirMargem = function () {
+    var self = this, doc = this.doc, ns = [];
+    this.corte = 0;
+    for (var i = this.de; i <= Math.min(this.ate, this.de + 2); i++) ns.push(i);
+    return Promise.all(ns.map(function (n) {
+      return doc.getPage(n).then(function (pg) {
+        if (pg.rotate % 180) return null;
+        var vb = pg.view, w = vb[2] - vb[0];
+        return pg.getTextContent().then(function (tc) {
+          var esq = w, dir = w;
+          tc.items.forEach(function (it) {
+            if (!it.str || !it.str.trim() || it.transform[1] || it.transform[2]) return;
+            var x = it.transform[4] - vb[0];
+            esq = Math.min(esq, x); dir = Math.min(dir, w - x - it.width);
+          });
+          return esq < w ? Math.max(0, Math.min(esq, dir) - 14) / w : null;
+        });
+      });
+    })).then(function (rs) {
+      rs = rs.filter(function (r) { return r !== null; });
+      if (rs.length) self.corte = Math.min(0.12, Math.min.apply(null, rs));
+    }).catch(function () { self.corte = 0; });
   };
   Leitor.prototype.largura = function () { return this.raiz.querySelector('.lp-paginas').clientWidth - 2; };
   Leitor.prototype.renderizar = function () {
@@ -196,14 +223,21 @@
       pgs.forEach(function (pg, j) {
         var i = j + de - 1;
         var base = pg.getViewport({ scale: 1 });
-        var escala = Math.min(self._largura, 900) / base.width * self.zoom;
+        var corte = self.corte || 0;
+        var escala = Math.min(self._largura, 1000) / (base.width * (1 - 2 * corte)) * self.zoom;
         var vp = pg.getViewport({ scale: escala });
+        var mold = document.createElement('div');
+        mold.className = 'lp-moldura';
+        mold.style.width = Math.floor(vp.width * (1 - 2 * corte)) + 'px';
         var d = document.createElement('div');
         d.className = 'lp-pag'; d.dataset.p = i + 1;
         d.style.width = Math.floor(vp.width) + 'px'; d.style.height = Math.floor(vp.height) + 'px';
+        d.style.marginLeft = -Math.floor(vp.width * corte) + 'px';
         d.style.setProperty('--scale-factor', escala);
-        d.innerHTML = '<canvas></canvas><div class="lp-grifos"></div><div class="textLayer"></div><span class="lp-num">' + (i + 1) + '</span>';
-        alvo.appendChild(d);
+        d.innerHTML = '<canvas></canvas><div class="lp-grifos"></div><div class="textLayer"></div>';
+        mold.innerHTML = '<span class="lp-num">' + (i + 1) + '</span>';
+        mold.insertBefore(d, mold.firstChild);
+        alvo.appendChild(mold);
         self.paginas[i + 1] = { pg: pg, vp: vp, el: d };
         self.ligarArea(d);
         obs.observe(d);
@@ -238,6 +272,7 @@
   };
   Leitor.prototype.lista = function () {
     var gs = this.meus(), el = this.raiz.querySelector('.lp-lista'); if (!el) return;
+    var ng = this.raiz.querySelector('.lp-ng'); if (ng) ng.textContent = gs.length;
     el.innerHTML = '<div class="lp-lt">Meus grifos <b>' + gs.length + '</b></div>' + (gs.length ? gs.map(function (g) {
       return '<button type="button" class="lp-it" data-ir="' + g.id + '"><span class="lp-cor" style="background:' + cor(g.c) + '"></span>' +
         '<span><small>p. ' + g.p + '</small>' + esc(g.t || 'Área grifada') + (g.n ? '<em>' + esc(g.n) + '</em>' : '') + '</span></button>';
