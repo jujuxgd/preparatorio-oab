@@ -13,6 +13,9 @@
 .lp-num{position:absolute;right:8px;bottom:6px;font:500 .62rem Inter,sans-serif;color:#a8988c;z-index:4;pointer-events:none}
 .lp-grifos{position:absolute;inset:0;z-index:1;pointer-events:none}
 .lp-g{position:absolute;border-radius:2px;mix-blend-mode:multiply}
+[data-theme="dark"] .lp-pag{background:#1f1b19}
+[data-theme="dark"] .lp-pag canvas{filter:invert(.88) hue-rotate(180deg)}
+[data-theme="dark"] .lp-g{mix-blend-mode:screen;opacity:.55}
 .lp-g.pisca{outline:2px solid var(--rose-deep);outline-offset:2px}
 .lp-gn{position:absolute;left:-14px;top:-6px;font-size:.7rem;color:var(--rose-deep);mix-blend-mode:normal}
 .lp-arrasto{outline:1.5px dashed var(--rose-deep)}
