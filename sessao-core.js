@@ -131,7 +131,8 @@
     return { novos: out, feitos: feitos };
   }
   function fila() {
-    var venc = ATIVO.vencidos(DATA);
+    // num dia futuro aberto antes da hora, revisões só valem até hoje: o que vence amanhã fica para amanhã
+    var venc = ATIVO.vencidos(DATA > HOJE ? HOJE : DATA);
     if (!DIA) return { venc: venc, novos: [], feitos: [] };
     if (DIA.tipo === 'vespera') return { venc: venc.slice(0, 30), novos: [], feitos: [] };
     if (DIA.tipo === 'leve' || DIA.tipo === 'prova') return { venc: venc, novos: [], feitos: [] };
