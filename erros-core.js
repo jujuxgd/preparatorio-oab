@@ -105,6 +105,7 @@ function erros_add(dados) {
       (dados.questao_id ? e.questao_id === dados.questao_id : e.flashcard_id === dados.flashcard_id));
     if (j >= 0) {
       list[j] = { ...list[j], nivel: 0, acertos_seguidos: 0, proxima_revisao: _erros_soma_dias(dataLocalHoje(), 1) };
+      if (dados.justificada) Object.assign(list[j], { motivo: dados.motivo, o_que_faltou: dados.o_que_faltou || '', justificada: true });
       erros_save(list);
       return list[j];
     }
@@ -120,6 +121,8 @@ function erros_add(dados) {
     explicacao:   dados.explicacao   || '',
     dia_estudo:   dados.dia_estudo   || null,
     questao_id:   dados.questao_id   || null,
+    origem:       dados.origem       || '',
+    justificada:  !!dados.justificada,
     flashcard_id: dados.flashcard_id || null,
     nivel: 0,
     acertos_seguidos: 0,
@@ -143,6 +146,7 @@ function erros_editar(id, dados) {
     motivo:       dados.motivo       ?? list[i].motivo,
     o_que_faltou: dados.o_que_faltou ?? list[i].o_que_faltou,
     explicacao:   dados.explicacao   ?? list[i].explicacao,
+    justificada:  dados.justificada  ?? list[i].justificada,
   };
   erros_save(list);
   return list[i];
@@ -155,6 +159,51 @@ function erros_dominar(id) {
   list[i] = { ...list[i], status: 'dominada', dominada_em: dataLocalHoje() };
   erros_save(list);
 }
+
+// "Preciso praticar mais": volta ao começo da escada e reaparece amanhã (também reabre uma dominada)
+function erros_praticar(id) {
+  const list = erros_get();
+  const i = list.findIndex(e => e.id === id);
+  if (i < 0) return;
+  const e = { ...list[i], status: 'pendente', nivel: 0, acertos_seguidos: 0,
+    proxima_revisao: _erros_soma_dias(dataLocalHoje(), 1) };
+  delete e.dominada_em;
+  list[i] = e;
+  erros_save(list);
+}
+
+function erros_da_questao(questaoId) {
+  return erros_get().find(e => e.questao_id === questaoId && e.status !== 'dominada') || null;
+}
+
+// ── Justificar o erro na hora (Hoje e Banco) ──
+function _erros_esc(t) {
+  return String(t || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+function erros_html_justificar(opts) {
+  opts = opts || {};
+  const sel = opts.motivo || '';
+  return '<div class="ej">' +
+    '<div class="ej-t">' + _erros_esc(opts.titulo || 'Por que você errou?') + '</div>' +
+    '<div class="ej-m">' + Object.entries(MOTIVOS_ERROS).map(([k, v]) =>
+      '<button type="button" class="ej-chip' + (k === sel ? ' sel' : '') + '" data-motivo="' + k + '">' + v + '</button>').join('') + '</div>' +
+    '<textarea class="ej-nota" rows="2" placeholder="O que faltou para acertar? (opcional)">' + _erros_esc(opts.nota) + '</textarea>' +
+    '<div class="ej-acoes"><button type="button" class="ej-salvar"' + (sel ? '' : ' disabled') + '>' + _erros_esc(opts.botao || 'Salvar no caderno') + '</button>' +
+    (opts.cancelar ? '<button type="button" class="ej-cancelar">Cancelar</button>' : '') +
+    '<span class="ej-dica">' + (sel ? '' : 'Escolha o motivo') + '</span></div></div>';
+}
+function erros_ler_justificar(el) {
+  const m = el.querySelector('.ej-chip.sel');
+  return { motivo: m ? m.dataset.motivo : 'nao_sabia', o_que_faltou: (el.querySelector('.ej-nota').value || '').trim() };
+}
+document.addEventListener('click', function (ev) {
+  const chip = ev.target.closest && ev.target.closest('.ej-chip');
+  if (!chip) return;
+  const box = chip.closest('.ej');
+  box.querySelectorAll('.ej-chip').forEach(b => b.classList.toggle('sel', b === chip));
+  box.querySelector('.ej-salvar').disabled = false;
+  const d = box.querySelector('.ej-dica'); if (d) d.textContent = '';
+});
 
 function erros_deletar(id) {
   erros_save(erros_get().filter(e => e.id !== id));

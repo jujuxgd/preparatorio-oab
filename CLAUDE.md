@@ -240,6 +240,11 @@ no máximo 15 por dia, mais atrasados primeiro. Erros sem `proxima_revisao` (ant
 vencem no primeiro dia. Cartões sem `questao_id` aparecem como "mostrar resposta →
 lembrei / não lembrei". `hoje.html` mostra o aviso do dia; a revisão em si é em `erros.html`.
 `erros_add` com `questao_id` já pendente reinicia o nível em vez de duplicar.
+**Justificar na hora (13/10/2026):** `erros_html_justificar()`/`erros_ler_justificar()` (erros-core) montam o bloco "Por que você
+errou?" (motivo + o que faltou). No Hoje o erro já vai ao caderno e o bloco grava a justificativa (`justificada: true`); no Banco,
+errar abre o bloco e só "Salvar no caderno" registra (acerto/chute: botão "+ Caderno de Erros"). A referência da questão fica em
+`origem` (registros antigos a tinham em `o_que_faltou`; `erros.html` reconhece). Cartão do caderno: Refazer agora (revisão só
+daquele item), ✓ Dominei, ↻ Preciso praticar mais (`erros_praticar`: nível 0, volta amanhã; também reabre dominada).
 
 ---
 

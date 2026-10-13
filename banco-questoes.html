@@ -721,13 +721,20 @@
     var expl = (e.respondida && e.expl && q.explanation)
       ? '<div class="expl"><h4>Comentário</h4>' + formatarExplicacao(q.explanation) +
         (q.legal_basis ? '<p class="base"><b>Fundamentação:</b> ' + esc(q.legal_basis) + '</p>' : '') + '</div>' : '';
+    // errou: o formulário de justificativa já abre; acertou (mas foi chute) abre pelo botão
+    var reg = e.respondida && typeof erros_da_questao === 'function' ? erros_da_questao(q.id) : null;
+    var errou = e.respondida && q.correct_answer && e.escolha !== q.correct_answer;
+    var jus = '';
+    if (reg) jus = '<div class="ej-ok">No Caderno de Erros' + (reg.justificada ? ' · <b>' + esc(MOTIVOS_ERROS[reg.motivo] || reg.motivo) + '</b>' + (reg.o_que_faltou ? ' — ' + esc(reg.o_que_faltou) : '') : '') + '</div>';
+    else if (e.respondida && typeof erros_html_justificar === 'function' && (e.cad || (errou && !e.semCaderno)))
+      jus = erros_html_justificar({ titulo: errou ? 'Por que você errou? Salve no Caderno de Erros para revisar em 1, 7 e 15 dias.' : 'Por que mandar para o caderno?', botao: 'Salvar no caderno', cancelar: true });
     var nota = (e.respondida && q.notes) ? '<div class="nota">Sobre o material de origem: ' + esc(q.notes) + '</div>' : '';
 
     var acoes = e.respondida
       ? (q.explanation ? '<button class="b g' + (e.expl ? ' on' : '') + '" data-a="expl">' + (e.expl ? 'Esconder comentário' : 'Ver comentário') + '</button>' : '') +
         '<button class="b g" data-a="refazer">Refazer</button>' +
         '<button class="b g' + (fav ? ' on' : '') + '" data-a="fav">' + (fav ? '★ Favoritada' : '☆ Favoritar') + '</button>' +
-        '<button class="b g" data-a="erro">+ Caderno de Erros</button>'
+        (reg || jus ? '' : '<button class="b g" data-a="erro">+ Caderno de Erros</button>')
       : '<button class="b" data-a="resp"' + (e.escolha ? '' : ' disabled') + '>Responder</button>' +
         '<button class="b g' + (fav ? ' on' : '') + '" data-a="fav">' + (fav ? '★ Favoritada' : '☆ Favoritar') + '</button>';
 
@@ -742,7 +749,7 @@
       '</header>' +
       '<div class="q-corpo">' +
         '<div class="q-enun">' + esc(q.statement) + '</div>' +
-        '<div class="alts">' + alts + '</div>' + ver + expl + nota +
+        '<div class="alts">' + alts + '</div>' + ver + jus + expl + nota +
         '<div class="q-acoes">' + acoes + '</div>' +
       '</div></article>';
   }
@@ -889,6 +896,20 @@
     var ctx0 = questaoDe(ev.target); if (!ctx0) return;
     var q = ctx0.q, e = ctx0.e;
 
+    if (ev.target.closest('.ej-cancelar')) { e.cad = false; e.semCaderno = true; aplicar(); return; }
+    var sal = ev.target.closest('.ej-salvar');
+    if (sal) {
+      var j = erros_ler_justificar(sal.closest('.ej'));
+      erros_add({
+        materia: q.discipline || '', topico: q.topic || '', subtopico: q.subtopic || '',
+        motivo: j.motivo, o_que_faltou: j.o_que_faltou, justificada: true,
+        origem: q.exam_number + 'º Exame · questão ' + q.question_number +
+                (e.escolha && e.escolha !== q.correct_answer ? ' · marquei ' + e.escolha : ' · foi chute') + ' · gabarito ' + (q.correct_answer || '—'),
+        explicacao: q.explanation || '',
+        questao_id: q.id
+      });
+      e.cad = false; aplicar(); return;
+    }
     var tes = ev.target.closest('button[data-corta]');
     if (tes) {
       alternarCorte(e, tes.dataset.corta, !tes.closest('.alt-linha').classList.contains('cortada'));
@@ -915,14 +936,7 @@
       gravar(K_FAV, favoritas); aplicar();
     } else if (b.dataset.a === 'erro') {
       if (typeof erros_add !== 'function') { b.textContent = 'Caderno indisponível'; return; }
-      erros_add({
-        materia: q.discipline || '', topico: q.topic || '', subtopico: q.subtopic || '', motivo: 'nao_sabia',
-        o_que_faltou: q.exam_number + 'º Exame, questão ' + q.question_number + '. Gabarito ' +
-                      (q.correct_answer || '—') + (e.escolha ? '; marquei ' + e.escolha : '') + '.',
-        explicacao: q.explanation || '',
-        questao_id: q.id
-      });
-      b.textContent = '✓ Enviada ao caderno'; b.disabled = true;
+      e.cad = true; e.semCaderno = false; aplicar();
     }
   });
 
