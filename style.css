@@ -1820,3 +1820,19 @@ main { animation: pageEnter 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
   color: var(--ink-soft); font-style: italic;
 }
 .mr-render a { color: var(--rose-deep); }
+
+/* Justificar o erro na hora (erros-core.js · Hoje e Banco) */
+.ej{margin-top:.7rem;padding:.8rem .9rem;border:1px dashed var(--line);border-radius:var(--radius-sm);background:var(--bg)}
+.ej-t{font-size:.78rem;font-weight:600;color:var(--ink);margin-bottom:.45rem}
+.ej-m{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:.5rem}
+.ej-chip{font:inherit;font-size:.74rem;padding:.3rem .7rem;border-radius:999px;border:1px solid var(--line);background:var(--paper);color:var(--ink-soft,var(--ink));cursor:pointer}
+.ej-chip:hover{border-color:var(--rose)}
+.ej-chip.sel{background:var(--rose);border-color:var(--rose);color:#fff}
+.ej-nota{width:100%;box-sizing:border-box;font:inherit;font-size:.82rem;padding:.5rem .6rem;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--paper);color:var(--ink);resize:vertical}
+.ej-acoes{display:flex;align-items:center;gap:.5rem;margin-top:.5rem}
+.ej-salvar{font:inherit;font-size:.78rem;font-weight:600;padding:.4rem .9rem;border-radius:var(--radius-sm);border:0;background:var(--rose);color:#fff;cursor:pointer}
+.ej-salvar:disabled{opacity:.45;cursor:default}
+.ej-cancelar{font:inherit;font-size:.78rem;padding:.4rem .8rem;border-radius:var(--radius-sm);border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer}
+.ej-dica{font-size:.72rem;color:var(--ink-faded)}
+.ej-ok{margin-top:.6rem;font-size:.78rem;color:var(--ink-soft,var(--ink))}
+.ej-ok b{color:var(--rose-deep)}

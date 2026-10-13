@@ -466,7 +466,7 @@
       (certa ? '<b class="ok">Acertou.</b><button data-chute="1">Foi chute → errei</button>'
        : chute ? '<b class="no">Foi chute.</b> Foi para o Caderno de Erros.'
        : '<b class="no">Errou · gabarito ' + q.correct_answer + '.</b> Foi para o Caderno de Erros.') +
-      '<button data-expl="1">Ver comentário</button></div><div class="ss-expl" hidden>' + formatarExplicacao(q.explanation) +
+      '<button data-expl="1">Ver comentário</button></div>' + (certa ? '' : htmlJustificar(q)) + '<div class="ss-expl" hidden>' + formatarExplicacao(q.explanation) +
       (q.legal_basis ? '<p><b>Fundamentação:</b> ' + esc(q.legal_basis) + '</p>' : '') + '</div>';
   }
   function blocoQuestoes(chave, titulo, extra, disc, topicos, g, n, erradasPrimeiro, usadas) {
@@ -515,12 +515,22 @@
   }
 
   function mandarProCaderno(q, letra) {
-    if (typeof erros_add !== 'function') return;
-    erros_add({
+    if (typeof erros_add !== 'function') return null;
+    return erros_add({
       materia: q.discipline || '', topico: q.topic || '', subtopico: q.subtopic || '', motivo: 'nao_sabia',
-      o_que_faltou: q.exam_number + 'º Exame, questão ' + q.question_number + '. Gabarito ' + q.correct_answer + (letra ? '; marquei ' + letra : '') + '.',
+      origem: nomeExame(q.exam_number) + ' · questão ' + q.question_number + (letra && letra !== q.correct_answer ? ' · marquei ' + letra : ' · foi chute') + ' · gabarito ' + q.correct_answer,
       explicacao: q.explanation || '', questao_id: q.id
     });
+  }
+  // errou: escolhe o motivo e anota o que faltou; o registro já está no caderno, aqui ele ganha a justificativa
+  function htmlJustificar(q) {
+    if (typeof erros_html_justificar !== 'function') return '';
+    var reg = erros_da_questao(q.id);
+    if (reg && reg.justificada) return htmlJustificado(reg);
+    return erros_html_justificar({ titulo: 'Por que você errou? Fica anotado no Caderno de Erros.', botao: 'Salvar justificativa' });
+  }
+  function htmlJustificado(reg) {
+    return '<div class="ej-ok">No caderno · <b>' + esc(MOTIVOS_ERROS[reg.motivo] || reg.motivo) + '</b>' + (reg.o_que_faltou ? ' — ' + esc(reg.o_que_faltou) : '') + '</div>';
   }
   function responderQuestao(card, letra) {
     var id = card.dataset.q, q = qpor(id); if (!q || card.dataset.feita) return;
@@ -607,6 +617,15 @@
     }
     var li = t.closest('.ck-lista li[data-ck]');
     if (li && !t.closest('a')) { marcar(li.dataset.ck, !li.classList.contains('done')); return; }
+    var sal = t.closest('.ss-q .ej-salvar');
+    if (sal) {
+      var cq = sal.closest('.ss-q'), qq = qpor(cq.dataset.q), box = sal.closest('.ej');
+      var reg = erros_da_questao(qq.id) || mandarProCaderno(qq, (ler(K_RESP, {})[qq.id] || {}).ultima_resposta);
+      if (!reg) return;
+      var j = erros_ler_justificar(box); j.justificada = true;
+      box.outerHTML = htmlJustificado(erros_editar(reg.id, j));
+      return;
+    }
     var tes = t.closest('.ss-tes');
     if (tes) { cortarAlt(tes.closest('.ss-linha'), !tes.closest('.ss-linha').classList.contains('cortada')); return; }
     var alt = t.closest('.ss-alt');
@@ -618,7 +637,9 @@
       var resp = ler(K_RESP, {}), r = resp[q.id];
       if (r) { r.ultima_correta = false; r.acertos = Math.max(0, r.acertos - 1); r.erros += 1; gravar(K_RESP, resp); }
       mandarProCaderno(q, q.correct_answer);
+      var res = t.closest('.ss-res');
       t.outerHTML = '<span style="margin-left:.6rem">Foi para o Caderno de Erros.</span>';
+      res.insertAdjacentHTML('afterend', htmlJustificar(q));
     }
   });
   document.addEventListener('change', function (ev) {

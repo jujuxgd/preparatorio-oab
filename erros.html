@@ -119,8 +119,8 @@
   border: 1px solid var(--line);
   border-left: 4px solid var(--error, #c9897e);
   border-radius: var(--radius);
-  padding: 1.8rem;
-  margin-bottom: 1.2rem;
+  padding: 1.2rem 1.4rem;
+  margin-bottom: 1rem;
   box-shadow: var(--shadow-sm);
   transition: opacity var(--transition);
 }
@@ -197,6 +197,19 @@
   font-size: 0.7rem;
   font-weight: 500;
 }
+
+.ec-origem { font-size: .8rem; color: var(--ink-soft, var(--ink)); margin: -.3rem 0 .7rem; }
+.ec-motivo { display: flex; align-items: center; gap: .6rem; margin-bottom: .7rem; }
+.ec-motivo .tag { padding: .2rem .7rem; border-radius: 20px; font-size: .72rem; font-weight: 500; }
+.ec-link { background: none; border: 0; padding: 0; font: inherit; font-size: .74rem; color: var(--rose-deep); text-decoration: underline; cursor: pointer; }
+.ec-pergunta { font-size: .92rem; color: var(--ink); line-height: 1.55; margin-bottom: .6rem; }
+.ec-det { margin-bottom: .6rem; font-size: .84rem; }
+.ec-det summary { cursor: pointer; font-size: .74rem; font-weight: 600; color: var(--rose-deep); }
+.ec-det > div { background: var(--bg-soft); padding: .8rem 1rem; border-radius: var(--radius-sm); margin-top: .5rem; line-height: 1.6; color: var(--ink); }
+.ec-estado { font-size: .74rem; color: var(--ink-faded); margin-top: .2rem; }
+.error-actions .btn { font-size: .76rem; padding: .38rem .85rem; }
+.ec-mais { margin-left: auto; display: flex; gap: .3rem; }
+.error-actions .ec-ic { padding: .38rem .6rem; color: var(--ink-faded); }
 .tag-nao_sabia         { background: rgba(200,100,80,.14); color: #a0402e; }
 .tag-confusao_conceito { background: rgba(201,120,10,.12); color: #8a5500; }
 .tag-pegadinha         { background: rgba(142,92,86,.14);  color: var(--rose-deep); }
@@ -404,13 +417,13 @@
 
       <div class="form-row">
         <div class="form-group form-full">
-          <label>O que faltou para acertar *</label>
+          <label>O que faltou para acertar</label>
           <textarea id="f-faltou" class="tall" placeholder="Escreva o ponto-chave que você não sabia ou confundiu..."></textarea>
         </div>
       </div>
       <div class="form-row">
         <div class="form-group form-full">
-          <label>Explicação (cole do QConcursos)</label>
+          <label>Explicação / comentário</label>
           <textarea id="f-explicacao" class="tall" placeholder="Cole aqui o comentário do gabarito..."></textarea>
         </div>
       </div>
@@ -541,7 +554,7 @@ function toggleFormPrefill(prefill) {
   document.getElementById('f-materia').value    = prefill.materia    || '';
   document.getElementById('f-topico').value     = prefill.topico     || '';
   document.getElementById('f-subtopico').value  = prefill.subtopico  || '';
-  document.getElementById('f-faltou').value     = prefill.o_que_faltou || '';
+  document.getElementById('f-faltou').value     = notaDe(prefill);
   document.getElementById('f-explicacao').value = prefill.explicacao   || '';
   document.querySelectorAll('.motivo-btn').forEach(b => b.classList.toggle('sel', b.dataset.motivo === (prefill.motivo || 'nao_sabia')));
   document.getElementById('novo-form-title').textContent = _editandoId ? 'Editar registro' : 'Registrar aprendizado';
@@ -553,7 +566,7 @@ function salvarRegistro() {
   const materia   = document.getElementById('f-materia').value;
   const o_que_faltou = document.getElementById('f-faltou').value.trim();
   if (!materia)   { document.getElementById('form-msg').textContent = 'Selecione a matéria.'; return; }
-  if (!o_que_faltou) { document.getElementById('form-msg').textContent = 'Preencha o campo obrigatório.'; return; }
+  if (!o_que_faltou && !_editandoId) { document.getElementById('form-msg').textContent = 'Preencha o que faltou para acertar.'; return; }
 
   const motivo = document.querySelector('.motivo-btn.sel')?.dataset.motivo || 'nao_sabia';
   const dados = {
@@ -562,7 +575,8 @@ function salvarRegistro() {
     subtopico:   document.getElementById('f-subtopico').value.trim(),
     motivo,
     o_que_faltou,
-    explicacao:  document.getElementById('f-explicacao').value.trim()
+    explicacao:  document.getElementById('f-explicacao').value.trim(),
+    justificada: true
   };
 
   if (_editandoId) {
@@ -637,6 +651,12 @@ function renderLista() {
       renderAll();
     });
   });
+  lista.querySelectorAll('[data-praticar]').forEach(btn => {
+    btn.addEventListener('click', () => { erros_praticar(btn.dataset.praticar); renderAll(); });
+  });
+  lista.querySelectorAll('[data-refazer]').forEach(btn => {
+    btn.addEventListener('click', () => iniciarRevisao([btn.dataset.refazer]));
+  });
   lista.querySelectorAll('[data-editar]').forEach(btn => {
     btn.addEventListener('click', () => editarErro(btn.dataset.editar));
   });
@@ -650,41 +670,62 @@ function renderLista() {
   });
 }
 
+// registros antigos guardavam a origem da questão em "o que faltou"
+const ORIGEM_ANTIGA = /^\d+º Exame, questão \d+\. Gabarito [A-D—]+(; marquei [A-D])?\.$/;
+function origemDe(e) {
+  if (e.origem) return e.origem;
+  if (ORIGEM_ANTIGA.test(e.o_que_faltou || '')) return e.o_que_faltou.replace(/\.$/, '').replace('. Gabarito', ' · gabarito').replace('; marquei', ' · marquei');
+  return '';
+}
+function notaDe(e) { return ORIGEM_ANTIGA.test(e.o_que_faltou || '') ? '' : (e.o_que_faltou || ''); }
+
 function renderCard(e) {
-  const matNome   = MATERIAS_ERROS[e.materia] || e.materia;
+  const matNome = MATERIAS_ERROS[e.materia] || e.materia;
   const motivoLabel = MOTIVOS_ERROS[e.motivo] || e.motivo;
   const isDominada = e.status === 'dominada';
+  const hoje = dataLocalHoje();
+  const origem = origemDe(e), nota = notaDe(e);
+  const fc = !!e.flashcard_id;
+  const semJustificar = !fc && e.questao_id && !e.justificada && !nota;
+  const btn = (cls, attr, txt) => `<button class="btn ${cls}" ${attr}>${txt}</button>`;
 
-  const subtopico = e.subtopico
-    ? `<div class="error-subtopico">${e.subtopico}</div>`
-    : '';
-  const faltou = e.o_que_faltou
-    ? `<div class="error-tip"><div class="lbl">O que faltou para acertar</div>${escHtml(e.o_que_faltou)}</div>`
-    : '';
-  const explicacao = e.explicacao
-    ? `<div class="error-tip"><div class="lbl">Explicação (QConcursos)</div>${escHtml(semQuebra(e.explicacao))}</div>`
-    : '';
+  let corpo = '';
+  if (fc) {
+    corpo += nota ? `<div class="ec-pergunta">${escHtml(nota)}</div>` : '';
+    corpo += e.explicacao ? `<details class="ec-det"><summary>Resposta</summary><div>${escHtml(semQuebra(e.explicacao))}</div></details>` : '';
+  } else {
+    corpo += `<div class="ec-motivo"><span class="tag tag-${e.motivo}">${escHtml(motivoLabel)}</span>` +
+      (semJustificar ? `<button class="ec-link" data-editar="${e.id}">justificar o erro</button>` : '') + '</div>';
+    if (nota) corpo += `<div class="error-tip"><div class="lbl">O que faltou para acertar</div>${escHtml(nota)}</div>`;
+    if (e.explicacao) corpo += `<details class="ec-det"><summary>Comentário da questão</summary><div>${escHtml(semQuebra(e.explicacao))}</div></details>`;
+  }
+
+  let estado = '';
+  if (isDominada) estado = '✓ Dominada' + (e.dominada_em ? ' em ' + erros_fmt_data(e.dominada_em) : '');
+  else if (e.proxima_revisao) {
+    const quando = e.proxima_revisao <= hoje ? 'hoje' : e.proxima_revisao === _erros_soma_dias(hoje, 1) ? 'amanhã' : 'em ' + erros_fmt_data(e.proxima_revisao);
+    estado = 'Revisa ' + quando + (e.acertos_seguidos ? ' · ' + e.acertos_seguidos + ' de ' + ERROS_ACERTOS_PARA_DOMINAR + ' acertos seguidos' : '');
+  }
+
   const acoes = isDominada
-    ? `<button class="btn" style="font-size:.76rem;padding:.35rem .8rem" data-editar="${e.id}">✎ Editar</button>
-       <button class="btn" style="font-size:.76rem;padding:.35rem .8rem" data-deletar="${e.id}">✕ Excluir</button>
-       <div class="tags"><span class="tag tag-${e.motivo}">${motivoLabel}</span></div>`
-    : `<button class="btn btn-primary" style="font-size:.76rem;padding:.35rem .8rem" data-dominar="${e.id}">✓ Dominei</button>
-       <button class="btn" style="font-size:.76rem;padding:.35rem .8rem" data-editar="${e.id}">✎ Editar</button>
-       <button class="btn" style="font-size:.76rem;padding:.35rem .8rem" data-deletar="${e.id}">✕ Excluir</button>
-       <div class="tags"><span class="tag tag-${e.motivo}">${motivoLabel}</span></div>`;
+    ? btn('', `data-praticar="${e.id}"`, '↻ Voltar a praticar')
+    : btn('btn-primary', `data-refazer="${e.id}"`, fc ? 'Revisar agora' : 'Refazer agora') +
+      btn('', `data-dominar="${e.id}"`, '✓ Dominei') +
+      btn('', `data-praticar="${e.id}"`, '↻ Preciso praticar mais');
 
   return `
     <div class="error-card${isDominada ? ' dominada' : ''}">
       <div class="error-head">
-        <span class="materia-badge">${matNome}</span>
-        <span class="materia">${e.topico || '—'}</span>
-        <span>${isDominada ? '✓ dominada ' + (e.dominada_em ? erros_fmt_data(e.dominada_em) : '') : erros_fmt_data(e.data)}</span>
+        <span class="materia-badge">${escHtml(matNome)}</span>
+        <span class="materia">${escHtml(e.topico || '—')}</span>
+        <span>${erros_fmt_data(e.data)}</span>
       </div>
-      ${subtopico}
-      ${faltou}
-      ${explicacao}
-      ${!isDominada && e.proxima_revisao ? `<div style="font-size:.72rem;color:var(--ink-faded);margin:.4rem 0">Próxima revisão: ${erros_fmt_data(e.proxima_revisao)}${e.acertos_seguidos ? ' · ' + e.acertos_seguidos + '/' + ERROS_ACERTOS_PARA_DOMINAR + ' acertos seguidos' : ''}</div>` : ''}
-      <div class="error-actions">${acoes}</div>
+      ${origem || fc ? `<div class="ec-origem">${fc ? 'Flashcard' + (e.subtopico ? ' · ' + escHtml(e.subtopico.replace(/ · flashcard$/, '')) : '') : escHtml(origem)}</div>` : (e.subtopico ? `<div class="error-subtopico">${escHtml(e.subtopico)}</div>` : '')}
+      ${corpo}
+      <div class="ec-estado">${estado}</div>
+      <div class="error-actions">${acoes}
+        <span class="ec-mais">${btn('ec-ic', `data-editar="${e.id}" title="Editar"`, '✎')}${btn('ec-ic', `data-deletar="${e.id}" title="Excluir"`, '✕')}</span>
+      </div>
     </div>`;
 }
 
@@ -736,8 +777,8 @@ function _revCarregarBanco() {
   });
 }
 
-async function iniciarRevisao() {
-  _revFila = erros_devidas();
+async function iniciarRevisao(ids) {
+  _revFila = ids ? erros_get().filter(e => ids.includes(e.id)) : erros_devidas();
   if (!_revFila.length) return;
   _revIdx = 0; _revAcertos = 0;
   document.getElementById('rev-overlay').classList.add('open');
