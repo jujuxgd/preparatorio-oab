@@ -311,7 +311,7 @@
       if (!st.fila.length) { el.innerHTML = '<p class="ss-vazio">' + (opts.vazio || 'Nenhum flashcard para agora.') + '</p>'; return; }
       if (st.idx >= st.fila.length) {
         el.innerHTML = '<div class="fc-player"><h3 style="font-family:Fraunces,serif;font-weight:500;color:var(--rose-deep);margin:0 0 .5rem">Flashcards concluídos</h3>' +
-          '<p style="font-size:.9rem;color:var(--ink-soft);margin:0">' + st.sabidos + ' de ' + st.fila.length + ' você sabia. Os errados voltam amanhã e estão no Caderno de Erros.</p></div>';
+          '<p style="font-size:.9rem;color:var(--ink-soft);margin:0">' + st.sabidos + ' de ' + st.fila.length + ' você sabia. Os errados voltam em 3 dias e estão no Caderno de Erros.</p></div>';
         if (opts.fim) opts.fim(st);
         return;
       }
@@ -481,7 +481,7 @@
     var usadas = {}, n = ATIVO.questoesPorTopico(), h = '';
     if (DIA.top) {
       h += '<div class="ss-bloco"><h3>Questões dos tópicos do dia</h3>' +
-        '<p>Do tema dos PDFs do dia, primeiro as que caíram no Gabaritaço. Errou, a questão vai para o Caderno de Erros e volta em 1, 7 e 15 dias.</p>' +
+        '<p>Do tema dos PDFs do dia, primeiro as que caíram no Gabaritaço. Errou, a questão vai para o Caderno de Erros e volta em 3, 7 e 15 dias.</p>' +
         DIA.top.map(function (t, i) {
           var l = linkTopico(t);
           return blocoQuestoes('t' + i, t.s, l ? '<a href="' + l.href + '" target="_blank" rel="noopener">' + esc(l.txt) + ' ↗</a>' : '', t.d, t.q, t.g, n, /^Reforço/.test(t.s), usadas);

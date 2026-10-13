@@ -7,7 +7,7 @@
 (function () {
   var K_FC = 'oab_fc_estado_v1';
   var K_QPT = 'oab_ativo_questoes_por_topico';
-  var ESCADA = [1, 7, 15];
+  var ESCADA = [3, 7, 15];
   var VESPERA = '2027-01-09';
   var NOVOS_POR_MATERIA = 10;
 
