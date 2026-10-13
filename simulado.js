@@ -250,6 +250,12 @@
       var fila = modo === 'fracas'
         ? embaralhar(erradas).concat(embaralhar(nunca), embaralhar(resto))
         : embaralhar(nunca).concat(embaralhar(erradas), embaralhar(resto));
+      var grupos = {};
+      fila = fila.filter(function (q) {
+        if (!q.duplicate_group) return true;
+        if (grupos[q.duplicate_group]) return false;
+        return (grupos[q.duplicate_group] = true);
+      });
       escolhidas = escolhidas.concat(fila.slice(0, vagas[d]));
     });
     if (!escolhidas.length) return;
