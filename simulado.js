@@ -532,7 +532,7 @@
       '</div>' +
 
       '<div class="res-acoes">' +
-        '<button class="bt-principal" id="bt-registrar">Registrar em Meus Simulados</button>' +
+        '<button class="bt-principal" id="bt-registrar">Registrar nas Estatísticas</button>' +
         '<button class="bt-secundario" id="bt-erros">Mandar erros para o Caderno</button>' +
         '<button class="bt-secundario" id="bt-novo">Fazer outro simulado</button>' +
       '</div>';
