@@ -373,7 +373,7 @@
     var VER = new RegExp('^(?:([A-D])\\)\\s*(' + JULGA + ')|(?:A\\s+)?(?:alternativa|assertiva|letra)\\s+([A-D])\\s+(?:est[áa]|é)\\s+(' + JULGA + '))\\b[\\s:.,-]*', 'i');
     return String(txt || '').split(new RegExp('\\n(?=' + ABRE + ')', 'i')).map(function (bloco) {
       var m = bloco.match(VER), corpo = m ? bloco.slice(m[0].length) : bloco;
-      corpo = corpo.replace(/\n{2,}/g, '\u0000').replace(/\n/g, ' ').replace(/\u0000/g, '\n').replace(/[ \t]{2,}/g, ' ').trim();
+      corpo = corpo.replace(/([^.:;?!)"”\s])[ \t]*\n\s*\n\s*/g, '$1 ').replace(/\n{2,}/g, '\u0000').replace(/\n/g, ' ').replace(/\u0000/g, '\n').replace(/[ \t]{2,}/g, ' ').trim();
       if (!corpo && !m) return '';
       var paras = corpo.split('\n').filter(Boolean).map(function (p) { return '<p>' + esc(p) + '</p>'; }).join('');
       if (!m) return '<div class="ex-bloco">' + paras + '</div>';

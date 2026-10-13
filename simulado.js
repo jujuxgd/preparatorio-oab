@@ -467,7 +467,7 @@
     return txt.split(new RegExp('\\n(?=' + ABRE + ')', 'i')).map(function (bloco) {
       var m = bloco.match(VER);
       var corpo = m ? bloco.slice(m[0].length) : bloco;
-      corpo = corpo.replace(/\n{2,}/g, '\u0000').replace(/\n/g, ' ')
+      corpo = corpo.replace(/([^.:;?!)"”\s])[ \t]*\n\s*\n\s*/g, '$1 ').replace(/\n{2,}/g, '\u0000').replace(/\n/g, ' ')
                    .replace(/\u0000/g, '\n').replace(/[ \t]{2,}/g, ' ').trim();
       if (!corpo && !m) return '';
       var paras = corpo.split('\n').filter(Boolean).map(function (p) {
