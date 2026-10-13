@@ -1225,7 +1225,7 @@
     intro.innerHTML = cart.length
       ? 'Primeiro os <b>' + f.venc.length + '</b> vencidos, depois <b>' + f.novos.length + '</b> novos' +
         (f.novos.length ? ' de ' + esc(uniq(f.novos.map(function (c) { return S.curto(c.d); })).join(', ')) : '') +
-        '. Leia a frente, tente lembrar, mostre a resposta e marque <b>sei</b> ou <b>errei</b>. Errou, volta em 1, 7 e 15 dias.'
+        '. Leia a frente, tente lembrar, mostre a resposta e marque <b>sei</b> ou <b>errei</b>. Errou, volta em 3, 7 e 15 dias.'
       : f.feitos.length ? 'Você já fez os <b>' + f.feitos.length + '</b> flashcards novos de hoje. Quer revisar mais? Abra <a href="revisar.html">Revisar</a> e escolha a matéria.'
       : 'Nenhum flashcard para hoje. Quer revisar mais? Abra <a href="revisar.html">Revisar</a> e escolha a matéria.';
     S.montarFlashcards(document.getElementById('fc-area'), cart, {

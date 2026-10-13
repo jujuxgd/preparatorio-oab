@@ -234,7 +234,7 @@ banco e cadernos legislativos entram no cache na primeira abertura online. Login
 
 Cada erro tem `proxima_revisao`, `nivel`, `acertos_seguidos` e, quando veio do banco ou
 do Simulado, `questao_id` (a questão é refeita a partir de `BANCO_QUESTOES`, carregado
-sob demanda em `erros.html`). Escada de intervalos 1→7→15 dias (desde 10/2026; cortada para
+sob demanda em `erros.html`). Escada de intervalos 3→7→15 dias (era 1→7→15; 3 dias desde 13/10/2026 para não acumular; cortada para
 caber antes de 09/01/2027); errar volta ao nível 0; 3 acertos seguidos = `dominada`. Erros com
 `flashcard_id` (vindos da sessão do dia) ficam fora desta fila — são revisados na sessão. Fila de
 no máximo 15 por dia, mais atrasados primeiro. Erros sem `proxima_revisao` (antigos)
@@ -245,7 +245,7 @@ lembrei / não lembrei". `hoje.html` mostra o aviso do dia; a revisão em si é 
 errou?" (motivo + o que faltou). No Hoje o erro já vai ao caderno e o bloco grava a justificativa (`justificada: true`); no Banco,
 errar abre o bloco e só "Salvar no caderno" registra (acerto/chute: botão "+ Caderno de Erros"). A referência da questão fica em
 `origem` (registros antigos a tinham em `o_que_faltou`; `erros.html` reconhece). Cartão do caderno: Refazer agora (revisão só
-daquele item), ✓ Dominei, ↻ Preciso praticar mais (`erros_praticar`: nível 0, volta amanhã; também reabre dominada).
+daquele item), ✓ Dominei, ↻ Preciso praticar mais (`erros_praticar`: nível 0, volta em 3 dias; também reabre dominada).
 
 ---
 
@@ -312,7 +312,7 @@ salvo; a sessão nova é a rotina do dia e aparece como cartão no topo do Hoje.
   nunca copiado; nada da marca d'água dos PDFs entra no repo. Carregados sob demanda pela lista
   `ARQUIVOS` em `ativo-core.js` (cartão novo: acrescentar o arquivo lá e em `ESSENCIAIS` do `sw.js`).
 - **`ativo-core.js`** → `window.ATIVO`. Estado em `oab_fc_estado_v1` (`{id: {n, prox, fora, h, erros}}`).
-  Errei → 1 dia e entra no Caderno de Erros (`flashcard_id`); acertando, 7 e 15 dias. Sei em cartão
+  Errei → 3 dias e entra no Caderno de Erros (`flashcard_id`); acertando, 7 e 15 dias. Sei em cartão
   novo → 15 dias; sei no degrau de 15 → sai da rotação. Novos: até 10 por matéria do dia.
 - **Planos mesclados (10/10/2026):** não há escolha de plano. A aba Hoje, o Calendário e o Revisar seguem
   `CAL_ATIVO`; o plano de 120 dias (`plano-vde.js`) fica só como dado legado (Início, Matérias, `dia.html`,

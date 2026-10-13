@@ -44,7 +44,7 @@ function erros_save(list) {
 // da rotação. Perto da prova o intervalo é cortado pra
 // caber antes de 10/01/2027. Erros sem `proxima_revisao` (anteriores a
 // esta função) contam como devidos hoje.
-const ERROS_ESCADA = [1, 7, 15];
+const ERROS_ESCADA = [3, 7, 15];
 const ERROS_ACERTOS_PARA_DOMINAR = 3;
 const ERROS_LIMITE_DIARIO = 15;
 const ERROS_DIA_PROVA = '2027-01-09';
@@ -104,7 +104,7 @@ function erros_add(dados) {
     const j = list.findIndex(e => e.status !== 'dominada' &&
       (dados.questao_id ? e.questao_id === dados.questao_id : e.flashcard_id === dados.flashcard_id));
     if (j >= 0) {
-      list[j] = { ...list[j], nivel: 0, acertos_seguidos: 0, proxima_revisao: _erros_soma_dias(dataLocalHoje(), 1) };
+      list[j] = { ...list[j], nivel: 0, acertos_seguidos: 0, proxima_revisao: _erros_soma_dias(dataLocalHoje(), ERROS_ESCADA[0]) };
       if (dados.justificada) Object.assign(list[j], { motivo: dados.motivo, o_que_faltou: dados.o_que_faltou || '', justificada: true });
       erros_save(list);
       return list[j];
@@ -126,7 +126,7 @@ function erros_add(dados) {
     flashcard_id: dados.flashcard_id || null,
     nivel: 0,
     acertos_seguidos: 0,
-    proxima_revisao: _erros_soma_dias(dataLocalHoje(), 1),
+    proxima_revisao: _erros_soma_dias(dataLocalHoje(), ERROS_ESCADA[0]),
     status: 'pendente'
   };
   list.unshift(registro);
@@ -160,13 +160,13 @@ function erros_dominar(id) {
   erros_save(list);
 }
 
-// "Preciso praticar mais": volta ao começo da escada e reaparece amanhã (também reabre uma dominada)
+// "Preciso praticar mais": volta ao começo da escada e reaparece em 3 dias (também reabre uma dominada)
 function erros_praticar(id) {
   const list = erros_get();
   const i = list.findIndex(e => e.id === id);
   if (i < 0) return;
   const e = { ...list[i], status: 'pendente', nivel: 0, acertos_seguidos: 0,
-    proxima_revisao: _erros_soma_dias(dataLocalHoje(), 1) };
+    proxima_revisao: _erros_soma_dias(dataLocalHoje(), ERROS_ESCADA[0]) };
   delete e.dominada_em;
   list[i] = e;
   erros_save(list);
