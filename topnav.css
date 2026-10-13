@@ -120,6 +120,7 @@
 }
 .tn-av:hover { transform: translateY(-1px); box-shadow: 0 0 0 1px var(--rose-300); }
 .tn-av.on { box-shadow: 0 0 0 1.5px var(--rose); }
+[data-theme="dark"] .tn-av { color: var(--rose-deep); }
 
 .tn-icon:focus-visible, .tn-av:focus-visible, .tn-item > a:focus-visible, .tn-sub a:focus-visible, .tn-brand:focus-visible {
   outline: 2px solid var(--rose); outline-offset: 3px; border-radius: 4px;

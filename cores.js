@@ -78,8 +78,9 @@
     const root = document.documentElement;
     const c0 = hexToRgb(base), escura = Math.max(c0.r, c0.g, c0.b) < 102; // preto/cinza-escuro: no escuro, o destaque vira tom claro
     const set = isDark ? (escura ? {
-      '--rose':      lighten(base, 0.65),
-      '--rose-deep': lighten(base, 0.8),
+      // tons médios: legíveis como texto no fundo escuro e como fundo de botão com texto branco
+      '--rose':      lighten(base, 0.42),
+      '--rose-deep': lighten(base, 0.55),
       '--rose-soft': lighten(base, 0.14),
       '--blush':     lighten(base, 0.08),
       '--rose-50':   lighten(base, 0.08),
