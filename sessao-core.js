@@ -347,20 +347,35 @@
   }
   function escolher(chave, disc, topicos, prioritarias, n, erradasPrimeiro, usadas) {
     var s = selecaoDoDia();
-    if (s.sel[chave]) return s.sel[chave];
-    var resp = ler(K_RESP, {}), todos = topicos.indexOf('*') >= 0;
+    if (s.sel[chave]) {
+      var vistos = {};
+      return s.sel[chave].filter(function (id) {
+        var q = qpor(id), gr = q && q.duplicate_group;
+        if (!gr) return true;
+        if (vistos[gr] || (usadas[gr] && !usadas[id])) return false;
+        return (vistos[gr] = true);
+      });
+    }
+    var resp = ler(K_RESP, {}), todos = topicos.indexOf('*') >= 0, acertoGrupo = {};
+    // a mesma questão saiu em mais de um exame (duplicate_group): conta como uma só
+    banco().forEach(function (q) { if (q.duplicate_group && resp[q.id] && resp[q.id].ultima_correta) acertoGrupo[q.duplicate_group] = 1; });
     var pool = banco().filter(function (q) {
-      return q.discipline === disc && q.correct_answer && !usadas[q.id] && (todos || topicos.indexOf(q.topic) >= 0);
+      return q.discipline === disc && q.correct_answer && !usadas[q.id] && !(q.duplicate_group && usadas[q.duplicate_group]) && (todos || topicos.indexOf(q.topic) >= 0);
     });
     function nivel(q) {
       var r = resp[q.id];
-      if (r && r.ultima_correta) return 9;
+      if ((r && r.ultima_correta) || acertoGrupo[q.duplicate_group]) return 9;
       var g = (prioritarias || []).indexOf(q.id) >= 0;
       if (erradasPrimeiro) return r ? 0 : g ? 1 : 2;
       return g ? 0 : r ? 2 : 1;
     }
     pool.sort(function (a, b) { return nivel(a) - nivel(b) || b.exam_number - a.exam_number; });
-    var ids = pool.filter(function (q) { return nivel(q) < 9; }).slice(0, n).map(function (q) { return q.id; });
+    var grupos = {};
+    var ids = pool.filter(function (q) {
+      if (nivel(q) >= 9) return false;
+      if (q.duplicate_group) { if (grupos[q.duplicate_group]) return false; grupos[q.duplicate_group] = 1; }
+      return true;
+    }).slice(0, n).map(function (q) { return q.id; });
     s.sel[chave] = ids;
     try { localStorage.setItem(K_DIA, JSON.stringify(s)); } catch (e) {}
     return ids;
@@ -453,7 +468,7 @@
   }
   function blocoQuestoes(chave, titulo, extra, disc, topicos, g, n, erradasPrimeiro, usadas) {
     var ids = escolher(chave, disc, topicos, g, n, erradasPrimeiro, usadas);
-    ids.forEach(function (id) { usadas[id] = 1; });
+    ids.forEach(function (id) { usadas[id] = 1; var q = qpor(id); if (q && q.duplicate_group) usadas[q.duplicate_group] = 1; });
     return '<div class="ss-top" data-bloco="' + chave + '"><div class="ss-top-cab"><b><span class="mat">' + esc(curto(disc)) + '</span>' + esc(titulo) + '</b>' + (extra || '') + '</div>' +
       (ids.length ? ids.map(function (id, i) { return htmlQuestao(id, i, g); }).join('')
         : '<p class="ss-vazio">Você já acertou todas as questões do banco neste tópico. Use os flashcards e o caderno de erros.</p>') + '</div>';
