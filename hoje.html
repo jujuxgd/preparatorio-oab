@@ -1204,7 +1204,7 @@
     document.getElementById('hj-dia').textContent = p.d;
     document.getElementById('hj-mes').textContent = S.MESES[p.m - 1];
     if (!DIA) return;
-    var fase = DIA.f === 1 ? 'Fase 1 · revisitar e praticar' : DIA.f === 2 ? 'Fase 2 · revisão final' : 'Prova';
+    var fase = DIA.f === 1 ? 'Fase 1' : DIA.f === 2 ? 'Fase 2 · revisão final' : 'Prova';
     document.getElementById('day-materia-tag').textContent = fase + ' · ' + (S.TIPO[DIA.tipo] || '');
     document.getElementById('day-titulo-h2').innerHTML = DIA.top
       ? DIA.top.map(function (t) { return esc(S.curto(t.d)) + ': ' + esc(t.s); }).join(' <em>·</em> ')

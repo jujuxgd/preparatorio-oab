@@ -61,9 +61,14 @@ body.hoje .day-footer>div:last-child{opacity:.9}
 }
 
 @media(max-width:480px){
- body.hoje .tabs-bar{gap:.45rem!important;justify-content:space-between!important}
- body.hoje .tab{font-size:.72rem!important;letter-spacing:0!important;padding-left:0!important;padding-right:0!important}
- body.hoje .tab svg{display:none}
+ /* 5 abas iguais, ícone em cima do nome (como a barra de baixo): cabem sem quebrar e ficam fáceis de tocar */
+ body.hoje .tabs-bar{display:grid!important;grid-template-columns:repeat(5,1fr);gap:0!important}
+ body.hoje .tab{flex-direction:column;justify-content:center;gap:.3rem!important;font-size:.7rem!important;letter-spacing:0!important;padding:.55rem 0 .5rem!important;min-height:54px}
+ body.hoje .tab svg{display:block;width:19px;height:19px}
+ body.hoje .tab .badge{font-size:.58rem;padding:0 .3rem}
+ body.hoje .day-info .tag{white-space:nowrap}
+ body.hoje .tab{position:relative}
+ body.hoje #ck-cont{position:absolute;top:5px;right:4px;font-size:.6rem!important}
 }
 
 /* checklist como aba principal */
