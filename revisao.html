@@ -264,9 +264,8 @@
     <div id="rv-continuar"></div>
     <div class="rv-tabs" id="rv-tabs">
       <button class="rv-tab on" data-tab="rev">Revisões</button>
-      <button class="rv-tab" data-tab="trab">Trabalhista<span class="rv-longo"> (2ª fase)</span></button>
       <button class="rv-tab" data-tab="peca">Peças</button>
-      <button class="rv-tab" data-tab="treino">Treinos</button>
+      <a class="rv-tab" href="segunda-fase.html?aba=estudo" style="text-decoration:none">2ª fase · Trabalho ↗</a>
     </div>
     <div id="rv-conteudo"></div>
   </main>
@@ -741,7 +740,7 @@ document.addEventListener('click', e => {
   if (b) abrirVisualizador(b.dataset.abrir);
 });
 document.getElementById('rv-tabs').addEventListener('click', e => {
-  const t = e.target.closest('.rv-tab');
+  const t = e.target.closest('.rv-tab[data-tab]');
   if (t) { if (aba === 'treino') lerRascunho(); aba = t.dataset.tab; render(); }
 });
 

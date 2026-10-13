@@ -59,16 +59,26 @@
       '--rose-deep': lighten(base, 0.8),
       '--rose-soft': lighten(base, 0.14),
       '--blush':     lighten(base, 0.08),
+      '--rose-50':   lighten(base, 0.08),
+      '--rose-100':  lighten(base, 0.14),
+      '--rose-300':  lighten(base, 0.35),
     } : {
       '--rose':      lighten(base, 0.32),
       '--rose-deep': lighten(base, 0.20),
       '--rose-soft': darken(base, 0.75),
       '--blush':     darken(base, 0.82),
+      // tons claros da escala viram tons escuros: senão etiquetas e seleções ficam brancas no modo escuro
+      '--rose-50':   darken(base, 0.82),
+      '--rose-100':  darken(base, 0.75),
+      '--rose-300':  darken(base, 0.45),
     }) : {
       '--rose':      lighten(base, 0.18),
       '--rose-deep': base,
       '--rose-soft': lighten(base, 0.88),
       '--blush':     lighten(base, 0.95),
+      '--rose-50':   lighten(base, 0.95),
+      '--rose-100':  lighten(base, 0.88),
+      '--rose-300':  lighten(base, 0.55),
     };
     Object.entries(aliases).forEach(([k, v]) => root.style.setProperty(k, v));
   } catch (e) {}

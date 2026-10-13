@@ -9,6 +9,7 @@
     cal: '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
     est: '<path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/>',
     pra: '<path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M7 16v-3"/><path d="M12 16V8"/><path d="M17 16v-5"/>',
+    pec: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8M8 17h5"/>',
     pla: '<path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><path d="M4 22V4"/>'
   };
   var S = {
@@ -29,6 +30,20 @@
     'estudar.html': [['revisar.html', 'Flashcards', 'rev'], ['revisao.html', 'Biblioteca de revisão', 'leg'], ['videoaulas.html', 'Videoaulas', 'vid'], ['caderno-legislativo.html', 'Caderno Legislativo', 'leg'], ['reta-final.html', 'Materiais extras', 'fl']],
     'treino.html': [['rumo40.html', 'Rumo aos 40', 'pra'], ['banco-questoes.html', 'Banco de Questões', 'banco'], ['simulado.html', 'Fazer Simulado', 'simf'], ['erros.html', 'Caderno de Erros', 'err'], ['estatisticas.html', 'Estatísticas', 'q']]
   };
+  // Modo 2ª fase (oab_fase = '2'): o menu vira o da área de Trabalho e as páginas-base da 1ª fase levam para ela
+  var ABA2 = { 'index.html': 'hoje', 'hoje.html': 'hoje', 'calendario.html': 'plano', 'estudar.html': 'estudo', 'treino.html': 'treino' };
+  var FASE = 1; try { FASE = localStorage.getItem('oab_fase') === '2' ? 2 : 1; } catch (e) {}
+  if (FASE === 2 && ABA2[P] && !emb) { location.replace('segunda-fase.html?aba=' + ABA2[P]); return; }
+  if (P === 'segunda-fase.html') FASE = 2;
+  var ABA = new URLSearchParams(location.search).get('aba') || 'hoje';
+  var NAV2 = [
+    ['segunda-fase.html?aba=hoje', 'Hoje', 'hoje', 'hoje'],
+    ['segunda-fase.html?aba=plano', 'Plano', 'cal', 'plano'],
+    ['segunda-fase.html?aba=estudo', 'Estudar', 'est', 'estudo'],
+    ['segunda-fase.html?aba=pecas', 'Peças', 'pec', 'pecas'],
+    ['segunda-fase.html?aba=treino', 'Treino', 'pra', 'treino'],
+    ['segunda-fase.html?aba=guia', 'Guia', 'pla', 'guia']
+  ];
   var NAV = [
     ['index.html', 'Início', 'ini', ['index.html', '']],
     ['hoje.html', 'Hoje', 'hoje', ['hoje.html', 'dia.html', 'sessao.html']],
@@ -38,7 +53,7 @@
   ];
 
   function diasAteProva() {
-    var exame = new Date(2027, 0, 10);
+    var exame = FASE === 2 ? new Date(2027, 1, 28) : new Date(2027, 0, 10);
     var hoje = new Date(); hoje.setHours(0, 0, 0, 0);
     return Math.max(0, Math.round((exame - hoje) / 86400000));
   }
@@ -49,7 +64,11 @@
 
     var perfilOn = P === 'perfil.html';
 
-    var links = NAV.map(function (l) {
+    var links = FASE === 2 ? NAV2.map(function (l) {
+      var on = P === 'segunda-fase.html' && ABA === l[3];
+      return '<div class="tn-item' + (l[3] === 'guia' ? ' so-pc' : '') + '"><a href="' + l[0] + '"' + (on ? ' class="on" aria-current="page"' : '') +
+        '><span class="mi"><svg viewBox="0 0 24 24">' + I[l[2]] + '</svg></span>' + l[1] + '</a></div>';
+    }).join('') : NAV.map(function (l) {
       var on = l[3].indexOf(P) > -1;
       var sub = SUB[l[0]];
       var caret = sub ? '<svg class="tn-caret" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M2 4l3 3 3-3"/></svg>' : '';
@@ -72,12 +91,23 @@
       '<div class="tn-rule" aria-hidden="true"></div>' +
       '<nav class="tn-links" aria-label="Principal">' + links + '<span class="tn-ink" aria-hidden="true"></span></nav>' +
       '<div class="tn-end">' +
-      '<div class="tn-count"><span class="lbl">Prova em</span><span class="val"><b>' + d + '</b> dias</span></div>' +
+      '<div class="tn-fase" role="group" aria-label="Fase do exame"><button type="button" data-fase="1"' + (FASE === 1 ? ' class="on"' : '') + '>1ª<span class="so-pc"> fase</span></button>' +
+      '<button type="button" data-fase="2"' + (FASE === 2 ? ' class="on"' : '') + '>2ª<span class="so-pc"> fase</span></button></div>' +
+      '<div class="tn-count"><span class="lbl">' + (FASE === 2 ? '2ª fase em' : 'Prova em') + '</span><span class="val"><b>' + d + '</b> dias</span></div>' +
       '<button class="tn-icon" type="button" title="Modo escuro" aria-label="Alternar modo escuro" onclick="window.toggleTheme&&toggleTheme()">' +
       '<svg viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>' +
       '<a class="tn-av' + (perfilOn ? ' on' : '') + '" href="perfil.html" title="Perfil e estatísticas" aria-label="Perfil e estatísticas">J</a>' +
       '</div>';
     document.body.insertBefore(bar, document.body.firstChild);
+    bar.querySelector('.tn-fase').addEventListener('click', function (ev) {
+      var b = ev.target.closest('[data-fase]'); if (!b) return;
+      try {
+        localStorage.setItem('oab_fase', b.dataset.fase);
+        localStorage.setItem('oab_local_rev', String(Date.now()));
+        if (window._syncOAB && window._syncOAB.notificarAlteracaoLocal) window._syncOAB.notificarAlteracaoLocal('oab_fase');
+      } catch (e) {}
+      location.href = b.dataset.fase === '2' ? 'segunda-fase.html?aba=hoje' : 'index.html';
+    });
 
     // indicador deslizante
     var wrap = bar.querySelector('.tn-links');

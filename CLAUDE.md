@@ -347,6 +347,20 @@ salvo; a sessão nova é a rotina do dia e aparece como cartão no topo do Hoje.
 
 ---
 
+## 5.6 2ª fase · Direito do Trabalho (`segunda-fase.html` + `segunda-fase.js` + `f2-dados.js`) — desde 13/10/2026
+
+Prova prático-profissional do OAB 48 em **28/02/2027** (cronograma da OAB). Julia escolheu Trabalho; o plano começa em 11/01/2027.
+- **Chave de fase** no topo (`topnav.js`, `.tn-fase`): `oab_fase` = '1' | '2' (sincronizada). No modo 2 o menu vira Hoje · Plano ·
+  Estudar · Peças · Treino · Guia (`segunda-fase.html?aba=…`), a contagem aponta para 28/02, e `index/hoje/calendario/estudar/treino.html`
+  redirecionam para a área da 2ª fase. Voltar para "1ª" leva ao Início.
+- **`f2-dados.js`** → `window.F2`: `MATERIAIS` (IDs do Drive de Julia: livro de Processo do Trabalho 23 cap., livro de Direito do
+  Trabalho 20 cap., 11 aulas de Processo, Revisões 1–3 do VDE, súmulas/OJs, cadernos legislativos; a trilha VDE `trab` de
+  `revisao-biblioteca.js` entra em runtime), `PECAS` (13 peças: para quem, quando, prazo, base legal, endereçamento, estrutura —
+  resumo da CLT/CPC, "conferir no Vade Mecum") e `plano()` (seg–sex 2 capítulos + esqueleto de peça; sáb peça completa; dom
+  discursivas; reta final 15–26/02 com peça diária; simulado 20/02; véspera 27/02).
+- Estado: `oab_f2_check_v1 {data:{k:true}}`, `oab_f2_feito_v1 {idDrive:data}`, `oab_f2_disc_v1 [...]`, `oab_f2_sim_v1 [...]`; peças
+  treinadas continuam em `oab_pecas_treino_v1`. A Biblioteca de revisão perdeu as abas Trabalhista e Treinos (viraram esta área).
+
 ## 6. Design System
 
 ### Paleta de Cores (style.css :root)

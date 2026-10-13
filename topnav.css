@@ -87,6 +87,9 @@
 /* ── Direita ── */
 .tn-end { display: flex; align-items: center; gap: 1.1rem; margin-left: auto; padding-left: 1.5rem; }
 .tn-count { text-align: right; line-height: 1.15; }
+.tn-fase { display: inline-flex; background: var(--bg-soft, var(--bg)); border: 1px solid var(--line); border-radius: 999px; padding: 2px; }
+.tn-fase button { border: 0; background: transparent; border-radius: 999px; padding: .3rem .7rem; font: 500 .74rem Inter, sans-serif; color: var(--ink-faded); cursor: pointer; white-space: nowrap; }
+.tn-fase button.on { background: var(--paper); color: var(--rose-deep); box-shadow: var(--shadow-sm); }
 .tn-count .lbl {
   display: block; font: 600 .6rem/1 'Inter', sans-serif;
   letter-spacing: .18em; text-transform: uppercase; color: var(--ink-soft);
@@ -159,8 +162,11 @@ html.embed .tn, body.embed .tn { display: none; }
   .tn-end { gap: .5rem; padding-left: 0; }
   .tn-count .lbl { display: none; }
   .tn-count .val { font-size: .85rem; }
+  .tn-fase .so-pc { display: none; }
+  .tn-fase button { padding: .28rem .55rem; }
   main { padding-bottom: 5.5rem !important; }
 }
+@media (max-width: 430px) { .tn-count { display: none; } }
 @media (min-width: 901px) { .tn-item > a .mi { display: none; } }
 
 @media (prefers-reduced-motion: reduce) {

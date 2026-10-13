@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="firebase-init.js?v=1783862902"></script>
+<script src="auth-guard.js?v=1784132091"></script>
+<script src="cores-early.js?v=1784060144"></script>
+<script src="page-transition.js?v=1783861010"></script>
+<title>2ª fase · Trabalho - OAB</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Inter:opsz,wght@14..32,400..700&display=swap" rel="stylesheet">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css?v=1784043341">
+<style>
+.rv-vazio{text-align:center;padding:2.5rem 1.5rem;color:var(--ink-soft);font-size:.9rem;line-height:1.6}
+.rv-chips{display:flex;gap:.4rem;flex-wrap:wrap;align-items:center}
+.rv-tr-form{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:1.2rem 1.3rem;box-shadow:var(--shadow-sm);margin-bottom:1.4rem}
+.rv-tr-form h3,.rv-tr-sec{font-family:'Fraunces',serif;font-weight:500;font-size:1.12rem;color:var(--ink);margin:0 0 .9rem}
+.rv-tr-sec{margin:1.6rem 0 .8rem}
+.rv-tr-linha{display:flex;gap:1rem;flex-wrap:wrap;align-items:flex-end;margin-bottom:1rem}
+.rv-tr-campo{display:flex;flex-direction:column;gap:.35rem;flex:1;min-width:150px}
+.rv-tr-campo>span{font-size:.76rem;color:var(--ink-faded)}
+.rv-tr-campo input,.rv-tr-campo textarea{border:1px solid var(--line);border-radius:var(--radius-sm);padding:.55rem .7rem;font:400 .88rem Inter,sans-serif;background:var(--bg);color:var(--ink);width:100%;box-sizing:border-box}
+.rv-tr-campo textarea{min-height:70px;resize:vertical}
+.rv-cron{display:flex;align-items:center;gap:.6rem;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:.3rem .35rem .3rem 1rem}
+.rv-cron b{font-family:'Fraunces',serif;font-weight:500;font-size:1.35rem;color:var(--ink);min-width:5.2ch;font-variant-numeric:tabular-nums}
+.rv-cron button{border:0;border-radius:999px;padding:.45rem .9rem;font:500 .76rem Inter,sans-serif;cursor:pointer;background:var(--paper);color:var(--ink);box-shadow:var(--shadow-sm)}
+.rv-crit{display:grid;gap:.45rem;margin-bottom:1rem}
+.rv-crit-l{display:flex;align-items:center;justify-content:space-between;gap:.6rem 1rem;flex-wrap:wrap;padding:.45rem 0;border-bottom:1px solid var(--line-soft,var(--line))}
+.rv-crit-l>span{font-size:.86rem;color:var(--ink)}
+.rv-crit .rv-seg button.on[data-v="ok"]{background:var(--sage);color:var(--ink)}
+.rv-crit .rv-seg button.on[data-v="parcial"]{background:var(--champagne);color:var(--ink)}
+.rv-crit .rv-seg button.on[data-v="faltou"]{background:var(--mat-civil);color:var(--ink)}
+.rv-tr-acoes{display:flex;gap:.8rem;align-items:center;flex-wrap:wrap}
+.rv-tr-msg{font-size:.78rem;color:var(--ink-faded)}
+.rv-tr-resumo{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:.8rem;margin-bottom:.4rem}
+.rv-tr-num{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:.9rem 1rem;box-shadow:var(--shadow-sm)}
+.rv-tr-num b{display:block;font-family:'Fraunces',serif;font-weight:500;font-size:1.5rem;color:var(--ink);line-height:1.1}
+.rv-tr-num small{font-size:.74rem;color:var(--ink-faded)}
+.rv-tr-item{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:.85rem 1.1rem;margin-bottom:.6rem;box-shadow:var(--shadow-sm)}
+.rv-tr-item-top{display:flex;align-items:baseline;justify-content:space-between;gap:.8rem;flex-wrap:wrap}
+.rv-tr-item-top strong{font-family:'Fraunces',serif;font-weight:500;font-size:1rem;color:var(--ink)}
+.rv-tr-item-top span{font-size:.74rem;color:var(--ink-faded)}
+.rv-tr-marcas{display:flex;gap:.35rem;flex-wrap:wrap;margin:.5rem 0 .2rem}
+.rv-tr-marca{font-size:.7rem;border-radius:999px;padding:.18rem .55rem;background:var(--bg);color:var(--ink-soft)}
+.rv-tr-marca.ok{background:var(--sage);color:var(--ink)}
+.rv-tr-marca.parcial{background:var(--champagne);color:var(--ink)}
+.rv-tr-marca.faltou{background:var(--mat-civil);color:var(--ink)}
+.rv-tr-obs{font-size:.8rem;color:var(--ink-soft);margin-top:.4rem;white-space:pre-wrap}
+.rv-tr-del{border:0;background:none;color:var(--ink-faded);font-size:.74rem;cursor:pointer;padding:0}
+.rv-tr-del:hover{color:var(--ink);text-decoration:underline}
+.rv-seg{display:inline-flex;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px}
+.rv-seg button{border:0;background:transparent;border-radius:999px;padding:.38rem .9rem;font:500 .76rem Inter,sans-serif;color:var(--ink-soft);cursor:pointer;transition:background .15s,color .15s}
+
+.f2-hero{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-lg);padding:1.4rem 1.6rem;box-shadow:var(--shadow-sm);margin-bottom:1.2rem}
+.f2-eb{font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faded);margin-bottom:.4rem}
+.f2-hero h2{font-family:'Fraunces',serif;font-weight:400;font-size:1.45rem;margin:0 0 .4rem;color:var(--ink)}
+.f2-hero h2 em{color:var(--rose-deep)}
+.f2-hero p{margin:0;color:var(--ink-soft);font-size:.9rem;line-height:1.55}
+.f2-nav{display:flex;align-items:center;gap:.6rem;margin:.9rem 0 0;flex-wrap:wrap}
+.f2-nav a,.f2-bt{border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:.4rem .9rem;font:500 .78rem Inter,sans-serif;color:var(--ink);text-decoration:none;cursor:pointer}
+.f2-bt.pri{background:var(--rose-deep);border-color:var(--rose-deep);color:#fff}
+.f2-lista{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.55rem}
+.f2-it{display:flex;align-items:flex-start;gap:.8rem;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:.85rem 1rem}
+.f2-it input{margin-top:.2rem;width:18px;height:18px;accent-color:var(--rose-deep);flex:none}
+.f2-it .tx{flex:1;font-size:.9rem;color:var(--ink);line-height:1.45}
+.f2-it.ok .tx{color:var(--ink-faded);text-decoration:line-through}
+.f2-it .ac{display:flex;gap:.4rem;flex-wrap:wrap}
+.f2-sec{font-family:'Fraunces',serif;font-weight:400;font-size:1.2rem;margin:1.8rem 0 .7rem;color:var(--ink)}
+.f2-sec small{font-family:Inter,sans-serif;font-size:.74rem;color:var(--ink-faded);margin-left:.4rem}
+.f2-sem{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);margin-bottom:.8rem;overflow:hidden}
+.f2-sem h3{font:600 .72rem Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faded);margin:0;padding:.8rem 1rem;border-bottom:1px solid var(--line-soft)}
+.f2-dia{display:grid;grid-template-columns:90px 110px 1fr auto;gap:.8rem;align-items:center;padding:.6rem 1rem;border-bottom:1px solid var(--line-soft);text-decoration:none;color:var(--ink);font-size:.86rem}
+.f2-dia:last-child{border-bottom:0}
+.f2-dia:hover{background:var(--bg)}
+.f2-dia.hoje{background:color-mix(in srgb,var(--rose) 10%,transparent)}
+.f2-dia .dt{color:var(--ink-faded);font-size:.78rem}
+.f2-dia .pg{font-size:.74rem;color:var(--ink-faded)}
+.f2-tag{display:inline-block;font-size:.68rem;font-weight:600;border-radius:999px;padding:.15rem .6rem;background:var(--bg);color:var(--ink-soft)}
+.f2-tag.estudo{background:var(--mat-trab,var(--sage));color:var(--mat-trab-deep,var(--ink))}
+.f2-tag.peca,.f2-tag.reta{background:var(--rose-soft);color:var(--rose-deep)}
+.f2-tag.discursivas{background:var(--lavender);color:var(--ink)}
+.f2-tag.simulado,.f2-tag.prova{background:var(--rose-deep);color:#fff}
+.f2-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:.7rem}
+.f2-mat{display:flex;align-items:center;gap:.7rem;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:.7rem .9rem}
+.f2-mat .n{flex:none;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:.72rem;font-weight:600;background:var(--bg);color:var(--ink-soft)}
+.f2-mat.ok .n{background:var(--mat-trab-deep,var(--rose-deep));color:#fff}
+.f2-mat .t{flex:1;font-size:.86rem;color:var(--ink);cursor:pointer;background:none;border:0;text-align:left;font-family:inherit;padding:0}
+.f2-mat .t:hover{color:var(--rose-deep)}
+.f2-mat .ck{border:1px solid var(--line);background:var(--paper);border-radius:999px;font-size:.7rem;padding:.25rem .6rem;cursor:pointer;color:var(--ink-soft)}
+.f2-mat.ok .ck{background:var(--sage);border-color:var(--sage);color:var(--ink)}
+.f2-gr-desc{font-size:.8rem;color:var(--ink-faded);margin:-.4rem 0 .7rem}
+.f2-peca{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:1.1rem 1.3rem;margin-bottom:.8rem;scroll-margin-top:90px}
+.f2-peca h3{font-family:'Fraunces',serif;font-weight:500;font-size:1.15rem;margin:0 0 .6rem;color:var(--ink)}
+.f2-peca dl{display:grid;grid-template-columns:130px 1fr;gap:.35rem .9rem;margin:0 0 .8rem;font-size:.85rem}
+.f2-peca dt{color:var(--ink-faded)}
+.f2-peca dd{margin:0;color:var(--ink);line-height:1.45}
+.f2-peca ol{margin:0 0 .8rem;padding-left:1.2rem;font-size:.85rem;line-height:1.6;color:var(--ink)}
+.f2-peca.alvo{border-color:var(--rose);box-shadow:0 0 0 3px color-mix(in srgb,var(--rose) 20%,transparent)}
+.f2-dec{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin-bottom:1.2rem}
+.f2-dec div{display:grid;grid-template-columns:1fr 220px;gap:1rem;padding:.65rem 1rem;border-bottom:1px solid var(--line-soft);font-size:.86rem}
+.f2-dec div:last-child{border-bottom:0}
+.f2-dec a{color:var(--rose-deep);font-weight:600;text-decoration:none}
+.f2-txt{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:1.1rem 1.3rem;margin-bottom:.8rem;font-size:.9rem;line-height:1.6;color:var(--ink)}
+.f2-txt h3{font-family:'Fraunces',serif;font-weight:500;font-size:1.1rem;margin:0 0 .5rem}
+.f2-txt ul{margin:.3rem 0 0;padding-left:1.2rem}
+.f2-txt li{margin-bottom:.3rem}
+.f2-txt a{color:var(--rose-deep)}
+.f2-modal{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9000;display:none;align-items:center;justify-content:center;padding:1.5rem}
+.f2-modal.open{display:flex}
+.f2-modal-box{background:var(--paper);border-radius:var(--radius-lg);width:100%;max-width:1200px;height:85vh;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.f2-modal-bar{display:flex;align-items:center;gap:1rem;padding:.8rem 1.2rem;border-bottom:1px solid var(--line);flex-shrink:0}
+.f2-modal-bar b{font-family:'Fraunces',serif;font-weight:500;flex:1;color:var(--ink)}
+@media (max-width:700px){
+  .f2-it{flex-wrap:wrap}
+  .f2-it .ac{width:100%;padding-left:30px}
+  .f2-dia{grid-template-columns:70px 1fr auto}
+  .f2-dia .tg{display:none}
+  .f2-peca dl{grid-template-columns:1fr}
+  .f2-peca dt{margin-top:.3rem}
+  .f2-dec div{grid-template-columns:1fr}
+  .f2-modal{padding:0}
+  .f2-modal-box{height:100%;border-radius:0}
+}
+</style>
+<link rel="stylesheet" href="leitor-pdf.css"><link rel="stylesheet" href="topnav.css?v=1791163406"><script src="topnav.js?v=1791163406"></script></head>
+<body>
+<main>
+  <div class="topbar">
+    <div class="page-title">
+      <div class="breadcrumb">2ª fase · Trabalho · <span id="f2-falta">—</span></div>
+      <h1 id="f2-titulo">2ª <em>fase</em></h1>
+    </div>
+  </div>
+  <div id="f2"></div>
+</main>
+
+<div class="f2-modal" id="f2-modal">
+  <div class="f2-modal-box">
+    <div class="f2-modal-bar"><b id="f2-modal-t">—</b>
+      <a id="f2-modal-drive" class="f2-bt" href="#" target="_blank" rel="noopener">Drive ↗</a>
+      <button class="f2-bt" type="button" id="f2-modal-x">✕ Fechar</button></div>
+    <div id="f2-modal-leitor" class="lp-rola"></div>
+  </div>
+</div>
+
+<script src="f2-dados.js"></script>
+<script src="revisao-biblioteca.js"></script>
+<script src="leitor-pdf.js"></script>
+<script src="progresso.js?v=1783859287"></script>
+<script src="script.js?v=1784021867"></script>
+<script src="sync.js?v=1784058237"></script>
+<script src="cores.js"></script>
+<script src="segunda-fase.js"></script>
+</body>
+</html>
