@@ -341,9 +341,17 @@
   }
 
   // ── questões: seleção fica fixa no dia para não embaralhar a cada abertura ──
+  // Sorteio guardado por data (antes era uma data só: abrir outro dia apagava o sorteio deste e, ao voltar, vinham questões novas)
   function selecaoDoDia() {
-    var s = ler(K_DIA, null);
-    if (!s || s.data !== DATA || s.n !== ATIVO.questoesPorTopico()) s = { data: DATA, n: ATIVO.questoesPorTopico(), sel: {} };
+    var t = ler(K_DIA, null), n = ATIVO.questoesPorTopico();
+    if (!t || !t.dias) t = { dias: {} };
+    var s = t.dias[DATA];
+    if (!s || s.n !== n) s = t.dias[DATA] = { n: n, sel: {} };
+    s.salvar = function () {
+      var ds = Object.keys(t.dias).sort();
+      while (ds.length > 21) delete t.dias[ds.shift()];
+      try { localStorage.setItem(K_DIA, JSON.stringify(t, function (k, v) { return k === 'salvar' ? undefined : v; })); } catch (e) {}
+    };
     return s;
   }
   function escolher(chave, disc, topicos, prioritarias, n, erradasPrimeiro, usadas) {
@@ -365,6 +373,8 @@
     });
     function nivel(q) {
       var r = resp[q.id];
+      // respondida a partir desta data = já era questão deste dia: volta primeiro, mesmo se o sorteio se perdeu (outro aparelho)
+      if (respostaDoDia(r)) return -1;
       if ((r && r.ultima_correta) || acertoGrupo[q.duplicate_group]) return 9;
       var g = (prioritarias || []).indexOf(q.id) >= 0;
       if (erradasPrimeiro) return r ? 0 : g ? 1 : 2;
@@ -378,7 +388,7 @@
       return true;
     }).slice(0, n).map(function (q) { return q.id; });
     s.sel[chave] = ids;
-    try { localStorage.setItem(K_DIA, JSON.stringify(s)); } catch (e) {}
+    s.salvar();
     return ids;
   }
 

@@ -323,7 +323,7 @@ salvo; a sessão nova é a rotina do dia e aparece como cartão no topo do Hoje.
   `oab_bq_respostas`; errou ou "foi chute" → caderno), checklist do dia, calendário e painel de erros.
   Checklist e "Estudei hoje" em `oab_ativo_check_v1` (`{data: {fc, t0, t1, etica, cad, sim, feito}}`);
   flashcards concluídos e bloco de questões todo respondido marcam o item sozinhos. Estilos em `sessao.css`.
-  Questões sorteadas do dia em `oab_ativo_dia` (só do aparelho); quantidade por tópico em
+  Questões sorteadas em `oab_ativo_dia` (só do aparelho; `{dias: {data: {n, sel}}}`, últimas 21 datas — desde 13/10/2026; questão respondida a partir da data volta primeiro no sorteio, então outro aparelho mostra as mesmas já feitas); quantidade por tópico em
   `oab_ativo_questoes_por_topico` (padrão 10).
 - **Páginas:** `hoje.html` (abas Conteúdo · Flashcards · Questões · Checklist · Videoaulas), `calendario.html`
   (escolha de Julia, 11/10/2026: **mês grande**, um por vez com ‹ › e "Hoje"; grade num cartão só (linhas finas entre semanas),
