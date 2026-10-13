@@ -662,7 +662,7 @@ function renderCard(e) {
     ? `<div class="error-tip"><div class="lbl">O que faltou para acertar</div>${escHtml(e.o_que_faltou)}</div>`
     : '';
   const explicacao = e.explicacao
-    ? `<div class="error-tip"><div class="lbl">Explicação (QConcursos)</div>${escHtml(e.explicacao)}</div>`
+    ? `<div class="error-tip"><div class="lbl">Explicação (QConcursos)</div>${escHtml(semQuebra(e.explicacao))}</div>`
     : '';
   const acoes = isDominada
     ? `<button class="btn" style="font-size:.76rem;padding:.35rem .8rem" data-editar="${e.id}">✎ Editar</button>
@@ -688,6 +688,8 @@ function renderCard(e) {
     </div>`;
 }
 
+// quebras herdadas do PDF no meio da frase viram espaço
+function semQuebra(t) { return String(t || '').replace(/([^.:;?!)"”\s])[ \t]*\n\s*/g, '$1 '); }
 function escHtml(str) {
   return str
     .replace(/&/g, '&amp;')
@@ -784,7 +786,7 @@ function _revMostrar() {
     document.getElementById('rev-mostrar').addEventListener('click', () => {
       document.getElementById('rev-fim').innerHTML =
         (e.o_que_faltou ? `<div class="error-tip"><div class="lbl">O que faltou para acertar</div>${escHtml(e.o_que_faltou)}</div>` : '') +
-        (e.explicacao ? `<div class="error-tip"><div class="lbl">Explicação</div>${escHtml(e.explicacao)}</div>` : '') +
+        (e.explicacao ? `<div class="error-tip"><div class="lbl">Explicação</div>${escHtml(semQuebra(e.explicacao))}</div>` : '') +
         `<div class="rev-acoes"><button class="btn btn-primary" data-r="1">Lembrei</button><button class="btn" data-r="0">Não lembrei</button></div>`;
       document.querySelectorAll('#rev-fim [data-r]').forEach(b => b.addEventListener('click', () => _revAvancar(e, b.dataset.r === '1')));
     });
@@ -800,7 +802,7 @@ function _revResponder(e, q, letra) {
     else if (b.dataset.l === letra) b.classList.add('errada');
   });
   document.getElementById('rev-fim').innerHTML =
-    `<div class="rev-feed"><b class="${acertou ? 'ok' : 'no'}">${acertou ? 'Acertou!' : 'Errou — gabarito ' + certa + '.'}</b><br>${escHtml(q.explanation || '')}</div>
+    `<div class="rev-feed"><b class="${acertou ? 'ok' : 'no'}">${acertou ? 'Acertou!' : 'Errou — gabarito ' + certa + '.'}</b><br>${escHtml(semQuebra(q.explanation || ''))}</div>
      <div class="rev-acoes"><button class="btn btn-primary" id="rev-prox">${_revIdx + 1 >= _revFila.length ? 'Concluir' : 'Próxima'}</button></div>`;
   document.getElementById('rev-prox').addEventListener('click', () => _revAvancar(e, acertou));
 }
