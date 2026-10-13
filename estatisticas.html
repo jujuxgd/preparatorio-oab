@@ -594,6 +594,29 @@
       </div>
     </div>
 
+    <!-- FLASHCARDS (Revisões VDE, oab_fc_estado_v1) -->
+    <div class="stats-grid-2">
+      <div class="chart-card">
+        <div class="chart-head">
+          <div>
+            <div class="chart-title"><em>Flashcards</em></div>
+            <div class="chart-sub" id="fc-sub">carregando…</div>
+          </div>
+        </div>
+        <ul class="ranking-list" id="fc-geral"></ul>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-head">
+          <div>
+            <div class="chart-title">Flashcards por <em>matéria</em></div>
+            <div class="chart-sub">cartões vistos · % de "sei" nas respostas</div>
+          </div>
+        </div>
+        <ul class="ranking-list" id="fc-materias"></ul>
+      </div>
+    </div>
+
     <!-- LINHA 3: RESUMO + CONQUISTAS -->
     <div class="stats-grid-2">
       <div class="wrapped-card" id="wrapped-card"></div>
@@ -620,6 +643,7 @@
 <script src="cores.js"></script>
 <script src="calendario-ativo.js"></script>
 <script src="plano-dinamico.js"></script>
+<script src="ativo-core.js"></script>
 <script>
 function montarEstatisticas() {
   const p      = carregarProgresso();
@@ -873,6 +897,36 @@ function montarEstatisticas() {
     }
   }
 }
+// ── Flashcards: estado em oab_fc_estado_v1 (Hoje e Revisar); cada "sei"/"errei" fica no histórico do cartão
+function montarFlashcardsStats() {
+  if (!window.ATIVO) return;
+  ATIVO.carregarCartoes().then(() => {
+    const est = ATIVO.estados(), cart = ATIVO.cartoes(), r = ATIVO.resumo(), por = {};
+    let sei = 0, resp = 0;
+    cart.forEach(c => {
+      const m = por[c.d] || (por[c.d] = { total: 0, vistos: 0, sei: 0, resp: 0 });
+      m.total++;
+      const e = est[c.id]; if (!e) return;
+      m.vistos++;
+      (e.h || []).forEach(x => { m.resp++; resp++; if (x[1] === 's') { m.sei++; sei++; } });
+    });
+    const curto = d => (window.CAL_ATIVO && CAL_ATIVO.curto && CAL_ATIVO.curto[d]) || d.replace(/^Direito (do |Processual )?/, '');
+    const vazio = t => `<li style="padding:1rem 0;color:var(--ink-faded);font-size:0.85rem;font-style:italic">${t}</li>`;
+    const linha = (pos, nome, pct, val) => `<li class="rank-item"><span class="rank-pos">${pos}</span><span class="rank-name">${nome}</span>
+      <div class="rank-bar"><div class="rank-fill" style="width:${pct}%"></div></div><span class="rank-val">${val}</span></li>`;
+    const pc = (a, b) => b ? Math.round(a / b * 100) : 0;
+    document.getElementById('fc-sub').textContent = resp ? `${resp} ${resp !== 1 ? 'respostas' : 'resposta'} · ${pc(sei, resp)}% "sei"` : 'nenhum flashcard respondido ainda';
+    document.getElementById('fc-geral').innerHTML = !r.vistos ? vazio('Faça os flashcards na aba Hoje ou em Revisar.') :
+      linha('✦', 'Vistos', pc(r.vistos, r.total), `${r.vistos}/${r.total}`) +
+      linha('✦', 'Em revisão', pc(r.emRevisao, r.total), r.emRevisao) +
+      linha('✦', 'Dominados', pc(r.fora, r.total), r.fora) +
+      linha('✦', 'Vencem hoje', pc(r.vencidos, Math.max(r.emRevisao, 1)), r.vencidos);
+    const mats = Object.keys(por).filter(d => por[d].vistos).sort((a, b) => por[b].vistos - por[a].vistos);
+    document.getElementById('fc-materias').innerHTML = !mats.length ? vazio('Nenhuma matéria começada.') :
+      mats.map(d => { const m = por[d]; return linha('✦', `${curto(d)} <small style="color:var(--ink-faded)">· ${pc(m.sei, m.resp)}% sei</small>`, pc(m.vistos, m.total), `${m.vistos}/${m.total}`); }).join('');
+  });
+}
+document.addEventListener('DOMContentLoaded', montarFlashcardsStats);
 document.addEventListener('DOMContentLoaded', () => {
   let temBanco = false; try { temBanco = Object.keys(JSON.parse(localStorage.getItem('oab_bq_respostas')) || {}).length > 0; } catch (e) {}
   if (!temBanco || window.BANCO_QUESTOES) { montarEstatisticas(); return; }
