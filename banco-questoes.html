@@ -654,6 +654,8 @@
   // Renderizar cru (pre-wrap) reproduzia essas quebras na tela. Aqui a
   // gente separa em blocos por alternativa e junta o texto de cada um.
   function formatarExplicacao(txt) {
+    // "A) Errado" seguido de "A alternativa A está incorreta, pois…": um cabeçalho só
+    txt = String(txt || '').replace(/(^|\n)(\s*([A-D])\)\s*(?:Correto|Correta|Certo|Certa|Errado|Errada|Incorreto|Incorreta)\b[ \t:.,-]*)\n+\s*(?:A\s+)?(?:alternativa|assertiva|letra)\s+\3\s+(?:est[áa]|é)\s+(?:corret[ao]|cert[ao]|errad[ao]|incorret[ao])\b[\s:.,-]*/gi, '$1$2\n');
     // Dois materiais, duas formas de abrir o comentário de cada alternativa:
     //   "A) Correto. ..."                   (provas XXII a 37º)
     //   "A alternativa A está correta. ..." (provas 38º a 47º)
