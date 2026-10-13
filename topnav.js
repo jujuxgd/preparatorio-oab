@@ -26,7 +26,7 @@
 
   var SUB = {
     'estudar.html': [['revisar.html', 'Flashcards', 'rev'], ['revisao.html', 'Biblioteca de revisão', 'leg'], ['videoaulas.html', 'Videoaulas', 'vid'], ['caderno-legislativo.html', 'Caderno Legislativo', 'leg'], ['reta-final.html', 'Materiais extras', 'fl']],
-    'treino.html': [['rumo40.html', 'Rumo aos 40', 'pra'], ['banco-questoes.html', 'Banco de Questões', 'banco'], ['simulado.html', 'Fazer Simulado', 'simf'], ['simulados.html', 'Meus simulados', 'sim'], ['erros.html', 'Caderno de Erros', 'err'], ['questoes.html', 'Tracker de questões', 'q']]
+    'treino.html': [['rumo40.html', 'Rumo aos 40', 'pra'], ['banco-questoes.html', 'Banco de Questões', 'banco'], ['simulado.html', 'Fazer Simulado', 'simf'], ['erros.html', 'Caderno de Erros', 'err'], ['estatisticas.html', 'Estatísticas', 'sim']]
   };
   var NAV = [
     ['index.html', 'Início', 'ini', ['index.html', '']],
@@ -46,7 +46,7 @@
     if (emb) { document.body.classList.add('embed'); return; }
     if (P === 'hoje.html') document.body.classList.add('hoje');
 
-    var perfilOn = ['perfil.html', 'estatisticas.html'].indexOf(P) > -1;
+    var perfilOn = P === 'perfil.html';
 
     var links = NAV.map(function (l) {
       var on = l[3].indexOf(P) > -1;

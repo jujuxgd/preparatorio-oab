@@ -184,7 +184,8 @@ Sala de prova. Três telas numa página: escolher, fazer e corrigir.
 - **Integra em vez de duplicar:** "Registrar em Meus Simulados" grava em
   `oab_simulados_v1` no formato que `simulados.html` já lê; "Mandar erros para o Caderno"
   chama `erros_add()` de `erros-core.js`.
-- `simulados.html` continua sendo só o **registro** de simulados feitos em qualquer lugar.
+- **Desde 13/10/2026** o registro de simulados (antes `simulados.html`, que agora redireciona) é a seção **Simulados** de
+  `estatisticas.html#simulados` — mesmos dados em `oab_simulados_v1`.
 
 ---
 
@@ -332,8 +333,10 @@ salvo; a sessão nova é a rotina do dia e aparece como cartão no topo do Hoje.
   `sessao.html` só redireciona.
 - **Menu (11/10/2026):** Início · Hoje · Calendário · **Estudar** (Flashcards, Biblioteca de revisão, Videoaulas,
   Caderno legislativo, Materiais extras = `reta-final.html`) · **Treino** (`treino.html`: Rumo aos 40 em destaque,
-  Banco, Simulado, Meus simulados, Caderno de erros, Tracker). O Painel de erros vive dentro de `erros.html`
-  (bloco "Onde você mais erra", `#painel`). `desempenho.html`, `plano.html` e `painel-erros.html` só redirecionam.
+  Banco, Simulado, Caderno de erros, Estatísticas). O Painel de erros vive dentro de `erros.html`
+  (bloco "Onde você mais erra", `#painel`). `desempenho.html`, `plano.html`, `painel-erros.html`, `simulados.html` e `questoes.html` (Tracker, removido em 13/10/2026; os registros
+  antigos continuam somando nas estatísticas) só redirecionam. **Estatísticas** (Treino): números do topo, "Como você está" (leitura em
+  frases), Questões (acerto por matéria + taxa), Simulados, Rotina (dias e Pomodoro) e Flashcards; sem Favorita, Resumo e Conquistas.
 - **Início, Matérias, Estatísticas e Perfil (11/10/2026):** Julia prefere o **visual antigo** do Início — não redesenhar
   páginas sem perguntar antes. Início, Matérias e Estatísticas mantêm o visual, mas os números vêm do `CAL_ATIVO`
   (dia N de 91, dias marcados em "Estudei hoje", PDFs do VDE estudados = item `p<n>` do checklist ou dia marcado,
