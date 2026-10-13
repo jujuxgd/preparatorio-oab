@@ -28,6 +28,17 @@
 .ss-alt{display:flex;gap:.6rem;width:100%;text-align:left;background:var(--paper);border:1px solid var(--line);border-left:4px solid var(--line);border-radius:var(--radius-sm);padding:.55rem .8rem;margin-bottom:.4rem;font:inherit;font-size:.84rem;color:var(--ink);cursor:pointer}
 .ss-alt .l{font-weight:700;color:var(--rose-deep)}
 .ss-alt:disabled{cursor:default}
+.ss-linha{display:flex;align-items:flex-start;gap:.4rem}
+.ss-linha .ss-alt{flex:1;min-width:0}
+.ss-tes{flex:none;width:26px;height:26px;margin-top:.45rem;border-radius:50%;border:1px solid var(--line);background:var(--paper);color:var(--ink-faded);display:grid;place-items:center;cursor:pointer;padding:0;opacity:.45;transition:opacity .15s,color .15s,border-color .15s}
+.ss-tes svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.ss-linha:hover .ss-tes,.ss-tes:focus-visible{opacity:1}
+.ss-tes:hover{color:var(--rose-deep);border-color:var(--rose)}
+.ss-linha.cortada .ss-tes{opacity:1;color:var(--rose);border-color:var(--rose);background:var(--rose-soft)}
+.ss-linha.cortada .ss-alt{opacity:.5}
+.ss-linha.cortada .ss-alt>span:nth-child(2){text-decoration:line-through;font-style:italic}
+.ss-q[data-feita] .ss-tes{visibility:hidden}
+@media (hover:none){.ss-tes{opacity:.8}}
 .ss-alt.certa{border-left-color:#5E8C6A;background:rgba(94,140,106,.09)}
 .ss-alt.errada{border-left-color:#C0524B;background:rgba(192,82,75,.09)}
 .ss-res{font-size:.82rem;margin:.5rem 0;color:var(--ink-soft)}
