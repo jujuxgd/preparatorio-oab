@@ -30,9 +30,10 @@
     'estudar.html': [['revisar.html', 'Flashcards', 'rev'], ['revisao.html', 'Biblioteca de revisão', 'leg'], ['videoaulas.html', 'Videoaulas', 'vid'], ['caderno-legislativo.html', 'Caderno Legislativo', 'leg'], ['reta-final.html', 'Materiais extras', 'fl']],
     'treino.html': [['rumo40.html', 'Rumo aos 40', 'pra'], ['banco-questoes.html', 'Banco de Questões', 'banco'], ['simulado.html', 'Fazer Simulado', 'simf'], ['erros.html', 'Caderno de Erros', 'err'], ['estatisticas.html', 'Estatísticas', 'q']]
   };
-  // Modo 2ª fase (oab_fase = '2'): o menu vira o da área de Trabalho e as páginas-base da 1ª fase levam para ela
+  // Modo 2ª fase (sessionStorage oab_fase = '2'): o menu vira o da área de Trabalho e as páginas-base da 1ª fase levam para ela
   var ABA2 = { 'index.html': 'hoje', 'hoje.html': 'hoje', 'calendario.html': 'plano', 'estudar.html': 'estudo', 'treino.html': 'treino' };
-  var FASE = 1; try { FASE = localStorage.getItem('oab_fase') === '2' ? 2 : 1; } catch (e) {}
+  // a escolha vale só enquanto o site está aberto: abrir de novo (PC ou celular) volta para a 1ª fase
+  var FASE = 1; try { localStorage.removeItem('oab_fase'); FASE = sessionStorage.getItem('oab_fase') === '2' ? 2 : 1; } catch (e) {}
   if (FASE === 2 && ABA2[P] && !emb) { location.replace('segunda-fase.html?aba=' + ABA2[P]); return; }
   if (P === 'segunda-fase.html') FASE = 2;
   var ABA = new URLSearchParams(location.search).get('aba') || 'hoje';
@@ -101,11 +102,7 @@
     document.body.insertBefore(bar, document.body.firstChild);
     bar.querySelector('.tn-fase').addEventListener('click', function (ev) {
       var b = ev.target.closest('[data-fase]'); if (!b) return;
-      try {
-        localStorage.setItem('oab_fase', b.dataset.fase);
-        localStorage.setItem('oab_local_rev', String(Date.now()));
-        if (window._syncOAB && window._syncOAB.notificarAlteracaoLocal) window._syncOAB.notificarAlteracaoLocal('oab_fase');
-      } catch (e) {}
+      try { sessionStorage.setItem('oab_fase', b.dataset.fase); } catch (e) {}
       location.href = b.dataset.fase === '2' ? 'segunda-fase.html?aba=hoje' : 'index.html';
     });
 
