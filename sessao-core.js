@@ -102,26 +102,41 @@
       .map(function (w) { return w.slice(0, 6); });
   }
   // Flashcards novos do tema de cada PDF do dia; sem cartão do tema, os primeiros da matéria.
+  // Cartão visto pela primeira vez nesta data continua ocupando a vaga dele: recarregar a página
+  // (ou adiantar outro PDF) não puxa mais cartões do mesmo tema.
+  function vistoNoDia(e) { return !!(e && e.h && e.h.length && e.h[0][0] === DATA); }
   function novosDoDia() {
-    if (!DIA.top) return ATIVO.novos(disciplinasDoDia());
-    var est = ATIVO.estados(), out = [], vistos = {};
+    var est = ATIVO.estados(), out = [], feitos = [], vistos = {};
+    function livre(c) { return !est[c.id] || vistoNoDia(est[c.id]); }
+    function poe(c) { vistos[c.id] = 1; (est[c.id] ? feitos : out).push(c); }
+    if (!DIA.top) {
+      var cont = {}, ds = disciplinasDoDia();
+      ATIVO.cartoes().forEach(function (c) {
+        if (ds.indexOf(c.d) < 0 || !livre(c)) return;
+        cont[c.d] = (cont[c.d] || 0) + 1;
+        if (cont[c.d] <= 10) poe(c);
+      });
+      out.sort(function (a, b) { return ds.indexOf(a.d) - ds.indexOf(b.d); });
+      return { novos: out, feitos: feitos };
+    }
     DIA.top.forEach(function (t) {
       var alvo = tokens(t.s + ' ' + (t.q || []).join(' '));
-      var cand = ATIVO.cartoes().filter(function (c) { return c.d === t.d && !est[c.id] && !vistos[c.id]; });
+      var cand = ATIVO.cartoes().filter(function (c) { return c.d === t.d && livre(c) && !vistos[c.id]; });
       var doTema = cand.filter(function (c) {
         var tk = tokens(c.t);
         return tk.some(function (w) { return alvo.indexOf(w) >= 0; });
       });
-      (doTema.length ? doTema.slice(0, 15) : cand.slice(0, 5)).forEach(function (c) { vistos[c.id] = 1; out.push(c); });
+      (doTema.length ? doTema.slice(0, 15) : cand.slice(0, 5)).forEach(poe);
     });
-    return out;
+    return { novos: out, feitos: feitos };
   }
   function fila() {
     var venc = ATIVO.vencidos(DATA);
-    if (!DIA) return { venc: venc, novos: [] };
-    if (DIA.tipo === 'vespera') return { venc: venc.slice(0, 30), novos: [] };
-    if (DIA.tipo === 'leve' || DIA.tipo === 'prova') return { venc: venc, novos: [] };
-    return { venc: venc, novos: novosDoDia() };
+    if (!DIA) return { venc: venc, novos: [], feitos: [] };
+    if (DIA.tipo === 'vespera') return { venc: venc.slice(0, 30), novos: [], feitos: [] };
+    if (DIA.tipo === 'leve' || DIA.tipo === 'prova') return { venc: venc, novos: [], feitos: [] };
+    var nv = novosDoDia();
+    return { venc: venc, novos: nv.novos, feitos: nv.feitos };
   }
 
   // ── PDFs do dia do VDE ──
@@ -212,6 +227,7 @@
       return (rv ? '<div class="ss-bloco"><p style="margin:0">' + esc(resumoDoDia()) + '. Releia a Revisão do VDE de cada matéria em foco e grife o que ainda escapa.</p></div>' + rv
         : '<div class="ss-bloco"><p class="ss-vazio" style="margin:0">Hoje não tem PDF novo: ' + esc(resumoDoDia()) + '.</p></div>') + htmlAdiantar();
     }
+    var gabFeito = {};
     return ps.map(function (p) {
       return '<div class="ss-bloco"><h3><span class="n">Dia ' + p.n + ' do VDE</span>' + esc(p.temas.join(' · ')) + '</h3>' +
         (p.ids.length ? p.ids.map(function (id, i) {
@@ -219,13 +235,17 @@
             (window.LEITOR ? '<div class="lp-host" data-arq="' + id + '"></div>'
               : '<iframe class="vde-pdf" src="https://drive.google.com/file/d/' + id + '/preview" title="PDF do dia ' + p.n + '" allow="autoplay"></iframe>');
         }).join('')
-          : '<p class="ss-vazio">O PDF "Dia ' + p.n + '" ainda não está na pasta do Drive. Quando subir, ele aparece aqui.</p>') + '</div>';
-    }).join('') + htmlGabaritaco() + htmlAdiantar();
+          : '<p class="ss-vazio">O PDF "Dia ' + p.n + '" ainda não está na pasta do Drive. Quando subir, ele aparece aqui.</p>') + '</div>' +
+        htmlGabaritaco(function (t) { return t.n === p.n; }, gabFeito);
+    }).join('') + htmlGabaritaco(function () { return true; }, gabFeito) + htmlAdiantar();
   }
   // Trecho do Gabaritaço de cada tema do dia (só as páginas das DICAS), aberto sob demanda.
-  function htmlGabaritaco() {
+  function htmlGabaritaco(filtro, feito) {
     var G = window.GABARITACO; if (!G || !DIA || !DIA.top) return '';
-    return DIA.top.filter(function (t) { return t.k && G[t.d]; }).map(function (t) {
+    return DIA.top.filter(function (t, i) {
+      if (!t.k || !G[t.d] || feito[i] || !filtro(t)) return false;
+      return (feito[i] = true);
+    }).map(function (t) {
       var g = G[t.d], de = g.dica[t.k[0] - 1] || 1, ate = g.dica[t.k[1]] || g.paginas;
       return '<div class="ss-bloco gab-bloco"><h3><span class="n">Gabaritaço · DICAS ' + t.k[0] + '–' + t.k[1] + '</span>' + esc(curto(t.d) + ': ' + t.s) + '</h3>' +
         '<div class="gab-host" data-arq="' + g.id + '" data-de="' + de + '" data-ate="' + ate + '">' +
@@ -254,7 +274,7 @@
     if (DIA.tipo === 'prova') return [{ id: 'prova', t: 'Prova da 1ª fase · 13h às 18h', s: 'Documento com foto, caneta preta de material transparente. Nada novo hoje.' }];
     revisoesDoDia().forEach(function (r) { it.push({ id: 'rv-' + r.d, t: 'Revisão ' + r.r + ' do VDE · ' + curto(r.d), s: 'Ler e grifar na aba Conteúdo', aba: 'conteudo' }); });
     pdfsDoDia().forEach(function (p) { it.push({ id: 'p' + p.n, t: 'Ler o PDF do Dia ' + p.n + ' do VDE', s: esc(p.temas.join(' · ')) + ' · aba Conteúdo', aba: 'conteudo' }); });
-    it.push({ id: 'fc', t: 'Flashcards do dia', s: n ? f.venc.length + ' vencidos + ' + f.novos.length + ' novos · aba Flashcards' : 'Nada vence hoje', aba: 'flashcards' });
+    it.push({ id: 'fc', t: 'Flashcards do dia', s: n ? f.venc.length + ' vencidos + ' + f.novos.length + ' novos · aba Flashcards' : f.feitos.length ? f.feitos.length + ' novos feitos hoje' : 'Nada vence hoje', aba: 'flashcards' });
     if (DIA.top) DIA.top.forEach(function (t, i) {
       var l = linkTopico(t);
       it.push({ id: 't' + i, t: curto(t.d) + ' · ' + t.s, aba: 'questoes',
@@ -363,17 +383,31 @@
     }).join('');
   }
 
+  function diaLocal(s) { var d = new Date(s); return isNaN(d) ? '' : d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+  // respondida a partir desta data: mostra o resultado em vez de deixar responder (e contar) de novo
+  function respostaDoDia(r) { return r && r.ultima_resposta && r.ultima_data && diaLocal(r.ultima_data) >= DATA ? r : null; }
   function htmlQuestao(id, i, g) {
     var q = qpor(id); if (!q) return '';
-    var r = ler(K_RESP, {})[id], gab = (g || []).indexOf(id) >= 0;
-    return '<div class="ss-q" data-q="' + id + '"><div class="meta">' + (i + 1) + ' · ' + esc(nomeExame(q.exam_number)) +
+    var r = ler(K_RESP, {})[id], gab = (g || []).indexOf(id) >= 0, hoje = respostaDoDia(r);
+    return '<div class="ss-q" data-q="' + id + '"' + (hoje ? ' data-feita="1"' : '') + '><div class="meta">' + (i + 1) + ' · ' + esc(nomeExame(q.exam_number)) +
       ', questão ' + q.question_number + ' · ' + esc(q.topic || '') + (gab ? ' · <span class="gab">caiu no Gabaritaço</span>' : '') +
-      (r ? ' · já respondida' : '') + '</div>' +
+      (r && !hoje ? ' · já respondida antes' : '') + '</div>' +
       '<div class="enun">' + esc(q.statement) + '</div>' +
       ['a', 'b', 'c', 'd'].map(function (k) {
-        return q['alternative_' + k] ? '<button class="ss-alt" data-l="' + k.toUpperCase() + '"><span class="l">' + k.toUpperCase() +
+        var L = k.toUpperCase(), cls = hoje ? (L === q.correct_answer ? ' certa' : L === hoje.ultima_resposta ? ' errada' : '') : '';
+        return q['alternative_' + k] ? '<button class="ss-alt' + cls + '" data-l="' + L + '"' + (hoje ? ' disabled' : '') + '><span class="l">' + L +
           '</span><span>' + esc(q['alternative_' + k]) + '</span></button>' : '';
-      }).join('') + '<div class="fim"></div></div>';
+      }).join('') + '<div class="fim">' + (hoje ? htmlResultado(q, hoje.ultima_resposta, hoje.ultima_correta) : '') + '</div></div>';
+    return h;
+  }
+  function htmlResultado(q, letra, certa) {
+    var chute = !certa && letra === q.correct_answer;
+    return '<div class="ss-res">' +
+      (certa ? '<b class="ok">Acertou.</b><button data-chute="1">Foi chute → errei</button>'
+       : chute ? '<b class="no">Foi chute.</b> Foi para o Caderno de Erros.'
+       : '<b class="no">Errou · gabarito ' + q.correct_answer + '.</b> Foi para o Caderno de Erros.') +
+      '<button data-expl="1">Ver comentário</button></div><div class="ss-expl" hidden>' + formatarExplicacao(q.explanation) +
+      (q.legal_basis ? '<p><b>Fundamentação:</b> ' + esc(q.legal_basis) + '</p>' : '') + '</div>';
   }
   function blocoQuestoes(chave, titulo, extra, disc, topicos, g, n, erradasPrimeiro, usadas) {
     var ids = escolher(chave, disc, topicos, g, n, erradasPrimeiro, usadas);
@@ -446,11 +480,7 @@
       if (b.dataset.l === q.correct_answer) b.classList.add('certa');
       else if (b.dataset.l === letra) b.classList.add('errada');
     });
-    card.querySelector('.fim').innerHTML = '<div class="ss-res">' +
-      (certa ? '<b class="ok">Acertou.</b><button data-chute="1">Foi chute → errei</button>'
-             : '<b class="no">Errou · gabarito ' + q.correct_answer + '.</b> Foi para o Caderno de Erros.') +
-      '<button data-expl="1">Ver comentário</button></div><div class="ss-expl" hidden>' + formatarExplicacao(q.explanation) +
-      (q.legal_basis ? '<p><b>Fundamentação:</b> ' + esc(q.legal_basis) + '</p>' : '') + '</div>';
+    card.querySelector('.fim').innerHTML = htmlResultado(q, letra, certa);
     var bloco = card.closest('[data-bloco]');
     if (bloco && !bloco.querySelector('.ss-q:not([data-feita])')) marcar(bloco.dataset.bloco, true);
   }
