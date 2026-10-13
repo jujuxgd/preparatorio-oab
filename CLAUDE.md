@@ -350,7 +350,7 @@ salvo; a sessão nova é a rotina do dia e aparece como cartão no topo do Hoje.
 ## 5.6 2ª fase · Direito do Trabalho (`segunda-fase.html` + `segunda-fase.js` + `f2-dados.js`) — desde 13/10/2026
 
 Prova prático-profissional do OAB 48 em **28/02/2027** (cronograma da OAB). Julia escolheu Trabalho; o plano começa em 11/01/2027.
-- **Chave de fase** no topo (`topnav.js`, `.tn-fase`): `oab_fase` = '1' | '2' (sincronizada). No modo 2 o menu vira Hoje · Plano ·
+- **Chave de fase** no topo (`topnav.js`, `.tn-fase`): `oab_fase` = '1' | '2' em **sessionStorage** (desde 13/10/2026, a pedido de Julia: abrir o site sempre começa na 1ª fase; não sincroniza). No modo 2 o menu vira Hoje · Plano ·
   Estudar · Peças · Treino · Guia (`segunda-fase.html?aba=…`), a contagem aponta para 28/02, e `index/hoje/calendario/estudar/treino.html`
   redirecionam para a área da 2ª fase. Voltar para "1ª" leva ao Início.
 - **`f2-dados.js`** → `window.F2`: `MATERIAIS` (IDs do Drive de Julia: livro de Processo do Trabalho 23 cap., livro de Direito do
