@@ -386,6 +386,46 @@
   function diaLocal(s) { var d = new Date(s); return isNaN(d) ? '' : d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
   // respondida a partir desta data: mostra o resultado em vez de deixar responder (e contar) de novo
   function respostaDoDia(r) { return r && r.ultima_resposta && r.ultima_data && diaLocal(r.ultima_data) >= DATA ? r : null; }
+  function cortarAlt(linha, cortar) {
+    if (linha.closest('.ss-q').dataset.feita || linha.classList.contains('cortada') === cortar) return;
+    linha.classList.toggle('cortada', cortar);
+    linha.querySelector('.ss-alt').disabled = cortar;
+    var tes = linha.querySelector('.ss-tes');
+    tes.title = (cortar ? 'Trazer de volta a alternativa ' : 'Descartar a alternativa ') + tes.dataset.corta;
+    tes.setAttribute('aria-label', tes.title);
+  }
+  // no toque a tesoura não aparece: arrastar para a esquerda descarta, para a direita traz de volta (como no Banco)
+  (function () {
+    var LIMIAR = 46, ini = null;
+    document.addEventListener('touchstart', function (ev) {
+      ini = null;
+      if (ev.touches.length !== 1) return;
+      var linha = ev.target.closest && ev.target.closest('.ss-linha');
+      if (!linha || linha.closest('.ss-q').dataset.feita) return;
+      ini = { x: ev.touches[0].clientX, y: ev.touches[0].clientY, linha: linha, alt: linha.querySelector('.ss-alt'), cortada: linha.classList.contains('cortada'), hor: false };
+    }, { passive: true });
+    document.addEventListener('touchmove', function (ev) {
+      if (!ini) return;
+      var dx = ev.touches[0].clientX - ini.x, dy = ev.touches[0].clientY - ini.y;
+      if (!ini.hor) {
+        if (Math.abs(dy) > Math.abs(dx)) { ini = null; return; }
+        if (Math.abs(dx) < 10) return;
+        ini.hor = true; ini.linha.classList.add('arrastando');
+      }
+      ev.preventDefault();
+      ini.alt.style.transform = 'translateX(' + (ini.cortada ? Math.max(0, dx) : Math.min(0, dx)) / 2 + 'px)';
+    }, { passive: false });
+    function soltar() { if (!ini) return; ini.linha.classList.remove('arrastando'); ini.alt.style.transform = ''; }
+    document.addEventListener('touchend', function (ev) {
+      if (!ini) return;
+      var i = ini, dx = ev.changedTouches[0].clientX - i.x;
+      soltar(); ini = null;
+      if (!i.hor) return;
+      if (dx <= -LIMIAR) cortarAlt(i.linha, true); else if (dx >= LIMIAR) cortarAlt(i.linha, false);
+      if (Math.abs(dx) >= 10) { i.linha.dataset.arrastou = '1'; setTimeout(function () { delete i.linha.dataset.arrastou; }, 400); }
+    }, { passive: true });
+    document.addEventListener('touchcancel', function () { soltar(); ini = null; }, { passive: true });
+  })();
   var TESOURA = '<svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4 8.12 15.88M14.47 14.48 20 20M8.12 8.12 12 12"/></svg>';
   function htmlQuestao(id, i, g) {
     var q = qpor(id); if (!q) return '';
@@ -399,7 +439,7 @@
         return q['alternative_' + k] ? '<div class="ss-linha"><button class="ss-tes" type="button" data-corta="' + L + '" title="Descartar a alternativa ' + L + '" aria-label="Descartar a alternativa ' + L + '">' + TESOURA + '</button>' +
           '<button class="ss-alt' + cls + '" data-l="' + L + '"' + (hoje ? ' disabled' : '') + '><span class="l">' + L +
           '</span><span>' + esc(q['alternative_' + k]) + '</span></button></div>' : '';
-      }).join('') + '<div class="fim">' + (hoje ? htmlResultado(q, hoje.ultima_resposta, hoje.ultima_correta) : '') + '</div></div>';
+      }).join('') + (hoje ? '' : '<p class="ss-dica-corte">Arraste a alternativa para a esquerda para descartá-la.</p>') + '<div class="fim">' + (hoje ? htmlResultado(q, hoje.ultima_resposta, hoje.ultima_correta) : '') + '</div></div>';
     return h;
   }
   function htmlResultado(q, letra, certa) {
@@ -550,13 +590,9 @@
     var li = t.closest('.ck-lista li[data-ck]');
     if (li && !t.closest('a')) { marcar(li.dataset.ck, !li.classList.contains('done')); return; }
     var tes = t.closest('.ss-tes');
-    if (tes) {
-      var linha = tes.closest('.ss-linha'), cortada = linha.classList.toggle('cortada');
-      linha.querySelector('.ss-alt').disabled = cortada;
-      tes.title = (cortada ? 'Trazer de volta a alternativa ' : 'Descartar a alternativa ') + tes.dataset.corta; tes.setAttribute('aria-label', tes.title);
-      return;
-    }
+    if (tes) { cortarAlt(tes.closest('.ss-linha'), !tes.closest('.ss-linha').classList.contains('cortada')); return; }
     var alt = t.closest('.ss-alt');
+    if (alt && alt.closest('[data-arrastou]')) return;
     if (alt && !alt.disabled) { responderQuestao(alt.closest('.ss-q'), alt.dataset.l); return; }
     if (t.closest('[data-expl]')) { var ex = t.closest('.ss-q').querySelector('.ss-expl'); ex.hidden = !ex.hidden; return; }
     if (t.closest('[data-chute]')) {

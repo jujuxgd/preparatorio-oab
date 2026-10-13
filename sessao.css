@@ -30,7 +30,7 @@
 .ss-alt:disabled{cursor:default}
 .ss-linha{display:flex;align-items:flex-start;gap:.4rem}
 .ss-linha .ss-alt{flex:1;min-width:0}
-.ss-tes{flex:none;width:26px;height:26px;margin-top:.45rem;border-radius:50%;border:1px solid var(--line);background:var(--paper);color:var(--ink-faded);display:grid;place-items:center;cursor:pointer;padding:0;opacity:.45;transition:opacity .15s,color .15s,border-color .15s}
+.ss-tes{flex:none;width:26px;height:26px;margin-top:.45rem;border-radius:50%;border:1px solid var(--line);background:var(--paper);color:var(--ink-faded);display:grid;place-items:center;cursor:pointer;padding:0;opacity:0;transition:opacity .15s,color .15s,border-color .15s}
 .ss-tes svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 .ss-linha:hover .ss-tes,.ss-tes:focus-visible{opacity:1}
 .ss-tes:hover{color:var(--rose-deep);border-color:var(--rose)}
@@ -38,7 +38,15 @@
 .ss-linha.cortada .ss-alt{opacity:.5}
 .ss-linha.cortada .ss-alt>span:nth-child(2){text-decoration:line-through;font-style:italic}
 .ss-q[data-feita] .ss-tes{visibility:hidden}
-@media (hover:none){.ss-tes{opacity:.8}}
+@media (hover:none){
+  .ss-tes{display:none}
+  .ss-linha{touch-action:pan-y}
+  .ss-linha .ss-alt{transition:transform .18s cubic-bezier(.2,.7,.2,1)}
+  .ss-linha.arrastando .ss-alt{transition:none}
+}
+.ss-dica-corte{display:none}
+@media (hover:none){.ss-dica-corte{display:block;font-size:.72rem;color:var(--ink-faded);margin:.3rem 0 0}}
+.ss-q[data-feita] .ss-dica-corte{display:none}
 .ss-alt.certa{border-left-color:#5E8C6A;background:rgba(94,140,106,.09)}
 .ss-alt.errada{border-left-color:#C0524B;background:rgba(192,82,75,.09)}
 .ss-res{font-size:.82rem;margin:.5rem 0;color:var(--ink-soft)}
