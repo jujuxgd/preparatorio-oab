@@ -289,9 +289,10 @@ salvo; a sessão nova é a rotina do dia e aparece como cartão no topo do Hoje.
   úteis e completo em 26/12 e 02/01; 24–25/12 e 31/12–01/01 leves; 09/01 só flashcards. Gerado por script fora
   do repo (tabela de dias com tema e tópicos do banco): para mudar, edite os dados direto mantendo o formato.
 - **`plano-dinamico.js`** (carregar logo depois de `calendario-ativo.js`) → `window.PLANO`. A fase 1 vira uma fila de
-  PDFs (`n`); "Adiantar" no Conteúdo do Hoje grava `oab_adiantado_v1 {n: data}`. Dias até hoje mantêm o previsto
-  (menos o adiantado) + o adiantado; dias depois de hoje recebem o resto da fila nas mesmas vagas (1 ou 2 PDFs);
-  dia de estudo que sobra vira `revisao` com `extra: true` (foco = matérias vistas 7 dias antes). Reescreve
+  PDFs (`n`); "Adiantar" no Conteúdo do Hoje grava `oab_adiantado_v1 {n: data}`. Desde 13/10/2026 é uma fila corrida
+  desde o 1º dia: cada dia de estudo pega as próximas vagas (1 ou 2 PDFs) da fila sem os adiantados, mais o que foi adiantado
+  nele — adiantar o PDF de amanhã puxa todo o resto um dia para trás (antes o dia seguinte ficava vazio); `dataPrevista`/`proximo`
+  usam a data recalculada. Dia de estudo que sobra no fim vira `revisao` com `extra: true` (foco = matérias vistas 7 dias antes). Reescreve
   `CAL_ATIVO.dias` em memória, então Hoje, Calendário e Revisar enxergam o plano já reorganizado.
 - **`leitor-pdf.js`/`.css`** → `window.LEITOR.montar(el, idDrive)`: PDF.js 3.11.174 (cdnjs) lendo o arquivo pela API
   do Drive (`?alt=media&key=` — chave só com Google Drive API e referenciadores `*.vercel.app`); sem acesso, cai no

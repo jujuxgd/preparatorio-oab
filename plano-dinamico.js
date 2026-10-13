@@ -2,10 +2,7 @@
 // Carregar logo depois de calendario-ativo.js: reescreve CAL_ATIVO.dias da fase 1 em memória.
 //
 // O plano fixo vira uma fila de conteúdos (n = DIA do VDE, na ordem do calendário). Adiantar grava
-// em oab_adiantado_v1 {n: data em que foi estudado}. Dias até hoje: o que estava previsto (menos o
-// que foi adiantado para outro dia) + o que foi adiantado para eles. Dias depois de hoje: o resto da
-// fila, na ordem, ocupando as mesmas vagas de cada dia (1 ou 2 PDFs); dia de estudo que sobra vira
-// revisão extra do que foi visto uma semana antes.
+// em oab_adiantado_v1 {n: data em que foi estudado}; o resto da fila anda para trás (ver aplicar).
 (function () {
   var CAL = window.CAL_ATIVO; if (!CAL) return;
   var K = 'oab_adiantado_v1';
@@ -35,16 +32,17 @@
   });
   var POR_N = {}; FILA.forEach(function (u) { POR_N[u.n] = u; });
 
+  // Fila corrida desde o 1º dia: cada dia de estudo pega as próximas vagas da fila (sem os adiantados) e
+  // recebe também o que foi adiantado nele. Adiantar o Dia 3 hoje puxa o resto: o que era do dia seguinte
+  // vira o de amanhã, e os dias que sobram no fim viram revisão extra.
+  var DATA_DE = {};
   function aplicar() {
     var adi = ler(), porData = {};
-    function poe(d, u) { (porData[d] = porData[d] || []).push(u); }
-    Object.keys(adi).forEach(function (n) { if (POR_N[n]) poe(adi[n], POR_N[n]); });
-    var resto = [];
-    FILA.forEach(function (u) {
-      if (adi[u.n]) return;
-      if (u.d <= HOJE) poe(u.d, u); else resto.push(u);
-    });
+    Object.keys(adi).forEach(function (n) { if (POR_N[n]) (porData[adi[n]] = porData[adi[n]] || []).push(POR_N[n]); });
+    var fila = FILA.filter(function (u) { return !adi[u.n]; }), k = 0;
     var vistos = {};
+    DATA_DE = {};
+    Object.keys(adi).forEach(function (n) { DATA_DE[n] = adi[n]; });
     CAL.dias = ORIGINAL.map(function (x) {
       var y = JSON.parse(JSON.stringify(x));
       if (x.f !== 1 || x.tipo !== 'estudo') {
@@ -55,8 +53,9 @@
         }
         return y;
       }
-      var us = porData[x.d] || [];
-      if (x.d > HOJE) for (var i = 0; i < VAGAS[x.d] && resto.length; i++) us.push(resto.shift());
+      var us = [];
+      for (var i = 0; i < VAGAS[x.d] && k < fila.length; i++) { DATA_DE[fila[k].n] = x.d; us.push(fila[k++]); }
+      us = us.concat(porData[x.d] || []);
       if (us.length) {
         y.top = [];
         us.sort(function (a, b) { return FILA.indexOf(a) - FILA.indexOf(b); }).forEach(function (u) { y.top = y.top.concat(u.tops); });
@@ -83,15 +82,15 @@
     adiantados: ler,
     // próximo PDF ainda não estudado, na ordem do VDE, previsto para depois de hoje
     proximo: function () {
-      var adi = ler();
-      return FILA.filter(function (u) { return !adi[u.n] && u.d > HOJE; })[0] || null;
+      var adi = ler(), u = FILA.filter(function (v) { return !adi[v.n] && DATA_DE[v.n] > HOJE; })[0];
+      return u ? { n: u.n, tops: u.tops, d: DATA_DE[u.n] } : null;
     },
     adiantar: function (n) { var a = ler(); a[n] = HOJE; gravar(a); },
     desfazer: function (n) { var a = ler(); delete a[n]; gravar(a); },
     adiantadosHoje: function () {
       var a = ler(); return FILA.filter(function (u) { return a[u.n] === HOJE && u.d !== HOJE; });
     },
-    dataPrevista: function (n) { return POR_N[n] ? POR_N[n].d : null; },
+    dataPrevista: function (n) { return DATA_DE[n] || null; },
     fimDoConteudo: function () {
       var ult = null; CAL.dias.forEach(function (x) { if (x.top && x.f === 1) ult = x.d; }); return ult;
     }
