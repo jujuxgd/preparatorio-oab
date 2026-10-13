@@ -464,6 +464,8 @@
   // o comentário do material vem em dois formatos; ambos abrem o
   // julgamento de cada alternativa, e é por ele que se separa.
   function formatarExplicacao(txt) {
+    // "A) Errado" seguido de "A alternativa A está incorreta, pois…": um cabeçalho só
+    txt = String(txt || '').replace(/(^|\n)(\s*([A-D])\)\s*(?:Correto|Correta|Certo|Certa|Errado|Errada|Incorreto|Incorreta)\b[ \t:.,-]*)\n+\s*(?:A\s+)?(?:alternativa|assertiva|letra)\s+\3\s+(?:est[áa]|é)\s+(?:corret[ao]|cert[ao]|errad[ao]|incorret[ao])\b[\s:.,-]*/gi, '$1$2\n');
     var JULGA = '(?:Correto|Correta|Certo|Certa|Errado|Errada|Incorreto|Incorreta)';
     var ABRE = '(?:[A-D]\\)\\s*' + JULGA + '\\b' +
                '|(?:A\\s+)?(?:alternativa|assertiva|letra)\\s+[A-D]\\s+(?:est[áa]|é)\\s+' + JULGA + '\\b)';
