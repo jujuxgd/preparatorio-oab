@@ -28,9 +28,9 @@
 .ss-alt{display:flex;gap:.6rem;width:100%;text-align:left;background:var(--paper);border:1px solid var(--line);border-left:4px solid var(--line);border-radius:var(--radius-sm);padding:.55rem .8rem;margin-bottom:.4rem;font:inherit;font-size:.84rem;color:var(--ink);cursor:pointer}
 .ss-alt .l{font-weight:700;color:var(--rose-deep)}
 .ss-alt:disabled{cursor:default}
-.ss-linha{display:flex;align-items:flex-start;gap:.4rem}
-.ss-linha .ss-alt{flex:1;min-width:0}
-.ss-tes{flex:none;width:26px;height:26px;margin-top:.45rem;border-radius:50%;border:1px solid var(--line);background:var(--paper);color:var(--ink-faded);display:grid;place-items:center;cursor:pointer;padding:0;opacity:0;transition:opacity .15s,color .15s,border-color .15s}
+.ss-linha{position:relative}
+@media (hover:hover){.ss-linha .ss-alt{padding-right:2.6rem}}
+.ss-tes{position:absolute;right:.55rem;top:calc(50% - .2rem);transform:translateY(-50%);z-index:1;width:26px;height:26px;border-radius:50%;border:1px solid var(--line);background:var(--paper);color:var(--ink-faded);display:grid;place-items:center;cursor:pointer;padding:0;opacity:0;transition:opacity .15s,color .15s,border-color .15s}
 .ss-tes svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 .ss-linha:hover .ss-tes,.ss-tes:focus-visible{opacity:1}
 .ss-tes:hover{color:var(--rose-deep);border-color:var(--rose)}
