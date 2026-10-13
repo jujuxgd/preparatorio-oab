@@ -386,6 +386,7 @@
   function diaLocal(s) { var d = new Date(s); return isNaN(d) ? '' : d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
   // respondida a partir desta data: mostra o resultado em vez de deixar responder (e contar) de novo
   function respostaDoDia(r) { return r && r.ultima_resposta && r.ultima_data && diaLocal(r.ultima_data) >= DATA ? r : null; }
+  var TESOURA = '<svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4 8.12 15.88M14.47 14.48 20 20M8.12 8.12 12 12"/></svg>';
   function htmlQuestao(id, i, g) {
     var q = qpor(id); if (!q) return '';
     var r = ler(K_RESP, {})[id], gab = (g || []).indexOf(id) >= 0, hoje = respostaDoDia(r);
@@ -395,8 +396,9 @@
       '<div class="enun">' + esc(q.statement) + '</div>' +
       ['a', 'b', 'c', 'd'].map(function (k) {
         var L = k.toUpperCase(), cls = hoje ? (L === q.correct_answer ? ' certa' : L === hoje.ultima_resposta ? ' errada' : '') : '';
-        return q['alternative_' + k] ? '<button class="ss-alt' + cls + '" data-l="' + L + '"' + (hoje ? ' disabled' : '') + '><span class="l">' + L +
-          '</span><span>' + esc(q['alternative_' + k]) + '</span></button>' : '';
+        return q['alternative_' + k] ? '<div class="ss-linha"><button class="ss-tes" type="button" data-corta="' + L + '" title="Descartar a alternativa ' + L + '" aria-label="Descartar a alternativa ' + L + '">' + TESOURA + '</button>' +
+          '<button class="ss-alt' + cls + '" data-l="' + L + '"' + (hoje ? ' disabled' : '') + '><span class="l">' + L +
+          '</span><span>' + esc(q['alternative_' + k]) + '</span></button></div>' : '';
       }).join('') + '<div class="fim">' + (hoje ? htmlResultado(q, hoje.ultima_resposta, hoje.ultima_correta) : '') + '</div></div>';
     return h;
   }
@@ -547,6 +549,13 @@
     }
     var li = t.closest('.ck-lista li[data-ck]');
     if (li && !t.closest('a')) { marcar(li.dataset.ck, !li.classList.contains('done')); return; }
+    var tes = t.closest('.ss-tes');
+    if (tes) {
+      var linha = tes.closest('.ss-linha'), cortada = linha.classList.toggle('cortada');
+      linha.querySelector('.ss-alt').disabled = cortada;
+      tes.title = (cortada ? 'Trazer de volta a alternativa ' : 'Descartar a alternativa ') + tes.dataset.corta; tes.setAttribute('aria-label', tes.title);
+      return;
+    }
     var alt = t.closest('.ss-alt');
     if (alt && !alt.disabled) { responderQuestao(alt.closest('.ss-q'), alt.dataset.l); return; }
     if (t.closest('[data-expl]')) { var ex = t.closest('.ss-q').querySelector('.ss-expl'); ex.hidden = !ex.hidden; return; }
