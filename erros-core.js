@@ -219,7 +219,7 @@ function erros_deletar(id) {
 }
 
 function erros_stats() {
-  const list = erros_get();
+  const list = erros_get().filter(e => !e.flashcard_id);
   const total     = list.length;
   const dominadas = list.filter(e => e.status === 'dominada').length;
   const pendentes = total - dominadas;

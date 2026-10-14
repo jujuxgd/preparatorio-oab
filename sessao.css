@@ -74,6 +74,14 @@
 .fc-bts{display:flex;gap:.6rem;margin-top:1.2rem;flex-wrap:wrap}
 .fc-bts .sei{background:#5E8C6A;border-color:#5E8C6A;color:#fff}
 .fc-bts .errei{background:#C0524B;border-color:#C0524B;color:#fff}
+.fc-4{display:grid;grid-template-columns:repeat(4,1fr);gap:.45rem}
+.fc-4 .btn{display:flex;flex-direction:column;align-items:center;gap:.15rem;padding:.6rem .3rem;min-height:56px;border-radius:var(--radius-sm);border:1px solid transparent;color:#fff;line-height:1.2}
+.fc-4 .btn b{font-size:.86rem;font-weight:600}
+.fc-4 .btn small{font-size:.68rem;opacity:.9;font-weight:400}
+.fc-4 .fc-errei{background:#C0524B}
+.fc-4 .fc-dificil{background:#C08A3E}
+.fc-4 .fc-bom{background:#5E8C6A}
+.fc-4 .fc-facil{background:#4F7BA8}
 /* calendário e painel */
 .cal-sem{margin-bottom:1.2rem}
 .cal-sem h4{font:600 .66rem Inter,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faded);margin:0 0 .4rem}

@@ -312,9 +312,12 @@ salvo; a sessão nova é a rotina do dia e aparece como cartão no topo do Hoje.
   `p` pegadinha, `c`/`n` = divergência da revisão com a lei, anotada no cartão. Texto reescrito,
   nunca copiado; nada da marca d'água dos PDFs entra no repo. Carregados sob demanda pela lista
   `ARQUIVOS` em `ativo-core.js` (cartão novo: acrescentar o arquivo lá e em `ESSENCIAIS` do `sw.js`).
-- **`ativo-core.js`** → `window.ATIVO`. Estado em `oab_fc_estado_v1` (`{id: {n, prox, fora, h, erros}}`).
-  Errei → 3 dias e entra no Caderno de Erros (`flashcard_id`; `proxDe`/`_erros_prox` garantem pelo menos 3 dias depois do erro mesmo para registros antigos da escada 1→7→15); acertando, 7 e 15 dias. Sei em cartão
-  novo → 15 dias; sei no degrau de 15 → sai da rotação. Novos: até 10 por matéria do dia.
+- **`ativo-core.js`** → `window.ATIVO`. Estado em `oab_fc_estado_v1` (`{id: {iv, prox, fora, h, erros}}`). **Desde 14/10/2026,
+  4 botões como o Anki** (escolha de Julia): errei → 1 dia · difícil → max(3, 1,2× último) · bom → 7 ou 2,5× · fácil → 15 ou 3,5×;
+  fácil com intervalo ≥15 ou bom com ≥30 tira da rotação; cada botão mostra quando o cartão volta (`ATIVO.previa`). `h` guarda
+  'e'/'d'/'b'/'f' (antigos: 's'/'e'); estados antigos só com degrau `n` (escada 3→7→15) viram intervalo por `intervaloAtual`.
+  **Flashcard errado não vai mais para o Caderno de Erros** (os registros antigos com `flashcard_id` ficam guardados mas
+  ocultos em `erros.html` e fora de `erros_stats`). Novos: até 10 por matéria do dia.
 - **Planos mesclados (10/10/2026):** não há escolha de plano. A aba Hoje, o Calendário e o Revisar seguem
   `CAL_ATIVO`; o plano de 120 dias (`plano-vde.js`) fica só como dado legado (Início, Matérias, `dia.html`,
   PDFs da semana na Reta Final).

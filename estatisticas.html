@@ -1033,7 +1033,7 @@
         <div class="chart-head">
           <div>
             <div class="chart-title">Flashcards por <em>matéria</em></div>
-            <div class="chart-sub">cartões vistos · % de "sei" nas respostas</div>
+            <div class="chart-sub">cartões vistos · % de acerto (tudo menos "errei")</div>
           </div>
         </div>
         <ul class="ranking-list" id="fc-materias"></ul>
@@ -1590,7 +1590,7 @@ function montarFlashcardsStats() {
       m.total++;
       const e = est[c.id]; if (!e) return;
       m.vistos++;
-      (e.h || []).forEach(x => { m.resp++; resp++; if (x[1] === 's') { m.sei++; sei++; } });
+      (e.h || []).forEach(x => { m.resp++; resp++; if (x[1] !== 'e') { m.sei++; sei++; } });
     });
     const curto = d => (window.CAL_ATIVO && CAL_ATIVO.curto && CAL_ATIVO.curto[d]) || d.replace(/^Direito (do |Processual )?/, '');
     const vazio = t => `<li style="padding:1rem 0;color:var(--ink-faded);font-size:0.85rem;font-style:italic">${t}</li>`;
@@ -1606,7 +1606,7 @@ function montarFlashcardsStats() {
         : 'Revisão de hoje em dia: nenhum flashcard nem erro do caderno vence hoje.') + '</span>';
     }
     })();
-    document.getElementById('fc-sub').textContent = resp ? `${resp} ${resp !== 1 ? 'respostas' : 'resposta'} · ${pc(sei, resp)}% "sei"` : 'nenhum flashcard respondido ainda';
+    document.getElementById('fc-sub').textContent = resp ? `${resp} ${resp !== 1 ? 'respostas' : 'resposta'} · ${pc(sei, resp)}% de acerto` : 'nenhum flashcard respondido ainda';
     document.getElementById('fc-geral').innerHTML = !r.vistos ? vazio('Faça os flashcards na aba Hoje ou em Revisar.') :
       linha('✦', 'Vistos', pc(r.vistos, r.total), `${r.vistos}/${r.total}`) +
       linha('✦', 'Em revisão', pc(r.emRevisao, r.total), r.emRevisao) +
