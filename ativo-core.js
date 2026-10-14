@@ -1,9 +1,7 @@
 // Revisão ativa (a partir de 12/10/2026): flashcards das Revisões VDE com "sei"/"errei".
 // Usado por: sessao-core.js (hoje.html, revisar.html, calendario.html, painel-erros.html)
 //
-// Regra de cada cartão (estado em oab_fc_estado_v1):
-//   errei → volta em 3 dias e entra no Caderno de Erros; acertando, 7 e depois 15 dias;
-//   sei   → cartão novo volta em 15 dias; "sei" no degrau de 15 dias tira da rotação.
+// Regra de cada cartão (estado em oab_fc_estado_v1): ver responder() — errei/difícil/bom/fácil.
 (function () {
   var K_FC = 'oab_fc_estado_v1';
   var K_QPT = 'oab_ativo_questoes_por_topico';
@@ -65,36 +63,42 @@
     return alvo > VESPERA && base < VESPERA ? VESPERA : alvo;
   }
 
-  function responder(id, sabia) {
+  // 4 respostas, como no Anki (desde 14/10/2026). O intervalo cresce a partir do último:
+  //   errei → 1 dia · difícil → 3 dias (ou um pouco mais que o último) · bom → 7 (ou 2,5× o último) · fácil → 15 (ou 3,5×).
+  //   Fácil com intervalo já de 15+ dias, ou bom com 30+, tira o cartão da rotação.
+  // Estados antigos (escada 3→7→15) guardavam só o degrau n; o intervalo vem dele.
+  var NOTAS = ['errei', 'dificil', 'bom', 'facil'];
+  function intervaloAtual(e) {
+    if (!e) return 0;
+    if (e.iv) return e.iv;
+    return e.n == null ? 0 : ESCADA[Math.min(e.n, ESCADA.length - 1)];
+  }
+  function proximoIntervalo(e, nota) {
+    var iv = intervaloAtual(e);
+    if (nota === 'errei') return 1;
+    if (nota === 'dificil') return Math.max(3, Math.round(iv * 1.2));
+    if (nota === 'bom') return iv >= 30 ? 0 : (iv ? Math.max(7, Math.round(iv * 2.5)) : 7);
+    return iv >= 15 ? 0 : (iv ? Math.max(15, Math.round(iv * 3.5)) : 15);
+  }
+  function previa(id) {
+    var e = estados()[id], out = {};
+    NOTAS.forEach(function (nota) { out[nota] = proximoIntervalo(e, nota); });
+    return out;
+  }
+  function responder(id, nota) {
+    if (nota === true) nota = 'bom';
+    if (nota === false) nota = 'errei';
     var todos = estados(), h = hoje();
-    var e = todos[id] || { n: null, h: [] };
-    var n = sabia ? (e.n == null ? ESCADA.length - 1 : e.n + 1) : 0;
-    e.h = (e.h || []).concat([[h, sabia ? 's' : 'e']]).slice(-12);
-    if (!sabia) e.erros = (e.erros || 0) + 1;
-    if (n >= ESCADA.length) {
-      e.n = n; e.fora = true; delete e.prox;
-    } else {
-      e.n = n; e.fora = false; e.prox = agendar(h, ESCADA[n]);
-    }
+    var e = todos[id] || { h: [] };
+    var dias = proximoIntervalo(e, nota);
+    e.h = (e.h || []).concat([[h, nota === 'errei' ? 'e' : nota[0]]]).slice(-12);
+    if (nota === 'errei') e.erros = (e.erros || 0) + 1;
+    e.n = null;
+    if (!dias) { e.fora = true; delete e.prox; delete e.iv; }
+    else { e.fora = false; e.iv = dias; e.prox = agendar(h, dias); }
     todos[id] = e;
     gravar(K_FC, todos);
-    espelharNoCaderno(id, sabia, e);
     return e;
-  }
-
-  // O cartão errado também aparece no Caderno de Erros (fila própria fica aqui na sessão).
-  function espelharNoCaderno(id, sabia, e) {
-    if (typeof erros_get !== 'function') return;
-    var c = porId(id); if (!c) return;
-    var reg = erros_get().filter(function (x) { return x.flashcard_id === id && x.status !== 'dominada'; })[0];
-    if (!sabia) {
-      erros_add({
-        materia: c.d, topico: c.t, subtopico: 'Revisão ' + c.r + ' VDE · flashcard', motivo: 'memorizacao',
-        o_que_faltou: c.f, explicacao: c.v + (c.b ? '\nBase: ' + c.b : ''), flashcard_id: id
-      });
-    } else if (reg) {
-      if (e.fora) erros_dominar(reg.id); else erros_registrar_revisao(reg.id, true);
-    }
   }
 
   function vencidos(data) {
@@ -161,7 +165,7 @@
 
   window.ATIVO = {
     ESCADA: ESCADA, ARQUIVOS: ARQUIVOS, hoje: hoje, somaDias: somaDias,
-    carregarCartoes: carregarCartoes, cartoes: cartoes, porId: porId, estados: estados, responder: responder,
+    carregarCartoes: carregarCartoes, cartoes: cartoes, porId: porId, estados: estados, responder: responder, previa: previa,
     vencidos: vencidos, novos: novos, resumo: resumo, painelErros: painelErros,
     questoesPorTopico: questoesPorTopico, definirQuestoesPorTopico: definirQuestoesPorTopico,
     diaDoCalendario: diaDoCalendario

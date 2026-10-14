@@ -311,7 +311,7 @@
       if (!st.fila.length) { el.innerHTML = '<p class="ss-vazio">' + (opts.vazio || 'Nenhum flashcard para agora.') + '</p>'; return; }
       if (st.idx >= st.fila.length) {
         el.innerHTML = '<div class="fc-player"><h3 style="font-family:Fraunces,serif;font-weight:500;color:var(--rose-deep);margin:0 0 .5rem">Flashcards concluídos</h3>' +
-          '<p style="font-size:.9rem;color:var(--ink-soft);margin:0">' + st.sabidos + ' de ' + st.fila.length + ' você sabia. Os errados voltam em 3 dias e estão no Caderno de Erros.</p></div>';
+          '<p style="font-size:.9rem;color:var(--ink-soft);margin:0">' + st.sabidos + ' de ' + st.fila.length + ' você lembrou. Os que você errou voltam amanhã.</p></div>';
         if (opts.fim) opts.fim(st);
         return;
       }
@@ -326,15 +326,20 @@
         '<div class="base"><b>Base:</b> ' + (c.b ? esc(c.b) : 'não citada na revisão') + (c.c || !c.b ? '<span class="fc-tag">conferir</span>' : '') +
         (c.n ? '<div class="base">' + esc(c.n) + '</div>' : '') + '</div>' +
         (c.p ? '<div class="fc-peg"><b>Pegadinha:</b> ' + esc(c.p) + '</div>' : '') + '</div>' +
-        '<div class="fc-bts"><button class="btn sei" data-fc="sei">Sei</button><button class="btn errei" data-fc="errei">Errei</button></div>';
+        (function () {
+          var pv = ATIVO.previa(c.id);
+          function quando(d) { return !d ? 'sai da revisão' : d === 1 ? 'amanhã' : d + ' dias'; }
+          return '<div class="fc-bts fc-4">' + [['errei', 'Errei'], ['dificil', 'Difícil'], ['bom', 'Bom'], ['facil', 'Fácil']].map(function (o) {
+            return '<button class="btn fc-' + o[0] + '" data-fc="' + o[0] + '"><b>' + o[1] + '</b><small>' + quando(pv[o[0]]) + '</small></button>';
+          }).join('') + '</div>';
+        })();
       el.innerHTML = h + '</div>';
     }
     el.onclick = function (ev) {
       var b = ev.target.closest('[data-fc]'); if (!b) return;
       if (b.dataset.fc === 'mostrar') { st.verso = true; desenhar(); return; }
-      var sabia = b.dataset.fc === 'sei';
-      ATIVO.responder(st.fila[st.idx].id, sabia);
-      if (sabia) st.sabidos++;
+      ATIVO.responder(st.fila[st.idx].id, b.dataset.fc);
+      if (b.dataset.fc !== 'errei') st.sabidos++;
       st.idx++; st.verso = false; desenhar();
     };
     desenhar();

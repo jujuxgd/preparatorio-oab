@@ -625,7 +625,8 @@ function renderStats() {
 
 // ── Render lista
 function renderLista() {
-  const todos = erros_get();
+  // flashcards errados não vão mais para o caderno (14/10/2026); os registros antigos ficam guardados, mas não aparecem
+  const todos = erros_get().filter(e => !e.flashcard_id);
   const filtrados = todos.filter(e => {
     if (filtroAtivo === 'pendentes') return e.status !== 'dominada';
     if (filtroAtivo === 'dominadas') return e.status === 'dominada';
