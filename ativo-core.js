@@ -2,7 +2,7 @@
 // Usado por: sessao-core.js (hoje.html, revisar.html, calendario.html, painel-erros.html)
 //
 // Regra de cada cartão (estado em oab_fc_estado_v1):
-//   errei → volta em 1 dia e entra no Caderno de Erros; acertando, 7 e depois 15 dias;
+//   errei → volta em 3 dias e entra no Caderno de Erros; acertando, 7 e depois 15 dias;
 //   sei   → cartão novo volta em 15 dias; "sei" no degrau de 15 dias tira da rotação.
 (function () {
   var K_FC = 'oab_fc_estado_v1';
@@ -51,6 +51,14 @@
   function porId(id) { return cartoes().filter(function (c) { return c.id === id; })[0] || null; }
   function estados() { return ler(K_FC, {}); }
 
+  // Errados antes de 13/10/2026 ficaram agendados para o dia seguinte (escada antiga 1→7→15).
+  // A data efetiva nunca fica antes de 3 dias depois do último erro — vale também para dado antigo vindo da nuvem.
+  function proxDe(e) {
+    var h = e.h || [], ult = h[h.length - 1];
+    if (e.n === 0 && e.prox && ult && ult[1] === 'e') { var c = somaDias(ult[0], ESCADA[0]); if (e.prox < c) return c; }
+    return e.prox;
+  }
+
   // Revisão marcada para depois da véspera é puxada para 09/01, para nada ficar para trás.
   function agendar(base, dias) {
     var alvo = somaDias(base, dias);
@@ -93,8 +101,8 @@
     var h = data || hoje(), est = estados();
     return cartoes().filter(function (c) {
       var e = est[c.id];
-      return e && !e.fora && e.prox && e.prox <= h;
-    }).sort(function (a, b) { return est[a.id].prox.localeCompare(est[b.id].prox); });
+      return e && !e.fora && e.prox && proxDe(e) <= h;
+    }).sort(function (a, b) { return proxDe(est[a.id]).localeCompare(proxDe(est[b.id])); });
   }
 
   // Cartões ainda não vistos das matérias do dia, na ordem das revisões.
