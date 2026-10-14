@@ -708,7 +708,8 @@ function renderCard(e) {
   let estado = '';
   if (isDominada) estado = '✓ Dominada' + (e.dominada_em ? ' em ' + erros_fmt_data(e.dominada_em) : '');
   else if (e.proxima_revisao) {
-    const quando = e.proxima_revisao <= hoje ? 'hoje' : e.proxima_revisao === _erros_soma_dias(hoje, 1) ? 'amanhã' : 'em ' + erros_fmt_data(e.proxima_revisao);
+    const prox = _erros_prox(e);
+    const quando = prox <= hoje ? 'hoje' : prox === _erros_soma_dias(hoje, 1) ? 'amanhã' : 'em ' + erros_fmt_data(prox);
     estado = 'Revisa ' + quando + (e.acertos_seguidos ? ' · ' + e.acertos_seguidos + ' de ' + ERROS_ACERTOS_PARA_DOMINAR + ' acertos seguidos' : '');
   }
 

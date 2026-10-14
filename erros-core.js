@@ -55,6 +55,15 @@ function _erros_soma_dias(iso, n) {
   return dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0') + '-' + String(dt.getDate()).padStart(2, '0');
 }
 
+// Erros registrados antes de 13/10/2026 voltavam no dia seguinte (escada 1→7→15): a data efetiva
+// nunca fica antes de 3 dias depois do erro (vale também para dado antigo vindo da nuvem).
+function _erros_prox(e) {
+  if ((e.nivel || 0) !== 0 || !e.proxima_revisao) return e.proxima_revisao;
+  const base = e.ultima_revisao || e.data;
+  const certo = base ? _erros_soma_dias(base, ERROS_ESCADA[0]) : e.proxima_revisao;
+  return e.proxima_revisao < certo ? certo : e.proxima_revisao;
+}
+
 function erros_proxima_data(nivel, hoje) {
   const passo = ERROS_ESCADA[Math.min(nivel, ERROS_ESCADA.length - 1)];
   const alvo = _erros_soma_dias(hoje, passo);
@@ -65,8 +74,8 @@ function erros_devidas(limite) {
   const hoje = dataLocalHoje();
   const max = limite == null ? ERROS_LIMITE_DIARIO : limite;
   return erros_get()
-    .filter(e => e.status !== 'dominada' && !e.flashcard_id && (e.proxima_revisao || '0000-00-00') <= hoje)
-    .sort((a, b) => (a.proxima_revisao || '0000-00-00').localeCompare(b.proxima_revisao || '0000-00-00'))
+    .filter(e => e.status !== 'dominada' && !e.flashcard_id && (_erros_prox(e) || '0000-00-00') <= hoje)
+    .sort((a, b) => (_erros_prox(a) || '0000-00-00').localeCompare(_erros_prox(b) || '0000-00-00'))
     .slice(0, max);
 }
 

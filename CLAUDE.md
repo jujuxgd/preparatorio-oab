@@ -313,7 +313,7 @@ salvo; a sessão nova é a rotina do dia e aparece como cartão no topo do Hoje.
   nunca copiado; nada da marca d'água dos PDFs entra no repo. Carregados sob demanda pela lista
   `ARQUIVOS` em `ativo-core.js` (cartão novo: acrescentar o arquivo lá e em `ESSENCIAIS` do `sw.js`).
 - **`ativo-core.js`** → `window.ATIVO`. Estado em `oab_fc_estado_v1` (`{id: {n, prox, fora, h, erros}}`).
-  Errei → 3 dias e entra no Caderno de Erros (`flashcard_id`); acertando, 7 e 15 dias. Sei em cartão
+  Errei → 3 dias e entra no Caderno de Erros (`flashcard_id`; `proxDe`/`_erros_prox` garantem pelo menos 3 dias depois do erro mesmo para registros antigos da escada 1→7→15); acertando, 7 e 15 dias. Sei em cartão
   novo → 15 dias; sei no degrau de 15 → sai da rotação. Novos: até 10 por matéria do dia.
 - **Planos mesclados (10/10/2026):** não há escolha de plano. A aba Hoje, o Calendário e o Revisar seguem
   `CAL_ATIVO`; o plano de 120 dias (`plano-vde.js`) fica só como dado legado (Início, Matérias, `dia.html`,
