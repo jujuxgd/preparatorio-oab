@@ -282,7 +282,7 @@ salvo; a sessão nova é a rotina do dia e aparece como cartão no topo do Hoje.
   10/10/2026 a pedido de Julia):** seg–sáb = os **PDFs do dia do VDE** em ordem (89 PDFs em 60 dias; 29 dias
   juntam os dois PDFs mais curtos vizinhos, de matérias diferentes); domingo = simulado completo (47º → 38º).
   Cada tópico: `n` = DIA do VDE (arquivo "Dia n - Matéria.pdf"), `d`, `s` = tema, `q` = tópicos do banco,
-  `k`/`g` herdados do Gabaritaço quando o tópico do banco coincide. Sem a semana 14 do VDE (Julia não tem); da
+  `k`/`g` herdados do Gabaritaço quando o tópico do banco coincide. **14/10/2026:** as faixas `k` foram conferidas DICA a DICA contra os títulos nos PDFs do Gabaritaço e 26 foram corrigidas (ex.: Contratos em geral 23–27 × em espécie 28–35; Fato típico 7–15 × Ilicitude 16–23; Serviços públicos/PPP 95–102). As páginas de `gabaritaco.js` batem 100% com os PDFs. Sem a semana 14 do VDE (Julia não tem); da
   semana 08 (escaneada) entram os dias 53–55 que Julia dividiu. Todos os dias do calendário têm PDF no Drive
   (a aba Conteúdo avisa se faltar algum). PyMuPDF lê os cabeçalhos "DIA N" melhor que pypdf.
   Fase 2 (21/12–08/01): revisão diária (caderno, flashcards, 20 questões de Ética), simulado parcial nos dias
