@@ -61,7 +61,7 @@ window.CAL_ATIVO = {
 ],
 "k": [
 1,
-16
+6
 ],
 "g": [
 "oab_000830",
@@ -122,7 +122,7 @@ window.CAL_ATIVO = {
 ],
 "k": [
 1,
-11
+5
 ],
 "g": [
 "oab_001232",
@@ -248,7 +248,7 @@ window.CAL_ATIVO = {
 "Poderes administrativos"
 ],
 "k": [
-10,
+1,
 15
 ],
 "g": [
@@ -287,7 +287,7 @@ window.CAL_ATIVO = {
 "Terceirização e responsabilidade"
 ],
 "k": [
-1,
+7,
 16
 ],
 "g": [
@@ -352,7 +352,7 @@ window.CAL_ATIVO = {
 ],
 "k": [
 7,
-23
+15
 ],
 "g": [
 "oab_000060",
@@ -368,7 +368,7 @@ window.CAL_ATIVO = {
 "Custas e honorários"
 ],
 "k": [
-1,
+6,
 11
 ],
 "g": [
@@ -604,7 +604,7 @@ window.CAL_ATIVO = {
 "Teoria do crime"
 ],
 "k": [
-7,
+16,
 23
 ],
 "g": [
@@ -718,7 +718,7 @@ window.CAL_ATIVO = {
 ],
 "k": [
 24,
-39
+28
 ],
 "g": [
 "oab_000433",
@@ -749,7 +749,7 @@ window.CAL_ATIVO = {
 ],
 "k": [
 32,
-45
+44
 ],
 "g": [
 "oab_000850",
@@ -805,7 +805,7 @@ window.CAL_ATIVO = {
 ],
 "k": [
 33,
-43
+37
 ],
 "g": [
 "oab_001157"
@@ -831,8 +831,8 @@ window.CAL_ATIVO = {
 "Organização do Estado"
 ],
 "k": [
-32,
-45
+45,
+46
 ],
 "g": [
 "oab_000850",
@@ -898,7 +898,7 @@ window.CAL_ATIVO = {
 ],
 "k": [
 23,
-35
+27
 ],
 "g": [
 "oab_001272"
@@ -1012,7 +1012,7 @@ window.CAL_ATIVO = {
 "Processo legislativo"
 ],
 "k": [
-46,
+47,
 61
 ],
 "g": [
@@ -1068,7 +1068,7 @@ window.CAL_ATIVO = {
 "Contratos"
 ],
 "k": [
-23,
+28,
 35
 ],
 "g": [
@@ -1103,7 +1103,7 @@ window.CAL_ATIVO = {
 "Incompatibilidades e impedimentos"
 ],
 "k": [
-33,
+38,
 43
 ],
 "g": [
@@ -1168,7 +1168,7 @@ window.CAL_ATIVO = {
 ],
 "k": [
 62,
-70
+71
 ],
 "g": [
 "oab_001089"
@@ -1330,7 +1330,7 @@ window.CAL_ATIVO = {
 ],
 "k": [
 44,
-61
+60
 ],
 "g": [
 "oab_001237",
@@ -1408,7 +1408,7 @@ window.CAL_ATIVO = {
 ],
 "k": [
 56,
-74
+67
 ],
 "g": [
 "oab_000130"
@@ -1524,7 +1524,7 @@ window.CAL_ATIVO = {
 "Crimes contra a Administração Pública"
 ],
 "k": [
-62,
+68,
 74
 ],
 "g": [
@@ -1611,7 +1611,7 @@ window.CAL_ATIVO = {
 ],
 "k": [
 47,
-49
+52
 ],
 "g": [
 "oab_000762"
@@ -1634,7 +1634,7 @@ window.CAL_ATIVO = {
 ],
 "k": [
 70,
-97
+94
 ],
 "g": [
 "oab_001107",
@@ -1689,7 +1689,7 @@ window.CAL_ATIVO = {
 ],
 "k": [
 65,
-79
+74
 ]
 }
 ]
@@ -1736,7 +1736,7 @@ window.CAL_ATIVO = {
 "Controle de constitucionalidade"
 ],
 "k": [
-71,
+72,
 78
 ],
 "g": [
@@ -1853,8 +1853,8 @@ window.CAL_ATIVO = {
 "Serviços públicos"
 ],
 "k": [
-65,
-69
+95,
+102
 ],
 "g": [
 "oab_000947"
@@ -1875,7 +1875,7 @@ window.CAL_ATIVO = {
 "Direito das sucessões"
 ],
 "k": [
-65,
+75,
 79
 ]
 },
@@ -1888,7 +1888,7 @@ window.CAL_ATIVO = {
 ],
 "k": [
 77,
-82
+80
 ],
 "g": [
 "oab_000941",
