@@ -53,6 +53,11 @@
     .ca-c.sel:not(.hoje) .ca-n b{box-shadow:inset 0 0 0 1.5px var(--rose)}
     .ca-c.passado .ca-n{color:var(--ink-faded)}
     .ca-c.passado .ca-chip{opacity:.55}
+    .ca-c.atraso{background:color-mix(in srgb,#c0504d 8%,transparent)}
+    .ca-c.atraso .ca-n{color:#a33f3c}
+    .ca-n .at{font:600 .58rem Inter,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#a33f3c}
+    [data-theme="dark"] .ca-c.atraso .ca-n,[data-theme="dark"] .ca-n .at,[data-theme="dark"] .ca-det .atr{color:#e8908c}
+    .ca-det .atr{color:#a33f3c;font-weight:600}
 
     /* etiquetas */
     .ca-chip{display:inline-block;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font:600 .7rem/1 Inter,sans-serif;padding:.35rem .6rem;border-radius:999px;background:var(--c,var(--bg-soft));color:var(--cd,var(--ink-soft))}
@@ -82,7 +87,7 @@
       .ca-c{min-height:74px;padding:.55rem .1rem;align-items:center;gap:.4rem}
       .ca-n{font-size:1rem}
       .ca-n b{margin:0}
-      .ca-n .ok{display:none}
+      .ca-n .ok,.ca-n .at{display:none}
       .ca-chips{display:flex;gap:3px;justify-content:center}
       .ca-grade .ca-chip{width:7px;height:7px;padding:0;font-size:0;background:var(--cd,var(--ink-faded))}
       .ca-grade .ca-chip.sim{background:var(--ink-soft);box-shadow:none}
@@ -179,7 +184,7 @@
     return '<span class="ca-chip" style="--c:var(--mat-' + c + ');--cd:var(--mat-' + c + '-deep)">' + esc(S.curto(d)) + '</span>';
   }
   function mes() {
-    var f = feitos(), k = mesAt, m = +k.slice(5), y = +k.slice(0, 4);
+    var f = feitos(), at = S.atrasados(), k = mesAt, m = +k.slice(5), y = +k.slice(0, 4);
     var ini = new Date(y, m - 1, 1), ult = new Date(y, m, 0).getDate(), h = '';
     ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'].forEach(function (w) { h += '<span class="ca-sem">' + w + '</span>'; });
     // semanas inteiras fora do plano (antes de 12/10, depois de 10/01) não aparecem
@@ -191,7 +196,7 @@
       var iso = k + '-' + String(d).padStart(2, '0'), x = POR[iso];
       if (!x) { h += '<span class="ca-c fora"><span class="ca-n"><b>' + d + '</b></span></span>'; continue; }
       var ok = f[iso] && f[iso].feito;
-      var cls = 'ca-c' + (iso === HOJE ? ' hoje' : iso < HOJE ? ' passado' : '') + (iso === sel ? ' sel' : '') + (ok ? ' feito' : '');
+      var cls = 'ca-c' + (iso === HOJE ? ' hoje' : iso < HOJE ? ' passado' : '') + (iso === sel ? ' sel' : '') + (ok ? ' feito' : '') + (at.indexOf(iso) >= 0 ? ' atraso' : '');
       var corpo = '';
       if (x.tipo === 'prova') corpo = '<span class="ca-chip prova">Prova</span>';
       else if (x.top && x.tipo !== 'simulado') {
@@ -202,7 +207,7 @@
       else if (x.tipo === 'revisao') corpo = '<span class="ca-chip rev">Revisão</span>';
       else corpo = '<span class="ca-chip leve">' + (x.tipo === 'vespera' ? 'Véspera' : 'Leve') + '</span>';
       h += '<button type="button" class="' + cls + '" data-d="' + iso + '" aria-label="' + esc(S.dataLonga(iso) + ': ' + (x.top ? temas(x).map(function (t) { return S.curto(t.d) + ', ' + t.s; }).join('; ') : tipoTxt(x))) + '">' +
-        '<span class="ca-n"><b>' + d + '</b>' + (ok ? '<span class="ok" title="estudado">✓</span>' : '') + '</span><span class="ca-chips">' + corpo + '</span></button>';
+        '<span class="ca-n"><b>' + d + '</b>' + (ok ? '<span class="ok" title="estudado">✓</span>' : at.indexOf(iso) >= 0 ? '<span class="at">atrasado</span>' : '') + '</span><span class="ca-chips">' + corpo + '</span></button>';
     }
     document.getElementById('ca-grade').innerHTML = h;
     document.getElementById('ca-mestit').textContent = MESES_L[m - 1] + ' ' + y;
@@ -216,7 +221,7 @@
     var tit = S.dataLonga(sel).replace(/^./, function (c) { return c.toUpperCase(); });
     var fase = x.f === 1 ? 'Fase de conteúdo' : x.f === 2 ? 'Revisão final' : 'Dia da prova';
     var h = '<span class="tag">Dia ' + idx + ' de ' + CAL.dias.length + (sel === HOJE ? ' · hoje' : '') + '</span>' +
-      '<p class="data">' + esc(tit) + '</p><p class="fase">' + fase + (f[sel] && f[sel].feito ? ', estudado ✓' : '') + '</p>';
+      '<p class="data">' + esc(tit) + '</p><p class="fase">' + fase + (f[sel] && f[sel].feito ? ', estudado ✓' : S.atrasados().indexOf(sel) >= 0 ? ', <span class="atr">atrasado</span>' : '') + '</p>';
     if (x.adiantado) h += '<p class="ca-adi">Você adiantou conteúdo para este dia.</p>';
     if (x.top && x.tipo !== 'simulado') h += temas(x).map(function (t) {
       return '<div class="ca-it">' + chip(t.d) + '<span class="tx">' + esc(t.s) + '</span>' +
