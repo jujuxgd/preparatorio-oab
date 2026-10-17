@@ -670,13 +670,22 @@
     gravar(K_CHECK, t);
   }
 
+  // dia do plano já passado sem "Estudei hoje" (dias leves não contam)
+  function atrasados() {
+    if (!CAL) return [];
+    var f = ler(K_CHECK, {});
+    return CAL.dias.filter(function (x) {
+      return x.d < HOJE && x.tipo !== 'leve' && x.tipo !== 'vespera' && x.tipo !== 'prova' && !(f[x.d] && f[x.d].feito);
+    }).map(function (x) { return x.d; });
+  }
+
   window.SESSAO = {
     DATA: DATA, HOJE: HOJE, DIA: DIA, TIPO: TIPO, ETICA: ETICA,
     esc: esc, curto: curto, dataLonga: dataLonga, partes: partes, MESES: MESES,
     indice: indice, vizinho: vizinho, resumoDoDia: resumoDoDia, disciplinasDoDia: disciplinasDoDia,
     sincPasta: sincPasta, fila: fila, montarFlashcards: montarFlashcards, montarQuestoes: montarQuestoes, carregarBanco: carregarBanco,
     itensChecklist: itensChecklist, htmlChecklist: htmlChecklist, htmlConteudo: htmlConteudo, montarConteudo: montarConteudo, revisoesDoDia: revisoesDoDia, pdfsDoDia: pdfsDoDia, progressoChecklist: progressoChecklist, marcar: marcar,
-    feito: function () { return !!checks().feito; }, marcarFeito: marcarFeito,
+    feito: function () { return !!checks().feito; }, marcarFeito: marcarFeito, atrasados: atrasados,
     htmlCalendario: htmlCalendario, htmlPainel: htmlPainel, linkRevisao: linkRevisao
   };
 })();

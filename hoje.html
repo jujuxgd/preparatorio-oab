@@ -233,6 +233,13 @@
 }
 
 /* ── Tabs ── */
+.hj-atraso { background: color-mix(in srgb, #c0504d 9%, var(--paper)); border: 1px solid color-mix(in srgb, #c0504d 35%, transparent); border-radius: var(--radius); padding: .8rem 1.1rem; margin: 0 0 1.2rem; font-size: .88rem; color: var(--ink); line-height: 1.5; }
+.hj-atraso b { color: #a33f3c; }
+.hj-atraso-lst { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .5rem; }
+.hj-atraso-lst a { font-size: .78rem; font-weight: 600; text-decoration: none; color: #a33f3c; background: var(--paper); border: 1px solid color-mix(in srgb, #c0504d 35%, transparent); border-radius: 999px; padding: .3rem .7rem; }
+.hj-atraso-lst a:hover { background: color-mix(in srgb, #c0504d 12%, var(--paper)); }
+[data-theme="dark"] .hj-atraso b, [data-theme="dark"] .hj-atraso-lst a { color: #e8908c; }
+
 .tabs-bar {
   display: flex;
   gap: 0.35rem;
@@ -1097,6 +1104,8 @@
       <button class="btn-estudei" id="btn-estudei" onclick="toggleDiaConcluido()">Estudei Hoje ✦</button>
     </div>
 
+    <div id="hj-atraso"></div>
+
     <div class="tabs-bar">
       <div class="tab" data-tab="conteudo"><svg viewBox="0 0 24 24"><path d="M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2z"/><path d="M22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7z"/></svg><span class="tl">Conteúdo</span></div>
       <div class="tab" data-tab="flashcards"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="14" height="14" rx="2"/><path d="M7 3h12a2 2 0 0 1 2 2v12"/></svg><span class="tl">Flashcards</span></div>
@@ -1215,7 +1224,29 @@
     if (prev) np.href = 'hoje.html?data=' + prev; else np.style.visibility = 'hidden';
     if (next) nn.href = 'hoje.html?data=' + next; else nn.style.visibility = 'hidden';
     if (S.DATA === S.HOJE) np.textContent = '← Ontem', nn.textContent = 'Amanhã →';
+    if (S.DATA < S.HOJE) document.getElementById('btn-estudei').textContent = 'Marcar como estudado ✦';
     if (S.feito()) estudeiOn();
+    avisoAtraso();
+  }
+
+  function avisoAtraso() {
+    var el = document.getElementById('hj-atraso'), at = S.atrasados();
+    if (S.DATA < S.HOJE && at.indexOf(S.DATA) >= 0) {
+      el.innerHTML = '<div class="hj-atraso"><b>Dia atrasado.</b> Faça o conteúdo e marque “Marcar como estudado” para tirá-lo da lista.</div>';
+      return;
+    }
+    if (S.DATA !== S.HOJE || !at.length) { el.innerHTML = ''; return; }
+    el.innerHTML = '<div class="hj-atraso"><b>' + at.length + (at.length === 1 ? ' dia atrasado' : ' dias atrasados') + '</b> · faça quando puder:' +
+      '<span class="hj-atraso-lst">' + at.map(function (d) {
+        var p = S.partes(d);
+        return '<a href="hoje.html?data=' + d + '">' + p.d + '/' + String(p.m).padStart(2, '0') + ' · ' + esc(curtoDia(d)) + '</a>';
+      }).join('') + '</span></div>';
+  }
+  function curtoDia(d) {
+    var x = CAL_ATIVO.dias.filter(function (y) { return y.d === d; })[0];
+    if (!x) return '';
+    if (x.top) return S.curto(x.top[0].d) + (x.top.length > 1 && x.top[1].d !== x.top[0].d ? ' + ' + S.curto(x.top[1].d) : '');
+    return S.TIPO[x.tipo] || '';
   }
 
   function montarFlashcards() {
@@ -1258,8 +1289,8 @@
   }
   window.toggleDiaConcluido = function () {
     var b = document.getElementById('btn-estudei');
-    if (S.feito()) { S.marcarFeito(false); b.classList.remove('concluido'); b.textContent = 'Estudei Hoje ✦'; return; }
-    S.marcarFeito(true); estudeiOn();
+    if (S.feito()) { S.marcarFeito(false); b.classList.remove('concluido'); b.textContent = S.DATA < S.HOJE ? 'Marcar como estudado ✦' : 'Estudei Hoje ✦'; avisoAtraso(); return; }
+    S.marcarFeito(true); estudeiOn(); avisoAtraso();
     if (S.DATA === S.HOJE && typeof baterMetaDoDia === 'function') baterMetaDoDia();
     else if (typeof showPetals === 'function') showPetals();
   };

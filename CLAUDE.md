@@ -347,6 +347,10 @@ salvo; a sessão nova é a rotina do dia e aparece como cartão no topo do Hoje.
   questões = `oab_bq_respostas` + Tracker). O Início ganhou os blocos Para revisar hoje, Próximos dias e Conteúdo do VDE.
   O streak global (`script.js`, `.streak-pill .count`) conta os dias seguidos com `feito` em `oab_ativo_check_v1`.
   Perfil é enxuto (cartão, humor, configurações); `perfil-ui.js` esconde Resumo, Conquistas, Insights e gráficos.
+- **Dias atrasados (17/10/2026, escolha de Julia):** dia já passado do `CAL_ATIVO` (menos leve/véspera/prova) sem `feito` em
+  `oab_ativo_check_v1` = atrasado (`SESSAO.atrasados()`). O calendário não muda: o Hoje mostra "N dias atrasados" com link para cada
+  um, o dia atrasado aberto troca o botão por "Marcar como estudado", e o `calendario.html` pinta a célula de vermelho ("atrasado")
+  até o dia ser marcado.
 - **Fluxo de entrega:** Julia pede merge a cada item terminado (PR + merge na `main` para aparecer no Vercel).
 
 ---
