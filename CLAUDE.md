@@ -306,7 +306,7 @@ salvo; a sessão nova é a rotina do dia e aparece como cartão no topo do Hoje.
   d'água com dados de terceiros: só IDs e temas entram no repo, nunca texto.
 - **`gabaritaco.js`** → `GABARITACO {disciplina: {id, paginas, dica:[página onde começa cada DICA]}}`, lido dos 10 PDFs
   com PyMuPDF. O Conteúdo do Hoje mostra, sob demanda ("Abrir o trecho"), o Gabaritaço do tema no leitor com grifos,
-  só nas páginas das DICAS `k` do tópico. Os PDFs (6–12 MB) ficam no Cache Storage do navegador (`oab-pdfs-v1`).
+  só nas páginas das DICAS `k` do tópico. **18/10/2026:** `topo[i]` marca a DICA que abre a página; aí a página dela não entra no trecho do tema anterior (antes 66 de 79 temas abriam uma página inteira do tema seguinte). Página de início compartilhada com DICAS anteriores continua (layout em 2 colunas não permite cortar). Os PDFs (6–12 MB) ficam no Cache Storage do navegador (`oab-pdfs-v1`).
 - **`fc-*.js`** (11 arquivos, 631 cartões) → `window.FC_VDE`, das **Revisões 1–3 do VDE**
   (`revisao-biblioteca.js`). Campos: `id, d` (disciplina do banco), `r` (revisão), `t` (tema),
   `f` frente, `v` verso curto, `b` dispositivo **só se citado na revisão** (sem `b` = "conferir"),
