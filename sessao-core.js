@@ -95,13 +95,15 @@
   }
 
   // ── fila de flashcards do dia ──
-  var STOP = ['de','da','do','das','dos','e','em','no','na','nos','nas','com','para','por','sem','ao','aos','os','as','um','uma','geral','direito','sobre','entre','pela','pelo'];
+  var STOP = ['de','da','do','das','dos','e','em','no','na','nos','nas','com','para','por','sem','ao','aos','os','as','um','uma','geral','direito','sobre','entre','pela','pelo','contra','crime','crimes','teoria','processo','processual','direitos','juridico','poder','publico','publica','publicos','publicas','pessoal','procedimento'];
+  // tema do dia sem palavra em comum com o tema do cartão
+  var SINONIMOS = { 'Intervenção do Estado na propriedade': 'desapropriação' };
   function tokens(s) {
     return String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9\s]/g, ' ')
-      .split(/\s+/).filter(function (w) { return w.length >= 4 && STOP.indexOf(w) < 0; })
+      .split(/\s+/).filter(function (w) { return (w.length >= 4 || w === 'fe') && STOP.indexOf(w) < 0; })
       .map(function (w) { return w.slice(0, 6); });
   }
-  // Flashcards novos do tema de cada PDF do dia; sem cartão do tema, os primeiros da matéria.
+  // Flashcards novos do tema de cada PDF do dia (sem cartão do tema, nenhum novo daquela matéria).
   // Cartão visto pela primeira vez nesta data continua ocupando a vaga dele: recarregar a página
   // (ou adiantar outro PDF) não puxa mais cartões do mesmo tema.
   function vistoNoDia(e) { return !!(e && e.h && e.h.length && e.h[0][0] === DATA); }
@@ -120,13 +122,20 @@
       return { novos: out, feitos: feitos };
     }
     DIA.top.forEach(function (t) {
-      var alvo = tokens(t.s + ' ' + (t.q || []).join(' '));
       var cand = ATIVO.cartoes().filter(function (c) { return c.d === t.d && livre(c) && !vistos[c.id]; });
-      var doTema = cand.filter(function (c) {
-        var tk = tokens(c.t);
-        return tk.some(function (w) { return alvo.indexOf(w) >= 0; });
-      });
-      (doTema.length ? doTema.slice(0, 15) : cand.slice(0, 5)).forEach(poe);
+      // palavra do nome da matéria ("penal", "tribut…") só conta se o cartão não tiver outra
+      var nomeDisc = tokens(t.d);
+      function casam(txt) {
+        var alvo = tokens(txt);
+        return cand.filter(function (c) {
+          var tk = tokens(c.t), proprias = tk.filter(function (w) { return nomeDisc.indexOf(w) < 0; });
+          return (proprias.length ? proprias : tk).some(function (w) { return alvo.indexOf(w) >= 0; });
+        });
+      }
+      // primeiro pelo tema do PDF; só se nada casar, pelos tópicos do banco
+      var doTema = casam(t.s + ' ' + (SINONIMOS[t.s] || ''));
+      if (!doTema.length) doTema = casam((t.q || []).join(' '));
+      doTema.slice(0, 15).forEach(poe);
     });
     return { novos: out, feitos: feitos };
   }
