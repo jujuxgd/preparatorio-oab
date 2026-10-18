@@ -256,7 +256,9 @@
       if (!t.k || !G[t.d] || feito[i] || !filtro(t)) return false;
       return (feito[i] = true);
     }).map(function (t) {
-      var g = G[t.d], de = g.dica[t.k[0] - 1] || 1, ate = g.dica[t.k[1]] || g.paginas;
+      // a página onde começa a DICA seguinte só entra se ela não abrir a página (senão é toda do próximo tema)
+      var g = G[t.d], de = g.dica[t.k[0] - 1] || 1, prox = g.dica[t.k[1]];
+      var ate = prox ? Math.max(de, prox - (g.topo && g.topo[t.k[1]] ? 1 : 0)) : g.paginas;
       return '<div class="ss-bloco gab-bloco"><h3><span class="n">Gabaritaço · DICAS ' + t.k[0] + '–' + t.k[1] + '</span>' + esc(curto(t.d) + ': ' + t.s) + '</h3>' +
         '<div class="gab-host" data-arq="' + g.id + '" data-de="' + de + '" data-ate="' + ate + '">' +
         '<p class="ss-vazio" style="margin:0 0 .6rem">Questões que já caíram sobre o tema, com as dicas do VDE (páginas ' + de + '–' + ate + ').</p>' +
