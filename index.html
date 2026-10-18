@@ -902,7 +902,7 @@ main { padding: 2rem 2.5rem 2.25rem; }
 <script src="cards.js"></script>
 <script src="progresso.js?v=1783859287"></script>
 <script src="humor.js"></script>
-<script src="script.js?v=1784021867"></script>
+<script src="script.js?v=1784021868"></script>
 <script src="cores.js?v=1784060144"></script>
 <script src="perfil.js?v=1783860863"></script>
 <script src="sync.js?v=1784058237"></script>
@@ -988,8 +988,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (typeof PLANO_VDE !== 'undefined') PLANO_VDE.forEach(d => (d.materias || []).forEach(m => { if (m.nome && m.emoji && !EMOJI[m.nome]) EMOJI[m.nome] = m.emoji; }));
 
   // Streak = dias seguidos marcados como estudados (hoje conta se já marcou)
-  let streak = 0;
-  { const d = new Date(HOJE + 'T12:00:00'); if (!feito(HOJE)) d.setDate(d.getDate() - 1); while (feito(isoDe(d))) { streak++; d.setDate(d.getDate() - 1); } }
+  const streak = streakOAB();
   const streakCount = document.getElementById('streak-count');
   if (streakCount) streakCount.textContent = streak;
 

@@ -1044,7 +1044,7 @@
   </main>
 </div>
 
-<script src="script.js?v=1784021867"></script>
+<script src="script.js?v=1784021868"></script>
 <script src="perfil.js?v=1783860863"></script>
 <script src="sync.js?v=1784058237"></script>
 <script src="progresso.js?v=1783859287"></script>
@@ -1384,8 +1384,7 @@ function montarEstatisticas() {
   const CK = (() => { try { return JSON.parse(localStorage.getItem('oab_ativo_check_v1')) || {}; } catch (e) { return {}; } })();
   const isoDe = d => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
   const feito = iso => !!(CK[iso] && CK[iso].feito);
-  p.streak = 0;
-  { const d = new Date(hoje); if (!feito(isoDe(d))) d.setDate(d.getDate() - 1); while (feito(isoDe(d))) { p.streak++; d.setDate(d.getDate() - 1); } }
+  p.streak = streakOAB();
   const CAL = window.CAL_ATIVO;
   if (CAL) { stats.concluidos = CAL.dias.filter(x => feito(x.d)).length; stats.pct = Math.round(stats.concluidos / CAL.dias.length * 100); }
   const totalDiasPlano = CAL ? CAL.dias.length : 120;

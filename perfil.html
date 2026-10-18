@@ -715,7 +715,7 @@
 <script src="cards.js"></script>
 <script src="progresso.js?v=1783861348"></script>
 <script src="humor.js"></script>
-<script src="script.js?v=1784021867"></script>
+<script src="script.js?v=1784021868"></script>
 <script src="cores.js"></script>
 <script src="perfil.js?v=1783861604"></script>
 <script src="sync.js?v=1784058237"></script>
@@ -775,6 +775,7 @@ function renderLineChart(containerId, pontos, formatador) {
 
 document.addEventListener('DOMContentLoaded', () => {
   const p = carregarProgresso();
+  if (typeof streakOAB === 'function') p.streak = streakOAB();
   const stats = calcularStats();
   const insightsHumor = HumorOAB.getInsights();
   const sessoes = getSessoesPomodoro();
