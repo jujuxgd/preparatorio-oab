@@ -228,7 +228,8 @@ e registra `sw.js` em todas as páginas. O service worker é **rede primeiro** (
 espera antes de usar a cópia) e guarda as páginas e scripts do site e o SDK do Firebase;
 banco e cadernos legislativos entram no cache na primeira abertura online. Login/Firestore
 (googleapis), Drive e YouTube nunca passam pelo cache. Página nova: acrescentar em
-`ESSENCIAIS` no `sw.js` (o cache em uso também pega sozinho na primeira visita).
+`ESSENCIAIS` no `sw.js`. **iPhone instalado (18/10/2026):** depois do teclado/tela cheia a área visível fica deslocada e a barra
+de baixo flutua; `topnav.js` desfaz o deslocamento (`visualViewport`) e prende `.tn-links` na borda visível (o cache em uso também pega sozinho na primeira visita).
 
 ## 5.3 Revisão espaçada do Caderno de Erros (`erros-core.js`)
 

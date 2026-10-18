@@ -166,6 +166,28 @@
     var onScroll = function () { bar.classList.toggle('scrolled', window.scrollY > 8); };
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
+
+    // iPhone com o site instalado: depois do teclado (ou da tela cheia do PDF) a área visível fica
+    // deslocada da página e a barra de baixo "flutua" no meio da tela. Desfaz o deslocamento e,
+    // se ele persistir, prende a barra na borda de baixo da área visível.
+    var vv = window.visualViewport;
+    if (vv) {
+      var digitando = function () { var a = document.activeElement; return a && a.matches && a.matches('input, textarea, select, [contenteditable="true"]'); };
+      var prender = function () {
+        var dy = window.innerWidth > 900 || digitando() ? 0 : vv.height + vv.offsetTop - window.innerHeight;
+        wrap.style.transform = Math.abs(dy) > 1 ? 'translateY(' + dy + 'px)' : '';
+      };
+      var corrigir = function () {
+        if (!digitando() && vv.offsetTop > 1) window.scrollTo(window.scrollX, window.scrollY);
+        prender();
+      };
+      vv.addEventListener('resize', prender);
+      vv.addEventListener('scroll', prender);
+      window.addEventListener('scroll', prender, { passive: true });
+      document.addEventListener('focusout', function () { setTimeout(corrigir, 350); });
+      window.addEventListener('pageshow', corrigir);
+      document.addEventListener('visibilitychange', function () { if (!document.hidden) corrigir(); });
+    }
   });
 })();
 
