@@ -407,7 +407,9 @@ Prova prático-profissional do OAB 48 em **28/02/2027** (cronograma da OAB). Jul
 Dia da revisão ativa (seção 5.5), por data. Hero com data, tópicos do dia, Pomodoro e "Estudei Hoje"
 (marca o dia no calendário e conta no streak). Abas:
 0. **Conteúdo** (padrão nos dias com PDF) — PDF(s) do dia do VDE
-1. **Flashcards** — vencidos primeiro, depois novos do tema de cada PDF (`t` do cartão × tema/tópicos do dia)
+1. **Flashcards** — vencidos primeiro, depois novos do tema de cada PDF (`t` do cartão × tema do dia; só sem casamento, × tópicos `q`).
+   Palavra do nome da matéria ("penal", "tribut…") não basta para casar; tema sem cartão não puxa outros da matéria
+   (18/10/2026 — antes "penal" trazia Legislação penal especial no dia de Lei penal no tempo). `SINONIMOS` cobre tema sem palavra em comum
 2. **Questões** — blocos por tópico do Gabaritaço, simulado do dia e matéria extra da semana
 3. **Checklist** — pontos do dia do `CAL_ATIVO`, com link para as DICAS do Gabaritaço
 4. **Videoaulas** — aulas das matérias do dia (`videoaulas.js`), destacando as do tópico
