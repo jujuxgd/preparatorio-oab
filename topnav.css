@@ -165,7 +165,7 @@ html.embed .tn, body.embed .tn { display: none; }
   .tn-count .val { font-size: .85rem; }
   .tn-fase .so-pc { display: none; }
   .tn-fase button { padding: .28rem .55rem; }
-  main { padding-bottom: 5.5rem !important; }
+  main { padding-bottom: calc(6.5rem + env(safe-area-inset-bottom, 0px)) !important; }
 }
 @media (max-width: 430px) { .tn-count { display: none; } }
 @media (max-width: 380px) { .tn-word { display: none; } }
