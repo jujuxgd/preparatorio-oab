@@ -157,7 +157,7 @@ cada questão** — ela foi determinada pelo conteúdo.
   passou a cobrá-los em blocos fixos (questões 19–20, 23–24 e 69–70). São 20, 20 e 19
   questões. A atribuição confere posição do bloco E conteúdo antes de trocar a matéria
 - Quando o material discorda do gabarito da banca, vale o **oficial**, com a divergência
-  em `notes` (164 questões têm ressalva)
+  em `notes` (165 questões têm ressalva). A alternativa do gabarito aparece sempre como "Gabarito" no comentário, mesmo quando o material a chama de errada (18/10/2026; ex.: 44º Q77 e provas XXVII–XXX com "X) Errado" em todas)
 - `banco-questoes.html` → `formatarExplicacao()` entende as duas formas de abrir o
   comentário de cada alternativa: `A) Correto` e `A alternativa A está correta`
 

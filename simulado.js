@@ -463,7 +463,8 @@
 
   // o comentário do material vem em dois formatos; ambos abrem o
   // julgamento de cada alternativa, e é por ele que se separa.
-  function formatarExplicacao(txt) {
+  // a alternativa do gabarito oficial aparece sempre como gabarito, mesmo quando o comentário do material a chama de errada
+  function formatarExplicacao(txt, gab) {
     // "A) Errado" seguido de "A alternativa A está incorreta, pois…": um cabeçalho só
     txt = String(txt || '').replace(/(^|\n)(\s*([A-D])\)\s*(?:Correto|Correta|Certo|Certa|Errado|Errada|Incorreto|Incorreta)\b[ \t:.,-]*)\n+\s*(?:A\s+)?(?:alternativa|assertiva|letra)\s+\3\s+(?:est[áa]|é)\s+(?:corret[ao]|cert[ao]|errad[ao]|incorret[ao])\b[\s:.,-]*/gi, '$1$2\n');
     var JULGA = '(?:Correto|Correta|Certo|Certa|Errado|Errada|Incorreto|Incorreta)';
@@ -484,6 +485,7 @@
       if (!m) return '<div class="ex-bloco ex-intro">' + paras + '</div>';
       var letra = m[1] || m[3], veredito = m[2] || m[4];
       var certo = /^(corret|cert)/i.test(veredito);
+      if (gab && letra.toUpperCase() === gab && !certo) { veredito = 'Gabarito'; certo = true; }
       return '<div class="ex-bloco ' + (certo ? 'ex-certo' : 'ex-errado') + '">' +
              '<span class="ex-l">' + esc(letra.toUpperCase()) + '</span>' +
              '<div class="ex-txt"><span class="ex-v">' + esc(veredito) + '</span>' + paras + '</div></div>';
@@ -557,7 +559,7 @@
                        (letra === q.correct_answer ? 'var(--ink)' : 'var(--ink-soft)') + '">' +
                        '<b>' + letra + marca + ')</b> ' + esc(t) + '</p>';
               }).join('') +
-              (q.explanation ? '<div style="margin-top:.9rem">' + formatarExplicacao(q.explanation) + '</div>' : '') +
+              (q.explanation ? '<div style="margin-top:.9rem">' + formatarExplicacao(q.explanation, q.correct_answer) + '</div>' : '') +
               (q.legal_basis ? '<p class="rev-base"><b>Fundamentação:</b> ' + esc(q.legal_basis) + '</p>' : '') +
               (q.notes ? '<div class="rev-nota">Sobre o material de origem: ' + esc(q.notes) + '</div>' : '') +
             '</div></div>';

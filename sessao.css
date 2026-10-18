@@ -59,7 +59,7 @@
 .ss-expl .ex-bloco{display:flex;gap:.5rem;margin:.35rem 0}
 .ss-expl .ex-l{font-weight:700;color:var(--rose-deep)}
 .ss-expl .ex-v{font-weight:600;margin-right:.3rem}
-.ss-expl .ex-certo .ex-v{color:#5E8C6A}.ss-expl .ex-errado .ex-v{color:#C0524B}
+.ss-expl .ex-certo .ex-v{color:#5E8C6A}.ss-expl .ss-nota{font-size:.82rem;color:var(--ink-faded);border-top:1px solid var(--line-soft);padding-top:.6rem}.ss-expl .ex-errado .ex-v{color:#C0524B}
 .ss-cfg{display:flex;gap:.6rem;align-items:center;font-size:.78rem;color:var(--ink-faded);margin:1.4rem 0 .4rem}
 .ss-cfg select{font:inherit;padding:.25rem .4rem;border:1px solid var(--line);border-radius:6px;background:var(--paper);color:var(--ink)}
 .ss-bar{height:4px;background:var(--rose-soft);border-radius:4px;margin-bottom:1.1rem;overflow:hidden}
