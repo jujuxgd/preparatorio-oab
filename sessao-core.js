@@ -407,7 +407,8 @@
   }
 
   // comentário: mesma leitura do Banco de Questões
-  function formatarExplicacao(txt) {
+  // a alternativa do gabarito oficial aparece sempre como gabarito, mesmo quando o comentário do material a chama de errada
+  function formatarExplicacao(txt, gab) {
     // "A) Errado" seguido de "A alternativa A está incorreta, pois…": um cabeçalho só
     txt = String(txt || '').replace(/(^|\n)(\s*([A-D])\)\s*(?:Correto|Correta|Certo|Certa|Errado|Errada|Incorreto|Incorreta)\b[ \t:.,-]*)\n+\s*(?:A\s+)?(?:alternativa|assertiva|letra)\s+\3\s+(?:est[áa]|é)\s+(?:corret[ao]|cert[ao]|errad[ao]|incorret[ao])\b[\s:.,-]*/gi, '$1$2\n');
     var JULGA = '(?:Correto|Correta|Certo|Certa|Errado|Errada|Incorreto|Incorreta)';
@@ -419,8 +420,9 @@
       if (!corpo && !m) return '';
       var paras = corpo.split('\n').filter(Boolean).map(function (p) { return '<p>' + esc(p) + '</p>'; }).join('');
       if (!m) return '<div class="ex-bloco">' + paras + '</div>';
-      var letra = m[1] || m[3], ver = m[2] || m[4];
-      return '<div class="ex-bloco ' + (/^(corret|cert)/i.test(ver) ? 'ex-certo' : 'ex-errado') + '"><span class="ex-l">' + esc(letra.toUpperCase()) +
+      var letra = m[1] || m[3], ver = m[2] || m[4], eGab = gab && letra.toUpperCase() === gab;
+      if (eGab && !/^(corret|cert)/i.test(ver)) ver = 'Gabarito';
+      return '<div class="ex-bloco ' + (eGab || /^(corret|cert)/i.test(ver) ? 'ex-certo' : 'ex-errado') + '"><span class="ex-l">' + esc(letra.toUpperCase()) +
         '</span><div><span class="ex-v">' + esc(ver) + '</span>' + paras + '</div></div>';
     }).join('');
   }
@@ -490,8 +492,9 @@
       (certa ? '<b class="ok">Acertou.</b><button data-chute="1">Foi chute → errei</button>'
        : chute ? '<b class="no">Foi chute.</b> Foi para o Caderno de Erros.'
        : '<b class="no">Errou · gabarito ' + q.correct_answer + '.</b> Foi para o Caderno de Erros.') +
-      '<button data-expl="1">Ver comentário</button></div>' + (certa ? '' : htmlJustificar(q)) + '<div class="ss-expl" hidden>' + formatarExplicacao(q.explanation) +
-      (q.legal_basis ? '<p><b>Fundamentação:</b> ' + esc(q.legal_basis) + '</p>' : '') + '</div>';
+      '<button data-expl="1">Ver comentário</button></div>' + (certa ? '' : htmlJustificar(q)) + '<div class="ss-expl" hidden>' + formatarExplicacao(q.explanation, q.correct_answer) +
+      (q.legal_basis ? '<p><b>Fundamentação:</b> ' + esc(q.legal_basis) + '</p>' : '') +
+      (q.notes ? '<p class="ss-nota">Sobre o material de origem: ' + esc(q.notes) + '</p>' : '') + '</div>';
   }
   function blocoQuestoes(chave, titulo, extra, disc, topicos, g, n, erradasPrimeiro, usadas) {
     var ids = escolher(chave, disc, topicos, g, n, erradasPrimeiro, usadas);

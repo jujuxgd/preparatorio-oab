@@ -35672,7 +35672,7 @@ window.BANCO_QUESTOES = [
   "legal_basis": "Súmula 368; CF, art. 114",
   "duplicate_group": null,
   "source_file": "Prova comentada Estratégia OAB — 44º Exame.pdf",
-  "notes": null
+  "notes": "CONFERIR: o comentário do material chama a alternativa D de incorreta, mas o gabarito oficial é D. A competência do art. 114, VIII, da CF alcança só as contribuições das sentenças que a Justiça do Trabalho profere e dos acordos que homologa (Súmula Vinculante 53; Súmula 368, I, do TST); cobrança de contribuições de todo o contrato, sem condenação, fica fora."
  },
  {
   "id": "oab_001552",
