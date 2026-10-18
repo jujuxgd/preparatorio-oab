@@ -346,7 +346,7 @@ salvo; a sessão nova é a rotina do dia e aparece como cartão no topo do Hoje.
   páginas sem perguntar antes. Início, Matérias e Estatísticas mantêm o visual, mas os números vêm do `CAL_ATIVO`
   (dia N de 91, dias marcados em "Estudei hoje", PDFs do VDE estudados = item `p<n>` do checklist ou dia marcado,
   questões = `oab_bq_respostas` + Tracker). O Início ganhou os blocos Para revisar hoje, Próximos dias e Conteúdo do VDE.
-  O streak global (`script.js`, `.streak-pill .count`) conta os dias seguidos com `feito` em `oab_ativo_check_v1`.
+  O streak global (`streakOAB()`/`atualizarStreak()` em `script.js`, usados por Início, Estatísticas, Perfil e `.streak-pill .count`) conta os dias seguidos com `feito` em `oab_ativo_check_v1`; hoje sem marca e dias leve/véspera não quebram; atualiza na hora ao marcar "Estudei hoje" (18/10/2026 — antes o Perfil e o aviso usavam o contador antigo `ju_oab_streak`).
   Perfil é enxuto (cartão, humor, configurações); `perfil-ui.js` esconde Resumo, Conquistas, Insights e gráficos.
 - **Dias atrasados (17/10/2026, escolha de Julia):** dia já passado do `CAL_ATIVO` (menos leve/véspera/prova) sem `feito` em
   `oab_ativo_check_v1` = atrasado (`SESSAO.atrasados()`). O calendário não muda: o Hoje mostra "N dias atrasados" com link para cada

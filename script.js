@@ -155,19 +155,35 @@ document.addEventListener('DOMContentLoaded', () => {
   // Badge de Revisar e streak — calculados após todos os scripts carregarem
   setTimeout(() => {
     atualizarBadgeRevisar();
-    // Streak global: atualiza qualquer .streak-pill .count na página
-    try {
-      // dias seguidos marcados em "Estudei hoje" (oab_ativo_check_v1); hoje conta se já marcou
-      const ck = JSON.parse(localStorage.getItem('oab_ativo_check_v1') || '{}');
-      const iso = d => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
-      const ok = d => !!(ck[iso(d)] && ck[iso(d)].feito);
-      const d = getCurrentDate(); let seq = 0;
-      if (!ok(d)) d.setDate(d.getDate() - 1);
-      while (ok(d)) { seq++; d.setDate(d.getDate() - 1); }
-      document.querySelectorAll('.streak-pill .count').forEach(el => { el.textContent = seq; });
-    } catch(e) {}
+    atualizarStreak();
   }, 0);
 });
+
+// Dias seguidos marcados em "Estudei hoje" (oab_ativo_check_v1). Hoje ainda sem marca não quebra a
+// sequência, nem os dias leves/véspera do plano (marcados, contam).
+function streakOAB() {
+  let ck = {};
+  try { ck = JSON.parse(localStorage.getItem('oab_ativo_check_v1') || '{}') || {}; } catch (e) {}
+  const iso = d => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  const leve = {};
+  if (window.CAL_ATIVO) CAL_ATIVO.dias.forEach(x => { if (x.tipo === 'leve' || x.tipo === 'vespera') leve[x.d] = 1; });
+  const ok = k => !!(ck[k] && ck[k].feito);
+  const d = getCurrentDate();
+  let seq = 0;
+  if (!ok(iso(d))) d.setDate(d.getDate() - 1);
+  for (let i = 0; i < 400; i++) {
+    const k = iso(d);
+    if (ok(k)) seq++;
+    else if (!leve[k]) break;
+    d.setDate(d.getDate() - 1);
+  }
+  return seq;
+}
+function atualizarStreak() {
+  const seq = streakOAB();
+  document.querySelectorAll('.streak-pill .count').forEach(el => { el.textContent = seq; });
+  return seq;
+}
 
 function atualizarBadgeRevisar() {
   const links = document.querySelectorAll('a.nav-link[href="revisar.html"]');
@@ -359,10 +375,7 @@ document.addEventListener('DOMContentLoaded', function () {
 // próprio e funcional em humor.js.)
 
 document.addEventListener('DOMContentLoaded', () => {
-    const streakElement = document.getElementById('streak-count');
     let streak = parseInt(localStorage.getItem('ju_oab_streak') || '0');
-
-    if (streakElement) streakElement.innerText = streak;
 
     window.baterMetaDoDia = function() {
         const _hoje = getCurrentDate();
@@ -386,8 +399,8 @@ document.addEventListener('DOMContentLoaded', () => {
             } catch (e) {}
         }
 
-        if (streakElement) streakElement.innerText = streak;
         showPetals();
-        setTimeout(() => mostrarToast(`Mandou bem, ${nomeUsuario}! Streak: ${streak} dias seguidos!`, '✨'), 300);
+        const seq = atualizarStreak();
+        setTimeout(() => mostrarToast(`Mandou bem, ${nomeUsuario}! Streak: ${seq} ${seq === 1 ? 'dia seguido' : 'dias seguidos'}!`, '✨'), 300);
     };
 });

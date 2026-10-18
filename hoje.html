@@ -1163,7 +1163,7 @@
   </main>
 </div>
 
-<script src="script.js?v=1784021867"></script>
+<script src="script.js?v=1784021868"></script>
 <script src="perfil.js?v=1783860863"></script>
 <script src="sync.js?v=1784058237"></script>
 <script src="progresso.js?v=1783859287"></script>
@@ -1289,8 +1289,8 @@
   }
   window.toggleDiaConcluido = function () {
     var b = document.getElementById('btn-estudei');
-    if (S.feito()) { S.marcarFeito(false); b.classList.remove('concluido'); b.textContent = S.DATA < S.HOJE ? 'Marcar como estudado ✦' : 'Estudei Hoje ✦'; avisoAtraso(); return; }
-    S.marcarFeito(true); estudeiOn(); avisoAtraso();
+    if (S.feito()) { S.marcarFeito(false); b.classList.remove('concluido'); b.textContent = S.DATA < S.HOJE ? 'Marcar como estudado ✦' : 'Estudei Hoje ✦'; avisoAtraso(); if (window.atualizarStreak) atualizarStreak(); return; }
+    S.marcarFeito(true); estudeiOn(); avisoAtraso(); if (window.atualizarStreak) atualizarStreak();
     if (S.DATA === S.HOJE && typeof baterMetaDoDia === 'function') baterMetaDoDia();
     else if (typeof showPetals === 'function') showPetals();
   };
