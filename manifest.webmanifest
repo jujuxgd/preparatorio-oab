@@ -4,7 +4,7 @@
   "description": "Plano de estudos, revisão, banco de questões e simulados para a OAB.",
   "start_url": "hoje.html",
   "scope": "./",
-  "display": "standalone",
+  "display": "fullscreen",
   "background_color": "#FAF8F5",
   "theme_color": "#FAF8F5",
   "lang": "pt-BR",
