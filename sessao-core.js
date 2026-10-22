@@ -97,7 +97,8 @@
   // ── fila de flashcards do dia ──
   var STOP = ['de','da','do','das','dos','e','em','no','na','nos','nas','com','para','por','sem','ao','aos','os','as','um','uma','geral','direito','sobre','entre','pela','pelo','contra','crime','crimes','teoria','processo','processual','direitos','juridico','poder','publico','publica','publicos','publicas','pessoal','procedimento'];
   // tema do dia sem palavra em comum com o tema do cartão
-  var SINONIMOS = { 'Intervenção do Estado na propriedade': 'desapropriação' };
+  var SINONIMOS = { 'Intervenção do Estado na propriedade': 'desapropriação', 'Empresa, empresário e estabelecimento': 'empresa e empresário' };
+  function normal(s) { return String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, ' ').trim(); }
   function tokens(s) {
     return String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9\s]/g, ' ')
       .split(/\s+/).filter(function (w) { return (w.length >= 4 || w === 'fe') && STOP.indexOf(w) < 0; })
@@ -126,10 +127,11 @@
       // palavra do nome da matéria ("penal", "tribut…") só conta se o cartão não tiver outra
       var nomeDisc = tokens(t.d);
       function casam(txt) {
-        var alvo = tokens(txt);
+        var alvo = tokens(txt), frase = ' ' + normal(txt) + ' ';
         return cand.filter(function (c) {
           var tk = tokens(c.t), proprias = tk.filter(function (w) { return nomeDisc.indexOf(w) < 0; });
-          return (proprias.length ? proprias : tk).some(function (w) { return alvo.indexOf(w) >= 0; });
+          // tema do cartão só com palavras da matéria ("Teoria da Constituição"): precisa aparecer inteiro
+          return proprias.length ? proprias.some(function (w) { return alvo.indexOf(w) >= 0; }) : frase.indexOf(' ' + normal(c.t) + ' ') >= 0;
         });
       }
       // primeiro pelo tema do PDF; só se nada casar, pelos tópicos do banco

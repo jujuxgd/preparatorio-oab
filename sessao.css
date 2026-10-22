@@ -24,8 +24,8 @@
 .ss-q{border:1px solid var(--line);border-radius:var(--radius-sm);padding:.8rem .95rem;margin-bottom:.6rem}
 .ss-q .meta{font-size:.68rem;color:var(--ink-faded);margin-bottom:.35rem}
 .ss-q .meta .gab{color:var(--rose-deep);font-weight:600}
-.ss-q .enun{font-size:.88rem;line-height:1.6;color:var(--ink);white-space:pre-wrap;margin-bottom:.6rem}
-.ss-alt{display:flex;gap:.6rem;width:100%;text-align:left;background:var(--paper);border:1px solid var(--line);border-left:4px solid var(--line);border-radius:var(--radius-sm);padding:.55rem .8rem;margin-bottom:.4rem;font:inherit;font-size:.84rem;color:var(--ink);cursor:pointer}
+.ss-q .enun{font-size:1rem;line-height:1.65;color:var(--ink);white-space:pre-wrap;margin-bottom:.6rem}
+.ss-alt{display:flex;gap:.6rem;width:100%;text-align:left;background:var(--paper);border:1px solid var(--line);border-left:4px solid var(--line);border-radius:var(--radius-sm);padding:.55rem .8rem;margin-bottom:.4rem;font:inherit;font-size:.95rem;line-height:1.55;color:var(--ink);cursor:pointer}
 .ss-alt .l{font-weight:700;color:var(--rose-deep)}
 .ss-alt:disabled{cursor:default}
 .ss-linha{position:relative}
@@ -51,10 +51,10 @@
 .ss-q[data-feita] .ss-dica-corte{display:none}
 .ss-alt.certa{border-left-color:#5E8C6A;background:rgba(94,140,106,.09)}
 .ss-alt.errada{border-left-color:#C0524B;background:rgba(192,82,75,.09)}
-.ss-res{font-size:.82rem;margin:.5rem 0;color:var(--ink-soft)}
+.ss-res{font-size:.88rem;margin:.5rem 0;color:var(--ink-soft)}
 .ss-res b.ok{color:#5E8C6A}.ss-res b.no{color:#C0524B}
 .ss-res button{font:inherit;font-size:.76rem;background:none;border:0;color:var(--ink-soft);text-decoration:underline;cursor:pointer;padding:0;margin-left:.6rem}
-.ss-expl{font-size:.8rem;line-height:1.55;color:var(--ink-soft);background:var(--bg);border-radius:var(--radius-sm);padding:.6rem .8rem}
+.ss-expl{font-size:.9rem;line-height:1.65;color:var(--ink-soft);background:var(--bg);border-radius:var(--radius-sm);padding:.6rem .8rem}
 .ss-expl p{margin:.25rem 0}
 .ss-expl .ex-bloco{display:flex;gap:.5rem;margin:.35rem 0}
 .ss-expl .ex-l{font-weight:700;color:var(--rose-deep)}
