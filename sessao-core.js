@@ -372,16 +372,29 @@
     };
     return s;
   }
+  // tópicos do banco desta matéria em dias já estudados (marcados em "Estudei hoje") ou no próprio dia
+  function topicosEstudados(disc) {
+    var ck = ler(K_CHECK, {}), out = [];
+    if (CAL) CAL.dias.forEach(function (x) {
+      if (!x.top || x.d > DATA || (x.d < DATA && !(ck[x.d] && ck[x.d].feito))) return;
+      x.top.forEach(function (t) { if (t.d === disc) (t.q || []).forEach(function (k) { if (k !== '*' && out.indexOf(k) < 0) out.push(k); }); });
+    });
+    return out;
+  }
   function escolher(chave, disc, topicos, prioritarias, n, erradasPrimeiro, usadas) {
     var s = selecaoDoDia();
     if (s.sel[chave]) {
       var vistos = {};
-      return s.sel[chave].filter(function (id) {
+      var salvas = s.sel[chave].filter(function (id) {
         var q = qpor(id), gr = q && q.duplicate_group;
         if (!gr) return true;
         if (vistos[gr] || (usadas[gr] && !usadas[id])) return false;
         return (vistos[gr] = true);
       });
+      if (salvas.length >= n || topicos.indexOf('*') >= 0 || s.sel[chave + '+']) return salvas;
+      var mais = completar(salvas);
+      s.sel[chave] = salvas.concat(mais); s.sel[chave + '+'] = 1; s.salvar();
+      return s.sel[chave];
     }
     var resp = ler(K_RESP, {}), todos = topicos.indexOf('*') >= 0, acertoGrupo = {};
     // a mesma questão saiu em mais de um exame (duplicate_group): conta como uma só
@@ -405,9 +418,25 @@
       if (q.duplicate_group) { if (grupos[q.duplicate_group]) return false; grupos[q.duplicate_group] = 1; }
       return true;
     }).slice(0, n).map(function (q) { return q.id; });
-    s.sel[chave] = ids;
+    if (!todos && ids.length < n) ids = ids.concat(completar(ids));
+    s.sel[chave] = ids; s.sel[chave + '+'] = 1;
     s.salvar();
     return ids;
+    // tema com poucas questões no banco: completa até n com outros temas da matéria que já foram estudados
+    function completar(ja) {
+      var r = resp || ler(K_RESP, {}), est = topicosEstudados(disc), ag = {}, grs = {};
+      banco().forEach(function (q) { if (q.duplicate_group && r[q.id] && r[q.id].ultima_correta) ag[q.duplicate_group] = 1; });
+      ja.forEach(function (id) { var q = qpor(id); if (q && q.duplicate_group) grs[q.duplicate_group] = 1; });
+      function nv(q) { var x = r[q.id]; if (respostaDoDia(x)) return -1; if ((x && x.ultima_correta) || ag[q.duplicate_group]) return 9; return x ? 1 : 0; }
+      return banco().filter(function (q) {
+        return q.discipline === disc && q.correct_answer && est.indexOf(q.topic) >= 0 && topicos.indexOf(q.topic) < 0 &&
+          ja.indexOf(q.id) < 0 && !usadas[q.id] && !(q.duplicate_group && usadas[q.duplicate_group]);
+      }).sort(function (a, b) { return nv(a) - nv(b) || b.exam_number - a.exam_number; }).filter(function (q) {
+        if (nv(q) >= 9) return false;
+        if (q.duplicate_group) { if (grs[q.duplicate_group]) return false; grs[q.duplicate_group] = 1; }
+        return true;
+      }).slice(0, n - ja.length).map(function (q) { return q.id; });
+    }
   }
 
   // comentário: mesma leitura do Banco de Questões
@@ -479,7 +508,7 @@
     var q = qpor(id); if (!q) return '';
     var r = ler(K_RESP, {})[id], gab = (g || []).indexOf(id) >= 0, hoje = respostaDoDia(r);
     return '<div class="ss-q" data-q="' + id + '"' + (hoje ? ' data-feita="1"' : '') + '><div class="meta">' + (i + 1) + ' · ' + esc(nomeExame(q.exam_number)) +
-      ', questão ' + q.question_number + ' · ' + esc(q.topic || '') + (gab ? ' · <span class="gab">caiu no Gabaritaço</span>' : '') +
+      ', questão ' + q.question_number + ' · ' + esc(q.topic || '') + (temasBloco && temasBloco.indexOf('*') < 0 && temasBloco.indexOf(q.topic) < 0 ? ' · <span class="outro">tema já estudado</span>' : '') + (gab ? ' · <span class="gab">caiu no Gabaritaço</span>' : '') +
       (r && !hoje ? ' · já respondida antes' : '') + '</div>' +
       '<div class="enun">' + esc(q.statement) + '</div>' +
       ['a', 'b', 'c', 'd'].map(function (k) {
@@ -500,12 +529,16 @@
       (q.legal_basis ? '<p><b>Fundamentação:</b> ' + esc(q.legal_basis) + '</p>' : '') +
       (q.notes ? '<p class="ss-nota">Sobre o material de origem: ' + esc(q.notes) + '</p>' : '') + '</div>';
   }
+  var temasBloco = null;
   function blocoQuestoes(chave, titulo, extra, disc, topicos, g, n, erradasPrimeiro, usadas) {
     var ids = escolher(chave, disc, topicos, g, n, erradasPrimeiro, usadas);
+    temasBloco = topicos;
     ids.forEach(function (id) { usadas[id] = 1; var q = qpor(id); if (q && q.duplicate_group) usadas[q.duplicate_group] = 1; });
-    return '<div class="ss-top" data-bloco="' + chave + '"><div class="ss-top-cab"><b><span class="mat">' + esc(curto(disc)) + '</span>' + esc(titulo) + '</b>' + (extra || '') + '</div>' +
+    var h = '<div class="ss-top" data-bloco="' + chave + '"><div class="ss-top-cab"><b><span class="mat">' + esc(curto(disc)) + '</span>' + esc(titulo) + '</b>' + (extra || '') + '</div>' +
       (ids.length ? ids.map(function (id, i) { return htmlQuestao(id, i, g); }).join('')
         : '<p class="ss-vazio">Você já acertou todas as questões do banco neste tópico. Use os flashcards e o caderno de erros.</p>') + '</div>';
+    temasBloco = null;
+    return h;
   }
   function htmlQuestoes() {
     if (!DIA) return '<p class="ss-vazio">Nenhum dia do calendário nesta data.</p>';
