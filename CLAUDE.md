@@ -158,6 +158,8 @@ cada questão** — ela foi determinada pelo conteúdo.
   questões. A atribuição confere posição do bloco E conteúdo antes de trocar a matéria
 - Quando o material discorda do gabarito da banca, vale o **oficial**, com a divergência
   em `notes` (165 questões têm ressalva). A alternativa do gabarito aparece sempre como "Gabarito" no comentário, mesmo quando o material a chama de errada (18/10/2026; ex.: 44º Q77 e provas XXVII–XXX com "X) Errado" em todas)
+- **23/10/2026:** removido de 13 enunciados o cabeçalho copiado do material ("Ano: 2020 Banca: FGV…", "(FGV - 2018 - OAB - Exame…
+  Primeira Fase)", "2)"); XXVIII Q9–10 traziam "XXX" no cabeçalho — mantidas no XXVIII com nota `CONFERIR`
 - `banco-questoes.html` → `formatarExplicacao()` entende as duas formas de abrir o
   comentário de cada alternativa: `A) Correto` e `A alternativa A está correta`
 
