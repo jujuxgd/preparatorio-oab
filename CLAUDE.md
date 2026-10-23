@@ -162,6 +162,10 @@ cada questão** — ela foi determinada pelo conteúdo.
   Primeira Fase)", "2)"); XXVIII Q9–10 traziam "XXX" no cabeçalho — mantidas no XXVIII com nota `CONFERIR`
 - **23/10/2026:** gabaritos corrigidos onde o comentário se contradizia (abre com uma letra e marca outra como correta): 44º Q38 D→C,
   45º Q40 A→C (mérito confere com a lei); 42º Q25 C→D (o material diz que a banca deu D — vale o oficial)
+- **23/10/2026 — conferência com fonte independente:** os gabaritos comentados do VDE no Drive (Simulados OAB 33–41 e Gabarito
+  Comentado 44) foram casados com o banco pelo conteúdo (a numeração do VDE é outra; as letras são as mesmas): 439 questões,
+  435 iguais. 38º Q46 D→B e 47º Q50 A→C (o banco guardava a letra que o material defendia, não a oficial); 39º Q44 e
+  44º Q4 ficam com nota `CONFERIR` (VDE diverge). Sem internet para o site da FGV, os demais exames não têm segunda fonte
 - `banco-questoes.html` → `formatarExplicacao()` entende as duas formas de abrir o
   comentário de cada alternativa: `A) Correto` e `A alternativa A está correta`
 
