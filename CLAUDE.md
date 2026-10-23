@@ -160,6 +160,8 @@ cada questão** — ela foi determinada pelo conteúdo.
   em `notes` (165 questões têm ressalva). A alternativa do gabarito aparece sempre como "Gabarito" no comentário, mesmo quando o material a chama de errada (18/10/2026; ex.: 44º Q77 e provas XXVII–XXX com "X) Errado" em todas)
 - **23/10/2026:** removido de 13 enunciados o cabeçalho copiado do material ("Ano: 2020 Banca: FGV…", "(FGV - 2018 - OAB - Exame…
   Primeira Fase)", "2)"); XXVIII Q9–10 traziam "XXX" no cabeçalho — mantidas no XXVIII com nota `CONFERIR`
+- **23/10/2026:** gabaritos corrigidos onde o comentário se contradizia (abre com uma letra e marca outra como correta): 44º Q38 D→C,
+  45º Q40 A→C (mérito confere com a lei); 42º Q25 C→D (o material diz que a banca deu D — vale o oficial)
 - `banco-questoes.html` → `formatarExplicacao()` entende as duas formas de abrir o
   comentário de cada alternativa: `A) Correto` e `A alternativa A está correta`
 
