@@ -385,9 +385,8 @@ Prova prático-profissional do OAB 48 em **28/02/2027** (cronograma da OAB). Jul
 
 - **Leitor volta na página:** `leitor-pdf.js` guarda a última página vista em `oab_lp_pos` (arquivo + página inicial do trecho,
   só do aparelho, em `SO_LOCAIS`) e volta nela quando o leitor é montado de novo (trocar de aba no Hoje, reabrir o app).
-- **Um pouco do visual "Palácio"** (escolha de Julia: "um pouco, tipo aumentar o tamanho"): `tema-palacio.css`, injetado por
-  `topnav.js` em todas as páginas — títulos maiores, cartões com topo em arco e fio em `--rose`, botões em pílula. Cores e
-  fontes continuam as da OAB; a faixa escura e as fontes Gloock/Instrument Sans do Escrevente **não** vieram.
+- **Visual Palácio desfeito (24/10/2026):** Julia não gostou dos arcos/pílulas/títulos grandes; queria só o texto maior.
+  `legibilidade.css` (injetado por `topnav.js` em todas as páginas) põe `html { font-size: 106.25% }` — tudo em rem cresce ~6%.
 
 ## 6. Design System
 
