@@ -201,6 +201,7 @@
     h.appendChild(el);
   }
   tag('link', { rel: 'manifest', href: 'manifest.webmanifest' });
+  tag('link', { href: 'tema-palacio.css', rel: 'stylesheet' });
   tag('link', { rel: 'apple-touch-icon', href: 'apple-touch-icon.png' });
   tag('meta', { name: 'theme-color', content: '#FAF8F5' });
   tag('meta', { name: 'apple-mobile-web-app-capable', content: 'yes' });

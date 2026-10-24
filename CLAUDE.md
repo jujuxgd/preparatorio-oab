@@ -381,6 +381,14 @@ Prova prático-profissional do OAB 48 em **28/02/2027** (cronograma da OAB). Jul
 - Estado: `oab_f2_check_v1 {data:{k:true}}`, `oab_f2_feito_v1 {idDrive:data}`, `oab_f2_disc_v1 [...]`, `oab_f2_sim_v1 [...]`; peças
   treinadas continuam em `oab_pecas_treino_v1`. A Biblioteca de revisão perdeu as abas Trabalhista e Treinos (viraram esta área).
 
+## 5.7 Trazido do projeto do Escrevente (`jujuxgd/escrevente-tjsp`) — 24/10/2026
+
+- **Leitor volta na página:** `leitor-pdf.js` guarda a última página vista em `oab_lp_pos` (arquivo + página inicial do trecho,
+  só do aparelho, em `SO_LOCAIS`) e volta nela quando o leitor é montado de novo (trocar de aba no Hoje, reabrir o app).
+- **Um pouco do visual "Palácio"** (escolha de Julia: "um pouco, tipo aumentar o tamanho"): `tema-palacio.css`, injetado por
+  `topnav.js` em todas as páginas — títulos maiores, cartões com topo em arco e fio em `--rose`, botões em pílula. Cores e
+  fontes continuam as da OAB; a faixa escura e as fontes Gloock/Instrument Sans do Escrevente **não** vieram.
+
 ## 6. Design System
 
 ### Paleta de Cores (style.css :root)
