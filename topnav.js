@@ -1,11 +1,13 @@
-// Tamanho do texto (botão "Aa" da barra): normal, maior, bem maior. Só deste aparelho; aplicado já no <head> para não piscar.
-var TAMANHOS = [106.25, 115, 125];
+// Tamanho do texto de leitura (botão "Aa" da barra): normal, maior, bem maior. Só deste aparelho; aplicado já no <head>.
+// Aumenta só os blocos de leitura (questões, comentários, flashcards, checklist) — menus, abas e botões ficam como estão.
+var TAMANHOS = ['normal', 'maior', 'bem maior'];
 function fonteAtual() { try { return (parseInt(localStorage.getItem('oab_fonte'), 10) || 0) % TAMANHOS.length; } catch (e) { return 0; } }
 function aplicarFonte() {
-  var i = fonteAtual();
-  document.documentElement.style.fontSize = TAMANHOS[i] + '%';
+  var i = fonteAtual(), h = document.documentElement;
+  h.classList.remove('fonte-1', 'fonte-2');
+  if (i) h.classList.add('fonte-' + i);
   var b = document.querySelector('.tn-fonte');
-  if (b) { b.title = 'Tamanho do texto: ' + ['normal', 'maior', 'bem maior'][i]; b.classList.toggle('on', i > 0); }
+  if (b) { b.title = 'Tamanho do texto: ' + TAMANHOS[i]; b.classList.toggle('on', i > 0); }
 }
 aplicarFonte();
 (function () {

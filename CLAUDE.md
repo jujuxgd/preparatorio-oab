@@ -388,12 +388,23 @@ Prova prático-profissional do OAB 48 em **28/02/2027** (cronograma da OAB). Jul
 - **Visual Palácio desfeito (24/10/2026):** Julia não gostou dos arcos/pílulas/títulos grandes; queria só o texto maior.
   `legibilidade.css` (injetado por `topnav.js` em todas as páginas) põe `html { font-size: 106.25% }` — tudo em rem cresce ~6%.
 
-- **Botão "Aa" (01/11/2026):** na barra do topo, ao lado da lua — alterna o tamanho do texto 106,25% → 115% → 125%
-  (`oab_fonte`, só do aparelho; `aplicarFonte()` no início de `topnav.js`, antes de a página desenhar).
+- **Botão "Aa" (01/11/2026):** na barra do topo, ao lado da lua — normal / maior / bem maior (`oab_fonte`, só do aparelho).
+  Põe `html.fonte-1|2` e `legibilidade.css` aplica `zoom` 1,12/1,25 **só nos blocos de leitura** (`.ss-q`, `.ss-expl`, `.fc-player`,
+  `.checklist`, `.q-enun`, `.alt`, `.expl`). A 1ª versão aumentava o `font-size` do `<html>` e quebrava abas e etiquetas no celular.
 - **Leitor em colunas (01/11/2026):** botão "▥ Colunas" (ligado por padrão em telas ≤ 700px; `oab_lp_col`, só do aparelho).
   `Leitor.divisao()` acha o vão entre as colunas pelo texto da página (bin de menor cobertura entre 35% e 65% da largura; página
   com pouco texto ou sem vão = uma coluna só) e cada coluna vira um quadro com a largura da tela (`paginas[n].els`, um `.lp-pag`
   por quadro com `data-x0/x1`; o canvas desenha só o pedaço visível). Grifos e notas usam `elDe(info, x)`.
+
+- **Modo texto do leitor (01/11/2026, escolha de Julia — "híbrido"):** botão "Aa Texto" (`oab_lp_texto`, só do aparelho).
+  `renderTexto()` + `blocosDaPagina()`: cada página é desenhada num canvas fora da tela (1400px de largura) e o texto vira página
+  normal (`.lp-texto`) — linhas na ordem de leitura (colunas pela `divisao()`), títulos h3/h4 pelo tamanho × corpo, negrito pelo nome
+  da fonte (`commonObjs` após `getOperatorList`), **cor do texto e fundo medidos nos pixels** (fundo não branco = caixa
+  `.lp-tx-caixa` com `--bx`; cinza/preto não ganham cor; texto claro sobre branco = marca d'água, sai). Linhas com 2+ vãos largos
+  seguidas = **tabela**, recortada da página como imagem (limites pela 1ª linha de pixels branca acima/abaixo); vão grande com
+  desenho entre linhas = figura. Acento gravado como letra separada (`c¸`, `a´`) vira acento real (`acentos()`); espaço entre
+  pedaços só se houver vão. Cabeçalho/rodapé repetidos em ≥40% das páginas e nº de página saem. Respeita o "Aa". Tudo no aparelho
+  — nada do PDF entra no repo.
 
 ## 6. Design System
 
