@@ -143,10 +143,14 @@
       '<span class="lp-acoes"><button type="button" class="lp-b" data-a="area" title="Para páginas escaneadas: arraste um retângulo para grifar">▭ Grifar área</button>' +
       '<button type="button" class="lp-b" data-a="lista" title="Mostrar ou esconder a lista de grifos">✎ Grifos <b class="lp-ng">0</b></button>' +
       '<button type="button" class="lp-b" data-a="zoom-" aria-label="Diminuir">−</button><span class="lp-zoom"></span><button type="button" class="lp-b" data-a="zoom+" aria-label="Aumentar">+</button>' +
+      '<button type="button" class="lp-b" data-a="col" title="PDF em duas colunas: mostra uma coluna de cada vez, na largura da tela">▥ Colunas</button>' +
       '<button type="button" class="lp-b" data-a="cheia">⛶ Tela cheia</button>' +
       '<a class="lp-b" href="https://drive.google.com/file/d/' + this.arq + '/view" target="_blank" rel="noopener">Drive ↗</a></span></div>' +
       '<div class="lp-corpo"><div class="lp-paginas"></div><aside class="lp-lista"></aside></div>';
     if (this.opts.caixa) { raiz.classList.add('lp-caixa'); this.opts.rolagem = raiz.querySelector('.lp-corpo'); }
+    var colSalvo = null; try { colSalvo = localStorage.getItem('oab_lp_col'); } catch (e) {}
+    this.colunas = colSalvo ? colSalvo === '1' : window.innerWidth <= 700;
+    raiz.querySelector('[data-a="col"]').classList.toggle('on', this.colunas);
     var zoomSalvo = parseFloat(localStorage.getItem('oab_lp_zoom3'));
     this.zoom = zoomSalvo >= 0.6 && zoomSalvo <= 3 ? zoomSalvo : 1;
     function mostrarZoom() { raiz.querySelector('.lp-zoom').textContent = Math.round(self.zoom * 100) + '%'; }
@@ -159,6 +163,12 @@
     raiz.querySelector('.lp-topo').addEventListener('click', function (e) {
       var b = e.target.closest('[data-a]'); if (!b) return;
       if (b.dataset.a === 'area') { self.area = !self.area; b.classList.toggle('on', self.area); raiz.classList.toggle('modo-area', self.area); }
+      if (b.dataset.a === 'col') {
+        self.colunas = !self.colunas; b.classList.toggle('on', self.colunas);
+        try { localStorage.setItem('oab_lp_col', self.colunas ? '1' : '0'); } catch (e) {}
+        var n0 = self.paginaAtual(), r0 = self.renderizar();
+        if (r0) r0.then(function () { var inf = self.paginas[n0]; if (inf && self.opts.rolagem) self.opts.rolagem.scrollTop += inf.el.getBoundingClientRect().top - self.opts.rolagem.getBoundingClientRect().top - 8; });
+      }
       if (b.dataset.a === 'cheia') self.telaCheia(!raiz.classList.contains('lp-cheia'));
       if (b.dataset.a === 'lista') { b.classList.toggle('on', raiz.classList.toggle('lp-com-lista')); if (Math.abs(self._largura - self.largura()) > 40) self.renderizar(); }
       if (b.dataset.a === 'zoom+') mudarZoom(self.zoom + 0.25);
@@ -268,54 +278,91 @@
     var feitas = [], de = this.de || 1, ate = this.ate || doc.numPages;
     for (var i = de; i <= ate; i++) feitas.push(doc.getPage(i));
     return Promise.all(feitas).then(function (pgs) {
+      return Promise.all(pgs.map(function (pg, j) { return self.colunas ? self.divisao(pg, j + de) : null; })).then(function (divs) { return [pgs, divs]; });
+    }).then(function (r) {
       if (vez !== self._vez) return;
+      var pgs = r[0], divs = r[1];
       pgs.forEach(function (pg, j) {
         var i = j + de - 1;
         var base = pg.getViewport({ scale: 1 });
-        var corte = self.corte || 0;
-        var escala = Math.min(self._largura, 1000) / (base.width * (1 - 2 * corte)) * self.zoom;
-        var vp = pg.getViewport({ scale: escala });
-        var mold = document.createElement('div');
-        mold.className = 'lp-moldura';
-        mold.style.width = Math.floor(vp.width * (1 - 2 * corte)) + 'px';
-        var d = document.createElement('div');
-        d.className = 'lp-pag'; d.dataset.p = i + 1;
-        d.style.width = Math.floor(vp.width) + 'px'; d.style.height = Math.floor(vp.height) + 'px';
-        d.style.marginLeft = -Math.floor(vp.width * corte) + 'px';
-        d.style.setProperty('--scale-factor', escala);
-        d.innerHTML = '<canvas></canvas><div class="lp-grifos"></div><div class="textLayer"></div>';
-        mold.innerHTML = '<span class="lp-num">' + (i + 1) + '</span>';
-        mold.insertBefore(d, mold.firstChild);
-        alvo.appendChild(mold);
-        self.paginas[i + 1] = { pg: pg, vp: vp, el: d };
-        self.ligarArea(d);
-        obs.observe(d);
+        var corte = self.corte || 0, s = divs[j];
+        // página em duas colunas: cada coluna vira um quadro com a largura da tela (a esquerda inteira, depois a direita)
+        var partes = s ? [[corte, s], [s, 1 - corte]] : [[corte, 1 - corte]];
+        var maior = Math.max.apply(null, partes.map(function (p) { return p[1] - p[0]; }));
+        var escala = Math.min(self._largura, 1000) / (base.width * maior) * self.zoom;
+        var vp = pg.getViewport({ scale: escala }), els = [];
+        partes.forEach(function (p, k) {
+          var mold = document.createElement('div');
+          mold.className = 'lp-moldura';
+          mold.style.width = Math.floor(vp.width * (p[1] - p[0])) + 'px';
+          var d = document.createElement('div');
+          d.className = 'lp-pag'; d.dataset.p = i + 1; d.dataset.x0 = p[0]; d.dataset.x1 = p[1];
+          d.style.width = Math.floor(vp.width) + 'px'; d.style.height = Math.floor(vp.height) + 'px';
+          d.style.marginLeft = -Math.floor(vp.width * p[0]) + 'px';
+          d.style.setProperty('--scale-factor', escala);
+          d.innerHTML = '<canvas></canvas><div class="lp-grifos"></div><div class="textLayer"></div>';
+          mold.innerHTML = '<span class="lp-num">' + (i + 1) + (partes.length > 1 ? ' · ' + (k ? 'coluna 2' : 'coluna 1') : '') + '</span>';
+          mold.insertBefore(d, mold.firstChild);
+          alvo.appendChild(mold);
+          self.ligarArea(d);
+          obs.observe(d);
+          els.push(d);
+        });
+        self.paginas[i + 1] = { pg: pg, vp: vp, el: els[0], els: els };
       });
       self.redesenhar();
     });
   };
+  // Onde fica o vão entre as duas colunas (fração da largura), pelo texto da página; null = página de uma coluna só.
+  Leitor.prototype.divisao = function (pg, n) {
+    var cache = this._div || (this._div = {});
+    if (n in cache) return Promise.resolve(cache[n]);
+    return pg.getTextContent().then(function (tc) {
+      var vb = pg.view, w = vb[2] - vb[0], B = 100, cob = new Array(B).fill(0), itens = [];
+      tc.items.forEach(function (it) {
+        if (!it.str || !it.str.trim() || it.transform[1] || it.transform[2]) return;
+        var a = (it.transform[4] - vb[0]) / w, b = a + it.width / w;
+        itens.push([a, b]);
+        for (var k = Math.max(0, Math.floor(a * B)); k < Math.min(B, Math.ceil(b * B)); k++) cob[k]++;
+      });
+      if (itens.length < 12) return (cache[n] = null);
+      var melhor = -1;
+      for (var k = 35; k <= 65; k++) if (melhor < 0 || cob[k] < cob[melhor]) melhor = k;
+      var s = (melhor + .5) / B;
+      var esq = itens.filter(function (q) { return q[1] <= s; }).length, dir = itens.filter(function (q) { return q[0] >= s; }).length;
+      var ok = cob[melhor] <= Math.max(2, itens.length * 0.04) && esq >= itens.length * 0.2 && dir >= itens.length * 0.2;
+      return (cache[n] = ok ? s : null);
+    }).catch(function () { return (cache[n] = null); });
+  };
+  Leitor.prototype.elDe = function (info, x) {
+    return (info.els || [info.el]).filter(function (d) { return x >= +d.dataset.x0 && x < +d.dataset.x1; })[0] || info.el;
+  };
   Leitor.prototype.desenharPagina = function (n) {
     var info = this.paginas[n]; if (!info || info.feita) return;
     info.feita = true;
-    var dpr = Math.min(window.devicePixelRatio || 1, 3), c = info.el.querySelector('canvas');
-    c.width = Math.floor(info.vp.width * dpr); c.height = Math.floor(info.vp.height * dpr);
-    c.style.width = Math.floor(info.vp.width) + 'px'; c.style.height = Math.floor(info.vp.height) + 'px';
-    info.pg.render({ canvasContext: c.getContext('2d'), viewport: info.vp, transform: dpr !== 1 ? [dpr, 0, 0, dpr, 0, 0] : null });
-    var tl = info.el.querySelector('.textLayer');
-    info.pg.getTextContent().then(function (tc) {
-      window.pdfjsLib.renderTextLayer({ textContentSource: tc, container: tl, viewport: info.vp, textDivs: [] });
+    var dpr = Math.min(window.devicePixelRatio || 1, 3), vp = info.vp, texto = info.pg.getTextContent();
+    // cada quadro desenha só o seu pedaço da página (canvas do tamanho da parte visível)
+    (info.els || [info.el]).forEach(function (d) {
+      var x0 = (+d.dataset.x0 || 0) * vp.width, cw = Math.floor(((+d.dataset.x1 || 1) * vp.width) - x0), c = d.querySelector('canvas');
+      c.width = Math.floor(cw * dpr); c.height = Math.floor(vp.height * dpr);
+      c.style.width = cw + 'px'; c.style.height = Math.floor(vp.height) + 'px';
+      c.style.position = 'absolute'; c.style.left = Math.floor(x0) + 'px'; c.style.top = '0';
+      info.pg.render({ canvasContext: c.getContext('2d'), viewport: vp, transform: [dpr, 0, 0, dpr, -x0 * dpr, 0] });
+      var tl = d.querySelector('.textLayer');
+      texto.then(function (tc) { window.pdfjsLib.renderTextLayer({ textContentSource: tc, container: tl, viewport: vp, textDivs: [] }); });
     });
   };
   Leitor.prototype.redesenhar = function () {
     var self = this, gs = this.meus();
     this.paginas.forEach(function (info, n) {
       if (!info) return;
-      info.el.querySelector('.lp-grifos').innerHTML = gs.filter(function (g) { return g.p === n; }).map(function (g) {
+      var html = gs.filter(function (g) { return g.p === n; }).map(function (g) {
         return g.r.map(function (q, i) {
           return '<div class="lp-g' + (g.n ? ' tem-nota' : '') + '" data-g="' + g.id + '" style="left:' + q[0] * 100 + '%;top:' + q[1] * 100 + '%;width:' + q[2] * 100 + '%;height:' + q[3] * 100 + '%;background:' + cor(g.c) + '">' +
             (i === 0 && g.n ? '<span class="lp-gn">✎</span>' : '') + '</div>';
         }).join('');
       }).join('');
+      (info.els || [info.el]).forEach(function (d) { d.querySelector('.lp-grifos').innerHTML = html; });
     });
     this.lista();
   };
@@ -330,15 +377,15 @@
   Leitor.prototype.irPara = function (id) {
     var g = grifosDe(this.arq).filter(function (x) { return x.id === id; })[0]; if (!g) return;
     var info = this.paginas[g.p]; if (!info) return;
-    var cx = this.opts.rolagem;
+    var cx = this.opts.rolagem, pe = this.elDe(info, g.r[0][0]);
     if (cx) {
-      var y2 = info.el.getBoundingClientRect().top - cx.getBoundingClientRect().top + cx.scrollTop + g.r[0][1] * info.el.offsetHeight - 80;
+      var y2 = pe.getBoundingClientRect().top - cx.getBoundingClientRect().top + cx.scrollTop + g.r[0][1] * pe.offsetHeight - 80;
       cx.scrollTo({ top: y2, behavior: 'smooth' });
     } else {
-      var y = info.el.getBoundingClientRect().top + window.scrollY + g.r[0][1] * info.el.offsetHeight - 120;
+      var y = pe.getBoundingClientRect().top + window.scrollY + g.r[0][1] * pe.offsetHeight - 120;
       window.scrollTo({ top: y, behavior: 'smooth' });
     }
-    var el = info.el.querySelector('[data-g="' + id + '"]');
+    var el = pe.querySelector('[data-g="' + id + '"]');
     if (el) { el.classList.add('pisca'); setTimeout(function () { el.classList.remove('pisca'); }, 1400); }
   };
   Leitor.prototype.abrirNota = function (id) {
@@ -352,10 +399,11 @@
       (g.t ? '<blockquote>' + esc(g.t) + '</blockquote>' : '') +
       '<textarea placeholder="Sua anotação (ex.: cai muito, reler o art. 7º)">' + esc(g.n || '') + '</textarea>' +
       '<div class="lp-pop-acoes"><button type="button" class="btn" data-fechar="1">Fechar</button><button type="button" class="btn btn-primary" data-salvar="1">Salvar</button></div>';
-    info.el.appendChild(pop);
-    var q = g.r[g.r.length - 1];
-    pop.style.top = Math.min((q[1] + q[3]) * info.el.offsetHeight + 6, info.el.offsetHeight - 10) + 'px';
-    pop.style.left = Math.max(4, Math.min(q[0] * info.el.offsetWidth, info.el.offsetWidth - 290)) + 'px';
+    var q = g.r[g.r.length - 1], pe = this.elDe(info, q[0]), W = pe.offsetWidth;
+    pe.appendChild(pop);
+    var x0 = (+pe.dataset.x0 || 0) * W, x1 = (+pe.dataset.x1 || 1) * W;
+    pop.style.top = Math.min((q[1] + q[3]) * pe.offsetHeight + 6, pe.offsetHeight - 10) + 'px';
+    pop.style.left = Math.max(x0 + 4, Math.min(q[0] * W, x1 - 290)) + 'px';
     var ta = pop.querySelector('textarea'); ta.focus();
     pop.addEventListener('mousedown', function (e) { e.stopPropagation(); });
     pop.addEventListener('click', function (e) {

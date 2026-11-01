@@ -1,3 +1,13 @@
+// Tamanho do texto (botão "Aa" da barra): normal, maior, bem maior. Só deste aparelho; aplicado já no <head> para não piscar.
+var TAMANHOS = [106.25, 115, 125];
+function fonteAtual() { try { return (parseInt(localStorage.getItem('oab_fonte'), 10) || 0) % TAMANHOS.length; } catch (e) { return 0; } }
+function aplicarFonte() {
+  var i = fonteAtual();
+  document.documentElement.style.fontSize = TAMANHOS[i] + '%';
+  var b = document.querySelector('.tn-fonte');
+  if (b) { b.title = 'Tamanho do texto: ' + ['normal', 'maior', 'bem maior'][i]; b.classList.toggle('on', i > 0); }
+}
+aplicarFonte();
 (function () {
   var P = location.pathname.split('/').pop() || 'index.html';
   var emb = /embed=1/.test(location.search);
@@ -95,11 +105,19 @@
       '<div class="tn-fase" role="group" aria-label="Fase do exame"><button type="button" data-fase="1"' + (FASE === 1 ? ' class="on"' : '') + '>1ª<span class="so-pc"> fase</span></button>' +
       '<button type="button" data-fase="2"' + (FASE === 2 ? ' class="on"' : '') + '>2ª<span class="so-pc"> fase</span></button></div>' +
       '<div class="tn-count"><span class="lbl">' + (FASE === 2 ? '2ª fase em' : 'Prova em') + '</span><span class="val"><b>' + d + '</b> dias</span></div>' +
+      '<button class="tn-icon tn-fonte" type="button" title="Tamanho do texto" aria-label="Tamanho do texto">Aa</button>' +
       '<button class="tn-icon" type="button" title="Modo escuro" aria-label="Alternar modo escuro" onclick="window.toggleTheme&&toggleTheme()">' +
       '<svg viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>' +
       '<a class="tn-av' + (perfilOn ? ' on' : '') + '" href="perfil.html" title="Perfil e estatísticas" aria-label="Perfil e estatísticas">J</a>' +
       '</div>';
     document.body.insertBefore(bar, document.body.firstChild);
+    aplicarFonte();
+    bar.querySelector('.tn-fonte').addEventListener('click', function () {
+      var i = (fonteAtual() + 1) % TAMANHOS.length;
+      try { localStorage.setItem('oab_fonte', String(i)); } catch (e) {}
+      aplicarFonte();
+      window.dispatchEvent(new Event('resize'));
+    });
     bar.querySelector('.tn-fase').addEventListener('click', function (ev) {
       var b = ev.target.closest('[data-fase]'); if (!b) return;
       try { sessionStorage.setItem('oab_fase', b.dataset.fase); } catch (e) {}
