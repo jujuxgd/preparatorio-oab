@@ -388,8 +388,9 @@ Prova prático-profissional do OAB 48 em **28/02/2027** (cronograma da OAB). Jul
 - **Visual Palácio desfeito (24/10/2026):** Julia não gostou dos arcos/pílulas/títulos grandes; queria só o texto maior.
   `legibilidade.css` (injetado por `topnav.js` em todas as páginas) põe `html { font-size: 106.25% }` — tudo em rem cresce ~6%.
 
-- **Botão "Aa" (01/11/2026):** na barra do topo, ao lado da lua — alterna o tamanho do texto 106,25% → 115% → 125%
-  (`oab_fonte`, só do aparelho; `aplicarFonte()` no início de `topnav.js`, antes de a página desenhar).
+- **Botão "Aa" (01/11/2026):** na barra do topo, ao lado da lua — normal / maior / bem maior (`oab_fonte`, só do aparelho).
+  Põe `html.fonte-1|2` e `legibilidade.css` aplica `zoom` 1,12/1,25 **só nos blocos de leitura** (`.ss-q`, `.ss-expl`, `.fc-player`,
+  `.checklist`, `.q-enun`, `.alt`, `.expl`). A 1ª versão aumentava o `font-size` do `<html>` e quebrava abas e etiquetas no celular.
 - **Leitor em colunas (01/11/2026):** botão "▥ Colunas" (ligado por padrão em telas ≤ 700px; `oab_lp_col`, só do aparelho).
   `Leitor.divisao()` acha o vão entre as colunas pelo texto da página (bin de menor cobertura entre 35% e 65% da largura; página
   com pouco texto ou sem vão = uma coluna só) e cada coluna vira um quadro com a largura da tela (`paginas[n].els`, um `.lp-pag`
