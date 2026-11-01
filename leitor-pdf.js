@@ -143,6 +143,7 @@
       '<span class="lp-acoes"><button type="button" class="lp-b" data-a="area" title="Para páginas escaneadas: arraste um retângulo para grifar">▭ Grifar área</button>' +
       '<button type="button" class="lp-b" data-a="lista" title="Mostrar ou esconder a lista de grifos">✎ Grifos <b class="lp-ng">0</b></button>' +
       '<button type="button" class="lp-b" data-a="zoom-" aria-label="Diminuir">−</button><span class="lp-zoom"></span><button type="button" class="lp-b" data-a="zoom+" aria-label="Aumentar">+</button>' +
+      '<button type="button" class="lp-b" data-a="texto" title="Mostra o texto do PDF como página normal, que se ajusta à tela (sem cores, imagens e grifos)">Aa Texto</button>' +
       '<button type="button" class="lp-b" data-a="col" title="PDF em duas colunas: mostra uma coluna de cada vez, na largura da tela">▥ Colunas</button>' +
       '<button type="button" class="lp-b" data-a="cheia">⛶ Tela cheia</button>' +
       '<a class="lp-b" href="https://drive.google.com/file/d/' + this.arq + '/view" target="_blank" rel="noopener">Drive ↗</a></span></div>' +
@@ -151,6 +152,10 @@
     var colSalvo = null; try { colSalvo = localStorage.getItem('oab_lp_col'); } catch (e) {}
     this.colunas = colSalvo ? colSalvo === '1' : window.innerWidth <= 700;
     raiz.querySelector('[data-a="col"]').classList.toggle('on', this.colunas);
+    var txtSalvo = null; try { txtSalvo = localStorage.getItem('oab_lp_texto'); } catch (e) {}
+    this.texto = txtSalvo === '1';
+    raiz.querySelector('[data-a="texto"]').classList.toggle('on', this.texto);
+    raiz.classList.toggle('lp-modo-texto', this.texto);
     var zoomSalvo = parseFloat(localStorage.getItem('oab_lp_zoom3'));
     this.zoom = zoomSalvo >= 0.6 && zoomSalvo <= 3 ? zoomSalvo : 1;
     function mostrarZoom() { raiz.querySelector('.lp-zoom').textContent = Math.round(self.zoom * 100) + '%'; }
@@ -163,6 +168,11 @@
     raiz.querySelector('.lp-topo').addEventListener('click', function (e) {
       var b = e.target.closest('[data-a]'); if (!b) return;
       if (b.dataset.a === 'area') { self.area = !self.area; b.classList.toggle('on', self.area); raiz.classList.toggle('modo-area', self.area); }
+      if (b.dataset.a === 'texto') {
+        self.texto = !self.texto; b.classList.toggle('on', self.texto); raiz.classList.toggle('lp-modo-texto', self.texto);
+        try { localStorage.setItem('oab_lp_texto', self.texto ? '1' : '0'); } catch (e) {}
+        self.renderizar();
+      }
       if (b.dataset.a === 'col') {
         self.colunas = !self.colunas; b.classList.toggle('on', self.colunas);
         try { localStorage.setItem('oab_lp_col', self.colunas ? '1' : '0'); } catch (e) {}
@@ -269,6 +279,7 @@
     this._largura = this.largura();
     alvo.innerHTML = '';
     this.paginas = [];
+    if (this.texto) return this.renderTexto(alvo);
     // vários cliques seguidos no zoom: só a última renderização vale
     var vez = this._vez = (this._vez || 0) + 1;
     if (this._obs) this._obs.disconnect();
@@ -333,6 +344,70 @@
       var ok = cob[melhor] <= Math.max(2, itens.length * 0.04) && esq >= itens.length * 0.2 && dir >= itens.length * 0.2;
       return (cache[n] = ok ? s : null);
     }).catch(function () { return (cache[n] = null); });
+  };
+  // Modo texto: o texto do PDF reacomodado como página normal (títulos pelo tamanho da letra, negrito pela fonte).
+  // Cabeçalho/rodapé que se repetem em quase todas as páginas e números de página saem.
+  Leitor.prototype.renderTexto = function (alvo) {
+    var self = this, doc = this.doc, de = this.de || 1, ate = this.ate || doc.numPages, vez = this._vez = (this._vez || 0) + 1;
+    alvo.innerHTML = '<p class="lp-vazio">Montando o texto…</p>';
+    var ns = []; for (var i = de; i <= ate; i++) ns.push(i);
+    return Promise.all(ns.map(function (n) {
+      return doc.getPage(n).then(function (pg) {
+        return Promise.all([pg.getTextContent(), pg.getOperatorList(), self.divisao(pg, n)]).then(function (r) { return self.linhas(pg, r[0], r[2]); });
+      });
+    })).then(function (pags) {
+      if (vez !== self._vez) return;
+      var conta = {};
+      pags.forEach(function (ls) { var vistos = {}; ls.forEach(function (l) { var k = l.txt.replace(/\d+/g, '#'); if (!vistos[k]) { vistos[k] = 1; conta[k] = (conta[k] || 0) + 1; } }); });
+      var rep = pags.length >= 3 ? Math.max(2, pags.length * 0.4) : 99;
+      var tams = []; pags.forEach(function (ls) { ls.forEach(function (l) { tams.push(Math.round(l.tam * 2) / 2); }); });
+      var freq = {}, corpo = 10; tams.forEach(function (t) { freq[t] = (freq[t] || 0) + 1; });
+      Object.keys(freq).forEach(function (t) { if (!freq[corpo] || freq[t] > freq[corpo]) corpo = +t; });
+      var h = '';
+      pags.forEach(function (ls, j) {
+        h += '<div class="lp-tx-pag"><span class="lp-tx-n">p. ' + (de + j) + '</span>';
+        var par = null, ant = null;
+        function fecha() { if (par) { h += '<' + par.tag + '>' + par.html + '</' + par.tag + '>'; par = null; } }
+        ls.forEach(function (l) {
+          if (conta[l.txt.replace(/\d+/g, '#')] >= rep || /^\d{1,3}$/.test(l.txt)) return;
+          var tag = l.tam >= corpo * 1.35 ? 'h3' : l.tam >= corpo * 1.12 ? 'h4' : 'p';
+          var novo = !par || par.tag !== tag || tag !== 'p' || (ant && (ant.y - l.y) > ant.tam * 1.9) || /^([-–•▪►✓]|\d+[.)]\s|[a-z]\)\s)/.test(l.txt);
+          if (novo) { fecha(); par = { tag: tag, html: '' }; } else par.html += ' ';
+          par.html += l.html;
+          ant = l;
+        });
+        fecha();
+        h += '</div>';
+      });
+      alvo.innerHTML = '<div class="lp-texto">' + (h || '<p class="lp-vazio">Este PDF não tem texto (é escaneado). Use o modo PDF.</p>') + '</div>';
+    });
+  };
+  // linhas da página na ordem de leitura (coluna esquerda inteira, depois a direita), com negrito marcado
+  Leitor.prototype.linhas = function (pg, tc, s) {
+    var vb = pg.view, w = vb[2] - vb[0], itens = [];
+    tc.items.forEach(function (it) {
+      if (!it.str || !it.str.trim() || it.transform[1] || it.transform[2]) return;
+      var x = (it.transform[4] - vb[0]) / w, tam = Math.abs(it.transform[3]) || 10, nome = '';
+      try { var f = pg.commonObjs.get(it.fontName); nome = (f && f.name) || ''; } catch (e) {}
+      itens.push({ x: x, y: it.transform[5], tam: tam, str: it.str, neg: /bold|black|heavy|semibold/i.test(nome), col: s && x >= s ? 1 : 0 });
+    });
+    itens.sort(function (a, b) { return a.col - b.col || b.y - a.y || a.x - b.x; });
+    var ls = [];
+    itens.forEach(function (it) {
+      var l = ls[ls.length - 1];
+      if (l && l.col === it.col && Math.abs(l.y - it.y) < Math.max(l.tam, it.tam) * 0.5) { l.partes.push(it); l.tam = Math.max(l.tam, it.tam); }
+      else ls.push({ col: it.col, y: it.y, tam: it.tam, partes: [it] });
+    });
+    return ls.map(function (l) {
+      l.partes.sort(function (a, b) { return a.x - b.x; });
+      var txt = '', html = '';
+      l.partes.forEach(function (p, k) {
+        var sep = k && !/\s$/.test(txt) && !/^[\s,.;:!?)\]]/.test(p.str) ? ' ' : '';
+        txt += sep + p.str;
+        html += sep + (p.neg ? '<b>' + esc(p.str) + '</b>' : esc(p.str));
+      });
+      return { y: l.y, tam: l.tam, txt: txt.replace(/\s+/g, ' ').trim(), html: html.replace(/<\/b>(\s*)<b>/g, '$1') };
+    }).filter(function (l) { return l.txt; });
   };
   Leitor.prototype.elDe = function (info, x) {
     return (info.els || [info.el]).filter(function (d) { return x >= +d.dataset.x0 && x < +d.dataset.x1; })[0] || info.el;

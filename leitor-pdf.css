@@ -76,3 +76,13 @@ html.lp-travada,html.lp-travada body{overflow:hidden}
 .lp-rola{position:relative;flex:1;min-height:0;overflow:auto;padding:1rem 1.2rem;overscroll-behavior:contain}
 .lp-rola .lp-lista{top:0;max-height:calc(100% - 10px)}
 .lp-parte{font:600 .66rem Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faded);margin:1rem 0 .4rem}
+
+/* modo texto: o texto do PDF como página normal */
+.lp-texto{background:var(--paper);border:1px solid var(--line-soft);border-radius:8px;padding:1.1rem 1.2rem;max-width:44rem;margin:0 auto;width:100%;color:var(--ink);font-size:1rem;line-height:1.7}
+.lp-texto p{margin:0 0 .75rem}
+.lp-texto h3{font:600 1.2rem/1.35 'Fraunces',serif;margin:1.3rem 0 .5rem;color:var(--rose-deep)}
+.lp-texto h4{font:600 1.02rem/1.4 Inter,sans-serif;margin:1rem 0 .4rem}
+.lp-texto b{font-weight:650}
+.lp-tx-pag+.lp-tx-pag{border-top:1px dashed var(--line);margin-top:1rem;padding-top:.6rem}
+.lp-tx-n{display:block;font:500 .7rem Inter,sans-serif;color:var(--ink-faded);margin-bottom:.4rem}
+.lp-modo-texto [data-a="area"],.lp-modo-texto [data-a="lista"],.lp-modo-texto [data-a="col"],.lp-modo-texto [data-a^="zoom"],.lp-modo-texto .lp-zoom{display:none}

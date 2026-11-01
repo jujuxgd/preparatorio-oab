@@ -396,6 +396,12 @@ Prova prático-profissional do OAB 48 em **28/02/2027** (cronograma da OAB). Jul
   com pouco texto ou sem vão = uma coluna só) e cada coluna vira um quadro com a largura da tela (`paginas[n].els`, um `.lp-pag`
   por quadro com `data-x0/x1`; o canvas desenha só o pedaço visível). Grifos e notas usam `elDe(info, x)`.
 
+- **Modo texto do leitor (01/11/2026, escolha de Julia para o PDF do dia no celular):** botão "Aa Texto" (`oab_lp_texto`, só do
+  aparelho) — `renderTexto()`/`linhas()` montam o texto do PDF como página normal (`.lp-texto`): linhas na ordem de leitura (colunas
+  pela `divisao()`), títulos h3/h4 pelo tamanho da letra × tamanho do corpo, negrito pelo nome da fonte (`commonObjs` após
+  `getOperatorList`), linhas repetidas em ≥40% das páginas (cabeçalho/rodapé) e números de página saem. Respeita o "Aa". Sem cores,
+  imagens e grifos; PDF escaneado avisa para usar o modo PDF. O texto é montado no aparelho — nada do PDF entra no repo.
+
 ## 6. Design System
 
 ### Paleta de Cores (style.css :root)

@@ -1,6 +1,6 @@
 /* Texto um pouco maior em todo o site, para leitura (pedido de Julia, 24/10/2026). Tudo que é medido em rem cresce junto. */
 html { font-size: 106.25%; }
 /* Botão "Aa" (topnav.js): amplia só os blocos de leitura; o zoom mantém as proporções do bloco e o texto se reacomoda na largura. */
-html.fonte-1 :is(.ss-q, .ss-expl, .fc-player, .checklist, .q-enun, .alt, .expl) { zoom: 1.12; }
-html.fonte-2 :is(.ss-q, .ss-expl, .fc-player, .checklist, .q-enun, .alt, .expl) { zoom: 1.25; }
+html.fonte-1 :is(.ss-q, .ss-expl, .fc-player, .checklist, .q-enun, .alt, .expl, .lp-texto) { zoom: 1.12; }
+html.fonte-2 :is(.ss-q, .ss-expl, .fc-player, .checklist, .q-enun, .alt, .expl, .lp-texto) { zoom: 1.25; }
 html:is(.fonte-1, .fonte-2) .ss-q .ss-expl { zoom: 1; }
