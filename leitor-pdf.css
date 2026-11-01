@@ -86,3 +86,14 @@ html.lp-travada,html.lp-travada body{overflow:hidden}
 .lp-tx-pag+.lp-tx-pag{border-top:1px dashed var(--line);margin-top:1rem;padding-top:.6rem}
 .lp-tx-n{display:block;font:500 .7rem Inter,sans-serif;color:var(--ink-faded);margin-bottom:.4rem}
 .lp-modo-texto [data-a="area"],.lp-modo-texto [data-a="lista"],.lp-modo-texto [data-a="col"],.lp-modo-texto [data-a^="zoom"],.lp-modo-texto .lp-zoom{display:none}
+
+.lp-tx-caixa{background:var(--bx);border-radius:8px;padding:.6rem .85rem .1rem;margin:.4rem 0 .9rem}
+.lp-tx-caixa.escura{color:#fff}
+.lp-tx-caixa.escura h3,.lp-tx-caixa.escura h4{color:#fff}
+[data-theme="dark"] .lp-tx-caixa:not(.escura){background:color-mix(in srgb,var(--bx) 22%,var(--paper))}
+.lp-tx-fig{margin:.6rem 0 1rem;overflow-x:auto;-webkit-overflow-scrolling:touch;cursor:zoom-in}
+.lp-tx-fig img{display:block;width:100%;height:auto;border-radius:6px;border:1px solid var(--line-soft);background:#fff}
+.lp-tx-fig.grande{cursor:zoom-out}
+.lp-tx-fig.grande img{width:220%;max-width:none}
+.lp-tx-fig figcaption{font:500 .7rem Inter,sans-serif;color:var(--ink-faded);margin-top:.3rem}
+[data-theme="dark"] .lp-tx-fig img{filter:invert(.88) hue-rotate(180deg)}

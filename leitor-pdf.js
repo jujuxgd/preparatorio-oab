@@ -345,69 +345,175 @@
       return (cache[n] = ok ? s : null);
     }).catch(function () { return (cache[n] = null); });
   };
-  // Modo texto: o texto do PDF reacomodado como página normal (títulos pelo tamanho da letra, negrito pela fonte).
-  // Cabeçalho/rodapé que se repetem em quase todas as páginas e números de página saem.
+  // Modo texto (híbrido): o texto do PDF reacomodado como página normal, com as cores e as caixas coloridas do PDF
+  // (lidas da própria página desenhada); tabelas e imagens entram como recorte da página. Cabeçalho/rodapé que se
+  // repetem em quase todas as páginas e números de página saem.
   Leitor.prototype.renderTexto = function (alvo) {
     var self = this, doc = this.doc, de = this.de || 1, ate = this.ate || doc.numPages, vez = this._vez = (this._vez || 0) + 1;
     alvo.innerHTML = '<p class="lp-vazio">Montando o texto…</p>';
-    var ns = []; for (var i = de; i <= ate; i++) ns.push(i);
-    return Promise.all(ns.map(function (n) {
-      return doc.getPage(n).then(function (pg) {
-        return Promise.all([pg.getTextContent(), pg.getOperatorList(), self.divisao(pg, n)]).then(function (r) { return self.linhas(pg, r[0], r[2]); });
+    var pags = [], n = de;
+    function proxima() {
+      if (vez !== self._vez) return null;
+      if (n > ate) return Promise.resolve();
+      var num = n++;
+      return doc.getPage(num).then(function (pg) {
+        return Promise.all([pg.getTextContent(), pg.getOperatorList(), self.divisao(pg, num)]).then(function (r) {
+          return self.blocosDaPagina(pg, r[0], r[2]);
+        }).then(function (bl) { pags.push(bl); return proxima(); });
       });
-    })).then(function (pags) {
+    }
+    return proxima().then(function () {
       if (vez !== self._vez) return;
-      var conta = {};
-      pags.forEach(function (ls) { var vistos = {}; ls.forEach(function (l) { var k = l.txt.replace(/\d+/g, '#'); if (!vistos[k]) { vistos[k] = 1; conta[k] = (conta[k] || 0) + 1; } }); });
+      var conta = {}, chave = function (l) { return l.txt.replace(/\d+/g, '#'); };
+      pags.forEach(function (bl) { var v = {}; bl.forEach(function (l) { if (l.txt && !v[chave(l)]) { v[chave(l)] = 1; conta[chave(l)] = (conta[chave(l)] || 0) + 1; } }); });
       var rep = pags.length >= 3 ? Math.max(2, pags.length * 0.4) : 99;
-      var tams = []; pags.forEach(function (ls) { ls.forEach(function (l) { tams.push(Math.round(l.tam * 2) / 2); }); });
-      var freq = {}, corpo = 10; tams.forEach(function (t) { freq[t] = (freq[t] || 0) + 1; });
+      var freq = {}, corpo = 10;
+      pags.forEach(function (bl) { bl.forEach(function (l) { if (l.txt) { var t = Math.round(l.tam * 2) / 2; freq[t] = (freq[t] || 0) + 1; } }); });
       Object.keys(freq).forEach(function (t) { if (!freq[corpo] || freq[t] > freq[corpo]) corpo = +t; });
       var h = '';
-      pags.forEach(function (ls, j) {
+      pags.forEach(function (bl, j) {
         h += '<div class="lp-tx-pag"><span class="lp-tx-n">p. ' + (de + j) + '</span>';
-        var par = null, ant = null;
-        function fecha() { if (par) { h += '<' + par.tag + '>' + par.html + '</' + par.tag + '>'; par = null; } }
-        ls.forEach(function (l) {
-          if (conta[l.txt.replace(/\d+/g, '#')] >= rep || /^\d{1,3}$/.test(l.txt)) return;
+        var par = null, ant = null, caixa = null;
+        function fecha() { if (par) { h += '<' + par.tag + (par.cor ? ' style="color:' + par.cor + '"' : '') + '>' + par.html + '</' + par.tag + '>'; par = null; } }
+        function fechaCaixa() { fecha(); if (caixa) { h += '</div>'; caixa = null; } }
+        bl.forEach(function (l) {
+          if (l.img) { fechaCaixa(); h += '<figure class="lp-tx-fig"><img src="' + l.img + '" alt="' + (l.tabela ? 'Tabela' : 'Figura') + ' da página ' + (de + j) + '" loading="lazy"><figcaption>' + (l.tabela ? 'Tabela' : 'Figura') + ' do PDF · toque para ampliar</figcaption></figure>'; ant = null; return; }
+          if (conta[chave(l)] >= rep || /^\d{1,3}$/.test(l.txt)) return;
+          if ((l.bg || '') !== (caixa ? caixa.bg : '')) {
+            fechaCaixa();
+            if (l.bg) { caixa = { bg: l.bg }; h += '<div class="lp-tx-caixa' + (l.bgEscuro ? ' escura' : '') + '" style="--bx:' + l.bg + '">'; }
+          }
           var tag = l.tam >= corpo * 1.35 ? 'h3' : l.tam >= corpo * 1.12 ? 'h4' : 'p';
-          var novo = !par || par.tag !== tag || tag !== 'p' || (ant && (ant.y - l.y) > ant.tam * 1.9) || /^([-–•▪►✓]|\d+[.)]\s|[a-z]\)\s)/.test(l.txt);
-          if (novo) { fecha(); par = { tag: tag, html: '' }; } else par.html += ' ';
+          var novo = !par || par.tag !== tag || tag !== 'p' || (ant && (ant.y - l.y) > ant.tam * 1.9) || /^([-–•▪►✓→]|\d+[.)]\s|[a-z]\)\s)/.test(l.txt);
+          if (novo) { fecha(); par = { tag: tag, html: '', cor: l.corLinha }; } else par.html += ' ';
           par.html += l.html;
           ant = l;
         });
-        fecha();
+        fechaCaixa();
         h += '</div>';
       });
       alvo.innerHTML = '<div class="lp-texto">' + (h || '<p class="lp-vazio">Este PDF não tem texto (é escaneado). Use o modo PDF.</p>') + '</div>';
+      alvo.querySelectorAll('.lp-tx-fig').forEach(function (f) { f.addEventListener('click', function () { f.classList.toggle('grande'); }); });
     });
   };
-  // linhas da página na ordem de leitura (coluna esquerda inteira, depois a direita), com negrito marcado
-  Leitor.prototype.linhas = function (pg, tc, s) {
-    var vb = pg.view, w = vb[2] - vb[0], itens = [];
-    tc.items.forEach(function (it) {
-      if (!it.str || !it.str.trim() || it.transform[1] || it.transform[2]) return;
-      var x = (it.transform[4] - vb[0]) / w, tam = Math.abs(it.transform[3]) || 10, nome = '';
-      try { var f = pg.commonObjs.get(it.fontName); nome = (f && f.name) || ''; } catch (e) {}
-      itens.push({ x: x, y: it.transform[5], tam: tam, str: it.str, neg: /bold|black|heavy|semibold/i.test(nome), col: s && x >= s ? 1 : 0 });
-    });
-    itens.sort(function (a, b) { return a.col - b.col || b.y - a.y || a.x - b.x; });
-    var ls = [];
-    itens.forEach(function (it) {
-      var l = ls[ls.length - 1];
-      if (l && l.col === it.col && Math.abs(l.y - it.y) < Math.max(l.tam, it.tam) * 0.5) { l.partes.push(it); l.tam = Math.max(l.tam, it.tam); }
-      else ls.push({ col: it.col, y: it.y, tam: it.tam, partes: [it] });
-    });
-    return ls.map(function (l) {
-      l.partes.sort(function (a, b) { return a.x - b.x; });
-      var txt = '', html = '';
-      l.partes.forEach(function (p, k) {
-        var sep = k && !/\s$/.test(txt) && !/^[\s,.;:!?)\]]/.test(p.str) ? ' ' : '';
-        txt += sep + p.str;
-        html += sep + (p.neg ? '<b>' + esc(p.str) + '</b>' : esc(p.str));
+  // Desenha a página num canvas fora da tela e devolve os blocos na ordem de leitura: linhas de texto (com cor e
+  // fundo medidos nos pixels) e recortes de tabela/imagem.
+  Leitor.prototype.blocosDaPagina = function (pg, tc, s) {
+    var base = pg.getViewport({ scale: 1 }), escala = 1400 / base.width, vp = pg.getViewport({ scale: escala });
+    var cv = document.createElement('canvas'); cv.width = Math.floor(vp.width); cv.height = Math.floor(vp.height);
+    var cx = cv.getContext('2d', { willReadFrequently: true });
+    cx.fillStyle = '#fff'; cx.fillRect(0, 0, cv.width, cv.height);
+    return pg.render({ canvasContext: cx, viewport: vp }).promise.then(function () {
+      var W = cv.width, H = cv.height, px = cx.getImageData(0, 0, W, H).data;
+      function rgb(c) { return 'rgb(' + c[0] + ',' + c[1] + ',' + c[2] + ')'; }
+      function dist(a, b) { return Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1]) + Math.abs(a[2] - b[2]); }
+      // cor de fundo (a mais comum) e cor do texto (média dos pixels bem diferentes do fundo) dentro de uma caixa
+      function cores(x0, y0, x1, y1) {
+        x0 = Math.max(0, Math.floor(x0)); y0 = Math.max(0, Math.floor(y0)); x1 = Math.min(W, Math.ceil(x1)); y1 = Math.min(H, Math.ceil(y1));
+        var cont = {}, amostra = [];
+        for (var y = y0; y < y1; y += 2) for (var x = x0; x < x1; x += 2) {
+          var k = (y * W + x) * 4, c = [px[k], px[k + 1], px[k + 2]];
+          amostra.push(c); var q = (c[0] >> 4) + ',' + (c[1] >> 4) + ',' + (c[2] >> 4); cont[q] = (cont[q] || 0) + 1;
+        }
+        if (!amostra.length) return null;
+        var mq = null; Object.keys(cont).forEach(function (q) { if (!mq || cont[q] > cont[mq]) mq = q; });
+        var bg = mq.split(',').map(function (v) { return (+v << 4) + 8; }), soma = [0, 0, 0], nt = 0;
+        amostra.forEach(function (c) { if (dist(c, bg) > 120) { soma[0] += c[0]; soma[1] += c[1]; soma[2] += c[2]; nt++; } });
+        return { bg: bg, fg: nt ? soma.map(function (v) { return Math.round(v / nt); }) : null };
+      }
+      function claro(c) { return c[0] > 232 && c[1] > 232 && c[2] > 232; }
+      // acento que alguns PDFs gravam como letra separada ("c¸ã", "a´") vira acento de verdade na letra anterior
+      var ACENTO = /^[´`ˆ^˜~¨¸]$/, COMB = { '´': '\u0301', '`': '\u0300', 'ˆ': '\u0302', '^': '\u0302', '˜': '\u0303', '~': '\u0303', '¨': '\u0308', '¸': '\u0327' };
+      function acentos(t) { return t.replace(/([A-Za-z])((?:<\/?[a-z][^>]*>)*)\s?([´`ˆ˜¨¸])/g, function (m, a, tags, c) { return (a + COMB[c]).normalize('NFC') + tags; }); }
+      function lum(c) { return 0.299 * c[0] + 0.587 * c[1] + 0.114 * c[2]; }
+      function neutro(c) { return Math.max(c[0], c[1], c[2]) - Math.min(c[0], c[1], c[2]) < 40; }
+      // texto: itens → linhas por coluna
+      var vb = pg.view, w = vb[2] - vb[0], itens = [];
+      tc.items.forEach(function (it) {
+        if (!it.str || !it.str.trim() || it.transform[1] || it.transform[2]) return;
+        var tam = Math.abs(it.transform[3]) || 10, x = (it.transform[4] - vb[0]) / w, nome = '';
+        try { var f = pg.commonObjs.get(it.fontName); nome = (f && f.name) || ''; } catch (e) {}
+        var a = vp.convertToViewportPoint(it.transform[4], it.transform[5] + tam * 0.85), b = vp.convertToViewportPoint(it.transform[4] + it.width, it.transform[5] - tam * 0.2);
+        var c = cores(Math.min(a[0], b[0]), Math.min(a[1], b[1]), Math.max(a[0], b[0]), Math.max(a[1], b[1]));
+        if (c && c.fg && claro(c.bg) && lum(c.fg) > 185) return;  // marca d'água clara sobre fundo branco
+        itens.push({ x: x, x1: x + it.width / w, y: it.transform[5], tam: tam, str: it.str, neg: /bold|black|heavy|semibold/i.test(nome), col: s && x >= s ? 1 : 0,
+          top: Math.min(a[1], b[1]), bot: Math.max(a[1], b[1]), c: c });
       });
-      return { y: l.y, tam: l.tam, txt: txt.replace(/\s+/g, ' ').trim(), html: html.replace(/<\/b>(\s*)<b>/g, '$1') };
-    }).filter(function (l) { return l.txt; });
+      itens.sort(function (a, b) { return a.col - b.col || b.y - a.y || a.x - b.x; });
+      var ls = [];
+      itens.forEach(function (it) {
+        var l = ls[ls.length - 1];
+        if (l && l.col === it.col && Math.abs(l.y - it.y) < Math.max(l.tam, it.tam) * 0.5) { l.partes.push(it); l.tam = Math.max(l.tam, it.tam); l.top = Math.min(l.top, it.top); l.bot = Math.max(l.bot, it.bot); }
+        else ls.push({ col: it.col, y: it.y, tam: it.tam, top: it.top, bot: it.bot, partes: [it] });
+      });
+      ls.forEach(function (l) {
+        l.partes.sort(function (a, b) { return a.x - b.x; });
+        var gaps = 0; for (var k = 1; k < l.partes.length; k++) if (l.partes[k].x - l.partes[k - 1].x1 > (l.tam * 3) / w) gaps++;
+        l.tab = gaps >= 2 || (gaps >= 1 && l.partes.length >= 3);
+      });
+      var colX = function (col) { return s ? (col ? [s, 1] : [0, s]) : [0, 1]; };
+      function recorte(col, y0, y1) {
+        var xr = colX(col), x0 = Math.floor(xr[0] * W), x1 = Math.ceil(xr[1] * W);
+        y0 = Math.max(0, Math.floor(y0 - 8)); y1 = Math.min(H, Math.ceil(y1 + 8));
+        if (y1 - y0 < 12) return null;
+        var c2 = document.createElement('canvas'); c2.width = x1 - x0; c2.height = y1 - y0;
+        c2.getContext('2d').drawImage(cv, x0, y0, x1 - x0, y1 - y0, 0, 0, x1 - x0, y1 - y0);
+        return c2.toDataURL('image/jpeg', 0.82);
+      }
+      // primeira linha de pixels toda branca a partir de y0, andando para baixo (dir 1) ou para cima (-1); a borda da tabela fica dentro
+      function vazia(col, y0, lim, dir) {
+        var xr = colX(col), x0 = Math.floor(xr[0] * W + 4), x1 = Math.floor(xr[1] * W - 4);
+        for (var y = Math.round(y0); dir > 0 ? y < lim : y > lim; y += dir) {
+          var cheia = false;
+          for (var x = x0; x < x1; x += 3) { var k = (y * W + x) * 4; if (px[k] < 235 || px[k + 1] < 235 || px[k + 2] < 235) { cheia = true; break; } }
+          if (!cheia) return y;
+        }
+        return lim;
+      }
+      function tinta(col, y0, y1) {
+        var xr = colX(col), x0 = Math.floor(xr[0] * W + W * 0.04), x1 = Math.floor(xr[1] * W - W * 0.04), n = 0, t = 0;
+        for (var y = Math.floor(y0); y < y1; y += 4) for (var x = x0; x < x1; x += 4) { var k = (y * W + x) * 4; t++; if (px[k] < 225 || px[k + 1] < 225 || px[k + 2] < 225) n++; }
+        return t ? n / t : 0;
+      }
+      var out = [], i = 0;
+      while (i < ls.length) {
+        var l = ls[i], prev = out.length ? out[out.length - 1] : null;
+        // vão grande com desenho entre duas linhas da mesma coluna = imagem/esquema
+        if (prev && prev.bot != null && prev.col === l.col && !prev.tabela && l.top - prev.bot > Math.max(l.tam * escala * 5, 110) && tinta(l.col, prev.bot + 6, l.top - 6) > 0.06) {
+          var im = recorte(l.col, prev.bot + 2, l.top - 2); if (im) out.push({ img: im });
+        }
+        // linhas seguidas em colunas de tabela = recorte da tabela inteira
+        if (l.tab && ls[i + 1] && ls[i + 1].tab && ls[i + 1].col === l.col) {
+          var f = i; while (ls[f + 1] && ls[f + 1].col === l.col && (ls[f + 1].tab || (ls[f + 2] && ls[f + 2].tab && ls[f + 2].col === l.col))) f++;
+          // a tabela vai até perto da próxima linha de texto (pega a borda e a última linha das células)
+          var prox = ls[f + 1], lim = prox && prox.col === l.col ? prox.top - 4 : Math.min(H, ls[f].bot + l.tam * escala * 6);
+          var fim = vazia(l.col, ls[f].bot + 2, lim, 1);
+          var limI = prev && prev.bot != null && prev.col === l.col ? prev.bot + 4 : Math.max(0, l.top - l.tam * escala * 4);
+          var ini = vazia(l.col, l.top - 2, limI, -1);
+          var img = recorte(l.col, ini, fim);
+          if (img) out.push({ img: img, tabela: true, col: l.col, bot: fim });
+          i = f + 1; continue;
+        }
+        var txt = '', html = '', bgs = {}, fgs = [];
+        l.partes.forEach(function (p, k) {
+          var ant = l.partes[k - 1];
+          var sep = k && !/\s$/.test(txt) && !/^[\s,.;:!?)\]]/.test(p.str) && !ACENTO.test(p.str) && !ACENTO.test(ant.str.slice(-1)) &&
+            p.x - ant.x1 > (l.tam * 0.18) / w ? ' ' : '';
+          txt += sep + p.str;
+          var fg = p.c && p.c.fg, cor = fg && !neutro(fg) ? fg : null;
+          var t = esc(p.str); if (p.neg) t = '<b>' + t + '</b>'; if (cor) t = '<span style="color:' + rgb(cor) + '">' + t + '</span>';
+          html += sep + t;
+          if (p.c) { var q = p.c.bg.join(','); bgs[q] = (bgs[q] || 0) + p.str.length; }
+        });
+        var bq = null; Object.keys(bgs).forEach(function (q) { if (!bq || bgs[q] > bgs[bq]) bq = q; });
+        var bg = bq ? bq.split(',').map(Number) : null;
+        out.push({ col: l.col, y: l.y, tam: l.tam, top: l.top, bot: l.bot, txt: acentos(txt).replace(/\s+/g, ' ').trim(),
+          html: acentos(html.replace(/<\/b>(\s*)<b>/g, '$1')), bg: bg && !claro(bg) ? rgb(bg) : '', bgEscuro: bg && lum(bg) < 140 });
+        i++;
+      }
+      cv.width = cv.height = 0;
+      return out.filter(function (o) { return o.img || o.txt; });
+    });
   };
   Leitor.prototype.elDe = function (info, x) {
     return (info.els || [info.el]).filter(function (d) { return x >= +d.dataset.x0 && x < +d.dataset.x1; })[0] || info.el;
