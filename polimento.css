@@ -57,8 +57,8 @@ html body:not(.home) :is(.rf-card, .mat-card, .stat-card, .revisao-card, .side-c
 
 /* ── Questões no celular: texto menor e mais compacto (enunciado, alternativas, comentário) ── */
 @media (max-width: 640px) {
-  html body .q-enun, html body .ss-q .enun { font-size: .92rem !important; line-height: 1.55 !important; }
-  html body .alt, html body .ss-q .alt { font-size: .88rem !important; line-height: 1.5 !important; padding-top: .6rem !important; padding-bottom: .6rem !important; }
+  html body .q-enun, html body .ss-q .enun { font-size: .86rem !important; line-height: 1.5 !important; }
+  html body .alt, html body .ss-q .alt { font-size: .82rem !important; line-height: 1.45 !important; padding-top: .5rem !important; padding-bottom: .5rem !important; }
   html body .alt .l { width: 22px; height: 22px; font-size: .7rem; }
-  html body .expl, html body .ss-expl { font-size: .86rem !important; line-height: 1.55 !important; }
+  html body .expl, html body .ss-expl { font-size: .8rem !important; line-height: 1.5 !important; }
 }
