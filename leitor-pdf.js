@@ -802,6 +802,34 @@
       }
       var colX = function (col) { return s ? (col ? [s, 1] : [0, s]) : [0, 1]; };
       // recorte justo: só a área com tinta dentro da faixa (sem margem branca nem pedaço de texto vizinho cortado)
+      // figuras e tabelas recortadas do PDF: o vermelho do material vira a cor de destaque do Perfil (mesma claridade de cada tom)
+      function recolorir(c) {
+        var cor = (getComputedStyle(document.documentElement).getPropertyValue('--rose-600') || '').trim(), m = cor.match(/^#?([0-9a-f]{6})$/i);
+        if (!m) return;
+        var n = parseInt(m[1], 16), ar = (n >> 16) / 255, ag = (n >> 8 & 255) / 255, ab = (n & 255) / 255;
+        var amx = Math.max(ar, ag, ab), amn = Math.min(ar, ag, ab), al = (amx + amn) / 2, ad = amx - amn, ah = 0;
+        var as = ad ? ad / (1 - Math.abs(2 * al - 1)) : 0;
+        if (ad) ah = amx === ar ? ((ag - ab) / ad) % 6 : amx === ag ? (ab - ar) / ad + 2 : (ar - ag) / ad + 4;
+        ah = (ah * 60 + 360) % 360;
+        if (ah >= 340 || ah <= 12) if (as > .5) return;
+        var x = c.getContext('2d'), im = x.getImageData(0, 0, c.width, c.height), d = im.data;
+        function hsl2rgb(h, s, l) {
+          var q = (1 - Math.abs(2 * l - 1)) * s, hp = h / 60, xx = q * (1 - Math.abs(hp % 2 - 1)), r1 = 0, g1 = 0, b1 = 0;
+          if (hp < 1) { r1 = q; g1 = xx; } else if (hp < 2) { r1 = xx; g1 = q; } else if (hp < 3) { g1 = q; b1 = xx; } else if (hp < 4) { g1 = xx; b1 = q; } else if (hp < 5) { r1 = xx; b1 = q; } else { r1 = q; b1 = xx; }
+          var mm = l - q / 2; return [(r1 + mm) * 255, (g1 + mm) * 255, (b1 + mm) * 255];
+        }
+        for (var i = 0; i < d.length; i += 4) {
+          var r = d[i] / 255, g = d[i + 1] / 255, b = d[i + 2] / 255, mx = Math.max(r, g, b), mn = Math.min(r, g, b), dd = mx - mn;
+          if (dd < .08 || mx !== r) continue;
+          var h = ((g - b) / dd) % 6 * 60; h = (h + 360) % 360;
+          if (!(h >= 335 || h <= 22)) continue;
+          var l = (mx + mn) / 2, sa = dd / (1 - Math.abs(2 * l - 1));
+          if (sa < .18) continue;
+          var o = hsl2rgb(ah, Math.min(1, sa * (as || 0) / .85), l);
+          d[i] = o[0]; d[i + 1] = o[1]; d[i + 2] = o[2];
+        }
+        x.putImageData(im, 0, 0);
+      }
       function recorte(col, y0, y1, minAlt) {
         var xr = colX(col), x0 = Math.floor(xr[0] * W), x1 = Math.ceil(xr[1] * W);
         y0 = Math.max(0, Math.floor(y0)); y1 = Math.min(H, Math.ceil(y1));
@@ -833,6 +861,7 @@
         x0 = Math.max(0, bx0 - 10); x1 = Math.min(W, bx1 + 10); y0 = Math.max(0, by0 - 10); y1 = Math.min(H, by1 + 10);
         var c2 = document.createElement('canvas'); c2.width = x1 - x0; c2.height = y1 - y0;
         c2.getContext('2d').drawImage(cv, x0, y0, x1 - x0, y1 - y0, 0, 0, x1 - x0, y1 - y0);
+        recolorir(c2);
         return c2.toDataURL('image/jpeg', 0.82);
       }
       // primeira linha de pixels toda branca a partir de y0, andando para baixo (dir 1) ou para cima (-1); a borda da tabela fica dentro
