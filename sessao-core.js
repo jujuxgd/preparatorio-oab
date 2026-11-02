@@ -308,10 +308,9 @@
       // a página onde começa a DICA seguinte só entra se ela não abrir a página (senão é toda do próximo tema)
       var g = G[t.d], de = g.dica[t.k[0] - 1] || 1, prox = g.dica[t.k[1]];
       var ate = prox ? Math.max(de, prox - (g.topo && g.topo[t.k[1]] ? 1 : 0)) : g.paginas;
-      return '<div class="ss-bloco gab-bloco"><h3><span class="n">Gabaritaço · DICAS ' + t.k[0] + '–' + t.k[1] + '</span>' + esc(curto(t.d) + ': ' + t.s) + '</h3>' +
-        '<div class="gab-host" data-arq="' + g.id + '" data-de="' + de + '" data-ate="' + ate + '">' +
-        '<p class="ss-vazio" style="margin:0 0 .6rem">Questões que já caíram sobre o tema, com as dicas do VDE (páginas ' + de + '–' + ate + ').</p>' +
-        '<button type="button" class="btn" data-abrir-gab="1">Abrir o trecho do Gabaritaço</button></div></div>';
+      // discreto: uma linha que abre o trecho só quando tocada
+      return '<details class="gab-mini"><summary>Gabaritaço · ' + esc(curto(t.d) + ': ' + t.s) + ' <span>questões que já caíram</span></summary>' +
+        '<div class="gab-host" data-arq="' + g.id + '" data-de="' + de + '" data-ate="' + ate + '"></div></details>';
     }).join('');
   }
 
@@ -319,6 +318,13 @@
     el.innerHTML = htmlConteudo();
     if (window.LEITOR) el.querySelectorAll('.lp-host').forEach(function (h) { LEITOR.montar(h, h.dataset.arq, { caixa: true }); });
     ligarEstrategia(el);
+    el.querySelectorAll('.gab-mini').forEach(function (d) {
+      d.addEventListener('toggle', function () {
+        var hg = d.querySelector('.gab-host');
+        if (!d.open || hg.dataset.feito || !window.LEITOR) return;
+        hg.dataset.feito = 1; LEITOR.montar(hg, hg.dataset.arq, { de: +hg.dataset.de, ate: +hg.dataset.ate, caixa: true, semTexto: true });
+      });
+    });
   }
 
   // ── checklist do dia ──
