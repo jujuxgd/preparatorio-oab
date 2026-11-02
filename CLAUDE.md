@@ -416,7 +416,7 @@ Prova prático-profissional do OAB 48 em **28/02/2027** (cronograma da OAB). Jul
 
 - **Leitor redesenhado (02/11/2026, pedido de Julia — "muitas opções"):** barra de uma linha só: `PDF | Texto` (PDF é o padrão),
   ✎ grifos (só no PDF), **Aa** (só no Texto), ⛶ tela cheia e **⋯** (grifar área, uma coluna por vez, zoom, abrir no Drive).
-  Ajustes do modo texto em `oab_lp_tx` (só do aparelho): letra (6 tamanhos), linhas (3), margem (3), fundo papel/sépia/noite e fonte
+  Ajustes do modo texto em `oab_lp_tx2` (só do aparelho): letra (8 tamanhos, de .72 a 1.5rem; `e: 2` marca a migração), linhas (3), margem (3), fundo papel/sépia/noite e fonte
   Literata (serifa, Google Fonts) ou Inter. O "Aa" do topo não amplia mais o modo texto. Texto corrido entre páginas (parágrafo sem
   pontuação final continua na página seguinte; sem número de página). PDFs impressos do navegador (Estratégia, fontes Type3 sem nome
   útil): negrito pela tinta de cada fonte (≥ 1,25× a do corpo); corpo = tamanho com mais caracteres; título só se maior que o corpo
@@ -451,7 +451,7 @@ Prova prático-profissional do OAB 48 em **28/02/2027** (cronograma da OAB). Jul
   Título do tema (`SESSAO.cabTema`, dentro da barra do leitor via `opts.titulo`, no Conteúdo e nos Mapas): "Matéria | Tema" em
   Fraunces, mesmo tamanho; matéria na cor de destaque escolhida (`--rose-deep`), "|" na cor do texto (escolha de Julia, 02/11/2026).
   Modo texto: margem livre num deslizador (0–3rem, `mp` em `oab_lp_tx2`, padrão 0), sem largura máxima; caixas coloridas
-  do PDF (`.lp-tx-caixa`) usam a cor de destaque (clara = `--rose-soft`, escura = `--rose-deep`). Texto colorido do PDF no modo texto (`.lp-tx-cor`) usa a cor de destaque do Perfil. `hoje.html`
+  do PDF (`.lp-tx-caixa`) usam a cor de destaque. No celular o bloco do leitor fica com as mesmas margens dos outros cartões (clara = `--rose-soft`, escura = `--rose-deep`). Texto colorido do PDF no modo texto (`.lp-tx-cor`) usa a cor de destaque do Perfil. `hoje.html`
   carrega sessao/leitor/calendário com `?v=` para não pegar CSS/JS velho do cache (antes, rolar a página com outra aba aberta salvava a última página). Conteúdo do dia sem a linha "Cap. N · título".
 
 ## 6. Design System

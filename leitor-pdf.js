@@ -224,9 +224,15 @@
     });
   };
   // Ajustes do modo texto (só deste aparelho): tamanho da letra, espaço entre linhas, margem, fundo e fonte.
-  var K_TX = 'oab_lp_tx2', TX_PADRAO = { t: 0, l: 1, m: 0, f: 'papel', s: 'sans' };
-  var TX_TAM = [0.9, 1, 1.1, 1.22, 1.36, 1.5], TX_LIN = [1.45, 1.62, 1.85];
-  function lerTx() { var v = {}; try { v = JSON.parse(localStorage.getItem(K_TX)) || {}; } catch (e) {} for (var k in TX_PADRAO) if (v[k] == null) v[k] = TX_PADRAO[k]; return v; }
+  var K_TX = 'oab_lp_tx2', TX_PADRAO = { t: 2, l: 1, m: 0, f: 'papel', s: 'sans', e: 2 };
+  var TX_TAM = [0.72, 0.8, 0.9, 1, 1.1, 1.22, 1.36, 1.5], TX_LIN = [1.45, 1.62, 1.85];
+  function lerTx() {
+    var v = {}; try { v = JSON.parse(localStorage.getItem(K_TX)) || {}; } catch (e) {}
+    // escala ganhou 2 tamanhos menores no começo (02/11/2026): quem já tinha escolhido um tamanho continua no mesmo
+    if (v.t != null && v.e == null) { v.t += 2; v.e = 2; }
+    for (var k in TX_PADRAO) if (v[k] == null) v[k] = TX_PADRAO[k];
+    return v;
+  }
   var _fonte = false;
   function carregarFonte() {
     if (_fonte) return; _fonte = true;
