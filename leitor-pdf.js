@@ -578,7 +578,7 @@
       alvo.querySelectorAll('.lp-texto h3').forEach(function (h) {
         var no = h.firstChild; if (!no || no.nodeType !== 3) return;
         var m = no.nodeValue.match(/^\s*(\d+(?:\.\d+)*)\.?\s+(\S[\s\S]*)$/); if (!m) return;
-        var sp = document.createElement('span'); sp.className = 'lp-tx-num'; sp.textContent = m[1];
+        var sp = document.createElement('span'); sp.className = 'lp-tx-num'; sp.textContent = m[1] + ' ';
         no.nodeValue = m[2]; h.insertBefore(sp, no); h.classList.add('com-num');
       });
       alvo.querySelectorAll('.lp-texto p:not(.lp-tx-nota)').forEach(function (pp) {
@@ -680,6 +680,28 @@
                 if (kk2 < j) linhasT.push({ t: segs[kk2].b, b: segs[kk2 + 1].t, th: false });
               }
               tabelasB.push({ top: yt, bot: yb, x0: vx[0], x1: vx[vx.length - 1], vx: vx, linhas: linhasT });
+            } else if (vx.length === 2) {
+              // caixa com borda em que só um trecho tem colunas (ex.: "TRT | TST" no meio de um quadro de uma coluna): acha as faixas
+              // entre linhas horizontais que têm divisória vertical própria e monta a tabela só com elas
+              var faixas = [];
+              for (var k3 = i; k3 < j; k3++) {
+                var ft = segs[k3].b + 1, fb = segs[k3 + 1].t - 1, div = [];
+                if (fb - ft < 18) continue;
+                for (var xd = vx[0] + 10; xd < vx[1] - 10; xd++) {
+                  var cd = 0, td = 0;
+                  for (var yd = ft; yd <= fb; yd += 2) { td++; var kd = (yd * W + xd) * 4; if (px[kd] < 235 || px[kd + 1] < 235 || px[kd + 2] < 235) cd++; }
+                  if (td && cd >= td * 0.92) { if (div.length && xd - div[div.length - 1] <= 4) div[div.length - 1] = xd; else div.push(xd); }
+                }
+                faixas.push({ t: ft, b: fb, div: div });
+              }
+              for (var f0 = 0; f0 < faixas.length;) {
+                if (!faixas[f0].div.length) { f0++; continue; }
+                var f1 = f0; while (faixas[f1 + 1] && faixas[f1 + 1].div.length === faixas[f0].div.length && Math.abs(faixas[f1 + 1].div[0] - faixas[f0].div[0]) <= 6) f1++;
+                var vxs = [vx[0]].concat(faixas[f0].div, [vx[1]]), linS = [];
+                for (var f2 = f0; f2 <= f1; f2++) linS.push({ t: faixas[f2].t, b: faixas[f2].b, th: false });
+                tabelasB.push({ top: faixas[f0].t, bot: faixas[f1].b, x0: vxs[0], x1: vxs[vxs.length - 1], vx: vxs, linhas: linS });
+                f0 = f1 + 1;
+              }
             }
           }
           i = j + 1;
