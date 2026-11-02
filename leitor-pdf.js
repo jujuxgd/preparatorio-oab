@@ -431,7 +431,7 @@
   // repetem em quase todas as páginas e números de página saem.
   Leitor.prototype.renderTexto = function (alvo) {
     var self = this, doc = this.doc, de = this.de || 1, ate = this.ate || doc.numPages, vez = this._vez = (this._vez || 0) + 1;
-    alvo.innerHTML = '<p class="lp-vazio">Montando o texto…</p>'; this._fs = {};
+    alvo.innerHTML = '<p class="lp-vazio">Montando o texto…</p>'; var FS = {};
     var pags = [], n = de;
     function proxima() {
       if (vez !== self._vez) return null;
@@ -439,7 +439,7 @@
       var num = n++;
       return doc.getPage(num).then(function (pg) {
         return Promise.all([pg.getTextContent(), pg.getOperatorList(), self.divisao(pg, num)]).then(function (r) {
-          return self.blocosDaPagina(pg, r[0], r[2]);
+          return self.blocosDaPagina(pg, r[0], r[2], FS);
         }).then(function (bl) { pags.push(bl); return proxima(); });
       });
     }
@@ -454,6 +454,30 @@
       pags.forEach(function (bl) { bl.forEach(function (l) { if (l.txt) { var t = Math.round(l.tam * 2) / 2; freq[t] = (freq[t] || 0) + l.txt.length; totalCh += l.txt.length; } }); });
       var corpo = Object.keys(freq).map(Number).sort(function (a, b) { return b - a; }).filter(function (t) { return freq[t] >= totalCh * 0.15; })[0] || 10;
       // texto corrido: o parágrafo que termina sem pontuação no fim da página continua na seguinte
+      if (de === 1 && pags[0] && pags[0].length <= 14 && pags[0].some(function (l) { return /^Documento última vez atualizado/i.test(l.txt || ''); })) pags[0] = [];
+      // primeira palavra dos títulos grandes que se repetem ("Princípio da…", "Princípio do…"): uma linha em negrito que começa igual
+      // é título do mesmo nível, mesmo que o PDF a tenha desenhado menor (aconteceu com "Princípio da Não Mercantilização")
+      var inicio3 = {};
+      pags.forEach(function (bl) { bl.forEach(function (l) {
+        if (!l.txt || l.tam < corpo * 1.25 || l.txt.length > 75 || /[.,;]\s*$/.test(l.txt)) return;
+        var w = l.txt.split(' ')[0]; if (w.length >= 5 && !/^\d/.test(w)) inicio3[w] = (inicio3[w] || 0) + 1;
+      }); });
+      // página de índice (3 ou mais linhas com pontilhado até o número da página) não é conteúdo
+      pags.forEach(function (bl, jj) {
+        if (bl.filter(function (l) { return l.txt && /(?:\.\s?){6,}|…{3,}/.test(l.txt); }).length >= 3) pags[jj] = [];
+      });
+      // sequência de 3 a 8 linhas bem curtas e seguidas (rótulos de um quadro, ex.: lista de princípios) = lista, não vários títulos
+      pags.forEach(function (bl) {
+        var run = [];
+        function fechaRun() { if (run.length >= 3 && run.length <= 8) run.forEach(function (x) { x.listaCurta = true; }); run = []; }
+        bl.forEach(function (l) {
+          var curtaL = !l.img && l.txt && l.txt.length <= 28 && l.txt.split(' ').length <= 4 && !/[.,;:]\s*$/.test(l.txt) && !/^\d+(\.\d+)*\s/.test(l.txt) && l.tam < corpo * 1.25 && !l.bg;
+          var ult = run[run.length - 1];
+          if (curtaL && (!ult || (ult.col === l.col && ult.y - l.y > 0 && ult.y - l.y <= ult.tam * 3.6))) run.push(l);
+          else { fechaRun(); if (curtaL) run = [l]; }
+        });
+        fechaRun();
+      });
       var h = '', par = null, ant = null, caixa = null, marca = '';
       function fecha() { if (par) { h += '<' + par.tag + (par.cls ? ' class="' + par.cls + '"' : '') + '>' + par.html + '</' + par.tag + '>'; par = null; } }
       function fechaCaixa() { fecha(); if (caixa) { h += '</div>'; caixa = null; } }
@@ -476,13 +500,17 @@
           var tag = !ehTitulo ? 'p' : l.tam >= corpo * 1.25 ? 'h3' : (l.neg >= 0.9 && l.txt.length <= 60 && comecoDeBloco) ? 'h4' : 'p';
           // título que termina em palavra solta ("…dos", "…no") continua na linha de baixo, seja qual for o estilo dela
           var continua = !primeira && par && par.tag !== 'p' && ant && (ant.y - l.y) <= ant.tam * 2.6 && !numerada && !l.marca &&
-            /(^|\s)(d[aeo]s?|n[aeo]s?|e|ou|a|o|as|os|para|com|em|por|ao|aos|à|às|que|x)\s*$/i.test(ant.txt);
+            (/(^|\s)(d[aeo]s?|n[aeo]s?|e|ou|a|o|as|os|para|com|em|por|ao|aos|à|às|que|x)\s*$/i.test(ant.txt) || /^[a-zà-ú]/.test(l.txt));
           if (continua) tag = par.tag;
+          if (tag === 'h4' && inicio3[l.txt.split(' ')[0]] >= 2) tag = 'h3';
+          if (l.listaCurta) tag = 'p';
           l.cabecalho = tag !== 'p';
           var segue = primeira && par && par.tag === 'p' && tag === 'p' && !l.marca && !/[.:;!?)]\s*(<\/[a-z]+>)*$/.test(par.html);
           var perto = ant && (ant.y - l.y) <= ant.tam * (tag === 'p' ? 1.9 : 1.6) && (tag === 'p' || Math.abs(ant.tam - l.tam) < 1);
-          var novo = !continua && !segue && (!par || par.tag !== tag || primeira || l.marca || !perto || /^([-–•▪►✓→]|\d+[.)]\s|[a-z]\)\s)/.test(l.txt));
-          if (novo) { fecha(); h += marca; marca = ''; par = { tag: tag, html: '', cls: l.marca ? 'lp-tx-item' : '' }; } else par.html += ' ';
+          var itemLista = l.marca || (l.bolinha && tag === 'p') || l.listaCurta;
+          var novo = !continua && !segue && (!par || par.tag !== tag || primeira || itemLista || !perto || /^([-–•▪►✓→]|\d+[.)]\s|[a-z]\)\s)/.test(l.txt));
+          if (novo) { fecha(); h += marca; marca = ''; par = { tag: tag, html: '', cls: itemLista ? 'lp-tx-item' : '' }; }
+          else par.html += (/[A-Za-zÀ-ú]-(<\/[a-z]+>)*$/.test(par.html) && /^[a-zà-ú]/.test(l.txt) ? '' : ' ');
           par.html += l.html;
           ant = l; primeira = false;
         });
@@ -495,8 +523,8 @@
   // Desenha a página num canvas fora da tela e devolve os blocos na ordem de leitura: linhas de texto (com cor e
   // fundo medidos nos pixels) e recortes de tabela/imagem.
   // chamadas da plataforma do curso (vídeo/PDF "pelo APP", QR code e link) não fazem sentido fora dela
-  var LIXO = /^(Assista (o|ao) vídeo pelo APP|Acesse o PDF pelo APP|Acesse a plataforma pelo QR code|Ou acesse pelo link|https?:\/\/\S+$|topic=[\d.]+$)/i;
-  Leitor.prototype.blocosDaPagina = function (pg, tc, s) {
+  var LIXO = /^(Assista (o|ao) vídeo pelo APP|Acesse o PDF pelo APP|Acesse a plataforma pelo QR code|Ou acesse pelo link|https?:\/\/|topic=[\d.]+$)|\?topic=[\d.]+$/i;
+  Leitor.prototype.blocosDaPagina = function (pg, tc, s, FS) {
     var base = pg.getViewport({ scale: 1 }), escala = 1400 / base.width, vp = pg.getViewport({ scale: escala });
     var cv = document.createElement('canvas'); cv.width = Math.floor(vp.width); cv.height = Math.floor(vp.height);
     var cx = cv.getContext('2d', { willReadFrequently: true });
@@ -537,23 +565,20 @@
         itens.push({ x: x, x1: x + it.width / w, y: it.transform[5], tam: tam, str: it.str, fn: it.fontName, semNome: !/[A-Za-z]{3,}/.test(nome.replace(/^[A-Z]{6}\+/, '')), neg: /bold|black|heavy|semibold/i.test(nome), col: s && x >= s ? 1 : 0,
           top: Math.min(a[1], b[1]), bot: Math.max(a[1], b[1]), c: c });
       });
-      // fontes sem nome (Type3, PDFs impressos do navegador): negrito = fonte com bem mais tinta que a fonte mais comum
-      // DO MESMO TAMANHO, com a estatística acumulada desde a primeira página (antes comparava com a fonte mais comum da
-      // página e a letra normal de 12pt parecia negrito numa página cheia de comentários em 9pt)
+      // fontes sem nome (Type3, PDFs impressos do navegador): negrito = tinta bem maior que a da fonte mais comum DO MESMO
+      // TAMANHO. A mesma fonte do PDF serve para o título grande e para o subtítulo em negrito do tamanho do texto, então a
+      // estatística é por fonte + tamanho e acumulada desde a primeira página.
       {
-        var FS = this._fs || (this._fs = {});
+        itens.forEach(function (it) { it.fk = it.fn + '|' + Math.round(it.tam); });
         itens.forEach(function (it) {
           var n = it.str.trim().length; if (!it.semNome || !it.c || n < 3) return;
-          var f = FS[it.fn] || (FS[it.fn] = { t: 0, n: 0, ts: 0 }); f.t += it.c.tinta * n; f.n += n; f.ts += it.tam * n;
+          var f = FS[it.fk] || (FS[it.fk] = { t: 0, n: 0, tam: Math.round(it.tam) }); f.t += it.c.tinta * n; f.n += n;
         });
         var baseTam = {};
-        Object.keys(FS).forEach(function (fn) {
-          var f = FS[fn]; f.tam = Math.round(f.ts / f.n);
-          if (!baseTam[f.tam] || f.n > FS[baseTam[f.tam]].n) baseTam[f.tam] = fn;
-        });
+        Object.keys(FS).forEach(function (k) { var f = FS[k]; if (!baseTam[f.tam] || f.n > FS[baseTam[f.tam]].n) baseTam[f.tam] = k; });
         itens.forEach(function (it) {
-          var f = FS[it.fn], b = f && baseTam[f.tam];
-          if (!f || it.neg || !it.semNome || !b || b === it.fn || f.n < 6 || it.str.trim().length < 3) return;
+          var f = FS[it.fk], b = f && baseTam[f.tam];
+          if (!f || it.neg || !it.semNome || !b || b === it.fk || f.n < 6 || it.str.trim().length < 3) return;
           if (f.t / f.n > (FS[b].t / FS[b].n) * 1.25) it.neg = true;
         });
       }
@@ -569,7 +594,47 @@
         var gaps = 0; for (var k = 1; k < l.partes.length; k++) if (l.partes[k].x - l.partes[k - 1].x1 > (l.tam * 3) / w) gaps++;
         l.tab = gaps >= 2 || (gaps >= 1 && l.partes.length >= 3);
         l.lixo = LIXO.test(l.partes.map(function (q) { return q.str; }).join(' ').trim());
+        l.gaps = gaps; l.x0 = l.partes[0].x;
       });
+      // linha com duas células colada em linhas de tabela é linha da mesma tabela (a de 2 colunas não passava no critério)
+      var vizinha = function (a, b) { return a && b && a.col === b.col && Math.abs(a.y - b.y) <= Math.max(a.tam, b.tam) * 4; };
+      for (var pass = 0; pass < 2; pass++) {
+        ls.forEach(function (l, k) { if (!l.tab && l.gaps >= 1 && l.partes.length >= 2 && ((ls[k - 1] && ls[k - 1].tab && vizinha(ls[k - 1], l)) || (ls[k + 1] && ls[k + 1].tab && vizinha(ls[k + 1], l)))) l.tab = true; });
+        for (var k2 = ls.length - 1; k2 >= 0; k2--) { var l2 = ls[k2]; if (!l2.tab && l2.gaps >= 1 && l2.partes.length >= 2 && ((ls[k2 - 1] && ls[k2 - 1].tab && vizinha(ls[k2 - 1], l2)) || (ls[k2 + 1] && ls[k2 + 1].tab && vizinha(ls[k2 + 1], l2)))) l2.tab = true; }
+      }
+      // 3 ou mais linhas seguidas, cada uma com um vão grande entre blocos de texto = tabela de poucas colunas
+      for (var k3 = 0; k3 < ls.length;) {
+        if (!ls[k3].tab && ls[k3].gaps >= 1 && ls[k3].partes.length >= 2) {
+          var k4 = k3;
+          while (ls[k4 + 1] && !ls[k4 + 1].tab && ls[k4 + 1].gaps >= 1 && ls[k4 + 1].partes.length >= 2 && vizinha(ls[k4], ls[k4 + 1])) k4++;
+          if (k4 - k3 >= 2) for (var k5 = k3; k5 <= k4; k5++) ls[k5].tab = true;
+          k3 = k4 + 1;
+        } else k3++;
+      }
+      // item de lista = linha com uma bolinha desenhada logo à esquerda (a indentação sozinha enganava: texto centralizado em
+      // célula de tabela também fica "recuado")
+      function temBolinha(l) {
+        var em = l.tam * escala, xt = l.x0 * W;
+        var xa = Math.max(0, Math.floor(xt - em * 1.7)), xb = Math.floor(xt - em * 0.2);
+        var ya = Math.floor(l.top + (l.bot - l.top) * 0.2), yb = Math.ceil(l.bot - (l.bot - l.top) * 0.15);
+        if (xb - xa < 3 || yb - ya < 3) return false;
+        var bx0 = 1e9, bx1 = -1, by0 = 1e9, by1 = -1, n = 0;
+        for (var y = ya; y < yb && y < H; y++) for (var x = xa; x < xb; x++) {
+          var k = (y * W + x) * 4;
+          if (px[k] < 200 || px[k + 1] < 200 || px[k + 2] < 200) { n++; if (x < bx0) bx0 = x; if (x > bx1) bx1 = x; if (y < by0) by0 = y; if (y > by1) by1 = y; }
+        }
+        var bw = bx1 - bx0 + 1, bh = by1 - by0 + 1;
+        if (!(n >= em * em * 0.04 && bw >= em * 0.15 && bw <= em * 0.75 && bh >= em * 0.15 && bh <= em * 0.75)) return false;
+        // a bolinha é um ponto isolado: sem tinta logo acima nem abaixo (ícone grande que atravessa duas linhas não conta)
+        var folga = Math.max(3, Math.round(em * 0.3));
+        function livre(ya2, yb2) {
+          for (var y2 = Math.max(0, ya2); y2 < Math.min(H, yb2); y2++) for (var x2 = Math.max(0, bx0 - 2); x2 <= bx1 + 2; x2++) {
+            var k2 = (y2 * W + x2) * 4; if (px[k2] < 200 || px[k2 + 1] < 200 || px[k2 + 2] < 200) return false;
+          }
+          return true;
+        }
+        return livre(by0 - folga, by0 - 1) && livre(by1 + 2, by1 + 2 + folga);
+      }
       var colX = function (col) { return s ? (col ? [s, 1] : [0, s]) : [0, 1]; };
       // recorte justo: só a área com tinta dentro da faixa (sem margem branca nem pedaço de texto vizinho cortado)
       function recorte(col, y0, y1, minAlt) {
@@ -583,6 +648,23 @@
         if (bx1 <= bx0 || by1 - by0 < (minAlt || 12)) return null;
         // ilustração clarinha de capa/fundo (ex.: a coruja da capa) não é figura do conteúdo
         if (minAlt && n && soma / n / 3 > 200) return null;
+        if (minAlt && n / (((bx1 - bx0) / 2) * ((by1 - by0) / 2) || 1) < 0.04) return null;
+        // resto de borda do elemento vizinho (faixa de tinta fina separada da figura por espaço em branco) fica de fora
+        if (minAlt) {
+          var cnt = [], colsAm = Math.max(1, (bx1 - bx0) / 2);
+          // moldura = poucas linhas inteiras (borda de cima/baixo) e, no resto, só os traços das laterais
+          function moldura(rows) { var cheias = 0; return rows.every(function (c) { if (c > 0.5 * colsAm) { cheias++; return true; } return c <= 0.04 * colsAm + 6; }) && cheias <= 3; }
+          for (var yy = by0; yy <= by1; yy += 2) { var c = 0; for (var xx = bx0; xx <= bx1; xx += 2) { var kk = (yy * W + xx) * 4; if (px[kk] < 235 || px[kk + 1] < 235 || px[kk + 2] < 235) c++; } cnt.push(c); }
+          // faixa de borda: baixa e com pouquíssima tinta (só a moldura da caixa vizinha), separada do resto por espaço em branco
+          var fimI = cnt.length - 1, run = 0, gap = 0, somaR = 0;
+          while (fimI >= 0 && cnt[fimI] > 0) { somaR += cnt[fimI]; fimI--; run++; }
+          while (fimI >= 0 && cnt[fimI] === 0) { fimI--; gap++; }
+          if (fimI >= 0 && run * 2 < 90 && gap * 2 >= 8 && moldura(cnt.slice(cnt.length - run))) by1 = by0 + fimI * 2;
+          var iniI = 0, run2 = 0, gap2 = 0, somaR2 = 0;
+          while (iniI < cnt.length && cnt[iniI] > 0) { somaR2 += cnt[iniI]; iniI++; run2++; }
+          while (iniI < cnt.length && cnt[iniI] === 0) { iniI++; gap2++; }
+          if (iniI < cnt.length && run2 * 2 < 90 && gap2 * 2 >= 8 && moldura(cnt.slice(0, run2))) by0 = by0 + iniI * 2;
+        }
         x0 = Math.max(0, bx0 - 10); x1 = Math.min(W, bx1 + 10); y0 = Math.max(0, by0 - 10); y1 = Math.min(H, by1 + 10);
         var c2 = document.createElement('canvas'); c2.width = x1 - x0; c2.height = y1 - y0;
         c2.getContext('2d').drawImage(cv, x0, y0, x1 - x0, y1 - y0, 0, 0, x1 - x0, y1 - y0);
@@ -608,16 +690,33 @@
         var l = ls[i], prev = out.length ? out[out.length - 1] : null;
         // vão grande com desenho entre duas linhas da mesma coluna = imagem/esquema
         if (prev && prev.bot != null && prev.col === l.col && !prev.tabela && !prev.lixo && !l.lixo && l.top - prev.bot > Math.max(l.tam * escala * 5, 110) && tinta(l.col, prev.bot + 6, l.top - 6) > 0.06) {
-          var im = recorte(l.col, prev.bot + 6, l.top - 6, 60); if (im) out.push({ img: im });
+          // se a próxima linha abre uma tabela ou faixa colorida, o desenho termina antes do topo dessa faixa
+          var limF = l.top - 6;
+          if (l.tab || (l.partes[0].c && !claro(l.partes[0].c.bg))) {
+            var cx0 = Math.floor(colX(l.col)[0] * W + 4), cx1 = Math.floor(colX(l.col)[1] * W - 4);
+            for (var yb = Math.round(l.top - 4); yb > prev.bot + 20; yb--) {
+              var pretos = 0, tot = 0;
+              for (var xb = cx0; xb < cx1; xb += 4) { var kb = (yb * W + xb) * 4; tot++; if (px[kb] < 235 || px[kb + 1] < 235 || px[kb + 2] < 235) pretos++; }
+              if (pretos / tot < 0.5) { limF = yb - 2; break; }
+            }
+          }
+          var im = recorte(l.col, prev.bot + 6, limF, 60); if (im) out.push({ img: im });
         }
         // linhas seguidas em colunas de tabela = recorte da tabela inteira
         if (l.tab && ls[i + 1] && ls[i + 1].tab && ls[i + 1].col === l.col) {
+          // a faixa de título da tabela (fundo colorido, logo acima) faz parte dela
+          var topoT = l.top;
+          while (out.length && out[out.length - 1].col === l.col && out[out.length - 1].bg && out[out.length - 1].txt && topoT - out[out.length - 1].bot < l.tam * escala * 3) { topoT = Math.min(topoT, out[out.length - 1].top); out.pop(); }
+          prev = out.length ? out[out.length - 1] : null;
           var f = i; while (ls[f + 1] && ls[f + 1].col === l.col && (ls[f + 1].tab || (ls[f + 2] && ls[f + 2].tab && ls[f + 2].col === l.col))) f++;
           // a tabela vai até perto da próxima linha de texto (pega a borda e a última linha das células)
           var prox = ls[f + 1], lim = prox && prox.col === l.col ? prox.top - 4 : Math.min(H, ls[f].bot + l.tam * escala * 6);
           var fim = vazia(l.col, ls[f].bot + 2, lim, 1);
-          var limI = prev && prev.bot != null && prev.col === l.col ? prev.bot + 4 : Math.max(0, l.top - l.tam * escala * 4);
-          var ini = vazia(l.col, l.top - 2, limI, -1);
+          // sobe pela borda da tabela até o primeiro espaço em branco (no máximo até o topo da linha anterior); linhas de texto que
+          // ficam dentro desse recorte entram na imagem e saem do texto
+          var limI = prev && prev.top != null && prev.col === l.col ? Math.max(0, prev.top - 2) : Math.max(0, topoT - l.tam * escala * 4);
+          var ini = vazia(l.col, topoT - 2, limI, -1);
+          while (out.length && out[out.length - 1].col === l.col && !out[out.length - 1].img && out[out.length - 1].top != null && out[out.length - 1].top >= ini - 2) out.pop();
           var img = recorte(l.col, ini, fim);
           if (img) out.push({ img: img, tabela: true, col: l.col, bot: fim });
           i = f + 1; continue;
@@ -641,6 +740,7 @@
         var t0 = acentos(txt).replace(ICONE, '').replace(AUDIO, ' ').replace(/\s+/g, ' ').trim(), h0 = acentos(html.replace(/<\/b>(\s*)<b>/g, '$1')).replace(ICONE, '').replace(AUDIO, ' ').trim(), mk = /^#/.test(t0);
         if (mk) { t0 = t0.replace(/^#\s*/, ''); h0 = h0.replace(/^((?:<[^>]+>)*)#\s*/, '$1'); }
         out.push({ col: l.col, y: l.y, tam: l.tam, top: l.top, bot: l.bot, txt: t0, html: h0, marca: mk, lixo: l.lixo, neg: nTot ? nNeg / nTot : 0,
+          bolinha: !l.tab && temBolinha(l),
           bg: bg && !claro(bg) ? rgb(bg) : '', bgEscuro: bg && lum(bg) < 140 });
         i++;
       }

@@ -462,6 +462,18 @@ Prova prático-profissional do OAB 48 em **28/02/2027** (cronograma da OAB). Jul
   travessão ou marcador** — `h3` se a letra for ≥ 1,25× o corpo, `h4` se a linha toda for negrito (≤ 60) e começar um bloco; título que termina
   em palavra solta ("…dos", "…no") junta com a linha de baixo; ícones de fonte de ícone (U+E000–F8FF) e "Para ouvir ao áudio…" saem.
 
+
+- **Modo texto, 2ª rodada (03/11/2026 — dia 1, Ética: Princípios):** (1) negrito por tinta agora por **fonte + tamanho** (a mesma fonte do PDF serve
+  ao título de 19pt e ao subtítulo em negrito de 12pt; a média dos dois escondia o negrito — "Princípio da Não Mercantilização" não virava título);
+  a estatística é local a cada renderização (`FS` passado a `blocosDaPagina`). (2) Negrito que começa como vários títulos grandes ("Princípio da…")
+  vira título do mesmo nível (`inicio3`). (3) Hífen de fim de linha junta sem espaço ("ex-" + "empregador"). (4) Capa (página 1 com "Documento
+  última vez atualizado") e página de índice (3+ linhas com pontilhado) saem; endereço do curso (inclusive quebrado em 2 linhas) sai.
+  (5) **Itens de lista** só ganham bolinha se houver uma bolinha desenhada isolada à esquerda (`temBolinha`; a indentação sozinha enganava com texto
+  centralizado em célula de tabela); 3–8 linhas curtas seguidas = lista (`listaCurta`). (6) Tabelas: linha de 2 células colada em linha de tabela e 3+ linhas
+  seguidas com vão grande também são tabela; o recorte sobe até o 1º espaço em branco e inclui a faixa colorida do título; figura que antecede
+  tabela/faixa termina antes dela; moldura de caixa vizinha (linha cheia + laterais) é aparada das figuras; "figura" só com moldura vazia some.
+  (7) Título que continua em linha começada em minúscula junta com a de cima. Erros do próprio material (ex.: "seestabeleçam") não são corrigidos.
+
 ## 6. Design System
 
 ### Paleta de Cores (style.css :root)
