@@ -290,6 +290,8 @@
   };
   Leitor.prototype.paginaAtual = function () {
     var topo = this.opts.rolagem ? this.opts.rolagem.getBoundingClientRect().top : 0, atual = this.de || 1;
+    // leitor escondido (outra aba aberta): tudo mede 0 e pareceria a última página
+    if (!this.raiz.offsetParent && !this.raiz.classList.contains('lp-cheia')) return null;
     this.paginas.forEach(function (info, n) { if (info && info.el.getBoundingClientRect().top <= topo + 80) atual = n; });
     return atual;
   };
@@ -312,7 +314,7 @@
   };
   // Página em que o PDF estava (por arquivo e trecho, só neste aparelho): ao trocar de aba no Hoje o leitor é montado
   // de novo e voltava para a primeira página.
-  var K_POS = 'oab_lp_pos';
+  var K_POS = 'oab_lp_pos2';
   Leitor.prototype.chavePos = function () { return this.arq + ':' + (this.opts.de || 1); };
   Leitor.prototype.voltarPosicao = function () {
     var self = this, rol = this.opts.rolagem, pos = {};
@@ -328,7 +330,8 @@
       t = setTimeout(function () {
         if (!self.raiz.isConnected) return;
         try { pos = JSON.parse(localStorage.getItem(K_POS)) || {}; } catch (e) { pos = {}; }
-        pos[self.chavePos()] = self.paginaAtual();
+        var n = self.paginaAtual(); if (n == null) return;
+        pos[self.chavePos()] = n;
         try { localStorage.setItem(K_POS, JSON.stringify(pos)); } catch (e) {}
       }, 400);
     }

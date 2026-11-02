@@ -155,3 +155,11 @@
 .mm-topo a { color: var(--rose-deep); text-decoration: none; white-space: nowrap; }
 .mm-pdf { display: block; width: 100%; height: 78vh; height: 78svh; border: 1px solid var(--line-soft, var(--line)); border-radius: var(--radius-sm, 8px); background: #fff; }
 .mm-tit { font: 600 1.05rem 'Fraunces', serif; margin: .2rem 0 .7rem; color: var(--ink); }
+.gab-mini { margin: -.4rem 0 1rem; padding: 0 .2rem; }
+.gab-mini summary { cursor: pointer; list-style: none; font: 500 .8rem Inter, sans-serif; color: var(--ink-faded); padding: .45rem 0; }
+.gab-mini summary::-webkit-details-marker { display: none; }
+.gab-mini summary::before { content: '▸'; display: inline-block; width: 1em; color: var(--rose-deep); transition: transform .15s; }
+.gab-mini[open] summary::before { transform: rotate(90deg); }
+.gab-mini summary span { opacity: .75; }
+.gab-mini summary:hover { color: var(--ink); }
+.gab-mini .gab-host { margin-top: .4rem; }
