@@ -139,7 +139,7 @@
   Leitor.prototype.iniciar = function () {
     var self = this, raiz = this.raiz;
     raiz.classList.add('lp');
-    raiz.innerHTML = '<div class="lp-topo">' +
+    raiz.innerHTML = '<div class="lp-topo">' + (this.opts.titulo ? '<div class="lp-titulo">' + this.opts.titulo + '</div>' : '') +
       '<span class="lp-info">Carregando…</span>' +
       '<span class="lp-acoes">' +
         '<button type="button" class="lp-i lp-so-pdf" data-a="lista" title="Seus grifos neste PDF" aria-label="Grifos">✎<b class="lp-ng">0</b></button>' +

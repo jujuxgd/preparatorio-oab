@@ -164,8 +164,15 @@
 .gab-mini summary:hover { color: var(--ink); }
 .gab-mini .gab-host { margin-top: .4rem; }
 
-/* título do tema numa linha (Conteúdo e Mapas) */
-.tema-linha { display: flex; align-items: baseline; flex-wrap: wrap; gap: .15rem .7rem; margin: 0 0 .5rem; }
-.tl-mat { font: 600 .8rem/1 Inter, sans-serif; color: var(--tcd); padding-right: .7rem; border-right: 1px solid var(--line, #e6ddd8); white-space: nowrap; }
-.tl-tema { font: 500 1.28rem/1.25 'Fraunces', Georgia, serif; letter-spacing: -.01em; color: var(--ink); }
-@media (max-width: 640px) { .tl-tema { font-size: 1.15rem; } }
+/* título do tema na barra do leitor (Conteúdo e Mapas): matéria pequena na cor do calendário + tema, alinhados pela base */
+.lp-titulo { flex: 1 1 auto; min-width: 0; }
+.tema-linha { margin: 0; line-height: 1.25; }
+.tl-mat { font: 600 .78rem Inter, sans-serif; letter-spacing: .01em; color: var(--tcd); margin-right: .45rem; white-space: nowrap; }
+.tl-tema { font: 500 1.22rem 'Fraunces', Georgia, serif; letter-spacing: -.01em; color: var(--ink); }
+/* celular: sem espaço para uma linha ao lado dos ícones — matéria em cima, tema embaixo, sem quebrar o tema no meio */
+@media (max-width: 640px) {
+  .tl-mat { display: block; font-size: .72rem; margin: 0 0 .1rem; }
+  .tl-tema { font-size: 1.05rem; line-height: 1.2; }
+  .lp-titulo + .lp-info + .lp-acoes .lp-i { min-width: 2rem; padding: 0 .35rem; }
+}
+.est-bloco { padding-top: 1rem; }

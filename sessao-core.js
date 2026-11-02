@@ -205,7 +205,7 @@
     'Ética Profissional': 'etica', 'ECA': 'etica'
   };
   function cabTema(d, tema) {
-    return '<h3 class="tema-linha" style="--tcd:var(--mat-' + (COR_MAT[d] || 'etica') + '-deep)"><span class="tl-mat">' + esc(curto(d)) + '</span><span class="tl-tema">' + esc(tema) + '</span></h3>';
+    return '<h3 class="tema-linha" style="--tcd:var(--mat-' + (COR_MAT[d] || 'etica') + '-deep)"><span class="tl-mat">' + esc(curto(d)) + '</span> <span class="tl-tema">' + esc(tema) + '</span></h3>';
   }
   function rotulo(n) { return n >= 1001 ? 'Estratégia' : 'Dia ' + n + ' do VDE'; }
   // Capítulos do Estratégia: um leitor por vez; versão resumida (padrão) ou completa, escolha só do aparelho.
@@ -213,7 +213,7 @@
   function versao() { try { return localStorage.getItem(K_VER) === 'x' ? 'x' : 'r'; } catch (e) { return 'r'; } }
   function htmlEstrategia(p) {
     var c0 = p.e[0];
-    return '<div class="ss-bloco est-bloco">' + cabTema(p.d, p.tema) +
+    return '<div class="ss-bloco est-bloco">' +
       (p.e.length > 1 ? '<div class="est-bar"><div class="est-ver">' + p.e.map(function (c, i) {
         return '<button type="button" class="' + (i ? '' : 'on') + '" data-est-cap="' + i + '">Cap. ' + c.c + '</button>';
       }).join('') + '</div></div>' : '') +
@@ -228,11 +228,11 @@
         b.querySelectorAll('[data-est-cap]').forEach(function (x) { x.classList.toggle('on', +x.dataset.estCap === cap); });
         var h = document.createElement('div'); h.className = 'lp-host';
         var alvo = b.querySelector('.est-leitor'); alvo.innerHTML = ''; alvo.appendChild(h);
-        if (!window.LEITOR) { h.innerHTML = '<iframe class="vde-pdf" src="https://drive.google.com/file/d/' + id + '/preview" allow="autoplay"></iframe>'; return; }
+        if (!window.LEITOR) { h.innerHTML = cabTema(p.d, p.tema) + '<iframe class="vde-pdf" src="https://drive.google.com/file/d/' + id + '/preview" allow="autoplay"></iframe>'; return; }
         var extras = c.x !== c.r ? [{ t: v === 'r' ? 'Ver a versão completa' : 'Voltar à versão resumida', sub: v === 'r' ? 'mais teoria e exemplos' : '', fn: function () {
           try { localStorage.setItem(K_VER, outra); } catch (e) {} abrir();
         } }] : [];
-        LEITOR.montar(h, id, { caixa: true, extras: extras });
+        LEITOR.montar(h, id, { caixa: true, extras: extras, titulo: cabTema(p.d, p.tema) });
       }
       b.addEventListener('click', function (ev) {
         var a = ev.target.closest('[data-est-cap]'); if (!a) return;
