@@ -172,12 +172,12 @@
     function fecharMenus(exceto) { raiz.querySelectorAll('.lp-menu').forEach(function (m) { if (m !== exceto) m.hidden = true; }); raiz.querySelectorAll('[data-a="mais"],[data-a="ajustes"]').forEach(function (b) { b.classList.toggle('on', !!exceto && b.dataset.a === exceto.dataset.de); }); }
     raiz.querySelector('.lp-menu-mais').dataset.de = 'mais'; raiz.querySelector('.lp-menu-aj').dataset.de = 'ajustes';
     document.addEventListener('click', function (e) { if (!raiz.querySelector('.lp-topo').contains(e.target)) fecharMenus(null); });
-    var zoomSalvo = parseFloat(localStorage.getItem('oab_lp_zoom3'));
+    var zoomSalvo = parseFloat(localStorage.getItem('oab_lp_zoom4'));
     this.zoom = zoomSalvo >= 0.6 && zoomSalvo <= 3 ? zoomSalvo : 1;
     function mostrarZoom() { raiz.querySelector('.lp-zoom').textContent = Math.round(self.zoom * 100) + '%'; }
     function mudarZoom(z) {
       self.zoom = Math.round(Math.min(3, Math.max(0.6, z)) * 100) / 100;
-      try { localStorage.setItem('oab_lp_zoom3', String(self.zoom)); } catch (e) {}
+      try { localStorage.setItem('oab_lp_zoom4', String(self.zoom)); } catch (e) {}
       mostrarZoom(); self.renderizar();
     }
     mostrarZoom();
@@ -356,11 +356,6 @@
     }).then(function (r) {
       if (vez !== self._vez) return;
       var pgs = r[0], divs = r[1];
-      var corpo = self.raiz.querySelector('.lp-corpo'), altCaixa = 0;
-      if (window.innerWidth > 900 && (self.opts.caixa || self.raiz.classList.contains('lp-cheia'))) {
-        altCaixa = self.raiz.classList.contains('lp-cheia') ? corpo.clientHeight : parseFloat(getComputedStyle(corpo).maxHeight) || 0;
-        altCaixa = Math.max(0, altCaixa - 28);
-      }
       pgs.forEach(function (pg, j) {
         var i = j + de - 1;
         var base = pg.getViewport({ scale: 1 });
@@ -368,10 +363,8 @@
         // página em duas colunas: cada coluna vira um quadro com a largura da tela (a esquerda inteira, depois a direita)
         var partes = s ? [[corte, s], [s, 1 - corte]] : [[corte, 1 - corte]];
         var maior = Math.max.apply(null, partes.map(function (p) { return p[1] - p[0]; }));
-        var escala = Math.min(self._largura, 1000) / (base.width * maior);
-        // no PC a página inteira cabe na caixa (largura ou altura, o que limitar antes); no celular, largura da tela
-        if (altCaixa) escala = Math.min(escala, altCaixa / base.height);
-        escala *= self.zoom;
+        // zoom 100% = página na largura da caixa (a caixa tem altura limitada e rola por dentro)
+        var escala = (self.opts.caixa || self.raiz.classList.contains('lp-cheia') ? self._largura : Math.min(self._largura, 1000)) / (base.width * maior) * self.zoom;
         var vp = pg.getViewport({ scale: escala }), els = [];
         partes.forEach(function (p, k) {
           var mold = document.createElement('div');
