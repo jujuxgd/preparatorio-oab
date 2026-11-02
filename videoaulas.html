@@ -67,15 +67,16 @@
   margin-bottom: 1.5rem;
   border-radius: var(--radius);
   overflow: hidden;
-  box-shadow: 0 4px 20px rgba(44,36,32,.12);
+  box-shadow: 0 0 0 1px var(--line), 0 4px 20px rgba(44,36,32,.12);
 }
 .va-player-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0.6rem 1rem;
-  background: var(--ink);
-  color: white;
+  /* fixo escuro: no tema escuro --ink é claro e o título branco sumia */
+  background: #211c19;
+  color: #fff;
 }
 .va-section {
   background: var(--paper);
