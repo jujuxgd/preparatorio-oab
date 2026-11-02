@@ -205,7 +205,7 @@
     'Ética Profissional': 'etica', 'ECA': 'etica'
   };
   function cabTema(d, tema) {
-    return '<h3 class="tema-linha" style="--tcd:var(--mat-' + (COR_MAT[d] || 'etica') + '-deep)"><span class="tl-mat">' + esc(curto(d)) + '</span> <span class="tl-tema">' + esc(tema) + '</span></h3>';
+    return '<h3 class="tema-linha" style="--tcd:var(--mat-' + (COR_MAT[d] || 'etica') + '-deep)"><span class="tl-mat">' + esc(curto(d)) + '</span><span class="tl-sep" aria-hidden="true">|</span><span class="tl-tema">' + esc(tema) + '</span></h3>';
   }
   function rotulo(n) { return n >= 1001 ? 'Estratégia' : 'Dia ' + n + ' do VDE'; }
   // Capítulos do Estratégia: um leitor por vez; versão resumida (padrão) ou completa, escolha só do aparelho.
@@ -321,7 +321,7 @@
       var g = G[t.d], de = g.dica[t.k[0] - 1] || 1, prox = g.dica[t.k[1]];
       var ate = prox ? Math.max(de, prox - (g.topo && g.topo[t.k[1]] ? 1 : 0)) : g.paginas;
       // discreto: uma linha que abre o trecho só quando tocada
-      return '<details class="gab-mini"><summary>Gabaritaço · ' + esc(curto(t.d) + ': ' + t.s) + ' <span>questões que já caíram</span></summary>' +
+      return '<details class="gab-mini"><summary>Gabaritaço: questões que já caíram neste tema</summary>' +
         '<div class="gab-host" data-arq="' + g.id + '" data-de="' + de + '" data-ate="' + ate + '"></div></details>';
     }).join('');
   }
