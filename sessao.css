@@ -10,7 +10,7 @@
 .ss-nums div{font-size:.72rem;color:var(--ink-faded)}
 .ss-nums b{display:block;font-family:'Fraunces',serif;font-size:1.5rem;font-weight:500;color:var(--rose-deep);line-height:1.1}
 .ss-bloco{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:1.1rem 1.3rem;margin-bottom:1rem;box-shadow:var(--shadow-sm)}
-.ss-bloco h3:not(.lp-texto h3){font-family:'Fraunces',serif;font-weight:500;font-size:1.12rem;color:var(--ink);margin:0 0 .35rem;display:flex;gap:.6rem;align-items:baseline}
+.ss-bloco h3:not(.lp-texto h3):not(.tema-linha){font-family:'Fraunces',serif;font-weight:500;font-size:1.12rem;color:var(--ink);margin:0 0 .35rem;display:flex;gap:.6rem;align-items:baseline}
 .ss-bloco h3 .n{font:600 .66rem Inter,sans-serif;letter-spacing:.12em;color:var(--rose-deep);text-transform:uppercase}
 .ss-bloco > p{font-size:.84rem;color:var(--ink-soft);margin:.2rem 0 .8rem;line-height:1.55}
 .ss-acoes{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center}
@@ -163,3 +163,9 @@
 .gab-mini summary span { opacity: .75; }
 .gab-mini summary:hover { color: var(--ink); }
 .gab-mini .gab-host { margin-top: .4rem; }
+
+/* título do tema numa linha (Conteúdo e Mapas) */
+.tema-linha { display: flex; align-items: baseline; flex-wrap: wrap; gap: .15rem .7rem; margin: 0 0 .5rem; }
+.tl-mat { font: 600 .8rem/1 Inter, sans-serif; color: var(--tcd); padding-right: .7rem; border-right: 1px solid var(--line, #e6ddd8); white-space: nowrap; }
+.tl-tema { font: 500 1.28rem/1.25 'Fraunces', Georgia, serif; letter-spacing: -.01em; color: var(--ink); }
+@media (max-width: 640px) { .tl-tema { font-size: 1.15rem; } }
