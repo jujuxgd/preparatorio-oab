@@ -787,7 +787,7 @@ function renderGrid() {
       const [ano, mes, dd] = u.data.split('-');
       diasHtml += `<div class="dia-bloco">
         <div class="dia-label">
-          <span class="dia-badge ${u.ok?'done':''}">Dia ${u.n} do VDE</span>
+          <span class="dia-badge ${u.ok?'done':''}">${u.n >= 1001 ? 'Estratégia' : 'Dia ' + u.n + ' do VDE'}</span>
           <a href="hoje.html?data=${u.data}" style="color:inherit">${dd}/${mes}</a>
         </div>
         <div class="topico-item ${u.ok?'checked':''}" onclick="togglePdf(${u.n},'${u.data}',this)">

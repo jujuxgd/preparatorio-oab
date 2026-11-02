@@ -1,8 +1,9 @@
 // Calendário até a prova (12/10/2026 → 10/01/2027).
-// Fase 1 (até 20/12): cada dia de seg a sáb é um ou dois PDFs do dia do VDE (n = DIA do VDE, arquivo
-// "Dia n - Matéria.pdf" em vde-dias.js), na ordem do VDE; nos dias com dois, os PDFs mais curtos.
-// Domingo: simulado completo. q = tópicos do banco; k = faixa de DICAS do Gabaritaço; g = questões
-// "Como já caiu" do Gabaritaço no banco. Fase 2: revisão (inalterada). Sem a semana 14 do VDE.
+// 12/10–01/11: PDFs do dia do VDE (n = DIA do VDE, arquivo "Dia n - Matéria.pdf" em vde-dias.js).
+// 02/11–20/12 (escolha de Julia, 02/11/2026): cronograma de 60 dias do Estratégia — seg–sex 2 temas, sábado
+// revisão semanal, domingo simulado completo. Nesses temas n ≥ 1001 e e = capítulos do Estratégia no Drive
+// dela (c = nº, t = título, r = resumido, x = completo). q = tópicos do banco; k = faixa de DICAS do
+// Gabaritaço; g = questões "Como já caiu". Fase 2 (21/12–09/01): revisão.
 window.CAL_ATIVO = {
 "curto": {
 "Ética Profissional": "Ética",
@@ -19,7 +20,12 @@ window.CAL_ATIVO = {
 "ECA": "ECA",
 "Direito do Consumidor": "Consumidor",
 "Direito Previdenciário": "Previdenciário",
-"Direito Eleitoral": "Eleitoral"
+"Direito Eleitoral": "Eleitoral",
+"Filosofia do Direito": "Filosofia",
+"Direitos Humanos": "Dir. Humanos",
+"Direito Internacional": "Internacional",
+"Direito Ambiental": "Ambiental",
+"Direito Financeiro": "Financeiro"
 },
 "dias": [
 {
@@ -581,36 +587,43 @@ window.CAL_ATIVO = {
 "top": [
 {
 "d": "Ética Profissional",
-"s": "Direitos e prerrogativas do advogado",
-"n": 30,
+"s": "Princípios",
+"n": 1001,
 "q": [
-"Direitos e prerrogativas do advogado"
+"Deveres e vedações éticas do advogado"
 ],
-"k": [
-14,
-21
-],
-"g": [
-"oab_001161",
-"oab_001078",
-"oab_001162"
+"e": [
+{
+"c": 3,
+"t": "Principios",
+"r": "1nCUxgdkMZHDGg2ME8YF_GoHM5Es_SLU9",
+"x": "1k8rbXRNxbFZ3qSlPAGRfxZdTDK6CLOY7"
+}
 ]
 },
 {
-"d": "Direito Penal",
-"s": "Ilicitude e culpabilidade",
-"n": 31,
+"d": "Direito Constitucional",
+"s": "Direitos individuais e coletivos",
+"n": 1002,
 "q": [
-"Teoria do crime"
+"Direitos e garantias fundamentais"
+],
+"e": [
+{
+"c": 3,
+"t": "Direitos Individuais e Coletivos",
+"r": "1a7FgbCbCXd2rwwO591AUsCbZslUS3_f_",
+"x": "1PnIbwRlgNMOPzfMz7gZ04XB1KkM47n_M"
+}
 ],
 "k": [
-16,
-23
+1,
+14
 ],
 "g": [
-"oab_000060",
-"oab_001136",
-"oab_001137"
+"oab_000232",
+"oab_000854",
+"oab_000930"
 ]
 }
 ]
@@ -621,37 +634,48 @@ window.CAL_ATIVO = {
 "tipo": "estudo",
 "top": [
 {
-"d": "Direito Processual do Trabalho",
-"s": "Ação trabalhista, defesa do réu e audiência",
-"n": 32,
+"d": "Direito Civil",
+"s": "Teoria geral: pessoas",
+"n": 1003,
 "q": [
-"Petição inicial e resposta do réu",
-"Audiência e revelia",
-"Procedimento sumaríssimo",
-"Jus postulandi e representação processual"
+"Parte geral"
+],
+"e": [
+{
+"c": 2,
+"t": "Teoria Geral- Pessoas",
+"r": "1wE4Kvg2nq8sYJAeXlV3isSDuCQQ8_Qop",
+"x": "1n8L_BYmsTunuvXWX9c-fZigiNXtzLhRh"
+}
 ],
 "k": [
-12,
-29
+1,
+6
 ],
 "g": [
-"oab_000680"
+"oab_001432"
 ]
 },
 {
-"d": "Direito Processual Civil",
-"s": "Tutela provisória",
-"n": 36,
+"d": "Direito Penal",
+"s": "Iter criminis",
+"n": 1004,
 "q": [
-"Tutela provisória"
+"Teoria do crime"
 ],
-"k": [
-24,
-30
-],
-"g": [
-"oab_000895",
-"oab_000889"
+"e": [
+{
+"c": 6,
+"t": "Iter Criminis",
+"r": "1mWF33Q_yWbWXBmDGHAp9-zSEa110cPWV",
+"x": "1mXLhfFi4Jd9SR14LLJdHC3ZI56yV86_9"
+},
+{
+"c": 7,
+"t": "Institutos Defensivos do Iter Criminis",
+"r": "1p0a0MwcOrLDHjVmdasd9KheDtUpe1w3y",
+"x": "1nP55OiM5nnC-nC9zjZc1U78m2ZsuzNnY"
+}
 ]
 }
 ]
@@ -662,34 +686,55 @@ window.CAL_ATIVO = {
 "tipo": "estudo",
 "top": [
 {
-"d": "Direito Administrativo",
-"s": "Atos administrativos",
-"n": 37,
+"d": "Direito Processual Civil",
+"s": "Partes e procuradores",
+"n": 1005,
 "q": [
-"Atos administrativos"
+"Partes e procuradores",
+"Honorários e despesas processuais"
+],
+"e": [
+{
+"c": 5,
+"t": "Partes e Procuradores",
+"r": "1spqIzWLr6CsJGXVIthHtum-E2f9ig_5b",
+"x": "1gzo3sIiRnycIjXPM_8OhGM_S1v-o1fBw"
+}
 ],
 "k": [
-27,
-35
+8,
+23
 ],
 "g": [
-"oab_000710"
+"oab_000660",
+"oab_000508",
+"oab_001127",
+"oab_000051"
 ]
 },
 {
 "d": "Ética Profissional",
-"s": "Honorários advocatícios",
-"n": 38,
+"s": "Direitos do advogado",
+"n": 1006,
 "q": [
-"Honorários advocatícios"
+"Direitos e prerrogativas do advogado"
+],
+"e": [
+{
+"c": 8,
+"t": "Dos Direitos dos Advogados",
+"r": "1ZULqhHszBL8e1JTuzLhNBqVqKvs3OwXZ",
+"x": "1NpxLKzXtHOQiLJVG9DpSnlorFICgYPxB"
+}
 ],
 "k": [
-27,
-32
+14,
+21
 ],
 "g": [
-"oab_000147",
-"oab_000996"
+"oab_001161",
+"oab_001078",
+"oab_001162"
 ]
 }
 ]
@@ -700,29 +745,43 @@ window.CAL_ATIVO = {
 "tipo": "estudo",
 "top": [
 {
-"d": "ECA",
-"s": "Direitos fundamentais e família substituta",
-"n": 39,
+"d": "Direito do Trabalho",
+"s": "Relações empregatícias especiais",
+"n": 1007,
 "q": [
-"Direitos fundamentais da criança e do adolescente",
-"Adoção e família substituta"
+"Trabalho doméstico",
+"Contrato de trabalho"
+],
+"e": [
+{
+"c": 4,
+"t": "Relações Empregatícias Especiais",
+"r": "1ZOs-wEi_JBYWJmZG1q5lrTQnAvNOkFW-",
+"x": "1KC92seK8FEUNquyq3lWNkzisxPC05OBa"
+}
 ]
 },
 {
-"d": "Direito Penal",
-"s": "Extinção da punibilidade e concurso de pessoas",
-"n": 40,
+"d": "Direito Administrativo",
+"s": "Intervenção do Estado na propriedade",
+"n": 1008,
 "q": [
-"Extinção da punibilidade",
-"Concurso de pessoas"
+"Intervenção na propriedade"
+],
+"e": [
+{
+"c": 7,
+"t": "Intervenção do Estado na Propriedade",
+"r": "1OJjHCEV5LC_a2YMWtE0H1hAmfU_i0_m2",
+"x": "19RGidK_G_YgpORX-04naQPtGnORv4D_p"
+}
 ],
 "k": [
-24,
-28
+54,
+64
 ],
 "g": [
-"oab_000433",
-"oab_001133"
+"oab_001344"
 ]
 }
 ]
@@ -733,27 +792,43 @@ window.CAL_ATIVO = {
 "tipo": "estudo",
 "top": [
 {
-"d": "Direito Empresarial",
-"s": "Direito societário",
-"n": 41,
+"d": "Direito Processual Penal",
+"s": "Jurisdição e competência",
+"n": 1009,
 "q": [
-"Sociedades"
+"Competência"
+],
+"e": [
+{
+"c": 7,
+"t": "Competência",
+"r": "12Ss_UxsnFS4oBk549PVcNv7HmN7M5jht",
+"x": "1hlEXH-FlRH8vXc3y5HCqp20sE2kslrmm"
+}
+],
+"k": [
+16,
+23
+],
+"g": [
+"oab_000519",
+"oab_000598"
 ]
 },
 {
-"d": "Direito Constitucional",
-"s": "Organização do Estado e repartição de competências",
-"n": 49,
+"d": "Direito Administrativo",
+"s": "Desapropriação",
+"n": 1010,
 "q": [
-"Organização do Estado"
+"Intervenção na propriedade"
 ],
-"k": [
-32,
-44
-],
-"g": [
-"oab_000850",
-"oab_001086"
+"e": [
+{
+"c": 8,
+"t": "Desapropriação",
+"r": "1dQjXWBBMTTNf-Dwy6o5gPBHxrSWxXGL6",
+"x": "1NIbNnQyX5jARwcirtpGaQuqufr-35Gkn"
+}
 ]
 }
 ]
@@ -761,25 +836,11 @@ window.CAL_ATIVO = {
 {
 "d": "2026-11-07",
 "f": 1,
-"tipo": "estudo",
-"top": [
-{
-"d": "Direito do Trabalho",
-"s": "Duração do trabalho: jornada, intervalos e férias",
-"n": 53,
-"q": [
-"Jornada de trabalho",
-"Férias"
-]
-},
-{
-"d": "Direito Tributário",
-"s": "Tema no PDF do dia (semana 8)",
-"n": 54,
-"q": [
-"*"
-]
-}
+"tipo": "revisao",
+"semanal": true,
+"foco": [
+"Ética Profissional",
+"Direito Administrativo"
 ]
 },
 {
@@ -797,46 +858,42 @@ window.CAL_ATIVO = {
 "tipo": "estudo",
 "top": [
 {
-"d": "Ética Profissional",
-"s": "Incompatibilidades e impedimentos",
-"n": 55,
+"d": "Direito Empresarial",
+"s": "Sociedades em conta de participação",
+"n": 1011,
 "q": [
-"Incompatibilidades e impedimentos"
+"Sociedades"
 ],
-"k": [
-33,
-37
-],
-"g": [
-"oab_001157"
-]
-},
+"e": [
 {
-"d": "Direito Processual do Trabalho",
-"s": "Provas",
-"n": 57,
-"q": [
-"Provas no processo do trabalho"
-],
-"k": [
-30,
-34
+"c": 11,
+"t": "Das Sociedades em Espécie",
+"r": "1JSEzkBv3xNvHji0zVAMF5rUeS4Ki0QmJ",
+"x": "1u2ZpdF1sutO0UzSzhMd6iqstePxQ94Yo"
+}
 ]
 },
 {
 "d": "Direito Constitucional",
-"s": "Intervenção",
-"n": 57,
+"s": "Remédios constitucionais",
+"n": 1012,
 "q": [
-"Organização do Estado"
+"Remédios constitucionais"
+],
+"e": [
+{
+"c": 3,
+"t": "Direitos Individuais e Coletivos",
+"r": "1a7FgbCbCXd2rwwO591AUsCbZslUS3_f_",
+"x": "1PnIbwRlgNMOPzfMz7gZ04XB1KkM47n_M"
+}
 ],
 "k": [
-45,
-46
+15,
+21
 ],
 "g": [
-"oab_000850",
-"oab_001086"
+"oab_001087"
 ]
 }
 ]
@@ -847,17 +904,36 @@ window.CAL_ATIVO = {
 "tipo": "estudo",
 "top": [
 {
-"d": "Direito Processual Civil",
-"s": "Procedimento comum",
-"n": 58,
+"d": "Direito Civil",
+"s": "Teoria geral: fato jurídico",
+"n": 1013,
 "q": [
-"Petição inicial e resposta do réu",
-"Conciliação e mediação",
-"Provas"
+"Negócio jurídico",
+"Parte geral"
 ],
-"k": [
-31,
-39
+"e": [
+{
+"c": 4,
+"t": "Teoria Geral- Fato Jurídico",
+"r": "1DcHC_NS8S6tD9gdl_8p7ND-amBewJV-6",
+"x": "1kwUf7D4Me_yPIn28rVVHQu8E38Y18DPy"
+}
+]
+},
+{
+"d": "Direito Empresarial",
+"s": "Sociedades limitadas",
+"n": 1014,
+"q": [
+"Sociedades"
+],
+"e": [
+{
+"c": 11,
+"t": "Das Sociedades em Espécie",
+"r": "1JSEzkBv3xNvHji0zVAMF5rUeS4Ki0QmJ",
+"x": "1u2ZpdF1sutO0UzSzhMd6iqstePxQ94Yo"
+}
 ]
 }
 ]
@@ -868,18 +944,42 @@ window.CAL_ATIVO = {
 "tipo": "estudo",
 "top": [
 {
-"d": "Direito Administrativo",
-"s": "Agentes públicos",
-"n": 59,
+"d": "Direito Internacional",
+"s": "Tratados internacionais",
+"n": 1015,
 "q": [
-"Agentes públicos"
+"Direito dos tratados"
+],
+"e": [
+{
+"c": 2,
+"t": "Aspectos Introdutórios",
+"r": "18-Wwz03PLeMBgIWwGbWEDj3ypZfaWCQD",
+"x": "12iHW3GMwdpVi5C1xx9Z4H7vhuwkuNJkl"
+}
+]
+},
+{
+"d": "Direito Processual Penal",
+"s": "Teoria geral das provas",
+"n": 1016,
+"q": [
+"Provas"
+],
+"e": [
+{
+"c": 8,
+"t": "Provas",
+"r": "1b52rAvM4J-eyxcyRCrC2Ejd0JlgbYgLB",
+"x": "1MU6SrB3EwUswLlPtG2MURxq2gj7d4ten"
+}
 ],
 "k": [
-36,
-45
+24,
+31
 ],
 "g": [
-"oab_001267"
+"oab_000597"
 ]
 }
 ]
@@ -890,18 +990,64 @@ window.CAL_ATIVO = {
 "tipo": "estudo",
 "top": [
 {
-"d": "Direito Civil",
-"s": "Contratos em geral",
-"n": 60,
+"d": "Direito Tributário",
+"s": "Obrigação tributária",
+"n": 1017,
 "q": [
-"Contratos"
+"Obrigação tributária"
+],
+"e": [
+{
+"c": 10,
+"t": "Obrigação Tributária",
+"r": "14sPmEUGyZ8H69fqs6ON0D2PCSnnDLGKR",
+"x": "1V61A4-_7YcUa-mMfqL_vCyl9Z6XBwvsV"
+}
 ],
 "k": [
-23,
-27
+40,
+52
+]
+},
+{
+"d": "Direito Processual do Trabalho",
+"s": "Defesa",
+"n": 1018,
+"q": [
+"Petição inicial e resposta do réu"
+],
+"e": [
+{
+"c": 15,
+"t": "Respostas do Réu",
+"r": "1uQlELtRG2p8tTGbprOMEn73x07gwgPKE",
+"x": "1cyOY_9YZwwqabO6y8540NjF9dvqp8ze8"
+},
+{
+"c": 16,
+"t": "Preliminares na Contestação",
+"r": "1VmAcqK-5Lnf98Tx2_AqP97dHHef9kIso",
+"x": "1pekfWjsWcPpFGTFtEusAAs2QmNbrTAIX"
+},
+{
+"c": 17,
+"t": "Prejudiciais de Mérito",
+"r": "1yzlFUgK62GY0vng4URmKOgmPaxX9FryI",
+"x": "1t8jOYITIGBOBgzRysmA0xDt5C-oHI_VE"
+},
+{
+"c": 18,
+"t": "Exceções",
+"r": "1wiCf_I-EJ1gM9etL4s7NI2CWXy5WlbPU",
+"x": "1fmdAKbMU2dSZ-bjyLUkfC5adqBYT-QbS"
+}
+],
+"k": [
+12,
+29
 ],
 "g": [
-"oab_001272"
+"oab_000680"
 ]
 }
 ]
@@ -912,16 +1058,42 @@ window.CAL_ATIVO = {
 "tipo": "estudo",
 "top": [
 {
-"d": "Direito Tributário",
-"s": "Obrigação e responsabilidade tributária",
-"n": 61,
+"d": "ECA",
+"s": "Adoção",
+"n": 1019,
 "q": [
-"Obrigação tributária",
-"Responsabilidade tributária"
+"Adoção e família substituta"
 ],
-"k": [
-40,
-52
+"e": [
+{
+"c": 3,
+"t": "Direitos Fundamentais",
+"r": "1_LVk7X2MVng9HtJtxvjdN6iPV9glp-S1",
+"x": "1WzSqb4Alf9YxWlw1UlShueEfhIoto3bl"
+}
+]
+},
+{
+"d": "Direito Penal",
+"s": "Teoria da pena",
+"n": 1020,
+"q": [
+"Teoria da pena",
+"Dosimetria da pena"
+],
+"e": [
+{
+"c": 17,
+"t": "Teoria e Aplicação da Pena",
+"r": "1vb6pYsOgjmj5e_w79-MYf16tgkfTovnN",
+"x": "1fWVnh32uKUpERGVcGskr_lSVkVpP_UZl"
+},
+{
+"c": 18,
+"t": "Teoria e Execução da Pena",
+"r": "1NhWxJnRdci4ydgF6IwJ3wYAYP-HtHCO5",
+"x": "1s6eERong9l7GwPA55CH97XI0pjGVZDhQ"
+}
 ]
 }
 ]
@@ -929,26 +1101,11 @@ window.CAL_ATIVO = {
 {
 "d": "2026-11-14",
 "f": 1,
-"tipo": "estudo",
-"top": [
-{
-"d": "Direito Penal",
-"s": "Penas e concurso de crimes",
-"n": 64,
-"q": [
-"Teoria da pena",
-"Dosimetria da pena",
-"Concurso de crimes"
-],
-"k": [
-29,
-44
-],
-"g": [
-"oab_001133",
-"oab_000587"
-]
-}
+"tipo": "revisao",
+"semanal": true,
+"foco": [
+"Direito Empresarial",
+"Direito Constitucional"
 ]
 },
 {
@@ -966,19 +1123,55 @@ window.CAL_ATIVO = {
 "tipo": "estudo",
 "top": [
 {
-"d": "Direito Processual Penal",
-"s": "Questões e processos incidentes; provas",
-"n": 65,
+"d": "Ética Profissional",
+"s": "Sociedade de advogados e honorários advocatícios",
+"n": 1021,
 "q": [
-"Questões e processos incidentes",
-"Provas"
+"Sociedade de advogados",
+"Honorários advocatícios"
+],
+"e": [
+{
+"c": 12,
+"t": "Sociedade de Advogados",
+"r": "1d86e8agT_vCCvTrKzGwtoHinxxO2ZMF3",
+"x": "1cygnf5AbldQQIXBZ1RI4ucModhCphWjS"
+},
+{
+"c": 14,
+"t": "Dos Honorários Advocatícios",
+"r": "1WulMw8989_WIvJT6PeuYgG7npcZJKe2t",
+"x": "1AMIxqxYiElOc-e-K4lOBlo4bIUHXbz17"
+}
 ],
 "k": [
-24,
-31
+7,
+26
 ],
 "g": [
-"oab_000597"
+"oab_001003",
+"oab_001080",
+"oab_000224"
+]
+},
+{
+"d": "Direito Tributário",
+"s": "Imunidades",
+"n": 1022,
+"q": [
+"Imunidades tributárias"
+],
+"e": [
+{
+"c": 8,
+"t": "Imunidades Tributárias",
+"r": "1orE_BcNmDJgL3QyYtihpKCpgM0CDBOnO",
+"x": "1FK2E3HkRn2hDEI-HtWjWmycFkXvNCnbg"
+}
+],
+"k": [
+25,
+31
 ]
 }
 ]
@@ -989,11 +1182,46 @@ window.CAL_ATIVO = {
 "tipo": "estudo",
 "top": [
 {
-"d": "Direito Empresarial",
-"s": "Títulos de crédito",
-"n": 66,
+"d": "Direito Administrativo",
+"s": "Responsabilidade civil do Estado",
+"n": 1023,
 "q": [
-"Títulos de crédito"
+"Responsabilidade civil do Estado"
+],
+"e": [
+{
+"c": 13,
+"t": "Responsabilidade do Estado",
+"r": "1gqZZJ6IGPr_M-Fry8XVoYPxTQxST2vN3",
+"x": "1FwbEvQniacGnXv5TOr6AmaC4AfWZT9Ov"
+}
+],
+"k": [
+65,
+69
+],
+"g": [
+"oab_000947"
+]
+},
+{
+"d": "Direito Processual Civil",
+"s": "Procedimento comum",
+"n": 1024,
+"q": [
+"Petição inicial e resposta do réu"
+],
+"e": [
+{
+"c": 15,
+"t": "Procedimento Comum",
+"r": "1vFov5Lf8hTJNgS-eg8G1Ic7DvcK27brE",
+"x": "1HFE0t6wi8LEukq4jJvSMzvFYPz_Kdmmi"
+}
+],
+"k": [
+31,
+39
 ]
 }
 ]
@@ -1004,22 +1232,42 @@ window.CAL_ATIVO = {
 "tipo": "estudo",
 "top": [
 {
-"d": "Direito Constitucional",
-"s": "Poder Legislativo e processo legislativo",
-"n": 67,
+"d": "Direito do Consumidor",
+"s": "Oferta e publicidade; práticas abusivas; bancos de dados",
+"n": 1025,
 "q": [
-"Poder Legislativo",
-"Processo legislativo"
+"Práticas comerciais e publicidade",
+"Bancos de dados e cadastros de consumidores"
 ],
-"k": [
-47,
-61
+"e": [
+{
+"c": 7,
+"t": "Das Práticas Comerciais",
+"r": "1h_ereRdbVWCgXLZTWAXF8PguCJmYIyjf",
+"x": "1w35syDb--sJH3U1atRM5vFALlGhoZT1Z"
+},
+{
+"c": 8,
+"t": "Das Práticas Abusivas",
+"r": "1vGN9mP13wbc28p1SjUTZjFCdBhgSsruK",
+"x": "1OIIjFyrg-vBad6D2el5CBBP4fswWt1nN"
+}
+]
+},
+{
+"d": "Direito Empresarial",
+"s": "Títulos de crédito (letra de câmbio e cheque)",
+"n": 1026,
+"q": [
+"Títulos de crédito"
 ],
-"g": [
-"oab_000779",
-"oab_000695",
-"oab_001006",
-"oab_001325"
+"e": [
+{
+"c": 9,
+"t": "Dos Títulos de Crédito em Espécie",
+"r": "17wO8nW9xeFQNm7onRRFppAa5jH09oWOZ",
+"x": "1Z_U7HAR-xwiqUe5mmheEdzYD9IGKe6iA"
+}
 ]
 }
 ]
@@ -1030,27 +1278,48 @@ window.CAL_ATIVO = {
 "tipo": "estudo",
 "top": [
 {
-"d": "Direito do Trabalho",
-"s": "Estabilidade",
-"n": 68,
+"d": "Direitos Humanos",
+"s": "DUDH, PIDCP e PIDESC",
+"n": 1027,
 "q": [
-"Estabilidade e garantias de emprego"
+"Sistema global de proteção"
 ],
-"k": [
-36,
-40
+"e": [
+{
+"c": 6,
+"t": "Declaração Universal dos Direitos Humanos",
+"r": "1ZhWdVyXVHBGZ-5YQNOfJzNrzxXB5xp2h",
+"x": "1ifgjmomrTZUF0PE59zQveChhJxDsfsv4"
+},
+{
+"c": 7,
+"t": "Os Pactos de 1966",
+"r": "1vF376-t3OVEHee0-8-Sz-yrZl9UmFZLy",
+"x": "1C6TgDbdDJwhGzP3MApIIpb4Y3g79wrdz"
+}
 ]
 },
 {
-"d": "Direito Processual Civil",
-"s": "Sentença e coisa julgada",
-"n": 69,
+"d": "Direito Processual Penal",
+"s": "Procedimento ordinário",
+"n": 1028,
 "q": [
-"Sentença e coisa julgada"
+"Procedimentos"
+],
+"e": [
+{
+"c": 10,
+"t": "Procedimentos",
+"r": "1yNRhTPQQRSOE15hVN4edQxKLd7qRYGMG",
+"x": "1E9Jl42A-DdNVvZG-WI4wXYSf-77ltDEU"
+}
 ],
 "k": [
-40,
+39,
 44
+],
+"g": [
+"oab_000752"
 ]
 }
 ]
@@ -1061,18 +1330,41 @@ window.CAL_ATIVO = {
 "tipo": "estudo",
 "top": [
 {
-"d": "Direito Civil",
-"s": "Contratos em espécie",
-"n": 71,
+"d": "Direito Penal",
+"s": "Espécies de erro: essenciais e acidentais",
+"n": 1029,
 "q": [
-"Contratos"
+"Teoria do crime"
 ],
-"k": [
-28,
-35
+"e": [
+{
+"c": 13,
+"t": "Teoria Do Erro – Espécies De Erro – Erros Essenciais",
+"r": "1b9AOFD3fSgXHqBpr4kk2BRo-n_LH4Fc9",
+"x": "1yYsuDtW1lmcokjsm9z6unhkE5-WHAX-c"
+},
+{
+"c": 14,
+"t": "Teoria Do Erro – Espécies De Erro – Erros Acidentais",
+"r": "1vtZhvnrPv97zPWZi7A2Tnpq7YeuRwqml",
+"x": "1Hzix8XoaL6hYsWCOgMUMK4nADggcjF3_"
+}
+]
+},
+{
+"d": "Direito Processual do Trabalho",
+"s": "Honorários",
+"n": 1030,
+"q": [
+"Custas e honorários"
 ],
-"g": [
-"oab_001272"
+"e": [
+{
+"c": 8,
+"t": "Honorários Advocatícios e Honorários Periciais",
+"r": "1HXLxfYZGddcmM08Vu7jynswagdUoB84S",
+"x": "1DW_7pkOxbF5FgYAyCZ9_F5_hrPiWCoLK"
+}
 ]
 }
 ]
@@ -1080,36 +1372,11 @@ window.CAL_ATIVO = {
 {
 "d": "2026-11-21",
 "f": 1,
-"tipo": "estudo",
-"top": [
-{
-"d": "Direito Administrativo",
-"s": "Improbidade administrativa",
-"n": 72,
-"q": [
-"Improbidade administrativa"
-],
-"k": [
-46,
-53
-]
-},
-{
-"d": "Ética Profissional",
-"s": "Infrações e sanções disciplinares",
-"n": 73,
-"q": [
-"Infrações e sanções disciplinares",
-"Incompatibilidades e impedimentos"
-],
-"k": [
-38,
-43
-],
-"g": [
-"oab_001157"
-]
-}
+"tipo": "revisao",
+"semanal": true,
+"foco": [
+"Ética Profissional",
+"Direito Tributário"
 ]
 },
 {
@@ -1127,12 +1394,50 @@ window.CAL_ATIVO = {
 "tipo": "estudo",
 "top": [
 {
-"d": "Direito do Consumidor",
-"s": "Política nacional e direitos básicos do consumidor",
-"n": 74,
+"d": "Ética Profissional",
+"s": "Incompatibilidades e impedimentos",
+"n": 1031,
 "q": [
-"Relação de consumo",
-"Direitos básicos do consumidor"
+"Incompatibilidades e impedimentos"
+],
+"e": [
+{
+"c": 16,
+"t": "Da Incompatibilidade e do Impedimento",
+"r": "1Cusw7RnZ1XY2NVkHs1VLAV6srImI8Zog",
+"x": "1jeHxOohwdDiR8kgOhVp2QNPpI90y9VKu"
+}
+],
+"k": [
+33,
+37
+],
+"g": [
+"oab_001157"
+]
+},
+{
+"d": "Direito Processual Civil",
+"s": "Tutela provisória",
+"n": 1032,
+"q": [
+"Tutela provisória"
+],
+"e": [
+{
+"c": 14,
+"t": "Tutela Provisória",
+"r": "10rmH5mCcEBR_zc1wA1hGUqoXxdwDJp6P",
+"x": "1jvJAEERJv86DKtRQ4a83IwDuBwB6ahWP"
+}
+],
+"k": [
+24,
+30
+],
+"g": [
+"oab_000895",
+"oab_000889"
 ]
 }
 ]
@@ -1143,35 +1448,51 @@ window.CAL_ATIVO = {
 "tipo": "estudo",
 "top": [
 {
-"d": "Direito Penal",
-"s": "Crimes contra a vida e contra a honra",
-"n": 75,
+"d": "Direito Constitucional",
+"s": "Repartição de competências",
+"n": 1033,
 "q": [
-"Crimes contra a pessoa"
+"Organização do Estado"
+],
+"e": [
+{
+"c": 9,
+"t": "Repartição de Competências",
+"r": "1aelAsNqCNEZo3GPs7wwx9tE5rJC04z0n",
+"x": "10bQ9uDZrJIQjju9TJP5L886tf8Uec_09"
+}
 ],
 "k": [
-45,
-55
+32,
+44
 ],
 "g": [
-"oab_001054",
-"oab_000743"
+"oab_000850",
+"oab_001086"
 ]
 },
 {
-"d": "Direito Constitucional",
-"s": "Poder Executivo e Poder Judiciário",
-"n": 78,
+"d": "Direito do Trabalho",
+"s": "Contrato de trabalho",
+"n": 1034,
 "q": [
-"Poder Executivo",
-"Poder Judiciário"
+"Contrato de trabalho"
+],
+"e": [
+{
+"c": 8,
+"t": "Contrato de Trabalho",
+"r": "1Ut9q8IPIwc02yJqLon8RNCUX-gdrwXdY",
+"x": "1wjZ0PqpQTBh_MVwaNzT_KtO6J7AKRvnG"
+}
 ],
 "k": [
-62,
-71
+1,
+6
 ],
 "g": [
-"oab_001089"
+"oab_000830",
+"oab_000754"
 ]
 }
 ]
@@ -1182,16 +1503,42 @@ window.CAL_ATIVO = {
 "tipo": "estudo",
 "top": [
 {
-"d": "Direito Processual Civil",
-"s": "Cumprimento de sentença e execução",
-"n": 79,
+"d": "Direito Administrativo",
+"s": "Serviços públicos",
+"n": 1035,
 "q": [
-"Cumprimento de sentença",
-"Execução"
+"Serviços públicos"
+],
+"e": [
+{
+"c": 11,
+"t": "Serviços Públicos",
+"r": "1dj3pC3aCA8bJ-fDcToOJnXLuP7coMs1w",
+"x": "1_grSZbDMKAOLyr7A-z4O0cXq78Ld0Coz"
+}
 ],
 "k": [
-45,
-52
+95,
+102
+],
+"g": [
+"oab_000947"
+]
+},
+{
+"d": "ECA",
+"s": "Ato infracional e medidas socioeducativas",
+"n": 1036,
+"q": [
+"Ato infracional"
+],
+"e": [
+{
+"c": 4,
+"t": "Prevenção",
+"r": "1hMs5MOiO71_ytwU0t_6yGZTznW3ta3WM",
+"x": "1A51V4l1GnaGL0KFh_VIm01NQMzcps0n5"
+}
 ]
 }
 ]
@@ -1202,27 +1549,36 @@ window.CAL_ATIVO = {
 "tipo": "estudo",
 "top": [
 {
-"d": "Direito Empresarial",
-"s": "Falência e recuperação judicial",
-"n": 80,
+"d": "Filosofia do Direito",
+"s": "Sistema jurídico",
+"n": 1037,
 "q": [
-"Falência",
-"Recuperação judicial e extrajudicial"
+"Teoria do ordenamento jurídico",
+"Teoria da norma jurídica"
+],
+"e": [
+{
+"c": 2,
+"t": "Sistema Jurídico",
+"r": "1LJ51rExLE4iXCQ8tBLWp3Tu5J3BfeGuC",
+"x": "16KJNfDOZEKbxbLkYlo3DkZ9lUOFqlOkt"
+}
 ]
 },
 {
-"d": "Direito do Trabalho",
-"s": "Remuneração e salário",
-"n": 81,
+"d": "Direito Processual do Trabalho",
+"s": "Partes e procuradores; tutela provisória",
+"n": 1038,
 "q": [
-"Remuneração e salário"
+"Jus postulandi e representação processual"
 ],
-"k": [
-41,
-45
-],
-"g": [
-"oab_000909"
+"e": [
+{
+"c": 9,
+"t": "Partes e Procuradores",
+"r": "1RY_VZhnaUd3Ek_XQrOdSRYIjU0ohIhSu",
+"x": "1EBAj263tQ-aeRI1hW2aA--4f3iRycEkj"
+}
 ]
 }
 ]
@@ -1234,33 +1590,56 @@ window.CAL_ATIVO = {
 "top": [
 {
 "d": "Direito Administrativo",
-"s": "Intervenção do Estado na propriedade",
-"n": 82,
+"s": "Licitações",
+"n": 1039,
 "q": [
-"Intervenção na propriedade"
+"Licitações"
+],
+"e": [
+{
+"c": 9,
+"t": "Licitações",
+"r": "1PX9K2X9BWYUxhjeCq0OICWLH9L6n8Zix",
+"x": "1ayU5zhg8tRsdbaoJB1E8yQbPeEr_0CaH"
+}
 ],
 "k": [
-54,
-64
+70,
+94
 ],
 "g": [
-"oab_001344"
+"oab_001107",
+"oab_001028",
+"oab_001348"
 ]
 },
 {
-"d": "Direito Processual Penal",
-"s": "Prisão, medidas cautelares e liberdade provisória",
-"n": 85,
+"d": "Direito Civil",
+"s": "Contratos: espécies comuns",
+"n": 1040,
 "q": [
-"Prisões e medidas cautelares"
+"Contratos"
+],
+"e": [
+{
+"c": 13,
+"t": "Direito dos Contratos: Espécies Comuns",
+"r": "1JAzSdT6eWg5dFsYQfwwTHvw3RUg2aZBe",
+"x": "1pSqgL-R_pgKvt0SIlIO4By_xldZCBTOg"
+},
+{
+"c": 14,
+"t": "Direito dos contratos: Espécies Residuais",
+"r": "1B1OQMWBa-rjkTjN3wGapwatuoftjRTJ6",
+"x": "1lLleR-exo8ivGtjYDPkr70vyr38i8Fi2"
+}
 ],
 "k": [
-32,
-38
+28,
+35
 ],
 "g": [
-"oab_001143",
-"oab_001222"
+"oab_001272"
 ]
 }
 ]
@@ -1268,26 +1647,11 @@ window.CAL_ATIVO = {
 {
 "d": "2026-11-28",
 "f": 1,
-"tipo": "estudo",
-"top": [
-{
-"d": "Direito do Consumidor",
-"s": "Responsabilidade civil nas relações de consumo",
-"n": 86,
-"q": [
-"Responsabilidade pelo fato do produto e do serviço",
-"Responsabilidade pelo vício do produto e do serviço"
-]
-},
-{
-"d": "Direito Eleitoral",
-"s": "Direitos políticos",
-"n": 86,
-"q": [
-"Registro de candidatura e inelegibilidades",
-"Alistamento e domicílio eleitoral"
-]
-}
+"tipo": "revisao",
+"semanal": true,
+"foco": [
+"Direito Administrativo",
+"Ética Profissional"
 ]
 },
 {
@@ -1305,36 +1669,48 @@ window.CAL_ATIVO = {
 "tipo": "estudo",
 "top": [
 {
-"d": "Direito Civil",
-"s": "Responsabilidade civil",
-"n": 87,
+"d": "Direito Tributário",
+"s": "Tributos",
+"n": 1041,
 "q": [
-"Responsabilidade civil"
+"Taxas e contribuições"
 ],
-"k": [
-36,
-43
-],
-"g": [
-"oab_000877"
+"e": [
+{
+"c": 4,
+"t": "Definição Legal de Tributo",
+"r": "1su9shRKo4DfxV5kOB9I_wBRWT2VXlsue",
+"x": "1a5KNNqmAzMpt5_l_y1OKVYWjQafsweHz"
+},
+{
+"c": 5,
+"t": "Espécies Tributárias",
+"r": "1RefRsrqaD1DgD7PX5Aas_sjpswybe4iV",
+"x": "1Kr6HUYq6xzWvcgumAPdJ_Mo2kCMtqRZX"
+}
 ]
 },
 {
 "d": "Ética Profissional",
-"s": "Processo disciplinar e relações com o cliente",
-"n": 88,
+"s": "Infrações e sanções disciplinares",
+"n": 1042,
 "q": [
-"Processo disciplinar",
-"Deveres e vedações éticas do advogado",
-"Relações com o cliente"
+"Infrações e sanções disciplinares"
+],
+"e": [
+{
+"c": 17,
+"t": "Infrações e Sanções Disciplinares",
+"r": "1c69WIxVPXjPjIZ2Oa24lALs-YnAyh12U",
+"x": "1X_36XGiZwdi1w8EroqPvPaLNRJ4kQvBr"
+}
 ],
 "k": [
-44,
-60
+38,
+43
 ],
 "g": [
-"oab_001237",
-"oab_000688"
+"oab_001157"
 ]
 }
 ]
@@ -1345,27 +1721,46 @@ window.CAL_ATIVO = {
 "tipo": "estudo",
 "top": [
 {
-"d": "Direito Previdenciário",
-"s": "Seguridade social, beneficiários e qualidade de segurado",
-"n": 89,
+"d": "Direito Financeiro",
+"s": "Orçamento público: leis orçamentárias",
+"n": 1043,
 "q": [
-"Segurados e filiação",
-"Qualidade de segurado e carência"
+"Leis orçamentárias e ciclo orçamentário",
+"Processo legislativo orçamentário"
+],
+"e": [
+{
+"c": 3,
+"t": "Orçamento Público",
+"r": "1RQ5GysH5EAmauXEMbdI3vcaPIn4e9xcE",
+"x": "17bFwn7nMsLhG97Yax5Hw6uTKGR7rs_dv"
+}
 ]
 },
 {
-"d": "Direito Civil",
-"s": "Direitos reais: posse e propriedade",
-"n": 99,
+"d": "Direito Constitucional",
+"s": "Processo legislativo",
+"n": 1044,
 "q": [
-"Direitos reais"
+"Processo legislativo"
+],
+"e": [
+{
+"c": 14,
+"t": "Processo Legislativo",
+"r": "1UF3Oev3xi0NAIJC6fBCrrBac9vQEyOir",
+"x": "13yBbPvI-L-cIp3RE04qYh77g88AAGQOO"
+}
 ],
 "k": [
-44,
-53
+47,
+61
 ],
 "g": [
-"oab_000181"
+"oab_000779",
+"oab_000695",
+"oab_001006",
+"oab_001325"
 ]
 }
 ]
@@ -1376,19 +1771,43 @@ window.CAL_ATIVO = {
 "tipo": "estudo",
 "top": [
 {
-"d": "Direito Processual Penal",
-"s": "Citação, intimação e procedimentos",
-"n": 100,
+"d": "Direito Ambiental",
+"s": "EIA/RIMA, licenciamento e compensação ambiental",
+"n": 1045,
 "q": [
-"Citações e intimações",
-"Procedimentos"
+"Licenciamento ambiental"
+],
+"e": [
+{
+"c": 8,
+"t": "Licenciamento Ambiental",
+"r": "1i-ADYyiEkRkZNPeJFyNdsG_y4bpIMwt3",
+"x": "1wa7e_vrTrYzY6QIT_csQaqha1nIe0jy_"
+}
+]
+},
+{
+"d": "Direito Processual Penal",
+"s": "Recursos",
+"n": 1046,
+"q": [
+"Recursos"
+],
+"e": [
+{
+"c": 11,
+"t": "Recursos",
+"r": "1V3wvciKJcw7sH_-RbcQdfzFaCQRZv3PP",
+"x": "1yaIhHa9FPakvUKLaUyOuO0fNo-97_Hl4"
+}
 ],
 "k": [
-39,
-44
+45,
+51
 ],
 "g": [
-"oab_000752"
+"oab_001218",
+"oab_000594"
 ]
 }
 ]
@@ -1399,19 +1818,36 @@ window.CAL_ATIVO = {
 "tipo": "estudo",
 "top": [
 {
-"d": "Direito Penal",
-"s": "Crimes contra o patrimônio e a dignidade sexual",
-"n": 101,
+"d": "Direito Empresarial",
+"s": "Falência",
+"n": 1047,
 "q": [
-"Crimes contra o patrimônio",
-"Crimes contra a dignidade sexual"
+"Falência"
 ],
-"k": [
-56,
-67
+"e": [
+{
+"c": 12,
+"t": "Falência e Recuperação",
+"r": "1QAeMV5NJxyjvh4gfgENg7HTJcmb8GSsC",
+"x": "1RlTfANn96UO3aFh7JbQY_ciFATNhLJK9"
+}
+]
+},
+{
+"d": "Direito do Consumidor",
+"s": "Responsabilidade do fornecedor",
+"n": 1048,
+"q": [
+"Responsabilidade pelo fato do produto e do serviço",
+"Responsabilidade pelo vício do produto e do serviço"
 ],
-"g": [
-"oab_000130"
+"e": [
+{
+"c": 4,
+"t": "Responsabilidade Civil dos Fornecedores",
+"r": "1XxswpKQY64e_gWh08caCj-XgKvLQo4lh",
+"x": "1W3lyaLAWKxSFbrIkZ3a6ZgA813xyw4J7"
+}
 ]
 }
 ]
@@ -1422,38 +1858,48 @@ window.CAL_ATIVO = {
 "tipo": "estudo",
 "top": [
 {
-"d": "Direito Tributário",
-"s": "Impostos federais, estaduais e municipais",
-"n": 102,
+"d": "Direito Penal",
+"s": "Crimes contra o patrimônio",
+"n": 1049,
 "q": [
-"Impostos em espécie"
+"Crimes contra o patrimônio"
+],
+"e": [
+{
+"c": 25,
+"t": "Dos Crimes Contra o Patrimônio",
+"r": "1KasPa4udNc-CkWRYRCWcKivGSVEYhSMn",
+"x": "1CqRI4aa0GsgfDCw7y4ipncpEhzkt11ot"
+}
 ],
 "k": [
-53,
-66
+56,
+67
 ],
 "g": [
-"oab_001024",
-"oab_001102",
-"oab_000628",
-"oab_000630",
-"oab_001020",
-"oab_001180"
+"oab_000130"
 ]
 },
 {
-"d": "Direito Processual do Trabalho",
-"s": "Execução trabalhista",
-"n": 102,
+"d": "Direito Eleitoral",
+"s": "Justiça Eleitoral e inelegibilidades",
+"n": 1050,
 "q": [
-"Execução trabalhista"
+"Registro de candidatura e inelegibilidades"
 ],
-"k": [
-35,
-41
-],
-"g": [
-"oab_001231"
+"e": [
+{
+"c": 7,
+"t": "Organização da Justiça Eleitoral",
+"r": "1Am8iwNCiM6LRE_llKVHz3mWqAYP-HOyz",
+"x": "1Am8iwNCiM6LRE_llKVHz3mWqAYP-HOyz"
+},
+{
+"c": 9,
+"t": "Inelegibilidades",
+"r": "1zupFAcYWGTdpROaVSq2dnZJdRo4a0mRH",
+"x": "1zupFAcYWGTdpROaVSq2dnZJdRo4a0mRH"
+}
 ]
 }
 ]
@@ -1461,23 +1907,11 @@ window.CAL_ATIVO = {
 {
 "d": "2026-12-05",
 "f": 1,
-"tipo": "estudo",
-"top": [
-{
-"d": "Direito Processual Civil",
-"s": "Recursos e ações autônomas de impugnação",
-"n": 103,
-"q": [
-"Recursos"
-],
-"k": [
-53,
-61
-],
-"g": [
-"oab_000738"
-]
-}
+"tipo": "revisao",
+"semanal": true,
+"foco": [
+"Direito Tributário",
+"Ética Profissional"
 ]
 },
 {
@@ -1495,17 +1929,43 @@ window.CAL_ATIVO = {
 "tipo": "estudo",
 "top": [
 {
-"d": "Direito do Trabalho",
-"s": "Extinção do contrato e direito coletivo",
-"n": 106,
+"d": "Filosofia do Direito",
+"s": "Hermenêutica",
+"n": 1051,
 "q": [
-"Extinção do contrato de trabalho",
-"FGTS e verbas rescisórias",
-"Direito coletivo do trabalho"
+"Hermenêutica jurídica",
+"Argumentação jurídica"
+],
+"e": [
+{
+"c": 4,
+"t": "Hermenêutica",
+"r": "14q-2-N-WZTmYRNOwZJSpX9vG587RRjkJ",
+"x": "1NRrCkb7JsD1d1vo5qnO56fI1bAhBiYlV"
+}
+]
+},
+{
+"d": "Direito Administrativo",
+"s": "Agentes públicos",
+"n": 1052,
+"q": [
+"Agentes públicos"
+],
+"e": [
+{
+"c": 12,
+"t": "Agentes Públicos",
+"r": "1Cj5MpQ_IjKyT6I2pgNWrLTvez4sOtRjy",
+"x": "1W7nL91womJJIYpHB5u5dsGN0j0tstLuE"
+}
 ],
 "k": [
-46,
-53
+36,
+45
+],
+"g": [
+"oab_001267"
 ]
 }
 ]
@@ -1516,43 +1976,43 @@ window.CAL_ATIVO = {
 "tipo": "estudo",
 "top": [
 {
-"d": "Direito Penal",
-"s": "Crimes contra a fé pública e a Administração Pública",
-"n": 107,
+"d": "Direitos Humanos",
+"s": "Convenção Americana sobre Direitos Humanos",
+"n": 1053,
 "q": [
-"Crimes contra a fé pública",
-"Crimes contra a Administração Pública"
+"Sistema interamericano de proteção"
 ],
-"k": [
-68,
-74
-],
-"g": [
-"oab_000130"
+"e": [
+{
+"c": 9,
+"t": "Convenções Interamericanas",
+"r": "1NOzsHuTR1NIdpVqS6VvnEIOyq0Oc-bxr",
+"x": "16NjI1AOMsJL5lbjR8eNKYJx6USJE91DR"
+}
 ]
 },
 {
-"d": "Direito Administrativo",
-"s": "Responsabilidade civil do Estado",
-"n": 108,
+"d": "Ética Profissional",
+"s": "Processo disciplinar",
+"n": 1054,
 "q": [
-"Responsabilidade civil do Estado"
+"Processo disciplinar"
+],
+"e": [
+{
+"c": 18,
+"t": "Processo Disciplinar",
+"r": "1znH8WkunFt8D_5TmaxHR1RIOajIKbtIp",
+"x": "1Jbz1rCdmzMaup2lCwXl6qe_RGxjhIhEM"
+}
 ],
 "k": [
-65,
-69
+44,
+60
 ],
 "g": [
-"oab_000947"
-]
-},
-{
-"d": "ECA",
-"s": "Tutela jurisdicional da criança e do adolescente",
-"n": 108,
-"q": [
-"Procedimentos e recursos no ECA",
-"Crimes e infrações administrativas no ECA"
+"oab_001237",
+"oab_000688"
 ]
 }
 ]
@@ -1563,51 +2023,49 @@ window.CAL_ATIVO = {
 "tipo": "estudo",
 "top": [
 {
-"d": "Direito Civil",
-"s": "Família: direito pessoal e patrimonial",
-"n": 116,
+"d": "Direito Constitucional",
+"s": "Controle concentrado",
+"n": 1055,
 "q": [
-"Direito de família"
+"Controle de constitucionalidade"
 ],
-"k": [
-54,
-64
-],
-"g": [
-"oab_001191"
-]
+"e": [
+{
+"c": 20,
+"t": "Controle Abstrato ou Concentrado",
+"r": "1cuQEiQ36bQ5cOO7OWhDcB5ZoxbENbIQM",
+"x": "1lXcY5McrFUdd4en0OpsfCOZFPMsFuJSL"
 }
-]
-},
-{
-"d": "2026-12-10",
-"f": 1,
-"tipo": "estudo",
-"top": [
-{
-"d": "Direito Tributário",
-"s": "Suspensão, extinção e exclusão do crédito",
-"n": 117,
-"q": [
-"Suspensão, extinção e exclusão do crédito",
-"Crédito tributário e lançamento"
 ],
 "k": [
-67,
-76
+72,
+78
 ],
 "g": [
-"oab_001341",
-"oab_000101"
+"oab_001090"
 ]
 },
 {
 "d": "Direito Processual do Trabalho",
 "s": "Recursos trabalhistas",
-"n": 120,
+"n": 1056,
 "q": [
 "Recursos trabalhistas",
 "Depósito recursal"
+],
+"e": [
+{
+"c": 19,
+"t": "Teoria Geral dos Recursos",
+"r": "13nitqxVy3NmGHCpd_dH2c7S-4dr7GrZo",
+"x": "1w3q8IHtu2_kLxwIc81ciCDz0fTD95zkG"
+},
+{
+"c": 20,
+"t": "Recursos em Espécie",
+"r": "1Bt3I6dHUNTHFhtXqL84aZL9X5ZH3DKXF",
+"x": "14lMWwTMsEvo8gHbhVTTE5aSgvn31u7aO"
+}
 ],
 "k": [
 47,
@@ -1620,26 +2078,97 @@ window.CAL_ATIVO = {
 ]
 },
 {
+"d": "2026-12-10",
+"f": 1,
+"tipo": "estudo",
+"top": [
+{
+"d": "Direito do Trabalho",
+"s": "Sistema remuneratório",
+"n": 1057,
+"q": [
+"Remuneração e salário"
+],
+"e": [
+{
+"c": 17,
+"t": "Sistema Remuneratório",
+"r": "11pgDR3iUKQ58S33gyuwDMi38LM__hDZM",
+"x": "1pik9EGvhDe7UpFNPTvDOdnMCUgLzMZ1Z"
+}
+],
+"k": [
+41,
+45
+],
+"g": [
+"oab_000909"
+]
+},
+{
+"d": "Direito Processual Civil",
+"s": "Cumprimento de sentença",
+"n": 1058,
+"q": [
+"Cumprimento de sentença"
+],
+"e": [
+{
+"c": 22,
+"t": "Cumprimento de Sentença",
+"r": "1X7b-mLSJbbteLURJ_ahyQMyyHWT8Oko8",
+"x": "1NGg_KfkJ4tr2a9qnrw3hp7gu-YNU_Ssl"
+}
+],
+"k": [
+45,
+52
+]
+}
+]
+},
+{
 "d": "2026-12-11",
 "f": 1,
 "tipo": "estudo",
 "top": [
 {
-"d": "Direito Administrativo",
-"s": "Licitações e contratos administrativos",
-"n": 121,
+"d": "Direito Processual Civil",
+"s": "Recursos",
+"n": 1059,
 "q": [
-"Licitações",
-"Contratos administrativos"
+"Recursos"
+],
+"e": [
+{
+"c": 24,
+"t": "Recursos",
+"r": "1z9zabtfo8hTUgOaPDPI9pVNKbY1EUtIc",
+"x": "1pMKpdXV0nF3HSFuDF-NFeFfeoF1IHChS"
+}
 ],
 "k": [
-70,
-94
+53,
+61
 ],
 "g": [
-"oab_001107",
-"oab_001028",
-"oab_001348"
+"oab_000738"
+]
+},
+{
+"d": "Direito Previdenciário",
+"s": "Contribuição previdenciária dos segurados",
+"n": 1060,
+"q": [
+"Segurados e filiação"
+],
+"e": [
+{
+"c": 7,
+"t": "Salário de Contribuição",
+"r": "1rhyH0u2pLJAVNPdQoCkqQE0HwN4fjRqs",
+"x": "15rwasSPoshvTJPM2GrveRiAGHJc1myvV"
+}
 ]
 }
 ]
@@ -1647,51 +2176,11 @@ window.CAL_ATIVO = {
 {
 "d": "2026-12-12",
 "f": 1,
-"tipo": "estudo",
-"top": [
-{
-"d": "Direito Processual do Trabalho",
-"s": "Ações especiais",
-"n": 122,
-"q": [
-"Ações especiais no processo do trabalho",
-"Dissídio coletivo e ação de cumprimento"
-],
-"k": [
-42,
-46
-],
-"g": [
-"oab_001392"
-]
-},
-{
-"d": "Direito Processual Civil",
-"s": "Procedimentos especiais",
-"n": 122,
-"q": [
-"Procedimentos especiais"
-],
-"k": [
-62,
-66
-],
-"g": [
-"oab_000970"
-]
-},
-{
-"d": "Direito Civil",
-"s": "Sucessões: sucessão em geral e legítima",
-"n": 123,
-"q": [
-"Direito das sucessões"
-],
-"k": [
-65,
-74
-]
-}
+"tipo": "revisao",
+"semanal": true,
+"foco": [
+"Direito Processual Civil",
+"Filosofia do Direito"
 ]
 },
 {
@@ -1709,38 +2198,39 @@ window.CAL_ATIVO = {
 "tipo": "estudo",
 "top": [
 {
-"d": "Ética Profissional",
-"s": "Estrutura da OAB, eleições e publicidade",
-"n": 124,
+"d": "Direito Ambiental",
+"s": "Responsabilidade ambiental",
+"n": 1061,
 "q": [
-"Órgãos da OAB",
-"Publicidade na advocacia"
+"Responsabilidade ambiental"
 ],
-"k": [
-50,
-59
-],
-"g": [
-"oab_000609",
-"oab_000685",
-"oab_001155",
-"oab_000840",
-"oab_000999"
+"e": [
+{
+"c": 10,
+"t": "Responsabilidade Ambiental",
+"r": "11b-19xMbid-MtqZp3xEXma3P5PsSxgji",
+"x": "11EmMZkCPUh1UPfUaUEGpcSEcoq7BPd8z"
+}
 ]
 },
 {
-"d": "Direito Constitucional",
-"s": "Controle de constitucionalidade",
-"n": 127,
+"d": "Direito Processual Civil",
+"s": "Execução",
+"n": 1062,
 "q": [
-"Controle de constitucionalidade"
+"Execução"
+],
+"e": [
+{
+"c": 20,
+"t": "Execução de Título Extrajudicial",
+"r": "1reXNv_2E90o59ip6UeLLGHWwYmextaqt",
+"x": "1_Zlei1qwYFgFgzTOd7Er5dKY1K7q6Bfr"
+}
 ],
 "k": [
-72,
-78
-],
-"g": [
-"oab_001090"
+45,
+52
 ]
 }
 ]
@@ -1751,15 +2241,42 @@ window.CAL_ATIVO = {
 "tipo": "estudo",
 "top": [
 {
-"d": "Direito Penal",
-"s": "Legislação penal especial",
-"n": 128,
+"d": "Direito Internacional",
+"s": "Conflito de leis no espaço",
+"n": 1063,
 "q": [
-"Legislação penal especial"
+"Direito internacional privado"
+],
+"e": [
+{
+"c": 7,
+"t": "Aplicação da Lei no Espaço e Jurisdição Internacional",
+"r": "1QXg66zHq337wPnv6CZI9ckDZ7c21JpyR",
+"x": "1KkoZWwua5FG3_rGmx1cghwBBbJm0rxCK"
+}
+]
+},
+{
+"d": "Direito Civil",
+"s": "Família: direito conjugal patrimonial",
+"n": 1064,
+"q": [
+"Direito de família"
+],
+"e": [
+{
+"c": 24,
+"t": "Direito de Família - Direito Conjugal Patrimonial",
+"r": "1v0JveCkYuNw96CyvXZ9xSgObm9XEFlEW",
+"x": "1qkJNLuUI348NNw8yeYjLdU_tQkdQIw33"
+}
 ],
 "k": [
-75,
-82
+54,
+64
+],
+"g": [
+"oab_001191"
 ]
 }
 ]
@@ -1770,21 +2287,51 @@ window.CAL_ATIVO = {
 "tipo": "estudo",
 "top": [
 {
-"d": "Direito Eleitoral",
-"s": "Partidos políticos",
-"n": 129,
+"d": "Direito Civil",
+"s": "Direito das sucessões",
+"n": 1065,
 "q": [
-"Partidos políticos e coligações",
-"Financiamento de campanha e prestação de contas"
+"Direito das sucessões"
+],
+"e": [
+{
+"c": 27,
+"t": "Direito das sucessões: Teoria Geral",
+"r": "13Po-GJJQrYUd0h3IkIBKj5I-lPO0U6Nw",
+"x": "1WDMrBHP6ej3Hc82vcuxcUnG7BsrbxC9q"
+},
+{
+"c": 28,
+"t": "Direito das sucessões: Sucessão Legítima",
+"r": "19QH3FqliWShAuKuDx2_NZ61e7wyO3ng7",
+"x": "15Bo7ByMaJk7_H6IseC008hmJ1phZdG-L"
+},
+{
+"c": 29,
+"t": "Direito das sucessões: Sucessão Testamentária",
+"r": "11e07LIVnTF9Yh_H4BybF2ayEzbszSfrU",
+"x": "1mJ4n0L9MX4HPSrHTUVyKUgi3rP-vDFZL"
+}
+],
+"k": [
+65,
+74
 ]
 },
 {
-"d": "Direito do Consumidor",
-"s": "Proteção contratual e práticas comerciais",
-"n": 130,
+"d": "Direito Previdenciário",
+"s": "Dependentes do RGPS",
+"n": 1066,
 "q": [
-"Proteção contratual",
-"Práticas comerciais e publicidade"
+"Pensão por morte e dependentes"
+],
+"e": [
+{
+"c": 9,
+"t": "Dependentes do Regime Geral de Previdência",
+"r": "1Zkn8kEE5JwqcyyTWo5E0aXihahlF8bkm",
+"x": "1vQV16wxkjI3ctkso0WJoorZE862PUVg0"
+}
 ]
 }
 ]
@@ -1795,30 +2342,48 @@ window.CAL_ATIVO = {
 "tipo": "estudo",
 "top": [
 {
-"d": "Direito Previdenciário",
-"s": "Carência, salário de benefício e aposentadorias",
-"n": 131,
+"d": "Direito Processual do Trabalho",
+"s": "Execução no processo do trabalho",
+"n": 1067,
 "q": [
-"Qualidade de segurado e carência",
-"Benefícios por incapacidade e reabilitação profissional",
-"Pensão por morte e dependentes"
+"Execução trabalhista"
+],
+"e": [
+{
+"c": 21,
+"t": "Liquidação de Sentença e Teoria Geral da Execução",
+"r": "1b6F4wU9t6zw3kYQfkun3cB_Ru-JyVNy4",
+"x": "1EUK8k1Sa70QKpG_e6oEifqwuFDjNH7LQ"
+},
+{
+"c": 22,
+"t": "Do Processo de Execução",
+"r": "1VIKMgrwBVQ3THEc2XnS0mUZDqSECHdZa",
+"x": "1ssB8HN2LamVG1unCbOaY4Xys9IMO98qK"
+}
+],
+"k": [
+35,
+41
+],
+"g": [
+"oab_001231"
 ]
 },
 {
-"d": "Direito Constitucional",
-"s": "Defesa do Estado e ordem social",
-"n": 134,
+"d": "Direito Financeiro",
+"s": "Despesa pública: precatórios e RPV",
+"n": 1068,
 "q": [
-"Defesa do Estado e das instituições democráticas",
-"Ordem social"
+"Despesa pública e execução orçamentária"
 ],
-"k": [
-79,
-90
-],
-"g": [
-"oab_001165",
-"oab_001249"
+"e": [
+{
+"c": 5,
+"t": "Despesa Pública",
+"r": "1yZL_A2l4eR9zj9S00Uf57JsXat1gxGBu",
+"x": "1ZiQNhY6cP29SFvxE5OQsYuqdZZJrlnfI"
+}
 ]
 }
 ]
@@ -1829,35 +2394,39 @@ window.CAL_ATIVO = {
 "tipo": "estudo",
 "top": [
 {
-"d": "Direito Processual Penal",
-"s": "Nulidades, recursos e ações de impugnação",
-"n": 135,
+"d": "Direito Eleitoral",
+"s": "Lei das Eleições e ações eleitorais",
+"n": 1069,
 "q": [
-"Nulidades",
-"Recursos"
+"Ações eleitorais e abuso de poder"
 ],
-"k": [
-45,
-51
-],
-"g": [
-"oab_001218",
-"oab_000594"
+"e": [
+{
+"c": 28,
+"t": "Ações Eleitorais",
+"r": "1UuBOzW9UIOLIZ8_P82wdVgR_Qe_K6PNL",
+"x": "1UuBOzW9UIOLIZ8_P82wdVgR_Qe_K6PNL"
+}
 ]
 },
 {
-"d": "Direito Administrativo",
-"s": "Serviços públicos, PPP e consórcios",
-"n": 136,
+"d": "Direito do Trabalho",
+"s": "Estabilidades",
+"n": 1070,
 "q": [
-"Serviços públicos"
+"Estabilidade e garantias de emprego"
+],
+"e": [
+{
+"c": 18,
+"t": "Estabilidades no Contrato de Trabalho",
+"r": "19QZff_x10AQv0K9acKeA4bgeTggfQQOM",
+"x": "16TV0BBmfVOYxqiPeBqLY_SlAYq0LgqQL"
+}
 ],
 "k": [
-95,
-102
-],
-"g": [
-"oab_000947"
+36,
+40
 ]
 }
 ]
@@ -1865,46 +2434,11 @@ window.CAL_ATIVO = {
 {
 "d": "2026-12-19",
 "f": 1,
-"tipo": "estudo",
-"top": [
-{
-"d": "Direito Civil",
-"s": "Sucessão testamentária",
-"n": 137,
-"q": [
-"Direito das sucessões"
-],
-"k": [
-75,
-79
-]
-},
-{
-"d": "Direito Tributário",
-"s": "Execução fiscal",
-"n": 137,
-"q": [
-"Processo tributário"
-],
-"k": [
-77,
-80
-],
-"g": [
-"oab_000941",
-"oab_001100",
-"oab_001339"
-]
-},
-{
-"d": "ECA",
-"s": "Ato infracional e medidas socioeducativas",
-"n": 138,
-"q": [
-"Ato infracional",
-"Medidas de proteção"
-]
-}
+"tipo": "revisao",
+"semanal": true,
+"foco": [
+"Direito Civil",
+"Direito Ambiental"
 ]
 },
 {

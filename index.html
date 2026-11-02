@@ -837,7 +837,7 @@ main { padding: 2rem 2.5rem 2.25rem; }
     <div class="section-label">Próximos dias</div>
     <div class="in-prox" id="in-prox"></div>
 
-    <div class="section-label">Conteúdo do VDE</div>
+    <div class="section-label">Conteúdo do plano</div>
     <section class="in-prog">
       <p id="in-prog-txt"></p>
       <div class="in-barra" id="in-barra" role="img"></div>
@@ -981,6 +981,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (x.tipo === 'prova') return 'Prova da 1ª fase · 13h às 18h';
     if (x.tipo === 'vespera') return 'Véspera: só flashcards leves';
     if (x.tipo === 'leve') return 'Dia leve: flashcards e 10 questões de Ética';
+    if (x.semanal) return 'Revisão semanal de ' + x.foco.map(curto).join(' e ');
     if (x.tipo === 'revisao') return (x.extra ? 'Revisão extra de ' : 'Revisão de ') + x.foco.map(curto).join(' e ');
     return '';
   };
@@ -1153,7 +1154,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const okN = ulist.filter(u => u.ok).length;
   const fim = window.PLANO ? PLANO.fimDoConteudo() : null;
   const progTxt = document.getElementById('in-prog-txt');
-  if (progTxt) progTxt.innerHTML = `<b>${okN} de ${ulist.length}</b> PDFs do dia estudados.` + (fim ? ` O último está previsto para ${fim.slice(8, 10)}/${fim.slice(5, 7)}; depois vem a revisão final até a prova.` : '');
+  if (progTxt) progTxt.innerHTML = `<b>${okN} de ${ulist.length}</b> conteúdos estudados (PDFs do VDE e temas do Estratégia).` + (fim ? ` O último está previsto para ${fim.slice(8, 10)}/${fim.slice(5, 7)}; depois vem a revisão final até a prova.` : '');
   const barra = document.getElementById('in-barra');
   if (barra) {
     barra.setAttribute('aria-label', `${okN} de ${ulist.length} PDFs estudados`);

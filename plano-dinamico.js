@@ -1,7 +1,7 @@
 // Calendário que se reorganiza quando Julia adianta conteúdo.
 // Carregar logo depois de calendario-ativo.js: reescreve CAL_ATIVO.dias da fase 1 em memória.
 //
-// O plano fixo vira uma fila de conteúdos (n = DIA do VDE, na ordem do calendário). Adiantar grava
+// O plano fixo vira uma fila de conteúdos (n = DIA do VDE ou tema do Estratégia, n ≥ 1001, na ordem do calendário). Adiantar grava
 // em oab_adiantado_v1 {n: data em que foi estudado}; o resto da fila anda para trás (ver aplicar).
 (function () {
   var CAL = window.CAL_ATIVO; if (!CAL) return;
@@ -39,7 +39,8 @@
   function aplicar() {
     var adi = ler(), porData = {};
     Object.keys(adi).forEach(function (n) { if (POR_N[n]) (porData[adi[n]] = porData[adi[n]] || []).push(POR_N[n]); });
-    var fila = FILA.filter(function (u) { return !adi[u.n]; }), k = 0;
+    // duas filas: VDE até 01/11 e Estratégia (n ≥ 1001) a partir de 02/11 — uma não invade a outra
+    var filas = [0, 1].map(function (e) { return FILA.filter(function (u) { return !adi[u.n] && (u.n >= 1001 ? 1 : 0) === e; }); }), ks = [0, 0];
     var vistos = {};
     DATA_DE = {};
     Object.keys(adi).forEach(function (n) { DATA_DE[n] = adi[n]; });
@@ -53,8 +54,8 @@
         }
         return y;
       }
-      var us = [];
-      for (var i = 0; i < VAGAS[x.d] && k < fila.length; i++) { DATA_DE[fila[k].n] = x.d; us.push(fila[k++]); }
+      var us = [], e = x.d >= '2026-11-02' ? 1 : 0, fila = filas[e];
+      for (var i = 0; i < VAGAS[x.d] && ks[e] < fila.length; i++) { DATA_DE[fila[ks[e]].n] = x.d; us.push(fila[ks[e]++]); }
       us = us.concat(porData[x.d] || []);
       if (us.length) {
         y.top = [];

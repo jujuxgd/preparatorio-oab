@@ -163,6 +163,7 @@
     if (x.tipo === 'prova') return 'Prova da 1ª fase, 13h às 18h';
     if (x.tipo === 'vespera') return 'Véspera: só flashcards leves';
     if (x.tipo === 'leve') return 'Dia leve: flashcards e 10 questões de Ética';
+    if (x.semanal) return 'Revisão semanal + descanso: flashcards, caderno e questões de ' + x.foco.map(S.curto).join(' e ');
     if (x.tipo === 'revisao') return (x.extra ? 'Revisão extra de ' : 'Revisão de ') + x.foco.map(S.curto).join(' e ') + (x.sim ? (x.sim.modo === 'completo' ? ', com simulado completo' : ', com simulado de 20 questões') : '');
     return '';
   }
@@ -225,7 +226,7 @@
     if (x.adiantado) h += '<p class="ca-adi">Você adiantou conteúdo para este dia.</p>';
     if (x.top && x.tipo !== 'simulado') h += temas(x).map(function (t) {
       return '<div class="ca-it">' + chip(t.d) + '<span class="tx">' + esc(t.s) + '</span>' +
-        (t.n != null ? '<small>PDF do Dia ' + t.n + ' do VDE' + (t.k ? ' · DICAS ' + t.k[0] + ' a ' + t.k[1] + ' do Gabaritaço' : '') + '</small>' : '') + '</div>';
+        (t.n != null ? '<small>' + (t.e ? 'Estratégia · ' + t.e.map(function (c) { return 'Cap. ' + c.c + ' ' + c.t; }).join(', ') : 'PDF do Dia ' + t.n + ' do VDE') + (t.k ? ' · DICAS ' + t.k[0] + ' a ' + t.k[1] + ' do Gabaritaço' : '') + '</small>' : '') + '</div>';
     }).join('');
     else h += '<div class="ca-it"><span class="tx">' + esc(tipoTxt(x)) + '</span></div>';
     h += '<a class="btn btn-primary" href="hoje.html?data=' + sel + '">Abrir este dia</a>';
