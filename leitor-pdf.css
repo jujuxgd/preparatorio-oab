@@ -74,8 +74,8 @@
 .lp-pop textarea{width:100%;min-height:70px;font:inherit;font-size:.82rem;border:1px solid var(--line);border-radius:var(--radius-sm);padding:.5rem;background:var(--bg);color:var(--ink);resize:vertical;box-sizing:border-box}
 .lp-pop-acoes{display:flex;justify-content:flex-end;gap:.4rem;margin-top:.5rem}
 .lp-pop-acoes .btn{font-size:.74rem;padding:.35rem .8rem}
-.lp-caixa .lp-corpo{max-height:min(78vh,1000px);overflow:auto;overscroll-behavior:contain;border-radius:var(--radius);background:var(--bg-soft,var(--bg));padding:12px}
-.lp-caixa .lp-lista{top:0;max-height:calc(min(78vh,1000px) - 24px)}
+.lp-caixa .lp-corpo{max-height:calc(100vh - 150px);max-height:calc(100svh - 150px);overflow:auto;overscroll-behavior:contain;border-radius:var(--radius);background:var(--bg-soft,var(--bg));padding:12px}
+.lp-caixa .lp-lista{top:0;max-height:calc(100svh - 174px)}
 @media (max-width:640px){
   .lp.lp-caixa .lp-corpo{padding:0;background:none;border-radius:0}
   .lp-rola{padding:.4rem .3rem}

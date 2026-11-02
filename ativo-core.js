@@ -1,9 +1,9 @@
 // Revisão ativa (a partir de 12/10/2026): flashcards das Revisões VDE com "sei"/"errei".
 // Usado por: sessao-core.js (hoje.html, revisar.html, calendario.html, painel-erros.html)
 //
-// Regra de cada cartão (estado em oab_fc_estado_v1): ver responder() — errei/difícil/bom/fácil.
+// Regra de cada cartão (estado em oab_fc_estado_v2 — zerado em 02/11/2026 com a troca para o Estratégia; o v1 fica guardado): ver responder() — errei/difícil/bom/fácil.
 (function () {
-  var K_FC = 'oab_fc_estado_v1';
+  var K_FC = 'oab_fc_estado_v2';
   var K_QPT = 'oab_ativo_questoes_por_topico';
   var ESCADA = [3, 7, 15];
   var VESPERA = '2027-01-09';
