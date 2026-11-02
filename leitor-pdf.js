@@ -574,6 +574,19 @@
       if (tiroQ && h) h += '<p class="lp-tx-nota">As questões comentadas deste capítulo ficam em “Questões do dia”.</p>';
       alvo.innerHTML = '<div class="lp-texto">' + (h || '<p class="lp-vazio">Este PDF não tem texto (é escaneado). Use o modo PDF.</p>') + '</div>';
       alvo.querySelectorAll('.lp-tx-fig').forEach(function (f) { f.addEventListener('click', function () { f.classList.toggle('grande'); }); });
+      // acabamento de leitura: número do título em destaque; artigo de lei e aviso ganham o seu tipo de caixa
+      alvo.querySelectorAll('.lp-texto h3').forEach(function (h) {
+        var no = h.firstChild; if (!no || no.nodeType !== 3) return;
+        var m = no.nodeValue.match(/^\s*(\d+(?:\.\d+)*)\.?\s+(\S[\s\S]*)$/); if (!m) return;
+        var sp = document.createElement('span'); sp.className = 'lp-tx-num'; sp.textContent = m[1];
+        no.nodeValue = m[2]; h.insertBefore(sp, no); h.classList.add('com-num');
+      });
+      alvo.querySelectorAll('.lp-texto p:not(.lp-tx-nota)').forEach(function (pp) {
+        if (pp.closest('.lp-tx-caixa')) return;
+        var t = (pp.textContent || '').trim();
+        if (t.length > 25 && /^[“"]?(Art\.|Arts\.|§|Parágrafo único|CLT\.|CPC\.|CF\/88\.|CC\.|CP\.|CPP\.|CTN\.|Lei n)/.test(t)) pp.classList.add('lp-tx-lei');
+        else if (/^(Atenção|Dica para|Dica:|Importante|Lembre|Pegadinha|Cuidado|Observação|Obs\.?:)/i.test(t)) pp.classList.add('lp-tx-dica');
+      });
     });
   };
   // Desenha a página num canvas fora da tela e devolve os blocos na ordem de leitura: linhas de texto (com cor e
