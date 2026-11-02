@@ -104,7 +104,7 @@ aplicarFonte();
       '<div class="tn-rule" aria-hidden="true"></div>' +
       '<nav class="tn-links" aria-label="Principal">' + links + '<span class="tn-ink" aria-hidden="true"></span></nav>' +
       '<div class="tn-end">' +
-      '<div class="tn-fase" role="group" aria-label="Fase do exame"><button type="button" data-fase="1"' + (FASE === 1 ? ' class="on"' : '') + '>1ª<span class="so-pc"> fase</span></button>' +
+      '<div class="tn-fase' + (P === 'index.html' || FASE === 2 ? ' visivel' : '') + '" role="group" aria-label="Fase do exame"><button type="button" data-fase="1"' + (FASE === 1 ? ' class="on"' : '') + '>1ª<span class="so-pc"> fase</span></button>' +
       '<button type="button" data-fase="2"' + (FASE === 2 ? ' class="on"' : '') + '>2ª<span class="so-pc"> fase</span></button></div>' +
       '<div class="tn-count"><span class="lbl">' + (FASE === 2 ? '2ª fase em' : 'Prova em') + '</span><span class="val"><b>' + d + '</b> dias</span></div>' +
       '<button class="tn-icon tn-fonte" type="button" title="Tamanho do texto" aria-label="Tamanho do texto">Aa</button>' +
