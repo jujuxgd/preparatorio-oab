@@ -454,6 +454,14 @@ Prova prático-profissional do OAB 48 em **28/02/2027** (cronograma da OAB). Jul
   do PDF (`.lp-tx-caixa`) usam a cor de destaque. No celular o bloco do leitor fica com as mesmas margens dos outros cartões (clara = `--rose-soft`, escura = `--rose-deep`). Texto colorido do PDF no modo texto (`.lp-tx-cor`) usa a cor de destaque do Perfil. `hoje.html`
   carrega sessao/leitor/calendário com `?v=` para não pegar CSS/JS velho do cache (antes, rolar a página com outra aba aberta salvava a última página). Conteúdo do dia sem a linha "Cap. N · título".
 
+
+- **Títulos do modo texto (03/11/2026):** antes, frases normais viravam título nos capítulos com muitas questões comentadas (letra de 9pt):
+  o "corpo" era a moda dos caracteres (9pt) e a letra de 12pt parecia grande e em negrito (a tinta era comparada com a fonte mais comum da
+  página). Agora: corpo = **maior tamanho com ≥ 15% dos caracteres**; negrito por tinta só entre fontes **do mesmo tamanho**, com
+  estatística acumulada do documento (`this._fs`); título = linha **curta (≤ 75), sem ponto final/vírgula, que não começa em minúscula,
+  travessão ou marcador** — `h3` se a letra for ≥ 1,25× o corpo, `h4` se a linha toda for negrito (≤ 60) e começar um bloco; título que termina
+  em palavra solta ("…dos", "…no") junta com a linha de baixo; ícones de fonte de ícone (U+E000–F8FF) e "Para ouvir ao áudio…" saem.
+
 ## 6. Design System
 
 ### Paleta de Cores (style.css :root)
