@@ -63,7 +63,6 @@ body.hoje .day-footer>div:last-child{opacity:.9}
 /* celular: o cartão do dia ocupa uma faixa curta e o conteúdo aparece já na primeira tela
    (data só no cabeçalho; cronômetro e "Estudei hoje" lado a lado) */
 @media(max-width:640px){
- body.hoje main{padding-top:1rem!important}
  body.hoje .day-hero{display:grid!important;grid-template-columns:1fr auto!important;align-items:center;gap:.7rem .6rem!important;padding:.85rem 1rem!important}
  body.hoje .day-number-big{display:none!important}
  body.hoje .day-info{grid-column:1/-1}

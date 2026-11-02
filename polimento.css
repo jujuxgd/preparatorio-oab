@@ -6,34 +6,35 @@
 :root:not([data-theme="dark"]) { --ink-faded: #7F7067; }
 
 /* rótulos e "cabeçalhinhos" em texto normal */
-html body :is(.card-eyebrow, .ss-eb, .adi-eb, .r40-eb, .f2-eb, .eyebrow, .leitura .eyebrow, .totais-label, .sim-label, .res-selo, .r40-tag, .fc-tag,
+html body:not(.home) :is(.card-eyebrow, .ss-eb, .adi-eb, .r40-eb, .f2-eb, .eyebrow, .leitura .eyebrow, .totais-label, .sim-label, .res-selo, .r40-tag, .fc-tag,
   .cron-rot, .tl-left, .home-quote .quote-author, .ss-top-cab .mat, .ss-bloco h3 .n, .streak-pill .label, .nav-section-label, .field-label,
   .ju-modal-field label, .section-label, .logo .subtitle) {
   text-transform: none !important; letter-spacing: 0 !important; font-size: max(.76rem, 1em);
 }
-html body :is(.cal-sem h4, .pn-lin.cab, .r40-lin.cab, .f2-sem h3, .cfg-bloco h2, .res-tabela h2, .prog-col h4, .mood-strip h4, .ex-v, .resumo-peg strong, .qr-hist-table th) {
+html body:not(.home) :is(.cal-sem h4, .pn-lin.cab, .r40-lin.cab, .f2-sem h3, .cfg-bloco h2, .res-tabela h2, .prog-col h4, .mood-strip h4, .ex-v, .resumo-peg strong, .qr-hist-table th) {
   text-transform: none !important; letter-spacing: 0 !important;
 }
 
 /* demais rótulos pequenos das telas (estatísticas, erros, simulado, início, perfil…): texto normal e tamanho legível */
-html body :is(.config-card-label, .countdown .label, .dia-label, .dia-tag, .donut-inner .lbl, .error-stat-card .label, .error-tip .lbl, .fact-card .eyebrow,
+html body:not(.home) :is(.config-card-label, .countdown .label, .dia-label, .dia-tag, .donut-inner .lbl, .error-stat-card .label, .error-tip .lbl, .fact-card .eyebrow,
   .favorita-card .badge .lbl, .favorita-card .eyebrow, .filter-bar .label, .gabarito .label, .hero .quote-author, .highlight-bar .label, .resultado-badge,
   .revisao-preview-item .when, .sim-card-type, .sim-label, .stat-big .label, .today-stat .lbl, .today-tag, .wrapped-card .eyebrow, .wrapped-stat .l,
   .resumo-label, .cf-rot, .pomodoro-status, .day-number-big .month, .section-label) {
   text-transform: none !important; letter-spacing: 0 !important; font-size: .78rem !important;
 }
-html body :is(label, .q-label, .form-label, .form-group label, .sim-field label, .motivo-group label, .error-head, .questao-head, .checklist-group-header, .callout .icon-label) {
+html body:not(.home) :is(label, .q-label, .form-label, .form-group label, .sim-field label, .motivo-group label, .error-head, .questao-head, .checklist-group-header, .callout .icon-label) {
   text-transform: none !important; letter-spacing: 0 !important;
 }
 
 /* título e botão de ação não podem encostar um no outro (ex.: "Caderno de erros" + "Novo registro") */
-.topbar { gap: .8rem 1.2rem; flex-wrap: wrap; }
-.topbar-actions { margin-left: auto; }
+body:not(.home) .topbar { gap: .8rem 1.2rem; flex-wrap: wrap; }
+body:not(.home) .topbar-actions { margin-left: auto; }
 
 /* data/subtítulo de página: vira linha de apoio embaixo do título (antes era um rótulo em caixa-alta em cima) */
-.page-title { display: flex; flex-direction: column; }
-.page-title h1 { order: 1; text-wrap: balance; }
-.page-title .breadcrumb {
+body:not(.home) .page-title { display: flex; flex-direction: column; padding-top: 1.5rem; }
+body:not(.home) .page-title > :not(h1):not(.breadcrumb) { order: 3; }
+body:not(.home) .page-title h1 { order: 1; text-wrap: balance; }
+body:not(.home) .page-title .breadcrumb {
   order: 2; text-transform: none !important; letter-spacing: 0 !important;
   font: 500 .95rem/1.4 Inter, sans-serif !important; color: var(--ink-soft) !important; margin: .1rem 0 0 !important;
 }
