@@ -1206,19 +1206,20 @@
       if (a === 'mapas') montarMapas();
     }
   }
-  // Mapa mental da matéria (PDF do Drive, sem modo texto): uma matéria do dia por vez
+  // Mapa mental: só as páginas do tema do dia (mm = [de, até] no calendário), no leitor de PDF (escurece no modo escuro), sem modo texto
   function montarMapas() {
     var el = document.getElementById('mm-area'), M = window.MAPAS_MENTAIS || {};
-    var ds = S.disciplinasDoDia().filter(function (d) { return M[d]; });
-    if (!ds.length) { el.innerHTML = '<p class="ss-vazio" style="margin:0">Sem mapa mental para as matérias deste dia.</p>'; return; }
+    var ts = (DIA && DIA.top ? DIA.top : []).filter(function (t) { return M[t.d] && t.mm; });
+    if (!ts.length) { el.innerHTML = '<p class="ss-vazio" style="margin:0">Hoje não tem mapa mental do tema. Os mapas aparecem nos dias de conteúdo.</p>'; return; }
     function mostrar(i) {
-      var id = M[ds[i]];
-      el.innerHTML = (ds.length > 1 ? '<div class="est-bar"><div class="est-ver">' + ds.map(function (d, j) {
-          return '<button type="button" class="' + (i === j ? 'on' : '') + '" data-mm="' + j + '">' + esc(S.curto(d)) + '</button>';
-        }).join('') + '</div></div>' : '') +
-        '<div class="mm-topo"><span>Mapa mental · ' + esc(ds[i]) + '</span><a href="https://drive.google.com/file/d/' + id + '/view" target="_blank" rel="noopener">Abrir no Drive</a></div>' +
-        '<iframe class="mm-pdf" src="https://drive.google.com/file/d/' + id + '/preview" title="Mapa mental de ' + esc(ds[i]) + '" allow="autoplay"></iframe>';
+      var t = ts[i];
+      el.innerHTML = (ts.length > 1 ? '<div class="est-bar"><div class="est-ver">' + ts.map(function (x, j) {
+          return '<button type="button" class="' + (i === j ? 'on' : '') + '" data-mm="' + j + '">' + esc(S.curto(x.d)) + '</button>';
+        }).join('') + '</div></div>' : '') + '<h3 class="mm-tit">' + esc(S.curto(t.d) + ': ' + t.s) + '</h3><div class="mm-host"></div>';
       el.querySelectorAll('[data-mm]').forEach(function (b) { b.addEventListener('click', function () { mostrar(+b.dataset.mm); }); });
+      var h = el.querySelector('.mm-host');
+      if (window.LEITOR) LEITOR.montar(h, M[t.d], { caixa: true, de: t.mm[0], ate: t.mm[1], semTexto: true });
+      else h.innerHTML = '<iframe class="mm-pdf" src="https://drive.google.com/file/d/' + M[t.d] + '/preview"></iframe>';
     }
     mostrar(0);
   }

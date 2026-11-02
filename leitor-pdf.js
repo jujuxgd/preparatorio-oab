@@ -148,7 +148,7 @@
         '<button type="button" class="lp-i" data-a="mais" title="Mais opções" aria-label="Mais opções">⋯</button>' +
       '</span>' +
       '<div class="lp-menu lp-menu-mais" hidden>' +
-        '<button type="button" class="lp-so-pdf" data-a="texto"><span>Ler como texto</span><small>letra e margens ajustáveis, bom no celular</small></button>' +
+        (this.opts.semTexto ? '' : '<button type="button" class="lp-so-pdf" data-a="texto"><span>Ler como texto</span><small>letra e margens ajustáveis, bom no celular</small></button>') +
         '<button type="button" class="lp-so-texto" data-a="pdf"><span>Voltar ao PDF</span><small>com grifos</small></button>' +
         (this.opts.extras || []).map(function (x, i) { return '<button type="button" data-extra="' + i + '"><span>' + esc(x.t) + '</span>' + (x.sub ? '<small>' + esc(x.sub) + '</small>' : '') + '</button>'; }).join('') +
         '<button type="button" class="lp-so-pdf" data-a="area"><span>Grifar área</span><small>arraste um retângulo (PDF escaneado)</small></button>' +
@@ -165,7 +165,7 @@
     raiz.querySelector('[data-a="col"]').classList.toggle('on', this.colunas);
     // o PDF é o padrão; o modo texto fica guardado por aparelho (chave nova: quem usava o modo texto antigo volta ao PDF)
     var txtSalvo = null; try { txtSalvo = localStorage.getItem('oab_lp_modo'); } catch (e) {}
-    this.texto = txtSalvo === 'texto';
+    this.texto = txtSalvo === 'texto' && !this.opts.semTexto;
     function marcarModo() { raiz.classList.toggle('lp-modo-texto', self.texto); }
     marcarModo();
     this.ajustesTexto();
@@ -356,6 +356,11 @@
     }).then(function (r) {
       if (vez !== self._vez) return;
       var pgs = r[0], divs = r[1];
+      var corpo = self.raiz.querySelector('.lp-corpo'), altCaixa = 0;
+      if (window.innerWidth > 900 && (self.opts.caixa || self.raiz.classList.contains('lp-cheia'))) {
+        altCaixa = self.raiz.classList.contains('lp-cheia') ? corpo.clientHeight : parseFloat(getComputedStyle(corpo).maxHeight) || 0;
+        altCaixa = Math.max(0, altCaixa - 28);
+      }
       pgs.forEach(function (pg, j) {
         var i = j + de - 1;
         var base = pg.getViewport({ scale: 1 });
@@ -363,7 +368,10 @@
         // página em duas colunas: cada coluna vira um quadro com a largura da tela (a esquerda inteira, depois a direita)
         var partes = s ? [[corte, s], [s, 1 - corte]] : [[corte, 1 - corte]];
         var maior = Math.max.apply(null, partes.map(function (p) { return p[1] - p[0]; }));
-        var escala = Math.min(self._largura, 1000) / (base.width * maior) * self.zoom;
+        var escala = Math.min(self._largura, 1000) / (base.width * maior);
+        // no PC a página inteira cabe na caixa (largura ou altura, o que limitar antes); no celular, largura da tela
+        if (altCaixa) escala = Math.min(escala, altCaixa / base.height);
+        escala *= self.zoom;
         var vp = pg.getViewport({ scale: escala }), els = [];
         partes.forEach(function (p, k) {
           var mold = document.createElement('div');
