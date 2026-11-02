@@ -231,6 +231,7 @@
     // escala ganhou 2 tamanhos menores no começo (02/11/2026): quem já tinha escolhido um tamanho continua no mesmo
     if (v.t != null && v.e == null) { v.t += 2; v.e = 2; }
     for (var k in TX_PADRAO) if (v[k] == null) v[k] = TX_PADRAO[k];
+    if (v.f === 'sepia') v.f = 'papel';
     return v;
   }
   var _fonte = false;
@@ -259,7 +260,7 @@
       '<div class="lp-aj"><span>Letra</span><div class="lp-seg"><button type="button" data-tx-t="-" aria-label="Letra menor">A−</button><button type="button" data-tx-t="+" aria-label="Letra maior">A+</button></div></div>' +
       grupo('Linhas', 'l', [[0, '<i class="lp-ic l0"></i>', 'Linhas juntas'], [1, '<i class="lp-ic l1"></i>', 'Linhas normais'], [2, '<i class="lp-ic l2"></i>', 'Linhas soltas']]) +
       '<div class="lp-aj"><span>Margem</span><input class="lp-rg" type="range" min="0" max="3" step="0.25" data-tx-m aria-label="Margem dos lados"></div>' +
-      grupo('Fundo', 'f', [['papel', '<i class="lp-bola papel"></i>', 'Papel'], ['sepia', '<i class="lp-bola sepia"></i>', 'Sépia'], ['noite', '<i class="lp-bola noite"></i>', 'Noite']]) +
+      grupo('Fundo', 'f', [['papel', '<i class="lp-bola papel"></i>', 'Papel'], ['noite', '<i class="lp-bola noite"></i>', 'Noite']]) +
       grupo('Fonte', 's', [['serif', '<span class="lp-fs">Serifa</span>'], ['sans', '<span class="lp-fn">Sem serifa</span>']]);
     // margem livre: o deslizador muda na hora, em todos os leitores abertos
     aj.addEventListener('input', function (e) {
