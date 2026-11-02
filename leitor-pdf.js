@@ -225,7 +225,7 @@
   };
   // Ajustes do modo texto (só deste aparelho): tamanho da letra, espaço entre linhas, margem, fundo e fonte.
   var K_TX = 'oab_lp_tx2', TX_PADRAO = { t: 0, l: 1, m: 0, f: 'papel', s: 'sans' };
-  var TX_TAM = [0.9, 1, 1.1, 1.22, 1.36, 1.5], TX_LIN = [1.45, 1.62, 1.85], TX_MARG = [['0', 'none'], ['.8rem', '52rem'], ['1.8rem', '40rem']];
+  var TX_TAM = [0.9, 1, 1.1, 1.22, 1.36, 1.5], TX_LIN = [1.45, 1.62, 1.85];
   function lerTx() { var v = {}; try { v = JSON.parse(localStorage.getItem(K_TX)) || {}; } catch (e) {} for (var k in TX_PADRAO) if (v[k] == null) v[k] = TX_PADRAO[k]; return v; }
   var _fonte = false;
   function carregarFonte() {
@@ -235,14 +235,15 @@
     document.head.appendChild(l);
   }
   Leitor.prototype.aplicarTx = function () {
-    var v = lerTx(), r = this.raiz, m = TX_MARG[v.m] || TX_MARG[1];
+    var v = lerTx(), r = this.raiz, mp = Math.max(0, Math.min(3, +v.mp || 0));
     if (v.s === 'serif') carregarFonte();
     r.style.setProperty('--tx-tam', (TX_TAM[v.t] || 1) + 'rem');
     r.style.setProperty('--tx-lin', TX_LIN[v.l] || 1.7);
-    r.style.setProperty('--tx-pad', m[0]); r.style.setProperty('--tx-larg', m[1]);
+    r.style.setProperty('--tx-pad', mp + 'rem'); r.style.setProperty('--tx-larg', 'none');
     r.dataset.txFundo = v.f; r.dataset.txFonte = v.s;
     var aj = r.querySelector('.lp-menu-aj'); if (!aj) return;
     aj.querySelectorAll('[data-tx]').forEach(function (b) { var p = b.dataset.tx.split(':'); b.classList.toggle('on', String(v[p[0]]) === p[1]); });
+    var rg = aj.querySelector('[data-tx-m]'); if (rg && document.activeElement !== rg) rg.value = mp;
     aj.querySelector('[data-tx-t="-"]').disabled = v.t <= 0; aj.querySelector('[data-tx-t="+"]').disabled = v.t >= TX_TAM.length - 1;
   };
   Leitor.prototype.ajustesTexto = function () {
@@ -251,9 +252,16 @@
     aj.innerHTML =
       '<div class="lp-aj"><span>Letra</span><div class="lp-seg"><button type="button" data-tx-t="-" aria-label="Letra menor">A−</button><button type="button" data-tx-t="+" aria-label="Letra maior">A+</button></div></div>' +
       grupo('Linhas', 'l', [[0, '<i class="lp-ic l0"></i>', 'Linhas juntas'], [1, '<i class="lp-ic l1"></i>', 'Linhas normais'], [2, '<i class="lp-ic l2"></i>', 'Linhas soltas']]) +
-      grupo('Margem', 'm', [[0, 'Estreita'], [1, 'Média'], [2, 'Larga']]) +
+      '<div class="lp-aj"><span>Margem</span><input class="lp-rg" type="range" min="0" max="3" step="0.25" data-tx-m aria-label="Margem dos lados"></div>' +
       grupo('Fundo', 'f', [['papel', '<i class="lp-bola papel"></i>', 'Papel'], ['sepia', '<i class="lp-bola sepia"></i>', 'Sépia'], ['noite', '<i class="lp-bola noite"></i>', 'Noite']]) +
       grupo('Fonte', 's', [['serif', '<span class="lp-fs">Serifa</span>'], ['sans', '<span class="lp-fn">Sem serifa</span>']]);
+    // margem livre: o deslizador muda na hora, em todos os leitores abertos
+    aj.addEventListener('input', function (e) {
+      if (!e.target.matches('[data-tx-m]')) return;
+      var v = lerTx(); v.mp = +e.target.value;
+      try { localStorage.setItem(K_TX, JSON.stringify(v)); } catch (er) {}
+      VIEWERS.forEach(function (x) { if (x.raiz.isConnected) x.aplicarTx(); });
+    });
     aj.addEventListener('click', function (e) {
       var b = e.target.closest('[data-tx], [data-tx-t]'); if (!b) return;
       var v = lerTx();
