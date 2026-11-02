@@ -44,3 +44,12 @@ html body :is(label, .q-label, .form-label, .form-group label, .sim-field label,
 :is(a, button, [role="button"], input, select, textarea, summary):focus-visible { outline: 2px solid var(--rose-600, var(--rose)); outline-offset: 2px; }
 @media (hover: none) { .btn:hover, .chip:hover, .mat-chip:hover { transform: none; } }
 @media (prefers-reduced-motion: reduce) { .btn, .btn-primary, .btn-ghost, .chip, .mat-chip { transition: none !important; } .btn:active, .chip:active { transform: none; } }
+
+/* ── Movimento (revisão com a skill do Emil Kowalski) ──
+   1) transições de hover/estado: 300 ms em ease-in-out → 200 ms em ease-out forte (resposta imediata, sem arrasto);
+   2) a entrada de cada página rodava a cada navegação (barra de baixo é ação frequente): mais curta e quase sem deslocamento;
+   3) as 4 manchas desfocadas do fundo animavam o tempo todo (bateria e quadros no celular): ficam paradas em tela pequena. */
+:root { --transition: 0.2s cubic-bezier(0.23, 1, 0.32, 1); }
+@keyframes pageEnter { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+main { animation: pageEnter 0.18s cubic-bezier(0.23, 1, 0.32, 1); }
+@media (max-width: 900px), (hover: none) { .aurora-blob { animation: none !important; } }
