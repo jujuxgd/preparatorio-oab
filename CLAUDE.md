@@ -413,6 +413,16 @@ Prova prático-profissional do OAB 48 em **28/02/2027** (cronograma da OAB). Jul
   pedaços só se houver vão. Cabeçalho/rodapé repetidos em ≥40% das páginas e nº de página saem. Respeita o "Aa". Tudo no aparelho
   — nada do PDF entra no repo.
 
+
+- **Leitor redesenhado (02/11/2026, pedido de Julia — "muitas opções"):** barra de uma linha só: `PDF | Texto` (PDF é o padrão),
+  ✎ grifos (só no PDF), **Aa** (só no Texto), ⛶ tela cheia e **⋯** (grifar área, uma coluna por vez, zoom, abrir no Drive).
+  Ajustes do modo texto em `oab_lp_tx` (só do aparelho): letra (6 tamanhos), linhas (3), margem (3), fundo papel/sépia/noite e fonte
+  Literata (serifa, Google Fonts) ou Inter. O "Aa" do topo não amplia mais o modo texto. Texto corrido entre páginas (parágrafo sem
+  pontuação final continua na página seguinte; marcador "p. N" discreto). PDFs impressos do navegador (Estratégia, fontes Type3 sem nome
+  útil): negrito pela tinta de cada fonte (≥ 1,25× a do corpo); corpo = tamanho com mais caracteres; título só se maior que o corpo
+  E em negrito (ou ≥ 1,6×), nunca começando em minúscula nem com mais de 110 caracteres; marcador "#" do Estratégia vira item com
+  bolinha; chamadas "pelo APP"/QR code/link, sumário com pontilhado e "n/16" saem (`LIXO`).
+
 ## 6. Design System
 
 ### Paleta de Cores (style.css :root)

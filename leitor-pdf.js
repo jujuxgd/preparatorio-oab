@@ -139,14 +139,23 @@
   Leitor.prototype.iniciar = function () {
     var self = this, raiz = this.raiz;
     raiz.classList.add('lp');
-    raiz.innerHTML = '<div class="lp-topo"><span class="lp-info">Carregando o PDF…</span>' +
-      '<span class="lp-acoes"><button type="button" class="lp-b" data-a="area" title="Para páginas escaneadas: arraste um retângulo para grifar">▭ Grifar área</button>' +
-      '<button type="button" class="lp-b" data-a="lista" title="Mostrar ou esconder a lista de grifos">✎ Grifos <b class="lp-ng">0</b></button>' +
-      '<button type="button" class="lp-b" data-a="zoom-" aria-label="Diminuir">−</button><span class="lp-zoom"></span><button type="button" class="lp-b" data-a="zoom+" aria-label="Aumentar">+</button>' +
-      '<button type="button" class="lp-b" data-a="texto" title="Mostra o texto do PDF como página normal, que se ajusta à tela (sem cores, imagens e grifos)">Aa Texto</button>' +
-      '<button type="button" class="lp-b" data-a="col" title="PDF em duas colunas: mostra uma coluna de cada vez, na largura da tela">▥ Colunas</button>' +
-      '<button type="button" class="lp-b" data-a="cheia">⛶ Tela cheia</button>' +
-      '<a class="lp-b" href="https://drive.google.com/file/d/' + this.arq + '/view" target="_blank" rel="noopener">Drive ↗</a></span></div>' +
+    raiz.innerHTML = '<div class="lp-topo">' +
+      '<div class="lp-modo" role="group" aria-label="Como ler"><button type="button" data-a="pdf">PDF</button><button type="button" data-a="texto">Texto</button></div>' +
+      '<span class="lp-info">Carregando…</span>' +
+      '<span class="lp-acoes">' +
+        '<button type="button" class="lp-i lp-so-pdf" data-a="lista" title="Seus grifos neste PDF" aria-label="Grifos">✎<b class="lp-ng">0</b></button>' +
+        '<button type="button" class="lp-i lp-so-texto" data-a="ajustes" title="Letra, espaço, margem e fundo" aria-label="Ajustes do texto">Aa</button>' +
+        '<button type="button" class="lp-i" data-a="cheia" title="Tela cheia" aria-label="Tela cheia">⛶</button>' +
+        '<button type="button" class="lp-i" data-a="mais" title="Mais opções" aria-label="Mais opções">⋯</button>' +
+      '</span>' +
+      '<div class="lp-menu lp-menu-mais" hidden>' +
+        '<button type="button" class="lp-so-pdf" data-a="area"><span>Grifar área</span><small>arraste um retângulo (PDF escaneado)</small></button>' +
+        '<button type="button" class="lp-so-pdf" data-a="col"><span>Uma coluna por vez</span><small>para PDF em duas colunas</small></button>' +
+        '<div class="lp-so-pdf lp-linha"><span>Zoom</span><button type="button" data-a="zoom-" aria-label="Diminuir">−</button><span class="lp-zoom"></span><button type="button" data-a="zoom+" aria-label="Aumentar">+</button></div>' +
+        '<a href="https://drive.google.com/file/d/' + this.arq + '/view" target="_blank" rel="noopener"><span>Abrir no Drive</span></a>' +
+      '</div>' +
+      '<div class="lp-menu lp-menu-aj" hidden></div>' +
+      '</div>' +
       '<div class="lp-corpo"><div class="lp-paginas"></div><aside class="lp-lista"></aside></div>';
     if (this.opts.caixa) { raiz.classList.add('lp-caixa'); this.opts.rolagem = raiz.querySelector('.lp-corpo'); }
     var colSalvo = null; try { colSalvo = localStorage.getItem('oab_lp_col'); } catch (e) {}
@@ -154,8 +163,16 @@
     raiz.querySelector('[data-a="col"]').classList.toggle('on', this.colunas);
     var txtSalvo = null; try { txtSalvo = localStorage.getItem('oab_lp_texto'); } catch (e) {}
     this.texto = txtSalvo === '1';
-    raiz.querySelector('[data-a="texto"]').classList.toggle('on', this.texto);
-    raiz.classList.toggle('lp-modo-texto', this.texto);
+    function marcarModo() {
+      raiz.querySelector('[data-a="texto"]').classList.toggle('on', self.texto);
+      raiz.querySelector('[data-a="pdf"]').classList.toggle('on', !self.texto);
+      raiz.classList.toggle('lp-modo-texto', self.texto);
+    }
+    marcarModo();
+    this.ajustesTexto();
+    function fecharMenus(exceto) { raiz.querySelectorAll('.lp-menu').forEach(function (m) { if (m !== exceto) m.hidden = true; }); raiz.querySelectorAll('[data-a="mais"],[data-a="ajustes"]').forEach(function (b) { b.classList.toggle('on', !!exceto && b.dataset.a === exceto.dataset.de); }); }
+    raiz.querySelector('.lp-menu-mais').dataset.de = 'mais'; raiz.querySelector('.lp-menu-aj').dataset.de = 'ajustes';
+    document.addEventListener('click', function (e) { if (!raiz.querySelector('.lp-topo').contains(e.target)) fecharMenus(null); });
     var zoomSalvo = parseFloat(localStorage.getItem('oab_lp_zoom3'));
     this.zoom = zoomSalvo >= 0.6 && zoomSalvo <= 3 ? zoomSalvo : 1;
     function mostrarZoom() { raiz.querySelector('.lp-zoom').textContent = Math.round(self.zoom * 100) + '%'; }
@@ -167,9 +184,13 @@
     mostrarZoom();
     raiz.querySelector('.lp-topo').addEventListener('click', function (e) {
       var b = e.target.closest('[data-a]'); if (!b) return;
-      if (b.dataset.a === 'area') { self.area = !self.area; b.classList.toggle('on', self.area); raiz.classList.toggle('modo-area', self.area); }
-      if (b.dataset.a === 'texto') {
-        self.texto = !self.texto; b.classList.toggle('on', self.texto); raiz.classList.toggle('lp-modo-texto', self.texto);
+      if (b.dataset.a === 'mais' || b.dataset.a === 'ajustes') {
+        var m = raiz.querySelector(b.dataset.a === 'mais' ? '.lp-menu-mais' : '.lp-menu-aj'), abrir = m.hidden;
+        fecharMenus(abrir ? m : null); m.hidden = !abrir; return;
+      }
+      if (b.dataset.a === 'area') { self.area = !self.area; b.classList.toggle('on', self.area); raiz.classList.toggle('modo-area', self.area); fecharMenus(null); }
+      if ((b.dataset.a === 'texto' && !self.texto) || (b.dataset.a === 'pdf' && self.texto)) {
+        self.texto = !self.texto; marcarModo(); fecharMenus(null);
         try { localStorage.setItem('oab_lp_texto', self.texto ? '1' : '0'); } catch (e) {}
         self.renderizar();
       }
@@ -190,7 +211,7 @@
     }).then(function (doc) {
       self.doc = doc;
       self.de = Math.max(1, self.opts.de || 1); self.ate = Math.min(doc.numPages, self.opts.ate || doc.numPages);
-      raiz.querySelector('.lp-info').textContent = (self.opts.de ? 'Páginas ' + self.de + '–' + self.ate + ' de ' + doc.numPages : doc.numPages + (doc.numPages === 1 ? ' página' : ' páginas')) + ' · selecione um trecho para grifar';
+      raiz.querySelector('.lp-info').textContent = self.opts.de ? 'p. ' + self.de + '–' + self.ate : doc.numPages + ' p.';
       return self.medirMargem().then(function () { return self.renderizar(); }).then(function () { self.voltarPosicao(); });
     }).then(function () {
       var rz; window.addEventListener('resize', function () { clearTimeout(rz); rz = setTimeout(function () { if (Math.abs(self._largura - self.largura()) > 40) self.renderizar(); }, 300); });
@@ -200,6 +221,47 @@
       raiz.innerHTML = '<p class="ss-vazio" style="margin:0 0 .5rem">Não deu para abrir o leitor com grifos agora — mostrando o PDF pelo Drive.</p>' +
         '<iframe class="vde-pdf" src="https://drive.google.com/file/d/' + self.arq + '/preview" allow="autoplay"></iframe>';
     });
+  };
+  // Ajustes do modo texto (só deste aparelho): tamanho da letra, espaço entre linhas, margem, fundo e fonte.
+  var K_TX = 'oab_lp_tx', TX_PADRAO = { t: 1, l: 1, m: 1, f: 'papel', s: 'serif' };
+  var TX_TAM = [0.9, 1, 1.1, 1.22, 1.36, 1.5], TX_LIN = [1.45, 1.62, 1.85], TX_MARG = [['.6rem', '42rem'], ['1.1rem', '36rem'], ['1.8rem', '31rem']];
+  function lerTx() { var v = {}; try { v = JSON.parse(localStorage.getItem(K_TX)) || {}; } catch (e) {} for (var k in TX_PADRAO) if (v[k] == null) v[k] = TX_PADRAO[k]; return v; }
+  var _fonte = false;
+  function carregarFonte() {
+    if (_fonte) return; _fonte = true;
+    var l = document.createElement('link'); l.rel = 'stylesheet';
+    l.href = 'https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&display=swap';
+    document.head.appendChild(l);
+  }
+  Leitor.prototype.aplicarTx = function () {
+    var v = lerTx(), r = this.raiz, m = TX_MARG[v.m] || TX_MARG[1];
+    if (v.s === 'serif') carregarFonte();
+    r.style.setProperty('--tx-tam', (TX_TAM[v.t] || 1) + 'rem');
+    r.style.setProperty('--tx-lin', TX_LIN[v.l] || 1.7);
+    r.style.setProperty('--tx-pad', m[0]); r.style.setProperty('--tx-larg', m[1]);
+    r.dataset.txFundo = v.f; r.dataset.txFonte = v.s;
+    var aj = r.querySelector('.lp-menu-aj'); if (!aj) return;
+    aj.querySelectorAll('[data-tx]').forEach(function (b) { var p = b.dataset.tx.split(':'); b.classList.toggle('on', String(v[p[0]]) === p[1]); });
+    aj.querySelector('[data-tx-t="-"]').disabled = v.t <= 0; aj.querySelector('[data-tx-t="+"]').disabled = v.t >= TX_TAM.length - 1;
+  };
+  Leitor.prototype.ajustesTexto = function () {
+    var self = this, aj = this.raiz.querySelector('.lp-menu-aj');
+    function grupo(nome, k, ops) { return '<div class="lp-aj"><span>' + nome + '</span><div class="lp-seg">' + ops.map(function (o) { return '<button type="button" data-tx="' + k + ':' + o[0] + '"' + (o[2] ? ' aria-label="' + o[2] + '"' : '') + '>' + o[1] + '</button>'; }).join('') + '</div></div>'; }
+    aj.innerHTML =
+      '<div class="lp-aj"><span>Letra</span><div class="lp-seg"><button type="button" data-tx-t="-" aria-label="Letra menor">A−</button><button type="button" data-tx-t="+" aria-label="Letra maior">A+</button></div></div>' +
+      grupo('Linhas', 'l', [[0, '<i class="lp-ic l0"></i>', 'Linhas juntas'], [1, '<i class="lp-ic l1"></i>', 'Linhas normais'], [2, '<i class="lp-ic l2"></i>', 'Linhas soltas']]) +
+      grupo('Margem', 'm', [[0, 'Estreita'], [1, 'Média'], [2, 'Larga']]) +
+      grupo('Fundo', 'f', [['papel', '<i class="lp-bola papel"></i>', 'Papel'], ['sepia', '<i class="lp-bola sepia"></i>', 'Sépia'], ['noite', '<i class="lp-bola noite"></i>', 'Noite']]) +
+      grupo('Fonte', 's', [['serif', '<span class="lp-fs">Serifa</span>'], ['sans', '<span class="lp-fn">Sem serifa</span>']]);
+    aj.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-tx], [data-tx-t]'); if (!b) return;
+      var v = lerTx();
+      if (b.dataset.txT) v.t = Math.max(0, Math.min(TX_TAM.length - 1, v.t + (b.dataset.txT === '+' ? 1 : -1)));
+      else { var p = b.dataset.tx.split(':'); v[p[0]] = isNaN(+p[1]) ? p[1] : +p[1]; }
+      try { localStorage.setItem(K_TX, JSON.stringify(v)); } catch (er) {}
+      VIEWERS.forEach(function (x) { if (x.raiz.isConnected) x.aplicarTx(); });
+    });
+    this.aplicarTx();
   };
   // margem branca dos lados (pelo texto das primeiras páginas): cortada para a página ganhar largura
   Leitor.prototype.medirMargem = function () {
@@ -235,7 +297,7 @@
     if (on) { this._rolagemAntes = this.opts.rolagem; this.opts.rolagem = corpo; } else this.opts.rolagem = this._rolagemAntes;
     raiz.classList.toggle('lp-cheia', on);
     document.documentElement.classList.toggle('lp-travada', on);
-    raiz.querySelector('[data-a="cheia"]').textContent = on ? '✕ Fechar' : '⛶ Tela cheia';
+    var bc = raiz.querySelector('[data-a="cheia"]'); bc.textContent = on ? '✕' : '⛶'; bc.setAttribute('aria-label', on ? 'Fechar tela cheia' : 'Tela cheia');
     if (on && !this._esc) {
       this._esc = function (e) { if (e.key === 'Escape' && raiz.classList.contains('lp-cheia')) self.telaCheia(false); };
       document.addEventListener('keydown', this._esc);
@@ -368,36 +430,41 @@
       pags.forEach(function (bl) { var v = {}; bl.forEach(function (l) { if (l.txt && !v[chave(l)]) { v[chave(l)] = 1; conta[chave(l)] = (conta[chave(l)] || 0) + 1; } }); });
       var rep = pags.length >= 3 ? Math.max(2, pags.length * 0.4) : 99;
       var freq = {}, corpo = 10;
-      pags.forEach(function (bl) { bl.forEach(function (l) { if (l.txt) { var t = Math.round(l.tam * 2) / 2; freq[t] = (freq[t] || 0) + 1; } }); });
+      pags.forEach(function (bl) { bl.forEach(function (l) { if (l.txt) { var t = Math.round(l.tam * 2) / 2; freq[t] = (freq[t] || 0) + l.txt.length; } }); });
       Object.keys(freq).forEach(function (t) { if (!freq[corpo] || freq[t] > freq[corpo]) corpo = +t; });
-      var h = '';
+      // texto corrido: o parágrafo que termina sem pontuação no fim da página continua na seguinte
+      var h = '', par = null, ant = null, caixa = null, marca = '';
+      function fecha() { if (par) { h += '<' + par.tag + (par.cls ? ' class="' + par.cls + '"' : '') + '>' + par.html + '</' + par.tag + '>'; par = null; } }
+      function fechaCaixa() { fecha(); if (caixa) { h += '</div>'; caixa = null; } }
       pags.forEach(function (bl, j) {
-        h += '<div class="lp-tx-pag"><span class="lp-tx-n">p. ' + (de + j) + '</span>';
-        var par = null, ant = null, caixa = null;
-        function fecha() { if (par) { h += '<' + par.tag + (par.cor ? ' style="color:' + par.cor + '"' : '') + '>' + par.html + '</' + par.tag + '>'; par = null; } }
-        function fechaCaixa() { fecha(); if (caixa) { h += '</div>'; caixa = null; } }
+        marca = '<span class="lp-tx-n" aria-hidden="true">p. ' + (de + j) + '</span>';
+        var primeira = true;
         bl.forEach(function (l) {
-          if (l.img) { fechaCaixa(); h += '<figure class="lp-tx-fig"><img src="' + l.img + '" alt="' + (l.tabela ? 'Tabela' : 'Figura') + ' da página ' + (de + j) + '" loading="lazy"><figcaption>' + (l.tabela ? 'Tabela' : 'Figura') + ' do PDF · toque para ampliar</figcaption></figure>'; ant = null; return; }
-          if (conta[chave(l)] >= rep || /^\d{1,3}$/.test(l.txt)) return;
+          if (l.img) { fechaCaixa(); h += marca + '<figure class="lp-tx-fig"><img src="' + l.img + '" alt="' + (l.tabela ? 'Tabela' : 'Figura') + ' da página ' + (de + j) + '" loading="lazy"><figcaption>' + (l.tabela ? 'Tabela' : 'Figura') + ' do PDF · toque para ampliar</figcaption></figure>'; marca = ''; ant = null; primeira = false; return; }
+          if (conta[chave(l)] >= rep || /^\d{1,3}(\s*\/\s*\d{1,3})?$/.test(l.txt) || /(?:\.\s?){6,}|…{3,}/.test(l.txt) || /^(Índice|Sumário)$/i.test(l.txt)) return;
           if ((l.bg || '') !== (caixa ? caixa.bg : '')) {
             fechaCaixa();
             if (l.bg) { caixa = { bg: l.bg }; h += '<div class="lp-tx-caixa' + (l.bgEscuro ? ' escura' : '') + '" style="--bx:' + l.bg + '">'; }
           }
-          var tag = l.tam >= corpo * 1.35 ? 'h3' : l.tam >= corpo * 1.12 ? 'h4' : 'p';
-          var novo = !par || par.tag !== tag || tag !== 'p' || (ant && (ant.y - l.y) > ant.tam * 1.9) || /^([-–•▪►✓→]|\d+[.)]\s|[a-z]\)\s)/.test(l.txt);
-          if (novo) { fecha(); par = { tag: tag, html: '', cor: l.corLinha }; } else par.html += ' ';
+          // título: letra maior que a do corpo e em negrito (ou bem maior); trecho longo é sempre parágrafo
+          var tag = l.txt.length > 110 || /^[a-zà-ú]/.test(l.txt) ? 'p' : l.tam >= corpo * 1.25 && (l.neg >= 0.6 || l.tam >= corpo * 1.6) ? 'h3' : l.tam >= corpo * 1.1 && l.neg >= 0.6 ? 'h4' : 'p';
+          var segue = primeira && par && par.tag === 'p' && tag === 'p' && !l.marca && !/[.:;!?)]\s*(<\/[a-z]+>)*$/.test(par.html);
+          var perto = ant && (ant.y - l.y) <= ant.tam * (tag === 'p' ? 1.9 : 1.6);
+          var novo = !segue && (!par || par.tag !== tag || primeira || l.marca || !perto || /^([-–•▪►✓→]|\d+[.)]\s|[a-z]\)\s)/.test(l.txt));
+          if (novo) { fecha(); h += marca; marca = ''; par = { tag: tag, html: '', cls: l.marca ? 'lp-tx-item' : '' }; } else par.html += ' ';
           par.html += l.html;
-          ant = l;
+          ant = l; primeira = false;
         });
-        fechaCaixa();
-        h += '</div>';
       });
+      fechaCaixa();
       alvo.innerHTML = '<div class="lp-texto">' + (h || '<p class="lp-vazio">Este PDF não tem texto (é escaneado). Use o modo PDF.</p>') + '</div>';
       alvo.querySelectorAll('.lp-tx-fig').forEach(function (f) { f.addEventListener('click', function () { f.classList.toggle('grande'); }); });
     });
   };
   // Desenha a página num canvas fora da tela e devolve os blocos na ordem de leitura: linhas de texto (com cor e
   // fundo medidos nos pixels) e recortes de tabela/imagem.
+  // chamadas da plataforma do curso (vídeo/PDF "pelo APP", QR code e link) não fazem sentido fora dela
+  var LIXO = /^(Assista (o|ao) vídeo pelo APP|Acesse o PDF pelo APP|Acesse a plataforma pelo QR code|Ou acesse pelo link|https?:\/\/\S+$|topic=[\d.]+$)/i;
   Leitor.prototype.blocosDaPagina = function (pg, tc, s) {
     var base = pg.getViewport({ scale: 1 }), escala = 1400 / base.width, vp = pg.getViewport({ scale: escala });
     var cv = document.createElement('canvas'); cv.width = Math.floor(vp.width); cv.height = Math.floor(vp.height);
@@ -419,7 +486,7 @@
         var mq = null; Object.keys(cont).forEach(function (q) { if (!mq || cont[q] > cont[mq]) mq = q; });
         var bg = mq.split(',').map(function (v) { return (+v << 4) + 8; }), soma = [0, 0, 0], nt = 0;
         amostra.forEach(function (c) { if (dist(c, bg) > 120) { soma[0] += c[0]; soma[1] += c[1]; soma[2] += c[2]; nt++; } });
-        return { bg: bg, fg: nt ? soma.map(function (v) { return Math.round(v / nt); }) : null };
+        return { bg: bg, fg: nt ? soma.map(function (v) { return Math.round(v / nt); }) : null, tinta: nt / amostra.length };
       }
       function claro(c) { return c[0] > 232 && c[1] > 232 && c[2] > 232; }
       // acento que alguns PDFs gravam como letra separada ("c¸ã", "a´") vira acento de verdade na letra anterior
@@ -436,9 +503,22 @@
         var a = vp.convertToViewportPoint(it.transform[4], it.transform[5] + tam * 0.85), b = vp.convertToViewportPoint(it.transform[4] + it.width, it.transform[5] - tam * 0.2);
         var c = cores(Math.min(a[0], b[0]), Math.min(a[1], b[1]), Math.max(a[0], b[0]), Math.max(a[1], b[1]));
         if (c && c.fg && claro(c.bg) && lum(c.fg) > 185) return;  // marca d'água clara sobre fundo branco
-        itens.push({ x: x, x1: x + it.width / w, y: it.transform[5], tam: tam, str: it.str, neg: /bold|black|heavy|semibold/i.test(nome), col: s && x >= s ? 1 : 0,
+        itens.push({ x: x, x1: x + it.width / w, y: it.transform[5], tam: tam, str: it.str, fn: it.fontName, semNome: !/[A-Za-z]{3,}/.test(nome.replace(/^[A-Z]{6}\+/, '')), neg: /bold|black|heavy|semibold/i.test(nome), col: s && x >= s ? 1 : 0,
           top: Math.min(a[1], b[1]), bot: Math.max(a[1], b[1]), c: c });
       });
+      // fontes sem nome (Type3, PDFs impressos do navegador): negrito = fonte com bem mais tinta que a do corpo
+      {
+        var porFonte = {}, corpoF = null;
+        itens.forEach(function (it) {
+          if (!it.semNome || !it.c || it.str.trim().length < 3) return;
+          var f = porFonte[it.fn] || (porFonte[it.fn] = { t: 0, n: 0 }); f.t += it.c.tinta * it.str.length; f.n += it.str.length;
+        });
+        Object.keys(porFonte).forEach(function (f) { if (!corpoF || porFonte[f].n > porFonte[corpoF].n) corpoF = f; });
+        if (corpoF) {
+          var base = porFonte[corpoF].t / porFonte[corpoF].n;
+          itens.forEach(function (it) { var f = porFonte[it.fn]; if (f && f.n >= 6 && it.semNome && it.str.trim().length >= 3 && it.fn !== corpoF && f.t / f.n > base * 1.25) it.neg = true; });
+        }
+      }
       itens.sort(function (a, b) { return a.col - b.col || b.y - a.y || a.x - b.x; });
       var ls = [];
       itens.forEach(function (it) {
@@ -450,6 +530,7 @@
         l.partes.sort(function (a, b) { return a.x - b.x; });
         var gaps = 0; for (var k = 1; k < l.partes.length; k++) if (l.partes[k].x - l.partes[k - 1].x1 > (l.tam * 3) / w) gaps++;
         l.tab = gaps >= 2 || (gaps >= 1 && l.partes.length >= 3);
+        l.lixo = LIXO.test(l.partes.map(function (q) { return q.str; }).join(' ').trim());
       });
       var colX = function (col) { return s ? (col ? [s, 1] : [0, s]) : [0, 1]; };
       function recorte(col, y0, y1) {
@@ -479,7 +560,7 @@
       while (i < ls.length) {
         var l = ls[i], prev = out.length ? out[out.length - 1] : null;
         // vão grande com desenho entre duas linhas da mesma coluna = imagem/esquema
-        if (prev && prev.bot != null && prev.col === l.col && !prev.tabela && l.top - prev.bot > Math.max(l.tam * escala * 5, 110) && tinta(l.col, prev.bot + 6, l.top - 6) > 0.06) {
+        if (prev && prev.bot != null && prev.col === l.col && !prev.tabela && !prev.lixo && !l.lixo && l.top - prev.bot > Math.max(l.tam * escala * 5, 110) && tinta(l.col, prev.bot + 6, l.top - 6) > 0.06) {
           var im = recorte(l.col, prev.bot + 2, l.top - 2); if (im) out.push({ img: im });
         }
         // linhas seguidas em colunas de tabela = recorte da tabela inteira
@@ -494,12 +575,12 @@
           if (img) out.push({ img: img, tabela: true, col: l.col, bot: fim });
           i = f + 1; continue;
         }
-        var txt = '', html = '', bgs = {}, fgs = [];
+        var txt = '', html = '', bgs = {}, fgs = [], nNeg = 0, nTot = 0;
         l.partes.forEach(function (p, k) {
           var ant = l.partes[k - 1];
           var sep = k && !/\s$/.test(txt) && !/^[\s,.;:!?)\]]/.test(p.str) && !ACENTO.test(p.str) && !ACENTO.test(ant.str.slice(-1)) &&
             p.x - ant.x1 > (l.tam * 0.18) / w ? ' ' : '';
-          txt += sep + p.str;
+          txt += sep + p.str; nTot += p.str.trim().length; if (p.neg) nNeg += p.str.trim().length;
           var fg = p.c && p.c.fg, cor = fg && !neutro(fg) ? fg : null;
           var t = esc(p.str); if (p.neg) t = '<b>' + t + '</b>'; if (cor) t = '<span style="color:' + rgb(cor) + '">' + t + '</span>';
           html += sep + t;
@@ -507,12 +588,14 @@
         });
         var bq = null; Object.keys(bgs).forEach(function (q) { if (!bq || bgs[q] > bgs[bq]) bq = q; });
         var bg = bq ? bq.split(',').map(Number) : null;
-        out.push({ col: l.col, y: l.y, tam: l.tam, top: l.top, bot: l.bot, txt: acentos(txt).replace(/\s+/g, ' ').trim(),
-          html: acentos(html.replace(/<\/b>(\s*)<b>/g, '$1')), bg: bg && !claro(bg) ? rgb(bg) : '', bgEscuro: bg && lum(bg) < 140 });
+        var t0 = acentos(txt).replace(/\s+/g, ' ').trim(), h0 = acentos(html.replace(/<\/b>(\s*)<b>/g, '$1')), mk = /^#/.test(t0);
+        if (mk) { t0 = t0.replace(/^#\s*/, ''); h0 = h0.replace(/^((?:<[^>]+>)*)#\s*/, '$1'); }
+        out.push({ col: l.col, y: l.y, tam: l.tam, top: l.top, bot: l.bot, txt: t0, html: h0, marca: mk, lixo: l.lixo, neg: nTot ? nNeg / nTot : 0,
+          bg: bg && !claro(bg) ? rgb(bg) : '', bgEscuro: bg && lum(bg) < 140 });
         i++;
       }
       cv.width = cv.height = 0;
-      return out.filter(function (o) { return o.img || o.txt; });
+      return out.filter(function (o) { return !o.lixo && (o.img || o.txt); });
     });
   };
   Leitor.prototype.elDe = function (info, x) {

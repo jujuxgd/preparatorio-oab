@@ -10,7 +10,7 @@
 .ss-nums div{font-size:.72rem;color:var(--ink-faded)}
 .ss-nums b{display:block;font-family:'Fraunces',serif;font-size:1.5rem;font-weight:500;color:var(--rose-deep);line-height:1.1}
 .ss-bloco{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:1.1rem 1.3rem;margin-bottom:1rem;box-shadow:var(--shadow-sm)}
-.ss-bloco h3{font-family:'Fraunces',serif;font-weight:500;font-size:1.12rem;color:var(--ink);margin:0 0 .35rem;display:flex;gap:.6rem;align-items:baseline}
+.ss-bloco h3:not(.lp-texto h3){font-family:'Fraunces',serif;font-weight:500;font-size:1.12rem;color:var(--ink);margin:0 0 .35rem;display:flex;gap:.6rem;align-items:baseline}
 .ss-bloco h3 .n{font:600 .66rem Inter,sans-serif;letter-spacing:.12em;color:var(--rose-deep);text-transform:uppercase}
 .ss-bloco > p{font-size:.84rem;color:var(--ink-soft);margin:.2rem 0 .8rem;line-height:1.55}
 .ss-acoes{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center}
@@ -142,8 +142,11 @@
 /* capítulos do Estratégia na aba Conteúdo */
 .est-bar { display: flex; flex-wrap: wrap; gap: .5rem .8rem; align-items: center; justify-content: space-between; margin: 0 0 .5rem; }
 .est-caps, .est-ver { display: flex; gap: .35rem; flex-wrap: wrap; }
-.est-bar button { font: inherit; font-size: .78rem; padding: .3rem .7rem; border-radius: 999px; border: 1px solid var(--line, #e6ddd8); background: var(--paper); color: var(--ink); cursor: pointer; }
-.est-bar button.on { background: var(--rose-soft); border-color: var(--rose); color: var(--rose-deep); font-weight: 600; }
+.est-ver { padding: 3px; border-radius: 999px; background: var(--bg-soft, var(--bg)); border: 1px solid var(--line-soft, var(--line)); gap: 2px; }
+.est-bar button { font: 600 .78rem Inter, sans-serif; padding: .36rem .85rem; border-radius: 999px; border: 1px solid var(--line, #e6ddd8); background: var(--paper); color: var(--ink-soft, var(--ink)); cursor: pointer; }
+.est-ver button { border-color: transparent; background: none; color: var(--ink-faded); }
+.est-bar button.on { background: var(--paper); color: var(--ink); border-color: var(--rose); }
+.est-ver button.on { border-color: transparent; box-shadow: 0 1px 3px rgba(44,36,32,.14); }
 .est-tit { font-size: .85rem; color: var(--ink-faded); margin: 0 0 .6rem; }
 .est-semana { list-style: none; margin: 0; padding: 0; display: grid; gap: .45rem; }
 .est-semana a { display: block; padding: .6rem .8rem; border: 1px solid var(--line, #e6ddd8); border-radius: var(--radius-sm, 8px); color: var(--ink); text-decoration: none; font-size: .9rem; }
