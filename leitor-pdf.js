@@ -431,7 +431,7 @@
   // repetem em quase todas as páginas e números de página saem.
   Leitor.prototype.renderTexto = function (alvo) {
     var self = this, doc = this.doc, de = this.de || 1, ate = this.ate || doc.numPages, vez = this._vez = (this._vez || 0) + 1;
-    alvo.innerHTML = '<p class="lp-vazio">Montando o texto…</p>';
+    alvo.innerHTML = '<p class="lp-vazio">Montando o texto…</p>'; this._fs = {};
     var pags = [], n = de;
     function proxima() {
       if (vez !== self._vez) return null;
@@ -448,9 +448,11 @@
       var conta = {}, chave = function (l) { return l.txt.replace(/\d+/g, '#'); };
       pags.forEach(function (bl) { var v = {}; bl.forEach(function (l) { if (l.txt && !v[chave(l)]) { v[chave(l)] = 1; conta[chave(l)] = (conta[chave(l)] || 0) + 1; } }); });
       var rep = pags.length >= 3 ? Math.max(2, pags.length * 0.4) : 99;
-      var freq = {}, corpo = 10;
-      pags.forEach(function (bl) { bl.forEach(function (l) { if (l.txt) { var t = Math.round(l.tam * 2) / 2; freq[t] = (freq[t] || 0) + l.txt.length; } }); });
-      Object.keys(freq).forEach(function (t) { if (!freq[corpo] || freq[t] > freq[corpo]) corpo = +t; });
+      // corpo = o maior tamanho de letra que tem parcela relevante do texto (a moda enganava nos capítulos com muitas
+      // questões comentadas em letra pequena: aí a letra normal parecia "grande" e virava título)
+      var freq = {}, totalCh = 0;
+      pags.forEach(function (bl) { bl.forEach(function (l) { if (l.txt) { var t = Math.round(l.tam * 2) / 2; freq[t] = (freq[t] || 0) + l.txt.length; totalCh += l.txt.length; } }); });
+      var corpo = Object.keys(freq).map(Number).sort(function (a, b) { return b - a; }).filter(function (t) { return freq[t] >= totalCh * 0.15; })[0] || 10;
       // texto corrido: o parágrafo que termina sem pontuação no fim da página continua na seguinte
       var h = '', par = null, ant = null, caixa = null, marca = '';
       function fecha() { if (par) { h += '<' + par.tag + (par.cls ? ' class="' + par.cls + '"' : '') + '>' + par.html + '</' + par.tag + '>'; par = null; } }
@@ -465,11 +467,21 @@
             fechaCaixa();
             if (l.bg) { caixa = { bg: l.bg }; h += '<div class="lp-tx-caixa' + (l.bgEscuro ? ' escura' : '') + '" style="--bx:' + l.bg + '">'; }
           }
-          // título: letra maior que a do corpo e em negrito (ou bem maior); trecho longo é sempre parágrafo
-          var tag = l.txt.length > 110 || /^[a-zà-ú]/.test(l.txt) ? 'p' : l.tam >= corpo * 1.25 && (l.neg >= 0.6 || l.tam >= corpo * 1.6) ? 'h3' : l.tam >= corpo * 1.1 && l.neg >= 0.6 ? 'h4' : 'p';
+          // título = linha curta, sem ponto final nem vírgula (frase terminada é parágrafo), que não começa em minúscula/travessão:
+          //   h3 = letra maior que a do corpo; h4 = linha toda em negrito que começa um bloco (depois de frase terminada ou de espaço)
+          var curta = l.txt.length <= 75, numerada = /^\d+(\.\d+)*\.?\s+\S/.test(l.txt);
+          var fimDeFrase = /[.,;]\s*$/.test(l.txt) && !numerada;
+          var comecoDeBloco = !ant || ant.cabecalho || /[.:;!?)”"]\s*$/.test(ant.txt) || (ant.y - l.y) > ant.tam * 1.9;
+          var ehTitulo = curta && !fimDeFrase && !l.marca && !/^[a-zà-ú\-–•●▪]/.test(l.txt);
+          var tag = !ehTitulo ? 'p' : l.tam >= corpo * 1.25 ? 'h3' : (l.neg >= 0.9 && l.txt.length <= 60 && comecoDeBloco) ? 'h4' : 'p';
+          // título que termina em palavra solta ("…dos", "…no") continua na linha de baixo, seja qual for o estilo dela
+          var continua = !primeira && par && par.tag !== 'p' && ant && (ant.y - l.y) <= ant.tam * 2.6 && !numerada && !l.marca &&
+            /(^|\s)(d[aeo]s?|n[aeo]s?|e|ou|a|o|as|os|para|com|em|por|ao|aos|à|às|que|x)\s*$/i.test(ant.txt);
+          if (continua) tag = par.tag;
+          l.cabecalho = tag !== 'p';
           var segue = primeira && par && par.tag === 'p' && tag === 'p' && !l.marca && !/[.:;!?)]\s*(<\/[a-z]+>)*$/.test(par.html);
-          var perto = ant && (ant.y - l.y) <= ant.tam * (tag === 'p' ? 1.9 : 1.6);
-          var novo = !segue && (!par || par.tag !== tag || primeira || l.marca || !perto || /^([-–•▪►✓→]|\d+[.)]\s|[a-z]\)\s)/.test(l.txt));
+          var perto = ant && (ant.y - l.y) <= ant.tam * (tag === 'p' ? 1.9 : 1.6) && (tag === 'p' || Math.abs(ant.tam - l.tam) < 1);
+          var novo = !continua && !segue && (!par || par.tag !== tag || primeira || l.marca || !perto || /^([-–•▪►✓→]|\d+[.)]\s|[a-z]\)\s)/.test(l.txt));
           if (novo) { fecha(); h += marca; marca = ''; par = { tag: tag, html: '', cls: l.marca ? 'lp-tx-item' : '' }; } else par.html += ' ';
           par.html += l.html;
           ant = l; primeira = false;
@@ -525,18 +537,25 @@
         itens.push({ x: x, x1: x + it.width / w, y: it.transform[5], tam: tam, str: it.str, fn: it.fontName, semNome: !/[A-Za-z]{3,}/.test(nome.replace(/^[A-Z]{6}\+/, '')), neg: /bold|black|heavy|semibold/i.test(nome), col: s && x >= s ? 1 : 0,
           top: Math.min(a[1], b[1]), bot: Math.max(a[1], b[1]), c: c });
       });
-      // fontes sem nome (Type3, PDFs impressos do navegador): negrito = fonte com bem mais tinta que a do corpo
+      // fontes sem nome (Type3, PDFs impressos do navegador): negrito = fonte com bem mais tinta que a fonte mais comum
+      // DO MESMO TAMANHO, com a estatística acumulada desde a primeira página (antes comparava com a fonte mais comum da
+      // página e a letra normal de 12pt parecia negrito numa página cheia de comentários em 9pt)
       {
-        var porFonte = {}, corpoF = null;
+        var FS = this._fs || (this._fs = {});
         itens.forEach(function (it) {
-          if (!it.semNome || !it.c || it.str.trim().length < 3) return;
-          var f = porFonte[it.fn] || (porFonte[it.fn] = { t: 0, n: 0 }); f.t += it.c.tinta * it.str.length; f.n += it.str.length;
+          var n = it.str.trim().length; if (!it.semNome || !it.c || n < 3) return;
+          var f = FS[it.fn] || (FS[it.fn] = { t: 0, n: 0, ts: 0 }); f.t += it.c.tinta * n; f.n += n; f.ts += it.tam * n;
         });
-        Object.keys(porFonte).forEach(function (f) { if (!corpoF || porFonte[f].n > porFonte[corpoF].n) corpoF = f; });
-        if (corpoF) {
-          var base = porFonte[corpoF].t / porFonte[corpoF].n;
-          itens.forEach(function (it) { var f = porFonte[it.fn]; if (f && f.n >= 6 && it.semNome && it.str.trim().length >= 3 && it.fn !== corpoF && f.t / f.n > base * 1.25) it.neg = true; });
-        }
+        var baseTam = {};
+        Object.keys(FS).forEach(function (fn) {
+          var f = FS[fn]; f.tam = Math.round(f.ts / f.n);
+          if (!baseTam[f.tam] || f.n > FS[baseTam[f.tam]].n) baseTam[f.tam] = fn;
+        });
+        itens.forEach(function (it) {
+          var f = FS[it.fn], b = f && baseTam[f.tam];
+          if (!f || it.neg || !it.semNome || !b || b === it.fn || f.n < 6 || it.str.trim().length < 3) return;
+          if (f.t / f.n > (FS[b].t / FS[b].n) * 1.25) it.neg = true;
+        });
       }
       itens.sort(function (a, b) { return a.col - b.col || b.y - a.y || a.x - b.x; });
       var ls = [];
@@ -616,7 +635,10 @@
         });
         var bq = null; Object.keys(bgs).forEach(function (q) { if (!bq || bgs[q] > bgs[bq]) bq = q; });
         var bg = bq ? bq.split(',').map(Number) : null;
-        var t0 = acentos(txt).replace(/\s+/g, ' ').trim(), h0 = acentos(html.replace(/<\/b>(\s*)<b>/g, '$1')), mk = /^#/.test(t0);
+        var AUDIO = /\s*Para ouvir ao áudio correspondente, acesse o LDI\.?\s*/g;
+        // ícones de fontes de ícone (caracteres da área privada, ex.: o alto-falante do "ouvir o áudio") não são texto
+        var ICONE = /[\uE000-\uF8FF]/g;
+        var t0 = acentos(txt).replace(ICONE, '').replace(AUDIO, ' ').replace(/\s+/g, ' ').trim(), h0 = acentos(html.replace(/<\/b>(\s*)<b>/g, '$1')).replace(ICONE, '').replace(AUDIO, ' ').trim(), mk = /^#/.test(t0);
         if (mk) { t0 = t0.replace(/^#\s*/, ''); h0 = h0.replace(/^((?:<[^>]+>)*)#\s*/, '$1'); }
         out.push({ col: l.col, y: l.y, tam: l.tam, top: l.top, bot: l.bot, txt: t0, html: h0, marca: mk, lixo: l.lixo, neg: nTot ? nNeg / nTot : 0,
           bg: bg && !claro(bg) ? rgb(bg) : '', bgEscuro: bg && lum(bg) < 140 });
