@@ -54,3 +54,11 @@ html body:not(.home) :is(.rf-card, .mat-card, .stat-card, .revisao-card, .side-c
 @media (max-width: 640px)  { html body .hub-card h3, html body .hub-destaque h3 { font-size: 1.1rem !important; } }
 /* texto de abertura das páginas de menu: não compete com o título no celular */
 @media (max-width: 640px) { html body .hub p.lead { font-size: .92rem; margin-bottom: 1.6rem; } }
+
+/* ── Questões no celular: texto menor e mais compacto (enunciado, alternativas, comentário) ── */
+@media (max-width: 640px) {
+  html body .q-enun, html body .ss-q .enun { font-size: .92rem !important; line-height: 1.55 !important; }
+  html body .alt, html body .ss-q .alt { font-size: .88rem !important; line-height: 1.5 !important; padding-top: .6rem !important; padding-bottom: .6rem !important; }
+  html body .alt .l { width: 22px; height: 22px; font-size: .7rem; }
+  html body .expl, html body .ss-expl { font-size: .86rem !important; line-height: 1.55 !important; }
+}
