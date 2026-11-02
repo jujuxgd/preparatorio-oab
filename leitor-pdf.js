@@ -543,10 +543,11 @@
           var curta = l.txt.length <= 75, numerada = /^\d+(\.\d+)*\.?\s+\S/.test(l.txt);
           var fimDeFrase = /[.,;]\s*$/.test(l.txt) && !numerada;
           var comecoDeBloco = !ant || ant.cabecalho || /[.:;!?)”"]\s*$/.test(ant.txt) || (ant.y - l.y) > ant.tam * 1.9;
-          var ehTitulo = curta && !fimDeFrase && !l.marca && !/^[a-zà-ú\-–•●▪]/.test(l.txt);
+          var ehTitulo = curta && !fimDeFrase && !l.marca && !/;\s*(e|ou)\s*$/.test(l.txt) && !/^[a-zà-ú\-–•●▪]/.test(l.txt);
           var tag = !ehTitulo ? 'p' : l.tam >= corpo * 1.25 ? 'h3' : (l.neg >= 0.9 && l.txt.length <= 60 && comecoDeBloco) ? 'h4' : 'p';
           // título que termina em palavra solta ("…dos", "…no") continua na linha de baixo, seja qual for o estilo dela
-          var continua = !primeira && par && par.tag !== 'p' && ant && (ant.y - l.y) <= ant.tam * 2.6 && !numerada && !l.marca &&
+          var continua = !primeira && par && par.tag !== 'p' && ant && (ant.y - l.y) <= ant.tam * 2.6 && !numerada && !l.marca && !/^[a-z]\)\s/.test(l.txt) &&
+            par.html.replace(/<[^>]+>/g, '').length + l.txt.length <= 150 &&
             (/(^|\s)(d[aeo]s?|n[aeo]s?|e|ou|a|o|as|os|para|com|em|por|ao|aos|à|às|que|x)\s*$/i.test(ant.txt) || /^[a-zà-ú]/.test(l.txt));
           if (continua) tag = par.tag;
           if (tag === 'h4' && inicio3[l.txt.split(' ')[0]] >= 2) tag = 'h3';
@@ -571,7 +572,7 @@
   // Desenha a página num canvas fora da tela e devolve os blocos na ordem de leitura: linhas de texto (com cor e
   // fundo medidos nos pixels) e recortes de tabela/imagem.
   // chamadas da plataforma do curso (vídeo/PDF "pelo APP", QR code e link) não fazem sentido fora dela
-  var LIXO = /^(Assista (o|ao) vídeo pelo APP|Acesse o PDF pelo APP|Acesse a plataforma pelo QR code|Ou acesse pelo link|\d{0,2}\s*https?:\/\/|topic=[\d.]+$)|\?topic=[\d.]+$/i;
+  var LIXO = /^(Assista (o|ao) vídeo pelo APP|Acesse o PDF pelo APP|Escute o Cast pelo APP|Acesse a plataforma pelo QR code|Ou acesse pelo link|\d{0,2}\s*https?:\/\/|topic=[\d.]+$)|\?topic=[\d.]+$|\bpelo APP!?$/i;
   Leitor.prototype.blocosDaPagina = function (pg, tc, s, FS) {
     var base = pg.getViewport({ scale: 1 }), escala = 1400 / base.width, vp = pg.getViewport({ scale: escala });
     var cv = document.createElement('canvas'); cv.width = Math.floor(vp.width); cv.height = Math.floor(vp.height);
@@ -616,13 +617,31 @@
         var junta = [];
         segs.forEach(function (g) { var u = junta[junta.length - 1]; if (u && u.b - u.t > 30 && g.t - u.b <= 40) u.b = g.b; else junta.push(g); });
         segs = junta.filter(function (g) { return g.t > margemPg && g.b < H - margemPg; });
+        // duas faixas só fazem parte da mesma tabela se alguma linha vertical da borda atravessa o espaço entre elas
+        // (senão, parágrafos entre duas tabelas empilhadas eram engolidos pela primeira e o texto saía embaralhado)
+        function ligada(y0, y1) {
+          if (y1 - y0 < 10) return true;
+          for (var x = Math.floor(W * 0.02); x < Math.floor(W * 0.98); x++) {
+            var ok = 0, tot = 0;
+            for (var y = y0 + 3; y < y1 - 2; y += 2) { tot++; var k = (y * W + x) * 4; if (px[k] < 235 || px[k + 1] < 235 || px[k + 2] < 235) ok++; }
+            if (tot && ok >= tot * 0.9) return true;
+          }
+          return false;
+        }
         for (var i = 0; i < segs.length;) {
-          var j = i; while (segs[j + 1] && segs[j + 1].t - segs[j].b <= 520) j++;
+          var j = i; while (segs[j + 1] && segs[j + 1].t - segs[j].b <= 520 && ligada(segs[j].b, segs[j + 1].t)) j++;
           if (j > i) {
-            var yt = segs[i].t, yb = segs[j].b, vx = [];
+            var yt = segs[i].t, yb = segs[j].b, vx = [], linhasV = [];
+            // linhas verticais = colunas escuras em (quase) todas as linhas do recorte, sem contar as faixas coloridas de cabeçalho
+            // (uma faixa grossa fazia toda coluna parecer uma "linha vertical")
+            for (var yy0 = yt; yy0 <= yb; yy0 += 2) {
+              var esc0 = 0, tot0 = 0;
+              for (var xe = Math.floor(W * 0.1); xe < Math.floor(W * 0.9); xe += 6) { tot0++; var ke = (yy0 * W + xe) * 4; if (px[ke] < 235 || px[ke + 1] < 235 || px[ke + 2] < 235) esc0++; }
+              if (esc0 < tot0 * 0.6) linhasV.push(yy0);
+            }
             for (var xx = Math.floor(W * 0.02); xx < Math.floor(W * 0.98); xx++) {
-              var c = 0; for (var yy = yt; yy <= yb; yy += 2) { var kk = (yy * W + xx) * 4; if (px[kk] < 235 || px[kk + 1] < 235 || px[kk + 2] < 235) c++; }
-              if (c >= ((yb - yt) / 2) * 0.55) { if (vx.length && xx - vx[vx.length - 1] <= 4) vx[vx.length - 1] = xx; else vx.push(xx); }
+              var c = 0; linhasV.forEach(function (yy) { var kk = (yy * W + xx) * 4; if (px[kk] < 235 || px[kk + 1] < 235 || px[kk + 2] < 235) c++; });
+              if (linhasV.length && c >= linhasV.length * 0.8) { if (vx.length && xx - vx[vx.length - 1] <= 4) vx[vx.length - 1] = xx; else vx.push(xx); }
             }
             if (vx.length >= 3) {
               var linhasT = [];
@@ -670,14 +689,21 @@
       var ls = [];
       itens.forEach(function (it) {
         var l = ls[ls.length - 1];
-        if (l && l.col === it.col && Math.abs(l.y - it.y) < Math.max(l.tam, it.tam) * 0.5) { l.partes.push(it); l.tam = Math.max(l.tam, it.tam); l.top = Math.min(l.top, it.top); l.bot = Math.max(l.bot, it.bot); }
+        if (l && l.col === it.col && Math.abs(l.y - it.y) < Math.max(l.tam, it.tam) * 0.5 && !(Math.max(l.tam, it.tam) >= Math.min(l.tam, it.tam) * 1.3 && Math.abs(l.y - it.y) > Math.min(l.tam, it.tam) * 0.4 && it.str.trim().length >= 3 && l.partes[0].str.trim().length >= 3)) { l.partes.push(it); l.tam = Math.max(l.tam, it.tam); l.top = Math.min(l.top, it.top); l.bot = Math.max(l.bot, it.bot); }
         else ls.push({ col: it.col, y: it.y, tam: it.tam, top: it.top, bot: it.bot, partes: [it] });
       });
       ls.forEach(function (l) {
         l.partes.sort(function (a, b) { return a.x - b.x; });
+        // ligatura (fi, fl…) vem como item à parte, em outra fonte: herda negrito e cor da palavra a que pertence
+        l.partes.forEach(function (q, kk) {
+          if (!/^(f[fil]|ffi|ffl|[\uFB00-\uFB06])$/.test(q.str.trim())) return;
+          var an = l.partes[kk - 1], pr = l.partes[kk + 1], tol = (l.tam * 0.3) / w;
+          var viz = an && q.x - an.x1 < tol ? an : pr && pr.x - q.x1 < tol ? pr : null;
+          if (viz) { q.neg = viz.neg; q.c = viz.c; }
+        });
         var gaps = 0; for (var k = 1; k < l.partes.length; k++) if (l.partes[k].x - l.partes[k - 1].x1 > (l.tam * 3) / w) gaps++;
         l.tab = gaps >= 2 || (gaps >= 1 && l.partes.length >= 3);
-        l.lixo = LIXO.test(l.partes.map(function (q) { return q.str; }).join(' ').trim());
+        l.lixo = LIXO.test(l.partes.map(function (q) { return q.str; }).join(' ').replace(/[\uE000-\uF8FF]/g, '').trim());
         l.gaps = gaps; l.x0 = l.partes[0].x;
       });
       // linha com duas células colada em linhas de tabela é linha da mesma tabela (a de 2 colunas não passava no critério)
@@ -791,7 +817,7 @@
       function htmlTabela(tb) {
         var its = itens.filter(function (it) {
           var cy = (it.top + it.bot) / 2, cx = (it.x + it.x1) / 2 * W;
-          return it.str.trim() && cy >= tb.top - 2 && cy <= tb.bot + 2 && cx >= tb.x0 - 4 && cx <= tb.x1 + 4;
+          return it.str.trim() && !/pelo APP|QR code|Ou acesse pelo link|^\s*https?:\/\/|topic=\d/i.test(it.str) && cy >= tb.top - 2 && cy <= tb.bot + 2 && cx >= tb.x0 - 4 && cx <= tb.x1 + 4;
         });
         if (!its.length || !tb.linhas.length) return '';
         var ncol = tb.vx.length - 1, grade = tb.linhas.map(function () { return []; }), cheias = 0;
@@ -815,10 +841,25 @@
           });
           return acentos(h2.replace(/<\/b>(\s*)<b>/g, '$1'));
         }
+        // caixa de destaque (todo o texto numa coluna só; as outras são só moldura/ícone): vira uma célula, e as linhas que
+        // não terminam frase se juntam (a caixa quebrava a frase em linhas de tabela)
+        var colsOcup = {}; grade.forEach(function (lin) { lin.forEach(function (cel, ci) { if (cel.length) colsOcup[ci] = 1; }); });
+        if (ncol > 1 && Object.keys(colsOcup).length === 1) {
+          var ci1 = +Object.keys(colsOcup)[0], pars = [];
+          grade.forEach(function (lin) {
+            var hc = htmlCelula(lin[ci1]); if (!hc) return;
+            var ult = pars.length ? pars[pars.length - 1] : null;
+            if (ult && !/[.:;!?)”"]\s*(<\/[a-z]+>)*$/.test(ult)) pars[pars.length - 1] = ult + ' ' + hc; else pars.push(hc);
+          });
+          return pars.length ? { cab: '', corpo: '<tr><td>' + pars.join('<br><br>') + '</td></tr>', ncol: 1 } : null;
+        }
         var corpoT = '', cabT = '';
         tb.linhas.forEach(function (r, ri) {
           var tds = '', alguma = false;
-          grade[ri].forEach(function (cel) { var hc = htmlCelula(cel); if (hc) { alguma = true; cheias++; } tds += '<' + (r.th ? 'th' : 'td') + '>' + hc + '</' + (r.th ? 'th' : 'td') + '>'; });
+          var hcs = grade[ri].map(htmlCelula), ocup = hcs.filter(function (x) { return x; });
+          // faixa de título com um texto só (centralizado sobre as colunas) ocupa a linha inteira
+          if (r.th && ncol > 1 && ocup.length === 1) { alguma = true; cheias++; tds = '<th colspan="' + ncol + '">' + ocup[0] + '</th>'; }
+          else hcs.forEach(function (hc) { if (hc) { alguma = true; cheias++; } tds += '<' + (r.th ? 'th' : 'td') + '>' + hc + '</' + (r.th ? 'th' : 'td') + '>'; });
           if (alguma) { if (r.th) cabT += '<tr>' + tds + '</tr>'; else corpoT += '<tr>' + tds + '</tr>'; }
         });
         return cheias >= 2 ? { cab: cabT, corpo: corpoT, ncol: ncol } : null;
@@ -887,8 +928,8 @@
         var AUDIO = /\s*Para ouvir ao áudio correspondente, acesse o LDI\.?\s*/g, IDQ = /\s4000\d{6}(?=\s)/g;
         // ícones de fontes de ícone (caracteres da área privada, ex.: o alto-falante do "ouvir o áudio") não são texto
         var ICONE = /[\uE000-\uF8FF]/g;
-        var t0 = acentos(txt).replace(ICONE, '').replace(AUDIO, ' ').replace(IDQ, '').replace(/\s+/g, ' ').trim(), h0 = acentos(html.replace(/<\/b>(\s*)<b>/g, '$1')).replace(ICONE, '').replace(AUDIO, ' ').replace(IDQ, '').trim().replace(/<(span class="lp-tx-cor"|b)><\/(span|b)>/g, ''), mk = /^#/.test(t0);
-        if (mk) { t0 = t0.replace(/^#\s*/, ''); h0 = h0.replace(/^((?:<[^>]+>)*)#\s*/, '$1'); }
+        var t0 = acentos(txt).replace(ICONE, '').replace(AUDIO, ' ').replace(IDQ, '').replace(/\s+/g, ' ').trim(), h0 = acentos(html.replace(/<\/b>(\s*)<b>/g, '$1')).replace(ICONE, '').replace(AUDIO, ' ').replace(IDQ, '').trim().replace(/<(span class="lp-tx-cor"|b)><\/(span|b)>/g, ''), mk = /^#/.test(t0) || /^[-–•▪●►]\s/.test(t0);
+        if (mk) { t0 = t0.replace(/^((#|[-–•▪●►])\s*)+/, ''); h0 = h0.replace(/^((?:<[^>]+>)*)((#|[-–•▪●►])\s*)+/, '$1'); }
         out.push({ col: l.col, y: l.y, tam: l.tam, top: l.top, bot: l.bot, txt: t0, html: h0, marca: mk, lixo: l.lixo, neg: nTot ? nNeg / nTot : 0,
           rv: naMoldura(l),
           bolinha: !l.tab && temBolinha(l),
