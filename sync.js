@@ -67,12 +67,14 @@
   // Chaves que são mapas de itens independentes: em vez de um lado vencer o
   // outro, junta item por item (o cartão/questão respondido por último vence).
   function jsonOu(v, padrao) { try { return v == null ? padrao : (JSON.parse(v) || padrao); } catch (e) { return padrao; } }
+  function maisRespondido(a, b) {
+    const h = x => (x && x.h) || [];
+    const ult = x => { const l = h(x); return l.length ? l[l.length - 1][0] : ''; };
+    return (h(b).length > h(a).length || (h(b).length === h(a).length && ult(b) > ult(a))) ? b : a;
+  }
   const MESCLAR = {
-    oab_fc_estado_v1: function (a, b) {
-      const h = x => (x && x.h) || [];
-      const ult = x => { const l = h(x); return l.length ? l[l.length - 1][0] : ''; };
-      return (h(b).length > h(a).length || (h(b).length === h(a).length && ult(b) > ult(a))) ? b : a;
-    },
+    oab_fc_estado_v1: maisRespondido,
+    oab_fc_estado_v2: maisRespondido,
     oab_bq_respostas: function (a, b) {
       return String((b && b.ultima_data) || '') > String((a && a.ultima_data) || '') ? b : a;
     },

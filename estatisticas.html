@@ -1017,7 +1017,7 @@
       </div>
     </div>
 
-    <!-- FLASHCARDS (Revisões VDE, oab_fc_estado_v1) -->
+    <!-- FLASHCARDS (Revisões VDE, oab_fc_estado_v2) -->
     <div class="est-sec"><h2>Flashcards</h2><a class="acao" href="revisar.html">Revisar →</a></div>
     <div class="stats-grid-2">
       <div class="chart-card">
@@ -1578,7 +1578,7 @@ function montarLeitura({ q, qTodas, NOMES_MAT, p, stats, totalDiasPlano }) {
   el.innerHTML = out.join('');
   if (window._preencherRev) window._preencherRev();
 }
-// ── Flashcards: estado em oab_fc_estado_v1 (Hoje e Revisar); cada "sei"/"errei" fica no histórico do cartão
+// ── Flashcards: estado em oab_fc_estado_v2 (Hoje e Revisar); cada "sei"/"errei" fica no histórico do cartão
 function montarFlashcardsStats() {
   if (!window.ATIVO) return;
   ATIVO.carregarCartoes().then(() => {

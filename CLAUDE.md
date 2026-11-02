@@ -436,6 +436,11 @@ Prova prático-profissional do OAB 48 em **28/02/2027** (cronograma da OAB). Jul
     legislativo: sem moldura, Inter no corpo, Fraunces nos títulos, margem estreita por padrão (`oab_lp_tx2`). Figuras recortadas
     justas pela área com tinta; ilustração clarinha (coruja da capa) é descartada.
 
+
+- **Só o Estratégia (02/11/2026, pedido de Julia):** o `CAL_ATIVO` começa em 02/11 (os dias do VDE de 12/10 a 01/11 saíram; "Dia N de 70").
+  Flashcards zerados: o estado passou para `oab_fc_estado_v2` (o v1 continua guardado e sincronizado, sem uso); questões e caderno de erros
+  continuam. A caixa do leitor no PC cabe na tela (`100svh - 150px`).
+
 ## 6. Design System
 
 ### Paleta de Cores (style.css :root)
