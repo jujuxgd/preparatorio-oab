@@ -450,7 +450,7 @@ Prova prático-profissional do OAB 48 em **28/02/2027** (cronograma da OAB). Jul
   `oab_lp_pos2`: não grava com o leitor escondido. Figura do modo texto amplia a 150% ao tocar.
   Título do tema (`SESSAO.cabTema`, dentro da barra do leitor via `opts.titulo`, no Conteúdo e nos Mapas): "Matéria | Tema" em
   Fraunces, mesmo tamanho; matéria na cor de destaque escolhida (`--rose-deep`), "|" na cor do texto (escolha de Julia, 02/11/2026).
-  Modo texto: margem "Estreita" (padrão) = sem margem lateral e sem largura máxima. Aa (leitor e topo) na cor de destaque. `hoje.html`
+  Modo texto: margem "Estreita" (padrão) = sem margem lateral e sem largura máxima. Texto colorido do PDF no modo texto (`.lp-tx-cor`) usa a cor de destaque do Perfil. `hoje.html`
   carrega sessao/leitor/calendário com `?v=` para não pegar CSS/JS velho do cache (antes, rolar a página com outra aba aberta salvava a última página). Conteúdo do dia sem a linha "Cap. N · título".
 
 ## 6. Design System

@@ -596,7 +596,7 @@
             p.x - ant.x1 > (l.tam * 0.18) / w ? ' ' : '';
           txt += sep + p.str; nTot += p.str.trim().length; if (p.neg) nNeg += p.str.trim().length;
           var fg = p.c && p.c.fg, cor = fg && !neutro(fg) ? fg : null;
-          var t = esc(p.str); if (p.neg) t = '<b>' + t + '</b>'; if (cor) t = '<span style="color:' + rgb(cor) + '">' + t + '</span>';
+          var t = esc(p.str); if (p.neg) t = '<b>' + t + '</b>'; if (cor) t = '<span class="lp-tx-cor">' + t + '</span>';
           html += sep + t;
           if (p.c) { var q = p.c.bg.join(','); bgs[q] = (bgs[q] || 0) + p.str.length; }
         });
