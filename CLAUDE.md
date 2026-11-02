@@ -447,7 +447,9 @@ Prova prático-profissional do OAB 48 em **28/02/2027** (cronograma da OAB). Jul
   (`mm`), no leitor de PDF (escurece no modo escuro), sem "Ler como texto" (`opts.semTexto`). Zoom 100% = página na largura da caixa;
   a caixa tem altura até 620px (62svh no celular) e rola por dentro; sem contagem de páginas na barra.
   Gabaritaço do tema virou uma linha discreta (`.gab-mini`, `<details>`) que monta o trecho só ao abrir. Posição do leitor em
-  `oab_lp_pos2`: não grava com o leitor escondido. Figura do modo texto amplia a 150% ao tocar (antes, rolar a página com outra aba aberta salvava a última página). Conteúdo do dia sem a linha "Cap. N · título".
+  `oab_lp_pos2`: não grava com o leitor escondido. Figura do modo texto amplia a 150% ao tocar.
+  Título do tema (`SESSAO.cabTema`, dentro da barra do leitor via `opts.titulo`, no Conteúdo e nos Mapas): "Matéria | Tema" em
+  Fraunces, mesmo tamanho; matéria na cor de destaque escolhida (`--rose-deep`), "|" na cor do texto (escolha de Julia, 02/11/2026) (antes, rolar a página com outra aba aberta salvava a última página). Conteúdo do dia sem a linha "Cap. N · título".
 
 ## 6. Design System
 

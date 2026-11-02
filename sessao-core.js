@@ -195,17 +195,9 @@
     });
     return ns;
   }
-  // Título do tema numa linha: matéria em texto pequeno na cor dela (a mesma do calendário), fio fino, tema em Fraunces
-  var COR_MAT = {
-    'Direito Constitucional': 'const', 'Direito Administrativo': 'const', 'Direito Eleitoral': 'const', 'Filosofia do Direito': 'const', 'Direitos Humanos': 'const', 'Direito Internacional': 'const',
-    'Direito Civil': 'civil', 'Direito Processual Civil': 'civil', 'Direito do Consumidor': 'civil',
-    'Direito Penal': 'penal', 'Direito Processual Penal': 'penal',
-    'Direito do Trabalho': 'trab', 'Direito Processual do Trabalho': 'trab', 'Direito Previdenciário': 'trab', 'Direito Ambiental': 'trab',
-    'Direito Tributário': 'tribut', 'Direito Empresarial': 'tribut', 'Direito Financeiro': 'tribut',
-    'Ética Profissional': 'etica', 'ECA': 'etica'
-  };
+  // Título do tema numa linha: "Matéria | Tema", mesmo tamanho; matéria na cor de destaque que Julia escolhe (--rose-deep)
   function cabTema(d, tema) {
-    return '<h3 class="tema-linha" style="--tcd:var(--mat-' + (COR_MAT[d] || 'etica') + '-deep)"><span class="tl-mat">' + esc(curto(d)) + '</span><span class="tl-sep" aria-hidden="true">|</span><span class="tl-tema">' + esc(tema) + '</span></h3>';
+    return '<h3 class="tema-linha"><span class="tl-mat">' + esc(curto(d)) + '</span><span class="tl-sep" aria-hidden="true">|</span><span class="tl-tema">' + esc(tema) + '</span></h3>';
   }
   function rotulo(n) { return n >= 1001 ? 'Estratégia' : 'Dia ' + n + ' do VDE'; }
   // Capítulos do Estratégia: um leitor por vez; versão resumida (padrão) ou completa, escolha só do aparelho.
