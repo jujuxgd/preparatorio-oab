@@ -79,7 +79,7 @@
 @media (max-width:640px){
   .lp.lp-caixa .lp-corpo{padding:0;background:none;border-radius:0}
   .lp-rola{padding:.4rem .3rem}
-  .ss-bloco:has(.lp){margin-left:calc(2px - var(--gutter,1.5rem));margin-right:calc(2px - var(--gutter,1.5rem));padding-left:.25rem;padding-right:.25rem}
+  .ss-bloco:has(.lp){padding-left:.7rem;padding-right:.7rem}
 }
 @media (max-width:900px){
   .lp-corpo,.lp-com-lista .lp-corpo{grid-template-columns:1fr}
@@ -136,3 +136,6 @@ html.lp-travada,html.lp-travada body{overflow:hidden}
 .lp-tx-caixa{padding:.65rem .9rem}
 .lp-tx-caixa>:first-child{margin-top:0}
 .lp-tx-caixa>:last-child{margin-bottom:0}
+
+.lp-texto,.lp-texto *{box-sizing:border-box;max-width:100%}
+.lp-texto{overflow-wrap:anywhere}
