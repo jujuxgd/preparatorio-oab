@@ -585,7 +585,17 @@
         if (pp.closest('.lp-tx-caixa')) return;
         var t = (pp.textContent || '').trim();
         if (t.length > 25 && /^[“"]?(Art\.|Arts\.|§|Parágrafo único|CLT\.|CPC\.|CF\/88\.|CC\.|CP\.|CPP\.|CTN\.|Lei n)/.test(t)) pp.classList.add('lp-tx-lei');
-        else if (/^(Atenção|Dica para|Dica:|Importante|Lembre|Pegadinha|Cuidado|Observação|Obs\.?:)/i.test(t)) pp.classList.add('lp-tx-dica');
+        else if (t.length > 20 && /^(Atenção|Dica para|Dica:|Importante|Lembre|Pegadinha|Cuidado|Observação|Obs\.?:)/i.test(t)) pp.classList.add('lp-tx-dica');
+      });
+      // artigo com parágrafos e incisos: inciso/alínea logo depois da lei entra na mesma caixa, e a sequência vira uma caixa só
+      alvo.querySelectorAll('.lp-texto .lp-tx-lei').forEach(function (pp) {
+        var n = pp.nextElementSibling;
+        while (n && n.tagName === 'P' && !n.classList.contains('lp-tx-lei') && /^\s*([IVXL]+\s*[-–—.]|[a-z]\)\s)/.test(n.textContent || '')) { n.classList.add('lp-tx-lei'); n = n.nextElementSibling; }
+      });
+      alvo.querySelectorAll('.lp-texto .lp-tx-lei').forEach(function (pp) {
+        var a = pp.previousElementSibling, d = pp.nextElementSibling;
+        if (a && a.classList.contains('lp-tx-lei')) pp.classList.add('lei-cont');
+        if (d && d.classList.contains('lp-tx-lei')) pp.classList.add('lei-segue');
       });
     });
   };
