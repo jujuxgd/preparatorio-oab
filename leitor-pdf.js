@@ -489,6 +489,35 @@
         });
         fechaRun();
       });
+      // Questões comentadas não entram no modo texto: o treino fica em "Questões do dia". Dois formatos do material:
+      //   1) caixa "Questão … Solução … Comentário do professor" em letra 9pt (corpo em 12pt): vai da linha "Questão" até a primeira linha maior;
+      //   2) caixa de moldura vermelha das revisões: "(XXXVII Exame da OAB) enunciado … COMENTÁRIOS … Gabarito: B" (vai até acabar a moldura).
+      // Figura/tabela solta no meio da caixa sai junto; a que vem depois do fim fica.
+      var tiroQ = 0;
+      (function () {
+        var seq = []; pags.forEach(function (bl) { bl.forEach(function (l) { seq.push(l); }); });
+        var tx = []; seq.forEach(function (l, k) { if (l.txt && !l.rodape && !(conta[chave(l)] >= rep)) { l.k = k; tx.push(l); } });
+        var ROT = /^(Solução|Comentário do professor):?$/i, INI2 = /^\((?=[^)]*(Exame|INÉDITA))/, FIM2 = /^Gabarito:?\s*[A-E]\b/;
+        var blocos = [], dentro = null;
+        tx.forEach(function (l, n) {
+          var prox = tx[n + 1];
+          if (dentro) {
+            if (ROT.test(l.txt) || l.tam <= 9.6) { dentro.fim = l.k; return; }
+            blocos.push(dentro); dentro = null;
+          }
+          if (/^Questão(\s|$)/.test(l.txt) && l.tam >= 11 && prox && prox.tam <= 9.6 && !ROT.test(prox.txt)) { dentro = { ini: l.k, fim: l.k }; return; }
+          if (INI2.test(l.txt) && l.tam >= 11) {
+            if (l.rv) { var m = n + 1; while (tx[m] && tx[m].rv) m++; blocos.push({ ini: l.k, fim: tx[m - 1].k }); }
+            else for (var m2 = n; m2 < Math.min(tx.length, n + 120); m2++) if (FIM2.test(tx[m2].txt)) { blocos.push({ ini: l.k, fim: tx[m2].k }); break; }
+          }
+        });
+        if (dentro) blocos.push(dentro);
+        // bloco do formato 2 engole as linhas até o fim: pula as que já ficaram dentro dele
+        blocos.sort(function (a, b) { return a.ini - b.ini; });
+        var ate = -1;
+        blocos.forEach(function (b) { if (b.ini <= ate) return; tiroQ++; for (var k = b.ini; k <= b.fim; k++) seq[k].questao = true; ate = b.fim; });
+        pags.forEach(function (bl, jj) { pags[jj] = bl.filter(function (o) { return !o.questao; }); });
+      })();
       var h = '', par = null, ant = null, caixa = null, marca = '', cabUlt = null;
       function fecha() { if (par) { h += '<' + par.tag + (par.cls ? ' class="' + par.cls + '"' : '') + '>' + par.html + '</' + par.tag + '>'; par = null; } }
       function fechaCaixa() { fecha(); if (caixa) { h += '</div>'; caixa = null; } }
@@ -534,6 +563,7 @@
         });
       });
       fechaCaixa();
+      if (tiroQ && h) h += '<p class="lp-tx-nota">As questões comentadas deste capítulo ficam em “Questões do dia”.</p>';
       alvo.innerHTML = '<div class="lp-texto">' + (h || '<p class="lp-vazio">Este PDF não tem texto (é escaneado). Use o modo PDF.</p>') + '</div>';
       alvo.querySelectorAll('.lp-tx-fig').forEach(function (f) { f.addEventListener('click', function () { f.classList.toggle('grande'); }); });
     });
@@ -665,6 +695,8 @@
           k3 = k4 + 1;
         } else k3++;
       }
+      // o cabeçalho da caixa de questão ("Questão  ID  ano  exame  Primeira fase") tem vãos largos mas não é tabela: virava recorte de imagem
+      ls.forEach(function (l) { if (l.tab && /^Questão$/.test(l.partes[0].str.trim()) && l.partes.some(function (q) { return /Exame|fase/i.test(q.str); })) l.tab = false; });
       // item de lista = linha com uma bolinha desenhada logo à esquerda (a indentação sozinha enganava: texto centralizado em
       // célula de tabela também fica "recuado")
       function temBolinha(l) {
@@ -739,6 +771,20 @@
         for (var y = Math.floor(y0); y < y1; y += 4) for (var x = x0; x < x1; x += 4) { var k = (y * W + x) * 4; t++; if (px[k] < 225 || px[k + 1] < 225 || px[k + 2] < 225) n++; }
         return t ? n / t : 0;
       }
+      // caixa de questão das revisões = moldura vermelha (borda esquerda: faixa vertical de vermelho, longa e fina)
+      var molduras = [];
+      (function () {
+        var xa = Math.floor(W * 0.02), xb = Math.floor(W * 0.2), minH = Math.floor(H * 0.04);
+        for (var x = xa; x < xb; x++) {
+          var run = 0, y0 = 0;
+          for (var y = 0; y <= H; y++) {
+            var k = (y * W + x) * 4, verm = y < H && px[k] > 150 && px[k + 1] < 90 && px[k + 2] < 90;
+            if (verm) { if (!run) y0 = y; run++; }
+            else { if (run >= minH && !molduras.some(function (m) { return Math.abs(m.x - x) <= 3 && m.t === y0; })) molduras.push({ x: x, t: y0, b: y - 1 }); run = 0; }
+          }
+        }
+      })();
+      function naMoldura(l) { var cy = (l.top + l.bot) / 2; return molduras.some(function (m) { return cy >= m.t - 4 && cy <= m.b + 4 && l.x0 * W > m.x; }); }
       var out = [], i = 0;
       var pendT = tabelasB.slice().sort(function (a, b) { return a.top - b.top; });
       // célula = itens de texto cujo centro cai entre duas linhas horizontais e duas verticais da borda
@@ -841,9 +887,10 @@
         var AUDIO = /\s*Para ouvir ao áudio correspondente, acesse o LDI\.?\s*/g, IDQ = /\s4000\d{6}(?=\s)/g;
         // ícones de fontes de ícone (caracteres da área privada, ex.: o alto-falante do "ouvir o áudio") não são texto
         var ICONE = /[\uE000-\uF8FF]/g;
-        var t0 = acentos(txt).replace(ICONE, '').replace(AUDIO, ' ').replace(IDQ, '').replace(/\s+/g, ' ').trim(), h0 = acentos(html.replace(/<\/b>(\s*)<b>/g, '$1')).replace(ICONE, '').replace(AUDIO, ' ').replace(IDQ, '').trim(), mk = /^#/.test(t0);
+        var t0 = acentos(txt).replace(ICONE, '').replace(AUDIO, ' ').replace(IDQ, '').replace(/\s+/g, ' ').trim(), h0 = acentos(html.replace(/<\/b>(\s*)<b>/g, '$1')).replace(ICONE, '').replace(AUDIO, ' ').replace(IDQ, '').trim().replace(/<(span class="lp-tx-cor"|b)><\/(span|b)>/g, ''), mk = /^#/.test(t0);
         if (mk) { t0 = t0.replace(/^#\s*/, ''); h0 = h0.replace(/^((?:<[^>]+>)*)#\s*/, '$1'); }
         out.push({ col: l.col, y: l.y, tam: l.tam, top: l.top, bot: l.bot, txt: t0, html: h0, marca: mk, lixo: l.lixo, neg: nTot ? nNeg / nTot : 0,
+          rv: naMoldura(l),
           bolinha: !l.tab && temBolinha(l),
           rodape: (l.y < 45 || l.y > base.height - 45) && l.tam <= 8.5,
           bg: bg && !claro(bg) ? rgb(bg) : '', bgEscuro: bg && lum(bg) < 140 });
