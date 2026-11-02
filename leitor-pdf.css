@@ -1,7 +1,7 @@
 /* Leitor de PDF com grifos (leitor-pdf.js) */
 .lp-topo{position:relative;display:flex;align-items:center;gap:.6rem;margin-bottom:.7rem}
-.lp-info{font:500 .72rem Inter,sans-serif;color:var(--ink-faded);font-variant-numeric:tabular-nums;margin-right:auto;white-space:nowrap}
-.lp-acoes{display:flex;gap:.25rem}
+.lp-info{display:none}
+.lp-acoes{display:flex;gap:.25rem;margin-left:auto}
 .lp-i{position:relative;min-width:2.25rem;height:2.25rem;padding:0 .55rem;border-radius:999px;border:1px solid transparent;background:none;color:var(--ink-soft);font:600 .95rem Inter,sans-serif;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:.2rem}
 .lp-i:hover,.lp-i.on{background:var(--bg-soft,var(--bg));border-color:var(--line-soft,var(--line))}
 .lp-i .lp-ng{font-size:.66rem;color:var(--rose-deep)}
@@ -74,8 +74,8 @@
 .lp-pop textarea{width:100%;min-height:70px;font:inherit;font-size:.82rem;border:1px solid var(--line);border-radius:var(--radius-sm);padding:.5rem;background:var(--bg);color:var(--ink);resize:vertical;box-sizing:border-box}
 .lp-pop-acoes{display:flex;justify-content:flex-end;gap:.4rem;margin-top:.5rem}
 .lp-pop-acoes .btn{font-size:.74rem;padding:.35rem .8rem}
-.lp-caixa .lp-corpo{max-height:min(calc(100vh - 150px),860px);max-height:min(calc(100svh - 150px),860px);overflow:auto;overscroll-behavior:contain;border-radius:var(--radius);background:var(--bg-soft,var(--bg));padding:12px}
-.lp-caixa .lp-lista{top:0;max-height:min(calc(100svh - 174px),836px)}
+.lp-caixa .lp-corpo{max-height:min(calc(100vh - 220px),620px);max-height:min(calc(100svh - 220px),620px);overflow:auto;overscroll-behavior:contain;border-radius:var(--radius);background:var(--bg-soft,var(--bg));padding:12px}
+.lp-caixa .lp-lista{top:0;max-height:min(calc(100svh - 244px),596px)}
 @media (max-width:640px){
   .lp.lp-caixa .lp-corpo{padding:0;background:none;border-radius:0}
   .lp-rola{padding:.4rem .3rem}
@@ -83,7 +83,7 @@
 }
 @media (max-width:900px){
   .lp-corpo,.lp-com-lista .lp-corpo{grid-template-columns:1fr}
-  .lp-caixa .lp-corpo{max-height:72vh;max-height:72svh;padding:8px}
+  .lp-caixa .lp-corpo{max-height:62vh;max-height:62svh;padding:8px}
   .lp-lista{position:static;max-height:none;order:-1}
   .lp-pop{width:min(280px,90%)}
 }
