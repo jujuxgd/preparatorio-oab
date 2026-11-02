@@ -126,6 +126,6 @@ html.lp-travada,html.lp-travada body{overflow:hidden}
 .lp-tx-fig{margin-block:.6rem 1rem;overflow-x:auto;-webkit-overflow-scrolling:touch;cursor:zoom-in}
 .lp-tx-fig img{display:block;width:100%;height:auto;border-radius:6px;border:1px solid var(--line-soft);background:#fff}
 .lp-tx-fig.grande{cursor:zoom-out}
-.lp-tx-fig.grande img{width:220%;max-width:none}
+.lp-tx-fig.grande img{width:150%;max-width:none}
 .lp-tx-fig figcaption{font:500 .7rem Inter,sans-serif;color:var(--tx-fraco,var(--ink-faded));margin-top:.3rem}
 [data-theme="dark"] .lp-tx-fig img{filter:invert(.88) hue-rotate(180deg)}

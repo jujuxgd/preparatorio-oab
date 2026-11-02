@@ -418,7 +418,7 @@ Prova prático-profissional do OAB 48 em **28/02/2027** (cronograma da OAB). Jul
   ✎ grifos (só no PDF), **Aa** (só no Texto), ⛶ tela cheia e **⋯** (grifar área, uma coluna por vez, zoom, abrir no Drive).
   Ajustes do modo texto em `oab_lp_tx` (só do aparelho): letra (6 tamanhos), linhas (3), margem (3), fundo papel/sépia/noite e fonte
   Literata (serifa, Google Fonts) ou Inter. O "Aa" do topo não amplia mais o modo texto. Texto corrido entre páginas (parágrafo sem
-  pontuação final continua na página seguinte; marcador "p. N" discreto). PDFs impressos do navegador (Estratégia, fontes Type3 sem nome
+  pontuação final continua na página seguinte; sem número de página). PDFs impressos do navegador (Estratégia, fontes Type3 sem nome
   útil): negrito pela tinta de cada fonte (≥ 1,25× a do corpo); corpo = tamanho com mais caracteres; título só se maior que o corpo
   E em negrito (ou ≥ 1,6×), nunca começando em minúscula nem com mais de 110 caracteres; marcador "#" do Estratégia vira item com
   bolinha; chamadas "pelo APP"/QR code/link, sumário com pontilhado e "n/16" saem (`LIXO`).
@@ -447,7 +447,7 @@ Prova prático-profissional do OAB 48 em **28/02/2027** (cronograma da OAB). Jul
   (`mm`), no leitor de PDF (escurece no modo escuro), sem "Ler como texto" (`opts.semTexto`). Zoom 100% = página na largura da caixa;
   a caixa tem altura até 620px (62svh no celular) e rola por dentro; sem contagem de páginas na barra.
   Gabaritaço do tema virou uma linha discreta (`.gab-mini`, `<details>`) que monta o trecho só ao abrir. Posição do leitor em
-  `oab_lp_pos2`: não grava com o leitor escondido (antes, rolar a página com outra aba aberta salvava a última página). Conteúdo do dia sem a linha "Cap. N · título".
+  `oab_lp_pos2`: não grava com o leitor escondido. Figura do modo texto amplia a 150% ao tocar (antes, rolar a página com outra aba aberta salvava a última página). Conteúdo do dia sem a linha "Cap. N · título".
 
 ## 6. Design System
 
