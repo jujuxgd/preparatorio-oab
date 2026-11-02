@@ -297,6 +297,13 @@ salvo; a sessão nova é a rotina do dia e aparece como cartão no topo do Hoje.
   Fase 2 (21/12–08/01): revisão diária (caderno, flashcards, 20 questões de Ética), simulado parcial nos dias
   úteis e completo em 26/12 e 02/01; 24–25/12 e 31/12–01/01 leves; 09/01 só flashcards. Gerado por script fora
   do repo (tabela de dias com tema e tópicos do banco): para mudar, edite os dados direto mantendo o formato.
+- **Cronograma Estratégia (02/11/2026, escolha de Julia):** o VDE estava desatualizado (edição do 43º) e ela perdeu ~1 semana.
+  De 02/11 a 20/12 o `CAL_ATIVO` segue o **CRONOGRAMA 60 DIAS do Estratégia** (pasta do Drive de Julia `1B0V79GlFAE5r8BWlD0TKcY6ECXvWICGD`,
+  uma subpasta por matéria com COMPLETO e RESUMIDO): 7 semanas, seg–sex 2 temas, sábado `revisao` com `semanal: true` (Conteúdo lista os
+  temas da semana), domingo simulado (inalterado). Cada tema tem `n` ≥ 1001 e `e: [{c, t, r, x}]` (capítulo, título, ID resumido, ID
+  completo; Eleitoral só tem completo). O Conteúdo abre um capítulo por vez, Resumido por padrão (`oab_est_ver`, só do aparelho).
+  `plano-dinamico.js` tem duas filas (VDE antes de 02/11, Estratégia depois) e `SESSAO.atrasados()` só conta a partir de 02/11.
+  As semanas 8–9 do cronograma (revisão por matéria) não entraram: a fase 2 (21/12–09/01) continua a mesma.
 - **`plano-dinamico.js`** (carregar logo depois de `calendario-ativo.js`) → `window.PLANO`. A fase 1 vira uma fila de
   PDFs (`n`); "Adiantar" no Conteúdo do Hoje grava `oab_adiantado_v1 {n: data}`. Desde 13/10/2026 é uma fila corrida
   desde o 1º dia: cada dia de estudo pega as próximas vagas (1 ou 2 PDFs) da fila sem os adiantados, mais o que foi adiantado

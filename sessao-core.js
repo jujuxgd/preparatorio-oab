@@ -84,6 +84,7 @@
     x = x || DIA; if (!x) return '';
     if (x.top) return x.top.map(function (t) { return curto(t.d) + ' (' + t.s + ')'; }).join(' e ');
     if (x.tipo === 'simulado') return 'Simulado completo · ' + nomeExame(x.sim.exame);
+    if (x.semanal) return 'Revisão semanal: flashcards, caderno de erros e questões de ' + x.foco.map(curto).join(' e ');
     if (x.tipo === 'revisao') return (x.extra ? 'Revisão extra (você adiantou): ' : 'Revisão com foco em ') + x.foco.map(curto).join(' e ') + (x.extra ? '' : ' + Ética');
     if (x.tipo === 'leve') return 'Flashcards vencidos e 10 questões de Ética';
     if (x.tipo === 'vespera') return 'Só flashcards leves. Nada novo.';
@@ -188,15 +189,52 @@
     DIA.top.forEach(function (t) {
       if (t.n == null) return;
       var x = ns.filter(function (y) { return y.n === t.n; })[0];
-      if (!x) ns.push(x = { n: t.n, ids: [].concat((window.VDE_DIAS || {})[t.n] || []), temas: [] });
+      if (!x) ns.push(x = { n: t.n, e: t.e, ids: t.e ? t.e.map(function (c) { return c.r; }) : [].concat((window.VDE_DIAS || {})[t.n] || []), temas: [] });
       x.temas.push(curto(t.d) + ': ' + t.s);
     });
     return ns;
   }
+  function rotulo(n) { return n >= 1001 ? 'Estratégia' : 'Dia ' + n + ' do VDE'; }
+  // Capítulos do Estratégia: um leitor por vez; versão resumida (padrão) ou completa, escolha só do aparelho.
+  var K_VER = 'oab_est_ver';
+  function versao() { try { return localStorage.getItem(K_VER) === 'x' ? 'x' : 'r'; } catch (e) { return 'r'; } }
+  function htmlEstrategia(p) {
+    var v = versao(), c0 = p.e[0];
+    return '<div class="ss-bloco est-bloco"><h3><span class="n">Estratégia</span>' + esc(p.temas.join(' · ')) + '</h3>' +
+      '<div class="est-bar">' +
+        (p.e.length > 1 ? '<div class="est-caps">' + p.e.map(function (c, i) {
+          return '<button type="button" class="' + (i ? '' : 'on') + '" data-est-cap="' + i + '">Cap. ' + c.c + '</button>';
+        }).join('') + '</div>' : '') +
+        '<div class="est-ver"><button type="button" class="' + (v === 'r' ? 'on' : '') + '" data-est-ver="r">Resumido</button>' +
+        '<button type="button" class="' + (v === 'x' ? 'on' : '') + '" data-est-ver="x">Completo</button></div></div>' +
+      '<div class="est-tit">Cap. ' + c0.c + ' · ' + esc(c0.t) + '</div>' +
+      (window.LEITOR ? '<div class="lp-host" data-arq="' + c0[v] + '"></div>'
+        : '<iframe class="vde-pdf" src="https://drive.google.com/file/d/' + c0[v] + '/preview" allow="autoplay"></iframe>') + '</div>';
+  }
+  function ligarEstrategia(el) {
+    el.querySelectorAll('.est-bloco').forEach(function (b, bi) {
+      var p = pdfsDoDia().filter(function (x) { return x.e; })[bi], cap = 0;
+      function abrir() {
+        var c = p.e[cap], v = versao(), velho = b.querySelector('.lp-host, iframe');
+        b.querySelector('.est-tit').textContent = 'Cap. ' + c.c + ' · ' + c.t;
+        b.querySelectorAll('[data-est-cap]').forEach(function (x) { x.classList.toggle('on', +x.dataset.estCap === cap); });
+        b.querySelectorAll('[data-est-ver]').forEach(function (x) { x.classList.toggle('on', x.dataset.estVer === v); });
+        if (!window.LEITOR) { velho.src = 'https://drive.google.com/file/d/' + c[v] + '/preview'; return; }
+        var h = document.createElement('div'); h.className = 'lp-host'; h.dataset.arq = c[v];
+        velho.replaceWith(h); LEITOR.montar(h, c[v], { caixa: true });
+      }
+      b.addEventListener('click', function (ev) {
+        var a = ev.target.closest('[data-est-cap], [data-est-ver]'); if (!a) return;
+        if (a.dataset.estCap != null) cap = +a.dataset.estCap;
+        else try { localStorage.setItem(K_VER, a.dataset.estVer); } catch (e) {}
+        abrir();
+      });
+    });
+  }
   // Dias de revisão: a próxima Revisão VDE (1→2→3) ainda não feita de cada matéria em foco.
   var K_REVST = 'oab_revisao_status_v1';
   function revisoesDoDia() {
-    if (!DIA || DIA.tipo !== 'revisao' || !DIA.foco) return [];
+    if (!DIA || DIA.tipo !== 'revisao' || !DIA.foco || DIA.semanal) return [];
     var st = ler(K_REVST, {}), lib = window.BIBLIOTECA_REVISAO || [];
     return DIA.foco.map(function (d) {
       var its = lib.filter(function (x) { return x.g === 'rev' && x.a === NOME_REV[d]; }).sort(function (a, b) { return +a.b - +b.b; });
@@ -222,18 +260,28 @@
     if (!window.PLANO || DATA !== HOJE) return '';
     var h = '', feitos = PLANO.adiantadosHoje(), prox = PLANO.proximo();
     if (feitos.length) h += '<div class="adi-feitos">' + feitos.map(function (u) {
-      return '<span>Adiantado: Dia ' + u.n + ' · ' + esc(u.tops.map(function (t) { return curto(t.d); }).join(' + ')) +
+      return '<span>Adiantado: ' + rotulo(u.n) + ' · ' + esc(u.tops.map(function (t) { return curto(t.d); }).join(' + ')) +
         ' <button type="button" data-desfazer="' + u.n + '">desfazer</button></span>';
     }).join('') + '</div>';
     if (prox) h += '<div class="adi"><div><div class="adi-eb">Terminou? Adiante o próximo</div>' +
-      '<b>Dia ' + prox.n + ' do VDE · ' + esc(prox.tops.map(function (t) { return curto(t.d) + ': ' + t.s; }).join(' · ')) + '</b>' +
+      '<b>' + rotulo(prox.n) + ' · ' + esc(prox.tops.map(function (t) { return curto(t.d) + ': ' + t.s; }).join(' · ')) + '</b>' +
       '<small>Previsto para ' + dm(prox.d) + '. O calendário anda para frente e os dias que sobrarem viram revisão extra.</small></div>' +
       '<button type="button" class="btn btn-primary" data-adiantar="' + prox.n + '">Adiantar</button></div>';
     else if (!feitos.length) h += '';
     return h;
   }
+  // Revisão semanal: os temas da semana, cada um com link para o dia (capítulo e grifos ficam lá).
+  function htmlSemana() {
+    var i = indice(), ds = [];
+    for (var j = i - 1; j >= 0 && ds.length < 5; j--) { var x = CAL.dias[j]; if (x.tipo === 'simulado' || x.semanal) break; if (x.top) ds.unshift(x); }
+    return '<div class="ss-bloco"><p style="margin:0 0 .8rem">' + esc(resumoDoDia()) + '. Releia seus grifos dos temas da semana e refaça as questões que errou.</p>' +
+      '<ul class="est-semana">' + ds.map(function (x) {
+        return '<li><a href="hoje.html?data=' + x.d + '"><b>' + dm(x.d) + '</b> ' + esc(x.top.map(function (t) { return curto(t.d) + ': ' + t.s; }).join(' · ')) + ' →</a></li>';
+      }).join('') + '</ul></div>';
+  }
   function htmlConteudo() {
     var ps = pdfsDoDia();
+    if (DIA && DIA.semanal) return htmlSemana();
     if (!ps.length) {
       var rv = htmlRevisoes();
       return (rv ? '<div class="ss-bloco"><p style="margin:0">' + esc(resumoDoDia()) + '. Releia a Revisão do VDE de cada matéria em foco e grife o que ainda escapa.</p></div>' + rv
@@ -241,6 +289,7 @@
     }
     var gabFeito = {};
     return ps.map(function (p) {
+      if (p.e) return htmlEstrategia(p) + htmlGabaritaco(function (t) { return t.n === p.n; }, gabFeito);
       return '<div class="ss-bloco"><h3><span class="n">Dia ' + p.n + ' do VDE</span>' + esc(p.temas.join(' · ')) + '</h3>' +
         (p.ids.length ? p.ids.map(function (id, i) {
           return (p.ids.length > 1 ? '<div class="lp-parte">Parte ' + (i + 1) + '</div>' : '') +
@@ -271,6 +320,7 @@
   function montarConteudo(el) {
     el.innerHTML = htmlConteudo();
     if (window.LEITOR) el.querySelectorAll('.lp-host').forEach(function (h) { LEITOR.montar(h, h.dataset.arq, { caixa: true }); });
+    ligarEstrategia(el);
   }
 
   // ── checklist do dia ──
@@ -287,7 +337,7 @@
     var it = [], f = fila(), n = f.venc.length + f.novos.length;
     if (DIA.tipo === 'prova') return [{ id: 'prova', t: 'Prova da 1ª fase · 13h às 18h', s: 'Documento com foto, caneta preta de material transparente. Nada novo hoje.' }];
     revisoesDoDia().forEach(function (r) { it.push({ id: 'rv-' + r.d, t: 'Revisão ' + r.r + ' do VDE · ' + curto(r.d), s: 'Ler e grifar na aba Conteúdo', aba: 'conteudo' }); });
-    pdfsDoDia().forEach(function (p) { it.push({ id: 'p' + p.n, t: 'Ler o PDF do Dia ' + p.n + ' do VDE', s: esc(p.temas.join(' · ')) + ' · aba Conteúdo', aba: 'conteudo' }); });
+    pdfsDoDia().forEach(function (p) { it.push({ id: 'p' + p.n, t: p.e ? 'Ler o capítulo do Estratégia' + (p.e.length > 1 ? ' (' + p.e.length + ' capítulos)' : '') : 'Ler o PDF do Dia ' + p.n + ' do VDE', s: esc(p.temas.join(' · ')) + ' · aba Conteúdo', aba: 'conteudo' }); });
     it.push({ id: 'fc', t: 'Flashcards do dia', s: n ? f.venc.length + ' vencidos + ' + f.novos.length + ' novos · aba Flashcards' : f.feitos.length ? f.feitos.length + ' novos feitos hoje' : 'Nada vence hoje', aba: 'flashcards' });
     if (DIA.top) DIA.top.forEach(function (t, i) {
       var l = linkTopico(t);
@@ -632,7 +682,7 @@
         sem = chave;
         h += '<div class="cal-sem"><h4>Semana de ' + seg.getDate() + ' ' + MESES[seg.getMonth()] + (x.f === 2 ? ' · Fase 2' : x.f === 1 ? ' · Fase 1' : '') + '</h4>';
       }
-      var desc = x.top ? x.top.map(function (t) { return '<b>' + esc(curto(t.d)) + '</b> · ' + esc(t.s) + (t.n != null ? ' <span class="tp">(Dia ' + t.n + ' VDE)</span>' : ''); }).join('<br>')
+      var desc = x.top ? x.top.map(function (t) { return '<b>' + esc(curto(t.d)) + '</b> · ' + esc(t.s) + (t.n != null ? ' <span class="tp">(' + (t.e ? 'Estratégia' : 'Dia ' + t.n + ' VDE') + ')</span>' : ''); }).join('<br>')
         : x.tipo === 'simulado' ? '<b>Simulado completo</b> · ' + esc(nomeExame(x.sim.exame))
         : x.tipo === 'revisao' ? 'Revisão: caderno + flashcards (foco ' + x.foco.map(curto).join(' e ') + ') + Ética' + (x.sim ? ' · simulado ' + (x.sim.modo === 'completo' ? 'completo (' + esc(nomeExame(x.sim.exame)) + ')' : 'parcial') : '')
         : x.tipo === 'leve' ? 'Leve: flashcards vencidos + 10 questões de Ética'
@@ -719,12 +769,13 @@
     gravar(K_CHECK, t);
   }
 
-  // dia do plano já passado sem "Estudei hoje" (dias leves não contam)
+  // dia do plano já passado sem "Estudei hoje" (dias leves não contam); conta só desde o recomeço do plano em 02/11
+  var INICIO_ATRASO = '2026-11-02';
   function atrasados() {
     if (!CAL) return [];
     var f = ler(K_CHECK, {});
     return CAL.dias.filter(function (x) {
-      return x.d < HOJE && x.tipo !== 'leve' && x.tipo !== 'vespera' && x.tipo !== 'prova' && !(f[x.d] && f[x.d].feito);
+      return x.d < HOJE && x.d >= INICIO_ATRASO && x.tipo !== 'leve' && x.tipo !== 'vespera' && x.tipo !== 'prova' && !(f[x.d] && f[x.d].feito);
     }).map(function (x) { return x.d; });
   }
 

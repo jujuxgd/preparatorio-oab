@@ -138,3 +138,13 @@
 .pn-details[open]>summary::before{transform:rotate(90deg)}
 .pn-details>summary span{font:400 .74rem Inter,sans-serif;color:var(--ink-faded);margin-left:.4rem}
 .pn-details[open]{padding-bottom:1rem}
+
+/* capítulos do Estratégia na aba Conteúdo */
+.est-bar { display: flex; flex-wrap: wrap; gap: .5rem .8rem; align-items: center; justify-content: space-between; margin: 0 0 .5rem; }
+.est-caps, .est-ver { display: flex; gap: .35rem; flex-wrap: wrap; }
+.est-bar button { font: inherit; font-size: .78rem; padding: .3rem .7rem; border-radius: 999px; border: 1px solid var(--line, #e6ddd8); background: var(--paper); color: var(--ink); cursor: pointer; }
+.est-bar button.on { background: var(--rose-soft); border-color: var(--rose); color: var(--rose-deep); font-weight: 600; }
+.est-tit { font-size: .85rem; color: var(--ink-faded); margin: 0 0 .6rem; }
+.est-semana { list-style: none; margin: 0; padding: 0; display: grid; gap: .45rem; }
+.est-semana a { display: block; padding: .6rem .8rem; border: 1px solid var(--line, #e6ddd8); border-radius: var(--radius-sm, 8px); color: var(--ink); text-decoration: none; font-size: .9rem; }
+.est-semana a b { color: var(--rose-deep); margin-right: .3rem; }
