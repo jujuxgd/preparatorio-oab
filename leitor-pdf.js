@@ -497,7 +497,7 @@
       (function () {
         var seq = []; pags.forEach(function (bl) { bl.forEach(function (l) { seq.push(l); }); });
         var tx = []; seq.forEach(function (l, k) { if (l.txt && !l.rodape && !(conta[chave(l)] >= rep)) { l.k = k; tx.push(l); } });
-        var ROT = /^(Solução|Comentário do professor):?$/i, INI2 = /^\((?=[^)]*(Exame|INÉDITA))/, FIM2 = /^Gabarito:?\s*[A-E]\b/;
+        var ROT = /^(Solução|Comentário do professor):?$/i, INI2 = /^\((?:(?=[^)]*(?:Exame|INÉDITA))|[^)]*(?:OAB|CESPE|FGV)[^)]*[-/]\s*(?:19|20)\d{2}\s*\))/, FIM2 = /^Gabarito:?\s*[A-E]\b/;
         var blocos = [], dentro = null;
         tx.forEach(function (l, n) {
           var prox = tx[n + 1];
@@ -510,7 +510,12 @@
           if (/^Questão(\s|$)/.test(l.txt) && l.tam >= 11 && prox && prox.tam <= 9.6 && !ROT.test(prox.txt)) { dentro = { ini: l.k, fim: l.k }; return; }
           if (INI2.test(l.txt) && l.tam >= 11) {
             if (l.rv) { var m = n + 1; while (tx[m] && tx[m].rv) m++; blocos.push({ ini: l.k, fim: tx[m - 1].k }); }
-            else for (var m2 = n; m2 < Math.min(tx.length, n + 120); m2++) if (FIM2.test(tx[m2].txt)) { blocos.push({ ini: l.k, fim: tx[m2].k }); break; }
+            else for (var m2 = n; m2 < Math.min(tx.length, n + 400); m2++) {
+              // sem "Gabarito" antes da próxima questão: a caixa acaba na linha anterior a ela (não engole texto de estudo)
+              // título de seção (letra bem maior que a do corpo) também encerra: nunca engole texto de estudo
+              if (m2 > n && (tx[m2].tam >= 14.5 || (INI2.test(tx[m2].txt) && tx[m2].tam >= 11))) { blocos.push({ ini: l.k, fim: tx[m2 - 1].k }); break; }
+              if (FIM2.test(tx[m2].txt)) { blocos.push({ ini: l.k, fim: tx[m2].k }); break; }
+            }
           }
         });
         if (dentro) { if (dentro.rot) dentro.fim = seq.length - 1; blocos.push(dentro); }

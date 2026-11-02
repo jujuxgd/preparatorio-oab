@@ -491,10 +491,11 @@ Prova prático-profissional do OAB 48 em **28/02/2027** (cronograma da OAB). Jul
 - **Modo texto sem questões (02/11/2026):** as questões comentadas do capítulo não entram no modo texto (o treino fica em "Questões do dia"; uma nota no fim avisa).
   Dois formatos: (1) caixa "Questão … Solução … Comentário do professor", letra 9pt com corpo em 12pt — vai da linha "Questão" até a primeira linha maior;
   o comentário pode vir numa caixa tratada como tabela, que sai junto; (2) caixa de moldura vermelha das revisões ("(XXXVII Exame da OAB) … COMENTÁRIOS … Gabarito"),
-  detectada pela moldura. Também saem "Hora de responder questões!", QR/links, "Prof. Estratégia Materiais" e o título-rodapé. Dois acentos decompostos ("questo˜es")
+  detectada pela moldura; (3) questões no corpo (12pt) que abrem com "(OAB/FGV - 2012)", "(CESPE/OAB - 2008)", "(FGV/OAB/2023)" e acabam em "Gabarito: X" (só o ECA Completo; a
+  caixa acaba antes da próxima questão ou de qualquer título maior, nunca engole texto de estudo — um padrão largo demais apagou o Provimento 205/2021 de Ética). Também saem "Hora de responder questões!", QR/links, "Prof. Estratégia Materiais" e o título-rodapé. Dois acentos decompostos ("questo˜es")
   exigem filtros tolerantes. Nos PDFs "Completo" de Penal as questões podem ser ~80% do texto: é esperado, o texto de estudo (12pt) fica inteiro.
   Tabelas: faixas só se juntam se uma linha vertical atravessa o espaço (tabelas empilhadas não se fundem); caixa de destaque de uma coluna vira uma célula;
-  palavra comprida em coluna estreita quebra (`overflow-wrap:anywhere`). Revisão visual e por palavras feita nos 84 capítulos "Resumido" e em 12 "Completo".
+  palavra comprida em coluna estreita quebra (`overflow-wrap:anywhere`). Revisão visual e por palavras feita nos 84 capítulos "Resumido" e nos 84 "Completo" (zero sobra de questão/lixo; texto de estudo em 12pt intacto).
 - **Polimento visual (nov/2026):** `polimento.css` (injetado por `topnav.js`, no cache offline) vale para todas as páginas: contraste do texto de apoio, cartões com borda/sombra
   na cor de destaque (exceto Início, que mantém o visual original), títulos menores em celular/tablet, toque/foco/movimento (hover 200 ms ease-out, entrada de página curta,
   fundo parado em tela pequena). Tipografia (caixa-alta dos rótulos, posição dos títulos) é a original — Julia pediu para voltar. O botão "Aa" fica escondido; a chave 1ª/2ª fase
