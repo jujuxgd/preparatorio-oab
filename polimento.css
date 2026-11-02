@@ -2,6 +2,9 @@
    Texto de apoio legível, toque com resposta e movimento. A tipografia (tamanhos, caixa-alta, posição dos títulos) é a original do site.
    Tudo que tem cor nasce da cor de destaque escolhida no Perfil. */
 
+/* iOS Safari aumenta sozinho o texto de blocos longos (enunciados, comentários); aqui o tamanho manda */
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
 /* texto de apoio: o bege claro (#A89A8E) ficava abaixo de 3:1 sobre branco; só no tema claro */
 :root:not([data-theme="dark"]) { --ink-faded: #7F7067; }
 
