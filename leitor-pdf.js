@@ -442,7 +442,7 @@
       function fecha() { if (par) { h += '<' + par.tag + (par.cls ? ' class="' + par.cls + '"' : '') + '>' + par.html + '</' + par.tag + '>'; par = null; } }
       function fechaCaixa() { fecha(); if (caixa) { h += '</div>'; caixa = null; } }
       pags.forEach(function (bl, j) {
-        marca = '<span class="lp-tx-n" aria-hidden="true">p. ' + (de + j) + '</span>';
+        marca = '';
         var primeira = true;
         bl.forEach(function (l) {
           if (l.img) { fechaCaixa(); h += marca + '<figure class="lp-tx-fig"><img src="' + l.img + '" alt="' + (l.tabela ? 'Tabela' : 'Figura') + ' da página ' + (de + j) + '" loading="lazy"><figcaption>' + (l.tabela ? 'Tabela' : 'Figura') + ' do PDF · toque para ampliar</figcaption></figure>'; marca = ''; ant = null; primeira = false; return; }
