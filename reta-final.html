@@ -187,8 +187,14 @@
 
 /* ── Responsivo (mobile) ─────────────────────── */
 @media (max-width: 640px) {
-  .rf-hero::after { font-size: 3rem; right: 1rem; }
-  .rf-hero h2 { font-size: 1.4rem; }
+  /* o título repete o da página ("Materiais extras") e o cartão ocupava meia tela: vira uma faixa curta */
+  .rf-hero { padding: 0 !important; margin-bottom: .9rem; background: none !important; border-radius: 0; color: var(--ink-soft); }
+  .topbar { margin-bottom: 1rem !important; }
+  .rf-hero::before, .rf-hero::after { display: none; }
+  .rf-hero h2 { display: none; }
+  .rf-hero p { font-size: .88rem !important; line-height: 1.5; opacity: 1; max-width: none; margin: 0; }
+  .rf-warning { margin: .9rem 0 1.2rem !important; padding: .55rem .75rem !important; font-size: .76rem !important; line-height: 1.45; gap: .5rem !important; border-radius: var(--radius-sm, 10px) !important; }
+  .rf-warning .icon { font-size: .9rem !important; }
 
   .rf-grid { grid-template-columns: 1fr; gap: 0.7rem; margin-bottom: 1.6rem; }
   .rf-card { padding: 1rem 1.1rem; }
