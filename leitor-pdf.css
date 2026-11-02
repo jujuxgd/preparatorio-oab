@@ -195,3 +195,21 @@ html.lp-travada,html.lp-travada body{overflow:hidden}
 .lp-texto .lp-tx-tab td{padding:.55rem .65rem}
 .lp-tx-nota{text-align:center;border-top:0;opacity:.85}
 @media (min-width:900px){.lp .lp-texto>p,.lp .lp-texto>h3,.lp .lp-texto>h4{max-width:min(72ch,100%)}}
+
+/* ═══ Harmonia (nov/2026): uma escala só de espaços (0,5 · 0,9 · 1,6em), títulos mais próximos do texto, negrito mais leve ═══ */
+.lp-texto p{margin-block:0 .9em}
+.lp-texto b{font-weight:600}
+.lp-texto h3{margin-block:1.6em .45em}
+.lp-texto h3::before{width:1.6rem;margin-bottom:.45em}
+.lp-texto>h3:first-child{margin-top:.2em}
+.lp-texto h4{margin-block:1.1em .3em}
+.lp-texto h3+h4,.lp-texto h3+.lp-tx-caixa,.lp-texto h4+.lp-tx-caixa{margin-top:.35em}
+.lp-texto .lp-tx-item{margin-block:0 .45em}
+.lp-texto .lp-tx-item+p:not(.lp-tx-item){margin-top:.9em}
+.lp-texto .lp-tx-lei,.lp-texto .lp-tx-dica{margin-block:.2em .9em}
+.lp-tx-caixa{margin-block:.4rem .9rem}
+.lp-tx-fig,.lp-texto .lp-tx-tab{margin-block:.6rem 1rem}
+/* caixa escura do PDF (faixa de título): tom claro da cor de destaque em vez do bloco cheio, para combinar com o resto */
+.lp-tx-caixa.escura{background:color-mix(in srgb,var(--tx-ac) 13%,var(--tx-bg,var(--paper)));color:color-mix(in srgb,var(--tx-ac) 78%,var(--tx-ink))}
+.lp-tx-caixa.escura h3,.lp-tx-caixa.escura h4,.lp-tx-caixa.escura b{color:inherit}
+.lp[data-tx-fundo="noite"] .lp-tx-caixa.escura,[data-theme="dark"] .lp-tx-caixa.escura{background:color-mix(in srgb,var(--tx-ac) 24%,var(--tx-bg,var(--paper)));color:color-mix(in srgb,var(--tx-ac) 45%,#fff)}
