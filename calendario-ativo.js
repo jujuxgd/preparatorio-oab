@@ -3,7 +3,8 @@
 // 02/11–20/12 (escolha de Julia, 02/11/2026): cronograma de 60 dias do Estratégia — seg–sex 2 temas, sábado
 // revisão semanal, domingo simulado completo. Nesses temas n ≥ 1001 e e = capítulos do Estratégia no Drive
 // dela (c = nº, t = título, r = resumido, x = completo). q = tópicos do banco; k = faixa de DICAS do
-// Gabaritaço; g = questões "Como já caiu". Fase 2 (21/12–09/01): revisão.
+// Gabaritaço (conferida pelos títulos das DICAS); g = questões "Como já caiu"; fc = temas dos
+// flashcards (campo t) daquele tema — só eles entram no dia. Fase 2 (21/12–09/01): revisão.
 window.CAL_ATIVO = {
 "curto": {
 "Ética Profissional": "Ética",
@@ -599,6 +600,24 @@ window.CAL_ATIVO = {
 "r": "1nCUxgdkMZHDGg2ME8YF_GoHM5Es_SLU9",
 "x": "1k8rbXRNxbFZ3qSlPAGRfxZdTDK6CLOY7"
 }
+],
+"fc": [
+"Sigilo profissional",
+"Publicidade",
+"Relações com o cliente",
+"Princípios"
+],
+"k": [
+56,
+60
+],
+"g": [
+"oab_001237",
+"oab_000688",
+"oab_000609",
+"oab_000685",
+"oab_001155",
+"oab_000840"
 ]
 },
 {
@@ -616,14 +635,19 @@ window.CAL_ATIVO = {
 "x": "1PnIbwRlgNMOPzfMz7gZ04XB1KkM47n_M"
 }
 ],
+"fc": [
+"Direitos fundamentais",
+"Direitos individuais e coletivos"
+],
 "k": [
-1,
-14
+6,
+16
 ],
 "g": [
 "oab_000232",
 "oab_000854",
-"oab_000930"
+"oab_000930",
+"oab_001087"
 ]
 }
 ]
@@ -647,6 +671,14 @@ window.CAL_ATIVO = {
 "r": "1wE4Kvg2nq8sYJAeXlV3isSDuCQQ8_Qop",
 "x": "1n8L_BYmsTunuvXWX9c-fZigiNXtzLhRh"
 }
+],
+"fc": [
+"Pessoas naturais",
+"Direitos da personalidade",
+"Morte presumida",
+"Comoriência",
+"Pessoas jurídicas",
+"Teoria geral: pessoas"
 ],
 "k": [
 1,
@@ -676,6 +708,19 @@ window.CAL_ATIVO = {
 "r": "1p0a0MwcOrLDHjVmdasd9KheDtUpe1w3y",
 "x": "1nP55OiM5nnC-nC9zjZc1U78m2ZsuzNnY"
 }
+],
+"fc": [
+"Tentativa",
+"Iter criminis"
+],
+"k": [
+11,
+15
+],
+"g": [
+"oab_000060",
+"oab_001136",
+"oab_001137"
 ]
 }
 ]
@@ -701,9 +746,15 @@ window.CAL_ATIVO = {
 "x": "1gzo3sIiRnycIjXPM_8OhGM_S1v-o1fBw"
 }
 ],
+"fc": [
+"Partes e procuradores",
+"Honorários",
+"Gratuidade da justiça",
+"Partes e procuradores"
+],
 "k": [
 8,
-23
+14
 ],
 "g": [
 "oab_000660",
@@ -727,11 +778,19 @@ window.CAL_ATIVO = {
 "x": "1NpxLKzXtHOQiLJVG9DpSnlorFICgYPxB"
 }
 ],
+"fc": [
+"Direitos e prerrogativas",
+"Desagravo público",
+"Direitos do advogado"
+],
 "k": [
 14,
 21
 ],
 "g": [
+"oab_001003",
+"oab_001080",
+"oab_000224",
 "oab_001161",
 "oab_001078",
 "oab_001162"
@@ -759,6 +818,24 @@ window.CAL_ATIVO = {
 "r": "1ZOs-wEi_JBYWJmZG1q5lrTQnAvNOkFW-",
 "x": "1KC92seK8FEUNquyq3lWNkzisxPC05OBa"
 }
+],
+"fc": [
+"Doméstico",
+"Trabalho do menor",
+"Trabalho da mulher",
+"Teletrabalho",
+"Intermitente",
+"Empregado hipersuficiente",
+"Estágio",
+"Relações empregatícias especiais"
+],
+"k": [
+4,
+11
+],
+"g": [
+"oab_000830",
+"oab_000754"
 ]
 },
 {
@@ -776,8 +853,11 @@ window.CAL_ATIVO = {
 "x": "19RGidK_G_YgpORX-04naQPtGnORv4D_p"
 }
 ],
+"fc": [
+"Intervenção do Estado na propriedade"
+],
 "k": [
-54,
+60,
 64
 ],
 "g": [
@@ -806,6 +886,10 @@ window.CAL_ATIVO = {
 "x": "1hlEXH-FlRH8vXc3y5HCqp20sE2kslrmm"
 }
 ],
+"fc": [
+"Competência",
+"Jurisdição e competência"
+],
 "k": [
 16,
 23
@@ -829,6 +913,17 @@ window.CAL_ATIVO = {
 "r": "1dQjXWBBMTTNf-Dwy6o5gPBHxrSWxXGL6",
 "x": "1NIbNnQyX5jARwcirtpGaQuqufr-35Gkn"
 }
+],
+"fc": [
+"Desapropriação",
+"Desapropriação"
+],
+"k": [
+54,
+59
+],
+"g": [
+"oab_001344"
 ]
 }
 ]
@@ -871,6 +966,9 @@ window.CAL_ATIVO = {
 "r": "1JSEzkBv3xNvHji0zVAMF5rUeS4Ki0QmJ",
 "x": "1u2ZpdF1sutO0UzSzhMd6iqstePxQ94Yo"
 }
+],
+"fc": [
+"Sociedades em conta de participação"
 ]
 },
 {
@@ -888,8 +986,12 @@ window.CAL_ATIVO = {
 "x": "1PnIbwRlgNMOPzfMz7gZ04XB1KkM47n_M"
 }
 ],
+"fc": [
+"Remédios constitucionais",
+"Remédios constitucionais"
+],
 "k": [
-15,
+17,
 21
 ],
 "g": [
@@ -918,6 +1020,17 @@ window.CAL_ATIVO = {
 "r": "1DcHC_NS8S6tD9gdl_8p7ND-amBewJV-6",
 "x": "1kwUf7D4Me_yPIn28rVVHQu8E38Y18DPy"
 }
+],
+"fc": [
+"Negócio jurídico",
+"Teoria geral: fato jurídico"
+],
+"k": [
+7,
+11
+],
+"g": [
+"oab_001274"
 ]
 },
 {
@@ -934,6 +1047,9 @@ window.CAL_ATIVO = {
 "r": "1JSEzkBv3xNvHji0zVAMF5rUeS4Ki0QmJ",
 "x": "1u2ZpdF1sutO0UzSzhMd6iqstePxQ94Yo"
 }
+],
+"fc": [
+"Sociedades limitadas"
 ]
 }
 ]
@@ -957,6 +1073,9 @@ window.CAL_ATIVO = {
 "r": "18-Wwz03PLeMBgIWwGbWEDj3ypZfaWCQD",
 "x": "12iHW3GMwdpVi5C1xx9Z4H7vhuwkuNJkl"
 }
+],
+"fc": [
+"Tratados internacionais"
 ]
 },
 {
@@ -974,9 +1093,13 @@ window.CAL_ATIVO = {
 "x": "1MU6SrB3EwUswLlPtG2MURxq2gj7d4ten"
 }
 ],
+"fc": [
+"Provas",
+"Teoria geral das provas"
+],
 "k": [
 24,
-31
+26
 ],
 "g": [
 "oab_000597"
@@ -1004,9 +1127,13 @@ window.CAL_ATIVO = {
 "x": "1V61A4-_7YcUa-mMfqL_vCyl9Z6XBwvsV"
 }
 ],
+"fc": [
+"Obrigação tributária",
+"Obrigação tributária"
+],
 "k": [
 40,
-52
+45
 ]
 },
 {
@@ -1042,9 +1169,13 @@ window.CAL_ATIVO = {
 "x": "1fmdAKbMU2dSZ-bjyLUkfC5adqBYT-QbS"
 }
 ],
+"fc": [
+"Defesa do réu",
+"Defesa"
+],
 "k": [
-12,
-29
+19,
+24
 ],
 "g": [
 "oab_000680"
@@ -1071,6 +1202,9 @@ window.CAL_ATIVO = {
 "r": "1_LVk7X2MVng9HtJtxvjdN6iPV9glp-S1",
 "x": "1WzSqb4Alf9YxWlw1UlShueEfhIoto3bl"
 }
+],
+"fc": [
+"Adoção"
 ]
 },
 {
@@ -1094,6 +1228,17 @@ window.CAL_ATIVO = {
 "r": "1NhWxJnRdci4ydgF6IwJ3wYAYP-HtHCO5",
 "x": "1s6eERong9l7GwPA55CH97XI0pjGVZDhQ"
 }
+],
+"fc": [
+"Teoria da pena"
+],
+"k": [
+29,
+39
+],
+"g": [
+"oab_001133",
+"oab_000587"
 ]
 }
 ]
@@ -1144,14 +1289,22 @@ window.CAL_ATIVO = {
 "x": "1AMIxqxYiElOc-e-K4lOBlo4bIUHXbz17"
 }
 ],
+"fc": [
+"Sociedade de advogados",
+"Honorários",
+"Advogado empregado",
+"Sociedade de advogados e honorários advocatícios"
+],
 "k": [
-7,
-26
+22,
+32
 ],
 "g": [
 "oab_001003",
 "oab_001080",
-"oab_000224"
+"oab_000224",
+"oab_000147",
+"oab_000996"
 ]
 },
 {
@@ -1168,6 +1321,10 @@ window.CAL_ATIVO = {
 "r": "1orE_BcNmDJgL3QyYtihpKCpgM0CDBOnO",
 "x": "1FK2E3HkRn2hDEI-HtWjWmycFkXvNCnbg"
 }
+],
+"fc": [
+"Imunidades",
+"Imunidades"
 ],
 "k": [
 25,
@@ -1196,6 +1353,9 @@ window.CAL_ATIVO = {
 "x": "1FwbEvQniacGnXv5TOr6AmaC4AfWZT9Ov"
 }
 ],
+"fc": [
+"Responsabilidade civil do Estado"
+],
 "k": [
 65,
 69
@@ -1218,6 +1378,14 @@ window.CAL_ATIVO = {
 "r": "1vFov5Lf8hTJNgS-eg8G1Ic7DvcK27brE",
 "x": "1HFE0t6wi8LEukq4jJvSMzvFYPz_Kdmmi"
 }
+],
+"fc": [
+"Petição inicial",
+"Audiência de conciliação",
+"Defesa do réu",
+"Saneamento",
+"Audiência de instrução",
+"Procedimento comum"
 ],
 "k": [
 31,
@@ -1252,6 +1420,9 @@ window.CAL_ATIVO = {
 "r": "1vGN9mP13wbc28p1SjUTZjFCdBhgSsruK",
 "x": "1OIIjFyrg-vBad6D2el5CBBP4fswWt1nN"
 }
+],
+"fc": [
+"Oferta e publicidade; práticas abusivas; bancos de dados"
 ]
 },
 {
@@ -1268,6 +1439,12 @@ window.CAL_ATIVO = {
 "r": "17wO8nW9xeFQNm7onRRFppAa5jH09oWOZ",
 "x": "1Z_U7HAR-xwiqUe5mmheEdzYD9IGKe6iA"
 }
+],
+"fc": [
+"Títulos de crédito",
+"Letra de câmbio",
+"Cheque",
+"Títulos de crédito (letra de câmbio e cheque)"
 ]
 }
 ]
@@ -1297,6 +1474,9 @@ window.CAL_ATIVO = {
 "r": "1vF376-t3OVEHee0-8-Sz-yrZl9UmFZLy",
 "x": "1C6TgDbdDJwhGzP3MApIIpb4Y3g79wrdz"
 }
+],
+"fc": [
+"DUDH, PIDCP e PIDESC"
 ]
 },
 {
@@ -1314,9 +1494,13 @@ window.CAL_ATIVO = {
 "x": "1E9Jl42A-DdNVvZG-WI4wXYSf-77ltDEU"
 }
 ],
+"fc": [
+"Procedimentos",
+"Procedimento ordinário"
+],
 "k": [
-39,
-44
+40,
+42
 ],
 "g": [
 "oab_000752"
@@ -1349,6 +1533,19 @@ window.CAL_ATIVO = {
 "r": "1vtZhvnrPv97zPWZi7A2Tnpq7YeuRwqml",
 "x": "1Hzix8XoaL6hYsWCOgMUMK4nADggcjF3_"
 }
+],
+"fc": [
+"Erro de tipo",
+"Espécies de erro: essenciais e acidentais"
+],
+"k": [
+10,
+10
+],
+"g": [
+"oab_000060",
+"oab_001136",
+"oab_001137"
 ]
 },
 {
@@ -1365,6 +1562,20 @@ window.CAL_ATIVO = {
 "r": "1HXLxfYZGddcmM08Vu7jynswagdUoB84S",
 "x": "1DW_7pkOxbF5FgYAyCZ9_F5_hrPiWCoLK"
 }
+],
+"fc": [
+"Despesas processuais",
+"Honorários"
+],
+"k": [
+9,
+11
+],
+"g": [
+"oab_001232",
+"oab_001230",
+"oab_000995",
+"oab_001391"
 ]
 }
 ]
@@ -1408,6 +1619,10 @@ window.CAL_ATIVO = {
 "x": "1jeHxOohwdDiR8kgOhVp2QNPpI90y9VKu"
 }
 ],
+"fc": [
+"Incompatibilidades e impedimentos",
+"Incompatibilidades e impedimentos"
+],
 "k": [
 33,
 37
@@ -1430,6 +1645,10 @@ window.CAL_ATIVO = {
 "r": "10rmH5mCcEBR_zc1wA1hGUqoXxdwDJp6P",
 "x": "1jvJAEERJv86DKtRQ4a83IwDuBwB6ahWP"
 }
+],
+"fc": [
+"Tutela provisória",
+"Tutela provisória"
 ],
 "k": [
 24,
@@ -1462,8 +1681,13 @@ window.CAL_ATIVO = {
 "x": "10bQ9uDZrJIQjju9TJP5L886tf8Uec_09"
 }
 ],
+"fc": [
+"Repartição de competências",
+"Organização do Estado",
+"Repartição de competências"
+],
 "k": [
-32,
+41,
 44
 ],
 "g": [
@@ -1486,9 +1710,15 @@ window.CAL_ATIVO = {
 "x": "1wjZ0PqpQTBh_MVwaNzT_KtO6J7AKRvnG"
 }
 ],
+"fc": [
+"Contrato de trabalho",
+"Relação de emprego",
+"Relação de trabalho",
+"Contrato de trabalho"
+],
 "k": [
 1,
-6
+3
 ],
 "g": [
 "oab_000830",
@@ -1517,9 +1747,14 @@ window.CAL_ATIVO = {
 "x": "1_grSZbDMKAOLyr7A-z4O0cXq78Ld0Coz"
 }
 ],
+"fc": [
+"Serviços públicos",
+"PPP",
+"Serviços públicos"
+],
 "k": [
 95,
-102
+98
 ],
 "g": [
 "oab_000947"
@@ -1539,6 +1774,9 @@ window.CAL_ATIVO = {
 "r": "1hMs5MOiO71_ytwU0t_6yGZTznW3ta3WM",
 "x": "1A51V4l1GnaGL0KFh_VIm01NQMzcps0n5"
 }
+],
+"fc": [
+"Ato infracional e medidas socioeducativas"
 ]
 }
 ]
@@ -1563,6 +1801,9 @@ window.CAL_ATIVO = {
 "r": "1LJ51rExLE4iXCQ8tBLWp3Tu5J3BfeGuC",
 "x": "16KJNfDOZEKbxbLkYlo3DkZ9lUOFqlOkt"
 }
+],
+"fc": [
+"Sistema jurídico"
 ]
 },
 {
@@ -1579,6 +1820,17 @@ window.CAL_ATIVO = {
 "r": "1RY_VZhnaUd3Ek_XQrOdSRYIjU0ohIhSu",
 "x": "1EBAj263tQ-aeRI1hW2aA--4f3iRycEkj"
 }
+],
+"fc": [
+"Jus postulandi",
+"Partes e procuradores; tutela provisória"
+],
+"k": [
+12,
+12
+],
+"g": [
+"oab_000680"
 ]
 }
 ]
@@ -1603,9 +1855,12 @@ window.CAL_ATIVO = {
 "x": "1ayU5zhg8tRsdbaoJB1E8yQbPeEr_0CaH"
 }
 ],
+"fc": [
+"Licitações"
+],
 "k": [
 70,
-94
+89
 ],
 "g": [
 "oab_001107",
@@ -1633,6 +1888,13 @@ window.CAL_ATIVO = {
 "r": "1B1OQMWBa-rjkTjN3wGapwatuoftjRTJ6",
 "x": "1lLleR-exo8ivGtjYDPkr70vyr38i8Fi2"
 }
+],
+"fc": [
+"Compra e venda",
+"Doação",
+"Contratos em espécie",
+"Fiança",
+"Contratos: espécies comuns"
 ],
 "k": [
 28,
@@ -1688,6 +1950,14 @@ window.CAL_ATIVO = {
 "r": "1RefRsrqaD1DgD7PX5Aas_sjpswybe4iV",
 "x": "1Kr6HUYq6xzWvcgumAPdJ_Mo2kCMtqRZX"
 }
+],
+"fc": [
+"Espécies tributárias",
+"Tributos"
+],
+"k": [
+32,
+39
 ]
 },
 {
@@ -1704,6 +1974,10 @@ window.CAL_ATIVO = {
 "r": "1c69WIxVPXjPjIZ2Oa24lALs-YnAyh12U",
 "x": "1X_36XGiZwdi1w8EroqPvPaLNRJ4kQvBr"
 }
+],
+"fc": [
+"Infrações e sanções",
+"Infrações e sanções disciplinares"
 ],
 "k": [
 38,
@@ -1735,6 +2009,9 @@ window.CAL_ATIVO = {
 "r": "1RQ5GysH5EAmauXEMbdI3vcaPIn4e9xcE",
 "x": "17bFwn7nMsLhG97Yax5Hw6uTKGR7rs_dv"
 }
+],
+"fc": [
+"Orçamento público: leis orçamentárias"
 ]
 },
 {
@@ -1752,8 +2029,12 @@ window.CAL_ATIVO = {
 "x": "13yBbPvI-L-cIp3RE04qYh77g88AAGQOO"
 }
 ],
+"fc": [
+"Processo legislativo",
+"Processo legislativo"
+],
 "k": [
-47,
+54,
 61
 ],
 "g": [
@@ -1784,6 +2065,9 @@ window.CAL_ATIVO = {
 "r": "1i-ADYyiEkRkZNPeJFyNdsG_y4bpIMwt3",
 "x": "1wa7e_vrTrYzY6QIT_csQaqha1nIe0jy_"
 }
+],
+"fc": [
+"EIA/RIMA, licenciamento e compensação ambiental"
 ]
 },
 {
@@ -1800,6 +2084,11 @@ window.CAL_ATIVO = {
 "r": "1V3wvciKJcw7sH_-RbcQdfzFaCQRZv3PP",
 "x": "1yaIhHa9FPakvUKLaUyOuO0fNo-97_Hl4"
 }
+],
+"fc": [
+"Recursos",
+"Ações autônomas",
+"Recursos"
 ],
 "k": [
 45,
@@ -1831,6 +2120,9 @@ window.CAL_ATIVO = {
 "r": "1QAeMV5NJxyjvh4gfgENg7HTJcmb8GSsC",
 "x": "1RlTfANn96UO3aFh7JbQY_ciFATNhLJK9"
 }
+],
+"fc": [
+"Falência"
 ]
 },
 {
@@ -1848,6 +2140,9 @@ window.CAL_ATIVO = {
 "r": "1XxswpKQY64e_gWh08caCj-XgKvLQo4lh",
 "x": "1W3lyaLAWKxSFbrIkZ3a6ZgA813xyw4J7"
 }
+],
+"fc": [
+"Responsabilidade do fornecedor"
 ]
 }
 ]
@@ -1872,9 +2167,13 @@ window.CAL_ATIVO = {
 "x": "1CqRI4aa0GsgfDCw7y4ipncpEhzkt11ot"
 }
 ],
+"fc": [
+"Crimes contra o patrimônio",
+"Crimes contra o patrimônio"
+],
 "k": [
 56,
-67
+61
 ],
 "g": [
 "oab_000130"
@@ -1900,6 +2199,9 @@ window.CAL_ATIVO = {
 "r": "1zupFAcYWGTdpROaVSq2dnZJdRo4a0mRH",
 "x": "1zupFAcYWGTdpROaVSq2dnZJdRo4a0mRH"
 }
+],
+"fc": [
+"Justiça Eleitoral e inelegibilidades"
 ]
 }
 ]
@@ -1943,6 +2245,9 @@ window.CAL_ATIVO = {
 "r": "14q-2-N-WZTmYRNOwZJSpX9vG587RRjkJ",
 "x": "1NRrCkb7JsD1d1vo5qnO56fI1bAhBiYlV"
 }
+],
+"fc": [
+"Hermenêutica"
 ]
 },
 {
@@ -1959,6 +2264,10 @@ window.CAL_ATIVO = {
 "r": "1Cj5MpQ_IjKyT6I2pgNWrLTvez4sOtRjy",
 "x": "1W7nL91womJJIYpHB5u5dsGN0j0tstLuE"
 }
+],
+"fc": [
+"Agentes públicos",
+"Agentes públicos"
 ],
 "k": [
 36,
@@ -1989,6 +2298,9 @@ window.CAL_ATIVO = {
 "r": "1NOzsHuTR1NIdpVqS6VvnEIOyq0Oc-bxr",
 "x": "16NjI1AOMsJL5lbjR8eNKYJx6USJE91DR"
 }
+],
+"fc": [
+"Convenção Americana sobre Direitos Humanos"
 ]
 },
 {
@@ -2006,9 +2318,13 @@ window.CAL_ATIVO = {
 "x": "1Jbz1rCdmzMaup2lCwXl6qe_RGxjhIhEM"
 }
 ],
+"fc": [
+"Processo disciplinar",
+"Processo disciplinar"
+],
 "k": [
 44,
-60
+49
 ],
 "g": [
 "oab_001237",
@@ -2037,8 +2353,12 @@ window.CAL_ATIVO = {
 "x": "1lXcY5McrFUdd4en0OpsfCOZFPMsFuJSL"
 }
 ],
+"fc": [
+"Controle de constitucionalidade",
+"Controle concentrado"
+],
 "k": [
-72,
+73,
 78
 ],
 "g": [
@@ -2066,6 +2386,10 @@ window.CAL_ATIVO = {
 "r": "1Bt3I6dHUNTHFhtXqL84aZL9X5ZH3DKXF",
 "x": "14lMWwTMsEvo8gHbhVTTE5aSgvn31u7aO"
 }
+],
+"fc": [
+"Recursos",
+"Recursos trabalhistas"
 ],
 "k": [
 47,
@@ -2097,6 +2421,10 @@ window.CAL_ATIVO = {
 "x": "1pik9EGvhDe7UpFNPTvDOdnMCUgLzMZ1Z"
 }
 ],
+"fc": [
+"Remuneração",
+"Sistema remuneratório"
+],
 "k": [
 41,
 45
@@ -2120,9 +2448,13 @@ window.CAL_ATIVO = {
 "x": "1NGg_KfkJ4tr2a9qnrw3hp7gu-YNU_Ssl"
 }
 ],
+"fc": [
+"Cumprimento de sentença",
+"Cumprimento de sentença"
+],
 "k": [
 45,
-52
+49
 ]
 }
 ]
@@ -2147,6 +2479,12 @@ window.CAL_ATIVO = {
 "x": "1pMKpdXV0nF3HSFuDF-NFeFfeoF1IHChS"
 }
 ],
+"fc": [
+"Recursos",
+"Ação rescisória",
+"IRDR",
+"Recursos"
+],
 "k": [
 53,
 61
@@ -2169,6 +2507,9 @@ window.CAL_ATIVO = {
 "r": "1rhyH0u2pLJAVNPdQoCkqQE0HwN4fjRqs",
 "x": "15rwasSPoshvTJPM2GrveRiAGHJc1myvV"
 }
+],
+"fc": [
+"Contribuição previdenciária dos segurados"
 ]
 }
 ]
@@ -2211,6 +2552,9 @@ window.CAL_ATIVO = {
 "r": "11b-19xMbid-MtqZp3xEXma3P5PsSxgji",
 "x": "11EmMZkCPUh1UPfUaUEGpcSEcoq7BPd8z"
 }
+],
+"fc": [
+"Responsabilidade ambiental"
 ]
 },
 {
@@ -2228,8 +2572,12 @@ window.CAL_ATIVO = {
 "x": "1_Zlei1qwYFgFgzTOd7Er5dKY1K7q6Bfr"
 }
 ],
+"fc": [
+"Execução",
+"Execução"
+],
 "k": [
-45,
+50,
 52
 ]
 }
@@ -2254,6 +2602,9 @@ window.CAL_ATIVO = {
 "r": "1QXg66zHq337wPnv6CZI9ckDZ7c21JpyR",
 "x": "1KkoZWwua5FG3_rGmx1cghwBBbJm0rxCK"
 }
+],
+"fc": [
+"Conflito de leis no espaço"
 ]
 },
 {
@@ -2271,9 +2622,13 @@ window.CAL_ATIVO = {
 "x": "1qkJNLuUI348NNw8yeYjLdU_tQkdQIw33"
 }
 ],
+"fc": [
+"Regime de bens",
+"Família: direito conjugal patrimonial"
+],
 "k": [
-54,
-64
+59,
+63
 ],
 "g": [
 "oab_001191"
@@ -2313,9 +2668,15 @@ window.CAL_ATIVO = {
 "x": "1mJ4n0L9MX4HPSrHTUVyKUgi3rP-vDFZL"
 }
 ],
+"fc": [
+"Sucessões",
+"Sucessão legítima",
+"Sucessão testamentária",
+"Direito das sucessões"
+],
 "k": [
 65,
-74
+79
 ]
 },
 {
@@ -2332,6 +2693,9 @@ window.CAL_ATIVO = {
 "r": "1Zkn8kEE5JwqcyyTWo5E0aXihahlF8bkm",
 "x": "1vQV16wxkjI3ctkso0WJoorZE862PUVg0"
 }
+],
+"fc": [
+"Dependentes do RGPS"
 ]
 }
 ]
@@ -2362,6 +2726,10 @@ window.CAL_ATIVO = {
 "x": "1ssB8HN2LamVG1unCbOaY4Xys9IMO98qK"
 }
 ],
+"fc": [
+"Execução",
+"Execução no processo do trabalho"
+],
 "k": [
 35,
 41
@@ -2384,6 +2752,9 @@ window.CAL_ATIVO = {
 "r": "1yZL_A2l4eR9zj9S00Uf57JsXat1gxGBu",
 "x": "1ZiQNhY6cP29SFvxE5OQsYuqdZZJrlnfI"
 }
+],
+"fc": [
+"Despesa pública: precatórios e RPV"
 ]
 }
 ]
@@ -2407,6 +2778,9 @@ window.CAL_ATIVO = {
 "r": "1UuBOzW9UIOLIZ8_P82wdVgR_Qe_K6PNL",
 "x": "1UuBOzW9UIOLIZ8_P82wdVgR_Qe_K6PNL"
 }
+],
+"fc": [
+"Lei das Eleições e ações eleitorais"
 ]
 },
 {
@@ -2423,6 +2797,10 @@ window.CAL_ATIVO = {
 "r": "19QZff_x10AQv0K9acKeA4bgeTggfQQOM",
 "x": "16TV0BBmfVOYxqiPeBqLY_SlAYq0LgqQL"
 }
+],
+"fc": [
+"Estabilidade",
+"Estabilidades"
 ],
 "k": [
 36,

@@ -136,8 +136,9 @@
         });
       }
       // primeiro pelo tema do PDF; só se nada casar, pelos tópicos do banco
-      var doTema = casam(t.s + ' ' + (SINONIMOS[t.s] || ''));
-      if (!doTema.length) doTema = casam((t.q || []).join(' '));
+      // temas do Estratégia trazem a lista dos cartões que valem para eles (fc); sem ela, casa pelo nome
+      var doTema = t.fc ? cand.filter(function (c) { return t.fc.indexOf(c.t) >= 0; }) : casam(t.s + ' ' + (SINONIMOS[t.s] || ''));
+      if (!doTema.length && !t.fc) doTema = casam((t.q || []).join(' '));
       doTema.slice(0, 15).forEach(poe);
     });
     return { novos: out, feitos: feitos };
@@ -199,36 +200,34 @@
   var K_VER = 'oab_est_ver';
   function versao() { try { return localStorage.getItem(K_VER) === 'x' ? 'x' : 'r'; } catch (e) { return 'r'; } }
   function htmlEstrategia(p) {
-    var v = versao(), c0 = p.e[0];
-    return '<div class="ss-bloco est-bloco"><h3><span class="n">Estratégia</span>' + esc(p.temas.join(' · ')) + '</h3>' +
-      '<div class="est-bar">' +
-        (p.e.length > 1 ? '<div class="est-caps">' + p.e.map(function (c, i) {
-          return '<button type="button" class="' + (i ? '' : 'on') + '" data-est-cap="' + i + '">Cap. ' + c.c + '</button>';
-        }).join('') + '</div>' : '') +
-        '<div class="est-ver"><button type="button" class="' + (v === 'r' ? 'on' : '') + '" data-est-ver="r">Resumido</button>' +
-        '<button type="button" class="' + (v === 'x' ? 'on' : '') + '" data-est-ver="x">Completo</button></div></div>' +
-      '<div class="est-tit">Cap. ' + c0.c + ' · ' + esc(c0.t) + '</div>' +
-      (window.LEITOR ? '<div class="lp-host" data-arq="' + c0[v] + '"></div>'
-        : '<iframe class="vde-pdf" src="https://drive.google.com/file/d/' + c0[v] + '/preview" allow="autoplay"></iframe>') + '</div>';
+    var c0 = p.e[0];
+    return '<div class="ss-bloco est-bloco"><h3>' + esc(p.temas.join(' · ')) + '</h3>' +
+      (p.e.length > 1 ? '<div class="est-bar"><div class="est-ver">' + p.e.map(function (c, i) {
+        return '<button type="button" class="' + (i ? '' : 'on') + '" data-est-cap="' + i + '">Cap. ' + c.c + '</button>';
+      }).join('') + '</div></div>' : '') +
+      '<div class="est-tit"></div><div class="est-leitor"></div></div>';
   }
+  // um leitor por vez; a versão completa fica no menu ⋯ do leitor
   function ligarEstrategia(el) {
     el.querySelectorAll('.est-bloco').forEach(function (b, bi) {
       var p = pdfsDoDia().filter(function (x) { return x.e; })[bi], cap = 0;
       function abrir() {
-        var c = p.e[cap], v = versao(), velho = b.querySelector('.lp-host, iframe');
-        b.querySelector('.est-tit').textContent = 'Cap. ' + c.c + ' · ' + c.t;
+        var c = p.e[cap], v = versao(), id = c[v], outra = v === 'r' ? 'x' : 'r';
+        b.querySelector('.est-tit').textContent = 'Cap. ' + c.c + ' · ' + c.t + (v === 'x' && c.x !== c.r ? ' · versão completa' : '');
         b.querySelectorAll('[data-est-cap]').forEach(function (x) { x.classList.toggle('on', +x.dataset.estCap === cap); });
-        b.querySelectorAll('[data-est-ver]').forEach(function (x) { x.classList.toggle('on', x.dataset.estVer === v); });
-        if (!window.LEITOR) { velho.src = 'https://drive.google.com/file/d/' + c[v] + '/preview'; return; }
-        var h = document.createElement('div'); h.className = 'lp-host'; h.dataset.arq = c[v];
-        velho.replaceWith(h); LEITOR.montar(h, c[v], { caixa: true });
+        var h = document.createElement('div'); h.className = 'lp-host';
+        var alvo = b.querySelector('.est-leitor'); alvo.innerHTML = ''; alvo.appendChild(h);
+        if (!window.LEITOR) { h.innerHTML = '<iframe class="vde-pdf" src="https://drive.google.com/file/d/' + id + '/preview" allow="autoplay"></iframe>'; return; }
+        var extras = c.x !== c.r ? [{ t: v === 'r' ? 'Ver a versão completa' : 'Voltar à versão resumida', sub: v === 'r' ? 'mais teoria e exemplos' : '', fn: function () {
+          try { localStorage.setItem(K_VER, outra); } catch (e) {} abrir();
+        } }] : [];
+        LEITOR.montar(h, id, { caixa: true, extras: extras });
       }
       b.addEventListener('click', function (ev) {
-        var a = ev.target.closest('[data-est-cap], [data-est-ver]'); if (!a) return;
-        if (a.dataset.estCap != null) cap = +a.dataset.estCap;
-        else try { localStorage.setItem(K_VER, a.dataset.estVer); } catch (e) {}
-        abrir();
+        var a = ev.target.closest('[data-est-cap]'); if (!a) return;
+        cap = +a.dataset.estCap; abrir();
       });
+      abrir();
     });
   }
   // Dias de revisão: a próxima Revisão VDE (1→2→3) ainda não feita de cada matéria em foco.
@@ -382,7 +381,7 @@
       var h = '<div class="fc-player"><div class="topo"><span>' + (st.idx + 1) + ' de ' + st.fila.length + (e ? ' · revisão' : ' · novo') + '</span></div>' +
         '<div class="ss-bar"><i style="width:' + Math.round(st.idx / st.fila.length * 100) + '%"></i></div>' +
         '<div class="fc-meta">' + esc(curto(c.d)) + ' · ' + esc(c.t) + ' · ' +
-          (origem ? '<a href="' + origem + '" target="_blank" rel="noopener" style="color:inherit">Revisão ' + c.r + ' VDE ↗</a>' : 'Revisão ' + c.r + ' VDE') + '</div>' +
+          (c.r === 'E' ? 'Estratégia' : origem ? '<a href="' + origem + '" target="_blank" rel="noopener" style="color:inherit">Revisão ' + c.r + ' VDE ↗</a>' : 'Revisão ' + c.r + ' VDE') + '</div>' +
         '<div class="fc-frente">' + esc(c.f) + '</div>';
       if (!st.verso) h += '<div class="fc-bts"><button class="btn btn-primary" data-fc="mostrar">Mostrar resposta</button></div>';
       else h += '<div class="fc-verso">' + esc(c.v) +

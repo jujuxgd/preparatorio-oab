@@ -140,7 +140,6 @@
     var self = this, raiz = this.raiz;
     raiz.classList.add('lp');
     raiz.innerHTML = '<div class="lp-topo">' +
-      '<div class="lp-modo" role="group" aria-label="Como ler"><button type="button" data-a="pdf">PDF</button><button type="button" data-a="texto">Texto</button></div>' +
       '<span class="lp-info">Carregando…</span>' +
       '<span class="lp-acoes">' +
         '<button type="button" class="lp-i lp-so-pdf" data-a="lista" title="Seus grifos neste PDF" aria-label="Grifos">✎<b class="lp-ng">0</b></button>' +
@@ -149,6 +148,9 @@
         '<button type="button" class="lp-i" data-a="mais" title="Mais opções" aria-label="Mais opções">⋯</button>' +
       '</span>' +
       '<div class="lp-menu lp-menu-mais" hidden>' +
+        '<button type="button" class="lp-so-pdf" data-a="texto"><span>Ler como texto</span><small>letra e margens ajustáveis, bom no celular</small></button>' +
+        '<button type="button" class="lp-so-texto" data-a="pdf"><span>Voltar ao PDF</span><small>com grifos</small></button>' +
+        (this.opts.extras || []).map(function (x, i) { return '<button type="button" data-extra="' + i + '"><span>' + esc(x.t) + '</span>' + (x.sub ? '<small>' + esc(x.sub) + '</small>' : '') + '</button>'; }).join('') +
         '<button type="button" class="lp-so-pdf" data-a="area"><span>Grifar área</span><small>arraste um retângulo (PDF escaneado)</small></button>' +
         '<button type="button" class="lp-so-pdf" data-a="col"><span>Uma coluna por vez</span><small>para PDF em duas colunas</small></button>' +
         '<div class="lp-so-pdf lp-linha"><span>Zoom</span><button type="button" data-a="zoom-" aria-label="Diminuir">−</button><span class="lp-zoom"></span><button type="button" data-a="zoom+" aria-label="Aumentar">+</button></div>' +
@@ -161,13 +163,10 @@
     var colSalvo = null; try { colSalvo = localStorage.getItem('oab_lp_col'); } catch (e) {}
     this.colunas = colSalvo ? colSalvo === '1' : window.innerWidth <= 700;
     raiz.querySelector('[data-a="col"]').classList.toggle('on', this.colunas);
-    var txtSalvo = null; try { txtSalvo = localStorage.getItem('oab_lp_texto'); } catch (e) {}
-    this.texto = txtSalvo === '1';
-    function marcarModo() {
-      raiz.querySelector('[data-a="texto"]').classList.toggle('on', self.texto);
-      raiz.querySelector('[data-a="pdf"]').classList.toggle('on', !self.texto);
-      raiz.classList.toggle('lp-modo-texto', self.texto);
-    }
+    // o PDF é o padrão; o modo texto fica guardado por aparelho (chave nova: quem usava o modo texto antigo volta ao PDF)
+    var txtSalvo = null; try { txtSalvo = localStorage.getItem('oab_lp_modo'); } catch (e) {}
+    this.texto = txtSalvo === 'texto';
+    function marcarModo() { raiz.classList.toggle('lp-modo-texto', self.texto); }
     marcarModo();
     this.ajustesTexto();
     function fecharMenus(exceto) { raiz.querySelectorAll('.lp-menu').forEach(function (m) { if (m !== exceto) m.hidden = true; }); raiz.querySelectorAll('[data-a="mais"],[data-a="ajustes"]').forEach(function (b) { b.classList.toggle('on', !!exceto && b.dataset.a === exceto.dataset.de); }); }
@@ -183,6 +182,8 @@
     }
     mostrarZoom();
     raiz.querySelector('.lp-topo').addEventListener('click', function (e) {
+      var x = e.target.closest('[data-extra]');
+      if (x) { fecharMenus(null); self.opts.extras[+x.dataset.extra].fn(); return; }
       var b = e.target.closest('[data-a]'); if (!b) return;
       if (b.dataset.a === 'mais' || b.dataset.a === 'ajustes') {
         var m = raiz.querySelector(b.dataset.a === 'mais' ? '.lp-menu-mais' : '.lp-menu-aj'), abrir = m.hidden;
@@ -191,7 +192,7 @@
       if (b.dataset.a === 'area') { self.area = !self.area; b.classList.toggle('on', self.area); raiz.classList.toggle('modo-area', self.area); fecharMenus(null); }
       if ((b.dataset.a === 'texto' && !self.texto) || (b.dataset.a === 'pdf' && self.texto)) {
         self.texto = !self.texto; marcarModo(); fecharMenus(null);
-        try { localStorage.setItem('oab_lp_texto', self.texto ? '1' : '0'); } catch (e) {}
+        try { localStorage.setItem('oab_lp_modo', self.texto ? 'texto' : 'pdf'); } catch (e) {}
         self.renderizar();
       }
       if (b.dataset.a === 'col') {
@@ -223,8 +224,8 @@
     });
   };
   // Ajustes do modo texto (só deste aparelho): tamanho da letra, espaço entre linhas, margem, fundo e fonte.
-  var K_TX = 'oab_lp_tx', TX_PADRAO = { t: 1, l: 1, m: 1, f: 'papel', s: 'serif' };
-  var TX_TAM = [0.9, 1, 1.1, 1.22, 1.36, 1.5], TX_LIN = [1.45, 1.62, 1.85], TX_MARG = [['.6rem', '42rem'], ['1.1rem', '36rem'], ['1.8rem', '31rem']];
+  var K_TX = 'oab_lp_tx2', TX_PADRAO = { t: 0, l: 1, m: 0, f: 'papel', s: 'sans' };
+  var TX_TAM = [0.9, 1, 1.1, 1.22, 1.36, 1.5], TX_LIN = [1.45, 1.62, 1.85], TX_MARG = [['.15rem', '46rem'], ['.9rem', '40rem'], ['1.8rem', '34rem']];
   function lerTx() { var v = {}; try { v = JSON.parse(localStorage.getItem(K_TX)) || {}; } catch (e) {} for (var k in TX_PADRAO) if (v[k] == null) v[k] = TX_PADRAO[k]; return v; }
   var _fonte = false;
   function carregarFonte() {
@@ -533,10 +534,19 @@
         l.lixo = LIXO.test(l.partes.map(function (q) { return q.str; }).join(' ').trim());
       });
       var colX = function (col) { return s ? (col ? [s, 1] : [0, s]) : [0, 1]; };
-      function recorte(col, y0, y1) {
+      // recorte justo: só a área com tinta dentro da faixa (sem margem branca nem pedaço de texto vizinho cortado)
+      function recorte(col, y0, y1, minAlt) {
         var xr = colX(col), x0 = Math.floor(xr[0] * W), x1 = Math.ceil(xr[1] * W);
-        y0 = Math.max(0, Math.floor(y0 - 8)); y1 = Math.min(H, Math.ceil(y1 + 8));
-        if (y1 - y0 < 12) return null;
+        y0 = Math.max(0, Math.floor(y0)); y1 = Math.min(H, Math.ceil(y1));
+        var bx0 = x1, bx1 = x0, by0 = y1, by1 = y0, soma = 0, n = 0;
+        for (var y = y0; y < y1; y += 2) for (var x = x0; x < x1; x += 2) {
+          var k = (y * W + x) * 4;
+          if (px[k] < 235 || px[k + 1] < 235 || px[k + 2] < 235) { if (x < bx0) bx0 = x; if (x > bx1) bx1 = x; if (y < by0) by0 = y; if (y > by1) by1 = y; soma += px[k] + px[k + 1] + px[k + 2]; n++; }
+        }
+        if (bx1 <= bx0 || by1 - by0 < (minAlt || 12)) return null;
+        // ilustração clarinha de capa/fundo (ex.: a coruja da capa) não é figura do conteúdo
+        if (minAlt && n && soma / n / 3 > 200) return null;
+        x0 = Math.max(0, bx0 - 10); x1 = Math.min(W, bx1 + 10); y0 = Math.max(0, by0 - 10); y1 = Math.min(H, by1 + 10);
         var c2 = document.createElement('canvas'); c2.width = x1 - x0; c2.height = y1 - y0;
         c2.getContext('2d').drawImage(cv, x0, y0, x1 - x0, y1 - y0, 0, 0, x1 - x0, y1 - y0);
         return c2.toDataURL('image/jpeg', 0.82);
@@ -561,7 +571,7 @@
         var l = ls[i], prev = out.length ? out[out.length - 1] : null;
         // vão grande com desenho entre duas linhas da mesma coluna = imagem/esquema
         if (prev && prev.bot != null && prev.col === l.col && !prev.tabela && !prev.lixo && !l.lixo && l.top - prev.bot > Math.max(l.tam * escala * 5, 110) && tinta(l.col, prev.bot + 6, l.top - 6) > 0.06) {
-          var im = recorte(l.col, prev.bot + 2, l.top - 2); if (im) out.push({ img: im });
+          var im = recorte(l.col, prev.bot + 6, l.top - 6, 60); if (im) out.push({ img: im });
         }
         // linhas seguidas em colunas de tabela = recorte da tabela inteira
         if (l.tab && ls[i + 1] && ls[i + 1].tab && ls[i + 1].col === l.col) {

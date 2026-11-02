@@ -423,6 +423,19 @@ Prova prático-profissional do OAB 48 em **28/02/2027** (cronograma da OAB). Jul
   E em negrito (ou ≥ 1,6×), nunca começando em minúscula nem com mais de 110 caracteres; marcador "#" do Estratégia vira item com
   bolinha; chamadas "pelo APP"/QR code/link, sumário com pontilhado e "n/16" saem (`LIXO`).
 
+
+- **Revisão do plano (02/11/2026, pedido de Julia):**
+  - **Gabaritaço:** os `k` dos 70 temas do Estratégia foram atribuídos DICA a DICA pelos títulos extraídos dos PDFs (48 temas;
+    matéria/tema sem DICA correspondente fica sem `k`). `g` = questões "Como já caiu" dos temas VDE com faixa sobreposta.
+  - **Flashcards:** cada tema do Estratégia tem `fc` (lista dos `t` de cartões que valem para ele) — só esses entram no dia, sem
+    casar por nome. `fc-estrategia.js` (193 cartões, `r: 'E'`, ids `est-…`) cobre os temas sem cartão do VDE; escritos a partir dos
+    capítulos do Estratégia, texto próprio, `b` só se o capítulo cita o dispositivo; pontos em que o material diverge da lei ficaram fora.
+  - **Mapas mentais:** aba "Mapas" no Hoje (`mapas-mentais.js`, um PDF do Estratégia por matéria, preview do Drive, sem modo texto).
+  - **Leitor:** sem seletor PDF/Texto nem Resumido/Completo na tela; o PDF é sempre o padrão (`oab_lp_modo`, chave nova) e
+    "Ler como texto" e "Ver a versão completa" ficam no menu ⋯ (`opts.extras` de `LEITOR.montar`). Modo texto no visual do caderno
+    legislativo: sem moldura, Inter no corpo, Fraunces nos títulos, margem estreita por padrão (`oab_lp_tx2`). Figuras recortadas
+    justas pela área com tinta; ilustração clarinha (coruja da capa) é descartada.
+
 ## 6. Design System
 
 ### Paleta de Cores (style.css :root)
