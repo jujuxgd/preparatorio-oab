@@ -609,10 +609,9 @@
     var usadas = {}, n = ATIVO.questoesPorTopico(), h = '';
     if (DIA.top) {
       h += '<div class="ss-bloco"><h3>Questões dos tópicos do dia</h3>' +
-        '<p>Do tema dos PDFs do dia, primeiro as que caíram no Gabaritaço. Errou, a questão vai para o Caderno de Erros e volta em 3, 7 e 15 dias.</p>' +
+        '<p>Do tema dos PDFs do dia. Errou, a questão vai para o Caderno de Erros e volta em 3, 7 e 15 dias.</p>' +
         DIA.top.map(function (t, i) {
-          var l = linkTopico(t);
-          return blocoQuestoes('t' + i, t.s, l ? '<a href="' + l.href + '" target="_blank" rel="noopener">' + esc(l.txt) + ' ↗</a>' : '', t.d, t.q, t.g, n, /^Reforço/.test(t.s), usadas, t.kw);
+          return blocoQuestoes('t' + i, t.s, '', t.d, t.q, t.g, n, /^Reforço/.test(t.s), usadas, t.kw);
         }).join('') + '</div>';
     } else if (DIA.tipo === 'revisao' || DIA.tipo === 'leve') {
       h += '<div class="ss-bloco"><h3>Reforço em Ética</h3><p>Erradas primeiro, depois as que você ainda não fez.</p>' +
