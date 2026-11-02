@@ -148,3 +148,56 @@ body.hoje .checklist-group-header { gap: 0 !important; }
   body.hoje .day-nav a:nth-child(2) { text-align: center; }
   body.hoje .day-nav a:last-child { text-align: right; }
 }
+
+/* ═══ Polimento (nov/2026): hierarquia, cor de destaque e toque ═══
+   Tudo nasce da cor de destaque escolhida no Perfil (--rose-600 e família), então vale para qualquer cor. */
+body.hoje{--ac:var(--rose-600);--ac-deep:var(--rose-700);--ac-soft:color-mix(in srgb,var(--ac) 10%,var(--paper));--ac-line:color-mix(in srgb,var(--ac) 18%,var(--line))}
+
+/* título: o "Dia 1 de 70" manda; a data vira uma linha de apoio embaixo (sem rótulo em caixa-alta) */
+body.hoje .page-title{display:flex;flex-direction:column;gap:.35rem}
+body.hoje .page-title h1{font-size:clamp(2.3rem,8.5vw,3.3rem)!important;line-height:1.02;letter-spacing:-.025em;text-wrap:balance}
+body.hoje .page-title h1 em{color:var(--ac)}
+body.hoje .breadcrumb{order:2;text-transform:none!important;letter-spacing:0!important;font:500 .95rem Inter,sans-serif!important;color:var(--ink-soft)!important;margin:0!important}
+body.hoje .hj-prog{order:3;height:4px;border-radius:4px;background:color-mix(in srgb,var(--ac) 14%,var(--line-soft));max-width:15rem;margin-top:.55rem;overflow:hidden}
+body.hoje .hj-prog i{display:block;height:100%;width:0;background:var(--ac);border-radius:4px;transition:width .7s cubic-bezier(.23,1,.32,1)}
+
+/* cartão do dia: borda na cor de destaque, sombra em camadas; sem pílula cinza nem caixa-alta */
+body.hoje .day-hero{border:1px solid var(--ac-line)!important;background:var(--paper)!important;box-shadow:0 1px 2px color-mix(in srgb,var(--ac) 8%,transparent),0 14px 30px -18px color-mix(in srgb,var(--ac) 38%,transparent)!important}
+body.hoje .day-hero::before{display:none}
+body.hoje .day-info{display:flex;flex-direction:column}
+body.hoje .day-info h2{order:1;font-size:1.3rem!important;line-height:1.22!important;letter-spacing:-.01em;text-wrap:balance}
+body.hoje .day-info .tag{order:2;align-self:flex-start;background:none!important;color:var(--ink-soft)!important;padding:0!important;margin-top:.35rem;font:500 .85rem Inter,sans-serif!important;text-transform:none!important;letter-spacing:0!important}
+body.hoje .day-number-big .month{text-transform:none;letter-spacing:0;font-size:.8rem!important;color:var(--ink-soft)}
+body.hoje .day-number-big .num{color:var(--ac-deep)}
+
+/* botão principal: sólido na cor de destaque, ícone desenhado, sem ✦ nem caixa-alta */
+body.hoje .day-hero .btn-estudei{background:var(--ac)!important;text-transform:none!important;letter-spacing:0!important;font:600 .92rem Inter,sans-serif!important;display:inline-flex;align-items:center;gap:.5rem;justify-content:center;box-shadow:0 8px 18px -10px var(--ac)!important;transition:transform .16s cubic-bezier(.23,1,.32,1),box-shadow .16s,background-color .16s}
+body.hoje .day-hero .btn-estudei::before{content:"";width:1.05em;height:1.05em;background:currentColor;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E") center/contain no-repeat}
+body.hoje .day-hero .btn-estudei:hover{transform:none;background:var(--ac-deep)!important}
+body.hoje .day-hero .btn-estudei:active{transform:scale(.97)}
+body.hoje .day-hero .btn-estudei.concluido{background:var(--ac-soft)!important;color:var(--ac-deep)!important;box-shadow:none!important;border:1px solid var(--ac-line)}
+body.hoje .pomodoro-mode{text-transform:none!important;letter-spacing:0!important;font:500 .8rem Inter,sans-serif!important;color:var(--ink-soft)!important}
+body.hoje .pomodoro-time{color:var(--ac-deep)}
+body.hoje .pomo-btn-main{transition:transform .16s cubic-bezier(.23,1,.32,1)}
+body.hoje .pomo-btn-main:active{transform:scale(.96)}
+
+/* abas: texto legível (antes bege claro sobre creme), ativa na cor de destaque, contador como pílula */
+body.hoje .tab{color:var(--ink-soft)!important;transition:color .15s,border-color .15s,transform .16s cubic-bezier(.23,1,.32,1)}
+body.hoje .tab:active{transform:scale(.97)}
+body.hoje .tab.active{color:var(--ac-deep)!important;border-bottom-width:2.5px!important;border-bottom-color:var(--ac)!important}
+body.hoje .tab .badge{background:var(--ac-soft)!important;color:var(--ac-deep)!important;border-radius:99px;font-weight:600;font-variant-numeric:tabular-nums}
+@media(max-width:640px){
+ body.hoje .day-hero{grid-template-columns:auto minmax(0,1fr)!important}
+ body.hoje .day-info h2{font-size:1.15rem!important}
+ body.hoje .day-hero .btn-estudei{width:100%!important;justify-self:stretch!important;padding:.6rem .5rem!important;font-size:.88rem!important}
+ body.hoje .pomodoro{padding:.2rem .3rem .2rem .7rem!important}
+}
+@media(max-width:480px){
+ body.hoje #ck-cont{top:2px!important;left:calc(50% + 6px)!important;right:auto!important;padding:0 .32rem!important;line-height:1.45;font-size:.58rem!important}
+ body.hoje .tab{font-size:.6rem!important;letter-spacing:0!important;padding-inline:1px!important}
+ body.hoje .tab span.tl{overflow:hidden;text-overflow:ellipsis;max-width:100%}
+}
+body.hoje :is(.tab,.btn-estudei,.pomo-btn-main):focus-visible{outline:2px solid var(--ac);outline-offset:3px;border-radius:12px}
+@media(prefers-reduced-motion:reduce){body.hoje .hj-prog i,body.hoje .btn-estudei,body.hoje .tab,body.hoje .pomo-btn-main{transition:none!important}}
+/* modo escuro: a versão "funda" da cor não tem contraste sobre fundo escuro — usa uma mais clara */
+[data-theme="dark"] body.hoje{--ac-deep:color-mix(in srgb,var(--rose-500) 55%,#fff);--ac-soft:color-mix(in srgb,var(--ac) 22%,var(--paper))}

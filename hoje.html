@@ -1068,8 +1068,9 @@
   <main>
     <div class="topbar">
       <div class="page-title">
-        <div class="breadcrumb">Hoje · <span id="hj-data">—</span></div>
         <h1>Dia <em id="hj-n">—</em> de <span id="hj-total">—</span></h1>
+        <div class="breadcrumb"><span id="hj-data">—</span></div>
+        <div class="hj-prog" aria-hidden="true"><i id="hj-prog-i"></i></div>
       </div>
       <div class="topbar-actions"></div>
     </div>
@@ -1086,7 +1087,7 @@
         <div class="meta" id="day-meta"></div>
       </div>
       <div class="pomodoro" id="pomodoro-widget">
-        <div class="pomodoro-mode" id="pomo-mode">🎯 Foco</div>
+        <div class="pomodoro-mode" id="pomo-mode">Foco</div>
         <div class="pomodoro-time" id="pomo-time">25:00</div>
         <div class="pomodoro-status" id="pomo-status">ciclo 1 de 4</div>
         <div class="pomodoro-cycles" id="pomo-cycles">
@@ -1101,7 +1102,7 @@
           <button class="pomo-btn-sm" onclick="pomoSkip()" title="Pular fase">⏭</button>
         </div>
       </div>
-      <button class="btn-estudei" id="btn-estudei" onclick="toggleDiaConcluido()">Estudei Hoje ✦</button>
+      <button class="btn-estudei" id="btn-estudei" onclick="toggleDiaConcluido()">Estudei hoje</button>
     </div>
 
     <div id="hj-atraso"></div>
@@ -1234,6 +1235,7 @@
     document.getElementById('hj-data').textContent = S.dataLonga(S.DATA) + (S.DATA !== S.HOJE ? (S.HOJE < CAL_ATIVO.dias[0].d && S.indice() === 0 ? ' · a revisão começa neste dia' : S.DATA < S.HOJE ? ' · dia passado' : ' · dia futuro') : '');
     document.getElementById('hj-n').textContent = S.indice() + 1;
     document.getElementById('hj-total').textContent = CAL_ATIVO.dias.length;
+    document.getElementById('hj-prog-i').style.width = Math.min(100, (S.indice() + 1) / CAL_ATIVO.dias.length * 100) + '%';
     document.getElementById('hj-dia').textContent = p.d;
     document.getElementById('hj-mes').textContent = S.MESES[p.m - 1];
     if (!DIA) return;
@@ -1248,7 +1250,7 @@
     if (prev) np.href = 'hoje.html?data=' + prev; else np.style.visibility = 'hidden';
     if (next) nn.href = 'hoje.html?data=' + next; else nn.style.visibility = 'hidden';
     if (S.DATA === S.HOJE) np.textContent = '← Ontem', nn.textContent = 'Amanhã →';
-    if (S.DATA < S.HOJE) document.getElementById('btn-estudei').textContent = 'Marcar como estudado ✦';
+    if (S.DATA < S.HOJE) document.getElementById('btn-estudei').textContent = 'Marcar como estudado';
     if (S.feito()) estudeiOn();
     avisoAtraso();
   }
@@ -1309,11 +1311,11 @@
   // ── Estudei hoje: marca o dia no calendário e conta no streak ──
   function estudeiOn() {
     var b = document.getElementById('btn-estudei');
-    b.classList.add('concluido'); b.textContent = '✓ Dia Concluído';
+    b.classList.add('concluido'); b.textContent = 'Dia concluído';
   }
   window.toggleDiaConcluido = function () {
     var b = document.getElementById('btn-estudei');
-    if (S.feito()) { S.marcarFeito(false); b.classList.remove('concluido'); b.textContent = S.DATA < S.HOJE ? 'Marcar como estudado ✦' : 'Estudei Hoje ✦'; avisoAtraso(); if (window.atualizarStreak) atualizarStreak(); return; }
+    if (S.feito()) { S.marcarFeito(false); b.classList.remove('concluido'); b.textContent = S.DATA < S.HOJE ? 'Marcar como estudado' : 'Estudei hoje'; avisoAtraso(); if (window.atualizarStreak) atualizarStreak(); return; }
     S.marcarFeito(true); estudeiOn(); avisoAtraso(); if (window.atualizarStreak) atualizarStreak();
     if (S.DATA === S.HOJE && typeof baterMetaDoDia === 'function') baterMetaDoDia();
     else if (typeof showPetals === 'function') showPetals();
@@ -1412,7 +1414,7 @@ function _pomoUI() {
   const m = String(Math.floor(POMO.secs/60)).padStart(2,'0'), s = String(POMO.secs%60).padStart(2,'0');
   const toggleBtn = document.getElementById('pomo-toggle');
   document.getElementById('pomo-time').textContent = `${m}:${s}`;
-  document.getElementById('pomo-mode').textContent = POMO.mode==='work' ? '🎯 Foco' : POMO.mode==='short' ? '☕ Pausa 5min' : '🌸 Descanso 15min';
+  document.getElementById('pomo-mode').textContent = POMO.mode==='work' ? 'Foco' : POMO.mode==='short' ? 'Pausa de 5 min' : 'Descanso de 15 min';
   document.getElementById('pomo-status').textContent = `ciclo ${POMO.cycle} de 4`;
   toggleBtn.textContent = POMO.running ? '⏸ Pausar'
     : (POMO.secs < (POMO.mode==='work'?POMO.WORK:POMO.mode==='short'?POMO.SHORT:POMO.LONG) ? '▶ Continuar' : '▶ Iniciar');
