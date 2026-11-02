@@ -24,3 +24,20 @@ body:not(.home) .topbar-actions { margin-left: auto; }
 @keyframes pageEnter { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
 main { animation: pageEnter 0.18s cubic-bezier(0.23, 1, 0.32, 1); }
 @media (max-width: 900px), (hover: none) { .aurora-blob { animation: none !important; } }
+
+/* ── Tamanhos em celular e tablet (PC fica como estava) ── */
+@media (max-width: 1024px) {
+  html body .page-title h1, html body .hub h1 { font-size: 1.4rem !important; }
+  html body.home .today-card h3 { font-size: clamp(1.05rem, 2.4vw, 1.2rem) !important; }
+  html body.hoje .day-info h2 { font-size: 1.02rem !important; }
+}
+@media (max-width: 640px) {
+  html body .page-title h1, html body .hub h1 { font-size: 1.2rem !important; }
+  html body.home .today-card h3 { font-size: 1.02rem !important; }
+  html body.hoje .day-info h2 { font-size: .98rem !important; }
+  main, main.hub { padding-top: 1.9rem !important; }
+}
+
+/* tablet na horizontal (901–1100px): barra do topo não cabe com a chave 1ª/2ª — o contador "Prova em" some (os dias aparecem no Início) */
+@media (min-width: 901px) and (max-width: 1100px) { .tn-count { display: none; } .tn-links { gap: 1.1rem; } .tn-end { gap: .4rem; } }
+@media (min-width: 901px) and (max-width: 1000px) { .tn-word { display: none; } }
