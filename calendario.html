@@ -97,14 +97,6 @@
     }
 
     /* ═══ Polimento (nov/2026): sem rótulos em caixa-alta, etiquetas que não vazam, toque melhor ═══ */
-    .ca-crumb{display:none}
-    .ca .page-title{display:flex;flex-direction:column;gap:.3rem}
-    .ca .page-title h1{font-size:clamp(1.8rem,5.2vw,2.35rem);line-height:1.08;letter-spacing:-.02em;text-wrap:balance}
-    .ca .page-title h1 em{color:var(--rose-600,var(--rose))}
-    .ca-sub{font-size:1rem;max-width:46ch;text-wrap:pretty}
-    .ca-sem{text-transform:none;letter-spacing:0;font:600 .8rem Inter,sans-serif;color:var(--ink-soft)}
-    .ca-det .tag{text-transform:none;letter-spacing:0;font:600 .8rem Inter,sans-serif;color:var(--rose-deep);background:color-mix(in srgb,var(--rose) 10%,var(--paper))}
-    .ca-n .at{text-transform:none;letter-spacing:0;font-size:.7rem}
     .ca-mesbox,.ca-det{border-color:color-mix(in srgb,var(--rose) 14%,var(--line-soft));box-shadow:0 1px 2px color-mix(in srgb,var(--rose) 6%,transparent),0 16px 32px -24px color-mix(in srgb,var(--rose) 34%,transparent)}
     .ca-c{min-width:0;overflow:hidden;transition:background-color .15s}
     .ca-chips{min-width:0;max-width:100%}
@@ -114,16 +106,13 @@
     .ca-det .btn:active{transform:scale(.97)}
     @media (hover:none){.ca-c:hover{background:none}.ca-c.sel:hover{background:color-mix(in srgb,var(--rose) 9%,transparent)}}
     @media (max-width:640px){
-      .ca-mesnav button{height:42px;min-width:42px}
-      .ca-mesnav h2{font-size:1.1rem;white-space:nowrap}
-      .ca-sem{letter-spacing:0}
     }
     @media (prefers-reduced-motion:reduce){.ca-c,.ca-mesnav button{transition:none}}
     </style>
     <div class="ca">
       <div class="topbar">
         <div class="page-title">
-          <div class="breadcrumb ca-crumb">Calendário · <span data-month-year>—</span></div>
+          <div class="breadcrumb">Calendário · <span data-month-year>—</span></div>
           <h1>Até a <em>prova</em></h1>
           <p id="ca-sub" class="ca-sub"></p>
         </div>
