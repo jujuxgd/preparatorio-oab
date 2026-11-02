@@ -60,6 +60,25 @@ body.hoje .day-footer>div:last-child{opacity:.9}
  body.hoje .tab span.tl{white-space:nowrap}
 }
 
+/* celular: o cartão do dia ocupa uma faixa curta e o conteúdo aparece já na primeira tela
+   (data só no cabeçalho; cronômetro e "Estudei hoje" lado a lado) */
+@media(max-width:640px){
+ body.hoje main{padding-top:1rem!important}
+ body.hoje .day-hero{display:grid!important;grid-template-columns:1fr auto!important;align-items:center;gap:.7rem .6rem!important;padding:.85rem 1rem!important}
+ body.hoje .day-number-big{display:none!important}
+ body.hoje .day-info{grid-column:1/-1}
+ body.hoje .day-info h2{font-size:1.05rem!important;margin:.3rem 0 0!important}
+ body.hoje .pomodoro{justify-self:start;padding:.25rem .35rem .25rem .85rem!important}
+ body.hoje .pomodoro-mode{display:none!important}
+ body.hoje .pomo-btn-main{white-space:nowrap;padding:.4rem .75rem!important}
+ body.hoje .pomodoro{gap:.5rem!important}
+ body.hoje .day-hero .btn-estudei{width:auto;justify-self:end;padding:.6rem .85rem;font-size:.64rem;letter-spacing:.03em}
+}
+@media(max-width:385px){
+ body.hoje .day-hero{grid-template-columns:1fr!important}
+ body.hoje .pomodoro{justify-self:stretch}
+ body.hoje .day-hero .btn-estudei{width:100%;justify-self:stretch}
+}
 @media(max-width:480px){
  /* 5 abas iguais, ícone em cima do nome (como a barra de baixo): cabem sem quebrar e ficam fáceis de tocar */
  body.hoje .tabs-bar{display:grid!important;grid-template-columns:repeat(6,1fr);gap:0!important}
