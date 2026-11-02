@@ -2,9 +2,6 @@
 .lp-topo{position:relative;display:flex;align-items:center;gap:.6rem;margin-bottom:.7rem}
 .lp-info{font:500 .72rem Inter,sans-serif;color:var(--ink-faded);font-variant-numeric:tabular-nums;margin-right:auto;white-space:nowrap}
 .lp-acoes{display:flex;gap:.25rem}
-.lp-modo{display:inline-flex;padding:3px;border-radius:999px;background:var(--bg-soft,var(--bg));border:1px solid var(--line-soft,var(--line))}
-.lp-modo button{font:600 .78rem Inter,sans-serif;padding:.38rem .95rem;border:0;border-radius:999px;background:none;color:var(--ink-faded);cursor:pointer}
-.lp-modo button.on{background:var(--paper);color:var(--ink);box-shadow:0 1px 3px rgba(44,36,32,.14)}
 .lp-i{position:relative;min-width:2.25rem;height:2.25rem;padding:0 .55rem;border-radius:999px;border:1px solid transparent;background:none;color:var(--ink-soft);font:600 .95rem Inter,sans-serif;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:.2rem}
 .lp-i:hover,.lp-i.on{background:var(--bg-soft,var(--bg));border-color:var(--line-soft,var(--line))}
 .lp-i .lp-ng{font-size:.66rem;color:var(--rose-deep)}
@@ -101,17 +98,19 @@ html.lp-travada,html.lp-travada body{overflow:hidden}
 .lp-parte{font:600 .66rem Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faded);margin:1rem 0 .4rem}
 
 /* modo texto: o texto do PDF como página normal, com letra, linhas, margem, fundo e fonte ajustáveis */
-.lp{--tx-tam:1rem;--tx-lin:1.62;--tx-pad:1.1rem;--tx-larg:36rem}
-.lp-texto{--tx-bg:var(--paper);--tx-ink:var(--ink);--tx-fraco:var(--ink-faded);background:var(--tx-bg);color:var(--tx-ink);border-radius:10px;padding:1.4rem var(--tx-pad) 2rem;margin:0 auto;width:100%;box-sizing:border-box;font-size:var(--tx-tam);line-height:var(--tx-lin);font-family:Inter,system-ui,sans-serif;hyphens:auto;-webkit-hyphens:auto;overflow-wrap:break-word}
+.lp{--tx-tam:.9rem;--tx-lin:1.62;--tx-pad:.15rem;--tx-larg:46rem}
+.lp-texto{--tx-bg:var(--paper);--tx-ink:var(--ink);--tx-fraco:var(--ink-faded);background:var(--tx-bg);color:var(--tx-ink);border-radius:0;padding:.4rem var(--tx-pad) 2rem;margin:0 auto;width:100%;box-sizing:border-box;font-size:var(--tx-tam);line-height:var(--tx-lin);font-family:Inter,system-ui,sans-serif;hyphens:auto;-webkit-hyphens:auto;overflow-wrap:break-word}
 .lp .lp-texto>*{max-width:var(--tx-larg);margin-left:auto;margin-right:auto}
 .lp[data-tx-fonte="serif"] .lp-texto{font-family:Literata,Georgia,'Times New Roman',serif;line-height:calc(var(--tx-lin) + .05)}
+.lp[data-tx-fundo="papel"] .lp-texto{--tx-bg:transparent}
+.lp[data-tx-fundo="sepia"] .lp-texto,.lp[data-tx-fundo="noite"] .lp-texto{border-radius:10px;padding-top:1rem;padding-left:max(.8rem,var(--tx-pad));padding-right:max(.8rem,var(--tx-pad))}
 .lp[data-tx-fundo="sepia"] .lp-texto{--tx-bg:#f1e6cf;--tx-ink:#3b2f24;--tx-fraco:#8a7660}
 .lp[data-tx-fundo="noite"] .lp-texto{--tx-bg:#1e1b1a;--tx-ink:#e4dbd1;--tx-fraco:#8f847a}
-.lp[data-tx-fundo="papel"] .lp-texto{border:1px solid var(--line-soft,var(--line))}
 .lp-caixa.lp-modo-texto .lp-corpo{background:none;padding:0}
 .lp-texto p{margin-block:0 .85em}
-.lp-texto h3{font:600 1.32em/1.3 'Fraunces',Literata,serif;margin-block:1.6em .55em;color:var(--rose-deep)}
-.lp[data-tx-fundo="noite"] .lp-texto h3{color:#e3a99f}
+.lp-texto h3{font:600 1.3em/1.3 'Fraunces',Georgia,serif;margin-block:1.5em .5em;color:var(--ink);letter-spacing:-.005em}
+.lp-texto h4{font-family:'Fraunces',Georgia,serif}
+.lp[data-tx-fundo="noite"] .lp-texto h3,.lp[data-tx-fundo="noite"] .lp-texto h4{color:#efe6dc}
 .lp-texto h4{font-weight:650;font-size:1.06em;line-height:1.4;margin-block:1.2em .45em}
 .lp-texto b{font-weight:650}
 .lp-texto .lp-tx-item{padding-left:1.1em;position:relative}

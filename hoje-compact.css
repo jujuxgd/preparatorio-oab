@@ -62,8 +62,8 @@ body.hoje .day-footer>div:last-child{opacity:.9}
 
 @media(max-width:480px){
  /* 5 abas iguais, ícone em cima do nome (como a barra de baixo): cabem sem quebrar e ficam fáceis de tocar */
- body.hoje .tabs-bar{display:grid!important;grid-template-columns:repeat(5,1fr);gap:0!important}
- body.hoje .tab{flex-direction:column;justify-content:center;gap:.3rem!important;font-size:.7rem!important;letter-spacing:0!important;padding:.55rem 0 .5rem!important;min-height:54px}
+ body.hoje .tabs-bar{display:grid!important;grid-template-columns:repeat(6,1fr);gap:0!important}
+ body.hoje .tab{flex-direction:column;justify-content:center;gap:.3rem!important;font-size:.64rem!important;letter-spacing:0!important;padding:.55rem 0 .5rem!important;min-height:54px}
  body.hoje .tab svg{display:block;width:19px;height:19px}
  body.hoje .tab .badge{font-size:.58rem;padding:0 .3rem}
  body.hoje .day-info .tag{white-space:nowrap}

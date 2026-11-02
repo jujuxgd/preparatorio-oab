@@ -1112,6 +1112,7 @@
       <div class="tab" data-tab="questoes"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg><span class="tl">Questões</span></div>
       <div class="tab" data-tab="checklist"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg><span class="tl">Checklist</span> <span id="ck-cont" style="font-size:.72rem;color:var(--rose-deep);font-weight:600"></span></div>
       <div class="tab" data-tab="videoaulas"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg><span class="tl">Videoaulas</span></div>
+      <div class="tab" data-tab="mapas"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.5"/><circle cx="4.5" cy="5" r="2"/><circle cx="19.5" cy="5" r="2"/><circle cx="4.5" cy="19" r="2"/><circle cx="19.5" cy="19" r="2"/><path d="M10.2 10.4 6 6.3M13.8 10.4 18 6.3M10.2 13.6 6 17.7M13.8 13.6 18 17.7"/></svg><span class="tl">Mapas</span></div>
     </div>
 
     <div class="content-layout">
@@ -1138,6 +1139,10 @@
             <div id="ck-area"></div>
           </div>
           <div id="ck-cad"></div>
+        </div>
+
+        <div class="tab-content" data-tab="mapas">
+          <div class="ss-bloco" id="mm-area"></div>
         </div>
 
         <div class="tab-content" data-tab="videoaulas">
@@ -1172,6 +1177,7 @@
 <script src="estudo-core.js"></script>
 <script src="revisao-biblioteca.js"></script>
 <script src="videoaulas.js"></script>
+<script src="mapas-mentais.js"></script>
 <script src="calendario-ativo.js"></script>
 <script src="plano-dinamico.js"></script>
 <script src="vde-dias.js"></script>
@@ -1182,7 +1188,7 @@
 <script>
 (function () {
   var S = SESSAO, DIA = S.DIA, esc = S.esc;
-  var ABAS = ['conteudo', 'flashcards', 'questoes', 'checklist', 'videoaulas'];
+  var ABAS = ['conteudo', 'flashcards', 'questoes', 'checklist', 'videoaulas', 'mapas'];
   var aba = new URLSearchParams(location.search).get('aba');
   if (ABAS.indexOf(aba) < 0) aba = S.pdfsDoDia().length || S.revisoesDoDia().length ? 'conteudo' : 'flashcards';
   var feitas = {};
@@ -1197,7 +1203,24 @@
       if (a === 'conteudo') S.montarConteudo(document.getElementById('ct-area'));
       if (a === 'questoes') S.montarQuestoes(document.getElementById('q-area'));
       if (a === 'videoaulas') montarVideoaulas();
+      if (a === 'mapas') montarMapas();
     }
+  }
+  // Mapa mental da matéria (PDF do Drive, sem modo texto): uma matéria do dia por vez
+  function montarMapas() {
+    var el = document.getElementById('mm-area'), M = window.MAPAS_MENTAIS || {};
+    var ds = S.disciplinasDoDia().filter(function (d) { return M[d]; });
+    if (!ds.length) { el.innerHTML = '<p class="ss-vazio" style="margin:0">Sem mapa mental para as matérias deste dia.</p>'; return; }
+    function mostrar(i) {
+      var id = M[ds[i]];
+      el.innerHTML = (ds.length > 1 ? '<div class="est-bar"><div class="est-ver">' + ds.map(function (d, j) {
+          return '<button type="button" class="' + (i === j ? 'on' : '') + '" data-mm="' + j + '">' + esc(S.curto(d)) + '</button>';
+        }).join('') + '</div></div>' : '') +
+        '<div class="mm-topo"><span>Mapa mental · ' + esc(ds[i]) + '</span><a href="https://drive.google.com/file/d/' + id + '/view" target="_blank" rel="noopener">Abrir no Drive</a></div>' +
+        '<iframe class="mm-pdf" src="https://drive.google.com/file/d/' + id + '/preview" title="Mapa mental de ' + esc(ds[i]) + '" allow="autoplay"></iframe>';
+      el.querySelectorAll('[data-mm]').forEach(function (b) { b.addEventListener('click', function () { mostrar(+b.dataset.mm); }); });
+    }
+    mostrar(0);
   }
   document.querySelectorAll('.tab').forEach(function (t) { t.addEventListener('click', function () { abrir(t.dataset.tab); }); });
   S.sincPasta(function (ns) {
