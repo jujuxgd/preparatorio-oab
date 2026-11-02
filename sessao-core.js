@@ -205,7 +205,7 @@
       (p.e.length > 1 ? '<div class="est-bar"><div class="est-ver">' + p.e.map(function (c, i) {
         return '<button type="button" class="' + (i ? '' : 'on') + '" data-est-cap="' + i + '">Cap. ' + c.c + '</button>';
       }).join('') + '</div></div>' : '') +
-      '<div class="est-tit"></div><div class="est-leitor"></div></div>';
+      '<div class="est-leitor"></div></div>';
   }
   // um leitor por vez; a versão completa fica no menu ⋯ do leitor
   function ligarEstrategia(el) {
@@ -213,7 +213,6 @@
       var p = pdfsDoDia().filter(function (x) { return x.e; })[bi], cap = 0;
       function abrir() {
         var c = p.e[cap], v = versao(), id = c[v], outra = v === 'r' ? 'x' : 'r';
-        b.querySelector('.est-tit').textContent = 'Cap. ' + c.c + ' · ' + c.t + (v === 'x' && c.x !== c.r ? ' · versão completa' : '');
         b.querySelectorAll('[data-est-cap]').forEach(function (x) { x.classList.toggle('on', +x.dataset.estCap === cap); });
         var h = document.createElement('div'); h.className = 'lp-host';
         var alvo = b.querySelector('.est-leitor'); alvo.innerHTML = ''; alvo.appendChild(h);
@@ -430,7 +429,7 @@
     });
     return out;
   }
-  function escolher(chave, disc, topicos, prioritarias, n, erradasPrimeiro, usadas) {
+  function escolher(chave, disc, topicos, prioritarias, n, erradasPrimeiro, usadas, kw) {
     var s = selecaoDoDia();
     if (s.sel[chave]) {
       var vistos = {};
@@ -451,6 +450,12 @@
     var pool = banco().filter(function (q) {
       return q.discipline === disc && q.correct_answer && !usadas[q.id] && !(q.duplicate_group && usadas[q.duplicate_group]) && (todos || topicos.indexOf(q.topic) >= 0);
     });
+    // tema mais estreito que o assunto do banco (ex.: Iter criminis dentro de Teoria do crime): só as do tema, se houver 3+
+    if (kw) {
+      var rx = new RegExp(kw, 'i'), doTema = pool.filter(function (q) { return rx.test(normal(q.subtopic)); });
+      if (doTema.length < 3) doTema = pool.filter(function (q) { return rx.test(normal((q.subtopic || '') + ' ' + String(q.statement || '').slice(0, 400))); });
+      if (doTema.length >= 3) pool = doTema;
+    }
     function nivel(q) {
       var r = resp[q.id];
       // respondida a partir desta data = já era questão deste dia: volta primeiro, mesmo se o sorteio se perdeu (outro aparelho)
@@ -579,8 +584,8 @@
       (q.notes ? '<p class="ss-nota">Sobre o material de origem: ' + esc(q.notes) + '</p>' : '') + '</div>';
   }
   var temasBloco = null;
-  function blocoQuestoes(chave, titulo, extra, disc, topicos, g, n, erradasPrimeiro, usadas) {
-    var ids = escolher(chave, disc, topicos, g, n, erradasPrimeiro, usadas);
+  function blocoQuestoes(chave, titulo, extra, disc, topicos, g, n, erradasPrimeiro, usadas, kw) {
+    var ids = escolher(chave, disc, topicos, g, n, erradasPrimeiro, usadas, kw);
     temasBloco = topicos;
     ids.forEach(function (id) { usadas[id] = 1; var q = qpor(id); if (q && q.duplicate_group) usadas[q.duplicate_group] = 1; });
     var h = '<div class="ss-top" data-bloco="' + chave + '"><div class="ss-top-cab"><b><span class="mat">' + esc(curto(disc)) + '</span>' + esc(titulo) + '</b>' + (extra || '') + '</div>' +
@@ -597,7 +602,7 @@
         '<p>Do tema dos PDFs do dia, primeiro as que caíram no Gabaritaço. Errou, a questão vai para o Caderno de Erros e volta em 3, 7 e 15 dias.</p>' +
         DIA.top.map(function (t, i) {
           var l = linkTopico(t);
-          return blocoQuestoes('t' + i, t.s, l ? '<a href="' + l.href + '" target="_blank" rel="noopener">' + esc(l.txt) + ' ↗</a>' : '', t.d, t.q, t.g, n, /^Reforço/.test(t.s), usadas);
+          return blocoQuestoes('t' + i, t.s, l ? '<a href="' + l.href + '" target="_blank" rel="noopener">' + esc(l.txt) + ' ↗</a>' : '', t.d, t.q, t.g, n, /^Reforço/.test(t.s), usadas, t.kw);
         }).join('') + '</div>';
     } else if (DIA.tipo === 'revisao' || DIA.tipo === 'leve') {
       h += '<div class="ss-bloco"><h3>Reforço em Ética</h3><p>Erradas primeiro, depois as que você ainda não fez.</p>' +

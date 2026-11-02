@@ -441,6 +441,12 @@ Prova prático-profissional do OAB 48 em **28/02/2027** (cronograma da OAB). Jul
   Flashcards zerados: o estado passou para `oab_fc_estado_v2` (o v1 continua guardado e sincronizado, sem uso); questões e caderno de erros
   continuam. A caixa do leitor no PC cabe na tela (`100svh - 150px`).
 
+
+- **Ajustes de 02/11/2026 (noite):** questões estreitadas por tema (`kw` no calendário, casando primeiro o `subtopic` e depois o enunciado;
+  só vale com 3+ questões); Ética: Princípios usa Publicidade/Relações com o cliente/Deveres. Mapa mental só com as páginas do tema
+  (`mm`), no leitor de PDF (escurece no modo escuro), sem "Ler como texto" (`opts.semTexto`). No PC a página inteira cabe na caixa
+  (escala = menor entre largura e altura da caixa, que vai até 860px). Conteúdo do dia sem a linha "Cap. N · título".
+
 ## 6. Design System
 
 ### Paleta de Cores (style.css :root)

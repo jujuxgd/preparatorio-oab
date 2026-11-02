@@ -3,7 +3,8 @@
 // revisão semanal, domingo simulado completo. Nesses temas n ≥ 1001 e e = capítulos do Estratégia no Drive
 // dela (c = nº, t = título, r = resumido, x = completo). q = tópicos do banco; k = faixa de DICAS do
 // Gabaritaço (conferida pelos títulos das DICAS); g = questões "Como já caiu"; fc = temas dos
-// flashcards (campo t) daquele tema — só eles entram no dia. Fase 2 (21/12–09/01): revisão.
+// flashcards (campo t) daquele tema — só eles entram no dia; kw = regex (sem acento) que estreita
+// as questões do assunto do banco ao tema (vale se achar 3+); mm = [de, até] páginas do mapa mental (mapas-mentais.js). Fase 2 (21/12–09/01): revisão.
 window.CAL_ATIVO = {
 "curto": {
 "Ética Profissional": "Ética",
@@ -38,6 +39,8 @@ window.CAL_ATIVO = {
 "s": "Princípios",
 "n": 1001,
 "q": [
+"Publicidade na advocacia",
+"Relações com o cliente",
 "Deveres e vedações éticas do advogado"
 ],
 "e": [
@@ -53,6 +56,11 @@ window.CAL_ATIVO = {
 "Publicidade",
 "Relações com o cliente",
 "Princípios"
+],
+"kw": "sigilo|publicidade|cliente|pessoalidade|mercantil|captacao|propaganda|anuncio",
+"mm": [
+3,
+3
 ],
 "k": [
 56,
@@ -85,6 +93,10 @@ window.CAL_ATIVO = {
 "fc": [
 "Direitos fundamentais",
 "Direitos individuais e coletivos"
+],
+"mm": [
+8,
+11
 ],
 "k": [
 6,
@@ -127,6 +139,11 @@ window.CAL_ATIVO = {
 "Pessoas jurídicas",
 "Teoria geral: pessoas"
 ],
+"kw": "personalidade|capacidade|incapa|emancipa|ausencia|ausente|morte|comoriencia|pessoa juridica|domicilio|curatela|nome civil|fundac|associac",
+"mm": [
+3,
+3
+],
 "k": [
 1,
 6
@@ -159,6 +176,11 @@ window.CAL_ATIVO = {
 "fc": [
 "Tentativa",
 "Iter criminis"
+],
+"kw": "tentativa|desist|arrependimento|crime impossivel|consuma|preparatori|iter criminis",
+"mm": [
+7,
+7
 ],
 "k": [
 11,
@@ -199,6 +221,10 @@ window.CAL_ATIVO = {
 "Gratuidade da justiça",
 "Partes e procuradores"
 ],
+"mm": [
+3,
+3
+],
 "k": [
 8,
 14
@@ -229,6 +255,10 @@ window.CAL_ATIVO = {
 "Direitos e prerrogativas",
 "Desagravo público",
 "Direitos do advogado"
+],
+"mm": [
+5,
+8
 ],
 "k": [
 14,
@@ -276,6 +306,11 @@ window.CAL_ATIVO = {
 "Estágio",
 "Relações empregatícias especiais"
 ],
+"kw": "domestic|aprendiz|teletrabalho|intermitente|rural|hipersuficiente|menor|estagi|diarista",
+"mm": [
+5,
+5
+],
 "k": [
 4,
 11
@@ -302,6 +337,11 @@ window.CAL_ATIVO = {
 ],
 "fc": [
 "Intervenção do Estado na propriedade"
+],
+"kw": "requisicao|servidao|tombamento|ocupacao temporaria|limitacao administrativa",
+"mm": [
+9,
+10
 ],
 "k": [
 60,
@@ -337,6 +377,10 @@ window.CAL_ATIVO = {
 "Competência",
 "Jurisdição e competência"
 ],
+"mm": [
+12,
+14
+],
 "k": [
 16,
 23
@@ -364,6 +408,11 @@ window.CAL_ATIVO = {
 "fc": [
 "Desapropriação",
 "Desapropriação"
+],
+"kw": "desapropria|expropria",
+"mm": [
+17,
+18
 ],
 "k": [
 54,
@@ -416,6 +465,11 @@ window.CAL_ATIVO = {
 ],
 "fc": [
 "Sociedades em conta de participação"
+],
+"kw": "conta de participacao|socio ostensivo|participante|sociedade em comum|nao personificad",
+"mm": [
+4,
+8
 ]
 },
 {
@@ -436,6 +490,10 @@ window.CAL_ATIVO = {
 "fc": [
 "Remédios constitucionais",
 "Remédios constitucionais"
+],
+"mm": [
+12,
+15
 ],
 "k": [
 17,
@@ -472,6 +530,11 @@ window.CAL_ATIVO = {
 "Negócio jurídico",
 "Teoria geral: fato jurídico"
 ],
+"kw": "negocio juridico|erro|dolo|coacao|lesao|estado de perigo|fraude contra|simulacao|nulidade|nulo|anulav|condicao|termo|encargo|prescri|decad|ato juridico|fato juridico",
+"mm": [
+5,
+6
+],
 "k": [
 7,
 11
@@ -497,6 +560,11 @@ window.CAL_ATIVO = {
 ],
 "fc": [
 "Sociedades limitadas"
+],
+"kw": "limitada|ltda|quota|cota",
+"mm": [
+4,
+8
 ]
 }
 ]
@@ -523,6 +591,10 @@ window.CAL_ATIVO = {
 ],
 "fc": [
 "Tratados internacionais"
+],
+"mm": [
+3,
+4
 ]
 },
 {
@@ -543,6 +615,10 @@ window.CAL_ATIVO = {
 "fc": [
 "Provas",
 "Teoria geral das provas"
+],
+"mm": [
+16,
+18
 ],
 "k": [
 24,
@@ -577,6 +653,10 @@ window.CAL_ATIVO = {
 "fc": [
 "Obrigação tributária",
 "Obrigação tributária"
+],
+"mm": [
+8,
+9
 ],
 "k": [
 40,
@@ -620,6 +700,10 @@ window.CAL_ATIVO = {
 "Defesa do réu",
 "Defesa"
 ],
+"mm": [
+13,
+14
+],
 "k": [
 19,
 24
@@ -652,6 +736,10 @@ window.CAL_ATIVO = {
 ],
 "fc": [
 "Adoção"
+],
+"mm": [
+7,
+7
 ]
 },
 {
@@ -678,6 +766,10 @@ window.CAL_ATIVO = {
 ],
 "fc": [
 "Teoria da pena"
+],
+"mm": [
+17,
+20
 ],
 "k": [
 29,
@@ -742,6 +834,11 @@ window.CAL_ATIVO = {
 "Advogado empregado",
 "Sociedade de advogados e honorários advocatícios"
 ],
+"kw": "sociedade|honorario|socio",
+"mm": [
+11,
+14
+],
 "k": [
 22,
 32
@@ -773,6 +870,10 @@ window.CAL_ATIVO = {
 "Imunidades",
 "Imunidades"
 ],
+"mm": [
+7,
+7
+],
 "k": [
 25,
 31
@@ -802,6 +903,10 @@ window.CAL_ATIVO = {
 ],
 "fc": [
 "Responsabilidade civil do Estado"
+],
+"mm": [
+15,
+16
 ],
 "k": [
 65,
@@ -833,6 +938,11 @@ window.CAL_ATIVO = {
 "Saneamento",
 "Audiência de instrução",
 "Procedimento comum"
+],
+"kw": "peticao inicial|contesta|reconven|audiencia|saneamento|valor da causa|improcedencia liminar|revelia|emenda",
+"mm": [
+14,
+15
 ],
 "k": [
 31,
@@ -870,6 +980,10 @@ window.CAL_ATIVO = {
 ],
 "fc": [
 "Oferta e publicidade; práticas abusivas; bancos de dados"
+],
+"mm": [
+7,
+7
 ]
 },
 {
@@ -892,6 +1006,10 @@ window.CAL_ATIVO = {
 "Letra de câmbio",
 "Cheque",
 "Títulos de crédito (letra de câmbio e cheque)"
+],
+"mm": [
+9,
+10
 ]
 }
 ]
@@ -924,6 +1042,10 @@ window.CAL_ATIVO = {
 ],
 "fc": [
 "DUDH, PIDCP e PIDESC"
+],
+"mm": [
+6,
+7
 ]
 },
 {
@@ -944,6 +1066,11 @@ window.CAL_ATIVO = {
 "fc": [
 "Procedimentos",
 "Procedimento ordinário"
+],
+"kw": "ordinario|resposta a acusacao|absolvicao sumaria|instrucao|alegacoes finais|testemunha|rejeicao da denuncia|recebimento da denuncia",
+"mm": [
+10,
+11
 ],
 "k": [
 40,
@@ -984,6 +1111,11 @@ window.CAL_ATIVO = {
 "fc": [
 "Erro de tipo",
 "Espécies de erro: essenciais e acidentais"
+],
+"kw": "erro|aberratio|descriminante putativa",
+"mm": [
+12,
+13
 ],
 "k": [
 10,
@@ -1070,6 +1202,10 @@ window.CAL_ATIVO = {
 "Incompatibilidades e impedimentos",
 "Incompatibilidades e impedimentos"
 ],
+"mm": [
+15,
+15
+],
 "k": [
 33,
 37
@@ -1096,6 +1232,10 @@ window.CAL_ATIVO = {
 "fc": [
 "Tutela provisória",
 "Tutela provisória"
+],
+"mm": [
+9,
+10
 ],
 "k": [
 24,
@@ -1133,6 +1273,11 @@ window.CAL_ATIVO = {
 "Organização do Estado",
 "Repartição de competências"
 ],
+"kw": "competencia",
+"mm": [
+23,
+24
+],
 "k": [
 41,
 44
@@ -1162,6 +1307,10 @@ window.CAL_ATIVO = {
 "Relação de emprego",
 "Relação de trabalho",
 "Contrato de trabalho"
+],
+"mm": [
+11,
+14
 ],
 "k": [
 1,
@@ -1199,6 +1348,10 @@ window.CAL_ATIVO = {
 "PPP",
 "Serviços públicos"
 ],
+"mm": [
+13,
+14
+],
 "k": [
 95,
 98
@@ -1224,6 +1377,10 @@ window.CAL_ATIVO = {
 ],
 "fc": [
 "Ato infracional e medidas socioeducativas"
+],
+"mm": [
+6,
+8
 ]
 }
 ]
@@ -1251,6 +1408,10 @@ window.CAL_ATIVO = {
 ],
 "fc": [
 "Sistema jurídico"
+],
+"mm": [
+3,
+4
 ]
 },
 {
@@ -1271,6 +1432,10 @@ window.CAL_ATIVO = {
 "fc": [
 "Jus postulandi",
 "Partes e procuradores; tutela provisória"
+],
+"mm": [
+8,
+10
 ],
 "k": [
 12,
@@ -1304,6 +1469,10 @@ window.CAL_ATIVO = {
 ],
 "fc": [
 "Licitações"
+],
+"mm": [
+11,
+12
 ],
 "k": [
 70,
@@ -1342,6 +1511,11 @@ window.CAL_ATIVO = {
 "Contratos em espécie",
 "Fiança",
 "Contratos: espécies comuns"
+],
+"kw": "compra|venda|doacao|locacao|comodato|mutuo|fianca|empreitada|deposito|mandato|seguro|transporte|troca|permuta|prestacao de servico",
+"mm": [
+14,
+15
 ],
 "k": [
 28,
@@ -1402,6 +1576,10 @@ window.CAL_ATIVO = {
 "Espécies tributárias",
 "Tributos"
 ],
+"mm": [
+3,
+3
+],
 "k": [
 32,
 39
@@ -1425,6 +1603,10 @@ window.CAL_ATIVO = {
 "fc": [
 "Infrações e sanções",
 "Infrações e sanções disciplinares"
+],
+"mm": [
+16,
+18
 ],
 "k": [
 38,
@@ -1459,6 +1641,10 @@ window.CAL_ATIVO = {
 ],
 "fc": [
 "Orçamento público: leis orçamentárias"
+],
+"mm": [
+5,
+6
 ]
 },
 {
@@ -1479,6 +1665,10 @@ window.CAL_ATIVO = {
 "fc": [
 "Processo legislativo",
 "Processo legislativo"
+],
+"mm": [
+39,
+41
 ],
 "k": [
 54,
@@ -1515,6 +1705,10 @@ window.CAL_ATIVO = {
 ],
 "fc": [
 "EIA/RIMA, licenciamento e compensação ambiental"
+],
+"mm": [
+5,
+7
 ]
 },
 {
@@ -1536,6 +1730,10 @@ window.CAL_ATIVO = {
 "Recursos",
 "Ações autônomas",
 "Recursos"
+],
+"mm": [
+8,
+9
 ],
 "k": [
 45,
@@ -1570,6 +1768,10 @@ window.CAL_ATIVO = {
 ],
 "fc": [
 "Falência"
+],
+"mm": [
+12,
+14
 ]
 },
 {
@@ -1590,6 +1792,10 @@ window.CAL_ATIVO = {
 ],
 "fc": [
 "Responsabilidade do fornecedor"
+],
+"mm": [
+6,
+6
 ]
 }
 ]
@@ -1617,6 +1823,10 @@ window.CAL_ATIVO = {
 "fc": [
 "Crimes contra o patrimônio",
 "Crimes contra o patrimônio"
+],
+"mm": [
+24,
+27
 ],
 "k": [
 56,
@@ -1649,6 +1859,10 @@ window.CAL_ATIVO = {
 ],
 "fc": [
 "Justiça Eleitoral e inelegibilidades"
+],
+"mm": [
+9,
+19
 ]
 }
 ]
@@ -1695,6 +1909,10 @@ window.CAL_ATIVO = {
 ],
 "fc": [
 "Hermenêutica"
+],
+"mm": [
+8,
+9
 ]
 },
 {
@@ -1748,6 +1966,10 @@ window.CAL_ATIVO = {
 ],
 "fc": [
 "Convenção Americana sobre Direitos Humanos"
+],
+"mm": [
+4,
+4
 ]
 },
 {
@@ -1768,6 +1990,10 @@ window.CAL_ATIVO = {
 "fc": [
 "Processo disciplinar",
 "Processo disciplinar"
+],
+"mm": [
+19,
+19
 ],
 "k": [
 44,
@@ -1804,6 +2030,10 @@ window.CAL_ATIVO = {
 "Controle de constitucionalidade",
 "Controle concentrado"
 ],
+"mm": [
+47,
+54
+],
 "k": [
 73,
 78
@@ -1837,6 +2067,10 @@ window.CAL_ATIVO = {
 "fc": [
 "Recursos",
 "Recursos trabalhistas"
+],
+"mm": [
+15,
+17
 ],
 "k": [
 47,
@@ -1872,6 +2106,10 @@ window.CAL_ATIVO = {
 "Remuneração",
 "Sistema remuneratório"
 ],
+"mm": [
+19,
+21
+],
 "k": [
 41,
 45
@@ -1898,6 +2136,10 @@ window.CAL_ATIVO = {
 "fc": [
 "Cumprimento de sentença",
 "Cumprimento de sentença"
+],
+"mm": [
+19,
+19
 ],
 "k": [
 45,
@@ -1932,6 +2174,10 @@ window.CAL_ATIVO = {
 "IRDR",
 "Recursos"
 ],
+"mm": [
+20,
+22
+],
 "k": [
 53,
 61
@@ -1957,6 +2203,10 @@ window.CAL_ATIVO = {
 ],
 "fc": [
 "Contribuição previdenciária dos segurados"
+],
+"mm": [
+15,
+16
 ]
 }
 ]
@@ -2002,6 +2252,10 @@ window.CAL_ATIVO = {
 ],
 "fc": [
 "Responsabilidade ambiental"
+],
+"mm": [
+11,
+11
 ]
 },
 {
@@ -2022,6 +2276,10 @@ window.CAL_ATIVO = {
 "fc": [
 "Execução",
 "Execução"
+],
+"mm": [
+23,
+23
 ],
 "k": [
 50,
@@ -2052,6 +2310,10 @@ window.CAL_ATIVO = {
 ],
 "fc": [
 "Conflito de leis no espaço"
+],
+"mm": [
+11,
+14
 ]
 },
 {
@@ -2072,6 +2334,11 @@ window.CAL_ATIVO = {
 "fc": [
 "Regime de bens",
 "Família: direito conjugal patrimonial"
+],
+"kw": "regime|pacto antenupcial|bens|comunhao|separacao|meacao|participacao final",
+"mm": [
+24,
+25
 ],
 "k": [
 59,
@@ -2121,6 +2388,10 @@ window.CAL_ATIVO = {
 "Sucessão testamentária",
 "Direito das sucessões"
 ],
+"mm": [
+26,
+30
+],
 "k": [
 65,
 79
@@ -2143,6 +2414,10 @@ window.CAL_ATIVO = {
 ],
 "fc": [
 "Dependentes do RGPS"
+],
+"mm": [
+19,
+19
 ]
 }
 ]
@@ -2177,6 +2452,10 @@ window.CAL_ATIVO = {
 "Execução",
 "Execução no processo do trabalho"
 ],
+"mm": [
+18,
+20
+],
 "k": [
 35,
 41
@@ -2202,6 +2481,10 @@ window.CAL_ATIVO = {
 ],
 "fc": [
 "Despesa pública: precatórios e RPV"
+],
+"mm": [
+10,
+13
 ]
 }
 ]
@@ -2228,6 +2511,10 @@ window.CAL_ATIVO = {
 ],
 "fc": [
 "Lei das Eleições e ações eleitorais"
+],
+"mm": [
+32,
+35
 ]
 },
 {
@@ -2248,6 +2535,10 @@ window.CAL_ATIVO = {
 "fc": [
 "Estabilidade",
 "Estabilidades"
+],
+"mm": [
+22,
+23
 ],
 "k": [
 36,
