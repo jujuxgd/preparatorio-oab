@@ -41,3 +41,16 @@ main { animation: pageEnter 0.18s cubic-bezier(0.23, 1, 0.32, 1); }
 /* tablet na horizontal (901–1100px): barra do topo não cabe com a chave 1ª/2ª — o contador "Prova em" some (os dias aparecem no Início) */
 @media (min-width: 901px) and (max-width: 1100px) { .tn-count { display: none; } .tn-links { gap: 1.1rem; } .tn-end { gap: .4rem; } }
 @media (min-width: 901px) and (max-width: 1000px) { .tn-word { display: none; } }
+
+/* ── Cartões de todas as telas (mesmo acabamento do Hoje e do Calendário): borda e sombra na cor de destaque ──
+   Fora do Início, que mantém o visual original. Hover e estados continuam valendo (seletores deles são mais fortes). */
+html body:not(.home) :is(.rf-card, .mat-card, .stat-card, .revisao-card, .side-card, .q-card, .favorita-card, .error-stat-card, .profile-card, .insight-card,
+  .fact-card, .chart-card, .playlist-card, .sim-card, .r40-card, .error-card, .config-card, .perfil-header-card, .content-card, .hub-card, .dia-content-card) {
+  border-color: color-mix(in srgb, var(--rose-600, var(--rose)) 14%, var(--line-soft));
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--rose-600, var(--rose)) 6%, transparent), 0 14px 28px -22px color-mix(in srgb, var(--rose-600, var(--rose)) 32%, transparent);
+}
+/* títulos dos cartões de menu (Treino, Estudar) menores no celular e tablet */
+@media (max-width: 1024px) { html body .hub-card h3, html body .hub-destaque h3 { font-size: 1.3rem !important; } }
+@media (max-width: 640px)  { html body .hub-card h3, html body .hub-destaque h3 { font-size: 1.1rem !important; } }
+/* texto de abertura das páginas de menu: não compete com o título no celular */
+@media (max-width: 640px) { html body .hub p.lead { font-size: .92rem; margin-bottom: 1.6rem; } }
