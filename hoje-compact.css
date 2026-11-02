@@ -155,7 +155,7 @@ body.hoje{--ac:var(--rose-600);--ac-deep:var(--rose-700);--ac-soft:color-mix(in 
 
 /* título: o "Dia 1 de 70" manda; a data vira uma linha de apoio embaixo (sem rótulo em caixa-alta) */
 body.hoje .page-title{display:flex;flex-direction:column;gap:.35rem}
-body.hoje .page-title h1{font-size:clamp(2.3rem,8.5vw,3.3rem)!important;line-height:1.02;letter-spacing:-.025em;text-wrap:balance}
+body.hoje .page-title h1{font-size:clamp(1.8rem,5.2vw,2.35rem)!important;line-height:1.08;letter-spacing:-.02em;text-wrap:balance}
 body.hoje .page-title h1 em{color:var(--ac)}
 body.hoje .breadcrumb{order:2;text-transform:none!important;letter-spacing:0!important;font:500 .95rem Inter,sans-serif!important;color:var(--ink-soft)!important;margin:0!important}
 body.hoje .hj-prog{order:3;height:4px;border-radius:4px;background:color-mix(in srgb,var(--ac) 14%,var(--line-soft));max-width:15rem;margin-top:.55rem;overflow:hidden}
