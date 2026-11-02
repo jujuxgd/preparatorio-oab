@@ -190,10 +190,14 @@
     DIA.top.forEach(function (t) {
       if (t.n == null) return;
       var x = ns.filter(function (y) { return y.n === t.n; })[0];
-      if (!x) ns.push(x = { n: t.n, e: t.e, ids: t.e ? t.e.map(function (c) { return c.r; }) : [].concat((window.VDE_DIAS || {})[t.n] || []), temas: [] });
+      if (!x) ns.push(x = { n: t.n, d: t.d, tema: t.s, e: t.e, ids: t.e ? t.e.map(function (c) { return c.r; }) : [].concat((window.VDE_DIAS || {})[t.n] || []), temas: [] });
       x.temas.push(curto(t.d) + ': ' + t.s);
     });
     return ns;
+  }
+  // Título do tema numa linha: "Matéria | Tema", mesmo tamanho; matéria na cor de destaque que Julia escolhe (--rose-deep)
+  function cabTema(d, tema) {
+    return '<h3 class="tema-linha"><span class="tl-mat">' + esc(curto(d)) + '</span><span class="tl-sep" aria-hidden="true">|</span><span class="tl-tema">' + esc(tema) + '</span></h3>';
   }
   function rotulo(n) { return n >= 1001 ? 'Estratégia' : 'Dia ' + n + ' do VDE'; }
   // Capítulos do Estratégia: um leitor por vez; versão resumida (padrão) ou completa, escolha só do aparelho.
@@ -201,7 +205,7 @@
   function versao() { try { return localStorage.getItem(K_VER) === 'x' ? 'x' : 'r'; } catch (e) { return 'r'; } }
   function htmlEstrategia(p) {
     var c0 = p.e[0];
-    return '<div class="ss-bloco est-bloco"><h3>' + esc(p.temas.join(' · ')) + '</h3>' +
+    return '<div class="ss-bloco est-bloco">' +
       (p.e.length > 1 ? '<div class="est-bar"><div class="est-ver">' + p.e.map(function (c, i) {
         return '<button type="button" class="' + (i ? '' : 'on') + '" data-est-cap="' + i + '">Cap. ' + c.c + '</button>';
       }).join('') + '</div></div>' : '') +
@@ -216,11 +220,11 @@
         b.querySelectorAll('[data-est-cap]').forEach(function (x) { x.classList.toggle('on', +x.dataset.estCap === cap); });
         var h = document.createElement('div'); h.className = 'lp-host';
         var alvo = b.querySelector('.est-leitor'); alvo.innerHTML = ''; alvo.appendChild(h);
-        if (!window.LEITOR) { h.innerHTML = '<iframe class="vde-pdf" src="https://drive.google.com/file/d/' + id + '/preview" allow="autoplay"></iframe>'; return; }
+        if (!window.LEITOR) { h.innerHTML = cabTema(p.d, p.tema) + '<iframe class="vde-pdf" src="https://drive.google.com/file/d/' + id + '/preview" allow="autoplay"></iframe>'; return; }
         var extras = c.x !== c.r ? [{ t: v === 'r' ? 'Ver a versão completa' : 'Voltar à versão resumida', sub: v === 'r' ? 'mais teoria e exemplos' : '', fn: function () {
           try { localStorage.setItem(K_VER, outra); } catch (e) {} abrir();
         } }] : [];
-        LEITOR.montar(h, id, { caixa: true, extras: extras });
+        LEITOR.montar(h, id, { caixa: true, extras: extras, titulo: cabTema(p.d, p.tema) });
       }
       b.addEventListener('click', function (ev) {
         var a = ev.target.closest('[data-est-cap]'); if (!a) return;
@@ -309,7 +313,7 @@
       var g = G[t.d], de = g.dica[t.k[0] - 1] || 1, prox = g.dica[t.k[1]];
       var ate = prox ? Math.max(de, prox - (g.topo && g.topo[t.k[1]] ? 1 : 0)) : g.paginas;
       // discreto: uma linha que abre o trecho só quando tocada
-      return '<details class="gab-mini"><summary>Gabaritaço · ' + esc(curto(t.d) + ': ' + t.s) + ' <span>questões que já caíram</span></summary>' +
+      return '<details class="gab-mini"><summary>Gabaritaço: questões que já caíram neste tema</summary>' +
         '<div class="gab-host" data-arq="' + g.id + '" data-de="' + de + '" data-ate="' + ate + '"></div></details>';
     }).join('');
   }
@@ -796,6 +800,6 @@
     sincPasta: sincPasta, fila: fila, montarFlashcards: montarFlashcards, montarQuestoes: montarQuestoes, carregarBanco: carregarBanco,
     itensChecklist: itensChecklist, htmlChecklist: htmlChecklist, htmlConteudo: htmlConteudo, montarConteudo: montarConteudo, revisoesDoDia: revisoesDoDia, pdfsDoDia: pdfsDoDia, progressoChecklist: progressoChecklist, marcar: marcar,
     feito: function () { return !!checks().feito; }, marcarFeito: marcarFeito, atrasados: atrasados,
-    htmlCalendario: htmlCalendario, htmlPainel: htmlPainel, linkRevisao: linkRevisao
+    htmlCalendario: htmlCalendario, cabTema: cabTema, htmlPainel: htmlPainel, linkRevisao: linkRevisao
   };
 })();

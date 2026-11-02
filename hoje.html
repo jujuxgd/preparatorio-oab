@@ -1215,10 +1215,10 @@
       var t = ts[i];
       el.innerHTML = (ts.length > 1 ? '<div class="est-bar"><div class="est-ver">' + ts.map(function (x, j) {
           return '<button type="button" class="' + (i === j ? 'on' : '') + '" data-mm="' + j + '">' + esc(S.curto(x.d)) + '</button>';
-        }).join('') + '</div></div>' : '') + '<h3 class="mm-tit">' + esc(S.curto(t.d) + ': ' + t.s) + '</h3><div class="mm-host"></div>';
+        }).join('') + '</div></div>' : '') + '<div class="mm-host"></div>';
       el.querySelectorAll('[data-mm]').forEach(function (b) { b.addEventListener('click', function () { mostrar(+b.dataset.mm); }); });
       var h = el.querySelector('.mm-host');
-      if (window.LEITOR) LEITOR.montar(h, M[t.d], { caixa: true, de: t.mm[0], ate: t.mm[1], semTexto: true });
+      if (window.LEITOR) LEITOR.montar(h, M[t.d], { caixa: true, de: t.mm[0], ate: t.mm[1], semTexto: true, titulo: S.cabTema(t.d, t.s) });
       else h.innerHTML = '<iframe class="mm-pdf" src="https://drive.google.com/file/d/' + M[t.d] + '/preview"></iframe>';
     }
     mostrar(0);
