@@ -152,3 +152,46 @@ html.lp-travada,html.lp-travada body{overflow:hidden}
 .lp-texto .lp-tx-tab td b{font-weight:650}
 .lp-texto .lp-tx-tab td .lp-tx-cor{color:var(--rose-deep)}
 .lp[data-tx-fundo="noite"] .lp-texto .lp-tx-tab th{background:color-mix(in srgb,var(--rose-deep) 70%,#000)}
+
+/* ═══ Acabamento de leitura (nov/2026): hierarquia, ritmo e tipos de bloco ═══ */
+.lp-texto{--tx-ac:var(--rose-600,var(--rose-deep));font-kerning:normal}
+.lp-texto p{margin-block:0 1.05em;text-wrap:pretty;line-height:calc(var(--tx-lin) + .06)}
+/* títulos: Fraunces leve e bem espaçado; o número vem em destaque e as seções ganham um fio curto de abertura */
+.lp-texto h3{font:500 1.42em/1.22 'Fraunces',Georgia,serif;letter-spacing:-.015em;margin-block:2.1em .55em;text-wrap:balance;position:relative}
+.lp-texto h3::before{content:'';display:block;width:2.1rem;height:2px;background:var(--tx-ac);border-radius:2px;margin-bottom:.7em;opacity:.75}
+.lp-texto>h3:first-child{margin-top:.4em}
+.lp-texto h3.com-num{display:grid;grid-template-columns:auto 1fr;column-gap:.6em;align-items:baseline}
+.lp-texto h3.com-num::before{grid-column:1/-1}
+.lp-texto .lp-tx-num{font:400 .72em 'Fraunces',Georgia,serif;font-style:italic;font-variant-numeric:lining-nums tabular-nums;color:var(--tx-ac);letter-spacing:0;white-space:nowrap}
+.lp-texto h4{font:600 1.04em/1.4 'Fraunces',Georgia,serif;font-style:italic;color:var(--tx-ac);margin-block:1.5em .4em;text-wrap:balance}
+.lp-texto h4 b{font-weight:inherit}
+.lp[data-tx-fundo="noite"] .lp-texto h4{color:color-mix(in srgb,var(--tx-ac) 55%,#fff)}
+/* listas: itens mais juntos entre si do que os parágrafos, marcador pequeno e firme */
+.lp-texto .lp-tx-item{margin-block:0 .5em;padding-left:1.25em}
+.lp-texto .lp-tx-item::before{top:.72em;width:.3em;height:.3em;border-radius:1px;transform:rotate(45deg);background:var(--tx-ac)}
+/* artigo de lei: serifa, fundo suave, sem borda lateral */
+.lp-texto .lp-tx-lei{font-family:'Fraunces',Georgia,serif;font-size:.95em;line-height:1.62;background:color-mix(in srgb,var(--tx-ac) 7%,transparent);border-radius:10px;padding:.7em .95em;margin-block:.3em 1.15em;color:var(--tx-ink)}
+.lp[data-tx-fundo="noite"] .lp-texto .lp-tx-lei{background:color-mix(in srgb,var(--tx-ac) 16%,transparent)}
+/* aviso: dica, atenção, pegadinha */
+.lp-texto .lp-tx-dica{background:color-mix(in srgb,var(--champagne,#C9A24B) 22%,transparent);border-radius:10px;padding:.7em .95em;margin-block:.3em 1.15em;font-size:.97em}
+.lp[data-tx-fundo="noite"] .lp-texto .lp-tx-dica{background:color-mix(in srgb,var(--champagne,#C9A24B) 16%,transparent)}
+/* caixa colorida do PDF (faixa de título): cantos e respiro de cartão */
+.lp-tx-caixa{border-radius:12px;padding:.75rem 1rem;margin-block:.6rem 1.1rem}
+.lp-tx-caixa.escura h3,.lp-tx-caixa.escura h4{font-style:normal;color:#fff}
+.lp-tx-caixa h3::before,.lp-tx-caixa h4::before{display:none}
+.lp-tx-caixa h3{margin-block:0;font-size:1.08em}
+/* figuras: moldura leve e legenda discreta */
+.lp-tx-fig{margin-block:.9rem 1.3rem}
+.lp-tx-fig img{border-radius:12px;border:1px solid color-mix(in srgb,var(--tx-ac) 12%,var(--line-soft));box-shadow:0 1px 2px color-mix(in srgb,var(--tx-ac) 6%,transparent),0 14px 26px -22px color-mix(in srgb,var(--tx-ac) 34%,transparent)}
+.lp-tx-fig figcaption{text-align:center;font-size:.66rem;opacity:.8;margin-top:.45rem}
+/* tabelas: cantos, listras e cabeçalho mais sóbrio */
+.lp-texto .lp-tx-tab{border:1px solid var(--line);border-radius:12px;margin-block:.9rem 1.3rem}
+.lp-texto .lp-tx-tab table{border-collapse:separate;border-spacing:0}
+.lp-texto .lp-tx-tab th,.lp-texto .lp-tx-tab td,.lp-texto .lp-tx-tab tr:last-child td{border:0;border-bottom:1px solid var(--line-soft);border-right:1px solid var(--line-soft)}
+.lp-texto .lp-tx-tab tr>*:last-child{border-right:0}
+.lp-texto .lp-tx-tab tbody tr:last-child td{border-bottom:0}
+.lp-texto .lp-tx-tab th{background:var(--tx-ac);font-weight:600;font-size:.94em}
+.lp-texto .lp-tx-tab tbody tr:nth-child(even) td{background:color-mix(in srgb,var(--tx-ac) 4%,transparent)}
+.lp-texto .lp-tx-tab td{padding:.55rem .65rem}
+.lp-tx-nota{text-align:center;border-top:0;opacity:.85}
+@media (min-width:900px){.lp .lp-texto>p,.lp .lp-texto>h3,.lp .lp-texto>h4{max-width:min(72ch,100%)}}

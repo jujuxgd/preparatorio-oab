@@ -501,6 +501,12 @@ Prova prático-profissional do OAB 48 em **28/02/2027** (cronograma da OAB). Jul
   fundo parado em tela pequena). Tipografia (caixa-alta dos rótulos, posição dos títulos) é a original — Julia pediu para voltar. O botão "Aa" fica escondido; a chave 1ª/2ª fase
   aparece em todas as páginas (entre 901 e 1100px o contador "Prova em" e, até 1000px, o nome da marca somem para a barra caber). Skills de design em `.claude/skills/`, MCPs em `.mcp.json`.
 
+- **Acabamento do modo texto (03/11/2026, pedido de Julia — "simples demais"):** fim de `leitor-pdf.css` + pós-processamento em `renderTexto` (`leitor-pdf.js`):
+  número do título (`3.1`) vira `.lp-tx-num` em destaque (grade número | título) e cada `h3` abre com um fio curto na cor do Perfil; `h4` em Fraunces itálico na cor de destaque;
+  parágrafo que começa com "Art./§/CLT./CPC./CF/88…" vira `.lp-tx-lei` (serifa, fundo suave, sem borda lateral) e o que começa com "Atenção/Dica/Importante/Lembre/Pegadinha…" vira
+  `.lp-tx-dica` (caixa dourada suave); marcador de lista em losango pequeno; tabelas com cantos, listras e cabeçalho na cor do Perfil; figuras com moldura leve; em telas ≥ 900px o texto
+  tem medida de 72ch. Tudo deriva de `--tx-ac` (= `--rose-600`), então segue a cor do Perfil e os fundos papel/sépia/noite.
+
 ## 6. Design System
 
 ### Paleta de Cores (style.css :root)
