@@ -480,6 +480,14 @@ Prova prático-profissional do OAB 48 em **28/02/2027** (cronograma da OAB). Jul
   número de 10 dígitos das questões ("Questão 4000012740…") sai; nota com endereço sai. Frase estranha que já vem assim no PDF do Estratégia
   (ex.: "a divulgação torna públicos…", falta "que") não é corrigida.
 
+
+- **Tabelas com borda no modo texto (03/11/2026):** uma tabela "vedados | permitidos" que continuava na página seguinte era lida coluna por coluna e
+  um item **vedado** (Mala direta…) aparecia depois do cabeçalho "permitidos" — mudava o sentido. Agora `blocosDaPagina` acha tabelas pelas bordas
+  (faixas horizontais ≥ 55% da largura, fora das margens de cabeçalho/rodapé, + 3 ou mais linhas verticais; faixa colorida de cabeçalho com texto
+  branco dentro é juntada) e **reconstrói a tabela em HTML** (`.lp-tx-tab`: célula = itens cujo centro cai entre duas linhas e duas verticais;
+  1ª faixa grossa = `th`); a página passa a ser de 1 coluna. Tabela que continua na página seguinte sem cabeçalho **herda o cabeçalho da anterior
+  com o mesmo nº de colunas** (`cabUlt`). Sem células suficientes, cai para imagem. `th`/`td` do `style.css` global são isolados em `.lp-texto .lp-tx-tab`.
+
 ## 6. Design System
 
 ### Paleta de Cores (style.css :root)
