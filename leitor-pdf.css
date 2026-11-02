@@ -115,7 +115,7 @@ html.lp-travada,html.lp-travada body{overflow:hidden}
 .lp-texto b{font-weight:650}
 .lp-texto .lp-tx-item{padding-left:1.1em;position:relative}
 .lp-texto .lp-tx-item::before{content:'';position:absolute;left:.15em;top:.7em;width:.36em;height:.36em;border-radius:50%;background:var(--rose)}
-.lp[data-tx-fundo="noite"] .lp-texto .lp-tx-item::before{background:#e3a99f}
+.lp[data-tx-fundo="noite"] .lp-texto .lp-tx-item::before{background:color-mix(in srgb,var(--rose-deep) 45%,#fff)}
 .lp-tx-n{display:block;font:500 .68rem Inter,sans-serif;color:var(--tx-fraco);margin-block:1.4em .3em;letter-spacing:.02em}
 .lp-tx-n:first-child{margin-top:0}
 .lp-texto .lp-tx-cor{color:var(--rose-deep)}

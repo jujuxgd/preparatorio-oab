@@ -502,7 +502,9 @@
         tx.forEach(function (l, n) {
           var prox = tx[n + 1];
           if (dentro) {
-            if (ROT.test(l.txt) || l.tam <= 9.6) { dentro.fim = l.k; return; }
+            if (ROT.test(l.txt) || l.tam <= 9.6) { dentro.fim = l.k; dentro.rot = /^Coment/i.test(l.txt); return; }
+            // o comentário do professor pode vir numa caixa que o leitor trata como tabela (sem linhas de texto): sai junto
+            if (dentro.rot) dentro.fim = l.k - 1;
             blocos.push(dentro); dentro = null;
           }
           if (/^Questão(\s|$)/.test(l.txt) && l.tam >= 11 && prox && prox.tam <= 9.6 && !ROT.test(prox.txt)) { dentro = { ini: l.k, fim: l.k }; return; }
@@ -511,7 +513,7 @@
             else for (var m2 = n; m2 < Math.min(tx.length, n + 120); m2++) if (FIM2.test(tx[m2].txt)) { blocos.push({ ini: l.k, fim: tx[m2].k }); break; }
           }
         });
-        if (dentro) blocos.push(dentro);
+        if (dentro) { if (dentro.rot) dentro.fim = seq.length - 1; blocos.push(dentro); }
         // bloco do formato 2 engole as linhas até o fim: pula as que já ficaram dentro dele
         blocos.sort(function (a, b) { return a.ini - b.ini; });
         var ate = -1;

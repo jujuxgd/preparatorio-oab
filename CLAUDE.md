@@ -488,6 +488,18 @@ Prova prático-profissional do OAB 48 em **28/02/2027** (cronograma da OAB). Jul
   1ª faixa grossa = `th`); a página passa a ser de 1 coluna. Tabela que continua na página seguinte sem cabeçalho **herda o cabeçalho da anterior
   com o mesmo nº de colunas** (`cabUlt`). Sem células suficientes, cai para imagem. `th`/`td` do `style.css` global são isolados em `.lp-texto .lp-tx-tab`.
 
+- **Modo texto sem questões (02/11/2026):** as questões comentadas do capítulo não entram no modo texto (o treino fica em "Questões do dia"; uma nota no fim avisa).
+  Dois formatos: (1) caixa "Questão … Solução … Comentário do professor", letra 9pt com corpo em 12pt — vai da linha "Questão" até a primeira linha maior;
+  o comentário pode vir numa caixa tratada como tabela, que sai junto; (2) caixa de moldura vermelha das revisões ("(XXXVII Exame da OAB) … COMENTÁRIOS … Gabarito"),
+  detectada pela moldura. Também saem "Hora de responder questões!", QR/links, "Prof. Estratégia Materiais" e o título-rodapé. Dois acentos decompostos ("questo˜es")
+  exigem filtros tolerantes. Nos PDFs "Completo" de Penal as questões podem ser ~80% do texto: é esperado, o texto de estudo (12pt) fica inteiro.
+  Tabelas: faixas só se juntam se uma linha vertical atravessa o espaço (tabelas empilhadas não se fundem); caixa de destaque de uma coluna vira uma célula;
+  palavra comprida em coluna estreita quebra (`overflow-wrap:anywhere`). Revisão visual e por palavras feita nos 84 capítulos "Resumido" e em 12 "Completo".
+- **Polimento visual (nov/2026):** `polimento.css` (injetado por `topnav.js`, no cache offline) vale para todas as páginas: contraste do texto de apoio, cartões com borda/sombra
+  na cor de destaque (exceto Início, que mantém o visual original), títulos menores em celular/tablet, toque/foco/movimento (hover 200 ms ease-out, entrada de página curta,
+  fundo parado em tela pequena). Tipografia (caixa-alta dos rótulos, posição dos títulos) é a original — Julia pediu para voltar. O botão "Aa" fica escondido; a chave 1ª/2ª fase
+  aparece em todas as páginas (entre 901 e 1100px o contador "Prova em" e, até 1000px, o nome da marca somem para a barra caber). Skills de design em `.claude/skills/`, MCPs em `.mcp.json`.
+
 ## 6. Design System
 
 ### Paleta de Cores (style.css :root)
