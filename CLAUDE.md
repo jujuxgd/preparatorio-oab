@@ -474,6 +474,12 @@ Prova prático-profissional do OAB 48 em **28/02/2027** (cronograma da OAB). Jul
   tabela/faixa termina antes dela; moldura de caixa vizinha (linha cheia + laterais) é aparada das figuras; "figura" só com moldura vazia some.
   (7) Título que continua em linha começada em minúscula junta com a de cima. Erros do próprio material (ex.: "seestabeleçam") não são corrigidos.
 
+
+- **Modo texto, 3ª rodada (03/11/2026):** rodapé repetido que escapava (numa página o "n/17" vinha separado, então a chave de repetição era outra) —
+  a chave ignora o "n/N" final e texto ≤ 8,5pt nas bordas da página (`rodape`) sai; "Referências e links deste capítulo" e tudo depois sai;
+  número de 10 dígitos das questões ("Questão 4000012740…") sai; nota com endereço sai. Frase estranha que já vem assim no PDF do Estratégia
+  (ex.: "a divulgação torna públicos…", falta "que") não é corrigida.
+
 ## 6. Design System
 
 ### Paleta de Cores (style.css :root)
