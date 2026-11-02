@@ -190,10 +190,24 @@
     DIA.top.forEach(function (t) {
       if (t.n == null) return;
       var x = ns.filter(function (y) { return y.n === t.n; })[0];
-      if (!x) ns.push(x = { n: t.n, e: t.e, ids: t.e ? t.e.map(function (c) { return c.r; }) : [].concat((window.VDE_DIAS || {})[t.n] || []), temas: [] });
+      if (!x) ns.push(x = { n: t.n, d: t.d, tema: t.s, e: t.e, ids: t.e ? t.e.map(function (c) { return c.r; }) : [].concat((window.VDE_DIAS || {})[t.n] || []), temas: [] });
       x.temas.push(curto(t.d) + ': ' + t.s);
     });
     return ns;
+  }
+  // Cabeçalho do tema: etiqueta da matéria na cor dela (a mesma do calendário) e o tema em destaque
+  var COR_MAT = {
+    'Direito Constitucional': 'const', 'Direito Administrativo': 'const', 'Direito Eleitoral': 'const', 'Filosofia do Direito': 'const', 'Direitos Humanos': 'const', 'Direito Internacional': 'const',
+    'Direito Civil': 'civil', 'Direito Processual Civil': 'civil', 'Direito do Consumidor': 'civil',
+    'Direito Penal': 'penal', 'Direito Processual Penal': 'penal',
+    'Direito do Trabalho': 'trab', 'Direito Processual do Trabalho': 'trab', 'Direito Previdenciário': 'trab', 'Direito Ambiental': 'trab',
+    'Direito Tributário': 'tribut', 'Direito Empresarial': 'tribut', 'Direito Financeiro': 'tribut',
+    'Ética Profissional': 'etica', 'ECA': 'etica'
+  };
+  function cabTema(d, tema) {
+    var c = COR_MAT[d] || 'etica';
+    return '<header class="tema-cab" style="--tc:var(--mat-' + c + ');--tcd:var(--mat-' + c + '-deep)"><span class="tema-mat">' + esc(curto(d)) + '</span>' +
+      '<h3 class="tema-tit">' + esc(tema) + '</h3></header>';
   }
   function rotulo(n) { return n >= 1001 ? 'Estratégia' : 'Dia ' + n + ' do VDE'; }
   // Capítulos do Estratégia: um leitor por vez; versão resumida (padrão) ou completa, escolha só do aparelho.
@@ -201,7 +215,7 @@
   function versao() { try { return localStorage.getItem(K_VER) === 'x' ? 'x' : 'r'; } catch (e) { return 'r'; } }
   function htmlEstrategia(p) {
     var c0 = p.e[0];
-    return '<div class="ss-bloco est-bloco"><h3>' + esc(p.temas.join(' · ')) + '</h3>' +
+    return '<div class="ss-bloco est-bloco">' + cabTema(p.d, p.tema) +
       (p.e.length > 1 ? '<div class="est-bar"><div class="est-ver">' + p.e.map(function (c, i) {
         return '<button type="button" class="' + (i ? '' : 'on') + '" data-est-cap="' + i + '">Cap. ' + c.c + '</button>';
       }).join('') + '</div></div>' : '') +
@@ -796,6 +810,6 @@
     sincPasta: sincPasta, fila: fila, montarFlashcards: montarFlashcards, montarQuestoes: montarQuestoes, carregarBanco: carregarBanco,
     itensChecklist: itensChecklist, htmlChecklist: htmlChecklist, htmlConteudo: htmlConteudo, montarConteudo: montarConteudo, revisoesDoDia: revisoesDoDia, pdfsDoDia: pdfsDoDia, progressoChecklist: progressoChecklist, marcar: marcar,
     feito: function () { return !!checks().feito; }, marcarFeito: marcarFeito, atrasados: atrasados,
-    htmlCalendario: htmlCalendario, htmlPainel: htmlPainel, linkRevisao: linkRevisao
+    htmlCalendario: htmlCalendario, cabTema: cabTema, htmlPainel: htmlPainel, linkRevisao: linkRevisao
   };
 })();

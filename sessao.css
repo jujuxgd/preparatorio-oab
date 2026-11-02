@@ -10,7 +10,7 @@
 .ss-nums div{font-size:.72rem;color:var(--ink-faded)}
 .ss-nums b{display:block;font-family:'Fraunces',serif;font-size:1.5rem;font-weight:500;color:var(--rose-deep);line-height:1.1}
 .ss-bloco{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:1.1rem 1.3rem;margin-bottom:1rem;box-shadow:var(--shadow-sm)}
-.ss-bloco h3:not(.lp-texto h3){font-family:'Fraunces',serif;font-weight:500;font-size:1.12rem;color:var(--ink);margin:0 0 .35rem;display:flex;gap:.6rem;align-items:baseline}
+.ss-bloco h3:not(.lp-texto h3):not(.tema-tit){font-family:'Fraunces',serif;font-weight:500;font-size:1.12rem;color:var(--ink);margin:0 0 .35rem;display:flex;gap:.6rem;align-items:baseline}
 .ss-bloco h3 .n{font:600 .66rem Inter,sans-serif;letter-spacing:.12em;color:var(--rose-deep);text-transform:uppercase}
 .ss-bloco > p{font-size:.84rem;color:var(--ink-soft);margin:.2rem 0 .8rem;line-height:1.55}
 .ss-acoes{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center}
@@ -163,3 +163,10 @@
 .gab-mini summary span { opacity: .75; }
 .gab-mini summary:hover { color: var(--ink); }
 .gab-mini .gab-host { margin-top: .4rem; }
+
+/* cabeçalho do tema (Conteúdo e Mapas): matéria como etiqueta na cor do calendário, tema em Fraunces */
+.tema-cab { margin: 0 0 .35rem; }
+.tema-mat { display: inline-block; font: 600 .74rem/1 Inter, sans-serif; letter-spacing: .01em; padding: .38rem .7rem; border-radius: 999px; background: var(--tc); color: var(--tcd); }
+.ss-bloco h3.tema-tit, .tema-tit { display: block; font: 500 1.65rem/1.15 'Fraunces', Georgia, serif; letter-spacing: -.015em; color: var(--ink); margin: .55rem 0 0; text-wrap: balance; }
+@media (max-width: 640px) { .ss-bloco h3.tema-tit, .tema-tit { font-size: 1.38rem; } }
+.est-bloco .est-bar { margin-top: -.2rem; }
