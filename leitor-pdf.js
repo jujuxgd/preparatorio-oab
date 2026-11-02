@@ -572,7 +572,7 @@
   // Desenha a página num canvas fora da tela e devolve os blocos na ordem de leitura: linhas de texto (com cor e
   // fundo medidos nos pixels) e recortes de tabela/imagem.
   // chamadas da plataforma do curso (vídeo/PDF "pelo APP", QR code e link) não fazem sentido fora dela
-  var LIXO = /^(Assista (o|ao) vídeo pelo APP|Acesse o PDF pelo APP|Escute o Cast pelo APP|Acesse a plataforma pelo QR code|Ou acesse pelo link|\d{0,2}\s*https?:\/\/|topic=[\d.]+$)|\?topic=[\d.]+$|\bpelo APP!?$|^Prof\.? Estratégia Materiais$|para a 1ª Fase do Exame de Ordem \(OAB\)$/i;
+  var LIXO = /^(Assista (o|ao) vídeo pelo APP|Acesse o PDF pelo APP|Escute o Cast pelo APP|Acesse a plataforma pelo QR code|Ou acesse pelo link|\d{0,2}\s*https?:\/\/|topic=[\d.]+$)|\?topic=[\d.]+$|\bpelo APP!?$|^Prof\.? Estratégia Materiais$|\bHora de responder quest\S{0,3}es\s*!?$|^vocês sobre o tema|áudio exclusivo que preparamos|para a 1ª Fase do Exame de Ordem \(OAB\)$/i;
   Leitor.prototype.blocosDaPagina = function (pg, tc, s, FS) {
     var base = pg.getViewport({ scale: 1 }), escala = 1400 / base.width, vp = pg.getViewport({ scale: escala });
     var cv = document.createElement('canvas'); cv.width = Math.floor(vp.width); cv.height = Math.floor(vp.height);
@@ -851,6 +851,7 @@
             var ult = pars.length ? pars[pars.length - 1] : null;
             if (ult && !/[.:;!?)”"]\s*(<\/[a-z]+>)*$/.test(ult)) pars[pars.length - 1] = ult + ' ' + hc; else pars.push(hc);
           });
+          if (pars.length && /Gabarito( Letra)?:?\s*[A-E]\.?\s*(<\/[a-z]+>)*$/i.test(pars[pars.length - 1])) return { drop: true };
           return pars.length ? { cab: '', corpo: '<tr><td>' + pars.join('<br><br>') + '</td></tr>', ncol: 1 } : null;
         }
         var corpoT = '', cabT = '';
@@ -867,6 +868,7 @@
       function emiteTabelas(ate) {
         while (pendT.length && pendT[0].top <= ate) {
           var tb = pendT.shift(), ht = htmlTabela(tb);
+          if (ht && ht.drop) continue;
           if (ht) out.push({ tabelaCorpo: ht.corpo, tabelaCab: ht.cab, tabelaNcol: ht.ncol, tabela: true, col: 0, top: tb.top, bot: tb.bot });
           else { var imT = recorte(0, tb.top - 2, tb.bot + 2); if (imT) out.push({ img: imT, tabela: true, col: 0, top: tb.top, bot: tb.bot }); }
         }
