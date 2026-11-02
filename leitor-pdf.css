@@ -139,3 +139,13 @@ html.lp-travada,html.lp-travada body{overflow:hidden}
 
 .lp-texto,.lp-texto *{box-sizing:border-box;max-width:100%}
 .lp-texto{overflow-wrap:anywhere}
+
+/* tabela com borda reconstruída do PDF (texto de verdade, colunas com a largura da tela); isola do estilo global de th/td do site */
+.lp-texto .lp-tx-tab{margin-block:.6rem 1rem;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.lp-texto .lp-tx-tab table{border-collapse:collapse;width:100%;table-layout:auto;font-size:.88em;line-height:1.4}
+.lp-texto .lp-tx-tab tr:hover td{background:none}
+.lp-texto .lp-tx-tab th,.lp-texto .lp-tx-tab td,.lp-texto .lp-tx-tab tr:last-child td{border:1px solid var(--line,#ddd2cc);padding:.45rem .5rem;vertical-align:top;text-align:left;font-size:1em;letter-spacing:0;text-transform:none;color:var(--tx-ink,var(--ink));overflow-wrap:break-word;word-break:normal;hyphens:auto}
+.lp-texto .lp-tx-tab th{background:var(--rose-deep);color:#fff;font-weight:650;text-align:center}
+.lp-texto .lp-tx-tab td b{font-weight:650}
+.lp-texto .lp-tx-tab td .lp-tx-cor{color:var(--rose-deep)}
+.lp[data-tx-fundo="noite"] .lp-texto .lp-tx-tab th{background:color-mix(in srgb,var(--rose-deep) 70%,#000)}

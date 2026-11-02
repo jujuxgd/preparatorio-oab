@@ -489,13 +489,20 @@
         });
         fechaRun();
       });
-      var h = '', par = null, ant = null, caixa = null, marca = '';
+      var h = '', par = null, ant = null, caixa = null, marca = '', cabUlt = null;
       function fecha() { if (par) { h += '<' + par.tag + (par.cls ? ' class="' + par.cls + '"' : '') + '>' + par.html + '</' + par.tag + '>'; par = null; } }
       function fechaCaixa() { fecha(); if (caixa) { h += '</div>'; caixa = null; } }
       pags.forEach(function (bl, j) {
         marca = '';
         var primeira = true;
         bl.forEach(function (l) {
+          if (l.tabelaCorpo !== undefined) {
+            // tabela que continua na página seguinte não repete o cabeçalho: herda o da anterior com o mesmo número de colunas
+            fechaCaixa();
+            var cabUsar = l.tabelaCab || (cabUlt && cabUlt.ncol === l.tabelaNcol ? cabUlt.html : '');
+            if (l.tabelaCab) cabUlt = { ncol: l.tabelaNcol, html: l.tabelaCab };
+            h += '<div class="lp-tx-tab"><table><tbody>' + cabUsar + l.tabelaCorpo + '</tbody></table></div>'; marca = ''; ant = null; primeira = false; return;
+          }
           if (l.img) { fechaCaixa(); h += marca + '<figure class="lp-tx-fig"><img src="' + l.img + '" alt="' + (l.tabela ? 'Tabela' : 'Figura') + ' da página ' + (de + j) + '" loading="lazy"><figcaption>' + (l.tabela ? 'Tabela' : 'Figura') + ' do PDF · toque para ampliar</figcaption></figure>'; marca = ''; ant = null; primeira = false; return; }
           if (l.rodape || conta[chave(l)] >= rep || /^\d{1,3}(\s*\/\s*\d{1,3})?$/.test(l.txt) || /(?:\.\s?){6,}|…{3,}/.test(l.txt) || /^(Índice|Sumário)$/i.test(l.txt)) return;
           if ((l.bg || '') !== (caixa ? caixa.bg : '')) {
@@ -564,6 +571,42 @@
       function acentos(t) { return t.replace(/([A-Za-z])((?:<\/?[a-z][^>]*>)*)\s?([´`ˆ˜¨¸])/g, function (m, a, tags, c) { return (a + COMB[c]).normalize('NFC') + tags; }); }
       function lum(c) { return 0.299 * c[0] + 0.587 * c[1] + 0.114 * c[2]; }
       function neutro(c) { return Math.max(c[0], c[1], c[2]) - Math.min(c[0], c[1], c[2]) < 40; }
+      // Tabelas com borda e 2+ colunas: o texto de cada coluna NÃO pode ser lido em sequência (uma tabela "vedados | permitidos" que
+      // continuava na página seguinte punha o item vedado depois do cabeçalho "permitidos"). Acha pelas linhas da borda (faixas
+      // horizontais longas + 3 ou mais linhas verticais) e recorta a tabela inteira como imagem; a página volta a ser de 1 coluna.
+      var tabelasB = [];
+      (function () {
+        var xa = Math.floor(W * 0.04), xb = Math.floor(W * 0.96), minRun = (xb - xa) * 0.55, segs = [], margemPg = 58 * escala;
+        for (var y = 0; y < H; y++) {
+          var run = 0, best = 0;
+          for (var x = xa; x < xb; x++) { var k = (y * W + x) * 4; if (px[k] < 235 || px[k + 1] < 235 || px[k + 2] < 235) { run++; if (run > best) best = run; } else run = 0; }
+          if (best >= minRun) { var u = segs[segs.length - 1]; if (u && y - u.b <= 3) u.b = y; else segs.push({ t: y, b: y }); }
+        }
+        // faixa colorida de cabeçalho com texto branco dentro vira várias faixas finas (o texto interrompe a linha): junta
+        var junta = [];
+        segs.forEach(function (g) { var u = junta[junta.length - 1]; if (u && u.b - u.t > 30 && g.t - u.b <= 40) u.b = g.b; else junta.push(g); });
+        segs = junta.filter(function (g) { return g.t > margemPg && g.b < H - margemPg; });
+        for (var i = 0; i < segs.length;) {
+          var j = i; while (segs[j + 1] && segs[j + 1].t - segs[j].b <= 520) j++;
+          if (j > i) {
+            var yt = segs[i].t, yb = segs[j].b, vx = [];
+            for (var xx = Math.floor(W * 0.02); xx < Math.floor(W * 0.98); xx++) {
+              var c = 0; for (var yy = yt; yy <= yb; yy += 2) { var kk = (yy * W + xx) * 4; if (px[kk] < 235 || px[kk + 1] < 235 || px[kk + 2] < 235) c++; }
+              if (c >= ((yb - yt) / 2) * 0.55) { if (vx.length && xx - vx[vx.length - 1] <= 4) vx[vx.length - 1] = xx; else vx.push(xx); }
+            }
+            if (vx.length >= 3) {
+              var linhasT = [];
+              for (var kk2 = i; kk2 <= j; kk2++) {
+                if (segs[kk2].b - segs[kk2].t > 12) linhasT.push({ t: segs[kk2].t, b: segs[kk2].b, th: true });
+                if (kk2 < j) linhasT.push({ t: segs[kk2].b, b: segs[kk2 + 1].t, th: false });
+              }
+              tabelasB.push({ top: yt, bot: yb, x0: vx[0], x1: vx[vx.length - 1], vx: vx, linhas: linhasT });
+            }
+          }
+          i = j + 1;
+        }
+      })();
+      if (tabelasB.length) s = null;
       // texto: itens → linhas por coluna
       var vb = pg.view, w = vb[2] - vb[0], itens = [];
       tc.items.forEach(function (it) {
@@ -697,7 +740,57 @@
         return t ? n / t : 0;
       }
       var out = [], i = 0;
+      var pendT = tabelasB.slice().sort(function (a, b) { return a.top - b.top; });
+      // célula = itens de texto cujo centro cai entre duas linhas horizontais e duas verticais da borda
+      function htmlTabela(tb) {
+        var its = itens.filter(function (it) {
+          var cy = (it.top + it.bot) / 2, cx = (it.x + it.x1) / 2 * W;
+          return it.str.trim() && cy >= tb.top - 2 && cy <= tb.bot + 2 && cx >= tb.x0 - 4 && cx <= tb.x1 + 4;
+        });
+        if (!its.length || !tb.linhas.length) return '';
+        var ncol = tb.vx.length - 1, grade = tb.linhas.map(function () { return []; }), cheias = 0;
+        tb.linhas.forEach(function (r, ri) { for (var c = 0; c < ncol; c++) grade[ri].push([]); });
+        its.forEach(function (it) {
+          var cy = (it.top + it.bot) / 2, cx = (it.x + it.x1) / 2 * W, ri = -1, ci = -1;
+          tb.linhas.forEach(function (r, k) { if (cy >= r.t && cy <= r.b) ri = k; });
+          for (var c = 0; c < ncol; c++) if (cx >= tb.vx[c] && cx <= tb.vx[c + 1]) ci = c;
+          if (ri >= 0 && ci >= 0) grade[ri][ci].push(it);
+        });
+        function htmlCelula(arr) {
+          arr.sort(function (a, b) { return b.y - a.y || a.x - b.x; });
+          var h2 = '', ultY = null, ultX1 = null, ultTam = 0;
+          arr.forEach(function (it) {
+            var t = esc(it.str), fg = it.c && it.c.fg, cor = fg && !neutro(fg);
+            if (it.neg) t = '<b>' + t + '</b>'; if (cor) t = '<span class="lp-tx-cor">' + t + '</span>';
+            if (ultY === null) h2 = t;
+            else if (Math.abs(ultY - it.y) < Math.max(ultTam, it.tam) * 0.5) h2 += (it.x - ultX1 > (it.tam * 0.18) / w ? ' ' : '') + t;
+            else h2 += (ultY - it.y > Math.max(ultTam, it.tam) * 1.8 ? '<br><br>' : ' ') + t;
+            ultY = it.y; ultX1 = it.x1; ultTam = it.tam;
+          });
+          return acentos(h2.replace(/<\/b>(\s*)<b>/g, '$1'));
+        }
+        var corpoT = '', cabT = '';
+        tb.linhas.forEach(function (r, ri) {
+          var tds = '', alguma = false;
+          grade[ri].forEach(function (cel) { var hc = htmlCelula(cel); if (hc) { alguma = true; cheias++; } tds += '<' + (r.th ? 'th' : 'td') + '>' + hc + '</' + (r.th ? 'th' : 'td') + '>'; });
+          if (alguma) { if (r.th) cabT += '<tr>' + tds + '</tr>'; else corpoT += '<tr>' + tds + '</tr>'; }
+        });
+        return cheias >= 2 ? { cab: cabT, corpo: corpoT, ncol: ncol } : null;
+      }
+      function emiteTabelas(ate) {
+        while (pendT.length && pendT[0].top <= ate) {
+          var tb = pendT.shift(), ht = htmlTabela(tb);
+          if (ht) out.push({ tabelaCorpo: ht.corpo, tabelaCab: ht.cab, tabelaNcol: ht.ncol, tabela: true, col: 0, top: tb.top, bot: tb.bot });
+          else { var imT = recorte(0, tb.top - 2, tb.bot + 2); if (imT) out.push({ img: imT, tabela: true, col: 0, top: tb.top, bot: tb.bot }); }
+        }
+      }
+      function dentroTabela(l) {
+        var cy = (l.top + l.bot) / 2;
+        return tabelasB.some(function (t) { return cy >= t.top - 2 && cy <= t.bot + 2 && l.x0 * W >= t.x0 - 8 && l.x0 * W <= t.x1; });
+      }
       while (i < ls.length) {
+        emiteTabelas(ls[i].top + 4);
+        if (dentroTabela(ls[i])) { i++; continue; }
         var l = ls[i], prev = out.length ? out[out.length - 1] : null;
         // vão grande com desenho entre duas linhas da mesma coluna = imagem/esquema
         if (prev && prev.bot != null && prev.col === l.col && !prev.tabela && !prev.lixo && !l.lixo && l.top - prev.bot > Math.max(l.tam * escala * 5, 110) && tinta(l.col, prev.bot + 6, l.top - 6) > 0.06) {
@@ -756,8 +849,9 @@
           bg: bg && !claro(bg) ? rgb(bg) : '', bgEscuro: bg && lum(bg) < 140 });
         i++;
       }
+      emiteTabelas(1e9);
       cv.width = cv.height = 0;
-      return out.filter(function (o) { return !o.lixo && (o.img || o.txt); });
+      return out.filter(function (o) { return !o.lixo && (o.img || o.tabelaCorpo !== undefined || o.txt); });
     });
   };
   Leitor.prototype.elDe = function (info, x) {
