@@ -416,7 +416,7 @@ Prova prático-profissional do OAB 48 em **28/02/2027** (cronograma da OAB). Jul
 
 - **Leitor redesenhado (02/11/2026, pedido de Julia — "muitas opções"):** barra de uma linha só: `PDF | Texto` (PDF é o padrão),
   ✎ grifos (só no PDF), **Aa** (só no Texto), ⛶ tela cheia e **⋯** (grifar área, uma coluna por vez, zoom, abrir no Drive).
-  Ajustes do modo texto em `oab_lp_tx2` (só do aparelho): letra (8 tamanhos, de .72 a 1.5rem; `e: 2` marca a migração), linhas (3), margem (3), fundo papel/sépia/noite e fonte
+  Ajustes do modo texto em `oab_lp_tx2` (só do aparelho): letra (8 tamanhos, de .72 a 1.5rem; `e: 2` marca a migração), linhas (3), margem (3), fundo papel/noite e fonte
   Literata (serifa, Google Fonts) ou Inter. O "Aa" do topo não amplia mais o modo texto. Texto corrido entre páginas (parágrafo sem
   pontuação final continua na página seguinte; sem número de página). PDFs impressos do navegador (Estratégia, fontes Type3 sem nome
   útil): negrito pela tinta de cada fonte (≥ 1,25× a do corpo); corpo = tamanho com mais caracteres; título só se maior que o corpo
@@ -505,7 +505,7 @@ Prova prático-profissional do OAB 48 em **28/02/2027** (cronograma da OAB). Jul
   número do título (`3.1`) vira `.lp-tx-num` em destaque (grade número | título) e cada `h3` abre com um fio curto na cor do Perfil; `h4` em Fraunces itálico na cor de destaque;
   parágrafo que começa com "Art./§/CLT./CPC./CF/88…" vira `.lp-tx-lei` (serifa, fundo suave, sem borda lateral) e o que começa com "Atenção/Dica/Importante/Lembre/Pegadinha…" vira
   `.lp-tx-dica` (caixa dourada suave); marcador de lista em losango pequeno; tabelas com cantos, listras e cabeçalho na cor do Perfil; figuras com moldura leve; em telas ≥ 900px o texto
-  tem medida de 72ch. Tudo deriva de `--tx-ac` (= `--rose-600`), então segue a cor do Perfil e os fundos papel/sépia/noite.
+  tem medida de 72ch. Tudo deriva de `--tx-ac` (= `--rose-600`), então segue a cor do Perfil e os fundos papel/noite.
   Depois (pedido de Julia — "sem harmonia"): escala única de espaços (0,5 · 0,9 · 1,6em), menos espaço antes dos títulos, negrito 600, caixa escura do PDF em tom claro;
   artigo com incisos/alíneas numa caixa contínua (`lei-segue`/`lei-cont`); quadro com borda em que só um trecho tem colunas (ex.: "TRT | TST") vira tabela só nesse trecho
   (faixas entre linhas horizontais com divisória vertical própria). Conferido nos 84 Resumido: só 3 capítulos mudaram, todos para melhor.
