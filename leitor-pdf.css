@@ -147,6 +147,8 @@ html.lp-travada,html.lp-travada body{overflow:hidden}
 .lp-texto .lp-tx-tab tr:hover td{background:none}
 .lp-texto .lp-tx-tab th,.lp-texto .lp-tx-tab td,.lp-texto .lp-tx-tab tr:last-child td{border:1px solid var(--line,#ddd2cc);padding:.45rem .5rem;vertical-align:top;text-align:left;font-size:1em;letter-spacing:0;text-transform:none;color:var(--tx-ink,var(--ink));overflow-wrap:break-word;word-break:normal;hyphens:auto}
 .lp-texto .lp-tx-tab th{background:var(--rose-deep);color:#fff;font-weight:650;text-align:center}
+/* palavra comprida numa coluna estreita quebra em vez de empurrar a tabela para fora da tela (texto escondido à direita) */
+.lp-texto .lp-tx-tab th,.lp-texto .lp-tx-tab td{overflow-wrap:anywhere!important;hyphens:auto;min-width:0}
 .lp-texto .lp-tx-tab td b{font-weight:650}
 .lp-texto .lp-tx-tab td .lp-tx-cor{color:var(--rose-deep)}
 .lp[data-tx-fundo="noite"] .lp-texto .lp-tx-tab th{background:color-mix(in srgb,var(--rose-deep) 70%,#000)}
