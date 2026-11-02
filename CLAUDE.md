@@ -509,6 +509,7 @@ Prova prático-profissional do OAB 48 em **28/02/2027** (cronograma da OAB). Jul
   Depois (pedido de Julia — "sem harmonia"): escala única de espaços (0,5 · 0,9 · 1,6em), menos espaço antes dos títulos, negrito 600, caixa escura do PDF em tom claro;
   artigo com incisos/alíneas numa caixa contínua (`lei-segue`/`lei-cont`); quadro com borda em que só um trecho tem colunas (ex.: "TRT | TST") vira tabela só nesse trecho
   (faixas entre linhas horizontais com divisória vertical própria). Conferido nos 84 Resumido: só 3 capítulos mudaram, todos para melhor.
+  Figuras e tabelas recortadas do PDF trocam os tons de vermelho pela cor do Perfil (`recolorir` em `recorte`, mantém a luminosidade de cada tom; sem efeito se a cor já for vermelha).
 
 ## 6. Design System
 
