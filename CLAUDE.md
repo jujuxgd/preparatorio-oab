@@ -506,6 +506,9 @@ Prova prático-profissional do OAB 48 em **28/02/2027** (cronograma da OAB). Jul
   parágrafo que começa com "Art./§/CLT./CPC./CF/88…" vira `.lp-tx-lei` (serifa, fundo suave, sem borda lateral) e o que começa com "Atenção/Dica/Importante/Lembre/Pegadinha…" vira
   `.lp-tx-dica` (caixa dourada suave); marcador de lista em losango pequeno; tabelas com cantos, listras e cabeçalho na cor do Perfil; figuras com moldura leve; em telas ≥ 900px o texto
   tem medida de 72ch. Tudo deriva de `--tx-ac` (= `--rose-600`), então segue a cor do Perfil e os fundos papel/sépia/noite.
+  Depois (pedido de Julia — "sem harmonia"): escala única de espaços (0,5 · 0,9 · 1,6em), menos espaço antes dos títulos, negrito 600, caixa escura do PDF em tom claro;
+  artigo com incisos/alíneas numa caixa contínua (`lei-segue`/`lei-cont`); quadro com borda em que só um trecho tem colunas (ex.: "TRT | TST") vira tabela só nesse trecho
+  (faixas entre linhas horizontais com divisória vertical própria). Conferido nos 84 Resumido: só 3 capítulos mudaram, todos para melhor.
 
 ## 6. Design System
 
