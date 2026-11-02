@@ -572,7 +572,7 @@
   // Desenha a página num canvas fora da tela e devolve os blocos na ordem de leitura: linhas de texto (com cor e
   // fundo medidos nos pixels) e recortes de tabela/imagem.
   // chamadas da plataforma do curso (vídeo/PDF "pelo APP", QR code e link) não fazem sentido fora dela
-  var LIXO = /^(Assista (o|ao) vídeo pelo APP|Acesse o PDF pelo APP|Escute o Cast pelo APP|Acesse a plataforma pelo QR code|Ou acesse pelo link|\d{0,2}\s*https?:\/\/|topic=[\d.]+$)|\?topic=[\d.]+$|\bpelo APP!?$/i;
+  var LIXO = /^(Assista (o|ao) vídeo pelo APP|Acesse o PDF pelo APP|Escute o Cast pelo APP|Acesse a plataforma pelo QR code|Ou acesse pelo link|\d{0,2}\s*https?:\/\/|topic=[\d.]+$)|\?topic=[\d.]+$|\bpelo APP!?$|^Prof\.? Estratégia Materiais$|para a 1ª Fase do Exame de Ordem \(OAB\)$/i;
   Leitor.prototype.blocosDaPagina = function (pg, tc, s, FS) {
     var base = pg.getViewport({ scale: 1 }), escala = 1400 / base.width, vp = pg.getViewport({ scale: escala });
     var cv = document.createElement('canvas'); cv.width = Math.floor(vp.width); cv.height = Math.floor(vp.height);
