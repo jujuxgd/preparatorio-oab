@@ -225,7 +225,7 @@
   };
   // Ajustes do modo texto (só deste aparelho): tamanho da letra, espaço entre linhas, margem, fundo e fonte.
   var K_TX = 'oab_lp_tx2', TX_PADRAO = { t: 0, l: 1, m: 0, f: 'papel', s: 'sans' };
-  var TX_TAM = [0.9, 1, 1.1, 1.22, 1.36, 1.5], TX_LIN = [1.45, 1.62, 1.85], TX_MARG = [['.15rem', '46rem'], ['.9rem', '40rem'], ['1.8rem', '34rem']];
+  var TX_TAM = [0.9, 1, 1.1, 1.22, 1.36, 1.5], TX_LIN = [1.45, 1.62, 1.85], TX_MARG = [['0', 'none'], ['.8rem', '52rem'], ['1.8rem', '40rem']];
   function lerTx() { var v = {}; try { v = JSON.parse(localStorage.getItem(K_TX)) || {}; } catch (e) {} for (var k in TX_PADRAO) if (v[k] == null) v[k] = TX_PADRAO[k]; return v; }
   var _fonte = false;
   function carregarFonte() {

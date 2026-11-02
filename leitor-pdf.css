@@ -98,7 +98,7 @@ html.lp-travada,html.lp-travada body{overflow:hidden}
 .lp-parte{font:600 .66rem Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faded);margin:1rem 0 .4rem}
 
 /* modo texto: o texto do PDF como página normal, com letra, linhas, margem, fundo e fonte ajustáveis */
-.lp{--tx-tam:.9rem;--tx-lin:1.62;--tx-pad:.15rem;--tx-larg:46rem}
+.lp{--tx-tam:.9rem;--tx-lin:1.62;--tx-pad:0;--tx-larg:none}
 .lp-texto{--tx-bg:var(--paper);--tx-ink:var(--ink);--tx-fraco:var(--ink-faded);background:var(--tx-bg);color:var(--tx-ink);border-radius:0;padding:.4rem var(--tx-pad) 2rem;margin:0 auto;width:100%;box-sizing:border-box;font-size:var(--tx-tam);line-height:var(--tx-lin);font-family:Inter,system-ui,sans-serif;hyphens:auto;-webkit-hyphens:auto;overflow-wrap:break-word}
 .lp .lp-texto>*{max-width:var(--tx-larg);margin-left:auto;margin-right:auto}
 .lp[data-tx-fonte="serif"] .lp-texto{font-family:Literata,Georgia,'Times New Roman',serif;line-height:calc(var(--tx-lin) + .05)}
