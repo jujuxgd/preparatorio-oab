@@ -445,7 +445,7 @@
     }
     return proxima().then(function () {
       if (vez !== self._vez) return;
-      var conta = {}, chave = function (l) { return l.txt.replace(/\d+/g, '#'); };
+      var conta = {}, chave = function (l) { return l.txt.replace(/\s*\d{1,3}\s*\/\s*\d{1,3}\s*$/, '').replace(/\d+/g, '#'); };
       pags.forEach(function (bl) { var v = {}; bl.forEach(function (l) { if (l.txt && !v[chave(l)]) { v[chave(l)] = 1; conta[chave(l)] = (conta[chave(l)] || 0) + 1; } }); });
       var rep = pags.length >= 3 ? Math.max(2, pags.length * 0.4) : 99;
       // corpo = o maior tamanho de letra que tem parcela relevante do texto (a moda enganava nos capítulos com muitas
@@ -462,6 +462,17 @@
         if (!l.txt || l.tam < corpo * 1.25 || l.txt.length > 75 || /[.,;]\s*$/.test(l.txt)) return;
         var w = l.txt.split(' ')[0]; if (w.length >= 5 && !/^\d/.test(w)) inicio3[w] = (inicio3[w] || 0) + 1;
       }); });
+      // "Referências e links deste capítulo" (endereços de leis, no fim) não é conteúdo de estudo
+      (function () {
+        for (var jj = 0; jj < pags.length; jj++) {
+          for (var ii = 0; ii < pags[jj].length; ii++) {
+            if (pags[jj][ii].txt && /^Referências e links deste capítulo/i.test(pags[jj][ii].txt)) {
+              pags[jj] = pags[jj].slice(0, ii); for (var kk = jj + 1; kk < pags.length; kk++) pags[kk] = [];
+              return;
+            }
+          }
+        }
+      })();
       // página de índice (3 ou mais linhas com pontilhado até o número da página) não é conteúdo
       pags.forEach(function (bl, jj) {
         if (bl.filter(function (l) { return l.txt && /(?:\.\s?){6,}|…{3,}/.test(l.txt); }).length >= 3) pags[jj] = [];
@@ -486,7 +497,7 @@
         var primeira = true;
         bl.forEach(function (l) {
           if (l.img) { fechaCaixa(); h += marca + '<figure class="lp-tx-fig"><img src="' + l.img + '" alt="' + (l.tabela ? 'Tabela' : 'Figura') + ' da página ' + (de + j) + '" loading="lazy"><figcaption>' + (l.tabela ? 'Tabela' : 'Figura') + ' do PDF · toque para ampliar</figcaption></figure>'; marca = ''; ant = null; primeira = false; return; }
-          if (conta[chave(l)] >= rep || /^\d{1,3}(\s*\/\s*\d{1,3})?$/.test(l.txt) || /(?:\.\s?){6,}|…{3,}/.test(l.txt) || /^(Índice|Sumário)$/i.test(l.txt)) return;
+          if (l.rodape || conta[chave(l)] >= rep || /^\d{1,3}(\s*\/\s*\d{1,3})?$/.test(l.txt) || /(?:\.\s?){6,}|…{3,}/.test(l.txt) || /^(Índice|Sumário)$/i.test(l.txt)) return;
           if ((l.bg || '') !== (caixa ? caixa.bg : '')) {
             fechaCaixa();
             if (l.bg) { caixa = { bg: l.bg }; h += '<div class="lp-tx-caixa' + (l.bgEscuro ? ' escura' : '') + '" style="--bx:' + l.bg + '">'; }
@@ -523,7 +534,7 @@
   // Desenha a página num canvas fora da tela e devolve os blocos na ordem de leitura: linhas de texto (com cor e
   // fundo medidos nos pixels) e recortes de tabela/imagem.
   // chamadas da plataforma do curso (vídeo/PDF "pelo APP", QR code e link) não fazem sentido fora dela
-  var LIXO = /^(Assista (o|ao) vídeo pelo APP|Acesse o PDF pelo APP|Acesse a plataforma pelo QR code|Ou acesse pelo link|https?:\/\/|topic=[\d.]+$)|\?topic=[\d.]+$/i;
+  var LIXO = /^(Assista (o|ao) vídeo pelo APP|Acesse o PDF pelo APP|Acesse a plataforma pelo QR code|Ou acesse pelo link|\d{0,2}\s*https?:\/\/|topic=[\d.]+$)|\?topic=[\d.]+$/i;
   Leitor.prototype.blocosDaPagina = function (pg, tc, s, FS) {
     var base = pg.getViewport({ scale: 1 }), escala = 1400 / base.width, vp = pg.getViewport({ scale: escala });
     var cv = document.createElement('canvas'); cv.width = Math.floor(vp.width); cv.height = Math.floor(vp.height);
@@ -734,13 +745,14 @@
         });
         var bq = null; Object.keys(bgs).forEach(function (q) { if (!bq || bgs[q] > bgs[bq]) bq = q; });
         var bg = bq ? bq.split(',').map(Number) : null;
-        var AUDIO = /\s*Para ouvir ao áudio correspondente, acesse o LDI\.?\s*/g;
+        var AUDIO = /\s*Para ouvir ao áudio correspondente, acesse o LDI\.?\s*/g, IDQ = /\s4000\d{6}(?=\s)/g;
         // ícones de fontes de ícone (caracteres da área privada, ex.: o alto-falante do "ouvir o áudio") não são texto
         var ICONE = /[\uE000-\uF8FF]/g;
-        var t0 = acentos(txt).replace(ICONE, '').replace(AUDIO, ' ').replace(/\s+/g, ' ').trim(), h0 = acentos(html.replace(/<\/b>(\s*)<b>/g, '$1')).replace(ICONE, '').replace(AUDIO, ' ').trim(), mk = /^#/.test(t0);
+        var t0 = acentos(txt).replace(ICONE, '').replace(AUDIO, ' ').replace(IDQ, '').replace(/\s+/g, ' ').trim(), h0 = acentos(html.replace(/<\/b>(\s*)<b>/g, '$1')).replace(ICONE, '').replace(AUDIO, ' ').replace(IDQ, '').trim(), mk = /^#/.test(t0);
         if (mk) { t0 = t0.replace(/^#\s*/, ''); h0 = h0.replace(/^((?:<[^>]+>)*)#\s*/, '$1'); }
         out.push({ col: l.col, y: l.y, tam: l.tam, top: l.top, bot: l.bot, txt: t0, html: h0, marca: mk, lixo: l.lixo, neg: nTot ? nNeg / nTot : 0,
           bolinha: !l.tab && temBolinha(l),
+          rodape: (l.y < 45 || l.y > base.height - 45) && l.tam <= 8.5,
           bg: bg && !claro(bg) ? rgb(bg) : '', bgEscuro: bg && lum(bg) < 140 });
         i++;
       }
