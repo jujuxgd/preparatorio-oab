@@ -60,14 +60,17 @@ html body:not(.home) :is(.rf-card, .mat-card, .stat-card, .revisao-card, .side-c
 
 /* ── Leitura no celular (Banco, Questões do Hoje, Simulado, Flashcards): texto compacto; só o conteúdo, o topo da página não muda ── */
 @media (max-width: 640px) {
-  html body .q-enun, html body .ss-q .enun { font-size: .8rem !important; line-height: 1.5 !important; }
-  html body .alt, html body .ss-q .alt, html body .ss-alt { font-size: .76rem !important; line-height: 1.45 !important; padding-top: .45rem !important; padding-bottom: .45rem !important; }
+  html body .q-enun, html body .ss-q .enun { font-size: .88rem !important; line-height: 1.5 !important; }
+  html body .alt, html body .ss-q .alt, html body .ss-alt { font-size: .83rem !important; line-height: 1.45 !important; padding-top: .45rem !important; padding-bottom: .45rem !important; }
   html body .alt .l { width: 20px; height: 20px; font-size: .66rem; }
-  html body .expl, html body .ss-expl { font-size: .74rem !important; line-height: 1.5 !important; }
-  html body .ss-q .meta, html body .q-cab { font-size: .66rem !important; }
-  html body .fc-frente { font-size: .98rem !important; line-height: 1.4 !important; }
-  html body .fc-verso { font-size: .78rem !important; line-height: 1.5 !important; }
-  html body .fc-verso .base, html body .fc-peg { font-size: .72rem !important; }
+  html body .expl, html body .ss-expl { font-size: .8rem !important; line-height: 1.5 !important; }
+  html body .ss-q .meta, html body .q-cab { font-size: .7rem !important; }
+  html body .fc-frente { font-size: 1.06rem !important; line-height: 1.4 !important; }
+  html body .fc-verso { font-size: .85rem !important; line-height: 1.5 !important; }
+  html body .fc-verso .base, html body .fc-peg { font-size: .78rem !important; }
   html body .fc-player { padding: .9rem 1rem !important; }
   html body .fc-meta, html body .fc-player .topo { font-size: .68rem !important; }
+  /* cabeçalho de cada bloco de questões: matéria e tema menores que o texto da questão */
+  html body .ss-top-cab b { font-size: .78rem !important; line-height: 1.35; }
+  html body .ss-top-cab .mat { font-size: .54rem !important; padding: .1rem .45rem !important; }
 }

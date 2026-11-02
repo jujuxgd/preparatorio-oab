@@ -222,7 +222,7 @@ aplicarFonte();
   }
   tag('link', { rel: 'manifest', href: 'manifest.webmanifest' });
   tag('link', { href: 'legibilidade.css', rel: 'stylesheet' });
-  tag('link', { href: 'polimento.css?v=20261104', rel: 'stylesheet' });
+  tag('link', { href: 'polimento.css?v=20261105', rel: 'stylesheet' });
   tag('link', { rel: 'apple-touch-icon', href: 'apple-touch-icon.png' });
   tag('meta', { name: 'theme-color', content: '#FAF8F5' });
   tag('meta', { name: 'apple-mobile-web-app-capable', content: 'yes' });
