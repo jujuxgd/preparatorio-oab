@@ -194,7 +194,8 @@ html.lp-travada,html.lp-travada body{overflow:hidden}
 .lp-texto .lp-tx-tab tbody tr:nth-child(even) td{background:color-mix(in srgb,var(--tx-ac) 4%,transparent)}
 .lp-texto .lp-tx-tab td{padding:.55rem .65rem}
 .lp-tx-nota{text-align:center;border-top:0;opacity:.85}
-@media (min-width:900px){.lp .lp-texto>p,.lp .lp-texto>h3,.lp .lp-texto>h4{max-width:min(72ch,100%)}}
+/* telas largas: a área de leitura inteira tem largura confortável e todos os blocos alinham na mesma margem */
+@media (min-width:900px){.lp .lp-texto{max-width:46rem;margin-inline:auto}}
 
 /* ═══ Harmonia (nov/2026): uma escala só de espaços (0,5 · 0,9 · 1,6em), títulos mais próximos do texto, negrito mais leve ═══ */
 .lp-texto p{margin-block:0 .9em}
