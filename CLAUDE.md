@@ -541,6 +541,7 @@ Prova prático-profissional do OAB 48 em **28/02/2027** (cronograma da OAB). Jul
 
 ### Modo Escuro
 - Variáveis redefinidas em `[data-theme="dark"]`
+- **03/11/2026 (pedido de Julia — "não fica escuro de verdade"):** fundo quase preto neutro-quente (`--bg #0E0D0C`, `--paper #161412`), texto `#E6E0D8` (sem branco puro); sem gradiente no `body` e sem as manchas `.aurora-bg` no escuro; `theme-color` acompanha o tema. No Hoje, `--ac` usa `--rose` no escuro (o destaque preto sumia no fundo)
 - Toggle via `data-theme` no `<html>`
 
 ---

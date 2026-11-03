@@ -122,6 +122,8 @@ function toggleTheme() {
   const next = current === 'dark' ? 'light' : 'dark';
   document.documentElement.setAttribute('data-theme', next);
   localStorage.setItem('theme', next);
+  const tc = document.querySelector('meta[name="theme-color"]');
+  if (tc) tc.setAttribute('content', next === 'dark' ? '#0E0D0C' : '#FAF8F5');
 
   const label = document.querySelector('.theme-label');
   if (label) label.textContent = next === 'dark' ? 'Modo claro' : 'Modo escuro';

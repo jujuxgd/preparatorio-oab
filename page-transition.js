@@ -17,7 +17,7 @@
 // ============================================================
 (function () {
   var isDark = (localStorage.getItem('theme') || 'light') === 'dark';
-  var paper = isDark ? '#211C18' : '#FFFFFF';
+  var paper = isDark ? '#0E0D0C' : '#FFFFFF';
 
   var veil = document.createElement('div');
   veil.id = 'page-veil';
