@@ -510,6 +510,7 @@ Prova prático-profissional do OAB 48 em **28/02/2027** (cronograma da OAB). Jul
   artigo com incisos/alíneas numa caixa contínua (`lei-segue`/`lei-cont`); quadro com borda em que só um trecho tem colunas (ex.: "TRT | TST") vira tabela só nesse trecho
   (faixas entre linhas horizontais com divisória vertical própria). Conferido nos 84 Resumido: só 3 capítulos mudaram, todos para melhor.
   Figuras e tabelas recortadas do PDF trocam os tons de vermelho pela cor do Perfil (`recolorir` em `recorte`, mantém a luminosidade de cada tom; sem efeito se a cor já for vermelha).
+  **03/11/2026:** cada figura é desenhada de novo só na sua área com até 2× a resolução (`nitidas` no fim de `blocosDaPagina`), sem legenda nem moldura, centralizada e com a mesma largura (`min(82%, 24rem)`; tocar amplia). Deslizador de margem vai de −2,5 a 3rem: abaixo de zero o leitor avança sobre o respiro do cartão até 4px da borda da tela (`--tx-sang`). No PC a caixa do leitor tem `100svh − 190px` (sem teto de 620px), para a tela mostrar só o leitor e a linha do Gabaritaço.
 
 ## 6. Design System
 

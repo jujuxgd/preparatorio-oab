@@ -242,11 +242,18 @@
     document.head.appendChild(l);
   }
   Leitor.prototype.aplicarTx = function () {
-    var v = lerTx(), r = this.raiz, mp = Math.max(0, Math.min(3, +v.mp || 0));
+    var v = lerTx(), r = this.raiz, mp = Math.max(-2.5, Math.min(3, +v.mp || 0));
     if (v.s === 'serif') carregarFonte();
     r.style.setProperty('--tx-tam', (TX_TAM[v.t] || 1) + 'rem');
     r.style.setProperty('--tx-lin', TX_LIN[v.l] || 1.7);
-    r.style.setProperty('--tx-pad', mp + 'rem'); r.style.setProperty('--tx-larg', 'none');
+    r.style.setProperty('--tx-pad', Math.max(0, mp) + 'rem'); r.style.setProperty('--tx-larg', 'none');
+    // abaixo de zero o texto avança sobre o respiro do cartão em volta, até perto da borda da tela
+    var sang = 0;
+    if (mp < 0 && r.parentElement) {
+      var bb = r.parentElement.getBoundingClientRect(), livre = Math.min(bb.left, (document.documentElement.clientWidth || innerWidth) - bb.right) - 4;
+      sang = Math.max(0, Math.min(-mp * 16, livre));
+    }
+    r.style.setProperty('--tx-sang', -sang + 'px');
     r.dataset.txFundo = v.f; r.dataset.txFonte = v.s;
     var aj = r.querySelector('.lp-menu-aj'); if (!aj) return;
     aj.querySelectorAll('[data-tx]').forEach(function (b) { var p = b.dataset.tx.split(':'); b.classList.toggle('on', String(v[p[0]]) === p[1]); });
@@ -259,7 +266,7 @@
     aj.innerHTML =
       '<div class="lp-aj"><span>Letra</span><div class="lp-seg"><button type="button" data-tx-t="-" aria-label="Letra menor">A−</button><button type="button" data-tx-t="+" aria-label="Letra maior">A+</button></div></div>' +
       grupo('Linhas', 'l', [[0, '<i class="lp-ic l0"></i>', 'Linhas juntas'], [1, '<i class="lp-ic l1"></i>', 'Linhas normais'], [2, '<i class="lp-ic l2"></i>', 'Linhas soltas']]) +
-      '<div class="lp-aj"><span>Margem</span><input class="lp-rg" type="range" min="0" max="3" step="0.25" data-tx-m aria-label="Margem dos lados"></div>' +
+      '<div class="lp-aj"><span>Margem</span><input class="lp-rg" type="range" min="-2.5" max="3" step="0.25" data-tx-m aria-label="Margem dos lados"></div>' +
       grupo('Fundo', 'f', [['papel', '<i class="lp-bola papel"></i>', 'Papel'], ['noite', '<i class="lp-bola noite"></i>', 'Noite']]) +
       grupo('Fonte', 's', [['serif', '<span class="lp-fs">Serifa</span>'], ['sans', '<span class="lp-fn">Sem serifa</span>']]);
     // margem livre: o deslizador muda na hora, em todos os leitores abertos
@@ -540,7 +547,7 @@
             if (l.tabelaCab) cabUlt = { ncol: l.tabelaNcol, html: l.tabelaCab };
             h += '<div class="lp-tx-tab"><table><tbody>' + cabUsar + l.tabelaCorpo + '</tbody></table></div>'; marca = ''; ant = null; primeira = false; return;
           }
-          if (l.img) { fechaCaixa(); h += marca + '<figure class="lp-tx-fig"><img src="' + l.img + '" alt="' + (l.tabela ? 'Tabela' : 'Figura') + ' da página ' + (de + j) + '" loading="lazy"><figcaption>' + (l.tabela ? 'Tabela' : 'Figura') + ' do PDF · toque para ampliar</figcaption></figure>'; marca = ''; ant = null; primeira = false; return; }
+          if (l.img) { fechaCaixa(); h += marca + '<figure class="lp-tx-fig"><img src="' + l.img + '" alt="' + (l.tabela ? 'Tabela' : 'Figura') + ' da página ' + (de + j) + '" loading="lazy"></figure>'; marca = ''; ant = null; primeira = false; return; }
           if (l.rodape || conta[chave(l)] >= rep || /^\d{1,3}(\s*\/\s*\d{1,3})?$/.test(l.txt) || /(?:\.\s?){6,}|…{3,}/.test(l.txt) || /^(Índice|Sumário)$/i.test(l.txt)) return;
           if ((l.bg || '') !== (caixa ? caixa.bg : '')) {
             fechaCaixa();
@@ -610,7 +617,7 @@
     var cx = cv.getContext('2d', { willReadFrequently: true });
     cx.fillStyle = '#fff'; cx.fillRect(0, 0, cv.width, cv.height);
     return pg.render({ canvasContext: cx, viewport: vp }).promise.then(function () {
-      var W = cv.width, H = cv.height, px = cx.getImageData(0, 0, W, H).data;
+      var W = cv.width, H = cv.height, px = cx.getImageData(0, 0, W, H).data, nitidas = [];
       function rgb(c) { return 'rgb(' + c[0] + ',' + c[1] + ',' + c[2] + ')'; }
       function dist(a, b) { return Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1]) + Math.abs(a[2] - b[2]); }
       // cor de fundo (a mais comum) e cor do texto (média dos pixels bem diferentes do fundo) dentro de uma caixa
@@ -862,7 +869,9 @@
         var c2 = document.createElement('canvas'); c2.width = x1 - x0; c2.height = y1 - y0;
         c2.getContext('2d').drawImage(cv, x0, y0, x1 - x0, y1 - y0, 0, 0, x1 - x0, y1 - y0);
         recolorir(c2);
-        return c2.toDataURL('image/jpeg', 0.82);
+        var u = c2.toDataURL('image/jpeg', 0.82);
+        nitidas.push({ u: u, b: [x0, y0, x1, y1] });
+        return u;
       }
       // primeira linha de pixels toda branca a partir de y0, andando para baixo (dir 1) ou para cima (-1); a borda da tabela fica dentro
       function vazia(col, y0, lim, dir) {
@@ -1023,7 +1032,22 @@
       }
       emiteTabelas(1e9);
       cv.width = cv.height = 0;
-      return out.filter(function (o) { return !o.lixo && (o.img || o.tabelaCorpo !== undefined || o.txt); });
+      out = out.filter(function (o) { return !o.lixo && (o.img || o.tabelaCorpo !== undefined || o.txt); });
+      // o recorte da análise (1400px de página) fica pixelado na tela do celular: cada figura é desenhada de novo só na sua área, com mais resolução
+      return nitidas.reduce(function (pr, j) {
+        return pr.then(function () {
+          var w = j.b[2] - j.b[0], h = j.b[3] - j.b[1], f = Math.min(2, Math.sqrt(5e6 / Math.max(1, w * h)));
+          if (f < 1.3) return;
+          var c3 = document.createElement('canvas'); c3.width = Math.round(w * f); c3.height = Math.round(h * f);
+          var x3 = c3.getContext('2d'); x3.fillStyle = '#fff'; x3.fillRect(0, 0, c3.width, c3.height);
+          return pg.render({ canvasContext: x3, viewport: pg.getViewport({ scale: escala * f }), transform: [1, 0, 0, 1, -j.b[0] * f, -j.b[1] * f] }).promise.then(function () {
+            recolorir(c3);
+            var u = c3.toDataURL('image/jpeg', 0.9);
+            out.forEach(function (o) { if (o.img === j.u) o.img = u; });
+            c3.width = c3.height = 0;
+          }).catch(function () {});
+        });
+      }, Promise.resolve()).then(function () { return out; });
     });
   };
   Leitor.prototype.elDe = function (info, x) {
