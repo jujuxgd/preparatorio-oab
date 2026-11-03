@@ -213,7 +213,7 @@
       self.doc = doc;
       self.de = Math.max(1, self.opts.de || 1); self.ate = Math.min(doc.numPages, self.opts.ate || doc.numPages);
       raiz.querySelector('.lp-info').textContent = self.opts.de ? 'p. ' + self.de + '–' + self.ate : doc.numPages + ' p.';
-      return self.medirMargem().then(function () { return self.renderizar(); }).then(function () { self.voltarPosicao(); });
+      return self.medirMargem().then(function () { return self.renderizar(); }).then(function () { self.voltarPosicao(); if (!self.texto) self.prepararTexto(); });
     }).then(function () {
       var rz; window.addEventListener('resize', function () { clearTimeout(rz); rz = setTimeout(function () { if (Math.abs(self._largura - self.largura()) > 40) self.renderizar(); }, 300); });
     }).catch(function (e) {
@@ -437,12 +437,76 @@
   // Modo texto (híbrido): o texto do PDF reacomodado como página normal, com as cores e as caixas coloridas do PDF
   // (lidas da própria página desenhada); tabelas e imagens entram como recorte da página. Cabeçalho/rodapé que se
   // repetem em quase todas as páginas e números de página saem.
+  // Texto já montado fica guardado no aparelho (IndexedDB): abrir de novo é instantâneo. TXV muda quando a montagem muda.
+  var TXV = 'tx1', TX_MAX = 30, _txDb = null;
+  function txDb() {
+    if (_txDb) return _txDb;
+    _txDb = new Promise(function (ok, erro) {
+      if (!window.indexedDB) return erro();
+      var rq = indexedDB.open('oab-texto', 1);
+      rq.onupgradeneeded = function () { rq.result.createObjectStore('tx'); };
+      rq.onsuccess = function () { ok(rq.result); }; rq.onerror = function () { erro(rq.error); };
+    }).catch(function () { return null; });
+    return _txDb;
+  }
+  function txLer(k) {
+    return txDb().then(function (db) {
+      if (!db) return null;
+      return new Promise(function (ok) { try { var rq = db.transaction('tx').objectStore('tx').get(k); rq.onsuccess = function () { ok(rq.result || null); }; rq.onerror = function () { ok(null); }; } catch (e) { ok(null); } });
+    });
+  }
+  function txGravar(k, html) {
+    return txDb().then(function (db) {
+      if (!db) return;
+      try {
+        var st = db.transaction('tx', 'readwrite').objectStore('tx'); st.put({ h: html, u: Date.now() }, k);
+        var todos = [], cur = st.openCursor();
+        cur.onsuccess = function () { var c = cur.result; if (c) { todos.push([c.key, c.value.u || 0]); c.continue(); } else if (todos.length > TX_MAX) { todos.sort(function (a, b) { return a[1] - b[1]; }).slice(0, todos.length - TX_MAX).forEach(function (t) { st.delete(t[0]); }); } };
+      } catch (e) {}
+    });
+  }
+  Leitor.prototype.chaveTexto = function () {
+    var cor = (getComputedStyle(document.documentElement).getPropertyValue('--rose-600') || '').trim();
+    return [TXV, this.arq, this.de || 1, this.ate || (this.doc && this.doc.numPages), cor].join('|');
+  };
+  Leitor.prototype.porTexto = function (alvo, html) {
+    alvo.innerHTML = html;
+    alvo.querySelectorAll('.lp-tx-fig').forEach(function (f) { f.addEventListener('click', function () { f.classList.toggle('grande'); }); });
+  };
   Leitor.prototype.renderTexto = function (alvo) {
-    var self = this, doc = this.doc, de = this.de || 1, ate = this.ate || doc.numPages, vez = this._vez = (this._vez || 0) + 1;
-    alvo.innerHTML = '<p class="lp-vazio">Montando o texto…</p>'; var FS = {};
+    var self = this, k = this.chaveTexto(), vez = this._vez = (this._vez || 0) + 1;
+    alvo.innerHTML = '<p class="lp-vazio">Montando o texto…</p>';
+    var espera = this._fundo || Promise.resolve();
+    return espera.then(function () { return txLer(k); }).then(function (c) {
+      if (vez !== self._vez) return;
+      if (c && c.h) { self.porTexto(alvo, c.h); return; }
+      var tmp = document.createElement('div');
+      return self.montarTexto(tmp, function () { return vez === self._vez; }).then(function (ok) {
+        if (!ok || vez !== self._vez) return;
+        self.porTexto(alvo, tmp.innerHTML);
+        if (tmp.querySelector('.lp-texto')) txGravar(k, tmp.innerHTML);
+      });
+    });
+  };
+  // Lendo o PDF, o texto vai sendo montado em segundo plano: na hora de "Ler como texto" ele já está pronto
+  Leitor.prototype.prepararTexto = function () {
+    var self = this;
+    if (this.opts.semTexto || this._fundo || !this.doc) return;
+    var k = this.chaveTexto();
+    this._fundo = new Promise(function (ok) { setTimeout(ok, 4000); }).then(function () { return txLer(k); }).then(function (c) {
+      if (c || !self.raiz.isConnected) return;
+      var tmp = document.createElement('div');
+      return self.montarTexto(tmp, function () { return self.raiz.isConnected; }).then(function (ok) {
+        if (ok && tmp.querySelector('.lp-texto')) return txGravar(k, tmp.innerHTML);
+      });
+    }).catch(function () {}).then(function () { self._fundo = Promise.resolve(); });
+  };
+  Leitor.prototype.montarTexto = function (alvo, vivo) {
+    var self = this, doc = this.doc, de = this.de || 1, ate = this.ate || doc.numPages;
+    var FS = {};
     var pags = [], n = de;
     function proxima() {
-      if (vez !== self._vez) return null;
+      if (!vivo()) return null;
       if (n > ate) return Promise.resolve();
       var num = n++;
       return doc.getPage(num).then(function (pg) {
@@ -452,7 +516,7 @@
       });
     }
     return proxima().then(function () {
-      if (vez !== self._vez) return;
+      if (!vivo()) return false;
       var conta = {}, chave = function (l) { return l.txt.replace(/\s*\d{1,3}\s*\/\s*\d{1,3}\s*$/, '').replace(/\d+/g, '#'); };
       pags.forEach(function (bl) { var v = {}; bl.forEach(function (l) { if (l.txt && !v[chave(l)]) { v[chave(l)] = 1; conta[chave(l)] = (conta[chave(l)] || 0) + 1; } }); });
       var rep = pags.length >= 3 ? Math.max(2, pags.length * 0.4) : 99;
@@ -581,7 +645,6 @@
       fechaCaixa();
       if (tiroQ && h) h += '<p class="lp-tx-nota">As questões comentadas deste capítulo ficam em “Questões do dia”.</p>';
       alvo.innerHTML = '<div class="lp-texto">' + (h || '<p class="lp-vazio">Este PDF não tem texto (é escaneado). Use o modo PDF.</p>') + '</div>';
-      alvo.querySelectorAll('.lp-tx-fig').forEach(function (f) { f.addEventListener('click', function () { f.classList.toggle('grande'); }); });
       // acabamento de leitura: número do título em destaque; artigo de lei e aviso ganham o seu tipo de caixa
       alvo.querySelectorAll('.lp-texto h3').forEach(function (h) {
         var no = h.firstChild; if (!no || no.nodeType !== 3) return;
@@ -605,6 +668,7 @@
         if (a && a.classList.contains('lp-tx-lei')) pp.classList.add('lei-cont');
         if (d && d.classList.contains('lp-tx-lei')) pp.classList.add('lei-segue');
       });
+      return true;
     });
   };
   // Desenha a página num canvas fora da tela e devolve os blocos na ordem de leitura: linhas de texto (com cor e
