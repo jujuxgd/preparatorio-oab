@@ -246,11 +246,17 @@ html.lp-travada,html.lp-travada body{overflow:hidden}
 .lp-tx-sum-lista>button{display:block;width:100%;text-align:left;border:0;background:none;color:var(--ink);cursor:pointer;border-radius:9px;font:500 .86rem/1.35 Inter,sans-serif;padding:.45rem .6rem}
 .lp-tx-sum-lista>button.lp-sum-h4{font-weight:400;font-size:.82rem;color:var(--ink-soft,var(--ink));padding-left:1.4rem}
 .lp-tx-sum-lista>button:hover{background:var(--bg-soft,var(--bg))}
-/* tela cheia do modo texto (celular): margens de leitura, barra separada do texto, fundo do texto na tela toda */
-.lp.lp-cheia.lp-modo-texto .lp-topo{padding:.55rem max(16px,env(safe-area-inset-left)) .55rem max(16px,env(safe-area-inset-left));border-bottom:1px solid var(--line);background:var(--paper)}
-.lp.lp-cheia.lp-modo-texto .lp-corpo{padding:.4rem max(20px,env(safe-area-inset-right)) calc(28px + env(safe-area-inset-bottom)) max(20px,env(safe-area-inset-left))}
-.lp.lp-cheia.lp-modo-texto .lp-paginas{max-width:40rem;margin:0 auto}
-.lp.lp-cheia.lp-modo-texto .lp-tx-sumario{margin-top:.8rem}
+/* tela cheia do modo texto: a margem é UMA só (a do deslizador do Aa, com mínimo de 20px) e vale igual para texto e sumário */
+.lp.lp-cheia.lp-modo-texto{--tx-m:max(20px,var(--tx-pad,0px))}
+.lp.lp-cheia.lp-modo-texto .lp-topo{display:flex;align-items:center;padding:.55rem max(16px,env(safe-area-inset-right)) .55rem max(16px,env(safe-area-inset-left));border-bottom:1px solid var(--line);background:var(--paper)}
+.lp.lp-cheia.lp-modo-texto .lp-titulo .tema-linha{font-size:.98rem;line-height:1.25}
+.lp.lp-cheia.lp-modo-texto .lp-corpo{padding:.4rem env(safe-area-inset-right) calc(28px + env(safe-area-inset-bottom)) env(safe-area-inset-left)}
+.lp.lp-cheia.lp-modo-texto .lp-paginas{max-width:46rem;margin:0 auto}
+.lp.lp-cheia.lp-modo-texto .lp-texto{padding-left:var(--tx-m)!important;padding-right:var(--tx-m)!important;border-radius:0}
+.lp.lp-cheia.lp-modo-texto .lp-tx-sumario{margin:.8rem var(--tx-m) 1rem;width:calc(100% - 2 * var(--tx-m))}
 .lp.lp-cheia[data-tx-fundo="noite"]{background:#1e1b1a}
 .lp.lp-cheia[data-tx-fundo="noite"] .lp-topo{background:#1e1b1a;border-color:rgba(255,255,255,.08)}
-.lp.lp-cheia[data-tx-fundo="noite"] .lp-texto{border-radius:0;padding-left:0;padding-right:0}
+/* fora da tela cheia: o sumário segue a mesma margem do texto; e quando o texto avança sobre o respiro do cartão (margem 0 no celular),
+   o quadro do cartão some, senão as bordas dele passam por trás do texto */
+.lp-tx-sumario{margin-left:var(--tx-pad,0px);margin-right:var(--tx-pad,0px);width:calc(100% - 2 * var(--tx-pad,0px))}
+@media (max-width:700px){.ss-bloco:has(.lp.lp-sangra){border-color:transparent!important;background:transparent!important;box-shadow:none!important}}
