@@ -511,6 +511,10 @@ Prova prático-profissional do OAB 48 em **28/02/2027** (cronograma da OAB). Jul
   (faixas entre linhas horizontais com divisória vertical própria). Conferido nos 84 Resumido: só 3 capítulos mudaram, todos para melhor.
   Figuras e tabelas recortadas do PDF trocam os tons de vermelho pela cor do Perfil (`recolorir` em `recorte`, mantém a luminosidade de cada tom; sem efeito se a cor já for vermelha).
   **03/11/2026:** cada figura é desenhada de novo só na sua área com até 2× a resolução (`nitidas` no fim de `blocosDaPagina`), sem legenda nem moldura, centralizada e com a mesma largura (`min(94%, 32rem)`; tocar amplia). Deslizador de margem 0–3 (`sangrar()`): 0 = mínimo de margem — no celular só a área do texto (`.lp-corpo`, não a barra com o título) avança sobre o respiro do cartão até 4px da borda (`--tx-sang`); no PC (leitor ≥ 700px) cada passo vale 5rem e não há mais largura fixa de 46rem. No PC a caixa do leitor tem `100svh − 190px` (sem teto de 620px), para a tela mostrar só o leitor e a linha do Gabaritaço.
+  **Esquema antes de lixo (03/11/2026):** o desenho entre duas linhas só virava figura se a linha de baixo não fosse lixo — o esquema do 3.3 de
+  Ética (Princípios), seguido do quadro "Assista o vídeo pelo APP!", sumia (o 3.3 ficava só com o título e uma frase). Agora a linha de baixo pode
+  ser lixo. Numa amostra de 7 capítulos, 3 ganharam a figura que faltava (Ética 3.3, Proc. Penal Competência, Proc. Civil Procedimento Comum) e
+  nada mais mudou. `TXV` = 'tx2'.
   **Sumário e posição do modo texto (03/11/2026, pedido de Julia):** botão ☰ na barra do leitor (só no modo texto, com 2+ títulos) abre o
   sumário do capítulo (h3 e h4 de `.lp-texto`, montado em `porTexto`, não fica no texto guardado); clicar pula para a seção e a seção atual fica
   marcada. A posição (índice do bloco no topo da tela) fica em `oab_lp_txpos` (`arquivo|de|ate`, últimos 40, só do aparelho) e volta ao reabrir;
