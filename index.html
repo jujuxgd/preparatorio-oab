@@ -639,7 +639,7 @@ main { padding: 2rem 2.5rem 2.25rem; }
 .in-barra i.ok{background:var(--cd)}
 @media (max-width:900px){ .in-fatos,.in-prox{grid-template-columns:1fr} }
 </style>
-<link rel="stylesheet" href="topnav.css?v=1791163406"><script src="topnav.js?v=1791163406"></script><link rel="stylesheet" href="home.css?v=20261113a"><link rel="stylesheet" href="leitor-pdf.css"></head>
+<link rel="stylesheet" href="topnav.css?v=1791163406"><script src="topnav.js?v=1791163406"></script><link rel="stylesheet" href="home.css?v=20261114a"><link rel="stylesheet" href="leitor-pdf.css"></head>
 <body>
 
 <div class="aurora-bg" aria-hidden="true">
@@ -788,9 +788,9 @@ main { padding: 2rem 2.5rem 2.25rem; }
 
         <div class="today-card-footer">
           <a href="hoje.html" class="btn btn-primary">Abrir conteúdo do dia →</a>
-          <a href="revisar.html" class="btn btn-ghost">Revisar</a>
-          <a href="calendario.html" class="btn btn-ghost">☷ Calendário</a>
-          <button onclick="abrirApostilaModal()" class="btn btn-ghost" title="Abrir a apostila completa do preparatório">📖 Apostila completa</button>
+          <a href="revisar.html" class="btn btn-ghost"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/></svg><span>Revisar</span></a>
+          <a href="calendario.html" class="btn btn-ghost"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><span>Calendário</span></a>
+          <button onclick="abrirApostilaModal()" class="btn btn-ghost" title="Abrir a apostila completa do preparatório"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2z"/><path d="M22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7z"/></svg><span>Apostila<span class="so-pc"> completa</span></span></button>
         </div>
       </div>
 
@@ -1015,7 +1015,12 @@ document.addEventListener('DOMContentLoaded', () => {
       } else todayTitle.textContent = tipoTxt(DIA);
     }
     const todaySubject = document.getElementById('today-subject');
-    if (todaySubject) todaySubject.textContent = ds.length ? ds.map(d => `${EMOJI[d] || ''} ${d}`.trim()).join('  ·  ') : (DIA.tipo === 'revisao' ? 'Caderno de erros, flashcards e questões' : '');
+    if (todaySubject) {
+      // ponto na cor da matéria (as mesmas do Calendário), no lugar do emoji
+      const COR = { 'Direito Constitucional': 'const', 'Direito Administrativo': 'const', 'Direito Eleitoral': 'const', 'Direito Civil': 'civil', 'Direito Processual Civil': 'civil', 'Direito do Consumidor': 'civil', 'Direito Penal': 'penal', 'Direito Processual Penal': 'penal', 'Direito do Trabalho': 'trab', 'Direito Processual do Trabalho': 'trab', 'Direito Previdenciário': 'trab', 'Direito Tributário': 'tribut', 'Direito Empresarial': 'tribut', 'Ética Profissional': 'etica', 'ECA': 'etica' };
+      if (ds.length) todaySubject.innerHTML = ds.map(d => '<span class="subj"><i class="subj-dot"' + (COR[d] ? ' style="--c:var(--mat-' + COR[d] + '-deep)"' : '') + '></i>' + S.esc(d) + '</span>').join('');
+      else todaySubject.textContent = DIA.tipo === 'revisao' ? 'Caderno de erros, flashcards e questões' : '';
+    }
     const statHoras = document.getElementById('stat-horas');
     if (statHoras) statHoras.textContent = S.pdfsDoDia().length || '—';
     const statMaterias = document.getElementById('stat-materias');
