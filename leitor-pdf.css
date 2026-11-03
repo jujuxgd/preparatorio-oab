@@ -217,3 +217,13 @@ html.lp-travada,html.lp-travada body{overflow:hidden}
 /* artigo em várias linhas (caput, §, incisos): uma caixa contínua */
 .lp-texto .lp-tx-lei.lei-segue{margin-bottom:0;border-bottom-left-radius:0;border-bottom-right-radius:0;padding-bottom:.35em}
 .lp-texto .lp-tx-lei.lei-cont{margin-top:0;border-top-left-radius:0;border-top-right-radius:0;padding-top:.35em}
+.lp.lp-modo-texto{margin-inline:var(--tx-sang,0px);position:relative}
+.lp.lp-modo-texto.lp-cheia{margin-inline:0}
+.lp-texto .lp-tx-fig{width:min(82%,24rem);margin-inline:auto}
+.lp-texto .lp-tx-fig img{width:100%}
+.lp-texto .lp-tx-fig.grande{width:100%}
+@media (min-width:901px){
+  .lp-caixa .lp-corpo{max-height:max(420px,calc(100vh - 190px));max-height:max(420px,calc(100svh - 190px))}
+  .lp-caixa .lp-lista{max-height:max(396px,calc(100svh - 214px))}
+}
+.lp-texto .lp-tx-fig img{border:0;box-shadow:none;border-radius:0}
