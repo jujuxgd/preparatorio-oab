@@ -249,11 +249,11 @@
     document.head.appendChild(l);
   }
   Leitor.prototype.aplicarTx = function () {
-    var v = lerTx(), r = this.raiz, mp = Math.max(-2.5, Math.min(3, +v.mp || 0));
+    var v = lerTx(), r = this.raiz, mp = Math.max(0, Math.min(3, +v.mp || 0));
     if (v.s === 'serif') carregarFonte();
     r.style.setProperty('--tx-tam', (TX_TAM[v.t] || 1) + 'rem');
     r.style.setProperty('--tx-lin', TX_LIN[v.l] || 1.7);
-    r.style.setProperty('--tx-pad', Math.max(0, mp) + 'rem'); r.style.setProperty('--tx-larg', 'none');
+    r.style.setProperty('--tx-larg', 'none');
     this._mp = mp; this.sangrar();
     if (!this._ro && window.ResizeObserver) { var self = this; this._ro = new ResizeObserver(function () { self.sangrar(); }); this._ro.observe(r); }
     r.dataset.txFundo = v.f; r.dataset.txFonte = v.s;
@@ -266,10 +266,13 @@
   // (a barra com o título fica onde está); medido quando o leitor aparece, porque numa aba escondida a largura é 0
   Leitor.prototype.sangrar = function () {
     var r = this.raiz, mp = this._mp || 0, bb = r.getBoundingClientRect(), sang = 0;
-    if (mp < 0) {
-      if (!bb.width) return;
+    if (!bb.width) return;
+    // deslizador: 0 = o mínimo de margem (no celular o texto vai até perto da borda da tela); no PC cada passo vale mais,
+    // porque a caixa é larga (no máximo, as linhas ficam com a largura de leitura de antes)
+    r.style.setProperty('--tx-pad', (bb.width >= 700 ? mp * 5 : mp) + 'rem');
+    if (mp === 0 && bb.width < 700) {
       var livre = Math.min(bb.left, (document.documentElement.clientWidth || innerWidth) - bb.right) - 4;
-      sang = Math.max(0, Math.min(-mp * 16, livre));
+      sang = Math.max(0, Math.min(40, livre));
     }
     r.style.setProperty('--tx-sang', -sang + 'px');
   };
@@ -279,7 +282,7 @@
     aj.innerHTML =
       '<div class="lp-aj"><span>Letra</span><div class="lp-seg"><button type="button" data-tx-t="-" aria-label="Letra menor">A−</button><button type="button" data-tx-t="+" aria-label="Letra maior">A+</button></div></div>' +
       grupo('Linhas', 'l', [[0, '<i class="lp-ic l0"></i>', 'Linhas juntas'], [1, '<i class="lp-ic l1"></i>', 'Linhas normais'], [2, '<i class="lp-ic l2"></i>', 'Linhas soltas']]) +
-      '<div class="lp-aj"><span>Margem</span><input class="lp-rg" type="range" min="-2.5" max="3" step="0.25" data-tx-m aria-label="Margem dos lados"></div>' +
+      '<div class="lp-aj"><span>Margem</span><input class="lp-rg" type="range" min="0" max="3" step="0.25" data-tx-m aria-label="Margem dos lados"></div>' +
       grupo('Fundo', 'f', [['papel', '<i class="lp-bola papel"></i>', 'Papel'], ['noite', '<i class="lp-bola noite"></i>', 'Noite']]) +
       grupo('Fonte', 's', [['serif', '<span class="lp-fs">Serifa</span>'], ['sans', '<span class="lp-fn">Sem serifa</span>']]);
     // margem livre: o deslizador muda na hora, em todos os leitores abertos
@@ -491,13 +494,24 @@
   // Uma montagem por capítulo, fora do leitor: trocar de aba (o leitor é remontado) não para nem recomeça o trabalho.
   // O progresso é salvo a cada 3 páginas ('p|' + chave): se a página recarregar (a sincronização recarrega quando
   // chega dado novo da nuvem), a montagem continua de onde parou.
-  var TRAB = {};
-  function trabalho(lt) {
+  // Um capítulo por vez (dois em paralelo dividiam o processador e os dois demoravam o dobro); o que está na tela passa à frente.
+  var TRAB = {}, FILA = [], rodando = false;
+  function proximoDaFila() {
+    if (rodando || !FILA.length) return;
+    FILA.sort(function (a, b) { return (b.fg ? 1 : 0) - (a.fg ? 1 : 0); });
+    var t = FILA.shift(); rodando = true;
+    t.rodar().then(function () { rodando = false; proximoDaFila(); });
+  }
+  function trabalho(lt, fg) {
     var k = lt.chaveTexto(), kp = 'p|' + k;
-    if (TRAB[k]) return TRAB[k];
-    var t = TRAB[k] = { ouv: [], i: 0, tot: (lt.ate || 1) - (lt.de || 1) + 1 };
-    var de = lt.de || 1;
-    t.p = txLer(kp).then(function (par) {
+    if (TRAB[k]) { if (fg) TRAB[k].fg = true; proximoDaFila(); return TRAB[k]; }
+    var t = TRAB[k] = { ouv: [], i: 0, tot: (lt.ate || 1) - (lt.de || 1) + 1, fg: !!fg };
+    var de = lt.de || 1, pronto;
+    t.p = new Promise(function (ok) { pronto = ok; });
+    t.rodar = function () { var r = rodar(); r.then(pronto); return r.then(function () {}, function () {}); };
+    FILA.push(t); proximoDaFila();
+    return t;
+    function rodar() { return txLer(kp).then(function (par) {
       var tmp = document.createElement('div'), vivo = function () { return true; };
       vivo.aviso = function (i, tot) { t.i = i; t.tot = tot; t.ouv.forEach(function (f) { try { f(i, tot); } catch (e) {} }); };
       vivo.pagina = function (pags, FS, n) { if ((n - de) % 3 === 0) txParcial(kp, { pags: pags, FS: FS, n: n, u: Date.now() }); };
@@ -507,8 +521,7 @@
         if (tmp.querySelector('.lp-texto')) txGravar(k, h).then(function () { txApagar(kp); });
         return h;
       });
-    }).then(function (h) { delete TRAB[k]; return h; }, function () { delete TRAB[k]; return null; });
-    return t;
+    }).then(function (h) { delete TRAB[k]; return h; }, function () { delete TRAB[k]; return null; }); }
   }
   Leitor.prototype.renderTexto = function (alvo) {
     var self = this, k = this.chaveTexto(), vez = this._vez = (this._vez || 0) + 1;
@@ -516,7 +529,7 @@
     return txLer(k).then(function (c) {
       if (vez !== self._vez) return;
       if (c && c.h) { self.porTexto(alvo, c.h); if (c.c !== corAtual()) self.prepararTexto(true); return; }
-      var t = trabalho(self), av = alvo.querySelector('.lp-vazio');
+      var t = trabalho(self, true), av = alvo.querySelector('.lp-vazio');
       function aviso(i, tot) { if (av && vez === self._vez) av.textContent = 'Montando o texto… página ' + i + ' de ' + tot + ' (só na primeira vez)'; }
       if (t.i) aviso(t.i, t.tot);
       t.ouv.push(aviso);
@@ -714,7 +727,8 @@
     var cv = document.createElement('canvas'); cv.width = Math.floor(vp.width); cv.height = Math.floor(vp.height);
     var cx = cv.getContext('2d', { willReadFrequently: true });
     cx.fillStyle = '#fff'; cx.fillRect(0, 0, cv.width, cv.height);
-    return pg.render({ canvasContext: cx, viewport: vp }).promise.then(function () {
+    // intent 'print': o desenho segue mesmo com a aba do navegador em segundo plano (o modo de tela espera requestAnimationFrame, que para)
+    return pg.render({ canvasContext: cx, viewport: vp, intent: 'print' }).promise.then(function () {
       var W = cv.width, H = cv.height, px = cx.getImageData(0, 0, W, H).data, nitidas = [];
       function rgb(c) { return 'rgb(' + c[0] + ',' + c[1] + ',' + c[2] + ')'; }
       function dist(a, b) { return Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1]) + Math.abs(a[2] - b[2]); }
@@ -1138,7 +1152,7 @@
           if (f < 1.3) return;
           var c3 = document.createElement('canvas'); c3.width = Math.round(w * f); c3.height = Math.round(h * f);
           var x3 = c3.getContext('2d'); x3.fillStyle = '#fff'; x3.fillRect(0, 0, c3.width, c3.height);
-          return pg.render({ canvasContext: x3, viewport: pg.getViewport({ scale: escala * f }), transform: [1, 0, 0, 1, -j.b[0] * f, -j.b[1] * f] }).promise.then(function () {
+          return pg.render({ canvasContext: x3, viewport: pg.getViewport({ scale: escala * f }), transform: [1, 0, 0, 1, -j.b[0] * f, -j.b[1] * f], intent: 'print' }).promise.then(function () {
             recolorir(c3);
             var u = c3.toDataURL('image/jpeg', 0.9);
             out.forEach(function (o) { if (o.img === j.u) o.img = u; });
