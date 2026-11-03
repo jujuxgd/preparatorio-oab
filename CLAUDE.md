@@ -515,6 +515,16 @@ Prova prático-profissional do OAB 48 em **28/02/2027** (cronograma da OAB). Jul
   Ética (Princípios), seguido do quadro "Assista o vídeo pelo APP!", sumia (o 3.3 ficava só com o título e uma frase). Agora a linha de baixo pode
   ser lixo. Numa amostra de 7 capítulos, 3 ganharam a figura que faltava (Ética 3.3, Proc. Penal Competência, Proc. Civil Procedimento Comum) e
   nada mais mudou. `TXV` = 'tx2'.
+  **Conferência dos 84 Resumido (03/11/2026, pedido de Julia):** os 84 PDFs foram montados num navegador de teste e comparados com o texto
+  do PDF (PyMuPDF, linha a linha por trigramas, fora questões/lixo/cabeçalho) e com as imagens do PDF. Texto: nada de estudo faltando. Imagens:
+  77 esquemas/mapas mentais gravados como imagem não apareciam (a regra do vão só pega desenho entre duas linhas da mesma página). Agora
+  `imagensDaPagina` lê da lista de operações do PDF.js onde cada imagem foi pintada (≥ 60×40pt, sem QR, fora de cabeçalho/rodapé, não coberta por
+  outro recorte) e a recorta na ordem da página; imagem com só rótulos curtos por cima vira figura e os rótulos saem do texto; com frases por
+  cima, não. `divisao()` não divide mais a página quando uma linha atravessa o vão com só um espaço (página com pouco texto e esquemas parecia
+  ter duas colunas). Sobrou 1 imagem fora (ilustração com o texto contornando, em 2. Aspectos Introdutórios). `TXV` = 'tx3'.
+  **Textos prontos antes (03/11/2026):** quem usa o modo texto (`oab_lp_modo` = 'texto') tem os capítulos do dia aberto e dos 3 dias seguintes
+  montados em segundo plano, um por vez, 20 s depois de abrir o Conteúdo (`prepararProximos` em `sessao-core.js` → `LEITOR.preparar(arq)`, leitor
+  sem tela que usa a mesma fila `trabalho()`). Guardados: últimos 60 (`TX_MAX`; ~0,03–2,8 MB cada por causa das figuras).
   **Sumário e posição do modo texto (03/11/2026, pedido de Julia):** botão ☰ na barra do leitor (só no modo texto, com 2+ títulos) abre o
   sumário do capítulo (h3 e h4 de `.lp-texto`, montado em `porTexto`, não fica no texto guardado); clicar pula para a seção e a seção atual fica
   marcada. A posição (índice do bloco no topo da tela) fica em `oab_lp_txpos` (`arquivo|de|ate`, últimos 40, só do aparelho) e volta ao reabrir;

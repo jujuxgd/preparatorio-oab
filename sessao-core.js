@@ -322,7 +322,28 @@
     }).join('');
   }
 
+  // Quem lê no modo texto: os capítulos deste dia e dos 3 dias seguintes são montados em segundo plano, um por vez,
+  // 20 s depois de abrir o Conteúdo — ao abrir o dia o texto já está pronto. Os outros ficam para quando forem abertos.
+  var _preparando = false;
+  function prepararProximos() {
+    if (_preparando || !window.LEITOR || !LEITOR.preparar || !CAL) return;
+    var modo = null; try { modo = localStorage.getItem('oab_lp_modo'); } catch (e) {}
+    if (modo !== 'texto') return;
+    _preparando = true;
+    var v = versao(), ids = [], dias = 0;
+    CAL.dias.forEach(function (d) {
+      if (d.d < DATA || dias >= 4) return;
+      var tem = false;
+      (d.top || []).forEach(function (t) { (t.e || []).forEach(function (c) { var id = c[v] || c.r || c.x; if (id && ids.indexOf(id) < 0) { ids.push(id); tem = true; } }); });
+      if (tem) dias++;
+    });
+    setTimeout(function () {
+      ids.reduce(function (p, id) { return p.then(function () { return LEITOR.preparar(id); }); }, Promise.resolve());
+    }, 20000);
+  }
+
   function montarConteudo(el) {
+    prepararProximos();
     el.innerHTML = htmlConteudo();
     if (window.LEITOR) el.querySelectorAll('.lp-host').forEach(function (h) { LEITOR.montar(h, h.dataset.arq, { caixa: true }); });
     ligarEstrategia(el);

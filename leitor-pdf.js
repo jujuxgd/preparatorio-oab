@@ -447,7 +447,7 @@
       tc.items.forEach(function (it) {
         if (!it.str || !it.str.trim() || it.transform[1] || it.transform[2]) return;
         var a = (it.transform[4] - vb[0]) / w, b = a + it.width / w;
-        itens.push([a, b]);
+        itens.push([a, b, Math.round(it.transform[5])]);
         for (var k = Math.max(0, Math.floor(a * B)); k < Math.min(B, Math.ceil(b * B)); k++) cob[k]++;
       });
       if (itens.length < 12) return (cache[n] = null);
@@ -456,6 +456,18 @@
       var s = (melhor + .5) / B;
       var esq = itens.filter(function (q) { return q[1] <= s; }).length, dir = itens.filter(function (q) { return q[0] >= s; }).length;
       var ok = cob[melhor] <= Math.max(2, itens.length * 0.04) && esq >= itens.length * 0.2 && dir >= itens.length * 0.2;
+      // linha que atravessa o vão com só um espaço entre os pedaços não é de duas colunas: página com pouco texto e esquemas
+      // em imagem (ex.: 8. Dos Direitos dos Advogados, p. 8) parecia ter duas colunas, e o esquema e a frase saíam fatiados
+      if (ok) {
+        var linhas = {}, cruza = 0, nl = 0;
+        itens.forEach(function (q) { (linhas[q[2]] = linhas[q[2]] || []).push(q); });
+        Object.keys(linhas).forEach(function (y) {
+          var ps = linhas[y].sort(function (p, q) { return p[0] - q[0]; }); nl++;
+          if (ps.some(function (q) { return q[0] < s - 0.01 && q[1] > s + 0.01; })) { cruza++; return; }
+          for (var i = 1; i < ps.length; i++) if (ps[i - 1][1] <= s + 0.005 && ps[i][0] >= s - 0.005 && ps[i][0] - ps[i - 1][1] < 0.02) { cruza++; break; }
+        });
+        if (cruza >= Math.max(1, nl * 0.1)) ok = false;
+      }
       return (cache[n] = ok ? s : null);
     }).catch(function () { return (cache[n] = null); });
   };
@@ -463,7 +475,7 @@
   // (lidas da própria página desenhada); tabelas e imagens entram como recorte da página. Cabeçalho/rodapé que se
   // repetem em quase todas as páginas e números de página saem.
   // Texto já montado fica guardado no aparelho (IndexedDB): abrir de novo é instantâneo. TXV muda quando a montagem muda.
-  var TXV = 'tx2', TX_MAX = 30, _txDb = null;
+  var TXV = 'tx3', TX_MAX = 60, _txDb = null;
   function txDb() {
     if (_txDb) return _txDb;
     _txDb = new Promise(function (ok, erro) {
@@ -797,13 +809,38 @@
   // fundo medidos nos pixels) e recortes de tabela/imagem.
   // chamadas da plataforma do curso (vídeo/PDF "pelo APP", QR code e link) não fazem sentido fora dela
   var LIXO = /^(Assista (o|ao) vídeo pelo APP|Acesse o PDF pelo APP|Escute o Cast pelo APP|Acesse a plataforma pelo QR code|Ou acesse pelo link|\d{0,2}\s*https?:\/\/|topic=[\d.]+$)|\?topic=[\d.]+$|\bpelo APP!?$|^Prof\.? Estratégia Materiais$|\bHora de responder quest\S{0,3}es\s*!?$|^vocês sobre o tema|áudio exclusivo que preparamos|para a 1ª Fase do Exame de Ordem \(OAB\)$/i;
+  // retângulos (em pixels da página desenhada) das imagens pintadas na página, pela lista de operações do PDF.js
+  function imagensDaPagina(opl, vp) {
+    var O = window.pdfjsLib && window.pdfjsLib.OPS; if (!opl || !O) return [];
+    var m = [1, 0, 0, 1, 0, 0], pilha = [], res = [];
+    function mul(a, b) { return [a[0] * b[0] + a[2] * b[1], a[1] * b[0] + a[3] * b[1], a[0] * b[2] + a[2] * b[3], a[1] * b[2] + a[3] * b[3], a[0] * b[4] + a[2] * b[5] + a[4], a[1] * b[4] + a[3] * b[5] + a[5]]; }
+    var IMG = {}; ['paintImageXObject', 'paintInlineImageXObject', 'paintImageMaskXObject', 'paintJpegXObject'].forEach(function (n) { if (O[n] != null) IMG[O[n]] = 1; });
+    for (var i = 0; i < opl.fnArray.length; i++) {
+      var f = opl.fnArray[i], a = opl.argsArray[i];
+      if (f === O.save) pilha.push(m);
+      else if (f === O.restore) m = pilha.length ? pilha.pop() : m;
+      else if (f === O.transform) m = mul(m, a);
+      else if (f === O.paintFormXObjectBegin) { pilha.push(m); if (a && a[0]) m = mul(m, a[0]); }
+      else if (f === O.paintFormXObjectEnd) m = pilha.length ? pilha.pop() : m;
+      else if (IMG[f]) {
+        var xs = [], ys = [];
+        [[0, 0], [1, 0], [0, 1], [1, 1]].forEach(function (q) {
+          var p = vp.convertToViewportPoint(m[0] * q[0] + m[2] * q[1] + m[4], m[1] * q[0] + m[3] * q[1] + m[5]);
+          xs.push(p[0]); ys.push(p[1]);
+        });
+        res.push([Math.min.apply(null, xs), Math.min.apply(null, ys), Math.max.apply(null, xs), Math.max.apply(null, ys)]);
+      }
+    }
+    return res;
+  }
   Leitor.prototype.blocosDaPagina = function (pg, tc, s, FS) {
     var base = pg.getViewport({ scale: 1 }), escala = 1400 / base.width, vp = pg.getViewport({ scale: escala });
     var cv = document.createElement('canvas'); cv.width = Math.floor(vp.width); cv.height = Math.floor(vp.height);
     var cx = cv.getContext('2d', { willReadFrequently: true });
     cx.fillStyle = '#fff'; cx.fillRect(0, 0, cv.width, cv.height);
     // intent 'print': o desenho segue mesmo com a aba do navegador em segundo plano (o modo de tela espera requestAnimationFrame, que para)
-    return pg.render({ canvasContext: cx, viewport: vp, intent: 'print' }).promise.then(function () {
+    return Promise.all([pg.render({ canvasContext: cx, viewport: vp, intent: 'print' }).promise, pg.getOperatorList().catch(function () { return null; })]).then(function (rr) {
+      var opl = rr[1];
       var W = cv.width, H = cv.height, px = cx.getImageData(0, 0, W, H).data, nitidas = [];
       function rgb(c) { return 'rgb(' + c[0] + ',' + c[1] + ',' + c[2] + ')'; }
       function dist(a, b) { return Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1]) + Math.abs(a[2] - b[2]); }
@@ -1053,6 +1090,7 @@
           if (iniI < cnt.length && run2 * 2 < 90 && gap2 * 2 >= 8 && moldura(cnt.slice(0, run2))) by0 = by0 + iniI * 2;
         }
         x0 = Math.max(0, bx0 - 10); x1 = Math.min(W, bx1 + 10); y0 = Math.max(0, by0 - 10); y1 = Math.min(H, by1 + 10);
+        if (by1 - by0 < (minAlt || 12)) return null;
         var c2 = document.createElement('canvas'); c2.width = x1 - x0; c2.height = y1 - y0;
         c2.getContext('2d').drawImage(cv, x0, y0, x1 - x0, y1 - y0, 0, 0, x1 - x0, y1 - y0);
         recolorir(c2);
@@ -1219,6 +1257,29 @@
         i++;
       }
       emiteTabelas(1e9);
+      // Imagens do PDF (esquemas e mapas mentais gravados como figura) que a regra do vão não pegou — no começo ou no fim da
+      // página, ou com o quadro do vídeo logo abaixo: antes sumiam do modo texto. Entram na ordem, pela posição na página.
+      imagensDaPagina(opl, vp).forEach(function (R) {
+        var w = R[2] - R[0], h = R[3] - R[1];
+        if (w < 60 * escala || h < 40 * escala) return;
+        if (Math.abs(w - h) < 12 * escala && w < 130 * escala) return;
+        if (R[3] < H * 0.08 || R[1] > H * 0.92) return;
+        if (nitidas.some(function (j) {
+          var ix = Math.max(0, Math.min(R[2], j.b[2]) - Math.max(R[0], j.b[0])), iy = Math.max(0, Math.min(R[3], j.b[3]) - Math.max(R[1], j.b[1]));
+          return ix * iy > 0.4 * w * h;
+        })) return;
+        var col = s && (R[0] + R[2]) / 2 / W >= s ? 1 : 0;
+        // imagem com texto por cima: só rótulos curtos ("Direito Interno", "Contrato de trabalho") = esquema, e os rótulos saem do
+        // texto (já estão no recorte); frases (texto que contorna a ilustração, caixa sobre um fundo) = não é figura
+        var sobre = out.filter(function (o) { return o.txt && !o.lixo && o.col === col && o.top != null && (o.top + o.bot) / 2 > R[1] && (o.top + o.bot) / 2 < R[3]; });
+        var rotulos = sobre.every(function (o) { return o.txt.length <= 40; }) && sobre.reduce(function (n, o) { return n + o.txt.length; }, 0) <= 160;
+        if (sobre.length >= 2 && !rotulos) return;
+        var im = recorte(col, R[1], R[3], 60); if (!im) return;
+        if (rotulos) sobre.forEach(function (o) { o.lixo = true; });
+        var k = 0;
+        while (k < out.length && !(out[k].col > col || (out[k].col === col && out[k].top != null && out[k].top >= R[1]))) k++;
+        out.splice(k, 0, { img: im, col: col, top: R[1], bot: R[3] });
+      });
       cv.width = cv.height = 0;
       out = out.filter(function (o) { return !o.lixo && (o.img || o.tabelaCorpo !== undefined || o.txt); });
       // o recorte da análise (1400px de página) fica pixelado na tela do celular: cada figura é desenhada de novo só na sua área, com mais resolução
@@ -1364,6 +1425,22 @@
 
   window.LEITOR = {
     montar: function (el, arq, opts) { var v = new Leitor(el, arq, opts); v.iniciar(); return v; },
+    // monta e guarda o modo texto de um capítulo sem mostrar nada (os próximos dias do Hoje ficam prontos antes de abrir)
+    preparar: function (arq, opts) {
+      opts = opts || {};
+      var lt = new Leitor(document.createElement('div'), arq, opts), k = lt.chaveTexto();
+      VIEWERS.splice(VIEWERS.indexOf(lt), 1);
+      return txLer(k).then(function (c) {
+        if (c && c.h) return;
+        if (TRAB[k]) return TRAB[k].p;
+        return Promise.all([carregarLib(), baixar(arq)]).then(function (r) {
+          return r[0].getDocument({ data: new Uint8Array(r[1].slice(0)) }).promise;
+        }).then(function (doc) {
+          lt.doc = doc; lt.de = Math.max(1, opts.de || 1); lt.ate = Math.min(doc.numPages, opts.ate || doc.numPages);
+          return trabalho(lt).p.then(function () { delete _cache[arq]; doc.destroy(); });
+        });
+      }).catch(function () {});
+    },
     grifosDe: grifosDe, CORES: CORES,
     listarPasta: function (pasta) {
       var q = encodeURIComponent("'" + pasta + "' in parents and trashed=false and mimeType='application/pdf'");
