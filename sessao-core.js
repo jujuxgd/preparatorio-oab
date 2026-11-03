@@ -131,6 +131,8 @@
       // temas do Estratégia trazem a lista dos cartões que valem para eles (fc); sem ela, casa pelo nome
       var doTema = t.fc ? cand.filter(function (c) { return t.fc.indexOf(c.t) >= 0; }) : casam(t.s + ' ' + (SINONIMOS[t.s] || ''));
       if (!doTema.length && !t.fc) doTema = casam((t.q || []).join(' '));
+      // tema com cartões escritos a partir do capítulo do Estratégia: o dia usa só esses (os das Revisões do VDE ficam no Revisar)
+      if (t.fc && ATIVO.cartoes().some(function (c) { return c.d === t.d && c.r === 'E' && t.fc.indexOf(c.t) >= 0; })) doTema = doTema.filter(function (c) { return c.r === 'E'; });
       doTema.slice(0, 15).forEach(poe);
     });
     return { novos: out, feitos: feitos };
@@ -550,7 +552,8 @@
   function cortarAlt(linha, cortar) {
     if (linha.closest('.ss-q').dataset.feita || linha.classList.contains('cortada') === cortar) return;
     linha.classList.toggle('cortada', cortar);
-    linha.querySelector('.ss-alt').disabled = cortar;
+    var a0 = linha.querySelector('.ss-alt'); a0.disabled = cortar;
+    if (cortar && a0.classList.contains('sel')) { a0.classList.remove('sel'); var br = linha.closest('.ss-q').querySelector('[data-responder]'); if (br) br.disabled = true; }
     var tes = linha.querySelector('.ss-tes');
     tes.title = (cortar ? 'Trazer de volta a alternativa ' : 'Descartar a alternativa ') + tes.dataset.corta;
     tes.setAttribute('aria-label', tes.title);
@@ -590,9 +593,9 @@
   var TESOURA = '<svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4 8.12 15.88M14.47 14.48 20 20M8.12 8.12 12 12"/></svg>';
   function htmlQuestao(id, i, g) {
     var q = qpor(id); if (!q) return '';
-    var r = ler(K_RESP, {})[id], gab = (g || []).indexOf(id) >= 0, hoje = respostaDoDia(r);
+    var r = ler(K_RESP, {})[id], hoje = respostaDoDia(r);
     return '<div class="ss-q" data-q="' + id + '"' + (hoje ? ' data-feita="1"' : '') + '><div class="meta">' + (i + 1) + ' · ' + esc(nomeExame(q.exam_number)) +
-      ', questão ' + q.question_number + ' · ' + esc(q.topic || '') + (temasBloco && temasBloco.indexOf('*') < 0 && temasBloco.indexOf(q.topic) < 0 ? ' · <span class="outro">tema já estudado</span>' : '') + (gab ? ' · <span class="gab">do capítulo do Estratégia</span>' : '') +
+      ', questão ' + q.question_number + ' · ' + esc(q.topic || '') + (temasBloco && temasBloco.indexOf('*') < 0 && temasBloco.indexOf(q.topic) < 0 ? ' · <span class="outro">tema já estudado</span>' : '') +
       (r && !hoje ? ' · já respondida antes' : '') + '</div>' +
       '<div class="enun">' + esc(q.statement) + '</div>' +
       ['a', 'b', 'c', 'd'].map(function (k) {
@@ -600,7 +603,7 @@
         return q['alternative_' + k] ? '<div class="ss-linha"><button class="ss-tes" type="button" data-corta="' + L + '" title="Descartar a alternativa ' + L + '" aria-label="Descartar a alternativa ' + L + '">' + TESOURA + '</button>' +
           '<button class="ss-alt' + cls + '" data-l="' + L + '"' + (hoje ? ' disabled' : '') + '><span class="l">' + L +
           '</span><span>' + esc(q['alternative_' + k]) + '</span></button></div>' : '';
-      }).join('') + (hoje ? '' : '<p class="ss-dica-corte">Arraste a alternativa para a esquerda para descartá-la.</p>') + '<div class="fim">' + (hoje ? htmlResultado(q, hoje.ultima_resposta, hoje.ultima_correta) : '') + '</div></div>';
+      }).join('') + (hoje ? '' : '<div class="ss-resp"><button type="button" class="btn btn-primary" data-responder disabled>Responder</button></div><p class="ss-dica-corte">Toque numa alternativa para marcar e depois em Responder. Arraste para a esquerda para descartá-la.</p>') + '<div class="fim">' + (hoje ? htmlResultado(q, hoje.ultima_resposta, hoje.ultima_correta) : '') + '</div></div>';
     return h;
   }
   function htmlResultado(q, letra, certa) {
@@ -777,7 +780,20 @@
     if (tes) { cortarAlt(tes.closest('.ss-linha'), !tes.closest('.ss-linha').classList.contains('cortada')); return; }
     var alt = t.closest('.ss-alt');
     if (alt && alt.closest('[data-arrastou]')) return;
-    if (alt && !alt.disabled) { responderQuestao(alt.closest('.ss-q'), alt.dataset.l); return; }
+    // tocar só marca (dá para trocar ou desmarcar); a resposta conta ao apertar Responder
+    if (alt && !alt.disabled) {
+      var cq0 = alt.closest('.ss-q'), ja = alt.classList.contains('sel');
+      cq0.querySelectorAll('.ss-alt.sel').forEach(function (b) { b.classList.remove('sel'); });
+      if (!ja) alt.classList.add('sel');
+      var br = cq0.querySelector('[data-responder]'); if (br) br.disabled = ja;
+      return;
+    }
+    var bresp = t.closest('[data-responder]');
+    if (bresp && !bresp.disabled) {
+      var cq1 = bresp.closest('.ss-q'), sel = cq1.querySelector('.ss-alt.sel');
+      if (sel) { bresp.parentNode.remove(); var dc = cq1.querySelector('.ss-dica-corte'); if (dc) dc.remove(); responderQuestao(cq1, sel.dataset.l); }
+      return;
+    }
     if (t.closest('[data-expl]')) { var ex = t.closest('.ss-q').querySelector('.ss-expl'); ex.hidden = !ex.hidden; return; }
     if (t.closest('[data-chute]')) {
       var card = t.closest('.ss-q'), q = qpor(card.dataset.q);
