@@ -217,8 +217,8 @@ html.lp-travada,html.lp-travada body{overflow:hidden}
 /* artigo em várias linhas (caput, §, incisos): uma caixa contínua */
 .lp-texto .lp-tx-lei.lei-segue{margin-bottom:0;border-bottom-left-radius:0;border-bottom-right-radius:0;padding-bottom:.35em}
 .lp-texto .lp-tx-lei.lei-cont{margin-top:0;border-top-left-radius:0;border-top-right-radius:0;padding-top:.35em}
-.lp.lp-modo-texto{margin-inline:var(--tx-sang,0px);position:relative}
-.lp.lp-modo-texto.lp-cheia{margin-inline:0}
+.lp.lp-modo-texto .lp-corpo{margin-inline:var(--tx-sang,0px)}
+.lp.lp-modo-texto.lp-cheia .lp-corpo{margin-inline:0}
 .lp-texto .lp-tx-fig{width:min(94%,32rem);margin-inline:auto}
 .lp-texto .lp-tx-fig img{width:100%}
 .lp-texto .lp-tx-fig.grande{width:100%}
