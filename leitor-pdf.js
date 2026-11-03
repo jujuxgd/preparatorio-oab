@@ -173,7 +173,7 @@
     this.ajustesTexto();
     function fecharMenus(exceto) { raiz.querySelectorAll('.lp-menu').forEach(function (m) { if (m !== exceto) m.hidden = true; }); raiz.querySelectorAll('[data-a="mais"],[data-a="ajustes"]').forEach(function (b) { b.classList.toggle('on', !!exceto && b.dataset.a === exceto.dataset.de); }); }
     raiz.querySelector('.lp-menu-mais').dataset.de = 'mais'; raiz.querySelector('.lp-menu-aj').dataset.de = 'ajustes'; raiz.querySelector('.lp-menu-sum').dataset.de = 'sumario';
-    document.addEventListener('click', function (e) { if (!raiz.querySelector('.lp-topo').contains(e.target)) fecharMenus(null); });
+    document.addEventListener('click', function (e) { var tp = raiz.querySelector('.lp-topo'); if (tp && !tp.contains(e.target)) fecharMenus(null); });
     raiz.querySelector('.lp-menu-sum').addEventListener('click', function (e) {
       var a = e.target.closest('[data-sum]'); if (!a) return;
       var h = raiz.querySelectorAll('.lp-texto h3, .lp-texto h4')[+a.dataset.sum];
@@ -522,9 +522,23 @@
     var r = this.raiz, m = r.querySelector('.lp-menu-sum'), b = r.querySelector('.lp-b-sum');
     var hs = r.querySelectorAll('.lp-texto h3, .lp-texto h4');
     b.hidden = hs.length < 2;
-    m.innerHTML = '<div class="lp-sum-tit">Sumário</div>' + Array.prototype.map.call(hs, function (h, i) {
+    var itens = Array.prototype.map.call(hs, function (h, i) {
       return '<button type="button" class="lp-sum-' + h.tagName.toLowerCase() + '" data-sum="' + i + '">' + esc(h.textContent.replace(/\s+/g, ' ').trim()) + '</button>';
     }).join('');
+    m.innerHTML = '<div class="lp-sum-tit">Sumário</div>' + itens;
+    // o mesmo sumário, visível no começo do texto (fora de .lp-texto: a posição salva conta os blocos do texto)
+    var tx = r.querySelector('.lp-texto'), velho = r.querySelector('.lp-tx-sumario');
+    if (velho) velho.remove();
+    if (!tx || hs.length < 2) return;
+    var d = document.createElement('details'); d.className = 'lp-tx-sumario';
+    d.innerHTML = '<summary>☰ Sumário do capítulo <small>' + hs.length + ' tópicos</small></summary><div class="lp-tx-sum-lista">' + itens + '</div>';
+    tx.parentNode.insertBefore(d, tx);
+    var self = this;
+    d.addEventListener('click', function (e) {
+      var a2 = e.target.closest('[data-sum]'); if (!a2) return;
+      var h = r.querySelectorAll('.lp-texto h3, .lp-texto h4')[+a2.dataset.sum];
+      d.open = false; if (h) self.rolarAte(h, 4);
+    });
   };
   // Onde o modo texto estava (bloco do topo da tela, por arquivo e trecho, só neste aparelho): volta nele ao reabrir o site
   var K_TXPOS = 'oab_lp_txpos';
@@ -679,9 +693,11 @@
           }
         }
       })();
-      // página de índice (3 ou mais linhas com pontilhado até o número da página) não é conteúdo
+      // página de índice (3 ou mais linhas com pontilhado até o número da página, ou que abre com o título "Índice"/"Sumário") não é conteúdo
       pags.forEach(function (bl, jj) {
         if (bl.filter(function (l) { return l.txt && /(?:\.\s?){6,}|…{3,}/.test(l.txt); }).length >= 3) pags[jj] = [];
+        var t1 = bl.filter(function (l) { return l.txt && !l.rodape && !(conta[chave(l)] >= rep); })[0];
+        if (jj <= 2 && t1 && /^(Índice|Sumário)$/i.test(t1.txt.trim())) pags[jj] = [];
       });
       // sequência de 3 a 8 linhas bem curtas e seguidas (rótulos de um quadro, ex.: lista de princípios) = lista, não vários títulos
       pags.forEach(function (bl) {

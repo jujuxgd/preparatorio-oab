@@ -345,6 +345,12 @@ salvo; a sessão nova é a rotina do dia e aparece como cartão no topo do Hoje.
   flashcards concluídos e bloco de questões todo respondido marcam o item sozinhos. Estilos em `sessao.css`.
   Questões sorteadas em `oab_ativo_dia` (só do aparelho; `{dias: {data: {n, sel}}}`, últimas 21 datas — desde 13/10/2026; questão respondida a partir da data volta primeiro no sorteio, então outro aparelho mostra as mesmas já feitas); quantidade por tópico em
   `oab_ativo_questoes_por_topico` (padrão 10).
+  **03/11/2026 (pedido de Julia — "o Estratégia vai ser meu material base"):** cada tema do Estratégia tem `qe` no calendário = questões do
+  banco que aparecem no próprio capítulo Resumido (casadas pelo enunciado, trigramas ≥ 50%, mesma matéria; 231 em 53 dos 70 temas; ~135 questões
+  dos capítulos são de exames que o banco não tem — 1º–21º, 34º–36º — e ficaram de fora). Elas vêm primeiro no bloco do tema ("do capítulo do
+  Estratégia"), mesmo com outro assunto do banco; depois o resto do tema, das provas mais recentes (38º+, comentadas pelo Estratégia) para as
+  antigas. `g` (Gabaritaço) não prioriza mais. O sorteio salvo usa a chave `e:t<i>` (o de antes fica de lado); o item do checklist continua `t<i>`.
+  O checklist não tem mais link para o Gabaritaço (a linha discreta do Gabaritaço no Conteúdo continua).
   **22/10/2026 (escolha de Julia):** tema com menos questões no banco que o limite é completado com questões de outros tópicos
   da mesma matéria **já estudados** (dias anteriores marcados "Estudei hoje" ou o próprio dia; `topicosEstudados`), marcadas "tema já
   estudado"; sem tópico estudado, fica só com as do tema.
@@ -521,7 +527,9 @@ Prova prático-profissional do OAB 48 em **28/02/2027** (cronograma da OAB). Jul
   `imagensDaPagina` lê da lista de operações do PDF.js onde cada imagem foi pintada (≥ 60×40pt, sem QR, fora de cabeçalho/rodapé, não coberta por
   outro recorte) e a recorta na ordem da página; imagem com só rótulos curtos por cima vira figura e os rótulos saem do texto; com frases por
   cima, não. `divisao()` não divide mais a página quando uma linha atravessa o vão com só um espaço (página com pouco texto e esquemas parecia
-  ter duas colunas). Sobrou 1 imagem fora (ilustração com o texto contornando, em 2. Aspectos Introdutórios). `TXV` = 'tx3'.
+  ter duas colunas). Sobraram 2 imagens fora (círculos ilustrativos com o texto contornando, em 2. Aspectos Introdutórios p. 6). Página que abre com "Índice"/"Sumário" (até a 3ª) sai inteira. `TXV` = 'tx3'.
+  **Sumário visível (03/11/2026):** além do ☰ da barra, o modo texto abre com um cartão `<details class="lp-tx-sumario">` (fora de
+  `.lp-texto`, para não mudar a contagem de blocos da posição salva) — Julia não tinha visto o ☰.
   **Textos prontos antes (03/11/2026):** quem usa o modo texto (`oab_lp_modo` = 'texto') tem os capítulos do dia aberto e dos 3 dias seguintes
   montados em segundo plano, um por vez, 20 s depois de abrir o Conteúdo (`prepararProximos` em `sessao-core.js` → `LEITOR.preparar(arq)`, leitor
   sem tela que usa a mesma fila `trabalho()`). Guardados: últimos 60 (`TX_MAX`; ~0,03–2,8 MB cada por causa das figuras).
