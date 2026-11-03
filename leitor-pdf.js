@@ -143,6 +143,7 @@
       '<span class="lp-info">Carregando…</span>' +
       '<span class="lp-acoes">' +
         '<button type="button" class="lp-i lp-so-pdf" data-a="lista" title="Seus grifos neste PDF" aria-label="Grifos">✎<b class="lp-ng">0</b></button>' +
+        '<button type="button" class="lp-i lp-so-texto lp-b-sum" data-a="sumario" title="Sumário do capítulo" aria-label="Sumário" hidden>☰</button>' +
         '<button type="button" class="lp-i lp-so-texto" data-a="ajustes" title="Letra, espaço, margem e fundo" aria-label="Ajustes do texto">Aa</button>' +
         '<button type="button" class="lp-i" data-a="cheia" title="Tela cheia" aria-label="Tela cheia">⛶</button>' +
         '<button type="button" class="lp-i" data-a="mais" title="Mais opções" aria-label="Mais opções">⋯</button>' +
@@ -157,6 +158,7 @@
         '<a href="https://drive.google.com/file/d/' + this.arq + '/view" target="_blank" rel="noopener"><span>Abrir no Drive</span></a>' +
       '</div>' +
       '<div class="lp-menu lp-menu-aj" hidden></div>' +
+      '<div class="lp-menu lp-menu-sum" hidden></div>' +
       '</div>' +
       '<div class="lp-corpo"><div class="lp-paginas"></div><aside class="lp-lista"></aside></div>';
     if (this.opts.caixa) { raiz.classList.add('lp-caixa'); this.opts.rolagem = raiz.querySelector('.lp-corpo'); }
@@ -170,8 +172,13 @@
     marcarModo();
     this.ajustesTexto();
     function fecharMenus(exceto) { raiz.querySelectorAll('.lp-menu').forEach(function (m) { if (m !== exceto) m.hidden = true; }); raiz.querySelectorAll('[data-a="mais"],[data-a="ajustes"]').forEach(function (b) { b.classList.toggle('on', !!exceto && b.dataset.a === exceto.dataset.de); }); }
-    raiz.querySelector('.lp-menu-mais').dataset.de = 'mais'; raiz.querySelector('.lp-menu-aj').dataset.de = 'ajustes';
+    raiz.querySelector('.lp-menu-mais').dataset.de = 'mais'; raiz.querySelector('.lp-menu-aj').dataset.de = 'ajustes'; raiz.querySelector('.lp-menu-sum').dataset.de = 'sumario';
     document.addEventListener('click', function (e) { if (!raiz.querySelector('.lp-topo').contains(e.target)) fecharMenus(null); });
+    raiz.querySelector('.lp-menu-sum').addEventListener('click', function (e) {
+      var a = e.target.closest('[data-sum]'); if (!a) return;
+      var h = raiz.querySelectorAll('.lp-texto h3, .lp-texto h4')[+a.dataset.sum];
+      fecharMenus(null); if (h) self.rolarAte(h, 4);
+    });
     var zoomSalvo = parseFloat(localStorage.getItem('oab_lp_zoom4'));
     this.zoom = zoomSalvo >= 0.6 && zoomSalvo <= 3 ? zoomSalvo : 1;
     function mostrarZoom() { raiz.querySelector('.lp-zoom').textContent = Math.round(self.zoom * 100) + '%'; }
@@ -185,9 +192,11 @@
       var x = e.target.closest('[data-extra]');
       if (x) { fecharMenus(null); self.opts.extras[+x.dataset.extra].fn(); return; }
       var b = e.target.closest('[data-a]'); if (!b) return;
-      if (b.dataset.a === 'mais' || b.dataset.a === 'ajustes') {
-        var m = raiz.querySelector(b.dataset.a === 'mais' ? '.lp-menu-mais' : '.lp-menu-aj'), abrir = m.hidden;
-        fecharMenus(abrir ? m : null); m.hidden = !abrir; return;
+      if (b.dataset.a === 'mais' || b.dataset.a === 'ajustes' || b.dataset.a === 'sumario') {
+        var m = raiz.querySelector('.lp-menu-' + { mais: 'mais', ajustes: 'aj', sumario: 'sum' }[b.dataset.a]), abrir = m.hidden;
+        fecharMenus(abrir ? m : null); m.hidden = !abrir;
+        if (abrir && b.dataset.a === 'sumario') { var at = m.querySelector('.atual'); if (at) at.scrollIntoView({ block: 'center' }); }
+        return;
       }
       if (b.dataset.a === 'area') { self.area = !self.area; b.classList.toggle('on', self.area); raiz.classList.toggle('modo-area', self.area); fecharMenus(null); }
       if ((b.dataset.a === 'texto' && !self.texto) || (b.dataset.a === 'pdf' && self.texto)) {
@@ -366,7 +375,7 @@
     function guardar() {
       clearTimeout(t);
       t = setTimeout(function () {
-        if (!self.raiz.isConnected) return;
+        if (!self.raiz.isConnected || self.texto) return;
         try { pos = JSON.parse(localStorage.getItem(K_POS)) || {}; } catch (e) { pos = {}; }
         var n = self.paginaAtual(); if (n == null) return;
         pos[self.chavePos()] = n;
@@ -488,6 +497,72 @@
   Leitor.prototype.porTexto = function (alvo, html) {
     alvo.innerHTML = html;
     alvo.querySelectorAll('.lp-tx-fig').forEach(function (f) { f.addEventListener('click', function () { f.classList.toggle('grande'); }); });
+    this.sumario();
+    this.voltarTexto();
+  };
+  Leitor.prototype.rolarAte = function (el, folga) {
+    var rol = this.opts.rolagem;
+    if (rol) rol.scrollTop += el.getBoundingClientRect().top - rol.getBoundingClientRect().top - folga;
+    else window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - 90 - folga);
+  };
+  // Sumário do modo texto: os títulos do capítulo (h3 e h4) num menu ☰ da barra, com a seção em que se está marcada
+  Leitor.prototype.sumario = function () {
+    var r = this.raiz, m = r.querySelector('.lp-menu-sum'), b = r.querySelector('.lp-b-sum');
+    var hs = r.querySelectorAll('.lp-texto h3, .lp-texto h4');
+    b.hidden = hs.length < 2;
+    m.innerHTML = '<div class="lp-sum-tit">Sumário</div>' + Array.prototype.map.call(hs, function (h, i) {
+      return '<button type="button" class="lp-sum-' + h.tagName.toLowerCase() + '" data-sum="' + i + '">' + esc(h.textContent.replace(/\s+/g, ' ').trim()) + '</button>';
+    }).join('');
+  };
+  // Onde o modo texto estava (bloco do topo da tela, por arquivo e trecho, só neste aparelho): volta nele ao reabrir o site
+  var K_TXPOS = 'oab_lp_txpos';
+  Leitor.prototype.chaveTxPos = function () { return this.arq + '|' + (this.opts.de || 1) + '|' + (this.opts.ate || 0); };
+  Leitor.prototype.refTopo = function () {
+    var rol = this.opts.rolagem;
+    if (rol) return rol.getBoundingClientRect().top;
+    var tn = document.querySelector('.tn'); return tn ? Math.max(0, tn.getBoundingClientRect().bottom) : 0;
+  };
+  Leitor.prototype.blocoAtual = function () {
+    var tx = this.raiz.querySelector('.lp-texto'); if (!tx || !tx.offsetParent) return -1;
+    var topo = this.refTopo() + 10, fs = tx.children;
+    for (var i = 0; i < fs.length; i++) if (fs[i].getBoundingClientRect().bottom > topo) return i;
+    return fs.length - 1;
+  };
+  Leitor.prototype.marcarSecao = function (i) {
+    var tx = this.raiz.querySelector('.lp-texto'), m = this.raiz.querySelector('.lp-menu-sum'); if (!tx || !m) return;
+    var hs = tx.querySelectorAll('h3, h4'), at = -1, topo = this.refTopo() + 40;
+    for (var j = 0; j < hs.length; j++) { if (hs[j].getBoundingClientRect().top <= topo) at = j; else break; }
+    m.querySelectorAll('[data-sum]').forEach(function (x) { x.classList.toggle('atual', +x.dataset.sum === Math.max(0, at)); });
+  };
+  Leitor.prototype.voltarTexto = function () {
+    var self = this, pos = {}, k = this.chaveTxPos(), mexeu = false;
+    try { pos = JSON.parse(localStorage.getItem(K_TXPOS)) || {}; } catch (e) {}
+    var alvo = pos[k] && pos[k].i;
+    function ir() {
+      if (mexeu || !alvo) return;
+      var tx = self.raiz.querySelector('.lp-texto'), el = tx && tx.children[alvo];
+      if (el && tx.offsetParent) self.rolarAte(el, 8);
+    }
+    requestAnimationFrame(ir); setTimeout(ir, 450);
+    if (this._txOuv) return;
+    this._txOuv = true;
+    ['wheel', 'touchstart', 'keydown'].forEach(function (ev) { self.raiz.addEventListener(ev, function () { mexeu = true; }, { passive: true }); });
+    var t;
+    function guardar() {
+      if (!self.texto || !self.raiz.isConnected) return;
+      self.marcarSecao();
+      clearTimeout(t);
+      t = setTimeout(function () {
+        var i = self.blocoAtual(); if (i < 0) return;
+        try { pos = JSON.parse(localStorage.getItem(K_TXPOS)) || {}; } catch (e) { pos = {}; }
+        pos[k] = { i: i, u: Date.now() };
+        var ks = Object.keys(pos).sort(function (a, b) { return (pos[b].u || 0) - (pos[a].u || 0); });
+        ks.slice(40).forEach(function (x) { delete pos[x]; });
+        try { localStorage.setItem(K_TXPOS, JSON.stringify(pos)); } catch (e) {}
+      }, 400);
+    }
+    this.raiz.querySelector('.lp-corpo').addEventListener('scroll', guardar, { passive: true });
+    window.addEventListener('scroll', guardar, { passive: true });
   };
   function txApagar(k) { return txDb().then(function (db) { if (db) try { db.transaction('tx', 'readwrite').objectStore('tx').delete(k); } catch (e) {} }); }
   function txParcial(k, v) { return txDb().then(function (db) { if (db) try { db.transaction('tx', 'readwrite').objectStore('tx').put(v, k); } catch (e) {} }); }

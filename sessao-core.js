@@ -202,6 +202,7 @@
   function rotulo(n) { return n >= 1001 ? 'Estratégia' : 'Dia ' + n + ' do VDE'; }
   // Capítulos do Estratégia: um leitor por vez; versão resumida (padrão) ou completa, escolha só do aparelho.
   var K_VER = 'oab_est_ver';
+  var K_CAP = 'oab_est_cap'; // capítulo aberto por tema (só do aparelho): ao reabrir o site volta nele
   function versao() { try { return localStorage.getItem(K_VER) === 'x' ? 'x' : 'r'; } catch (e) { return 'r'; } }
   function htmlEstrategia(p) {
     var c0 = p.e[0];
@@ -214,7 +215,9 @@
   // um leitor por vez; a versão completa fica no menu ⋯ do leitor
   function ligarEstrategia(el) {
     el.querySelectorAll('.est-bloco').forEach(function (b, bi) {
-      var p = pdfsDoDia().filter(function (x) { return x.e; })[bi], cap = 0;
+      var p = pdfsDoDia().filter(function (x) { return x.e; })[bi], caps = {};
+      try { caps = JSON.parse(localStorage.getItem(K_CAP)) || {}; } catch (e) {}
+      var cap = Math.min(p.e.length - 1, Math.max(0, +caps[p.n] || 0));
       function abrir() {
         var c = p.e[cap], v = versao(), id = c[v], outra = v === 'r' ? 'x' : 'r';
         b.querySelectorAll('[data-est-cap]').forEach(function (x) { x.classList.toggle('on', +x.dataset.estCap === cap); });
@@ -229,6 +232,7 @@
       b.addEventListener('click', function (ev) {
         var a = ev.target.closest('[data-est-cap]'); if (!a) return;
         cap = +a.dataset.estCap; abrir();
+        try { var cs = JSON.parse(localStorage.getItem(K_CAP)) || {}; cs[p.n] = cap; localStorage.setItem(K_CAP, JSON.stringify(cs)); } catch (e) {}
       });
       abrir();
     });
