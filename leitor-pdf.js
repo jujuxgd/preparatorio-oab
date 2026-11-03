@@ -284,6 +284,7 @@
       sang = Math.max(0, Math.min(40, livre));
     }
     r.style.setProperty('--tx-sang', -sang + 'px');
+    r.classList.toggle('lp-sangra', sang > 0);
   };
   Leitor.prototype.ajustesTexto = function () {
     var self = this, aj = this.raiz.querySelector('.lp-menu-aj');

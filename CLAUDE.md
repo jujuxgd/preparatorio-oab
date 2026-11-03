@@ -540,6 +540,11 @@ Prova prático-profissional do OAB 48 em **28/02/2027** (cronograma da OAB). Jul
   padding de `.lp-corpo` no modo texto). Na tela cheia: margens de 20px (ou a área segura), coluna de no máximo 40rem, barra de cima com fundo e
   fio embaixo; com fundo "noite", a tela toda fica na cor do texto. No Hoje, "Marcar como estudado" (dia atrasado, classe `longo`) vai para a
   linha de baixo do cronômetro no celular — estourava o cartão.
+  **Margem única (03/11/2026, 2ª rodada da tela cheia):** na tela cheia a margem do texto somava os 20px fixos com o deslizador de margem do Aa
+  (com o deslizador em ~2,5 o texto ficava a ~60px da borda e o sumário a 20px). Agora é uma só: `--tx-m = max(20px, --tx-pad)`, igual para o
+  texto (`.lp-texto`) e para o sumário. Fora da tela cheia o sumário também segue `--tx-pad`. Com margem 0 no celular (texto avançando sobre o
+  respiro do cartão, classe `lp-sangra`) o quadro do cartão (`.ss-bloco`, via `:has`) fica transparente — as bordas dele passavam por trás do texto.
+  O título na barra da tela cheia é menor (.98rem) e a barra alinha ao centro.
   **Início no celular (03/11/2026, pedido de Julia — "esse quadrado não tá bom"):** só layout, visual igual. No cartão "Foco de hoje" (≤ 640px, fim de
   `home.css`): cada tema numa linha (`.tl-tema`, sem o "·" solto no começo da linha), "Abrir conteúdo do dia" na largura toda, Revisar /
   Calendário / Apostila em 3 caixas iguais e o anel de progresso pequeno ao lado do texto (o cartão passou de 621 para 454px no iPhone 13).
