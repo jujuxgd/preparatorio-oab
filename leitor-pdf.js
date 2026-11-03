@@ -211,6 +211,7 @@
     var rapido = this.texto ? txLer(this.chaveTexto()).then(function (c) {
       if (!c || !c.h || !self.texto || self.doc) return;
       self.porTexto(raiz.querySelector('.lp-paginas'), c.h); self._txRapido = true; self.voltarPosicao();
+      if (c.c !== corAtual()) self._txRefazer = true;
     }).catch(function () {}) : Promise.resolve();
     return Promise.all([carregarLib(), baixar(this.arq), rapido]).then(function (r) {
       return r[0].getDocument({ data: new Uint8Array(r[1].slice(0)) }).promise;
@@ -218,7 +219,7 @@
       self.doc = doc;
       self.de = Math.max(1, self.opts.de || 1); self.ate = Math.min(doc.numPages, self.opts.ate || doc.numPages);
       raiz.querySelector('.lp-info').textContent = self.opts.de ? 'p. ' + self.de + '–' + self.ate : doc.numPages + ' p.';
-      if (self._txRapido && self.texto) { self._largura = self.largura(); return self.medirMargem(); }
+      if (self._txRapido && self.texto) { self._largura = self.largura(); return self.medirMargem().then(function () { if (self._txRefazer) self.prepararTexto(true); }); }
       return self.medirMargem().then(function () { return self.renderizar(); }).then(function () { self.voltarPosicao(); if (!self.texto) self.prepararTexto(); });
     }).then(function () {
       var rz; window.addEventListener('resize', function () { clearTimeout(rz); rz = setTimeout(function () { if (Math.abs(self._largura - self.largura()) > 40) self.renderizar(); }, 300); });
@@ -253,18 +254,24 @@
     r.style.setProperty('--tx-tam', (TX_TAM[v.t] || 1) + 'rem');
     r.style.setProperty('--tx-lin', TX_LIN[v.l] || 1.7);
     r.style.setProperty('--tx-pad', Math.max(0, mp) + 'rem'); r.style.setProperty('--tx-larg', 'none');
-    // abaixo de zero o texto avança sobre o respiro do cartão em volta, até perto da borda da tela
-    var sang = 0;
-    if (mp < 0 && r.parentElement) {
-      var bb = r.parentElement.getBoundingClientRect(), livre = Math.min(bb.left, (document.documentElement.clientWidth || innerWidth) - bb.right) - 4;
-      sang = Math.max(0, Math.min(-mp * 16, livre));
-    }
-    r.style.setProperty('--tx-sang', -sang + 'px');
+    this._mp = mp; this.sangrar();
+    if (!this._ro && window.ResizeObserver) { var self = this; this._ro = new ResizeObserver(function () { self.sangrar(); }); this._ro.observe(r); }
     r.dataset.txFundo = v.f; r.dataset.txFonte = v.s;
     var aj = r.querySelector('.lp-menu-aj'); if (!aj) return;
     aj.querySelectorAll('[data-tx]').forEach(function (b) { var p = b.dataset.tx.split(':'); b.classList.toggle('on', String(v[p[0]]) === p[1]); });
     var rg = aj.querySelector('[data-tx-m]'); if (rg && document.activeElement !== rg) rg.value = mp;
     aj.querySelector('[data-tx-t="-"]').disabled = v.t <= 0; aj.querySelector('[data-tx-t="+"]').disabled = v.t >= TX_TAM.length - 1;
+  };
+  // margem abaixo de zero: só a área do texto avança sobre o respiro do cartão em volta, até 4px da borda da tela
+  // (a barra com o título fica onde está); medido quando o leitor aparece, porque numa aba escondida a largura é 0
+  Leitor.prototype.sangrar = function () {
+    var r = this.raiz, mp = this._mp || 0, bb = r.getBoundingClientRect(), sang = 0;
+    if (mp < 0) {
+      if (!bb.width) return;
+      var livre = Math.min(bb.left, (document.documentElement.clientWidth || innerWidth) - bb.right) - 4;
+      sang = Math.max(0, Math.min(-mp * 16, livre));
+    }
+    r.style.setProperty('--tx-sang', -sang + 'px');
   };
   Leitor.prototype.ajustesTexto = function () {
     var self = this, aj = this.raiz.querySelector('.lp-menu-aj');
@@ -465,16 +472,16 @@
     return txDb().then(function (db) {
       if (!db) return;
       try {
-        var st = db.transaction('tx', 'readwrite').objectStore('tx'); st.put({ h: html, u: Date.now() }, k);
+        var st = db.transaction('tx', 'readwrite').objectStore('tx'); st.put({ h: html, u: Date.now(), c: corAtual() }, k);
         var todos = [], cur = st.openCursor();
         cur.onsuccess = function () { var c = cur.result; if (c) { todos.push([c.key, c.value.u || 0]); c.continue(); } else if (todos.length > TX_MAX) { todos.sort(function (a, b) { return a[1] - b[1]; }).slice(0, todos.length - TX_MAX).forEach(function (t) { st.delete(t[0]); }); } };
       } catch (e) {}
     });
   }
-  Leitor.prototype.chaveTexto = function () {
-    var cor = (getComputedStyle(document.documentElement).getPropertyValue('--rose-600') || '').trim();
-    return [TXV, this.arq, this.opts.de || 1, this.opts.ate || 0, cor].join('|');
-  };
+  // a cor do Perfil não entra na chave: ela chega depois do login/sincronização e a chave nunca batia.
+  // Texto guardado com outra cor aparece assim mesmo e é refeito em segundo plano.
+  function corAtual() { return (getComputedStyle(document.documentElement).getPropertyValue('--rose-600') || '').trim().toLowerCase(); }
+  Leitor.prototype.chaveTexto = function () { return [TXV, this.arq, this.opts.de || 1, this.opts.ate || 0].join('|'); };
   Leitor.prototype.porTexto = function (alvo, html) {
     alvo.innerHTML = html;
     alvo.querySelectorAll('.lp-tx-fig').forEach(function (f) { f.addEventListener('click', function () { f.classList.toggle('grande'); }); });
@@ -482,12 +489,14 @@
   Leitor.prototype.renderTexto = function (alvo) {
     var self = this, k = this.chaveTexto(), vez = this._vez = (this._vez || 0) + 1;
     alvo.innerHTML = '<p class="lp-vazio">Montando o texto…</p>';
-    var espera = this._fundo || Promise.resolve();
+    var espera = (this._fundoMontando && this._fundo) || Promise.resolve();
     return espera.then(function () { return txLer(k); }).then(function (c) {
       if (vez !== self._vez) return;
-      if (c && c.h) { self.porTexto(alvo, c.h); return; }
-      var tmp = document.createElement('div');
-      return self.montarTexto(tmp, function () { return vez === self._vez; }).then(function (ok) {
+      if (c && c.h) { self.porTexto(alvo, c.h); if (c.c !== corAtual()) self.prepararTexto(true); return; }
+      var tmp = document.createElement('div'), vivo = function () { return vez === self._vez; };
+      var av = alvo.querySelector('.lp-vazio');
+      vivo.aviso = function (i, t) { if (av) av.textContent = 'Montando o texto… página ' + i + ' de ' + t + ' (só na primeira vez)'; };
+      return self.montarTexto(tmp, vivo).then(function (ok) {
         if (!ok || vez !== self._vez) return;
         self.porTexto(alvo, tmp.innerHTML);
         if (tmp.querySelector('.lp-texto')) txGravar(k, tmp.innerHTML);
@@ -495,17 +504,18 @@
     });
   };
   // Lendo o PDF, o texto vai sendo montado em segundo plano: na hora de "Ler como texto" ele já está pronto
-  Leitor.prototype.prepararTexto = function () {
+  Leitor.prototype.prepararTexto = function (refazer) {
     var self = this;
-    if (this.opts.semTexto || this._fundo || !this.doc) return;
-    var k = this.chaveTexto();
+    if (this.opts.semTexto || this._fundoAtivo || !this.doc) return;
+    var k = this.chaveTexto(); this._fundoAtivo = true;
     this._fundo = new Promise(function (ok) { setTimeout(ok, 4000); }).then(function () { return txLer(k); }).then(function (c) {
-      if (c || !self.raiz.isConnected) return;
+      if ((c && (!refazer || c.c === corAtual())) || !self.raiz.isConnected || (self.texto && !refazer)) return;
+      self._fundoMontando = true;
       var tmp = document.createElement('div');
       return self.montarTexto(tmp, function () { return self.raiz.isConnected; }).then(function (ok) {
         if (ok && tmp.querySelector('.lp-texto')) return txGravar(k, tmp.innerHTML);
       });
-    }).catch(function () {}).then(function () { self._fundo = Promise.resolve(); });
+    }).catch(function () {}).then(function () { self._fundo = null; self._fundoAtivo = self._fundoMontando = false; });
   };
   Leitor.prototype.montarTexto = function (alvo, vivo) {
     var self = this, doc = this.doc, de = this.de || 1, ate = this.ate || doc.numPages;
@@ -515,6 +525,7 @@
       if (!vivo()) return null;
       if (n > ate) return Promise.resolve();
       var num = n++;
+      if (vivo.aviso) vivo.aviso(num - de + 1, ate - de + 1);
       return doc.getPage(num).then(function (pg) {
         return Promise.all([pg.getTextContent(), pg.getOperatorList(), self.divisao(pg, num)]).then(function (r) {
           return self.blocosDaPagina(pg, r[0], r[2], FS);
