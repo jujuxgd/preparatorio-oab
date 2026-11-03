@@ -536,6 +536,10 @@ Prova prático-profissional do OAB 48 em **28/02/2027** (cronograma da OAB). Jul
   ter duas colunas). Sobraram 2 imagens fora (círculos ilustrativos com o texto contornando, em 2. Aspectos Introdutórios p. 6). Página que abre com "Índice"/"Sumário" (até a 3ª) sai inteira. `TXV` = 'tx3'.
   **Sumário visível (03/11/2026):** além do ☰ da barra, o modo texto abre com um cartão `<details class="lp-tx-sumario">` (fora de
   `.lp-texto`, para não mudar a contagem de blocos da posição salva) — Julia não tinha visto o ☰.
+  **Tela cheia do modo texto (03/11/2026, pedido de Julia — "muito feia no iPhone"):** o texto encostava na borda (a caixa do Hoje zera o
+  padding de `.lp-corpo` no modo texto). Na tela cheia: margens de 20px (ou a área segura), coluna de no máximo 40rem, barra de cima com fundo e
+  fio embaixo; com fundo "noite", a tela toda fica na cor do texto. No Hoje, "Marcar como estudado" (dia atrasado, classe `longo`) vai para a
+  linha de baixo do cronômetro no celular — estourava o cartão.
   **Textos prontos antes (03/11/2026):** quem usa o modo texto (`oab_lp_modo` = 'texto') tem os capítulos do dia aberto e dos 3 dias seguintes
   montados em segundo plano, um por vez, 20 s depois de abrir o Conteúdo (`prepararProximos` em `sessao-core.js` → `LEITOR.preparar(arq)`, leitor
   sem tela que usa a mesma fila `trabalho()`). Guardados: últimos 60 (`TX_MAX`; ~0,03–2,8 MB cada por causa das figuras).

@@ -246,3 +246,11 @@ html.lp-travada,html.lp-travada body{overflow:hidden}
 .lp-tx-sum-lista>button{display:block;width:100%;text-align:left;border:0;background:none;color:var(--ink);cursor:pointer;border-radius:9px;font:500 .86rem/1.35 Inter,sans-serif;padding:.45rem .6rem}
 .lp-tx-sum-lista>button.lp-sum-h4{font-weight:400;font-size:.82rem;color:var(--ink-soft,var(--ink));padding-left:1.4rem}
 .lp-tx-sum-lista>button:hover{background:var(--bg-soft,var(--bg))}
+/* tela cheia do modo texto (celular): margens de leitura, barra separada do texto, fundo do texto na tela toda */
+.lp.lp-cheia.lp-modo-texto .lp-topo{padding:.55rem max(16px,env(safe-area-inset-left)) .55rem max(16px,env(safe-area-inset-left));border-bottom:1px solid var(--line);background:var(--paper)}
+.lp.lp-cheia.lp-modo-texto .lp-corpo{padding:.4rem max(20px,env(safe-area-inset-right)) calc(28px + env(safe-area-inset-bottom)) max(20px,env(safe-area-inset-left))}
+.lp.lp-cheia.lp-modo-texto .lp-paginas{max-width:40rem;margin:0 auto}
+.lp.lp-cheia.lp-modo-texto .lp-tx-sumario{margin-top:.8rem}
+.lp.lp-cheia[data-tx-fundo="noite"]{background:#1e1b1a}
+.lp.lp-cheia[data-tx-fundo="noite"] .lp-topo{background:#1e1b1a;border-color:rgba(255,255,255,.08)}
+.lp.lp-cheia[data-tx-fundo="noite"] .lp-texto{border-radius:0;padding-left:0;padding-right:0}

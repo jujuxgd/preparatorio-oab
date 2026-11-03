@@ -71,6 +71,8 @@ body.hoje .day-footer>div:last-child{opacity:.9}
  body.hoje .pomo-btn-main{white-space:nowrap;padding:.4rem .75rem!important}
  body.hoje .pomodoro{gap:.5rem!important}
  body.hoje .day-hero .btn-estudei{width:auto;justify-self:end;padding:.6rem .85rem}
+ /* "Marcar como estudado" (dia atrasado) não cabe ao lado do cronômetro: vai para a linha de baixo */
+ body.hoje .day-hero .btn-estudei.longo{grid-column:1/-1;width:100%;justify-self:stretch}
 }
 @media(max-width:385px){
  body.hoje .day-hero{grid-template-columns:1fr!important}
