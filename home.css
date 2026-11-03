@@ -83,6 +83,24 @@ body.home .hero { display: none !important; }
   body.home .today-card { padding: 1.5rem 1.3rem !important; }
   .tl-marks { font-size: .62rem; }
 }
+/* celular: cada tema numa linha, botões alinhados e o anel de progresso compacto ao lado do texto */
+@media (max-width: 640px) {
+  body.home .today-card { padding: 1.3rem 1.1rem !important; gap: 1.2rem; }
+  body.home .today-tag { margin-bottom: .7rem !important; }
+  body.home .today-card h3 { font-size: 1.3rem !important; margin-bottom: .6rem !important; }
+  body.home .today-card h3 .tl-tema { display: block; }
+  body.home .today-card h3 .tl-tema + .tl-sep + .tl-tema { margin-top: .25rem; }
+  body.home .today-card h3 .tl-sep { display: none; }
+  body.home .today-card .subject { letter-spacing: 0 !important; font-size: .84rem !important; margin-bottom: .9rem !important; line-height: 1.5; }
+  body.home .today-stats { margin-bottom: 1.1rem !important; }
+  body.home .today-card-footer { display: grid; grid-template-columns: repeat(3, 1fr); gap: .5rem; align-items: stretch; }
+  body.home .today-card-footer .btn-primary { grid-column: 1 / -1; width: 100%; justify-content: center; text-align: center; padding: .85rem 1rem; }
+  body.home .today-card-footer .btn-ghost { display: flex; align-items: center; justify-content: center; text-align: center; min-height: 44px; line-height: 1.2; font-size: .78rem; padding: .5rem .3rem !important; border: 1px solid var(--line-soft) !important; border-radius: 12px !important; }
+  body.home .home-ring { display: flex; align-items: center; gap: 1rem; text-align: left; padding-top: 1.1rem; border-top: 1px solid var(--line-soft); }
+  body.home .home-ring-fig { width: 76px; height: 76px; margin: 0; flex-shrink: 0; }
+  body.home .home-ring-c b { font-size: 1.15rem; }
+  body.home .home-ring-t { font-size: .85rem; }
+}
 @media (prefers-reduced-motion: reduce) {
   .tl-fill, .tl-dot, .home-ring-fg { transition: none !important; }
 }

@@ -540,6 +540,9 @@ Prova prático-profissional do OAB 48 em **28/02/2027** (cronograma da OAB). Jul
   padding de `.lp-corpo` no modo texto). Na tela cheia: margens de 20px (ou a área segura), coluna de no máximo 40rem, barra de cima com fundo e
   fio embaixo; com fundo "noite", a tela toda fica na cor do texto. No Hoje, "Marcar como estudado" (dia atrasado, classe `longo`) vai para a
   linha de baixo do cronômetro no celular — estourava o cartão.
+  **Início no celular (03/11/2026, pedido de Julia — "esse quadrado não tá bom"):** só layout, visual igual. No cartão "Foco de hoje" (≤ 640px, fim de
+  `home.css`): cada tema numa linha (`.tl-tema`, sem o "·" solto no começo da linha), "Abrir conteúdo do dia" na largura toda, Revisar /
+  Calendário / Apostila em 3 caixas iguais e o anel de progresso pequeno ao lado do texto (o cartão passou de 621 para 454px no iPhone 13).
   **Textos prontos antes (03/11/2026):** quem usa o modo texto (`oab_lp_modo` = 'texto') tem os capítulos do dia aberto e dos 3 dias seguintes
   montados em segundo plano, um por vez, 20 s depois de abrir o Conteúdo (`prepararProximos` em `sessao-core.js` → `LEITOR.preparar(arq)`, leitor
   sem tela que usa a mesma fila `trabalho()`). Guardados: últimos 60 (`TX_MAX`; ~0,03–2,8 MB cada por causa das figuras).
