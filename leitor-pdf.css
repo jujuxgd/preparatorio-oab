@@ -227,3 +227,4 @@ html.lp-travada,html.lp-travada body{overflow:hidden}
   .lp-caixa .lp-lista{max-height:max(396px,calc(100svh - 214px))}
 }
 .lp-texto .lp-tx-fig img{border:0;box-shadow:none;border-radius:0}
+@media (min-width:900px){.lp .lp-texto{max-width:none}}
