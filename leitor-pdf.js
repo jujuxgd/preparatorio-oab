@@ -486,21 +486,41 @@
     alvo.innerHTML = html;
     alvo.querySelectorAll('.lp-tx-fig').forEach(function (f) { f.addEventListener('click', function () { f.classList.toggle('grande'); }); });
   };
+  function txApagar(k) { return txDb().then(function (db) { if (db) try { db.transaction('tx', 'readwrite').objectStore('tx').delete(k); } catch (e) {} }); }
+  function txParcial(k, v) { return txDb().then(function (db) { if (db) try { db.transaction('tx', 'readwrite').objectStore('tx').put(v, k); } catch (e) {} }); }
+  // Uma montagem por capítulo, fora do leitor: trocar de aba (o leitor é remontado) não para nem recomeça o trabalho.
+  // O progresso é salvo a cada 3 páginas ('p|' + chave): se a página recarregar (a sincronização recarrega quando
+  // chega dado novo da nuvem), a montagem continua de onde parou.
+  var TRAB = {};
+  function trabalho(lt) {
+    var k = lt.chaveTexto(), kp = 'p|' + k;
+    if (TRAB[k]) return TRAB[k];
+    var t = TRAB[k] = { ouv: [], i: 0, tot: (lt.ate || 1) - (lt.de || 1) + 1 };
+    var de = lt.de || 1;
+    t.p = txLer(kp).then(function (par) {
+      var tmp = document.createElement('div'), vivo = function () { return true; };
+      vivo.aviso = function (i, tot) { t.i = i; t.tot = tot; t.ouv.forEach(function (f) { try { f(i, tot); } catch (e) {} }); };
+      vivo.pagina = function (pags, FS, n) { if ((n - de) % 3 === 0) txParcial(kp, { pags: pags, FS: FS, n: n, u: Date.now() }); };
+      return lt.montarTexto(tmp, vivo, par && par.pags ? par : null).then(function (ok) {
+        if (!ok) return null;
+        var h = tmp.innerHTML;
+        if (tmp.querySelector('.lp-texto')) txGravar(k, h).then(function () { txApagar(kp); });
+        return h;
+      });
+    }).then(function (h) { delete TRAB[k]; return h; }, function () { delete TRAB[k]; return null; });
+    return t;
+  }
   Leitor.prototype.renderTexto = function (alvo) {
     var self = this, k = this.chaveTexto(), vez = this._vez = (this._vez || 0) + 1;
     alvo.innerHTML = '<p class="lp-vazio">Montando o texto…</p>';
-    var espera = (this._fundoMontando && this._fundo) || Promise.resolve();
-    return espera.then(function () { return txLer(k); }).then(function (c) {
+    return txLer(k).then(function (c) {
       if (vez !== self._vez) return;
       if (c && c.h) { self.porTexto(alvo, c.h); if (c.c !== corAtual()) self.prepararTexto(true); return; }
-      var tmp = document.createElement('div'), vivo = function () { return vez === self._vez; };
-      var av = alvo.querySelector('.lp-vazio');
-      vivo.aviso = function (i, t) { if (av) av.textContent = 'Montando o texto… página ' + i + ' de ' + t + ' (só na primeira vez)'; };
-      return self.montarTexto(tmp, vivo).then(function (ok) {
-        if (!ok || vez !== self._vez) return;
-        self.porTexto(alvo, tmp.innerHTML);
-        if (tmp.querySelector('.lp-texto')) txGravar(k, tmp.innerHTML);
-      });
+      var t = trabalho(self), av = alvo.querySelector('.lp-vazio');
+      function aviso(i, tot) { if (av && vez === self._vez) av.textContent = 'Montando o texto… página ' + i + ' de ' + tot + ' (só na primeira vez)'; }
+      if (t.i) aviso(t.i, t.tot);
+      t.ouv.push(aviso);
+      return t.p.then(function (h) { if (h && vez === self._vez && self.texto) self.porTexto(alvo, h); });
     });
   };
   // Lendo o PDF, o texto vai sendo montado em segundo plano: na hora de "Ler como texto" ele já está pronto
@@ -508,19 +528,16 @@
     var self = this;
     if (this.opts.semTexto || this._fundoAtivo || !this.doc) return;
     var k = this.chaveTexto(); this._fundoAtivo = true;
-    this._fundo = new Promise(function (ok) { setTimeout(ok, 4000); }).then(function () { return txLer(k); }).then(function (c) {
-      if ((c && (!refazer || c.c === corAtual())) || !self.raiz.isConnected || (self.texto && !refazer)) return;
-      self._fundoMontando = true;
-      var tmp = document.createElement('div');
-      return self.montarTexto(tmp, function () { return self.raiz.isConnected; }).then(function (ok) {
-        if (ok && tmp.querySelector('.lp-texto')) return txGravar(k, tmp.innerHTML);
-      });
-    }).catch(function () {}).then(function () { self._fundo = null; self._fundoAtivo = self._fundoMontando = false; });
+    new Promise(function (ok) { setTimeout(ok, 4000); }).then(function () { return txLer(k); }).then(function (c) {
+      if (c && (!refazer || c.c === corAtual())) return;
+      if (!self.raiz.isConnected || TRAB[k]) return;
+      return trabalho(self).p;
+    }).catch(function () {}).then(function () { self._fundoAtivo = false; });
   };
-  Leitor.prototype.montarTexto = function (alvo, vivo) {
+  Leitor.prototype.montarTexto = function (alvo, vivo, ini) {
     var self = this, doc = this.doc, de = this.de || 1, ate = this.ate || doc.numPages;
-    var FS = {};
-    var pags = [], n = de;
+    var FS = (ini && ini.FS) || {};
+    var pags = (ini && ini.pags) || [], n = (ini && ini.n) || de;
     function proxima() {
       if (!vivo()) return null;
       if (n > ate) return Promise.resolve();
@@ -529,7 +546,7 @@
       return doc.getPage(num).then(function (pg) {
         return Promise.all([pg.getTextContent(), pg.getOperatorList(), self.divisao(pg, num)]).then(function (r) {
           return self.blocosDaPagina(pg, r[0], r[2], FS);
-        }).then(function (bl) { pags.push(bl); return proxima(); });
+        }).then(function (bl) { pags.push(bl); if (vivo.pagina) vivo.pagina(pags, FS, n); return proxima(); });
       });
     }
     return proxima().then(function () {
