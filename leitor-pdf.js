@@ -207,12 +207,18 @@
       if (b.dataset.a === 'zoom-') mudarZoom(self.zoom - 0.25);
     });
     this.lista();
-    return Promise.all([carregarLib(), baixar(this.arq)]).then(function (r) {
+    // texto já guardado aparece antes mesmo de baixar e abrir o PDF
+    var rapido = this.texto ? txLer(this.chaveTexto()).then(function (c) {
+      if (!c || !c.h || !self.texto || self.doc) return;
+      self.porTexto(raiz.querySelector('.lp-paginas'), c.h); self._txRapido = true; self.voltarPosicao();
+    }).catch(function () {}) : Promise.resolve();
+    return Promise.all([carregarLib(), baixar(this.arq), rapido]).then(function (r) {
       return r[0].getDocument({ data: new Uint8Array(r[1].slice(0)) }).promise;
     }).then(function (doc) {
       self.doc = doc;
       self.de = Math.max(1, self.opts.de || 1); self.ate = Math.min(doc.numPages, self.opts.ate || doc.numPages);
       raiz.querySelector('.lp-info').textContent = self.opts.de ? 'p. ' + self.de + '–' + self.ate : doc.numPages + ' p.';
+      if (self._txRapido && self.texto) { self._largura = self.largura(); return self.medirMargem(); }
       return self.medirMargem().then(function () { return self.renderizar(); }).then(function () { self.voltarPosicao(); if (!self.texto) self.prepararTexto(); });
     }).then(function () {
       var rz; window.addEventListener('resize', function () { clearTimeout(rz); rz = setTimeout(function () { if (Math.abs(self._largura - self.largura()) > 40) self.renderizar(); }, 300); });
@@ -467,7 +473,7 @@
   }
   Leitor.prototype.chaveTexto = function () {
     var cor = (getComputedStyle(document.documentElement).getPropertyValue('--rose-600') || '').trim();
-    return [TXV, this.arq, this.de || 1, this.ate || (this.doc && this.doc.numPages), cor].join('|');
+    return [TXV, this.arq, this.opts.de || 1, this.opts.ate || 0, cor].join('|');
   };
   Leitor.prototype.porTexto = function (alvo, html) {
     alvo.innerHTML = html;

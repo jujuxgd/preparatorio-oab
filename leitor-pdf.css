@@ -219,7 +219,7 @@ html.lp-travada,html.lp-travada body{overflow:hidden}
 .lp-texto .lp-tx-lei.lei-cont{margin-top:0;border-top-left-radius:0;border-top-right-radius:0;padding-top:.35em}
 .lp.lp-modo-texto{margin-inline:var(--tx-sang,0px);position:relative}
 .lp.lp-modo-texto.lp-cheia{margin-inline:0}
-.lp-texto .lp-tx-fig{width:min(82%,24rem);margin-inline:auto}
+.lp-texto .lp-tx-fig{width:min(94%,32rem);margin-inline:auto}
 .lp-texto .lp-tx-fig img{width:100%}
 .lp-texto .lp-tx-fig.grande{width:100%}
 @media (min-width:901px){
