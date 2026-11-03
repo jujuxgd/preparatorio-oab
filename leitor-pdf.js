@@ -463,7 +463,7 @@
   // (lidas da própria página desenhada); tabelas e imagens entram como recorte da página. Cabeçalho/rodapé que se
   // repetem em quase todas as páginas e números de página saem.
   // Texto já montado fica guardado no aparelho (IndexedDB): abrir de novo é instantâneo. TXV muda quando a montagem muda.
-  var TXV = 'tx1', TX_MAX = 30, _txDb = null;
+  var TXV = 'tx2', TX_MAX = 30, _txDb = null;
   function txDb() {
     if (_txDb) return _txDb;
     _txDb = new Promise(function (ok, erro) {
@@ -1159,8 +1159,9 @@
         emiteTabelas(ls[i].top + 4);
         if (dentroTabela(ls[i])) { i++; continue; }
         var l = ls[i], prev = out.length ? out[out.length - 1] : null;
-        // vão grande com desenho entre duas linhas da mesma coluna = imagem/esquema
-        if (prev && prev.bot != null && prev.col === l.col && !prev.tabela && !prev.lixo && !l.lixo && l.top - prev.bot > Math.max(l.tam * escala * 5, 110) && tinta(l.col, prev.bot + 6, l.top - 6) > 0.06) {
+        // vão grande com desenho entre duas linhas da mesma coluna = imagem/esquema (a linha de baixo pode ser lixo, ex.: o quadro
+        // "Assista o vídeo pelo APP!" logo depois do esquema do 3.3 de Ética — antes o esquema inteiro sumia)
+        if (prev && prev.bot != null && prev.col === l.col && !prev.tabela && !prev.lixo && l.top - prev.bot > Math.max(l.tam * escala * 5, 110) && tinta(l.col, prev.bot + 6, l.top - 6) > 0.06) {
           // se a próxima linha abre uma tabela ou faixa colorida, o desenho termina antes do topo dessa faixa
           var limF = l.top - 6;
           if (l.tab || (l.partes[0].c && !claro(l.partes[0].c.bg))) {
