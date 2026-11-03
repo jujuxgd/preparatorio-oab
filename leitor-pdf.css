@@ -236,3 +236,13 @@ html.lp-travada,html.lp-travada body{overflow:hidden}
 .lp-menu-sum>button.lp-sum-h4{font-weight:400;font-size:.8rem;color:var(--ink-soft,var(--ink));padding-left:1.5rem}
 .lp-menu-sum>button:hover{background:var(--bg-soft,var(--bg))}
 .lp-menu-sum>button.atual{background:color-mix(in srgb,var(--rose-deep) 12%,transparent);color:var(--rose-deep);font-weight:600}
+/* sumário visível no começo do modo texto */
+.lp-tx-sumario{display:block;width:100%;box-sizing:border-box;margin:.4rem 0 1rem;border:1px solid color-mix(in srgb,var(--rose-deep) 25%,var(--line));border-radius:12px;background:color-mix(in srgb,var(--rose-deep) 5%,var(--paper))}
+.lp-tx-sumario>summary{cursor:pointer;list-style:none;padding:.7rem .9rem;font:600 .9rem Inter,sans-serif;color:var(--rose-deep)}
+.lp-tx-sumario>summary::-webkit-details-marker{display:none}
+.lp-tx-sumario>summary small{font-weight:400;color:var(--ink-faded);margin-left:.35rem}
+.lp-tx-sumario[open]>summary{border-bottom:1px solid var(--line)}
+.lp-tx-sum-lista{padding:.35rem;max-height:min(55vh,420px);overflow-y:auto}
+.lp-tx-sum-lista>button{display:block;width:100%;text-align:left;border:0;background:none;color:var(--ink);cursor:pointer;border-radius:9px;font:500 .86rem/1.35 Inter,sans-serif;padding:.45rem .6rem}
+.lp-tx-sum-lista>button.lp-sum-h4{font-weight:400;font-size:.82rem;color:var(--ink-soft,var(--ink));padding-left:1.4rem}
+.lp-tx-sum-lista>button:hover{background:var(--bg-soft,var(--bg))}

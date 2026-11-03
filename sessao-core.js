@@ -5,13 +5,6 @@
   var K_RESP = 'oab_bq_respostas', K_DIA = 'oab_ativo_dia', K_CHECK = 'oab_ativo_check_v1';
   var DIAS_SEM = ['domingo', 'segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado'];
   var MESES = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
-  var GABARITACO = {
-    'Direito Constitucional': '1OxwCkh7ktp86eY4xV-qjeGnUDuXA5JK8', 'Direito Civil': '18f7snpnvRyROPiqfVyzvbiZvLuUM02pV',
-    'Direito Processual Civil': '1HRJef6BbLRuPcvAiMpdmLAqtXK3ODZ87', 'Direito Penal': '1kA6-Dl-Dg8c-SRMB6hqL1_CG-U2vFDJF',
-    'Direito Processual Penal': '13TnIk_nRowEIwYbb1qDcZASV5icUaQZp', 'Direito do Trabalho': '1ux1m3wMGUkyV1uiyvea1gWsk6Pg12KEs',
-    'Direito Processual do Trabalho': '1pDduJ9ujams2xglSyH93idq2toC_5rFK', 'Direito Administrativo': '1Tl8knaHJAdLjQ_3Qv4NuUv10-K1tDDhb',
-    'Direito Tributário': '18vkNz1RXGumP-sJjFGW85w5hEHiqzxFv', 'Ética Profissional': '1rmCzKZJq7-A7DK1CJUdAqRvon30U3JDz'
-  };
   // nome da matéria em revisao-biblioteca.js
   var NOME_REV = {
     'Ética Profissional': 'Ética', 'Direito Constitucional': 'Constitucional', 'Direito Civil': 'Civil',
@@ -52,7 +45,6 @@
     return item ? drive(item.id) : null;
   }
   function linkTopico(t) {
-    if (t.k && GABARITACO[t.d]) return { href: drive(GABARITACO[t.d]), txt: 'Gabaritaço · DICAS ' + t.k[0] + '–' + t.k[1] };
     var r = t.rev && linkRevisao(t.d, t.rev);
     return r ? { href: r, txt: 'Revisão ' + t.rev + ' VDE' } : null;
   }
@@ -322,7 +314,28 @@
     }).join('');
   }
 
+  // Quem lê no modo texto: os capítulos deste dia e dos 3 dias seguintes são montados em segundo plano, um por vez,
+  // 20 s depois de abrir o Conteúdo — ao abrir o dia o texto já está pronto. Os outros ficam para quando forem abertos.
+  var _preparando = false;
+  function prepararProximos() {
+    if (_preparando || !window.LEITOR || !LEITOR.preparar || !CAL) return;
+    var modo = null; try { modo = localStorage.getItem('oab_lp_modo'); } catch (e) {}
+    if (modo !== 'texto') return;
+    _preparando = true;
+    var v = versao(), ids = [], dias = 0;
+    CAL.dias.forEach(function (d) {
+      if (d.d < DATA || dias >= 4) return;
+      var tem = false;
+      (d.top || []).forEach(function (t) { (t.e || []).forEach(function (c) { var id = c[v] || c.r || c.x; if (id && ids.indexOf(id) < 0) { ids.push(id); tem = true; } }); });
+      if (tem) dias++;
+    });
+    setTimeout(function () {
+      ids.reduce(function (p, id) { return p.then(function () { return LEITOR.preparar(id); }); }, Promise.resolve());
+    }, 20000);
+  }
+
   function montarConteudo(el) {
+    prepararProximos();
     el.innerHTML = htmlConteudo();
     if (window.LEITOR) el.querySelectorAll('.lp-host').forEach(function (h) { LEITOR.montar(h, h.dataset.arq, { caixa: true }); });
     ligarEstrategia(el);
@@ -443,8 +456,9 @@
     });
     return out;
   }
-  function escolher(chave, disc, topicos, prioritarias, n, erradasPrimeiro, usadas, kw) {
-    var s = selecaoDoDia();
+  function escolher(chave0, disc, topicos, prioritarias, n, erradasPrimeiro, usadas, kw) {
+    // 'e:' = sorteio com as questões do capítulo do Estratégia primeiro (03/11/2026); o sorteio antigo do dia fica de lado
+    var s = selecaoDoDia(), chave = 'e:' + chave0;
     if (s.sel[chave]) {
       var vistos = {};
       var salvas = s.sel[chave].filter(function (id) {
@@ -461,21 +475,23 @@
     var resp = ler(K_RESP, {}), todos = topicos.indexOf('*') >= 0, acertoGrupo = {};
     // a mesma questão saiu em mais de um exame (duplicate_group): conta como uma só
     banco().forEach(function (q) { if (q.duplicate_group && resp[q.id] && resp[q.id].ultima_correta) acertoGrupo[q.duplicate_group] = 1; });
-    var pool = banco().filter(function (q) {
-      return q.discipline === disc && q.correct_answer && !usadas[q.id] && !(q.duplicate_group && usadas[q.duplicate_group]) && (todos || topicos.indexOf(q.topic) >= 0);
-    });
+    var pri = prioritarias || [];
+    var livre = function (q) { return q.discipline === disc && q.correct_answer && !usadas[q.id] && !(q.duplicate_group && usadas[q.duplicate_group]); };
+    var pool = banco().filter(function (q) { return livre(q) && (todos || topicos.indexOf(q.topic) >= 0); });
     // tema mais estreito que o assunto do banco (ex.: Iter criminis dentro de Teoria do crime): só as do tema, se houver 3+
     if (kw) {
       var rx = new RegExp(kw, 'i'), doTema = pool.filter(function (q) { return rx.test(normal(q.subtopic)); });
       if (doTema.length < 3) doTema = pool.filter(function (q) { return rx.test(normal((q.subtopic || '') + ' ' + String(q.statement || '').slice(0, 400))); });
       if (doTema.length >= 3) pool = doTema;
     }
+    // questões que estão no próprio capítulo do Estratégia do dia entram sempre (o assunto do banco pode ser outro)
+    pri.forEach(function (id) { var q = qpor(id); if (q && livre(q) && pool.indexOf(q) < 0) pool.push(q); });
     function nivel(q) {
       var r = resp[q.id];
       // respondida a partir desta data = já era questão deste dia: volta primeiro, mesmo se o sorteio se perdeu (outro aparelho)
       if (respostaDoDia(r)) return -1;
       if ((r && r.ultima_correta) || acertoGrupo[q.duplicate_group]) return 9;
-      var g = (prioritarias || []).indexOf(q.id) >= 0;
+      var g = pri.indexOf(q.id) >= 0;
       if (erradasPrimeiro) return r ? 0 : g ? 1 : 2;
       return g ? 0 : r ? 2 : 1;
     }
@@ -576,7 +592,7 @@
     var q = qpor(id); if (!q) return '';
     var r = ler(K_RESP, {})[id], gab = (g || []).indexOf(id) >= 0, hoje = respostaDoDia(r);
     return '<div class="ss-q" data-q="' + id + '"' + (hoje ? ' data-feita="1"' : '') + '><div class="meta">' + (i + 1) + ' · ' + esc(nomeExame(q.exam_number)) +
-      ', questão ' + q.question_number + ' · ' + esc(q.topic || '') + (temasBloco && temasBloco.indexOf('*') < 0 && temasBloco.indexOf(q.topic) < 0 ? ' · <span class="outro">tema já estudado</span>' : '') + (gab ? ' · <span class="gab">caiu no Gabaritaço</span>' : '') +
+      ', questão ' + q.question_number + ' · ' + esc(q.topic || '') + (temasBloco && temasBloco.indexOf('*') < 0 && temasBloco.indexOf(q.topic) < 0 ? ' · <span class="outro">tema já estudado</span>' : '') + (gab ? ' · <span class="gab">do capítulo do Estratégia</span>' : '') +
       (r && !hoje ? ' · já respondida antes' : '') + '</div>' +
       '<div class="enun">' + esc(q.statement) + '</div>' +
       ['a', 'b', 'c', 'd'].map(function (k) {
@@ -613,9 +629,9 @@
     var usadas = {}, n = ATIVO.questoesPorTopico(), h = '';
     if (DIA.top) {
       h += '<div class="ss-bloco"><h3>Questões dos tópicos do dia</h3>' +
-        '<p>Do tema dos PDFs do dia. Errou, a questão vai para o Caderno de Erros e volta em 3, 7 e 15 dias.</p>' +
+        '<p>Primeiro as questões que estão no capítulo do Estratégia do dia; depois, do banco, as do tema, das provas mais recentes (comentadas pelo Estratégia) para as mais antigas. Errou, a questão vai para o Caderno de Erros e volta em 3, 7 e 15 dias.</p>' +
         DIA.top.map(function (t, i) {
-          return blocoQuestoes('t' + i, t.s, '', t.d, t.q, t.g, n, /^Reforço/.test(t.s), usadas, t.kw);
+          return blocoQuestoes('t' + i, t.s, '', t.d, t.q, t.qe || [], n, /^Reforço/.test(t.s), usadas, t.kw);
         }).join('') + '</div>';
     } else if (DIA.tipo === 'revisao' || DIA.tipo === 'leve') {
       h += '<div class="ss-bloco"><h3>Reforço em Ética</h3><p>Erradas primeiro, depois as que você ainda não fez.</p>' +
