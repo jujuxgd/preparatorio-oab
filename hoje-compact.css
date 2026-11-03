@@ -191,4 +191,4 @@ body.hoje .tab .badge{background:var(--ac-soft)!important;color:var(--ac-deep)!i
 body.hoje :is(.tab,.btn-estudei,.pomo-btn-main):focus-visible{outline:2px solid var(--ac);outline-offset:3px;border-radius:12px}
 @media(prefers-reduced-motion:reduce){body.hoje .hj-prog i,body.hoje .btn-estudei,body.hoje .tab,body.hoje .pomo-btn-main{transition:none!important}}
 /* modo escuro: a versão "funda" da cor não tem contraste sobre fundo escuro — usa uma mais clara */
-[data-theme="dark"] body.hoje{--ac-deep:color-mix(in srgb,var(--rose-500) 55%,#fff);--ac-soft:color-mix(in srgb,var(--ac) 22%,var(--paper))}
+[data-theme="dark"] body.hoje{--ac:var(--rose);--ac-deep:color-mix(in srgb,var(--rose-500) 55%,#fff);--ac-soft:color-mix(in srgb,var(--ac) 22%,var(--paper))}

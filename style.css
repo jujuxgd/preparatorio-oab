@@ -113,19 +113,19 @@
 
 [data-theme="dark"] {
   /* superfícies espresso quentes */
-  --bg: #1A1714;
-  --bg-soft: #221D18;
-  --bg-deep: #2B241D;
-  --paper: #211C18;
-  --paper-tint: #262019;
+  --bg: #0E0D0C;
+  --bg-soft: #151311;
+  --bg-deep: #1C1916;
+  --paper: #161412;
+  --paper-tint: #1A1715;
 
-  --ink: #F1ECE4;
-  --ink-soft: #C4B6AA;
-  --ink-faded: #887A70;
-  --ink-ghost: #4A4038;
+  --ink: #E6E0D8;
+  --ink-soft: #B5A99E;
+  --ink-faded: #8C8076;
+  --ink-ghost: #3A332E;
 
-  --line: #332C25;
-  --line-soft: #28211B;
+  --line: #29241F;
+  --line-soft: #1F1B18;
 
   /* rosa: ação permanece vibrante; texto/superfície adaptam ao escuro */
   --rose: #E86A9C;
@@ -188,9 +188,7 @@ body {
 }
 
 [data-theme="dark"] body {
-  background-image:
-    radial-gradient(circle at 15% 20%, color-mix(in srgb, var(--rose-500) 6%, transparent) 0%, transparent 50%),
-    radial-gradient(circle at 85% 80%, color-mix(in srgb, var(--rose-600) 4%, transparent) 0%, transparent 50%);
+  background-image: none;
 }
 
 .serif  { font-family: var(--font-display); font-optical-sizing: auto; }
@@ -1237,10 +1235,7 @@ select:focus {
   animation: auroraD 24s ease-in-out infinite alternate;
 }
 
-[data-theme="dark"] .ab1 { background: rgba(70, 52, 42, 0.55); }
-[data-theme="dark"] .ab2 { background: rgba(80, 65, 52, 0.45); }
-[data-theme="dark"] .ab3 { background: rgba(75, 58, 46, 0.50); }
-[data-theme="dark"] .ab4 { background: rgba(62, 48, 40, 0.40); }
+[data-theme="dark"] .aurora-bg { display: none; }
 
 @keyframes auroraA {
   from { transform: translate(0, 0) scale(1); }
