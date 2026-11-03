@@ -228,3 +228,11 @@ html.lp-travada,html.lp-travada body{overflow:hidden}
 }
 .lp-texto .lp-tx-fig img{border:0;box-shadow:none;border-radius:0}
 @media (min-width:900px){.lp .lp-texto{max-width:none}}
+/* sumário do modo texto (☰ na barra) */
+.lp-b-sum[hidden]{display:none!important}
+.lp-menu-sum{max-height:min(60vh,460px);overflow-y:auto;overscroll-behavior:contain;width:min(340px,calc(100vw - 24px))}
+.lp-sum-tit{font:600 .68rem Inter,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-faded);padding:.45rem .7rem .3rem}
+.lp-menu-sum>button{display:block;width:100%;text-align:left;border:0;background:none;color:var(--ink);cursor:pointer;border-radius:9px;font:500 .84rem/1.35 Inter,sans-serif;padding:.45rem .7rem}
+.lp-menu-sum>button.lp-sum-h4{font-weight:400;font-size:.8rem;color:var(--ink-soft,var(--ink));padding-left:1.5rem}
+.lp-menu-sum>button:hover{background:var(--bg-soft,var(--bg))}
+.lp-menu-sum>button.atual{background:color-mix(in srgb,var(--rose-deep) 12%,transparent);color:var(--rose-deep);font-weight:600}
