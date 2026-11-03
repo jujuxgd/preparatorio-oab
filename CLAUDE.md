@@ -345,6 +345,8 @@ salvo; a sessão nova é a rotina do dia e aparece como cartão no topo do Hoje.
   flashcards concluídos e bloco de questões todo respondido marcam o item sozinhos. Estilos em `sessao.css`.
   Questões sorteadas em `oab_ativo_dia` (só do aparelho; `{dias: {data: {n, sel}}}`, últimas 21 datas — desde 13/10/2026; questão respondida a partir da data volta primeiro no sorteio, então outro aparelho mostra as mesmas já feitas); quantidade por tópico em
   `oab_ativo_questoes_por_topico` (padrão 10).
+  **Responder (03/11/2026, pedido de Julia):** tocar numa alternativa só marca (`.ss-alt.sel`; tocar de novo desmarca); a resposta conta ao apertar
+  "Responder" (`[data-responder]`). A questão não leva mais etiqueta de origem (nem Gabaritaço nem Estratégia).
   **03/11/2026 (pedido de Julia — "o Estratégia vai ser meu material base"):** cada tema do Estratégia tem `qe` no calendário = questões do
   banco que aparecem no próprio capítulo Resumido (casadas pelo enunciado, trigramas ≥ 50%, mesma matéria; 231 em 53 dos 70 temas; ~135 questões
   dos capítulos são de exames que o banco não tem — 1º–21º, 34º–36º — e ficaram de fora). Elas vêm primeiro no bloco do tema ("do capítulo do
@@ -436,6 +438,10 @@ Prova prático-profissional do OAB 48 em **28/02/2027** (cronograma da OAB). Jul
   - **Flashcards:** cada tema do Estratégia tem `fc` (lista dos `t` de cartões que valem para ele) — só esses entram no dia, sem
     casar por nome. `fc-estrategia.js` (193 cartões, `r: 'E'`, ids `est-…`) cobre os temas sem cartão do VDE; escritos a partir dos
     capítulos do Estratégia, texto próprio, `b` só se o capítulo cita o dispositivo; pontos em que o material diverge da lei ficaram fora.
+  - **Flashcards só do Estratégia (03/11/2026, pedido de Julia — "não parecem seguir o material"):** os 42 temas que só tinham cartões das
+    Revisões do VDE ganharam 419 cartões escritos a partir do capítulo Resumido do tema (`fc-estrategia.js`, `t` = nome do tema, 7–10 por tema;
+    pontos em que o material erra ou diverge da lei ficaram de fora). Agora os 70 temas têm cartões `r: 'E'`, e o dia usa **só** esses
+    (`novosDoDia` filtra `r === 'E'` quando o tema tem algum); os cartões do VDE continuam no Revisar.
   - **Mapas mentais:** aba "Mapas" no Hoje (`mapas-mentais.js`, um PDF do Estratégia por matéria, preview do Drive, sem modo texto).
   - **Leitor:** sem seletor PDF/Texto nem Resumido/Completo na tela; o PDF é sempre o padrão (`oab_lp_modo`, chave nova) e
     "Ler como texto" e "Ver a versão completa" ficam no menu ⋯ (`opts.extras` de `LEITOR.montar`). Modo texto no visual do caderno

@@ -52,9 +52,6 @@ window.CAL_ATIVO = {
 }
 ],
 "fc": [
-"Sigilo profissional",
-"Publicidade",
-"Relações com o cliente",
 "Princípios"
 ],
 "kw": "sigilo|publicidade|cliente|pessoalidade|mercantil|captacao|propaganda|anuncio",
@@ -95,7 +92,6 @@ window.CAL_ATIVO = {
 }
 ],
 "fc": [
-"Direitos fundamentais",
 "Direitos individuais e coletivos"
 ],
 "mm": [
@@ -150,11 +146,6 @@ window.CAL_ATIVO = {
 }
 ],
 "fc": [
-"Pessoas naturais",
-"Direitos da personalidade",
-"Morte presumida",
-"Comoriência",
-"Pessoas jurídicas",
 "Teoria geral: pessoas"
 ],
 "kw": "personalidade|capacidade|incapa|emancipa|ausencia|ausente|morte|comoriencia|pessoa juridica|domicilio|curatela|nome civil|fundac|associac",
@@ -245,9 +236,6 @@ window.CAL_ATIVO = {
 }
 ],
 "fc": [
-"Partes e procuradores",
-"Honorários",
-"Gratuidade da justiça",
 "Partes e procuradores"
 ],
 "mm": [
@@ -291,8 +279,6 @@ window.CAL_ATIVO = {
 }
 ],
 "fc": [
-"Direitos e prerrogativas",
-"Desagravo público",
 "Direitos do advogado"
 ],
 "mm": [
@@ -336,13 +322,6 @@ window.CAL_ATIVO = {
 }
 ],
 "fc": [
-"Doméstico",
-"Trabalho do menor",
-"Trabalho da mulher",
-"Teletrabalho",
-"Intermitente",
-"Empregado hipersuficiente",
-"Estágio",
 "Relações empregatícias especiais"
 ],
 "kw": "domestic|aprendiz|teletrabalho|intermitente|rural|hipersuficiente|menor|estagi|diarista",
@@ -419,7 +398,6 @@ window.CAL_ATIVO = {
 }
 ],
 "fc": [
-"Competência",
 "Jurisdição e competência"
 ],
 "mm": [
@@ -455,7 +433,6 @@ window.CAL_ATIVO = {
 }
 ],
 "fc": [
-"Desapropriação",
 "Desapropriação"
 ],
 "kw": "desapropria|expropria",
@@ -542,7 +519,6 @@ window.CAL_ATIVO = {
 }
 ],
 "fc": [
-"Remédios constitucionais",
 "Remédios constitucionais"
 ],
 "mm": [
@@ -595,7 +571,6 @@ window.CAL_ATIVO = {
 }
 ],
 "fc": [
-"Negócio jurídico",
 "Teoria geral: fato jurídico"
 ],
 "kw": "negocio juridico|erro|dolo|coacao|lesao|estado de perigo|fraude contra|simulacao|nulidade|nulo|anulav|condicao|termo|encargo|prescri|decad|ato juridico|fato juridico",
@@ -690,7 +665,6 @@ window.CAL_ATIVO = {
 }
 ],
 "fc": [
-"Provas",
 "Teoria geral das provas"
 ],
 "mm": [
@@ -734,7 +708,6 @@ window.CAL_ATIVO = {
 }
 ],
 "fc": [
-"Obrigação tributária",
 "Obrigação tributária"
 ],
 "mm": [
@@ -783,7 +756,6 @@ window.CAL_ATIVO = {
 }
 ],
 "fc": [
-"Defesa do réu",
 "Defesa"
 ],
 "mm": [
@@ -927,9 +899,6 @@ window.CAL_ATIVO = {
 }
 ],
 "fc": [
-"Sociedade de advogados",
-"Honorários",
-"Advogado empregado",
 "Sociedade de advogados e honorários advocatícios"
 ],
 "kw": "sociedade|honorario|socio",
@@ -965,7 +934,6 @@ window.CAL_ATIVO = {
 }
 ],
 "fc": [
-"Imunidades",
 "Imunidades"
 ],
 "mm": [
@@ -1040,11 +1008,6 @@ window.CAL_ATIVO = {
 }
 ],
 "fc": [
-"Petição inicial",
-"Audiência de conciliação",
-"Defesa do réu",
-"Saneamento",
-"Audiência de instrução",
 "Procedimento comum"
 ],
 "kw": "peticao inicial|contesta|reconven|audiencia|saneamento|valor da causa|improcedencia liminar|revelia|emenda",
@@ -1123,9 +1086,6 @@ window.CAL_ATIVO = {
 }
 ],
 "fc": [
-"Títulos de crédito",
-"Letra de câmbio",
-"Cheque",
 "Títulos de crédito (letra de câmbio e cheque)"
 ],
 "mm": [
@@ -1188,7 +1148,6 @@ window.CAL_ATIVO = {
 }
 ],
 "fc": [
-"Procedimentos",
 "Procedimento ordinário"
 ],
 "kw": "ordinario|resposta a acusacao|absolvicao sumaria|instrucao|alegacoes finais|testemunha|rejeicao da denuncia|recebimento da denuncia",
@@ -1286,7 +1245,6 @@ window.CAL_ATIVO = {
 }
 ],
 "fc": [
-"Despesas processuais",
 "Honorários"
 ],
 "k": [
@@ -1345,7 +1303,6 @@ window.CAL_ATIVO = {
 }
 ],
 "fc": [
-"Incompatibilidades e impedimentos",
 "Incompatibilidades e impedimentos"
 ],
 "mm": [
@@ -1376,7 +1333,6 @@ window.CAL_ATIVO = {
 }
 ],
 "fc": [
-"Tutela provisória",
 "Tutela provisória"
 ],
 "mm": [
@@ -1425,8 +1381,6 @@ window.CAL_ATIVO = {
 }
 ],
 "fc": [
-"Repartição de competências",
-"Organização do Estado",
 "Repartição de competências"
 ],
 "kw": "competencia",
@@ -1467,9 +1421,6 @@ window.CAL_ATIVO = {
 }
 ],
 "fc": [
-"Contrato de trabalho",
-"Relação de emprego",
-"Relação de trabalho",
 "Contrato de trabalho"
 ],
 "mm": [
@@ -1513,8 +1464,6 @@ window.CAL_ATIVO = {
 }
 ],
 "fc": [
-"Serviços públicos",
-"PPP",
 "Serviços públicos"
 ],
 "mm": [
@@ -1687,10 +1636,6 @@ window.CAL_ATIVO = {
 }
 ],
 "fc": [
-"Compra e venda",
-"Doação",
-"Contratos em espécie",
-"Fiança",
 "Contratos: espécies comuns"
 ],
 "kw": "compra|venda|doacao|locacao|comodato|mutuo|fianca|empreitada|deposito|mandato|seguro|transporte|troca|permuta|prestacao de servico",
@@ -1759,7 +1704,6 @@ window.CAL_ATIVO = {
 }
 ],
 "fc": [
-"Espécies tributárias",
 "Tributos"
 ],
 "mm": [
@@ -1798,7 +1742,6 @@ window.CAL_ATIVO = {
 }
 ],
 "fc": [
-"Infrações e sanções",
 "Infrações e sanções disciplinares"
 ],
 "mm": [
@@ -1868,7 +1811,6 @@ window.CAL_ATIVO = {
 }
 ],
 "fc": [
-"Processo legislativo",
 "Processo legislativo"
 ],
 "mm": [
@@ -1954,8 +1896,6 @@ window.CAL_ATIVO = {
 }
 ],
 "fc": [
-"Recursos",
-"Ações autônomas",
 "Recursos"
 ],
 "mm": [
@@ -2073,7 +2013,6 @@ window.CAL_ATIVO = {
 }
 ],
 "fc": [
-"Crimes contra o patrimônio",
 "Crimes contra o patrimônio"
 ],
 "mm": [
@@ -2198,7 +2137,6 @@ window.CAL_ATIVO = {
 }
 ],
 "fc": [
-"Agentes públicos",
 "Agentes públicos"
 ],
 "k": [
@@ -2263,7 +2201,6 @@ window.CAL_ATIVO = {
 }
 ],
 "fc": [
-"Processo disciplinar",
 "Processo disciplinar"
 ],
 "mm": [
@@ -2302,7 +2239,6 @@ window.CAL_ATIVO = {
 }
 ],
 "fc": [
-"Controle de constitucionalidade",
 "Controle concentrado"
 ],
 "mm": [
@@ -2351,7 +2287,6 @@ window.CAL_ATIVO = {
 }
 ],
 "fc": [
-"Recursos",
 "Recursos trabalhistas"
 ],
 "mm": [
@@ -2392,7 +2327,6 @@ window.CAL_ATIVO = {
 }
 ],
 "fc": [
-"Remuneração",
 "Sistema remuneratório"
 ],
 "mm": [
@@ -2427,7 +2361,6 @@ window.CAL_ATIVO = {
 }
 ],
 "fc": [
-"Cumprimento de sentença",
 "Cumprimento de sentença"
 ],
 "mm": [
@@ -2468,9 +2401,6 @@ window.CAL_ATIVO = {
 }
 ],
 "fc": [
-"Recursos",
-"Ação rescisória",
-"IRDR",
 "Recursos"
 ],
 "mm": [
@@ -2582,7 +2512,6 @@ window.CAL_ATIVO = {
 }
 ],
 "fc": [
-"Execução",
 "Execução"
 ],
 "mm": [
@@ -2658,7 +2587,6 @@ window.CAL_ATIVO = {
 }
 ],
 "fc": [
-"Regime de bens",
 "Família: direito conjugal patrimonial"
 ],
 "kw": "regime|pacto antenupcial|bens|comunhao|separacao|meacao|participacao final",
@@ -2712,9 +2640,6 @@ window.CAL_ATIVO = {
 }
 ],
 "fc": [
-"Sucessões",
-"Sucessão legítima",
-"Sucessão testamentária",
 "Direito das sucessões"
 ],
 "mm": [
@@ -2778,7 +2703,6 @@ window.CAL_ATIVO = {
 }
 ],
 "fc": [
-"Execução",
 "Execução no processo do trabalho"
 ],
 "mm": [
@@ -2870,7 +2794,6 @@ window.CAL_ATIVO = {
 }
 ],
 "fc": [
-"Estabilidade",
 "Estabilidades"
 ],
 "mm": [
