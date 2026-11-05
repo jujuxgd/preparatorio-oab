@@ -476,7 +476,7 @@
   // (lidas da própria página desenhada); tabelas e imagens entram como recorte da página. Cabeçalho/rodapé que se
   // repetem em quase todas as páginas e números de página saem.
   // Texto já montado fica guardado no aparelho (IndexedDB): abrir de novo é instantâneo. TXV muda quando a montagem muda.
-  var TXV = 'tx4', TX_MAX = 60, _txDb = null;
+  var TXV = 'tx5', TX_MAX = 60, _txDb = null;
   function txDb() {
     if (_txDb) return _txDb;
     _txDb = new Promise(function (ok, erro) {
@@ -911,7 +911,7 @@
           return false;
         }
         for (var i = 0; i < segs.length;) {
-          var j = i; while (segs[j + 1] && segs[j + 1].t - segs[j].b <= 520 && ligada(segs[j].b, segs[j + 1].t)) j++;
+          var j = i; while (segs[j + 1] && segs[j + 1].t - segs[j].b <= 1500 && ligada(segs[j].b, segs[j + 1].t)) j++;
           if (j > i) {
             var yt = segs[i].t, yb = segs[j].b, vx = [], linhasV = [];
             // linhas verticais = colunas escuras em (quase) todas as linhas do recorte, sem contar as faixas coloridas de cabeçalho
@@ -1175,6 +1175,8 @@
             else h2 += (ultY - it.y > Math.max(ultTam, it.tam) * 1.8 ? '<br><br>' : ' ') + t;
             ultY = it.y; ultX1 = it.x1; ultTam = it.tam;
           });
+          // alguns PDFs imprimem a bolinha como letra de fonte de símbolos: "l" (bolinha) e "Ä" (quadradinho) no começo do parágrafo
+          h2 = h2.replace(/(^|<br><br>)((?:<[^>]+>)*)([lÄ])(?:\s|&nbsp;)+/g, function (m, ini, tags, g) { return ini + tags + (g === 'l' ? '• ' : '– '); });
           return acentos(h2.replace(/<\/b>(\s*)<b>/g, '$1'));
         }
         // caixa de destaque (todo o texto numa coluna só; as outras são só moldura/ícone): vira uma célula, e as linhas que
@@ -1267,8 +1269,8 @@
         var AUDIO = /\s*Para (?:ouvir ao áudio|assistir ao v[ií]deo) correspondente, acesse o LDI\.?\s*/gi, IDQ = /\s4000\d{6}(?=\s)/g;
         // ícones de fontes de ícone (caracteres da área privada, ex.: o alto-falante do "ouvir o áudio") não são texto
         var ICONE = /[\uE000-\uF8FF]/g;
-        var t0 = acentos(txt).replace(ICONE, '').replace(AUDIO, ' ').replace(IDQ, '').replace(/\s+/g, ' ').trim(), h0 = acentos(html.replace(/<\/b>(\s*)<b>/g, '$1')).replace(ICONE, '').replace(AUDIO, ' ').replace(IDQ, '').trim().replace(/<(span class="lp-tx-cor"|b)><\/(span|b)>/g, ''), mk = /^#/.test(t0) || /^[-–•▪●►]\s/.test(t0);
-        if (mk) { t0 = t0.replace(/^((#|[-–•▪●►])\s*)+/, ''); h0 = h0.replace(/^((?:<[^>]+>)*)((#|[-–•▪●►])\s*)+/, '$1'); }
+        var t0 = acentos(txt).replace(ICONE, '').replace(AUDIO, ' ').replace(IDQ, '').replace(/\s+/g, ' ').trim(), h0 = acentos(html.replace(/<\/b>(\s*)<b>/g, '$1')).replace(ICONE, '').replace(AUDIO, ' ').replace(IDQ, '').trim().replace(/<(span class="lp-tx-cor"|b)><\/(span|b)>/g, ''), mk = /^#/.test(t0) || /^[-–•▪●►]\s/.test(t0) || /^[lÄ]\s/.test(t0);
+        if (mk) { t0 = t0.replace(/^(?:(?:#|[-–•▪●►])\s*|[lÄ]\s+)+/, ''); h0 = h0.replace(/^((?:<[^>]+>)*)(?:(?:#|[-–•▪●►])\s*|[lÄ]\s+)+/, '$1'); }
         out.push({ col: l.col, y: l.y, tam: l.tam, top: l.top, bot: l.bot, txt: t0, html: h0, marca: mk, lixo: l.lixo, neg: nTot ? nNeg / nTot : 0,
           rv: naMoldura(l),
           bolinha: !l.tab && temBolinha(l),
