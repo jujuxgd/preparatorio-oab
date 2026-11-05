@@ -2767,6 +2767,18 @@ window.CAL_ATIVO = {
 ],
 "e": [
 {
+"c": 17,
+"t": "Prestação de Contas",
+"r": "1_U1zI8fL_OkNEiKdtKoNnzLCsm8PcMPi",
+"x": "1_U1zI8fL_OkNEiKdtKoNnzLCsm8PcMPi"
+},
+{
+"c": 20,
+"t": "Propaganda Política",
+"r": "1M43WMbtTHq4HFSQzDkV9eETzndSBfrhG",
+"x": "1M43WMbtTHq4HFSQzDkV9eETzndSBfrhG"
+},
+{
 "c": 28,
 "t": "Ações Eleitorais",
 "r": "1UuBOzW9UIOLIZ8_P82wdVgR_Qe_K6PNL",
