@@ -1157,7 +1157,7 @@
         });
         if (!its.length || !tb.linhas.length) return '';
         // caixa de questão comentada (comentário do professor, "A letra B está correta…"): as questões não entram no modo texto
-        if (/Coment[aá]rio do professor|Solu[cç][aã]o:|A (?:letra|alternativa) [A-D] (?:est[aá] )?(?:in)?correta|A alternativa correta [eé] a letra|Gabarito:?\s*[A-D]\b/i.test(its.map(function (it) { return it.str; }).join(' '))) return { drop: true };
+        if (/Coment[aá]rio do professor|Solu[cç][aã]o:|A (?:letra|alternativa) [A-D] (?:est[aá] )?(?:in)?correta|A alternativa correta [eé] a letra|Gabarito:?\s*[A-D]\b|gabarito da quest[aã]o|LETRA [A-D] [eé] a correta|A quest[aã]o (?:versa|trata|aborda|cobrou|traz)\b/i.test(its.map(function (it) { return it.str; }).join(' '))) return { drop: true };
         var ncol = tb.vx.length - 1, grade = tb.linhas.map(function () { return []; }), cheias = 0;
         tb.linhas.forEach(function (r, ri) { for (var c = 0; c < ncol; c++) grade[ri].push([]); });
         its.forEach(function (it) {
