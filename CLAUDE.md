@@ -552,6 +552,10 @@ Prova prático-profissional do OAB 48 em **28/02/2027** (cronograma da OAB). Jul
   **Início no celular (03/11/2026, pedido de Julia — "esse quadrado não tá bom"):** só layout, visual igual. No cartão "Foco de hoje" (≤ 640px, fim de
   `home.css`): cada tema numa linha (`.tl-tema`, sem o "·" solto no começo da linha), "Abrir conteúdo do dia" na largura toda, Revisar /
   Calendário / Apostila em 3 caixas iguais e o anel de progresso pequeno ao lado do texto (o cartão passou de 621 para 454px no iPhone 13).
+  **Sem chamadas de vídeo/áudio (05/11/2026, pedido de Julia):** "Para assistir ao vídeo correspondente, acesse o LDI." (70 vezes, às vezes colada
+  no começo de um parágrafo) sai do texto, como "Para ouvir ao áudio… LDI" (regex `AUDIO`). Parágrafos curtos (≤ 200 caracteres) que mandam ver um vídeo ou
+  ouvir um áudio ("Segue o vídeo:", "Vamos rever, em vídeo?", "Constitucionalistas, acompanhe o áudio…"; `CHAMADA` em `fecha()`) também saem — o vídeo
+  não vem no PDF. Texto de estudo que só cita vídeo/áudio (áudio interceptado, videoconferência) fica. Conferido nos 84 Resumido. `TXV` = 'tx4'.
   **Textos prontos antes (03/11/2026):** quem usa o modo texto (`oab_lp_modo` = 'texto') tem os capítulos do dia aberto e dos 3 dias seguintes
   montados em segundo plano, um por vez, 20 s depois de abrir o Conteúdo (`prepararProximos` em `sessao-core.js` → `LEITOR.preparar(arq)`, leitor
   sem tela que usa a mesma fila `trabalho()`). Guardados: últimos 60 (`TX_MAX`; ~0,03–2,8 MB cada por causa das figuras).
