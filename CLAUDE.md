@@ -556,6 +556,13 @@ Prova prático-profissional do OAB 48 em **28/02/2027** (cronograma da OAB). Jul
   no começo de um parágrafo) sai do texto, como "Para ouvir ao áudio… LDI" (regex `AUDIO`). Parágrafos curtos (≤ 200 caracteres) que mandam ver um vídeo ou
   ouvir um áudio ("Segue o vídeo:", "Vamos rever, em vídeo?", "Constitucionalistas, acompanhe o áudio…"; `CHAMADA` em `fecha()`) também saem — o vídeo
   não vem no PDF. Texto de estudo que só cita vídeo/áudio (áudio interceptado, videoconferência) fica. Conferido nos 84 Resumido. `TXV` = 'tx4'.
+  **Tabelas altas e bolinhas de símbolo (05/11/2026, Julia: "não entendi nada" — art. 73 do CPC embaralhado):** o detector de tabelas por borda só juntava
+  faixas a até 520px de distância; a tabela "Legitimação para agir dos cônjuges" (≈735px, 2 colunas) não era reconhecida e as duas colunas saíam
+  intercaladas linha a linha. Agora o limite é 1500px. Caixas de comentário de questão (padrões `Comentário do professor`, `A letra X está correta`,
+  `A questão versa/trata…`, `gabarito da questão`) são **descartadas** em `htmlTabela` (`drop`), para não voltarem ao texto. PDFs do Estratégia imprimem a
+  bolinha como letra de fonte de símbolos: "l" (bolinha) e "Ä" (quadrado) no começo de linha viram marcador de lista (e "•"/"–" dentro das células).
+  Conferido nos 84 Resumido: 6 capítulos mudaram (Partes e Procuradores, Relações Empregatícias — tabela dos direitos dos domésticos —, Licenciamento
+  Ambiental, Sistema Remuneratório, Agentes Públicos, Intervenção do Estado), todos para melhor; 21 caixas de questão deixaram de aparecer como figura. `TXV` = 'tx5'.
   **Textos prontos antes (03/11/2026):** quem usa o modo texto (`oab_lp_modo` = 'texto') tem os capítulos do dia aberto e dos 3 dias seguintes
   montados em segundo plano, um por vez, 20 s depois de abrir o Conteúdo (`prepararProximos` em `sessao-core.js` → `LEITOR.preparar(arq)`, leitor
   sem tela que usa a mesma fila `trabalho()`). Guardados: últimos 60 (`TX_MAX`; ~0,03–2,8 MB cada por causa das figuras).
