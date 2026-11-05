@@ -1562,6 +1562,12 @@ window.CAL_ATIVO = {
 "t": "Partes e Procuradores",
 "r": "1RY_VZhnaUd3Ek_XQrOdSRYIjU0ohIhSu",
 "x": "1EBAj263tQ-aeRI1hW2aA--4f3iRycEkj"
+},
+{
+"c": 14,
+"t": "Tutela Provisória (Processo Civil)",
+"r": "10rmH5mCcEBR_zc1wA1hGUqoXxdwDJp6P",
+"x": "1jvJAEERJv86DKtRQ4a83IwDuBwB6ahWP"
 }
 ],
 "fc": [
