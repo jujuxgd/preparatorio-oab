@@ -752,7 +752,7 @@
       // chamadas para vídeo/áudio da plataforma ("Segue o vídeo:", "Vamos rever, em vídeo?", "acompanhe o áudio…"): o vídeo não vem no PDF, então não é conteúdo.
       // Só parágrafos curtos, para nunca apagar texto de estudo que apenas cita um vídeo ou áudio (prova, interceptação…)
       var CHAMADA = /(v[ií]deo\s+(?:abaixo|r[aá]pido)|\b(?:em|neste|no|ao|pelo)\s+v[ií]deo\b|segue o v[ií]deo|acompanhe[^.]{0,40}[aá]udio)/i;
-      function fecha() { if (par && par.tag === 'p' && !par.cls) { var tp = par.html.replace(/<[^>]+>/g, ''); if (tp.length <= 200 && CHAMADA.test(tp)) par = null; } if (par) { h += '<' + par.tag + (par.cls ? ' class="' + par.cls + '"' : '') + '>' + par.html + '</' + par.tag + '>'; par = null; } }
+      function fecha() { if (par && par.tag === 'p') { var tp = par.html.replace(/<[^>]+>/g, ''); if (tp.length <= 200 && CHAMADA.test(tp)) par = null; } if (par) { h += '<' + par.tag + (par.cls ? ' class="' + par.cls + '"' : '') + '>' + par.html + '</' + par.tag + '>'; par = null; } }
       function fechaCaixa() { fecha(); if (caixa) { h += '</div>'; caixa = null; } }
       pags.forEach(function (bl, j) {
         marca = '';
