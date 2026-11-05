@@ -1061,6 +1061,12 @@ window.CAL_ATIVO = {
 "t": "Das Práticas Abusivas",
 "r": "1vGN9mP13wbc28p1SjUTZjFCdBhgSsruK",
 "x": "1OIIjFyrg-vBad6D2el5CBBP4fswWt1nN"
+},
+{
+"c": 9,
+"t": "Da Cobrança de Dívidas",
+"r": "1V-LnPdHA4g9biJA6c-6TZXtP6wKI_SQ7",
+"x": "1eQ-Gj0jeG6Whm51qj5xQTDnDGpPeFw-m"
 }
 ],
 "fc": [

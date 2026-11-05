@@ -476,7 +476,7 @@
   // (lidas da própria página desenhada); tabelas e imagens entram como recorte da página. Cabeçalho/rodapé que se
   // repetem em quase todas as páginas e números de página saem.
   // Texto já montado fica guardado no aparelho (IndexedDB): abrir de novo é instantâneo. TXV muda quando a montagem muda.
-  var TXV = 'tx6', TX_MAX = 60, _txDb = null;
+  var TXV = 'tx7', TX_MAX = 60, _txDb = null;
   function txDb() {
     if (_txDb) return _txDb;
     _txDb = new Promise(function (ok, erro) {
@@ -687,7 +687,7 @@
       (function () {
         for (var jj = 0; jj < pags.length; jj++) {
           for (var ii = 0; ii < pags[jj].length; ii++) {
-            if (pags[jj][ii].txt && /^Referências e links deste capítulo/i.test(pags[jj][ii].txt)) {
+            if (pags[jj][ii].txt && /^(Referências e links deste capítulo|Denuncie a pirataria)/i.test(pags[jj][ii].txt)) {
               pags[jj] = pags[jj].slice(0, ii); for (var kk = jj + 1; kk < pags.length; kk++) pags[kk] = [];
               return;
             }
