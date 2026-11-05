@@ -476,7 +476,7 @@
   // (lidas da própria página desenhada); tabelas e imagens entram como recorte da página. Cabeçalho/rodapé que se
   // repetem em quase todas as páginas e números de página saem.
   // Texto já montado fica guardado no aparelho (IndexedDB): abrir de novo é instantâneo. TXV muda quando a montagem muda.
-  var TXV = 'tx3', TX_MAX = 60, _txDb = null;
+  var TXV = 'tx4', TX_MAX = 60, _txDb = null;
   function txDb() {
     if (_txDb) return _txDb;
     _txDb = new Promise(function (ok, erro) {
@@ -749,7 +749,10 @@
         pags.forEach(function (bl, jj) { pags[jj] = bl.filter(function (o) { return !o.questao; }); });
       })();
       var h = '', par = null, ant = null, caixa = null, marca = '', cabUlt = null;
-      function fecha() { if (par) { h += '<' + par.tag + (par.cls ? ' class="' + par.cls + '"' : '') + '>' + par.html + '</' + par.tag + '>'; par = null; } }
+      // chamadas para vídeo/áudio da plataforma ("Segue o vídeo:", "Vamos rever, em vídeo?", "acompanhe o áudio…"): o vídeo não vem no PDF, então não é conteúdo.
+      // Só parágrafos curtos, para nunca apagar texto de estudo que apenas cita um vídeo ou áudio (prova, interceptação…)
+      var CHAMADA = /(v[ií]deo\s+(?:abaixo|r[aá]pido)|\b(?:em|neste|no|ao|pelo)\s+v[ií]deo\b|segue o v[ií]deo|acompanhe[^.]{0,40}[aá]udio)/i;
+      function fecha() { if (par && par.tag === 'p') { var tp = par.html.replace(/<[^>]+>/g, ''); if (tp.length <= 200 && CHAMADA.test(tp)) par = null; } if (par) { h += '<' + par.tag + (par.cls ? ' class="' + par.cls + '"' : '') + '>' + par.html + '</' + par.tag + '>'; par = null; } }
       function fechaCaixa() { fecha(); if (caixa) { h += '</div>'; caixa = null; } }
       pags.forEach(function (bl, j) {
         marca = '';
@@ -1261,7 +1264,7 @@
         });
         var bq = null; Object.keys(bgs).forEach(function (q) { if (!bq || bgs[q] > bgs[bq]) bq = q; });
         var bg = bq ? bq.split(',').map(Number) : null;
-        var AUDIO = /\s*Para ouvir ao áudio correspondente, acesse o LDI\.?\s*/g, IDQ = /\s4000\d{6}(?=\s)/g;
+        var AUDIO = /\s*Para (?:ouvir ao áudio|assistir ao v[ií]deo) correspondente, acesse o LDI\.?\s*/gi, IDQ = /\s4000\d{6}(?=\s)/g;
         // ícones de fontes de ícone (caracteres da área privada, ex.: o alto-falante do "ouvir o áudio") não são texto
         var ICONE = /[\uE000-\uF8FF]/g;
         var t0 = acentos(txt).replace(ICONE, '').replace(AUDIO, ' ').replace(IDQ, '').replace(/\s+/g, ' ').trim(), h0 = acentos(html.replace(/<\/b>(\s*)<b>/g, '$1')).replace(ICONE, '').replace(AUDIO, ' ').replace(IDQ, '').trim().replace(/<(span class="lp-tx-cor"|b)><\/(span|b)>/g, ''), mk = /^#/.test(t0) || /^[-–•▪●►]\s/.test(t0);
