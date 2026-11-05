@@ -569,6 +569,7 @@ Prova prático-profissional do OAB 48 em **28/02/2027** (cronograma da OAB). Jul
   um parágrafo de ≥ 100 caracteres** sai (a primeira aparição fica; chave = texto sem acento/pontuação). Listas curtas repetidas em seções diferentes (cargos e prazos em
   9. Inelegibilidades) ficam. Conferido: 13 capítulos mudaram (Desapropriação -77, Provas -32, Recursos -8, Despesa Pública -7…) e toda linha removida ainda existe em outro
   ponto do capítulo. `TXV` = 'tx6'.
+  **Conferência com o CRONOGRAMA 60 DIAS (05/11/2026, Julia: "parece que tópicos foram pulados"):** os 70 temas e a ordem batem com o PDF das semanas 1–7. Faltava o cap. 3 "Relação de Emprego" no dia de "Relações empregatícias + especiais" (só entrava o cap. 4) — adicionado. Não entraram: semanas 8–9 do cronograma (revisão por matéria) e, em "Lei das Eleições e ações eleitorais", só o cap. 28 (Ações Eleitorais) abre — os capítulos da Lei 9.504 (propaganda, prestação de contas etc.) ficam de fora até Julia escolher.
   **Textos prontos antes (03/11/2026):** quem usa o modo texto (`oab_lp_modo` = 'texto') tem os capítulos do dia aberto e dos 3 dias seguintes
   montados em segundo plano, um por vez, 20 s depois de abrir o Conteúdo (`prepararProximos` em `sessao-core.js` → `LEITOR.preparar(arq)`, leitor
   sem tela que usa a mesma fila `trabalho()`). Guardados: últimos 60 (`TX_MAX`; ~0,03–2,8 MB cada por causa das figuras).
