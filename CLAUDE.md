@@ -563,6 +563,12 @@ Prova prático-profissional do OAB 48 em **28/02/2027** (cronograma da OAB). Jul
   bolinha como letra de fonte de símbolos: "l" (bolinha) e "Ä" (quadrado) no começo de linha viram marcador de lista (e "•"/"–" dentro das células).
   Conferido nos 84 Resumido: 6 capítulos mudaram (Partes e Procuradores, Relações Empregatícias — tabela dos direitos dos domésticos —, Licenciamento
   Ambiental, Sistema Remuneratório, Agentes Públicos, Intervenção do Estado), todos para melhor; 21 caixas de questão deixaram de aparecer como figura. `TXV` = 'tx5'.
+  **Repetições (06/11/2026, Julia: "parece que repete trechos"):** o PDF do Estratégia às vezes traz o mesmo bloco duas vezes (144 parágrafos repetidos nos 84
+  Resumido; só 3 vinham do modo texto e eram títulos). Ex.: em 8. Desapropriação a lista dos casos de utilidade pública vem com "-" na p. 4 e de novo com
+  marcadores na p. 5, depois de um título repetido. No fim de `montarTexto`, bloco que repete um bloco anterior (3+ itens, ou ≥ 160 caracteres) **e tem ao menos
+  um parágrafo de ≥ 100 caracteres** sai (a primeira aparição fica; chave = texto sem acento/pontuação). Listas curtas repetidas em seções diferentes (cargos e prazos em
+  9. Inelegibilidades) ficam. Conferido: 13 capítulos mudaram (Desapropriação -77, Provas -32, Recursos -8, Despesa Pública -7…) e toda linha removida ainda existe em outro
+  ponto do capítulo. `TXV` = 'tx6'.
   **Textos prontos antes (03/11/2026):** quem usa o modo texto (`oab_lp_modo` = 'texto') tem os capítulos do dia aberto e dos 3 dias seguintes
   montados em segundo plano, um por vez, 20 s depois de abrir o Conteúdo (`prepararProximos` em `sessao-core.js` → `LEITOR.preparar(arq)`, leitor
   sem tela que usa a mesma fila `trabalho()`). Guardados: últimos 60 (`TX_MAX`; ~0,03–2,8 MB cada por causa das figuras).

@@ -476,7 +476,7 @@
   // (lidas da própria página desenhada); tabelas e imagens entram como recorte da página. Cabeçalho/rodapé que se
   // repetem em quase todas as páginas e números de página saem.
   // Texto já montado fica guardado no aparelho (IndexedDB): abrir de novo é instantâneo. TXV muda quando a montagem muda.
-  var TXV = 'tx5', TX_MAX = 60, _txDb = null;
+  var TXV = 'tx6', TX_MAX = 60, _txDb = null;
   function txDb() {
     if (_txDb) return _txDb;
     _txDb = new Promise(function (ok, erro) {
@@ -799,6 +799,26 @@
       fechaCaixa();
       if (tiroQ && h) h += '<p class="lp-tx-nota">As questões comentadas deste capítulo ficam em “Questões do dia”.</p>';
       alvo.innerHTML = '<div class="lp-texto">' + (h || '<p class="lp-vazio">Este PDF não tem texto (é escaneado). Use o modo PDF.</p>') + '</div>';
+      // O PDF do Estratégia às vezes traz o mesmo trecho duas vezes (a lista de casos da desapropriação vem em "- a)…" e de novo com marcadores,
+      // depois de um título repetido). Bloco que repete um bloco anterior (3+ itens, ou texto longo) sai; a primeira aparição fica.
+      // Só vale com pelo menos um parágrafo longo: listas curtas que se repetem em seções diferentes (cargos, prazos) podem ser legítimas.
+      (function () {
+        var tx = alvo.querySelector('.lp-texto'); if (!tx) return;
+        var el = Array.prototype.slice.call(tx.children);
+        function chave(e) { return (e.textContent || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]/g, ''); }
+        var K = el.map(chave), prim = {}, apagar = [], i = 0;
+        while (i < K.length) {
+          var k = K[i], j = prim[k];
+          if (k.length >= 15 && j != null) {
+            var L = 0, ch = 0, maior = 0;
+            while (i + L < K.length && j + L < i && K[i + L] === K[j + L]) { ch += K[i + L].length; if (K[i + L].length > maior) maior = K[i + L].length; L++; }
+            if ((L >= 3 || ch >= 160) && maior >= 100) { for (var x = 0; x < L; x++) apagar.push(el[i + x]); i += L; continue; }
+          }
+          if (k.length >= 15 && prim[k] == null) prim[k] = i;
+          i++;
+        }
+        apagar.forEach(function (e) { if (e.parentNode) e.parentNode.removeChild(e); });
+      })();
       // acabamento de leitura: número do título em destaque; artigo de lei e aviso ganham o seu tipo de caixa
       alvo.querySelectorAll('.lp-texto h3').forEach(function (h) {
         var no = h.firstChild; if (!no || no.nodeType !== 3) return;
