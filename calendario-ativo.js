@@ -1603,6 +1603,12 @@ window.CAL_ATIVO = {
 "t": "Licitações",
 "r": "1PX9K2X9BWYUxhjeCq0OICWLH9L6n8Zix",
 "x": "1ayU5zhg8tRsdbaoJB1E8yQbPeEr_0CaH"
+},
+{
+"c": 10,
+"t": "Contratos Administrativos",
+"r": "10cUz1IQYbJdDwLwbtnx2HfustpOaWgcl",
+"x": "1l0KfwMnnPnrXCt-Rxh0zUxm7wNChzCBD"
 }
 ],
 "fc": [
